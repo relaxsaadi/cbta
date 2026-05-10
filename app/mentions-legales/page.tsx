@@ -32,7 +32,7 @@ export default function MentionsLegalesPage() {
                 <br />
                 Alger, Algérie
                 <br />
-                Téléphone : +213 770 77 26 19
+                Téléphone : +213 542 30 53 83
                 <br />
                 Email : kostgroupe@gmail.com
               </p>
@@ -83,7 +83,7 @@ export default function MentionsLegalesPage() {
                 <Link href="/#formulaire" className="text-[#003D7A] underline">
                   formulaire
                 </Link>{" "}
-                ou par WhatsApp au +213 770 77 26 19.
+                ou par WhatsApp au +213 542 30 53 83.
               </p>
             </section>
           </div>

@@ -46,7 +46,7 @@ export default function Footer() {
               <li className="flex items-start gap-2">
                 <Phone className="h-4 w-4 mt-0.5 shrink-0 text-[#F39C12]" aria-hidden />
                 <a
-                  href="tel:+213770772619"
+                  href="tel:+213542305383"
                   onClick={trackPhoneClick}
                   className="hover:text-white"
                 >

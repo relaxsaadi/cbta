@@ -71,7 +71,7 @@ const orgSchema = {
     addressLocality: "Alger",
     addressCountry: "DZ",
   },
-  telephone: "+213770772619",
+  telephone: "+213542305383",
   areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "ML", "BF", "GA"],
   sameAs: ["https://www.linkedin.com/company/kost-academy"],
 };

@@ -310,8 +310,8 @@ export const COUNTRIES = [
   { code: "GA", name: "Gabon", flag: "🇬🇦" },
 ];
 
-export const WHATSAPP_NUMBER = "+213770772619";
-export const WHATSAPP_LINK = `https://wa.me/213770772619?text=${encodeURIComponent(
+export const WHATSAPP_NUMBER = "+213542305383";
+export const WHATSAPP_LINK = `https://wa.me/213542305383?text=${encodeURIComponent(
   "Bonjour, j'aimerais des informations sur vos formations CBTA"
 )}`;
-export const PHONE_DISPLAY = "+213 770 77 26 19";
+export const PHONE_DISPLAY = "+213 542 30 53 83";

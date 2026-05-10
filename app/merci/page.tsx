@@ -97,7 +97,7 @@ export default function MerciPage() {
                   WhatsApp
                 </a>
                 <a
-                  href="tel:+213770772619"
+                  href="tel:+213542305383"
                   className="btn-secondary text-sm"
                 >
                   <PhoneCall className="h-5 w-5" aria-hidden />

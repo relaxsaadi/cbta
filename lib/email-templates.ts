@@ -38,7 +38,7 @@ export function leadConfirmationEmail(lead: LeadPayload): {
     <div style="background:#f5f7fb;border-left:4px solid ${ACCENT};padding:16px 20px;border-radius:6px;margin:0 0 24px;">
       <div style="font-size:13px;color:#5b6b80;margin-bottom:6px;">Besoin urgent ?</div>
       <div style="font-size:15px;font-weight:600;">
-        WhatsApp : <a href="https://wa.me/213770772619" style="color:${PRIMARY};text-decoration:none;">+213 770 77 26 19</a>
+        WhatsApp : <a href="https://wa.me/213542305383" style="color:${PRIMARY};text-decoration:none;">+213 542 30 53 83</a>
       </div>
     </div>
     <p style="line-height:1.6;font-size:14px;color:#5b6b80;margin:24px 0 0;">
@@ -62,7 +62,7 @@ Nous avons bien reçu votre demande concernant ${lead.formation}.
 
 Un conseiller pédagogique vous contacte sous 24 heures ouvrables.
 
-WhatsApp : +213 770 77 26 19
+WhatsApp : +213 542 30 53 83
 
 L'équipe KOST Academy`;
 

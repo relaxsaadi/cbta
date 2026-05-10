@@ -55,7 +55,7 @@ export default function Hero() {
               aria-label="Contacter sur WhatsApp"
             >
               <MessageCircle className="h-5 w-5" aria-hidden />
-              WhatsApp +213 770 77 26 19
+              WhatsApp +213 542 30 53 83
             </a>
           </div>
 

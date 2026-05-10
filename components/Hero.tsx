@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ShieldCheck, MessageCircle, ArrowDown, BadgeCheck } from "lucide-react";
 import { WHATSAPP_LINK } from "@/lib/formations";
@@ -28,7 +29,7 @@ export default function Hero() {
             Formation DGR-CBTA<br />
             <span className="text-[#F39C12]">Certifiée IATA</span>
             <span className="block text-2xl md:text-4xl lg:text-5xl mt-2 font-bold opacity-95">
-              1er Centre CBTA Provider en Afrique francophone
+              1er Centre CBTA Provider Certifié IATA en Algérie
             </span>
           </h1>
 
@@ -74,20 +75,22 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* IATA badge placeholder */}
+        {/* IATA CBTA Provider badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="hidden lg:block absolute right-8 top-32 w-44 h-44 rounded-2xl bg-white/10 backdrop-blur-md border-2 border-white/20 flex items-center justify-center text-center p-4"
-          aria-label="Badge IATA Provider"
+          className="hidden lg:block absolute right-8 top-32 w-48 h-48 rounded-2xl bg-white/95 backdrop-blur-md p-3 shadow-2xl"
+          aria-label="Badge IATA Competency Training & Assessment Center Provider"
         >
-          <div className="flex flex-col items-center justify-center h-full">
-            <BadgeCheck className="h-12 w-12 text-[#F39C12] mb-2" aria-hidden />
-            <div className="text-xs uppercase tracking-wider text-white/70">Certifié</div>
-            <div className="text-lg font-bold">IATA CBTA</div>
-            <div className="text-xs text-white/70 mt-1">Provider</div>
-          </div>
+          <Image
+            src="/iata-cbta-provider.png"
+            alt="IATA Competency Training & Assessment Center Provider"
+            width={192}
+            height={192}
+            priority
+            className="h-full w-full object-contain"
+          />
         </motion.div>
       </div>
     </section>

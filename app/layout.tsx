@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default:
-      "Formation IATA DGR-CBTA — KOST Academy · 1er CBTA Provider en Afrique francophone",
+      "Formation IATA DGR-CBTA — KOST Academy · 1er Centre CBTA Provider Certifié IATA en Algérie",
     template: "%s — KOST Academy",
   },
   description:
@@ -39,13 +39,13 @@ export const metadata: Metadata = {
     siteName: "KOST Academy",
     title: "Formation IATA DGR-CBTA Certifiée — KOST Academy",
     description:
-      "1er CBTA Provider IATA en Afrique francophone. Certificat IATA officiel, 50% moins cher qu'à Bruxelles.",
+      "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel, 50% moins cher qu'à Bruxelles.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Formation IATA DGR-CBTA — KOST Academy",
     description:
-      "1er CBTA Provider IATA en Afrique francophone. Certificat IATA officiel.",
+      "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel.",
   },
   robots: { index: true, follow: true },
 };
@@ -64,7 +64,7 @@ const orgSchema = {
   url: siteUrl,
   logo: `${siteUrl}/logo.png`,
   description:
-    "1er Centre CBTA Provider IATA certifié en Algérie et en Afrique francophone. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10.",
+    "1er Centre CBTA Provider Certifié IATA en Algérie. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki, Bab Ezzouar",

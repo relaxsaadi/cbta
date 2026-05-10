@@ -18,7 +18,7 @@ export function leadConfirmationEmail(lead: LeadPayload): {
 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
   <tr><td style="background:${PRIMARY};padding:32px;text-align:center;color:#ffffff;">
     <div style="font-size:24px;font-weight:800;letter-spacing:0.5px;">KOST ACADEMY</div>
-    <div style="font-size:13px;opacity:0.85;margin-top:6px;">1er Centre CBTA Provider IATA en Afrique francophone</div>
+    <div style="font-size:13px;opacity:0.85;margin-top:6px;">1er Centre CBTA Provider Certifié IATA en Algérie</div>
   </td></tr>
   <tr><td style="padding:36px 36px 16px 36px;">
     <h1 style="margin:0 0 16px;font-size:22px;color:${PRIMARY};">Bonjour ${escape(lead.prenom)},</h1>

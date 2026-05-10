@@ -1,21 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { trackLead } from "@/lib/tracking";
+import { trackLead, DEFAULT_LEAD_VALUE } from "@/lib/tracking";
 
 export default function MerciTracker() {
   const params = useSearchParams();
+  const firedRef = useRef(false);
 
   useEffect(() => {
+    if (firedRef.current) return;
+    firedRef.current = true;
+
     const formation = params.get("f") || undefined;
     const pays = params.get("p") || undefined;
-    const value = Number(params.get("v")) || undefined;
+    const value = Number(params.get("v"));
+    const tx = params.get("tx") || undefined;
+
     trackLead({
-      email: "",
       formation,
       pays,
-      prixEur: value,
+      leadValue: Number.isFinite(value) && value > 0 ? value : DEFAULT_LEAD_VALUE,
+      transactionId: tx,
     });
   }, [params]);
 

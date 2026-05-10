@@ -78,7 +78,7 @@ export function leadNotificationEmail(lead: LeadPayload): {
 <html><body style="font-family:-apple-system,sans-serif;color:#0f1c2e;padding:24px;">
 <h2 style="color:${PRIMARY};margin:0 0 16px;">Nouveau lead KOST Academy</h2>
 <table cellspacing="0" cellpadding="8" style="border-collapse:collapse;width:100%;font-size:14px;">
-<tr><td style="background:#f5f7fb;font-weight:600;width:180px;">Nom</td><td>${escape(lead.prenom)} ${escape(lead.nom)}</td></tr>
+<tr><td style="background:#f5f7fb;font-weight:600;width:180px;">Nom</td><td>${escape(lead.prenom)} ${escape(lead.nom || "")}</td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">Email</td><td><a href="mailto:${escape(lead.email)}">${escape(lead.email)}</a></td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">WhatsApp</td><td><a href="https://wa.me/${lead.whatsapp.replace(/[^0-9]/g, "")}">${escape(lead.whatsapp)}</a></td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">Pays</td><td>${escape(lead.pays)}</td></tr>
@@ -86,7 +86,11 @@ export function leadNotificationEmail(lead: LeadPayload): {
 <tr><td style="background:#f5f7fb;font-weight:600;">Formation</td><td><strong>${escape(lead.formation)}</strong></td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">Message</td><td>${escape(lead.message || "-")}</td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">Source page</td><td>${escape(lead.sourcePage || "-")}</td></tr>
-<tr><td style="background:#f5f7fb;font-weight:600;">UTM</td><td>${escape(lead.utm || "-")}</td></tr>
+<tr><td style="background:#f5f7fb;font-weight:600;">UTM source</td><td>${escape(lead.utm_source || "-")}</td></tr>
+<tr><td style="background:#f5f7fb;font-weight:600;">UTM medium</td><td>${escape(lead.utm_medium || "-")}</td></tr>
+<tr><td style="background:#f5f7fb;font-weight:600;">UTM campaign</td><td>${escape(lead.utm_campaign || "-")}</td></tr>
+<tr><td style="background:#f5f7fb;font-weight:600;">UTM term / content</td><td>${escape(lead.utm_term || "-")} / ${escape(lead.utm_content || "-")}</td></tr>
+<tr><td style="background:#f5f7fb;font-weight:600;">gclid / fbclid</td><td>${escape(lead.gclid || "-")} / ${escape(lead.fbclid || "-")}</td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">Reçu le</td><td>${new Date().toLocaleString("fr-FR", { timeZone: "Africa/Algiers" })}</td></tr>
 </table>
 </body></html>`;

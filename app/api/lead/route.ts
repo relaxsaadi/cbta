@@ -1,23 +1,21 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { leadSchema } from "@/lib/schemas";
-import {
-  leadConfirmationEmail,
-  leadNotificationEmail,
-} from "@/lib/email-templates";
+import { leadSchema, type LeadPayload } from "@/lib/schemas";
+import { leadNotificationEmail } from "@/lib/email-templates";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const GHL_TIMEOUT_MS = 10_000;
+
+type SideStatus = "ok" | "skip" | "fail";
 
 export async function POST(req: Request) {
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      { error: "Body JSON invalide" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Body JSON invalide" }, { status: 400 });
   }
 
   const parsed = leadSchema.safeParse(body);
@@ -38,87 +36,19 @@ export async function POST(req: Request) {
 
   // Honeypot — silently accept then drop
   if (lead.website && lead.website.length > 0) {
+    console.warn("[lead] honeypot triggered — dropped");
     return NextResponse.json({ ok: true }, { status: 200 });
   }
 
-  const errors: string[] = [];
+  // Fire integrations in parallel
+  const [ghlStatus, resendStatus] = await Promise.all([
+    pushToGHL(lead),
+    sendNotificationEmail(lead),
+  ]);
 
-  // Email via Resend
-  const resendKey = process.env.RESEND_API_KEY;
-  const notifyEmail = process.env.NOTIFICATION_EMAIL || "kostgroupe@gmail.com";
-
-  if (resendKey) {
-    try {
-      const resend = new Resend(resendKey);
-      const fromAddress = process.env.RESEND_FROM_EMAIL || "KOST Academy <onboarding@resend.dev>";
-
-      const confirmation = leadConfirmationEmail(lead);
-      const notification = leadNotificationEmail(lead);
-
-      await Promise.allSettled([
-        resend.emails.send({
-          from: fromAddress,
-          to: lead.email,
-          subject: confirmation.subject,
-          html: confirmation.html,
-          text: confirmation.text,
-          replyTo: notifyEmail,
-        }),
-        resend.emails.send({
-          from: fromAddress,
-          to: notifyEmail,
-          subject: notification.subject,
-          html: notification.html,
-          replyTo: lead.email,
-        }),
-      ]);
-    } catch (err) {
-      console.error("[lead] Resend error:", err);
-      errors.push("email");
-    }
-  } else {
-    console.warn(
-      "[lead] RESEND_API_KEY missing — skipping email send. Lead:",
-      JSON.stringify({
-        email: lead.email,
-        formation: lead.formation,
-        pays: lead.pays,
-      })
-    );
-  }
-
-  // Push to Google Sheet webhook
-  const sheetWebhook = process.env.GOOGLE_SHEET_WEBHOOK;
-  if (sheetWebhook) {
-    try {
-      const payload = {
-        ...lead,
-        receivedAt: new Date().toISOString(),
-      };
-      // Fire-and-forget but await briefly to surface errors
-      const ctrl = new AbortController();
-      const timeout = setTimeout(() => ctrl.abort(), 4000);
-      await fetch(sheetWebhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: ctrl.signal,
-      }).catch((err) => {
-        console.error("[lead] Sheet webhook error:", err);
-        errors.push("sheet");
-      });
-      clearTimeout(timeout);
-    } catch (err) {
-      console.error("[lead] Sheet webhook outer error:", err);
-      errors.push("sheet");
-    }
-  } else {
-    console.warn("[lead] GOOGLE_SHEET_WEBHOOK missing — skipping sheet push.");
-  }
-
-  // Always log the lead so it's never lost
+  // Always log so the lead is never lost (Vercel Logs)
   console.info(
-    "[lead] received:",
+    "[lead] processed:",
     JSON.stringify({
       ts: new Date().toISOString(),
       email: lead.email,
@@ -126,10 +56,121 @@ export async function POST(req: Request) {
       formation: lead.formation,
       whatsapp: lead.whatsapp,
       sourcePage: lead.sourcePage,
-      utm: lead.utm,
-      sideErrors: errors,
+      utm_source: lead.utm_source,
+      utm_campaign: lead.utm_campaign,
+      gclid: lead.gclid,
+      ghl: ghlStatus,
+      resend: resendStatus,
     })
   );
 
-  return NextResponse.json({ ok: true, sideErrors: errors }, { status: 200 });
+  return NextResponse.json(
+    { ok: true, integrations: { ghl: ghlStatus, resend: resendStatus } },
+    { status: 200 }
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// GHL (primary CRM)
+// ─────────────────────────────────────────────────────────────
+async function pushToGHL(lead: LeadPayload): Promise<SideStatus> {
+  const url = process.env.GHL_WEBHOOK_URL;
+  if (!url) {
+    console.warn("[lead][ghl] GHL_WEBHOOK_URL missing — skipping CRM push");
+    return "skip";
+  }
+
+  // Split: support both split prenom/nom and single-word case
+  const firstName = lead.prenom.trim();
+  const lastName = (lead.nom || "").trim();
+  const fullName = `${firstName} ${lastName}`.trim();
+
+  const tags = ["KOST-DGR", lead.pays, lead.formation].filter(Boolean);
+
+  const payload = {
+    firstName,
+    lastName,
+    fullName,
+    email: lead.email,
+    phone: lead.whatsapp,
+    country: lead.pays,
+    company: lead.entreprise || "",
+    formation: lead.formation,
+    message: lead.message || "",
+    source: "dgr.kostacademy.com",
+    utm_source: lead.utm_source || "",
+    utm_medium: lead.utm_medium || "",
+    utm_campaign: lead.utm_campaign || "",
+    utm_term: lead.utm_term || "",
+    utm_content: lead.utm_content || "",
+    gclid: lead.gclid || "",
+    fbclid: lead.fbclid || "",
+    tags,
+    submittedAt: new Date().toISOString(),
+  };
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), GHL_TIMEOUT_MS);
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal,
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) {
+      const bodyText = await res.text().catch(() => "<no body>");
+      console.error(
+        `[lead][ghl] webhook returned ${res.status} ${res.statusText} — ${bodyText.slice(0, 300)}`
+      );
+      return "fail";
+    }
+    console.info(`[lead][ghl] pushed OK (${res.status})`);
+    return "ok";
+  } catch (err) {
+    clearTimeout(timer);
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[lead][ghl] fetch error: ${msg}`);
+    return "fail";
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Resend (internal notification only — GHL handles the welcome)
+// ─────────────────────────────────────────────────────────────
+async function sendNotificationEmail(lead: LeadPayload): Promise<SideStatus> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn("[lead][resend] RESEND_API_KEY missing — skipping notification email");
+    return "skip";
+  }
+
+  const notifyEmail = process.env.NOTIFICATION_EMAIL || "kostgroupe@gmail.com";
+  const fromAddress =
+    process.env.RESEND_FROM_EMAIL || "KOST Academy <onboarding@resend.dev>";
+
+  try {
+    const resend = new Resend(apiKey);
+    const notification = leadNotificationEmail(lead);
+    const result = await resend.emails.send({
+      from: fromAddress,
+      to: notifyEmail,
+      subject: notification.subject,
+      html: notification.html,
+      replyTo: lead.email,
+    });
+    if (result.error) {
+      console.error("[lead][resend] send error:", result.error);
+      return "fail";
+    }
+    console.info("[lead][resend] notification sent OK");
+    return "ok";
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[lead][resend] exception: ${msg}`);
+    return "fail";
+  }
 }

@@ -9,6 +9,8 @@ declare global {
 
 const isClient = () => typeof window !== "undefined";
 
+export const DEFAULT_LEAD_VALUE = 1000;
+
 export function trackEvent(
   eventName: string,
   params: Record<string, unknown> = {}
@@ -19,45 +21,61 @@ export function trackEvent(
 }
 
 export type LeadData = {
-  email: string;
+  email?: string;
   pays?: string;
   formation?: string;
-  prixEur?: number;
+  leadValue?: number;
+  transactionId?: string;
 };
 
 export function trackLead(data: LeadData): void {
   if (!isClient()) return;
 
+  const value = data.leadValue ?? DEFAULT_LEAD_VALUE;
+  const txId = data.transactionId;
+
+  // GA4 / GTM dataLayer event
   trackEvent("generate_lead", {
     currency: "EUR",
-    value: data.prixEur ?? 1200,
-    pays: data.pays,
+    value,
+    lead_value: value,
+    country: data.pays,
     formation: data.formation,
+    transaction_id: txId,
   });
 
-  // Google Ads conversion
+  // Google Ads conversion (snippet path)
   const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
   const adsLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
   if (window.gtag && adsId && adsLabel) {
     window.gtag("event", "conversion", {
       send_to: `${adsId}/${adsLabel}`,
-      value: data.prixEur ?? 1200,
+      value,
       currency: "EUR",
+      transaction_id: txId,
     });
   }
 
   // LinkedIn conversion
-  if (window.lintrk) {
-    window.lintrk("track", { conversion_id: 0 });
+  const linkedInConvId = process.env.NEXT_PUBLIC_LINKEDIN_CONVERSION_ID;
+  if (window.lintrk && linkedInConvId) {
+    const conversionId = Number(linkedInConvId);
+    if (!Number.isNaN(conversionId)) {
+      window.lintrk("track", { conversion_id: conversionId });
+    }
   }
 
   // Meta Pixel
   if (window.fbq) {
     window.fbq("track", "Lead", {
+      value,
       currency: "EUR",
-      value: data.prixEur ?? 1200,
     });
   }
+}
+
+export function trackPageView(params: Record<string, unknown> = {}): void {
+  trackEvent("page_view_custom", params);
 }
 
 export function trackPhoneClick(): void {

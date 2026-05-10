@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Lock, Send } from "lucide-react";
 import { FORMATIONS, COUNTRIES } from "@/lib/formations";
 import { leadSchema } from "@/lib/schemas";
+import { useUTMParams } from "@/lib/useUTMParams";
 import {
   trackFormStart,
   trackFormSubmitAttempt,
@@ -16,9 +17,29 @@ type Props = {
   sourcePage?: string;
 };
 
+async function hashTransactionId(email: string): Promise<string> {
+  const input = `${email}::${Date.now()}`;
+  try {
+    if (typeof crypto !== "undefined" && crypto.subtle) {
+      const buf = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(input)
+      );
+      return Array.from(new Uint8Array(buf))
+        .slice(0, 12)
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+  } catch {
+    /* fall through */
+  }
+  return `tx_${Date.now().toString(36)}`;
+}
+
 export default function LeadForm({ defaultFormation, sourcePage }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const utm = useUTMParams();
   const formStartedRef = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -47,14 +68,6 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
     setErrors({});
 
     const fd = new FormData(e.currentTarget);
-    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
-    const utm = utmKeys
-      .map((k) => {
-        const v = searchParams.get(k);
-        return v ? `${k}=${v}` : null;
-      })
-      .filter(Boolean)
-      .join("&");
 
     const payload = {
       prenom: String(fd.get("prenom") || "").trim(),
@@ -67,8 +80,16 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
       message: String(fd.get("message") || "").trim(),
       consent: fd.get("consent") === "on",
       website: String(fd.get("website") || ""), // honeypot
-      sourcePage: sourcePage || (typeof window !== "undefined" ? window.location.pathname : ""),
-      utm,
+      sourcePage:
+        sourcePage ||
+        (typeof window !== "undefined" ? window.location.pathname : ""),
+      utm_source: utm.utm_source || "",
+      utm_medium: utm.utm_medium || "",
+      utm_campaign: utm.utm_campaign || "",
+      utm_term: utm.utm_term || "",
+      utm_content: utm.utm_content || "",
+      gclid: utm.gclid || "",
+      fbclid: utm.fbclid || "",
     };
 
     const parsed = leadSchema.safeParse(payload);
@@ -100,11 +121,13 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
         setSubmitting(false);
         return;
       }
-      // Pass selected formation + price for conversion tracking
+      // Pass selected formation + price + transaction_id for conversion tracking
       const fObj = FORMATIONS.find((x) => x.code === parsed.data.formation);
+      const txId = await hashTransactionId(parsed.data.email);
       const params = new URLSearchParams({
         f: parsed.data.formation,
         p: parsed.data.pays,
+        tx: txId,
       });
       if (fObj) params.set("v", String(fObj.prixEur));
       router.push(`/merci?${params.toString()}`);

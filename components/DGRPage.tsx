@@ -19,11 +19,13 @@ import LeadForm from "@/components/LeadForm";
 import Footer from "@/components/Footer";
 import WhatsAppSticky from "@/components/WhatsAppSticky";
 import ScrollTracker from "@/components/ScrollTracker";
+import DGRPageView from "@/components/DGRPageView";
 
 export default function DGRPage({ formation }: { formation: Formation }) {
   return (
     <>
       <ScrollTracker />
+      <DGRPageView formation={formation.code} />
       <main>
         {/* Hero spécifique */}
         <section className="relative bg-gradient-to-br from-[#003D7A] via-[#0a4a8a] to-[#002A56] text-white">

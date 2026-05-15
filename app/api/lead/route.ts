@@ -10,6 +10,30 @@ const GHL_TIMEOUT_MS = 10_000;
 
 type SideStatus = "ok" | "skip" | "fail";
 
+// Map readable country names (FR) → ISO 3166-1 alpha-2 codes for GHL standard
+// country field. Falls back to the input value if no match (e.g. "Autre").
+const COUNTRY_NAME_TO_ISO: Record<string, string> = {
+  algérie: "DZ",
+  algerie: "DZ",
+  maroc: "MA",
+  tunisie: "TN",
+  sénégal: "SN",
+  senegal: "SN",
+  "côte d'ivoire": "CI",
+  "cote d'ivoire": "CI",
+  cameroun: "CM",
+  mali: "ML",
+  "burkina faso": "BF",
+  gabon: "GA",
+  france: "FR",
+};
+
+function countryNameToIso(name: string): string {
+  if (!name) return "";
+  const key = name.trim().toLowerCase();
+  return COUNTRY_NAME_TO_ISO[key] || name;
+}
+
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -87,13 +111,17 @@ async function pushToGHL(lead: LeadPayload): Promise<SideStatus> {
 
   const tags = ["KOST-DGR", lead.pays, lead.formation].filter(Boolean);
 
+  // GHL standard country field expects ISO 3166 alpha-2 codes
+  const countryCode = countryNameToIso(lead.pays);
+
   const payload = {
     firstName,
     lastName,
     fullName,
     email: lead.email,
     phone: lead.whatsapp,
-    country: lead.pays,
+    country: countryCode,
+    countryName: lead.pays,
     company: lead.entreprise || "",
     formation: lead.formation,
     message: lead.message || "",

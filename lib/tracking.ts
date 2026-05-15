@@ -18,6 +18,10 @@ export function trackEvent(
   if (!isClient()) return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: eventName, ...params });
+  // Send directly to GA4 too (no GTM config needed)
+  if (window.gtag) {
+    window.gtag("event", eventName, params);
+  }
 }
 
 export type LeadData = {

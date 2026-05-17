@@ -7,7 +7,7 @@ export function buildFormationMetadata(formation: Formation): Metadata {
     description: `${formation.description} Durée : ${formation.duree}. Tarif : ${formation.prixEur} € / ${formation.prixUsd} $.`,
     alternates: { canonical: `/${formation.slug}` },
     openGraph: {
-      title: `${formation.code} — ${formation.title} | KOST Academy`,
+      title: `${formation.code} — ${formation.title} | KOST GROUP`,
       description: formation.description,
       url: `/${formation.slug}`,
     },
@@ -22,7 +22,7 @@ export function courseSchema(formation: Formation) {
     description: formation.description,
     provider: {
       "@type": "EducationalOrganization",
-      name: "KOST Academy",
+      name: "KOST GROUP",
       sameAs: process.env.NEXT_PUBLIC_SITE_URL || "https://formation.kostacademy.com",
     },
     offers: {

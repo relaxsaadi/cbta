@@ -9,7 +9,7 @@ export default function Guarantee() {
             <ShieldCheck className="h-10 w-10" aria-hidden />
           </div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f1c2e] mb-4">
-            Garantie KOST Academy
+            Garantie KOST GROUP
           </h2>
           <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto">
             Si vous ne réussissez pas l'examen IATA du premier coup, nous vous offrons une <strong className="text-[#003D7A]">session de rattrapage gratuite</strong>.

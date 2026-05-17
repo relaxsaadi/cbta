@@ -11,14 +11,14 @@ const inter = Inter({
 });
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://formation.kostacademy.com";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://dgr.kostacademy.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default:
-      "Formation IATA DGR-CBTA — KOST Academy · 1er Centre CBTA Provider Certifié IATA en Algérie",
-    template: "%s — KOST Academy",
+      "Formation IATA DGR-CBTA — KOST GROUP · 1er Centre CBTA Provider Certifié IATA en Algérie",
+    template: "%s — KOST GROUP",
   },
   description:
     "Formations IATA DGR-CBTA officielles (7.1 à 7.10) à Alger pour l'Afrique francophone. Certificat IATA reconnu, 50% moins cher qu'à Bruxelles. Paiement EUR/USD.",
@@ -29,23 +29,44 @@ export const metadata: Metadata = {
     "Aviation Afrique",
     "Cargo aérien",
     "Formation Alger",
+    "KOST GROUP",
   ],
-  authors: [{ name: "KOST Academy" }],
+  authors: [{ name: "KOST GROUP" }],
   alternates: { canonical: "/" },
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/kost-group-logo.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon-32.png",
+  },
   openGraph: {
     type: "website",
     locale: "fr_FR",
     url: siteUrl,
-    siteName: "KOST Academy",
-    title: "Formation IATA DGR-CBTA Certifiée — KOST Academy",
+    siteName: "KOST GROUP",
+    title: "Formation IATA DGR-CBTA Certifiée — KOST GROUP",
     description:
       "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel, 50% moins cher qu'à Bruxelles.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "KOST GROUP — 1er Centre CBTA Provider Certifié IATA en Algérie",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Formation IATA DGR-CBTA — KOST Academy",
+    title: "Formation IATA DGR-CBTA — KOST GROUP",
     description:
       "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel.",
+    images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
 };
@@ -60,9 +81,11 @@ export const viewport: Viewport = {
 const orgSchema = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
-  name: "KOST Academy",
+  name: "KOST GROUP",
+  alternateName: "KOST Academy",
   url: siteUrl,
-  logo: `${siteUrl}/logo.png`,
+  logo: `${siteUrl}/kost-group-logo.svg`,
+  image: `${siteUrl}/og-image.jpg`,
   description:
     "1er Centre CBTA Provider Certifié IATA en Algérie. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
   address: {
@@ -73,7 +96,7 @@ const orgSchema = {
   },
   telephone: "+213542305383",
   areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "ML", "BF", "GA"],
-  sameAs: ["https://www.linkedin.com/company/kost-academy"],
+  sameAs: ["https://www.linkedin.com/company/kost-group"],
 };
 
 export default function RootLayout({

@@ -29,7 +29,7 @@ export default function USPSection() {
       <div className="container-x">
         <div className="text-center mb-12">
           <span className="inline-block text-sm uppercase tracking-wider text-[#F39C12] font-bold mb-2">
-            Pourquoi KOST Academy
+            Pourquoi KOST GROUP
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f1c2e]">
             Le bon choix pour votre certification IATA

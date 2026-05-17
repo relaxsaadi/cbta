@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Phone, Clock, Linkedin, BadgeCheck } from "lucide-react";
 import { PHONE_DISPLAY } from "@/lib/formations";
@@ -11,11 +12,14 @@ export default function Footer() {
       <div className="container-x py-14">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <div className="flex items-center gap-2 text-white mb-3">
-              <BadgeCheck className="h-7 w-7 text-[#F39C12]" aria-hidden />
-              <span className="text-2xl font-extrabold tracking-tight">
-                KOST ACADEMY
-              </span>
+            <div className="mb-4 inline-block rounded-lg bg-white px-4 py-3">
+              <Image
+                src="/kost-group-logo.svg"
+                alt="KOST GROUP"
+                width={180}
+                height={101}
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               1<sup>er</sup> CBTA Provider IATA en Algérie. Formations DGR officielles pour l'aviation et le fret aérien.
@@ -59,7 +63,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <Linkedin className="h-4 w-4 mt-0.5 shrink-0 text-[#F39C12]" aria-hidden />
-                <span>LinkedIn : KOST Academy CBTA Algérie</span>
+                <span>LinkedIn : KOST GROUP CBTA Algérie</span>
               </li>
             </ul>
           </div>
@@ -77,7 +81,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-gray-500">
-          <div>© {new Date().getFullYear()} KOST Academy — Tous droits réservés</div>
+          <div>© {new Date().getFullYear()} KOST GROUP — Tous droits réservés</div>
           <div>Paiements traités via STRATEGIX (entité française) — Facturation EUR/USD</div>
         </div>
       </div>

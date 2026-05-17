@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
-  description: "Mentions légales de KOST Academy",
+  description: "Mentions légales de KOST GROUP",
   alternates: { canonical: "/mentions-legales" },
 };
 
@@ -26,7 +26,7 @@ export default function MentionsLegalesPage() {
             <section>
               <h2 className="text-xl font-bold text-[#0f1c2e] mb-2">Éditeur du site</h2>
               <p>
-                <strong>KOST Academy</strong>
+                <strong>KOST GROUP</strong>
                 <br />
                 176 Cité Boushaki, Bab Ezzouar
                 <br />
@@ -42,7 +42,7 @@ export default function MentionsLegalesPage() {
                 Entité de facturation
               </h2>
               <p>
-                Les paiements et la facturation officielle EUR/USD sont assurés par <strong>STRATEGIX</strong>, entité française partenaire de KOST Academy.
+                Les paiements et la facturation officielle EUR/USD sont assurés par <strong>STRATEGIX</strong>, entité française partenaire de KOST GROUP.
               </p>
             </section>
             <section>
@@ -56,7 +56,7 @@ export default function MentionsLegalesPage() {
                 Certification IATA
               </h2>
               <p>
-                KOST Academy est officiellement certifié <strong>CBTA Provider</strong> par l'International Air Transport Association (IATA). La vérification est disponible publiquement sur{" "}
+                KOST GROUP est officiellement certifié <strong>CBTA Provider</strong> par l'International Air Transport Association (IATA). La vérification est disponible publiquement sur{" "}
                 <a
                   href="https://www.iata.org/en/training/cbta-center-registry/"
                   target="_blank"
@@ -73,7 +73,7 @@ export default function MentionsLegalesPage() {
                 Propriété intellectuelle
               </h2>
               <p>
-                L'ensemble du contenu de ce site (textes, images, logos, vidéos) est la propriété exclusive de KOST Academy ou utilisé avec autorisation. Toute reproduction sans autorisation écrite préalable est interdite.
+                L'ensemble du contenu de ce site (textes, images, logos, vidéos) est la propriété exclusive de KOST GROUP ou utilisé avec autorisation. Toute reproduction sans autorisation écrite préalable est interdite.
               </p>
             </section>
             <section>

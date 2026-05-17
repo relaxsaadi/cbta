@@ -101,14 +101,14 @@ Resend envoie **uniquement** un email de notification à `kostgroupe@gmail.com` 
 1. Créer un compte sur [resend.com](https://resend.com) (gratuit jusqu'à 3 000 emails/mois).
 2. **API Keys** → Create API Key → scope "Sending access" → copier `re_xxx`.
 3. **Domains** → Add Domain → `kostacademy.com` → suivre les instructions DNS Bluehost (SPF + DKIM).
-4. Une fois le domaine vérifié, configurer `RESEND_FROM_EMAIL="KOST Academy <noreply@kostacademy.com>"`.
+4. Une fois le domaine vérifié, configurer `RESEND_FROM_EMAIL="KOST GROUP <noreply@kostacademy.com>"`.
 
 ### Variables d'env
 
 | Clé | Valeur |
 |---|---|
 | `RESEND_API_KEY` | `re_xxx` |
-| `RESEND_FROM_EMAIL` | `KOST Academy <noreply@kostacademy.com>` (sinon fallback `onboarding@resend.dev`) |
+| `RESEND_FROM_EMAIL` | `KOST GROUP <noreply@kostacademy.com>` (sinon fallback `onboarding@resend.dev`) |
 | `NOTIFICATION_EMAIL` | `kostgroupe@gmail.com` |
 
 ### Tester

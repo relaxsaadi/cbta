@@ -339,7 +339,7 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
                   className="mt-1 h-5 w-5 rounded border-gray-300 text-[#003D7A] focus:ring-[#003D7A] shrink-0"
                 />
                 <span className="text-sm text-gray-600 leading-relaxed">
-                  J'accepte d'être contacté par KOST Academy au sujet de cette demande et reconnais avoir lu la{" "}
+                  J'accepte d'être contacté par KOST GROUP au sujet de cette demande et reconnais avoir lu la{" "}
                   <a
                     href="/confidentialite"
                     className="text-[#003D7A] underline font-medium"

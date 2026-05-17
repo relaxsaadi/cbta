@@ -6,7 +6,7 @@ const TESTIMONIALS = [
     role: "Responsable logistique cargo",
     country: "Maroc 🇲🇦",
     quote:
-      "Formation très complète, formateurs experts du domaine. Le certificat IATA m'a permis de débloquer rapidement nos expéditions sensibles. Je recommande KOST Academy pour tout acteur du fret aérien en Afrique.",
+      "Formation très complète, formateurs experts du domaine. Le certificat IATA m'a permis de débloquer rapidement nos expéditions sensibles. Je recommande KOST GROUP pour tout acteur du fret aérien en Afrique.",
   },
   {
     name: "[Témoignage à compléter]",

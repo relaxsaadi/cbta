@@ -1,6 +1,6 @@
-# KOST Academy — Funnel de vente
+# KOST GROUP — Funnel de vente
 
-Funnel multi-pays + multi-formations pour KOST Academy, 1<sup>er</sup> centre IATA CBTA Provider en Algérie.
+Funnel multi-pays + multi-formations pour KOST GROUP, 1<sup>er</sup> centre IATA CBTA Provider en Algérie.
 
 ## Stack
 

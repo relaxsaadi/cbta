@@ -9,7 +9,7 @@ import MerciTracker from "./MerciTracker";
 export const metadata: Metadata = {
   title: "Merci pour votre demande",
   description:
-    "Votre demande KOST Academy a bien été reçue. Un conseiller vous contacte sous 24h ouvrables.",
+    "Votre demande KOST GROUP a bien été reçue. Un conseiller vous contacte sous 24h ouvrables.",
   robots: { index: false, follow: false },
 };
 
@@ -29,7 +29,7 @@ export default function MerciPage() {
               Merci ! Votre demande a bien été reçue
             </h1>
             <p className="text-lg text-gray-600 mb-10">
-              Un conseiller pédagogique KOST Academy vous contacte très bientôt.
+              Un conseiller pédagogique KOST GROUP vous contacte très bientôt.
             </p>
 
             <div className="text-left bg-gray-50 rounded-2xl p-6 md:p-8 mb-8">

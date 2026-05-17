@@ -8,7 +8,7 @@ export function leadConfirmationEmail(lead: LeadPayload): {
   html: string;
   text: string;
 } {
-  const subject = "Votre demande KOST Academy a bien été reçue";
+  const subject = "Votre demande KOST GROUP a bien été reçue";
   const html = `<!doctype html>
 <html lang="fr">
 <head><meta charset="utf-8"><title>${subject}</title></head>
@@ -16,9 +16,9 @@ export function leadConfirmationEmail(lead: LeadPayload): {
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f7fb;padding:32px 0;">
 <tr><td align="center">
 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-  <tr><td style="background:${PRIMARY};padding:32px;text-align:center;color:#ffffff;">
-    <div style="font-size:24px;font-weight:800;letter-spacing:0.5px;">KOST ACADEMY</div>
-    <div style="font-size:13px;opacity:0.85;margin-top:6px;">1er Centre CBTA Provider Certifié IATA en Algérie</div>
+  <tr><td style="background:#ffffff;padding:28px;text-align:center;border-bottom:3px solid ${PRIMARY};">
+    <img src="https://dgr.kostacademy.com/kost-group-logo-800.png" alt="KOST GROUP" width="240" height="auto" style="max-width:240px;height:auto;display:inline-block;"/>
+    <div style="font-size:12px;color:#5b6b80;margin-top:12px;letter-spacing:1px;text-transform:uppercase;">1er Centre CBTA Provider Certifié IATA en Algérie</div>
   </td></tr>
   <tr><td style="padding:36px 36px 16px 36px;">
     <h1 style="margin:0 0 16px;font-size:22px;color:${PRIMARY};">Bonjour ${escape(lead.prenom)},</h1>
@@ -43,11 +43,11 @@ export function leadConfirmationEmail(lead: LeadPayload): {
     </div>
     <p style="line-height:1.6;font-size:14px;color:#5b6b80;margin:24px 0 0;">
       Bien cordialement,<br>
-      L'équipe pédagogique KOST Academy
+      L'équipe pédagogique KOST GROUP
     </p>
   </td></tr>
   <tr><td style="background:#0f1c2e;padding:24px 36px;color:#a8b3c4;font-size:12px;line-height:1.6;text-align:center;">
-    KOST Academy · 176 Cité Boushaki, Bab Ezzouar, Alger<br>
+    KOST GROUP · 176 Cité Boushaki, Bab Ezzouar, Alger<br>
     Certifié IATA — Vérifiable sur iata.org/cbta-center-registry<br>
     Paiement EUR/USD via STRATEGIX (entité française)
   </td></tr>
@@ -64,7 +64,7 @@ Un conseiller pédagogique vous contacte sous 24 heures ouvrables.
 
 WhatsApp : +213 542 30 53 83
 
-L'équipe KOST Academy`;
+L'équipe KOST GROUP`;
 
   return { subject, html, text };
 }
@@ -76,7 +76,7 @@ export function leadNotificationEmail(lead: LeadPayload): {
   const subject = `Nouveau lead — ${lead.formation} — ${lead.pays}`;
   const html = `<!doctype html>
 <html><body style="font-family:-apple-system,sans-serif;color:#0f1c2e;padding:24px;">
-<h2 style="color:${PRIMARY};margin:0 0 16px;">Nouveau lead KOST Academy</h2>
+<h2 style="color:${PRIMARY};margin:0 0 16px;">Nouveau lead KOST GROUP</h2>
 <table cellspacing="0" cellpadding="8" style="border-collapse:collapse;width:100%;font-size:14px;">
 <tr><td style="background:#f5f7fb;font-weight:600;width:180px;">Nom</td><td>${escape(lead.prenom)} ${escape(lead.nom || "")}</td></tr>
 <tr><td style="background:#f5f7fb;font-weight:600;">Email</td><td><a href="mailto:${escape(lead.email)}">${escape(lead.email)}</a></td></tr>

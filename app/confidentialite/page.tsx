@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
-  description: "Politique de confidentialité et traitement RGPD — KOST Academy",
+  description: "Politique de confidentialité et traitement RGPD — KOST GROUP",
   alternates: { canonical: "/confidentialite" },
 };
 
@@ -64,7 +64,7 @@ export default function ConfidentialitePage() {
                 Destinataires
               </h2>
               <p>
-                Vos données sont accessibles uniquement à l'équipe pédagogique et commerciale de KOST Academy, ainsi qu'à STRATEGIX (entité française) pour la facturation. Aucune donnée n'est revendue à des tiers.
+                Vos données sont accessibles uniquement à l'équipe pédagogique et commerciale de KOST GROUP, ainsi qu'à STRATEGIX (entité française) pour la facturation. Aucune donnée n'est revendue à des tiers.
               </p>
             </section>
             <section>

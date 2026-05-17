@@ -178,7 +178,7 @@ async function sendNotificationEmail(lead: LeadPayload): Promise<SideStatus> {
 
   const notifyEmail = process.env.NOTIFICATION_EMAIL || "kostgroupe@gmail.com";
   const fromAddress =
-    process.env.RESEND_FROM_EMAIL || "KOST Academy <onboarding@resend.dev>";
+    process.env.RESEND_FROM_EMAIL || "KOST GROUP <onboarding@resend.dev>";
 
   try {
     const resend = new Resend(apiKey);

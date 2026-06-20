@@ -23,7 +23,7 @@ export function courseSchema(formation: Formation) {
     provider: {
       "@type": "EducationalOrganization",
       name: "KOST GROUP",
-      sameAs: process.env.NEXT_PUBLIC_SITE_URL || "https://formation.kostacademy.com",
+      sameAs: process.env.NEXT_PUBLIC_SITE_URL || "https://dgr.kostacademy.com",
     },
     offers: {
       "@type": "Offer",

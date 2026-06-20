@@ -33,6 +33,12 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "KOST GROUP" }],
   alternates: { canonical: "/" },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
+    other: {
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION || "",
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },

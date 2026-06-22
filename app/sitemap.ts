@@ -36,6 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...dgrUrls,
     {
+      url: `${base}/planning`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
       url: `${base}/mentions-legales`,
       lastModified: now,
       changeFrequency: "yearly",

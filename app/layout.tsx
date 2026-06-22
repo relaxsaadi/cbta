@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
 const inter = Inter({
@@ -125,6 +126,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
+        <Navbar />
         {children}
         <AnalyticsLoader />
       </body>

@@ -3,8 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, Clock, Users, ChevronDown, MessageCircle, CheckCircle, ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { Calendar, Clock, Users, ChevronDown, MessageCircle } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/formations";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
 type Session = {
   id: string;
@@ -422,17 +432,6 @@ export default function PlanningPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#002A56] via-[#003D7A] to-[#001a38] text-white">
-      {/* NAV BACK */}
-      <div className="max-w-5xl mx-auto px-4 pt-6">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
-        >
-          <ArrowLeft size={14} />
-          Accueil
-        </Link>
-      </div>
-
       {/* HERO */}
       <section className="max-w-5xl mx-auto px-4 pt-10 pb-12 text-center">
         <div className="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs font-bold px-4 py-2 rounded-full mb-6 uppercase tracking-wider">
@@ -462,11 +461,18 @@ export default function PlanningPage() {
             { num: "12", label: "Places / session" },
             { num: "10", label: "Fonctions DGR" },
             { num: "5", label: "Pays disponibles" },
-          ].map((s) => (
-            <div key={s.label} className="bg-white/[0.05] border border-white/10 rounded-xl p-4 text-center">
+          ].map((s, i) => (
+            <motion.div
+              key={s.label}
+              custom={i}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="bg-white/[0.05] border border-white/10 rounded-xl p-4 text-center"
+            >
               <div className="text-2xl font-black text-yellow-400">{s.num}</div>
               <div className="text-xs text-white/40 font-medium mt-1">{s.label}</div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -515,8 +521,17 @@ export default function PlanningPage() {
         <p className="text-center text-white/40 text-sm mb-8">Cliquez sur un mois pour voir les sessions disponibles</p>
 
         <div className="flex flex-col gap-3">
-          {MONTHS.map((month) => (
-            <MonthBlock key={month.id} month={month} />
+          {MONTHS.map((month, i) => (
+            <motion.div
+              key={month.id}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={fadeUp}
+            >
+              <MonthBlock month={month} />
+            </motion.div>
           ))}
         </div>
       </section>

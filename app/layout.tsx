@@ -98,6 +98,7 @@ const orgSchema = {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki, Bab Ezzouar",
     addressLocality: "Alger",
+    postalCode: "16111",
     addressCountry: "DZ",
   },
   telephone: "+213542305383",

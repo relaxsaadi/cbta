@@ -489,7 +489,7 @@ export default function PlanningPage() {
       <section className="max-w-3xl mx-auto px-4 mb-10">
         <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden">
           <div className="bg-yellow-400/[0.08] border-b border-yellow-400/15 px-5 py-3 text-xs font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-2">
-            <Image src="/iata-cbta-provider.png" alt="IATA" width={20} height={20} className="object-contain" />
+            <Image src="/iata-cbta-provider.png" alt="IATA CBTA Provider Certifié — KOST GROUP Algérie" width={20} height={20} className="object-contain" />
             Ce que vous obtenez avec chaque formation
           </div>
           {[

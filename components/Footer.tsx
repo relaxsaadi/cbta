@@ -72,7 +72,9 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-3">Liens</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white">Accueil</Link></li>
-              <li><Link href="/#formations" className="hover:text-white">Formations</Link></li>
+              <li><Link href="/#formations" className="hover:text-white">Formations DGR</Link></li>
+              <li><Link href="/planning" className="hover:text-white">Planning 2026</Link></li>
+              <li><Link href="/promos" className="hover:text-white">Offres & Réductions</Link></li>
               <li><Link href="/#formulaire" className="hover:text-white">Demande de programme</Link></li>
               <li><Link href="/mentions-legales" className="hover:text-white">Mentions légales</Link></li>
               <li><Link href="/confidentialite" className="hover:text-white">Politique de confidentialité</Link></li>

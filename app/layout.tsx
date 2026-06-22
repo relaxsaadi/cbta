@@ -17,8 +17,7 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default:
-      "Formation IATA DGR-CBTA — KOST GROUP · 1er Centre CBTA Provider Certifié IATA en Algérie",
+    default: "Formation IATA DGR Algérie — Certifié KOST GROUP",
     template: "%s — KOST GROUP",
   },
   description:

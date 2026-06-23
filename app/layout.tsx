@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
 import "./globals.css";
 
@@ -127,6 +128,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <AnalyticsLoader />
+        <Analytics />
       </body>
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
     </html>

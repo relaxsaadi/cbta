@@ -1,0 +1,16 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.dgr.kostacademy.com" }],
+      "destination": "https://dgr.kostacademy.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "formation.kostacademy.com" }],
+      "destination": "https://dgr.kostacademy.com/$1",
+      "permanent": true
+    }
+  ]
+}

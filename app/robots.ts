@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   const base =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://formation.kostacademy.com";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://dgr.kostacademy.com";
   return {
     rules: [
       {

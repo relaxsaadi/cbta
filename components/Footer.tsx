@@ -76,6 +76,8 @@ export default function Footer() {
               <li><Link href="/planning" className="hover:text-white">Planning 2026</Link></li>
               <li><Link href="/promos" className="hover:text-white">Offres & Réductions</Link></li>
               <li><Link href="/#formulaire" className="hover:text-white">Demande de programme</Link></li>
+              <li><Link href="/a-propos" className="hover:text-white">À propos</Link></li>
+              <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
               <li><Link href="/mentions-legales" className="hover:text-white">Mentions légales</Link></li>
               <li><Link href="/confidentialite" className="hover:text-white">Politique de confidentialité</Link></li>
             </ul>

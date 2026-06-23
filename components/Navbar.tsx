@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, MessageCircle, Calendar, Tag, BookOpen, Home } from "lucide-react";
+import { Menu, X, ChevronDown, MessageCircle, Calendar, Tag, BookOpen, Home, Info } from "lucide-react";
 import { WHATSAPP_LINK } from "@/lib/formations";
 
 const FORMATIONS_NAV = [
@@ -133,6 +133,11 @@ export default function Navbar() {
               <Tag size={14} />
               Promos
             </NavLink>
+
+            <NavLink href="/a-propos" active={isActive("/a-propos")}>
+              <Info size={14} />
+              À propos
+            </NavLink>
           </div>
 
           {/* CTA */}
@@ -201,6 +206,12 @@ export default function Navbar() {
               </MobileNavLink>
               <MobileNavLink href="/promos" active={isActive("/promos")}>
                 <Tag size={16} /> Promos
+              </MobileNavLink>
+              <MobileNavLink href="/a-propos" active={isActive("/a-propos")}>
+                <Info size={16} /> À propos
+              </MobileNavLink>
+              <MobileNavLink href="/contact" active={isActive("/contact")}>
+                <MessageCircle size={16} /> Contact
               </MobileNavLink>
 
               <div className="pt-3 border-t border-white/[0.07]">

@@ -38,7 +38,17 @@ const orgSchema = {
   },
   telephone: "+213542305383",
   email: "kostgroupe@gmail.com",
-  openingHours: "Su-Th 08:30-16:30",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 36.71942,
+    longitude: 3.18274,
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+    opens: "08:30",
+    closes: "16:30",
+  },
   sameAs: ["https://www.iata.org/en/training/cbta-center-registry/"],
   hasCredential: {
     "@type": "EducationalOccupationalCredential",

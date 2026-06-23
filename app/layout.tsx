@@ -103,8 +103,23 @@ const orgSchema = {
     addressCountry: "DZ",
   },
   telephone: "+213542305383",
+  email: "kostgroupe@gmail.com",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 36.71942,
+    longitude: 3.18274,
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+    opens: "08:30",
+    closes: "16:30",
+  },
   areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "ML", "BF", "GA"],
-  sameAs: ["https://www.linkedin.com/company/kost-group"],
+  sameAs: [
+    "https://www.linkedin.com/company/kost-group",
+    "https://www.facebook.com/Kostgroup",
+  ],
 };
 
 export default function RootLayout({

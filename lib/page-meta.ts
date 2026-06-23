@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import type { Formation } from "./formations";
 
 export function buildFormationMetadata(formation: Formation): Metadata {
+  // Keep title ≤47 chars so "— KOST GROUP" suffix stays under 60 total
+  const shortTitle = `${formation.code} — ${formation.title}`.slice(0, 47).replace(/\s\S+$/, "");
   return {
-    title: `${formation.code} — ${formation.title}`,
-    description: `${formation.description} Durée : ${formation.duree}. Tarif : ${formation.prixEur} € / ${formation.prixUsd} $.`,
+    title: shortTitle,
+    description: `${formation.description} Durée : ${formation.duree}. Tarif : ${formation.prixEur} €.`,
     alternates: { canonical: `/${formation.slug}` },
     openGraph: {
-      title: `${formation.code} — ${formation.title} | KOST GROUP`,
+      title: shortTitle,
       description: formation.description,
       url: `/${formation.slug}`,
     },

@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: siteUrl,
     siteName: "KOST GROUP",
-    title: "Formation IATA DGR-CBTA Certifiée — KOST GROUP",
+    title: "Formation IATA DGR Algérie — Certifié KOST GROUP",
     description:
       "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel, 50% moins cher qu'à Bruxelles.",
     images: [

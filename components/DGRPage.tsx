@@ -166,10 +166,16 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                 <div className="text-xs uppercase tracking-wider text-[#F39C12] font-bold mb-2">
                   Prochaines sessions
                 </div>
-                <div className="font-bold text-lg">Sur demande</div>
+                <div className="font-bold text-lg">Juillet – Décembre 2026</div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Calendrier ajusté à votre besoin · Sessions toutes les 4-6 semaines
+                  Sessions toutes les 4–6 semaines à Alger
                 </p>
+                <Link
+                  href="/planning"
+                  className="inline-flex items-center gap-1 mt-3 text-sm font-bold text-[#003D7A] hover:text-[#F39C12] transition-colors"
+                >
+                  Voir le planning complet →
+                </Link>
               </div>
             </div>
           </div>

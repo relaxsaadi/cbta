@@ -232,6 +232,62 @@ export default function PromosPage() {
         </div>
       </section>
 
+      {/* COMPARATIF PRIX VS CONCURRENTS */}
+      <section className="max-w-3xl mx-auto px-4 mb-16">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          custom={0}
+        >
+          <h2 className="text-xl font-black text-center mb-2">
+            Combien coûte la même formation ailleurs ?
+          </h2>
+          <p className="text-white/40 text-sm text-center mb-6">
+            Le certificat IATA est identique — le prix, non.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-3 px-4 text-white/40 font-semibold text-xs uppercase tracking-wider">Formation</th>
+                  <th className="py-3 px-3 text-white/40 font-semibold text-xs uppercase tracking-wider text-center">IATA Bruxelles</th>
+                  <th className="py-3 px-3 text-white/40 font-semibold text-xs uppercase tracking-wider text-center">AFTRAL (France)</th>
+                  <th className="py-3 px-3 bg-yellow-400/[0.07] rounded-t-xl text-yellow-400 font-black text-xs uppercase tracking-wider text-center">KOST GROUP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: "DGR 7.1 Initial", brussels: "$3 950", aftral: "~€2 800", kost: "1 800 €", saving: "−36%" },
+                  { name: "DGR 7.3 Initial", brussels: "$4 500", aftral: "~€3 100", kost: "2 100 €", saving: "−32%" },
+                  { name: "DGR 7.2", brussels: "$2 200", aftral: "~€1 600", kost: "900 €", saving: "−44%" },
+                  { name: "DGR 7.5", brussels: "$1 800", aftral: "~€1 200", kost: "850 €", saving: "−29%" },
+                  { name: "DGR 7.7/7.9", brussels: "$1 400", aftral: "~€950", kost: "650 €", saving: "−32%" },
+                ].map((row, i) => (
+                  <tr key={row.name} className={`border-b border-white/[0.06] ${i % 2 === 0 ? "" : "bg-white/[0.02]"}`}>
+                    <td className="py-3 px-4 font-semibold text-white">{row.name}</td>
+                    <td className="py-3 px-3 text-center text-red-400/80 font-mono">{row.brussels}</td>
+                    <td className="py-3 px-3 text-center text-orange-400/70 font-mono">{row.aftral}</td>
+                    <td className="py-3 px-3 bg-yellow-400/[0.05] text-center">
+                      <span className="font-black text-green-400 font-mono">{row.kost}</span>
+                      <span className="ml-2 text-xs text-green-500 font-bold">{row.saving}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colSpan={4} className="pt-3 px-4 text-xs text-white/25 italic">
+                    Tarifs IATA Bruxelles au catalogue 2026 · AFTRAL estimés (session inter) · Tous incluent l'examen officiel IATA
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </motion.div>
+      </section>
+
       {/* CUMUL SECTION */}
       <section className="max-w-3xl mx-auto px-4 mb-16">
         <motion.div

@@ -28,7 +28,23 @@ type Session = {
   price: string;
   audience: string;
   seatsLabel: string;
+  slug?: string;
   urgent?: boolean;
+};
+
+const BADGE_TO_SLUG: Record<string, string> = {
+  "DGR 7.1 — Initial": "dgr-7-1",
+  "DGR 7.1 — Recurrent": "dgr-7-1-recurrent",
+  "DGR 7.2": "dgr-7-2",
+  "DGR 7.3 — Initial": "dgr-7-3",
+  "DGR 7.3 — Recurrent": "dgr-7-3-recurrent",
+  "DGR 7.4": "dgr-7-4",
+  "DGR 7.5": "dgr-7-5",
+  "DGR 7.6": "dgr-7-6",
+  "DGR 7.7": "dgr-7-7",
+  "DGR 7.8": "dgr-7-8",
+  "DGR 7.9": "dgr-7-9",
+  "DGR 7.10": "dgr-7-10",
 };
 
 type Month = {
@@ -329,9 +345,18 @@ function SessionCard({ session, month }: { session: Session; month: string }) {
   return (
     <div className="bg-white/[0.03] border border-white/10 rounded-xl p-5 hover:border-white/20 transition-all duration-200 hover:-translate-y-0.5 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2 flex-wrap">
-        <span className={`text-xs font-bold px-3 py-1 rounded-full ${session.badgeColor}`}>
-          {session.badge}
-        </span>
+        {BADGE_TO_SLUG[session.badge] ? (
+          <Link
+            href={`/${BADGE_TO_SLUG[session.badge]}`}
+            className={`text-xs font-bold px-3 py-1 rounded-full ${session.badgeColor} hover:opacity-80 transition-opacity`}
+          >
+            {session.badge} →
+          </Link>
+        ) : (
+          <span className={`text-xs font-bold px-3 py-1 rounded-full ${session.badgeColor}`}>
+            {session.badge}
+          </span>
+        )}
         <span className="text-xs font-semibold text-white/50 bg-white/[0.06] px-2 py-1 rounded-full whitespace-nowrap">
           {session.seatsLabel}
         </span>
@@ -512,6 +537,41 @@ export default function PlanningPage() {
             <span className="text-sm font-bold text-yellow-400">Valeur totale de l'offre</span>
             <span className="text-lg font-black text-yellow-400">$2 800+ · Votre prix : dès 650 €</span>
           </div>
+        </div>
+      </section>
+
+      {/* INTRO STATIQUE — texte indexable par Google */}
+      <section className="max-w-3xl mx-auto px-4 pb-10 text-white/60 text-sm leading-relaxed">
+        <p className="mb-4">
+          KOST GROUP, premier centre IATA CBTA Provider certifié en Algérie, organise ses sessions de formation IATA DGR (Marchandises Dangereuses) de juillet à décembre 2026 à Alger. Chaque session est animée par un formateur certifié IATA, inclut le manuel DGR 67e édition et l'examen officiel IATA. Le certificat délivré est identique à celui obtenu à Bruxelles et reconnu par les 300+ compagnies membres IATA.
+        </p>
+        <p className="mb-6">
+          Les formations couvrent toutes les fonctions réglementées : préparation des expéditions (<Link href="/dgr-7-1" className="text-yellow-400 hover:underline">DGR 7.1</Link>), acceptation cargo (<Link href="/dgr-7-3" className="text-yellow-400 hover:underline">DGR 7.3</Link>), personnel sol (<Link href="/dgr-7-4" className="text-yellow-400 hover:underline">DGR 7.4</Link>), enregistrement (<Link href="/dgr-7-5" className="text-yellow-400 hover:underline">DGR 7.5</Link>), équipages (<Link href="/dgr-7-7" className="text-yellow-400 hover:underline">DGR 7.7</Link>) et personnels navigants de cabine (<Link href="/dgr-7-9" className="text-yellow-400 hover:underline">DGR 7.9</Link>). Sessions intra-entreprise disponibles dès 4 participants.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 not-italic">
+          {[
+            { label: "DGR 7.1 Initial", href: "/dgr-7-1", price: "1 800 €" },
+            { label: "DGR 7.1 Recurrent", href: "/dgr-7-1-recurrent", price: "1 400 €" },
+            { label: "DGR 7.2", href: "/dgr-7-2", price: "900 €" },
+            { label: "DGR 7.3 Initial", href: "/dgr-7-3", price: "2 100 €" },
+            { label: "DGR 7.3 Recurrent", href: "/dgr-7-3-recurrent", price: "1 500 €" },
+            { label: "DGR 7.4", href: "/dgr-7-4", price: "900 €" },
+            { label: "DGR 7.5", href: "/dgr-7-5", price: "850 €" },
+            { label: "DGR 7.6", href: "/dgr-7-6", price: "650 €" },
+            { label: "DGR 7.7", href: "/dgr-7-7", price: "650 €" },
+            { label: "DGR 7.8", href: "/dgr-7-8", price: "650 €" },
+            { label: "DGR 7.9", href: "/dgr-7-9", price: "650 €" },
+            { label: "DGR 7.10", href: "/dgr-7-10", price: "650 €" },
+          ].map((f) => (
+            <Link
+              key={f.href}
+              href={f.href}
+              className="flex items-center justify-between bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 rounded-xl px-3 py-2 transition-colors group"
+            >
+              <span className="text-xs font-bold text-white group-hover:text-yellow-400 transition-colors">{f.label}</span>
+              <span className="text-xs text-white/40 font-medium">{f.price}</span>
+            </Link>
+          ))}
         </div>
       </section>
 

@@ -7,6 +7,7 @@ import FormationsTable from "@/components/FormationsTable";
 import PriceAnchor from "@/components/PriceAnchor";
 import IncludedSection from "@/components/IncludedSection";
 import Guarantee from "@/components/Guarantee";
+import TrainerBio from "@/components/TrainerBio";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import LeadForm from "@/components/LeadForm";
@@ -102,6 +103,7 @@ export default function HomePage() {
         <PriceAnchor />
         <IncludedSection />
         <Guarantee />
+        <TrainerBio />
         <Testimonials />
         <FAQ />
         <Suspense fallback={null}>

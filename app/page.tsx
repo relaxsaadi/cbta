@@ -9,6 +9,7 @@ import IncludedSection from "@/components/IncludedSection";
 import Guarantee from "@/components/Guarantee";
 import TrainerBio from "@/components/TrainerBio";
 import Testimonials from "@/components/Testimonials";
+import B2BSection from "@/components/B2BSection";
 import FAQ from "@/components/FAQ";
 import LeadForm from "@/components/LeadForm";
 import WhatsAppSticky from "@/components/WhatsAppSticky";
@@ -105,6 +106,7 @@ export default function HomePage() {
         <Guarantee />
         <TrainerBio />
         <Testimonials />
+        <B2BSection />
         <FAQ />
         <Suspense fallback={null}>
           <LeadForm sourcePage="/" />

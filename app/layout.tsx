@@ -4,6 +4,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
 import Navbar from "@/components/Navbar";
+import UrgenceBanner from "@/components/UrgenceBanner";
 import "./globals.css";
 
 const inter = Inter({
@@ -142,6 +143,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased bg-[#002A56]">
+        <UrgenceBanner />
         <Navbar />
         {children}
         <AnalyticsLoader />

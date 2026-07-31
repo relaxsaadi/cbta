@@ -8,7 +8,6 @@ import PriceAnchor from "@/components/PriceAnchor";
 import IncludedSection from "@/components/IncludedSection";
 import Guarantee from "@/components/Guarantee";
 import TrainerBio from "@/components/TrainerBio";
-import Testimonials from "@/components/Testimonials";
 import B2BSection from "@/components/B2BSection";
 import FAQ from "@/components/FAQ";
 import LeadForm from "@/components/LeadForm";
@@ -105,7 +104,6 @@ export default function HomePage() {
         <IncludedSection />
         <Guarantee />
         <TrainerBio />
-        <Testimonials />
         <B2BSection />
         <FAQ />
         <Suspense fallback={null}>

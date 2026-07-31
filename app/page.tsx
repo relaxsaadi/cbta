@@ -106,9 +106,11 @@ export default function HomePage() {
         <TrainerBio />
         <B2BSection />
         <FAQ />
-        <Suspense fallback={null}>
-          <LeadForm sourcePage="/" />
-        </Suspense>
+        <div id="contact">
+          <Suspense fallback={null}>
+            <LeadForm sourcePage="/" />
+          </Suspense>
+        </div>
       </main>
       <Footer />
       <WhatsAppSticky />

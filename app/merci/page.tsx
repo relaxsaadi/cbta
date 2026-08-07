@@ -5,6 +5,7 @@ import { CheckCircle2, Mail, PhoneCall, FileText, Home, MessageCircle } from "lu
 import { WHATSAPP_LINK, PHONE_DISPLAY } from "@/lib/formations";
 import Footer from "@/components/Footer";
 import MerciTracker from "./MerciTracker";
+import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Merci pour votre demande",
@@ -87,7 +88,9 @@ export default function MerciPage() {
                 <strong>Besoin urgent ?</strong> Contactez-nous directement :
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <a
+                <TrackedLink
+                  track="whatsapp"
+                  location="merci-page"
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -95,14 +98,15 @@ export default function MerciPage() {
                 >
                   <MessageCircle className="h-5 w-5" aria-hidden />
                   WhatsApp
-                </a>
-                <a
+                </TrackedLink>
+                <TrackedLink
+                  track="phone"
                   href="tel:+213542305383"
                   className="btn-secondary text-sm"
                 >
                   <PhoneCall className="h-5 w-5" aria-hidden />
                   {PHONE_DISPLAY}
-                </a>
+                </TrackedLink>
               </div>
             </div>
 

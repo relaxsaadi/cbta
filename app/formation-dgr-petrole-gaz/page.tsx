@@ -5,9 +5,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppSticky from "@/components/WhatsAppSticky";
 import LeadForm from "@/components/LeadForm";
+import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR Pétrole & Gaz — Marchandises Dangereuses Hydrocarbures | KOST GROUP",
+  title: "Formation IATA DGR Pétrole & Gaz — Marchandises Dangereuses Hydrocarbures",
   description:
     "Formation IATA DGR pour les entreprises pétrolières et gazières. Expédition par avion de produits pétroliers, gaz comprimés, matières corrosives et équipements chimiques. Centre CBTA certifié.",
   alternates: { canonical: "/formation-dgr-petrole-gaz" },
@@ -75,9 +76,9 @@ export default function Page() {
             <a href="#contact" style={{ background: "white", color: "#7c3800", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
               Demander un devis
             </a>
-            <a href="https://wa.me/213542305383?text=Bonjour%2C%20secteur%20p%C3%A9trolier%20-%20je%20souhaite%20former%20mon%20%C3%A9quipe%20DGR" target="_blank" rel="noopener noreferrer" style={{ background: "#25D366", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
+            <TrackedLink track="whatsapp" location="formation-dgr-petrole-gaz-top" href="https://wa.me/213542305383?text=Bonjour%2C%20secteur%20p%C3%A9trolier%20-%20je%20souhaite%20former%20mon%20%C3%A9quipe%20DGR" target="_blank" rel="noopener noreferrer" style={{ background: "#25D366", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
               WhatsApp
-            </a>
+            </TrackedLink>
           </div>
         </section>
 
@@ -163,22 +164,24 @@ export default function Page() {
               ))}
             </div>
 
-            {/* Article 49 */}
+            {/* Positionnement */}
             <div style={{ background: "#1c1c1c", color: "white", borderRadius: 12, padding: "24px 28px", marginBottom: 28 }}>
-              <p style={{ fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase", opacity: 0.6, marginBottom: 8 }}>Avantage réglementaire</p>
+              <p style={{ fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase", opacity: 0.6, marginBottom: 8 }}>Positionnement</p>
               <p style={{ fontSize: 15, lineHeight: 1.7, margin: 0 }}>
-                En tant que <strong>seul prestataire IATA CBTA accrédité ANAC en Algérie</strong>, KOST bénéficie du régime de marché de gré à gré selon l&apos;<strong>Article 49 du Décret 15-247</strong> — aucun appel d&apos;offres requis pour Sonatrach et ses filiales. Commandez directement.
+                En tant que <strong>seul prestataire IATA CBTA Provider certifié en Algérie</strong> (n°CBTA-PR-25-0059), KOST accompagne Sonatrach et ses filiales dans leur conformité DGR. Contactez-nous pour évaluer les options d&apos;approvisionnement adaptées à votre procédure d&apos;achat.
               </p>
             </div>
 
-            <a
+            <TrackedLink
+              track="whatsapp"
+              location="formation-dgr-petrole-gaz-sonatrach"
               href="https://wa.me/213542305383?text=Bonjour%2C%20je%20repr%C3%A9sente%20Sonatrach%20et%20souhaite%20obtenir%20votre%20dossier%20formation%20DGR%20%2B%20les%20modalit%C3%A9s%20gr%C3%A9%20%C3%A0%20gr%C3%A9"
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: "inline-block", background: "#25D366", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none", fontSize: 15 }}
             >
               Télécharger notre dossier Sonatrach via WhatsApp
-            </a>
+            </TrackedLink>
           </div>
         </section>
 
@@ -220,20 +223,22 @@ export default function Page() {
             <div style={{ background: "#f0f7ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: "20px 24px" }}>
               <p style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Référençable sur Sequana</p>
               <p style={{ fontSize: 13, color: "#555", lineHeight: 1.6, margin: 0 }}>
-                Le portail fournisseurs TotalEnergies (Sequana) exige un référencement préalable. KOST GROUP est référençable sur Sequana — nous fournissons tous les documents de conformité (accréditation IATA, attestation ANAC) nécessaires à votre processus achat.
+                Le portail fournisseurs TotalEnergies (Sequana) exige un référencement préalable. KOST GROUP est référençable sur Sequana — nous fournissons tous les documents de conformité (accréditation IATA CBTA Provider) nécessaires à votre processus achat.
               </p>
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <a
+            <TrackedLink
+              track="whatsapp"
+              location="formation-dgr-petrole-gaz-totalenergies"
               href="https://wa.me/213542305383?text=Bonjour%2C%20TotalEnergies%20Alg%C3%A9rie%20-%20je%20souhaite%20un%20devis%20formation%20DGR%20pour%20nos%20%C3%A9quipes%20et%20information%20sur%20votre%20r%C3%A9f%C3%A9rencement%20Sequana"
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: "inline-block", background: "#25D366", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none", fontSize: 15 }}
             >
               Contacter KOST pour TotalEnergies
-            </a>
+            </TrackedLink>
             <a
               href="#contact"
               style={{ display: "inline-block", background: "#7c3800", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none", fontSize: 15 }}
@@ -250,8 +255,8 @@ export default function Page() {
             { q: "Sonatrach, TotalEnergies, Eni — leurs exigences DGR sont-elles couvertes ?", a: "Oui. La formation DGR 7.1 KOST est conforme IATA DGR dernière édition, reconnue par toutes les majors pétrolières et les compagnies aériennes cargo (Air Algérie, Air France Cargo, etc.)." },
             { q: "Peut-on former des agents sur un site de production éloigné ?", a: "Oui. KOST GROUP propose des formations intra sur site dans les bassins pétroliers algériens (Hassi Messaoud, In Amenas, etc.) et dans tout pays africain à la demande." },
             { q: "Quels produits pétroliers sont réglementés DGR par avion ?", a: "Tout produit inflammable (classe 3), gazeux comprimé (classe 2), corrosif (classe 8) ou chimique de forage est soumis aux réglementations IATA DGR. La liste précise est dans le Dangerous Goods Regulations (DGR) IATA, Section 3." },
-            { q: "Comment Sonatrach peut-elle commander directement sans appel d'offres ?", a: "En vertu de l'Article 49 du Décret 15-247, un prestataire disposant d'une position unique ou d'une accréditation réglementaire exclusive peut être sollicité par gré à gré, sans procédure d'appel d'offres. KOST étant le seul centre IATA CBTA accrédité ANAC en Algérie, Sonatrach et ses filiales (TTA, etc.) peuvent nous sélectionner directement pour leurs formations DGR." },
-            { q: "TotalEnergies utilise Sequana — êtes-vous référençable ?", a: "Oui. KOST GROUP est référençable sur Sequana, le portail fournisseurs de TotalEnergies. Nous fournissons l'ensemble des documents requis : accréditation IATA CBTA, attestation ANAC, RIB, extrait de registre de commerce, et fiches de conformité HSE. Contactez-nous pour initier le processus de référencement." },
+            { q: "Quelle est votre procédure de référencement fournisseur pour Sonatrach ?", a: "KOST GROUP, en tant que seul prestataire IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059), peut fournir tous les documents de conformité nécessaires à votre processus achat interne (accréditation IATA, RIB, extrait de registre de commerce, fiches HSE). Contactez-nous pour évaluer avec vos services achats la procédure la plus adaptée à votre cas." },
+            { q: "TotalEnergies utilise Sequana — êtes-vous référençable ?", a: "Oui. KOST GROUP est référençable sur Sequana, le portail fournisseurs de TotalEnergies. Nous fournissons l'ensemble des documents requis : accréditation IATA CBTA Provider, RIB, extrait de registre de commerce, et fiches de conformité HSE. Contactez-nous pour initier le processus de référencement." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#7c3800" }}>{faq.q}</summary>

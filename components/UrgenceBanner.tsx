@@ -1,13 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const STORAGE_KEY = "kost_urgence_banner_dismissed";
 
+// Pages ciblant un autre pays que l'Algérie : le Décret 21-253 et l'ANAC
+// sont spécifiques à l'Algérie, donc ce bandeau n'y est pas pertinent.
+const NON_ALGERIA_PATHS = [
+  "/formation-dgr-maroc",
+  "/formation-dgr-senegal",
+  "/formation-dgr-cote-ivoire",
+  "/formation-dgr-cameroun",
+  "/formation-dgr-afrique",
+];
+
 export default function UrgenceBanner() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
+  const hiddenOnThisPage = NON_ALGERIA_PATHS.includes(pathname);
+
   useEffect(() => {
+    if (hiddenOnThisPage) return;
     try {
       const dismissed = localStorage.getItem(STORAGE_KEY);
       if (!dismissed) {
@@ -17,7 +33,7 @@ export default function UrgenceBanner() {
       // localStorage unavailable (SSR safety)
       setVisible(true);
     }
-  }, []);
+  }, [hiddenOnThisPage]);
 
   function dismiss() {
     setVisible(false);
@@ -28,7 +44,7 @@ export default function UrgenceBanner() {
     }
   }
 
-  if (!visible) return null;
+  if (hiddenOnThisPage || !visible) return null;
 
   return (
     <div
@@ -40,30 +56,26 @@ export default function UrgenceBanner() {
       <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
         {/* Desktop text */}
         <p className="hidden sm:block leading-snug flex-1">
-          <span className="font-semibold">⚠️ Alerte ANAC 2026 :</span>{" "}
-          Seuls les centres IATA CBTA sont désormais reconnus — votre certification est-elle toujours valide ?{" "}
-          <a
-            href="https://wa.me/213542305383"
-            target="_blank"
-            rel="noopener noreferrer"
+          <span className="font-semibold">⚠️ Obligation légale (Décret 21-253, Art. 14) :</span>{" "}
+          l'ANAC doit contrôler les programmes de formation marchandises dangereuses de tout exploitant — votre certification est-elle conforme ?{" "}
+          <Link
+            href="/reglementation-dgr-algerie"
             className="underline font-semibold whitespace-nowrap hover:text-orange-200 transition-colors"
           >
-            → Vérifier maintenant
-          </a>
+            → Voir le cadre réglementaire
+          </Link>
         </p>
 
         {/* Mobile text (shorter) */}
         <p className="block sm:hidden leading-snug flex-1 text-xs">
-          <span className="font-semibold">⚠️ ANAC 2026 :</span>{" "}
-          Centres non-CBTA non reconnus.{" "}
-          <a
-            href="https://wa.me/213542305383"
-            target="_blank"
-            rel="noopener noreferrer"
+          <span className="font-semibold">⚠️ Décret 21-253 :</span>{" "}
+          contrôle ANAC obligatoire des formations DGR.{" "}
+          <Link
+            href="/reglementation-dgr-algerie"
             className="underline font-semibold hover:text-orange-200 transition-colors"
           >
-            Vérifier →
-          </a>
+            Cadre légal →
+          </Link>
         </p>
 
         <button

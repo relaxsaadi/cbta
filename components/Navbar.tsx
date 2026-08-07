@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, MessageCircle, Calendar, Tag, BookOpen, Home, Info } from "lucide-react";
 import { WHATSAPP_LINK } from "@/lib/formations";
+import { trackWhatsApp } from "@/lib/tracking";
 
 const FORMATIONS_NAV = [
   { href: "/dgr-7-1", label: "DGR 7.1 — Expéditeurs" },
@@ -52,13 +52,13 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
           <Link href="/" className="shrink-0">
-            <div className="bg-white rounded-lg px-2.5 py-1.5 shadow-sm">
+            <div className="bg-white rounded-lg px-2 py-1.5 shadow-sm">
               <Image
-                src="/kost-group-logo.svg"
-                alt="KOST GROUP"
-                width={100}
-                height={56}
-                className="h-7 w-auto"
+                src="/kost-group-icon.png"
+                alt="KOST Academy"
+                width={48}
+                height={48}
+                className="h-11 w-11"
                 priority
               />
             </div>
@@ -92,14 +92,9 @@ export default function Navbar() {
                 />
               </button>
 
-              <AnimatePresence>
-                {formationsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-0 mt-1 w-64 bg-[#001f45] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+              {formationsOpen && (
+                  <div
+                    className="animate-dropdown absolute top-full left-0 mt-1 w-64 bg-[#001f45] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
                   >
                     <div className="px-3 py-2 border-b border-white/[0.07]">
                       <p className="text-xs font-bold text-white/30 uppercase tracking-wider">10 Formations IATA DGR</p>
@@ -119,9 +114,8 @@ export default function Navbar() {
                         </Link>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
             </div>
 
             <NavLink href="/planning" active={isActive("/planning")}>
@@ -146,6 +140,7 @@ export default function Navbar() {
               href={WHATSAPP_LINK}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsApp("navbar-desktop")}
               className="inline-flex items-center gap-1.5 bg-green-500 hover:bg-green-400 text-black text-sm font-black px-4 py-2 rounded-full transition-all duration-150 hover:scale-105 shadow-lg shadow-green-500/20"
             >
               <MessageCircle size={14} />
@@ -165,14 +160,9 @@ export default function Navbar() {
       </nav>
 
       {/* MOBILE MENU */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 bg-[#001f45]/98 backdrop-blur-lg border-b border-white/10 shadow-2xl"
+      {mobileOpen && (
+          <div
+            className="animate-fade-in-down-fast fixed inset-x-0 top-16 z-40 bg-[#001f45]/98 backdrop-blur-lg border-b border-white/10 shadow-2xl"
           >
             <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
               <MobileNavLink href="/" active={isActive("/")}>
@@ -219,6 +209,7 @@ export default function Navbar() {
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsApp("navbar-mobile")}
                   className="flex items-center justify-center gap-2 bg-green-500 text-black font-black text-sm px-6 py-3 rounded-full w-full"
                 >
                   <MessageCircle size={16} />
@@ -226,9 +217,8 @@ export default function Navbar() {
                 </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {/* Spacer */}
       <div className="h-16" />

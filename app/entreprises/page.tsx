@@ -5,11 +5,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppSticky from "@/components/WhatsAppSticky";
 import LeadForm from "@/components/LeadForm";
+import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR IATA Entreprises & Grands Comptes — Intra & Groupe | KOST GROUP",
+  title: "Formation DGR IATA Entreprises & Grands Comptes — Intra & Groupe",
   description:
-    "Formation IATA DGR intra-entreprise et groupe pour grands comptes en Algérie. Seul centre IATA CBTA accrédité ANAC (n°DZ-CBTA-001). Gré à gré autorisé Article 49 Décret 15-247. Sonatrach, Air Algérie, TotalEnergies.",
+    "Formation IATA DGR intra-entreprise et groupe pour grands comptes en Algérie. Seul centre IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059). Sonatrach, Air Algérie, TotalEnergies.",
   alternates: { canonical: "/entreprises" },
   keywords: [
     "formation DGR entreprises Algérie",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR IATA Entreprises — KOST GROUP",
     description:
-      "Formations DGR obligatoires (Décret 15-247) pour grands comptes. Seul prestataire IATA CBTA accrédité ANAC. Gré à gré possible — pas d'appel d'offres requis.",
+      "Formations DGR pour grands comptes. Seul prestataire IATA CBTA Provider certifié en Algérie.",
     url: "https://dgr.kostacademy.com/entreprises",
   },
 };
@@ -42,14 +43,14 @@ const JSON_LD = {
       "@type": "PostalAddress",
       addressCountry: "DZ",
       addressLocality: "Alger",
-      postalCode: "16111",
+      postalCode: "16024",
     },
   },
   areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "GA"],
   serviceType: "Formation professionnelle DGR IATA",
   hasCredential: {
     "@type": "EducationalOccupationalCredential",
-    name: "Accréditation ANAC n°DZ-CBTA-001",
+    name: "IATA CBTA Provider n°CBTA-PR-25-0059",
   },
 };
 
@@ -89,13 +90,13 @@ const SECTEURS = [
 const AVANTAGES = [
   {
     icon: "✅",
-    titre: "Seul centre IATA CBTA accrédité ANAC en Algérie",
-    desc: "Numéro d'accréditation officiel ANAC : DZ-CBTA-001. Nos certificats sont reconnus par toutes les compagnies aériennes et les autorités de l'aviation civile.",
+    titre: "Seul centre IATA CBTA Provider certifié en Algérie",
+    desc: "Numéro d'accréditation officiel IATA : CBTA-PR-25-0059, vérifiable sur le registre officiel IATA CBTA Center Registry. Nos certificats sont reconnus par toutes les compagnies aériennes membres IATA.",
   },
   {
     icon: "📋",
-    titre: "Gré à gré possible — Article 49 Décret 15-247",
-    desc: "En tant que prestataire unique agréé ANAC pour la formation CBTA, l'Article 49 du Décret 15-247 autorise la conclusion d'un marché de gré à gré sans appel d'offres obligatoire.",
+    titre: "Accréditation ANAC en cours de finalisation",
+    desc: "En parallèle de notre certification IATA CBTA, notre dossier d'accréditation ANAC est en phase finale — nous vous tenons informés de sa validation officielle.",
   },
   {
     icon: "🚁",
@@ -185,10 +186,10 @@ export default function Page() {
             Intra &amp; Groupe
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 }}>
-            Premier centre IATA CBTA accrédité ANAC en Algérie (n°DZ-CBTA-001). Formations obligatoires Décret 15-247 — sur site ou dans notre centre.
+            Premier centre CBTA Provider certifié IATA en Algérie (n°CBTA-PR-25-0059). Formations sur site ou dans notre centre.
           </p>
           <p style={{ fontSize: 13, opacity: 0.65, marginBottom: 36 }}>
-            Gré à gré autorisé · Art. 49 Décret 15-247 · Certificats individuels reconnus IATA
+            Accréditation ANAC en cours de finalisation · Certificats individuels reconnus IATA
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
@@ -197,14 +198,16 @@ export default function Page() {
             >
               Demander un devis groupe
             </a>
-            <a
+            <TrackedLink
+              track="whatsapp"
+              location="entreprises-page"
               href="https://wa.me/213542305383?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20une%20formation%20DGR%20intra-entreprise"
               target="_blank"
               rel="noopener noreferrer"
               style={{ background: "#25D366", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none", fontSize: 15 }}
             >
               WhatsApp direct
-            </a>
+            </TrackedLink>
           </div>
         </section>
 

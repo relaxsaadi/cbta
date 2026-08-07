@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import LeadForm from "@/components/LeadForm";
 import { MapPin, Phone, Clock, MessageCircle } from "lucide-react";
 import { WHATSAPP_LINK, PHONE_DISPLAY } from "@/lib/formations";
+import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -66,16 +67,16 @@ export default function ContactPage() {
                   <MapPin className="h-5 w-5 mt-0.5 text-[#F39C12] flex-shrink-0" aria-hidden />
                   <div>
                     <p className="font-semibold text-[#0f1c2e]">Adresse</p>
-                    <p className="text-gray-600">176 Cité Boushaki, Bab Ezzouar<br />Alger, Algérie — 16111</p>
+                    <p className="text-gray-600">176 Cité Boushaki, Bab Ezzouar<br />Alger, Algérie — 16024</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Phone className="h-5 w-5 mt-0.5 text-[#F39C12] flex-shrink-0" aria-hidden />
                   <div>
                     <p className="font-semibold text-[#0f1c2e]">Téléphone / WhatsApp</p>
-                    <a href="tel:+213542305383" className="text-[#003D7A] hover:underline">
+                    <TrackedLink track="phone" href="tel:+213542305383" className="text-[#003D7A] hover:underline">
                       {PHONE_DISPLAY}
-                    </a>
+                    </TrackedLink>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -88,7 +89,9 @@ export default function ContactPage() {
               </ul>
 
               <div className="mt-8">
-                <a
+                <TrackedLink
+                  track="whatsapp"
+                  location="contact-page"
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -96,7 +99,7 @@ export default function ContactPage() {
                 >
                   <MessageCircle size={16} />
                   Écrire sur WhatsApp
-                </a>
+                </TrackedLink>
               </div>
 
               <div className="mt-8 p-4 bg-[#f7f9fc] rounded-xl border border-gray-100 text-sm text-gray-600">
@@ -105,6 +108,18 @@ export default function ContactPage() {
                   Paiements traités via <strong>STRATEGIX</strong> (entité française) — Facture EUR ou USD.
                   Entité algérienne disponible sur demande.
                 </p>
+              </div>
+
+              <div className="mt-8 rounded-xl overflow-hidden border border-gray-100">
+                <iframe
+                  title="Localisation KOST GROUP — Bab Ezzouar, Alger"
+                  src="https://www.google.com/maps?q=36.71942,3.18274&z=15&output=embed"
+                  width="100%"
+                  height="220"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </div>
 

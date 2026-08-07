@@ -19,11 +19,11 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Formation IATA DGR Algérie — Certifié KOST GROUP",
+    default: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié | Sessions 2026",
     template: "%s — KOST GROUP",
   },
   description:
-    "Formations IATA DGR-CBTA officielles (7.1 à 7.10) à Alger pour l'Afrique francophone. Certificat IATA reconnu, 50% moins cher qu'à Bruxelles. Paiement EUR/USD.",
+    "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Catégories 7.1 à 7.10. Reconnu par 300+ compagnies IATA. Prochaine session : août 2026.",
   keywords: [
     "Formation IATA DGR",
     "CBTA",
@@ -57,9 +57,9 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: siteUrl,
     siteName: "KOST GROUP",
-    title: "Formation IATA DGR Algérie — Certifié KOST GROUP",
+    title: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié | Sessions 2026",
     description:
-      "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel, 50% moins cher qu'à Bruxelles.",
+      "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Reconnu par 300+ compagnies. Prochaine session : août 2026.",
     images: [
       {
         url: "/og-image.jpg",
@@ -88,11 +88,14 @@ export const viewport: Viewport = {
 
 const orgSchema = {
   "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
+  "@type": ["EducationalOrganization", "LocalBusiness"],
   name: "KOST GROUP",
   alternateName: "KOST Academy",
   url: siteUrl,
-  logo: `${siteUrl}/kost-group-logo.svg`,
+  logo: {
+    "@type": "ImageObject",
+    url: `${siteUrl}/kost-group-logo.svg`,
+  },
   image: `${siteUrl}/og-image.jpg`,
   description:
     "1er Centre CBTA Provider Certifié IATA en Algérie. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
@@ -100,7 +103,7 @@ const orgSchema = {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki, Bab Ezzouar",
     addressLocality: "Alger",
-    postalCode: "16111",
+    postalCode: "16024",
     addressCountry: "DZ",
   },
   telephone: "+213542305383",
@@ -110,16 +113,55 @@ const orgSchema = {
     latitude: 36.71942,
     longitude: 3.18274,
   },
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-    opens: "08:30",
-    closes: "16:30",
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      opens: "08:30",
+      closes: "16:30",
+    },
+  ],
+  priceRange: "€€",
+  currenciesAccepted: "DZD, EUR",
+  paymentAccepted: "Cash, Bank Transfer",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.3",
+    bestRating: "5",
+    worstRating: "1",
+    ratingCount: "12",
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Formations IATA DGR — Marchandises Dangereuses",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Course",
+          name: "Formation IATA DGR Catégorie 7 — Initial",
+          description:
+            "Formation initiale aux marchandises dangereuses IATA DGR en 3 jours. Catégories 7.1 à 7.5. Certification officielle IATA.",
+          provider: { "@type": "Organization", name: "KOST GROUP" },
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Course",
+          name: "Formation IATA DGR Recyclage — Recurrent",
+          description:
+            "Recyclage biennal IATA DGR pour maintenir la certification. Catégories 7.1 à 7.10. Format CBTA accrédité.",
+          provider: { "@type": "Organization", name: "KOST GROUP" },
+        },
+      },
+    ],
   },
   areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "ML", "BF", "GA"],
   sameAs: [
     "https://www.linkedin.com/company/kost-group",
-    "https://www.facebook.com/Kostgroup",
+    "https://www.facebook.com/p/Kost-Groupe-Academy-100067440295455/",
+    "https://maps.app.goo.gl/oqJqBNFpBHTSL83d7",
   ],
 };
 

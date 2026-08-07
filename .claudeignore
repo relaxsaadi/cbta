@@ -1,0 +1,28 @@
+# Historique Claude - SOURCE PRINCIPALE DU PROBLÈME
+.claude/
+.claude/projects/
+.claude/backups/
+.claude/telemetry/
+
+# Dépendances
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+coverage/
+
+# Locks et logs
+pnpm-lock.yaml
+*.log
+*.tsbuildinfo
+
+# Cache
+.cache/
+.vercel/
+
+# Médias lourds
+public/*.svg

@@ -36,3 +36,39 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 .indexnow-key
+
+# Google Ads MCP local data
+.notfair.json
+.notfair/
+.gstack/
+
+# Claude Code local session state (worktrees, locks — never share/commit)
+.claude/
+.mcp.json
+
+# Documents commerciaux / prospection internes (dupliqués sur Desktop/PROSPECT-ANALYSIS)
+CLIENT-PROPOSAL-*.md
+COMPANY-RESEARCH-*.md
+COMPETITOR-ANALYSIS-*.pdf
+DECISION-MAKERS-*.md
+FOLLOWUP-SEQUENCE-*.md
+GUIDE-COMMERCIAL-*.pdf
+IDEAL-CUSTOMER-PROFILE.md
+LEAD-QUALIFICATION-*.md
+LOCAL-SEO-ANALYSIS*.md
+MEETING-PREP-*.md
+OBJECTION-PLAYBOOK-*.md
+OUTREACH-SEQUENCE-*.md
+PROSPECT-ANALYSIS*.md
+PROSPECT-ANALYSIS*.pdf
+SALES-REPORT*.md
+SALES-REPORT*.pdf
+
+# Filet de sécurité : ne jamais exposer de docs commerciaux via public/ (servi tel quel en prod)
+public/proposition-*.html
+public/prospects-*.csv
+public/kit-prospection.html
+public/catalogue.html
+public/presentation-dgr.html
+public/formation-commerciale-dgr*.html
+public/guide-fonctions-dgr*.html

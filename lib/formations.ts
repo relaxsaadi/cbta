@@ -118,7 +118,7 @@ export const FORMATIONS: Formation[] = [
     code: "DGR 7.3 Recurrent",
     title: "Renouvellement acceptation DG",
     publicCible: "Personnel déjà certifié 7.3",
-    duree: "3 jours / 18h",
+    duree: "3 jours / 24h",
     prixEur: 1500,
     prixUsd: 1630,
     category: "recurrent",

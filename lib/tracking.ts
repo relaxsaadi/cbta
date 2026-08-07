@@ -84,10 +84,20 @@ export function trackPageView(params: Record<string, unknown> = {}): void {
 
 export function trackPhoneClick(): void {
   trackEvent("click_phone");
+  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+  const adsLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_PHONE_LABEL;
+  if (isClient() && window.gtag && adsId && adsLabel) {
+    window.gtag("event", "conversion", { send_to: `${adsId}/${adsLabel}` });
+  }
 }
 
 export function trackWhatsApp(location: string = "default"): void {
   trackEvent("click_whatsapp", { location });
+  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+  const adsLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_WHATSAPP_LABEL;
+  if (isClient() && window.gtag && adsId && adsLabel) {
+    window.gtag("event", "conversion", { send_to: `${adsId}/${adsLabel}` });
+  }
 }
 
 export function trackPricingCta(formation: string): void {

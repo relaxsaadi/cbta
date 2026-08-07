@@ -1,4 +1,13 @@
 {
+  "crons": [
+    { "path": "/api/agent/run", "schedule": "0 7 * * 1-5" },
+    { "path": "/api/agent/followup", "schedule": "0 8 * * 1-5" },
+    { "path": "/api/agent/intel", "schedule": "0 6 * * 1-5" },
+    { "path": "/api/prospects/scan", "schedule": "0 9 * * 1" },
+    { "path": "/api/agents/africa-scan", "schedule": "0 10 * * 3" },
+    { "path": "/api/agents/send-email", "schedule": "0 8 * * 1-6" },
+    { "path": "/api/agents/followup", "schedule": "0 14 * * 1-6" }
+  ],
   "redirects": [
     {
       "source": "/(.*)",

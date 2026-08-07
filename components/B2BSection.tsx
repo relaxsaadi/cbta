@@ -28,7 +28,7 @@ const SECTORS = [
     stat: "Décret 15-247 gré à gré",
     categories: "Cat. 7.1",
     description:
-      "Seul centre CBTA accrédité ANAC en Algérie — marché de gré à gré autorisé par l'Article 49 du Décret 15-247.",
+      "Seul centre CBTA Provider certifié IATA en Algérie — accréditation ANAC en cours de finalisation.",
   },
 ];
 

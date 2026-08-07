@@ -3,6 +3,9 @@ import path from "node:path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
   poweredByHeader: false,
   compress: true,
   outputFileTracingRoot: path.join(__dirname),

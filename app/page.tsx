@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Hero from "@/components/Hero";
+import SessionAoutBanner from "@/components/SessionAoutBanner";
 import CountriesBar from "@/components/CountriesBar";
 import ProblemSection from "@/components/ProblemSection";
 import USPSection from "@/components/USPSection";
@@ -24,7 +25,7 @@ const faqSchema = {
       name: "Est-ce reconnu dans mon pays (Maroc, Sénégal, Tunisie, Côte d'Ivoire) ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par les autorités de l'aviation civile (DGAC) au Maroc, Sénégal, Tunisie, Côte d'Ivoire, Cameroun, Mali, Burkina Faso, Gabon, Algérie. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
+        text: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par l'autorité de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
       },
     },
     {
@@ -96,6 +97,7 @@ export default function HomePage() {
       <ScrollTracker />
       <main>
         <Hero />
+        <SessionAoutBanner />
         <CountriesBar />
         <ProblemSection />
         <USPSection />

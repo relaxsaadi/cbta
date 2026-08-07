@@ -33,7 +33,7 @@ const orgSchema = {
     streetAddress: "176 Cité Boushaki",
     addressLocality: "Bab Ezzouar",
     addressRegion: "Alger",
-    postalCode: "16111",
+    postalCode: "16024",
     addressCountry: "DZ",
   },
   telephone: "+213542305383",
@@ -148,7 +148,7 @@ export default function AProposPage() {
               >
                 iata.org/cbta-center-registry
               </a>{" "}
-              — nous proposons les 13 formations IATA DGR officielles à partir de 650 €, avec
+              — nous proposons les 12 formations IATA DGR officielles à partir de 650 €, avec
               le même certificat qu'à Bruxelles, valide auprès des 300+ compagnies aériennes
               membres IATA.
             </p>

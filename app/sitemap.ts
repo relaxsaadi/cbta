@@ -70,6 +70,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${base}/session-aout`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    },
+    {
       url: `${base}/a-propos`,
       lastModified: now,
       changeFrequency: "monthly" as const,
@@ -77,6 +83,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${base}/contact`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    },
+    {
+      url: `${base}/entreprises`,
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.75,

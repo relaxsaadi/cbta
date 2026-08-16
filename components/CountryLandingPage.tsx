@@ -143,9 +143,25 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
           >
             {t.heroTitle}
           </h1>
-          <p style={{ fontSize: 16, opacity: 0.65, lineHeight: 1.7, marginBottom: 32 }}>
+          <p style={{ fontSize: 16, opacity: 0.65, lineHeight: 1.7, marginBottom: data.keyFeature ? 12 : 32 }}>
             {t.heroSub}
           </p>
+          {data.keyFeature && (
+            <p
+              style={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "#FFD700",
+                lineHeight: 1.6,
+                marginBottom: 32,
+                maxWidth: 620,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              ✓ {data.keyFeature}
+            </p>
+          )}
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
               href="#devis"

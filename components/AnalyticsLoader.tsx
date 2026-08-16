@@ -3,31 +3,14 @@
 import Script from "next/script";
 
 export default function AnalyticsLoader() {
-  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  // GA4 + Google Ads conversions are handled by Google Tag Manager
+  // (see <GoogleTagManager> in app/layout.tsx, driven by NEXT_PUBLIC_GTM_ID).
+  // lib/tracking.ts pushes events to window.dataLayer, which GTM tags read.
   const linkedInId = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID;
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
   return (
     <>
-      {(adsId || gaId) && (
-        <>
-          <Script
-            id="gtag-base"
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=${adsId || gaId}`}
-          />
-          <Script id="gtag-init" strategy="afterInteractive">{`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            window.gtag = gtag;
-            gtag('js', new Date());
-            ${gaId ? `gtag('config', '${gaId}');` : ""}
-            ${adsId ? `gtag('config', '${adsId}');` : ""}
-          `}</Script>
-        </>
-      )}
-
       {linkedInId && (
         <>
           <Script id="linkedin-init" strategy="afterInteractive">{`

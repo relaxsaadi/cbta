@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import PlanningPage from "@/components/PlanningPage";
 
 export const metadata: Metadata = {
-  title: "Planning Sessions IATA DGR 2026",
+  title: "Sessions Formation DGR IATA 2026 — Tarifs & Disponibilités Alger",
   description:
-    "Planning complet des sessions de formation IATA DGR CBTA 2026 à Alger. 29 sessions de juillet à décembre. Réservation via WhatsApp. Certificat IATA officiel.",
+    "29 sessions IATA DGR à Alger de juillet à décembre 2026. Tarifs en EUR et USD. Places limitées par session. Réservation immédiate via WhatsApp. Certificat IATA officiel.",
   alternates: { canonical: "/planning" },
   openGraph: {
-    title: "Planning Sessions IATA DGR 2026",
+    title: "Sessions Formation DGR IATA 2026 — Tarifs & Disponibilités Alger",
     description:
-      "29 sessions IATA DGR CBTA à Alger · Juillet–Décembre 2026 · Réservation immédiate via WhatsApp.",
+      "29 sessions IATA DGR à Alger · Juillet–Décembre 2026 · Tarifs EUR/USD · Places limitées · WhatsApp.",
     url: "/planning",
   },
 };

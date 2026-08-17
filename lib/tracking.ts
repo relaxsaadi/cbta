@@ -38,7 +38,9 @@ export function trackLead(data: LeadData): void {
   const value = data.leadValue ?? DEFAULT_LEAD_VALUE;
   const txId = data.transactionId;
 
-  // GA4 / GTM dataLayer event
+  // GA4 event + Google Ads conversion (150 EUR) are both fired from GTM,
+  // triggered off this dataLayer event — see the "generate_lead" trigger
+  // in the dgr.kostacademy.com container.
   trackEvent("generate_lead", {
     currency: "EUR",
     value,
@@ -47,18 +49,6 @@ export function trackLead(data: LeadData): void {
     formation: data.formation,
     transaction_id: txId,
   });
-
-  // Google Ads conversion (snippet path)
-  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
-  const adsLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
-  if (window.gtag && adsId && adsLabel) {
-    window.gtag("event", "conversion", {
-      send_to: `${adsId}/${adsLabel}`,
-      value,
-      currency: "EUR",
-      transaction_id: txId,
-    });
-  }
 
   // LinkedIn conversion
   const linkedInConvId = process.env.NEXT_PUBLIC_LINKEDIN_CONVERSION_ID;
@@ -82,10 +72,12 @@ export function trackPageView(params: Record<string, unknown> = {}): void {
   trackEvent("page_view_custom", params);
 }
 
+// Google Ads conversion (50 EUR) fired from GTM, triggered off "click_phone".
 export function trackPhoneClick(): void {
   trackEvent("click_phone");
 }
 
+// Google Ads conversion (50 EUR) fired from GTM, triggered off "click_whatsapp".
 export function trackWhatsApp(location: string = "default"): void {
   trackEvent("click_whatsapp", { location });
 }

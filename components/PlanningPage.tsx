@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Calendar, Clock, Users, ChevronDown, MessageCircle } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/formations";
+import { trackWhatsApp } from "@/lib/tracking";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -72,7 +73,7 @@ const MONTHS: Month[] = [
         duration: "32h",
         price: "1 800 €",
         audience: "Transitaires · Exportateurs · Agents logistique",
-        seatsLabel: "12 places max",
+        seatsLabel: "✅ Session terminée",
       },
       {
         id: "73-juil",
@@ -85,16 +86,42 @@ const MONTHS: Month[] = [
         duration: "40h",
         price: "2 100 €",
         audience: "Compagnies aériennes · Handling · Acceptation cargo",
-        seatsLabel: "12 places max",
+        seatsLabel: "✅ Session terminée",
       },
     ],
   },
   {
     id: "aout",
-    name: "Août 2026 — Pause Estivale",
-    icon: "🏖️",
-    sessions: [],
-    closed: true,
+    name: "Août 2026",
+    icon: "🔥",
+    sessions: [
+      {
+        id: "71-aout",
+        badge: "DGR 7.1 — Initial",
+        badgeColor: "bg-blue-500/15 text-blue-400 border border-blue-500/20",
+        name: "Préparation des Expéditions de Marchandises Dangereuses",
+        dates: "18 – 22 Août 2026",
+        days: "Dim – Jeu",
+        hours: "08h30 – 16h30",
+        duration: "32h",
+        price: "1 800 €",
+        audience: "Transitaires · Exportateurs · Agents logistique",
+        seatsLabel: "⚡ Dernières places",
+      },
+      {
+        id: "73-aout",
+        badge: "DGR 7.3 — Initial",
+        badgeColor: "bg-red-500/15 text-red-400 border border-red-500/20",
+        name: "Acceptation des Expéditions de Marchandises Dangereuses",
+        dates: "23 – 27 Août 2026",
+        days: "Dim – Jeu",
+        hours: "08h30 – 16h30",
+        duration: "40h",
+        price: "2 100 €",
+        audience: "Compagnies aériennes · Handling · Acceptation cargo",
+        seatsLabel: "⚡ Dernières places",
+      },
+    ],
   },
   {
     id: "septembre",
@@ -112,7 +139,7 @@ const MONTHS: Month[] = [
         duration: "32h",
         price: "1 800 €",
         audience: "Transitaires · Exportateurs",
-        seatsLabel: "12 places max",
+        seatsLabel: "⚠️ Avant deadline 30 sept",
       },
       {
         id: "73-sep",
@@ -125,7 +152,7 @@ const MONTHS: Month[] = [
         duration: "40h",
         price: "2 100 €",
         audience: "Compagnies aériennes · Acceptation",
-        seatsLabel: "12 places max",
+        seatsLabel: "⚠️ Avant deadline 30 sept",
       },
       {
         id: "75-sep",
@@ -138,7 +165,7 @@ const MONTHS: Month[] = [
         duration: "16h",
         price: "850 €",
         audience: "Embarquement · Pilotes · Co-pilotes",
-        seatsLabel: "12 places max",
+        seatsLabel: "⚡ Dernières places",
       },
       {
         id: "71rec-sep",
@@ -151,7 +178,7 @@ const MONTHS: Month[] = [
         duration: "24h",
         price: "1 400 €",
         audience: "Certifiés DGR 7.1 à renouveler",
-        seatsLabel: "Renouvellement",
+        seatsLabel: "⚠️ Renouvellement urgent",
       },
     ],
   },
@@ -207,7 +234,7 @@ const MONTHS: Month[] = [
         dates: "25 – 27 Oct 2026",
         days: "Dim – Mar",
         hours: "08h30 – 16h30",
-        duration: "18h",
+        duration: "24h",
         price: "1 500 €",
         audience: "Certifiés DGR 7.3 à renouveler",
         seatsLabel: "Renouvellement",
@@ -402,7 +429,7 @@ function SessionCard({ session, month }: { session: Session; month: string }) {
 }
 
 function MonthBlock({ month }: { month: Month }) {
-  const [open, setOpen] = useState(!month.closed && month.id === "juillet");
+  const [open, setOpen] = useState(!month.closed && month.id === "aout");
 
   return (
     <div className={`border rounded-2xl overflow-hidden transition-colors duration-200 ${open ? "border-white/15" : "border-white/[0.07]"} bg-white/[0.02]`}>
@@ -640,6 +667,7 @@ export default function PlanningPage() {
               href={`https://wa.me/${WHATSAPP_NUMBER.replace("+", "")}?text=${encodeURIComponent("Bonjour, je souhaite des informations sur les formations IATA DGR CBTA 2026")}`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsApp("planning-bottom")}
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black font-black text-sm px-6 py-3 rounded-full transition-all duration-200 shadow-lg shadow-green-500/20 hover:shadow-green-400/30 hover:-translate-y-0.5"
             >
               <MessageCircle size={16} />

@@ -14,6 +14,20 @@ const dgrSlugs = [
   "dgr-7-10",
 ];
 
+const countryUrls = [
+  "formation-dgr-algerie",
+  "formation-dgr-maroc",
+  "formation-dgr-senegal",
+  "formation-dgr-cote-ivoire",
+  "formation-dgr-cameroun",
+  "formation-dgr-afrique",
+  "iata-dangerous-goods-training-algeria",
+  "formation-dgr-transitaires",
+  "formation-dgr-petrole-gaz",
+  "formation-dgr-pharmacie",
+  "reglementation-dgr-algerie",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://dgr.kostacademy.com";
   const now = new Date();
@@ -27,6 +41,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     }));
 
+  const countryPages = countryUrls.map((slug) => ({
+    url: `${base}/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+  }));
+
   return [
     {
       url: base,
@@ -34,6 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1.0,
     },
+    ...countryPages,
     ...dgrUrls,
     {
       url: `${base}/planning`,
@@ -48,6 +70,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${base}/session-aout`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    },
+    {
       url: `${base}/a-propos`,
       lastModified: now,
       changeFrequency: "monthly" as const,
@@ -55,6 +83,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${base}/contact`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    },
+    {
+      url: `${base}/entreprises`,
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.75,

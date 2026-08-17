@@ -10,15 +10,15 @@ export default function Footer() {
   return (
     <footer className="bg-[#0f1c2e] text-gray-300">
       <div className="container-x py-14">
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-4">
           <div>
-            <div className="mb-4 inline-block rounded-lg bg-white px-4 py-3">
+            <div className="mb-4 inline-block rounded-lg bg-white p-2">
               <Image
-                src="/kost-group-logo.svg"
-                alt="KOST GROUP"
-                width={180}
-                height={101}
-                className="h-12 w-auto"
+                src="/kost-group-icon.png"
+                alt="KOST Academy"
+                width={48}
+                height={48}
+                className="h-12 w-12"
               />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
@@ -45,7 +45,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-[#F39C12]" aria-hidden />
-                <span>176 Cité Boushaki, Bab Ezzouar, Alger, Algérie</span>
+                <span>176 Cité Boushaki, Bab Ezzouar, Alger, Algérie — 16024</span>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="h-4 w-4 mt-0.5 shrink-0 text-[#F39C12]" aria-hidden />
@@ -69,13 +69,29 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-3">Liens</h3>
+            <h3 className="text-white font-semibold mb-3">Formations par pays</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/formation-dgr-algerie" className="hover:text-white">Formation DGR Algérie</Link></li>
+              <li><Link href="/formation-dgr-maroc" className="hover:text-white">Formation DGR Maroc</Link></li>
+              <li><Link href="/formation-dgr-senegal" className="hover:text-white">Formation DGR Sénégal</Link></li>
+              <li><Link href="/formation-dgr-cote-ivoire" className="hover:text-white">Formation DGR Côte d'Ivoire</Link></li>
+              <li><Link href="/formation-dgr-cameroun" className="hover:text-white">Formation DGR Cameroun</Link></li>
+              <li><Link href="/formation-dgr-afrique" className="hover:text-white">Formation DGR Afrique (Tunisie, Mali, Burkina Faso, Gabon...)</Link></li>
+              <li><Link href="/formation-dgr-petrole-gaz" className="hover:text-white">Formation DGR Pétrole & Gaz</Link></li>
+              <li><Link href="/formation-dgr-transitaires" className="hover:text-white">Formation DGR Transitaires</Link></li>
+              <li><Link href="/iata-dangerous-goods-training-algeria" className="hover:text-white">IATA DGR Training Algeria</Link></li>
+              <li><Link href="/entreprises" className="hover:text-white">Solutions Entreprises</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-3">Liens utiles</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white">Accueil</Link></li>
-              <li><Link href="/#formations" className="hover:text-white">Formations DGR</Link></li>
+              <li><Link href="/#formations" className="hover:text-white">Catalogue formations</Link></li>
               <li><Link href="/planning" className="hover:text-white">Planning 2026</Link></li>
               <li><Link href="/promos" className="hover:text-white">Offres & Réductions</Link></li>
-              <li><Link href="/#formulaire" className="hover:text-white">Demande de programme</Link></li>
+              <li><Link href="/reglementation-dgr-algerie" className="hover:text-white">Réglementation DGR Algérie</Link></li>
               <li><Link href="/a-propos" className="hover:text-white">À propos</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
               <li><Link href="/mentions-legales" className="hover:text-white">Mentions légales</Link></li>

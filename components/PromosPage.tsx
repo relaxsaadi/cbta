@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Tag, Users, Clock, Zap, CheckCircle, MessageCircle, Timer } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/formations";
+import { trackWhatsApp } from "@/lib/tracking";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -217,6 +218,7 @@ export default function PromosPage() {
                   href={waLink(p.waSubject)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsApp(`promo-${p.id}`)}
                   className={`w-full flex items-center justify-center gap-2 font-black text-sm py-3 rounded-xl transition-all duration-150 hover:scale-[1.02] ${
                     p.highlight
                       ? "bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/20"
@@ -346,6 +348,7 @@ export default function PromosPage() {
               href={waLink("Offres et remises 2026")}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsApp("promos-bottom")}
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black font-black px-6 py-3 rounded-full transition-all duration-150 hover:scale-105 shadow-lg shadow-green-500/20"
             >
               <MessageCircle size={16} />

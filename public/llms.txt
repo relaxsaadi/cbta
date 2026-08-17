@@ -1,5 +1,7 @@
 # KOST GROUP — Premier Centre IATA CBTA Certifié d'Algérie
 
+> Dernière mise à jour : 2026-08-07
+
 > KOST GROUP est le premier centre IATA CBTA (Competency-Based Training & Assessment) Provider certifié en Algérie et en Afrique francophone. Nous formons les professionnels du transport aérien aux Réglementations sur les Marchandises Dangereuses (DGR) selon les normes IATA 2026.
 
 ## Ce que nous faisons
@@ -105,4 +107,5 @@ Formation et certification IATA DGR pour tous les professionnels du transport a�
 ## Liens importants
 
 - [Toutes les formations DGR](https://dgr.kostacademy.com)
+- [Grille tarifaire complète (machine-readable)](https://dgr.kostacademy.com/pricing.md)
 - [Vérification IATA](https://www.iata.org/en/training/cbta-center-registry/)

@@ -19,11 +19,11 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié | Sessions 2026",
+    default: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié",
     template: "%s — KOST GROUP",
   },
   description:
-    "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Catégories 7.1 à 7.10. Reconnu par 300+ compagnies IATA. Prochaine session : août 2026.",
+    "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié en Algérie. Catégories 7.1 à 7.10. Reconnu par 300+ compagnies IATA. Sessions mensuelles.",
   keywords: [
     "Formation IATA DGR",
     "CBTA",
@@ -57,9 +57,9 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: siteUrl,
     siteName: "KOST GROUP",
-    title: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié | Sessions 2026",
+    title: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié",
     description:
-      "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Reconnu par 300+ compagnies. Prochaine session : août 2026.",
+      "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Reconnu par 300+ compagnies. Sessions mensuelles, places limitées.",
     images: [
       {
         url: "/og-image.jpg",

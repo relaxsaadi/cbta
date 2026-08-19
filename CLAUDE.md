@@ -162,7 +162,7 @@ campaign._pb.contains_eu_political_advertising = 3  # 3 = DOES_NOT_CONTAIN
 - **NEVER** committer `.env`, `.env.*`, `credentials.json`
 - Les fichiers `.mcp.json`, `.notfair.json` sont dans `.gitignore` (non commités)
 - Les campagnes Google Ads créées en PAUSED — activer manuellement ou via API après review
-- Developer token = **Explorer access** → ne peut pas créer de sous-comptes via API
+- Developer token = **Explorer access** → ne peut pas créer de sous-comptes via API, et ne peut PAS non plus appeler `KeywordPlanIdeaService.GenerateKeywordIdeas` (erreur "This method is not allowed for use with explorer access. Please apply for basic or standard access.", vérifié 2026-08-18). Toute recherche de volume de mots-clés doit passer par un autre outil (ex. extension Keyword Surfer, ou upgrade du token en Basic/Standard access auprès de Google).
 - Toujours utiliser `warnings.filterwarnings('ignore')` avec la lib google-ads (Python 3.9)
 
 ## Google Business Profile

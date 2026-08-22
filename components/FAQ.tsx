@@ -25,6 +25,10 @@ const ITEMS = [
     a: "Oui pour les formations Initial (7.1, 7.3 Initial). La formation est conçue pour amener un participant sans prérequis au niveau d'expert opérationnel. Les sessions Recurrent supposent en revanche une certification active arrivant à échéance.",
   },
   {
+    q: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",
+    a: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard obligatoire pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion — c'est la seule reconnue par les 300+ compagnies aériennes membres de l'IATA et exigée par l'ANAC en Algérie. Si votre activité touche au transport aérien, c'est cette certification qu'il vous faut, pas une formation HSE générique.",
+  },
+  {
     q: "Vous déplacez-vous pour les formations intra-entreprise ?",
     a: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. Nous prenons en charge le formateur, les supports, l'examen IATA officiel. Vous fournissez la salle et la logistique locale.",
   },

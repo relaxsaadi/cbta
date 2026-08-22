@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     "Formation IATA DGR",
     "CBTA",
     "Marchandises dangereuses",
+    "Formation matières dangereuses",
     "Aviation Afrique",
     "Cargo aérien",
     "Formation Alger",

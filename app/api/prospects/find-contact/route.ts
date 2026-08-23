@@ -10,6 +10,7 @@ const SECTOR_TITLE_FILTERS: Record<string, string[]> = {
     'formation', 'training', 'dgr', 'dangerous goods', 'cargo', 'safety', 'sécurité',
     'qualité', 'quality', 'compliance', 'opérations', 'operations', 'ground',
     'responsable formation', 'learning', 'rh', 'human resources',
+    'rdf', 'rdfe', 'responsable de formation exploitation',
   ],
   ground_handler: [
     'formation', 'training', 'dgr', 'dangerous goods', 'safety', 'sécurité', 'hse',

@@ -8,6 +8,7 @@ When working on the KOST DGR/CBTA question-bank revalidation or exam-platform re
 - `docs/RECOVERED_STAGE2A_CONTEXT.md`
 - `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`
 - `docs/READINESS_CORRECTIONS_2026-08-24.md`
+- `docs/LOCAL_RECOVERY_TARGETS.md`
 - `docs/AUTONOMOUS_PLATFORM_READINESS.md` when present
 - `docs/PLATFORM_READY_CHECKLIST.md` when present
 - `docs/PLATFORM_READINESS_REPORT.md` when present
@@ -33,6 +34,8 @@ The earlier blocker “Stage 2A blueprint / 44-subtask competency matrix not fou
 Historical platform architecture evidence also exists in `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`. Treat it as historical guidance that must be reverified live, not as a current passed gate. In particular, historical automated-backup status was NOT CONFIGURED.
 
 `docs/READINESS_CORRECTIONS_2026-08-24.md` overrides stale blocker language in the current readiness report until that report is rewritten on the next active pass.
+
+`docs/LOCAL_RECOVERY_TARGETS.md` contains high-priority local discovery leads that must be checked before concluding the exam-console source/runtime is inaccessible, including a prior Claude scratchpad path named `kost-eexam-console`.
 
 ## Autonomous execution authorization — 2026-08-24
 

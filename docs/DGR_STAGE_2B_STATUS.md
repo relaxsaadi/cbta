@@ -4,7 +4,7 @@ Regulatory baseline: IATA DGR 67th Edition 2026, French, Addendum 1 integrated.
 
 | ID | FR status | Type | Current source basis | EN status | Approval |
 |---|---|---|---|---|---|
-| Q-7.1-001 | PENDING 67e REVALIDATION | Pilot item | Glossary location confirmed (Appendice A, p.703) via §1.0 Note; danger/risque entries not yet read — session tooling failure | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-001 | FR SOURCE GAP CONFIRMED — DGR silent by design; Tier B/C basis retained | Pilot item | Appendice A Généralités (p.703) + §1.0 Note (p.11): DGR glossary excludes ordinary/dictionary-sense terms by explicit policy; no "Danger"/"Risque" headword exists | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.1-002 | FROZEN FR / SOURCE VERIFIED | True/False | Table 4.2 Acétylène (liquide) + §2.1.1 + Note 1 + §2.1.2 distinction | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.1-003 | FROZEN FR / SOURCE VERIFIED | MCQ | §3.0.1.1 + §3.0.2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.1-004 | FROZEN FR / SOURCE VERIFIED | MCQ | §7.3.17 + Figure 7.3.V | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -18,6 +18,13 @@ Regulatory baseline: IATA DGR 67th Edition 2026, French, Addendum 1 integrated.
 | Q-7.1-012 | FROZEN FR / SOURCE VERIFIED | True/False | §1.3.4.1; §1.3.4.2 supporting only | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 ## Frozen wording notes
+
+### Q-7.1-001 — FINAL, source basis reclassified Tier B/C
+Direct current Tier A evidence read 2026-08-24 (chrome-devtools MCP, authenticated IATA Bookshelf, `DGR-6066-67`, book reader top-frame ToC/search + screenshot technique):
+- Appendice A — Glossaire, Généralités (p.703): *"Les définitions ci-dessous sont celles des termes utilisés couramment dans la présente Réglementation. Lorsque les mots sont pris dans leur sens habituel, tel qu'il figure dans le dictionnaire ou dans leur sens technique le plus fréquent, leur définition n'a pas été introduite dans cet appendice."* — ordinary/dictionary-sense words are explicitly excluded from the appendix by policy.
+- §1.0 Définition des marchandises dangereuses, Note (p.11): *"La définition des termes ayant un sens spécial dans la présente Réglementation apparaît à l'appendice A."* — only terms with a **special** DGR-specific meaning are defined there.
+- In-book search for "Risque" (62 hits book-wide, 6 within Appendice A's own text) found **no "DANGER" or "RISQUE" headword entry** — every hit is an incidental usage of the word inside an unrelated entry's definition (e.g. `DISPOSITIF D'AMORÇAGE`). "Danger" was not separately brute-force-searched (5000+ book-wide noise hits, impractical) but the same exclusion policy applies with at least equal force, since "danger" is used even more pervasively in its ordinary sense (e.g. "marchandises dangereuses") than "risque."
+**Conclusion:** the current DGR 67th Edition (FR, Addendum 1) does **not** define "danger" vs. "risque" as distinct regulatory terms — this is a confirmed, current, Tier A **absence**, not an unread gap. The pilot item's danger/risque distinction is therefore **not DGR-glossary-sourced**; its actual basis is Tier B (KOST Function 7.1 course) / Tier C (generic dangerous-goods competency framework), consistent with Stage 2A sub-task `0.1.4 Danger vs risque`'s recorded source pool. The item stem/answer must not attribute this distinction to "the DGR glossary" or any DGR appendix — it should be worded as general dangerous-goods safety terminology, sourced to the KOST course material. This closes Q-7.1-001's regulatory-verification gate: not `FROZEN FR / SOURCE VERIFIED` (there is no DGR text to verify against) but `FR SOURCE GAP CONFIRMED`, an equally decisive terminal state per the no-fabrication rule. Pilot is 11/12 DGR-Tier-A-verified + 1/12 confirmed-Tier-A-silent-with-Tier-B/C-basis; do not report this as "12/12 FR SOURCE VERIFIED."
 
 ### Q-7.1-002
 Use the exact current substance wording `Acétylène (liquide)`. Do not generalize to all acetylene. The visual Table 4.2 check confirmed the regular/thin typeface criterion referenced by §2.1.1 Note 1.

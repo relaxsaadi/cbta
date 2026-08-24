@@ -62,6 +62,8 @@ Current count: 8/12 FR source-verified; 4/12 pending.
 
 Revalidate the remaining four items in one batch where possible, rather than one conversational round-trip per question.
 
+Consolidated retrieval plan: see `docs/DGR_NEXT_SOURCE_REQUEST.md` for the exact sections/tables, Bookshelf search terms, and fields needed for all four items in a single pass.
+
 Expected source targets:
 
 - Q001: current Tier A definition/support for danger vs risk used by the pilot item.

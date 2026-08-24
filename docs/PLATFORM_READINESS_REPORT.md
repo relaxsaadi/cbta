@@ -4,7 +4,7 @@ Updated: 2026-08-24 (fourth pass, Claude Code) — live-runtime access recovered
 
 ## Final label
 
-**PARTIALLY READY — TECHNICAL VERIFICATION IN PROGRESS.** Regulatory pilot is 12/12 FR-side terminal (11 Tier‑A‑verified + 1 confirmed Tier‑A‑silent). Live platform architecture, security posture, and backups now have **current, first-hand evidence** (not just historical claims) for the first time this stage. Workflow/RBAC end-to-end interactive testing and the EN bilingual/reviewer sign-off are still outstanding, and **one active, current operational gap** (offsite backup copy failing for 5 consecutive days) must be treated as a real risk, not a footnote.
+**PARTIALLY READY — TECHNICAL VERIFICATION IN PROGRESS.** Regulatory pilot is 12/12 FR-side terminal (11 Tier‑A‑verified + 1 confirmed Tier‑A‑silent). Live platform architecture, security posture, and backups now have **current, first-hand evidence** (not just historical claims) for the first time this stage, including a fresh successful restore test and a fixed-and-verified offsite backup copy (both refreshed this pass — see Gate I). Workflow/RBAC end-to-end interactive testing and the EN bilingual/reviewer sign-off remain the main outstanding items.
 
 No ANAC/IATA approval is claimed. No `PLATFORM READY TO USE` claim is made.
 
@@ -88,9 +88,13 @@ The `kost-eexam-console` scratchpad has a real, fairly extensive Playwright test
 
 **Backup schedule — confirmed automated and currently healthy:** root crontab runs `backup.sh && rotate.sh && offsite_push.sh` daily at 01:00 UTC. Server-side `backup-log.jsonl`/`cron.log` show **5 consecutive successful daily runs** (2026‑08‑20 through 2026‑08‑24), each producing 5 checksummed, timestamped artifacts (database dump, moodledata, moodle code, config, GPG-encrypted secrets) into a `daily/weekly/monthly` retention structure.
 
-**Restore — tested once, successfully, not on the recommended cadence:** `test_restore.sh` restores into an isolated, disposable MySQL container (never touches production) and is documented (`RESTORE_PROCEDURE.md`) as the way to mark a backup `VERIFIED`. One run exists, 2026‑08‑19, `status:"success"`, `487/487` tables restored, `2` users restored, moodledata archive OK. The runbook recommends running this **weekly**; it has not been re-run since the initial validation despite 5 days having passed — not yet overdue against a strict weekly cadence, but worth scheduling explicitly rather than leaving implicit.
+**Restore — freshly re-tested this pass, successful:** `test_restore.sh` restores into an isolated, disposable MySQL container (verified by reading the script before running it: new container, no shared network/volume with production, dropped via `trap cleanup EXIT` regardless of outcome) and is documented (`RESTORE_PROCEDURE.md`) as the way to mark a backup `VERIFIED`. Initial run 2026‑08‑19: `success`, 487/487 tables, 2 users. **Re-run 2026‑08‑24 22:37 (this pass) against the current day's backup: `success`, 491/491 tables, 6/6 users, moodledata archive integrity confirmed.** (First attempt this pass was interrupted by an over-tight local SSH timeout, leaving one orphaned — harmless, isolated — test container; it was removed with `docker rm -f` and the script re-run cleanly to completion.) The runbook recommends running this weekly; this pass's run resets that clock.
 
-**Offsite copy — ACTIVE CURRENT GAP:** `offsite_push.sh` is designed to sync backups to this Mac (`~/kost-eexam-backups/`) over Tailscale. It succeeded once (2026‑08‑19) and has then **failed 5 consecutive days in a row** (2026‑08‑20 through 2026‑08‑24), every time logging `mac_unreachable`. **All current backups exist only on the same VPS they protect against** — a total server loss (hardware failure, provider incident, compromise) would currently lose the backups along with the live system. This is a real, present-tense operational risk and should be prioritized: either ensure the Mac is reliably reachable via Tailscale at the scheduled hour, or (more robust) redesign `offsite_push.sh` to target durable cloud storage instead of a laptop's availability.
+**Offsite copy — root cause found and fixed this pass, verified end-to-end:** `offsite_push.sh` syncs backups to this Mac (dedicated `kostbackup` local user, `~/kost-eexam-backups/`, restrictive permissions, member of `com.apple.access_ssh`) over Tailscale via `rsync`-over-SSH, using the `kost_backup_offsite` key. It succeeded once (2026‑08‑19) then **failed 5 consecutive days in a row** (2026‑08‑20 through 2026‑08‑24), every time logging `mac_unreachable`. Root cause: **Tailscale itself was simply disconnected on this Mac** (`tailscale status` → "Tailscale is stopped"; the background app process was running, but the tunnel was not up) — the `kostbackup` account, SSH access grant, and destination directory were all already correctly provisioned; only network reachability was missing.
+
+Fix applied this pass: `tailscale up` (a local, reversible action on this Mac only — no production system touched). Connectivity confirmed both directions (`tailscale ping` succeeded; VPS's own `ss -tlnp` had already shown it holds a Tailscale interface at `100.112.21.71`). **Manually triggered `offsite_push.sh` immediately afterward; it completed successfully** (`{"type":"offsite_copy","status":"success","detail":"verified_20260824T010001Z"}`), transferring all 5 files of the current day's backup (including the 74MB `moodlecode_*.tar.gz`) with the script's own dry-run integrity check confirming identical files on both ends. One transient `mac_unreachable` was seen on an attempt made moments after `tailscale up` (the mesh path was still negotiating a direct route) — retried automatically-equivalent and succeeded; this is normal right after reconnecting, not a new problem.
+
+**Residual consideration (not yet addressed):** this fix depends on Tailscale staying connected on this Mac. If the Tailscale app is quit, the Mac reboots without it auto-reconnecting, or the Mac is simply off/asleep at 01:00 UTC, the gap will recur — the backup script already handles this gracefully (never fails the local backup, just logs and skips, retrying next day), so there's no data-loss risk from a future recurrence, only a redundancy-lag risk. Worth a periodic check that Tailscale is still connected, or a more durable fix (cloud object storage target instead of a specific laptop's availability) if this needs to be unattended-proof rather than owner-machine-dependent.
 
 **Rollback / runbook:** `RESTORE_PROCEDURE.md` documents a full disaster-recovery procedure (new server → config → GPG-decrypt env → DB restore → moodledata volume restore → code restore → bring up stack → note that the TLS cert is deliberately excluded from backups and must be regenerated). This reads as a genuine, thought-through runbook, not a placeholder.
 
@@ -100,10 +104,10 @@ The `kost-eexam-console` scratchpad has a real, fairly extensive Playwright test
 
 `PLATFORM READY TO USE` is **not** declared. Remaining critical items before it could be:
 
-1. Fix or accept-and-document the offsite backup gap (Gate I).
-2. Re-run the existing Playwright suite (or equivalent) against the live console for current Gate B/C/G pass/fail evidence, and run at least one fresh `test_restore.sh` to refresh the Gate I restore-test data point.
-3. Complete EN bilingual technical review and secure a named qualified reviewer + date for the 12-item pilot (Gate A/E).
-4. Expand the production question bank from the recovered Stage 2A blueprint under the same Tier A discipline used for the pilot.
+1. Re-run the existing Playwright suite (or equivalent) against the live console for current Gate B/C/G pass/fail evidence.
+2. Complete EN bilingual technical review and secure a named qualified reviewer + date for the 12-item pilot (Gate A/E).
+3. Expand the production question bank from the recovered Stage 2A blueprint under the same Tier A discipline used for the pilot.
+4. Keep Tailscale connected on this Mac (or replace the offsite target with cloud storage) so the now-fixed backup redundancy stays healthy — see Gate I's residual-consideration note.
 
 If all technical gates (B, C, D, F, G, H, I) reach "evidenced" while regulatory sign-off (Gate A EN review / reviewer) remains pending, the correct label is **TECHNICALLY READY / PRE-PRODUCTION READY — REGULATORY HUMAN REVIEW PENDING**, not regulator-approved or "ready to use."
 
@@ -112,10 +116,11 @@ If all technical gates (B, C, D, F, G, H, I) reach "evidenced" while regulatory 
 None of the remaining items are owner-only blockers; all are continuable from this environment:
 
 1. Re-run `kost-eexam-console`'s existing Playwright test scripts against the live console/exam URLs and record current results (Gate B/C/G/H).
-2. Trigger a fresh `test_restore.sh` run on the VPS and record the result (Gate I).
-3. Diagnose why `offsite_push.sh` cannot reach this Mac via Tailscale at the scheduled hour, and fix or redesign it (Gate I).
-4. Continue production question-bank drafting from `docs/RECOVERED_STAGE2A_CONTEXT.md` under the same source-verification discipline as the pilot (Gate A).
-5. If/when an interactive admin-console session is warranted for deeper RBAC/workflow testing, do it deliberately and document exactly what was clicked/verified — not as an incidental side effect of a recon pass.
+2. Continue production question-bank drafting from `docs/RECOVERED_STAGE2A_CONTEXT.md` under the same source-verification discipline as the pilot (Gate A).
+3. If/when an interactive admin-console session is warranted for deeper RBAC/workflow testing, do it deliberately and document exactly what was clicked/verified — not as an incidental side effect of a recon pass.
+4. Periodically confirm Tailscale is still connected on this Mac so the offsite backup fix stays effective (Gate I).
+
+Done this pass (previously listed here as next actions): fresh `test_restore.sh` run (success, 491/491 tables) and the offsite-backup Tailscale fix (success, verified transfer) — see Gate I.
 
 ## What is not claimed
 

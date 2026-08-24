@@ -5,7 +5,11 @@ When working on the KOST DGR/CBTA question-bank revalidation or exam-platform re
 - `docs/AI_HANDOFF.md`
 - `docs/DGR_STAGE_2B_STATUS.md`
 - `docs/DGR_SOURCE_REGISTER.md`
+- `docs/RECOVERED_STAGE2A_CONTEXT.md`
+- `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`
 - `docs/AUTONOMOUS_PLATFORM_READINESS.md` when present
+- `docs/PLATFORM_READY_CHECKLIST.md` when present
+- `docs/PLATFORM_READINESS_REPORT.md` when present
 
 These files are the shared coordination state between Claude Code and ChatGPT.
 
@@ -21,6 +25,12 @@ These files are the shared coordination state between Claude Code and ChatGPT.
 8. Before changing a frozen item, record the reason: current-source correction/addendum impact, documented reviewer correction, or explicit user instruction.
 9. Update `docs/DGR_STAGE_2B_STATUS.md` and `docs/DGR_SOURCE_REGISTER.md` after each material revalidation decision so both agents see the same state.
 
+## Recovered-context rule
+
+The earlier blocker “Stage 2A blueprint / 44-subtask competency matrix not found” is resolved on the documentation side. ChatGPT recovered the controlling Stage 1/2A context into `docs/RECOVERED_STAGE2A_CONTEXT.md` from the user's File Library / prior project work. Do not ask the user to resupply that blueprint/matrix before reading and using the recovered file.
+
+Historical platform architecture evidence also exists in `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`. Treat it as historical guidance that must be reverified live, not as a current passed gate. In particular, historical automated-backup status was NOT CONFIGURED.
+
 ## Autonomous execution authorization — 2026-08-24
 
 The user explicitly authorized Claude Code and ChatGPT to continue the KOST E-EXAM / DGR platform work autonomously toward a genuinely ready-to-use state, including remaining questions and application tasks.
@@ -28,7 +38,7 @@ The user explicitly authorized Claude Code and ChatGPT to continue the KOST E-EX
 Therefore:
 
 10. Continue from one task to the next without stopping for routine confirmation. Do not end a work cycle merely because one subtask or batch is complete.
-11. Ask the user only for a **hard blocker** that cannot be resolved from the local workspace, authenticated Bookshelf, GitHub/shared state, or safe engineering judgment (examples: manual MFA/login, unavailable external reviewer decision, missing secret/credential that must be supplied by the owner, irreversible production action with no safe rollback).
+11. Ask the user only for a **hard blocker** that cannot be resolved from the local workspace, authenticated Bookshelf, GitHub/shared state, File-Library-recovered context already committed to GitHub, or safe engineering judgment (examples: manual MFA/login, unavailable external reviewer decision, missing secret/credential that must be supplied by the owner, irreversible production action with no safe rollback).
 12. Safe local/code/documentation changes, tests, migrations in a non-production/test environment, question-bank draft/review-state work, Moodle configuration that has a tested rollback path, and Git commits/pushes are authorized when they advance the readiness plan.
 13. Never weaken security, expose secrets, bypass DRM/licensing, fabricate regulatory approval, or mark regulatory review complete without evidence.
 14. Do not perform destructive production database writes, irreversible deployment changes, or merge/deploy a change with failing critical tests. Use backups/rollback and staged validation.

@@ -81,6 +81,7 @@ This register stores concise regulatory source locations and validation conclusi
 - E4: 1 g/1 mL — 500 g/500 mL
 - E5: 1 g/1 mL — 300 g/300 mL
 - Conclusion: E0 = "not permitted in excepted quantities" confirmed as correct answer. E1's actual finite limits (not "unlimited", not "not permitted") refute a distractor implying otherwise; no code in the table permits an unlimited quantity. The existing distractor **"State derogation required"** has no support or rebuttal in Tableau 2.6.A — the table does not address state derogations/variations at all — so per evidence-hygiene rule this distractor is flagged for revision/replacement, not asserted false.
+- **2026-08-24 correction applied:** distractor "State derogation required" replaced with **"1 kg/1 L"** (E1's actual outer-package limit, misattributed to E0) — directly refuted by Tableau 2.6.A's own E0 row (no quantity value; "Non permises"). Full final distractor set: "1 kg/1 L" (E1), "500 g/500 mL" (E2), "Illimitée" (no E-code is unlimited). Q-7.1-008 closed FR SOURCE VERIFIED with a fully source-grounded distractor set. Documentation-stage correction only; not applied to any live/production question-bank copy from this environment.
 
 ## Pending source targets
 

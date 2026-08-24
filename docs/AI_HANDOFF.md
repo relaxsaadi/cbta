@@ -44,6 +44,9 @@ Source-verified/frozen on FR side:
 - Q-7.1-003 — nine hazard classes
 - Q-7.1-004 — Class 8 corrosive hazard label
 - Q-7.1-005 — Propane UN 1978, Division 2.1
+- Q-7.1-006 — Class 8 Packing Group I/II/III criteria, Tableau 3.8.A
+- Q-7.1-007 — Special Provisions A1/A2, exact "approbation" terminology (not "dérogation")
+- Q-7.1-008 — Excepted quantity code E0, Tableau 2.6.A (1 distractor flagged for revision — see status doc)
 - Q-7.1-009 — PI 965 / UN 3480, Section IA = 35 kg cargo only
 - Q-7.1-010 — UN 1845 dry ice package marking, net quantity
 - Q-7.1-011 — overpack hazard labels visible/reproduced, labels-only scope
@@ -51,37 +54,35 @@ Source-verified/frozen on FR side:
 
 Pending 67th Edition revalidation:
 
-- Q-7.1-001
-- Q-7.1-006
-- Q-7.1-007
-- Q-7.1-008
+- Q-7.1-001 — glossary location confirmed (Appendice A, p.703); danger/risque entries not yet read
 
-Current count: 8/12 FR source-verified; 4/12 pending.
+Current count: 11/12 FR source-verified; 1/12 pending.
 
 ## Next action
 
-Revalidate the remaining four items in one batch where possible, rather than one conversational round-trip per question.
+One item remains: **Q-7.1-001** (danger vs. risque). Resume directly at Appendice A — Glossaire, Bookshelf p.703 (reachable via the reader's Table of Contents: "Go to APPENDICE A — GLOSSAIRE, page 703") and read the "Danger" and "Risque" entries. Avoid a bare keyword search for "Danger" — it returns 5000+ noise hits from hazard-label text throughout the book; browse the glossary directly instead. Once read, apply the same FR SOURCE VERIFIED / SOURCE INSUFFICIENT logic as the other three items.
 
-Consolidated retrieval plan: see `docs/DGR_NEXT_SOURCE_REQUEST.md` for the exact sections/tables, Bookshelf search terms, and fields needed for all four items in a single pass.
+Q-7.1-006, Q-7.1-007, and Q-7.1-008 are now FR SOURCE VERIFIED — see `docs/DGR_SOURCE_REGISTER.md` for full evidence and `docs/DGR_STAGE_2B_STATUS.md` for wording-precision notes (Q-7.1-007's A1 nuance, Q-7.1-008's flagged distractor).
 
-Expected source targets:
+## Session log — 2026-08-24, first pass (Claude Code, chrome-devtools MCP)
 
-- Q001: current Tier A definition/support for danger vs risk used by the pilot item.
-- Q006: current Tier A packing-group definitions, especially Group I / II / III.
-- Q007: current Tier A A1/A2 wording and exact approval/derogation terminology. Do not label A2 a derogation unless the current source literally supports that wording.
-- Q008: current Tier A Table 2.6.A entry/code E0 and the exact regulatory consequence tested by the pilot item.
-
-## Session log — 2026-08-24 (Claude Code, chrome-devtools MCP)
-
-Attempted the consolidated batch retrieval above. Outcome: **blocked by tooling, no evidence retrieved, no status changes.**
+Attempted the consolidated batch retrieval. Outcome: **blocked by tooling, no evidence retrieved, no status changes.**
 
 - Connected to the user's already-running Chrome via `chrome-devtools` MCP (remote debugging, port 9222) as instructed. This session's MCP build exposes only three tools: `navigate`, `evaluate` (arbitrary JS in the top page), `screenshot`. No page-list/page-select tool, no click, no keyboard-input tool.
 - Confirmed authenticated access to the IATA Digital Publications Bookshelf (`digitalpublications.iata.org`) and located the correct title in "My Library": **"Réglementation pour le transport des marchandises dangereuses (DGR) Édition 67 Addendum 1, 67th Edition"** — matches the current regulatory baseline. Book id `DGR-6066-67`.
 - The Bookshelf reader renders book pages inside a cross-origin iframe (`jigsaw.iata.org/mosaic/wrapper.html`, VitalSource "Mosaic" reader). `evaluate` cannot read that iframe's DOM (blocked by same-origin policy: "Blocked a frame with origin ... from accessing a cross-origin frame"). Navigating the tab directly to the iframe's own wrapper URL (top-level, not embedded) leaves it stuck indefinitely on a loading spinner — it appears to require the parent-frame embedding/handshake to boot.
-- No click/keyboard tool was available to drive the reader's own search or table-of-contents UI, so no page could be opened, searched, or read this session.
-- Deliberately did not attempt to call the reader's internal content/search APIs directly (e.g. via `fetch`) to work around the missing UI-interaction tools — that would risk bypassing the reader's normal access/DRM flow, which is out of scope per standing instructions.
-- No regulatory content was read. Q-7.1-001 / -006 / -007 / -008 remain exactly as before this session: `PENDING 67e REVALIDATION` / `SOURCE REQUIRED`. No frozen item was touched.
-- **What the next session needs to make progress**: a browser-automation path that can actually click/scroll/type inside the Bookshelf reader (e.g. Playwright with a real input-dispatch API, or a `chrome-devtools` MCP build that exposes `Input.dispatchMouseEvent`/`dispatchKeyEvent` or a page-list + click tool) — plain `evaluate`-only access cannot drive this reader.
+- No click/keyboard tool was available at that point to drive the reader's own search or table-of-contents UI, so no page could be opened, searched, or read in this pass.
+- No regulatory content was read in this pass. No frozen item was touched.
+
+## Session log — 2026-08-24, second pass (Claude Code, chrome-devtools MCP + attempted Playwright)
+
+User asked to attach Playwright to the same already-open, already-authenticated Chrome (CDP at `127.0.0.1:9222`) and drive the reader's cross-origin iframe with real frame locators. Outcome: **Playwright attach failed; a different technique via the existing `chrome-devtools` MCP worked instead; 3 of 4 items fully resolved; the 4th blocked mid-retrieval by a tooling failure, not by evidence.**
+
+- **Playwright attach attempt (Python `playwright.sync_api`, only Python 3.9 environment with the package installed):** `connect_over_cdp("http://127.0.0.1:9222")` failed — the HTTP JSON discovery endpoint (`/json/version`) returns a bare 404 for every path and `Host` header tried, with or without the Bash sandbox. Found Chrome's own `DevToolsActivePort` file (`~/Library/Application Support/Google/Chrome/DevToolsActivePort` — standard local port-discovery file Chrome itself writes, not a credential/cookie) and used the exact `ws://127.0.0.1:9222/devtools/browser/<id>` it names, skipping HTTP discovery entirely. The WebSocket connected, but Chrome never answered the CDP protocol handshake — `TimeoutError` after 180s. Consistent with a security/origin gate on this Chrome instance that the already-attached `chrome-devtools` MCP client satisfies but a fresh/unrecognized CDP client does not. Abandoned this path; no cookies, storage, or tokens were read or exported at any point.
+- **Working technique found via `chrome-devtools` MCP:** the reader's surrounding UI chrome — "Search across book" button/input, the Table of Contents, and the page navigator — all live in the **top-level frame** (`digitalpublications.iata.org`), not inside the cross-origin `jigsaw.iata.org` iframe. So `evaluate()` can click/type them directly (ordinary same-origin DOM access, not a cross-origin workaround). Separately, `screenshot()` captures the fully composited page — including the cross-origin iframe's rendered content — because it operates at the browser-compositor level, not the JS/DOM layer, so it is unaffected by the iframe's cross-origin restriction. Combining "open search → type query → click Search → click a result → screenshot to read" reliably navigated and read real page content. This is normal UI automation (click/type/read), not API reverse-engineering, and no DRM was bypassed.
+- Using this, **Q-7.1-006, Q-7.1-007, and Q-7.1-008 were fully retrieved, read, and are now FR SOURCE VERIFIED** — see `docs/DGR_SOURCE_REGISTER.md` for the evidence and `docs/DGR_STAGE_2B_STATUS.md` for wording-precision notes surfaced along the way (Q-7.1-007's A1 passenger-vs-cargo nuance; Q-7.1-008's "State derogation required" distractor, which Tableau 2.6.A does not support or refute and which is flagged for revision rather than asserted false).
+- **Q-7.1-001**: found and confirmed the glossary's current location (§1.0's Note explicitly points to Appendice A, p.703) before the tool broke. Mid-navigation to the glossary itself, the `chrome-devtools` MCP connection began failing every call (`evaluate`, `navigate`, and `screenshot` alike) with `Network.enable timed out`, and did not recover across ~6 retries over several minutes real time. No stray process was left holding the CDP connection (checked). No glossary content was fabricated to compensate — Q-7.1-001 stays `SOURCE REQUIRED` for its core claim, now with a precise, low-effort next step.
+- **What the next session needs**: nothing new in principle — the top-frame-click + screenshot technique above works and should be reused directly. If the `chrome-devtools` MCP connection is still broken, that's a session/connection-level issue (reload the MCP client) rather than a capability gap.
 
 ## Update discipline
 

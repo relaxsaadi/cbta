@@ -7,6 +7,7 @@ When working on the KOST DGR/CBTA question-bank revalidation or exam-platform re
 - `docs/DGR_SOURCE_REGISTER.md`
 - `docs/RECOVERED_STAGE2A_CONTEXT.md`
 - `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`
+- `docs/READINESS_CORRECTIONS_2026-08-24.md`
 - `docs/AUTONOMOUS_PLATFORM_READINESS.md` when present
 - `docs/PLATFORM_READY_CHECKLIST.md` when present
 - `docs/PLATFORM_READINESS_REPORT.md` when present
@@ -30,6 +31,8 @@ These files are the shared coordination state between Claude Code and ChatGPT.
 The earlier blocker “Stage 2A blueprint / 44-subtask competency matrix not found” is resolved on the documentation side. ChatGPT recovered the controlling Stage 1/2A context into `docs/RECOVERED_STAGE2A_CONTEXT.md` from the user's File Library / prior project work. Do not ask the user to resupply that blueprint/matrix before reading and using the recovered file.
 
 Historical platform architecture evidence also exists in `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`. Treat it as historical guidance that must be reverified live, not as a current passed gate. In particular, historical automated-backup status was NOT CONFIGURED.
+
+`docs/READINESS_CORRECTIONS_2026-08-24.md` overrides stale blocker language in the current readiness report until that report is rewritten on the next active pass.
 
 ## Autonomous execution authorization — 2026-08-24
 

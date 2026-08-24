@@ -71,6 +71,9 @@ Need current direct Tier A text for A1 and A2 and any provision they point to. P
 ### Q-7.1-008
 Need current Tier A Table 2.6.A / code E0 and enough surrounding provision to establish the exact consequence tested by the pilot question.
 
+### 2026-08-24 retrieval attempt — blocked, no evidence obtained
+Session tried the consolidated batch pass above via the `chrome-devtools` MCP against the correct book (`DGR-6066-67`, matches current baseline). The MCP session exposed only `navigate`/`evaluate`/`screenshot` — no click or keyboard-input tool — and the reader renders pages inside a cross-origin iframe that `evaluate` cannot read. No page/table/definition text was retrieved for any of the four items; nothing below was updated as a result. See `docs/AI_HANDOFF.md` session log for full detail. Status for all four remains `SOURCE REQUIRED`.
+
 ## Evidence hygiene
 
 - Screenshots may be used for visual formatting evidence when copy/paste loses typography.

@@ -71,6 +71,18 @@ Expected source targets:
 - Q007: current Tier A A1/A2 wording and exact approval/derogation terminology. Do not label A2 a derogation unless the current source literally supports that wording.
 - Q008: current Tier A Table 2.6.A entry/code E0 and the exact regulatory consequence tested by the pilot item.
 
+## Session log — 2026-08-24 (Claude Code, chrome-devtools MCP)
+
+Attempted the consolidated batch retrieval above. Outcome: **blocked by tooling, no evidence retrieved, no status changes.**
+
+- Connected to the user's already-running Chrome via `chrome-devtools` MCP (remote debugging, port 9222) as instructed. This session's MCP build exposes only three tools: `navigate`, `evaluate` (arbitrary JS in the top page), `screenshot`. No page-list/page-select tool, no click, no keyboard-input tool.
+- Confirmed authenticated access to the IATA Digital Publications Bookshelf (`digitalpublications.iata.org`) and located the correct title in "My Library": **"Réglementation pour le transport des marchandises dangereuses (DGR) Édition 67 Addendum 1, 67th Edition"** — matches the current regulatory baseline. Book id `DGR-6066-67`.
+- The Bookshelf reader renders book pages inside a cross-origin iframe (`jigsaw.iata.org/mosaic/wrapper.html`, VitalSource "Mosaic" reader). `evaluate` cannot read that iframe's DOM (blocked by same-origin policy: "Blocked a frame with origin ... from accessing a cross-origin frame"). Navigating the tab directly to the iframe's own wrapper URL (top-level, not embedded) leaves it stuck indefinitely on a loading spinner — it appears to require the parent-frame embedding/handshake to boot.
+- No click/keyboard tool was available to drive the reader's own search or table-of-contents UI, so no page could be opened, searched, or read this session.
+- Deliberately did not attempt to call the reader's internal content/search APIs directly (e.g. via `fetch`) to work around the missing UI-interaction tools — that would risk bypassing the reader's normal access/DRM flow, which is out of scope per standing instructions.
+- No regulatory content was read. Q-7.1-001 / -006 / -007 / -008 remain exactly as before this session: `PENDING 67e REVALIDATION` / `SOURCE REQUIRED`. No frozen item was touched.
+- **What the next session needs to make progress**: a browser-automation path that can actually click/scroll/type inside the Bookshelf reader (e.g. Playwright with a real input-dispatch API, or a `chrome-devtools` MCP build that exposes `Input.dispatchMouseEvent`/`dispatchKeyEvent` or a page-list + click tool) — plain `evaluate`-only access cannot drive this reader.
+
 ## Update discipline
 
 After each batch:

@@ -1,201 +1,127 @@
 # KOST E-EXAM / DGR Platform — Readiness Report
 
-Updated: 2026-08-24 by ChatGPT + Claude Code shared handoff.
+Updated: 2026-08-24 (fourth pass, Claude Code) — live-runtime access recovered and exercised.
 
 ## Final label
 
-**NOT READY YET — regulatory pilot is 11/12 FR source-verified; live platform gates still require current runtime verification.**
+**PARTIALLY READY — TECHNICAL VERIFICATION IN PROGRESS.** Regulatory pilot is 12/12 FR-side terminal (11 Tier‑A‑verified + 1 confirmed Tier‑A‑silent). Live platform architecture, security posture, and backups now have **current, first-hand evidence** (not just historical claims) for the first time this stage. Workflow/RBAC end-to-end interactive testing and the EN bilingual/reviewer sign-off are still outstanding, and **one active, current operational gap** (offsite backup copy failing for 5 consecutive days) must be treated as a real risk, not a footnote.
 
-This report deliberately separates:
+No ANAC/IATA approval is claimed. No `PLATFORM READY TO USE` claim is made.
 
-- **current direct evidence**;
-- **historical platform evidence that must be reverified**; and
-- **open gates / true blockers**.
+## What changed this pass
 
-No ANAC/IATA approval is claimed.
+The prior report's "true hard blocker" (no route to the live exam/console runtime) is **resolved**. Per `docs/LOCAL_RECOVERY_TARGETS.md`'s lead, this session found:
 
-## Important recovered-context corrections
+1. A real, substantial local scratchpad (`kost-eexam-console`, not a git repo, at a `/private/tmp` session path) containing the actual Next.js console source, Moodle admin/ops PHP scripts, a security incident response procedure, dozens of Playwright QA scripts, and 100+ prior screenshots.
+2. Dedicated, working SSH key pairs at `~/.ssh/hostarts_kost_moodle{,_rsa}` (comment `claude-kost-moodle-deploy`) and `~/.ssh/kost_backup_offsite` (comment `kost-backup-offsite-transfer-only`), both created 2026-08-19.
+3. Root SSH access to the live VPS (`102.206.40.221`, hostname `exam-kost.hostarts.dz.AS329667.net`, Hostarts/Algeria) working on the first try with the `hostarts_kost_moodle` key.
 
-Two blockers reported in the previous version are now narrowed/resolved:
+All exploration below was **read-only**: inspection commands only (`docker ps`, `ss`, `crontab -l`, log tails, `SELECT COUNT`-style read-only DB queries via the DB container's own root env var, never printed). No config was changed, no service restarted, no data written or deleted, no secret values were printed to logs, docs, or committed anywhere. A live admin console session (`console.kostacademy.com`) was reached and rendered correctly with the browser's autofilled `console_admin` credentials visible in the form — **deliberately not submitted**; interactively operating the production admin console is a bigger step than this pass's audit scope and was left for an explicit follow-up.
 
-1. **Stage 2A / 44-subtask Function 7.1 scope is recovered.** The user does not need to resupply it. See `docs/RECOVERED_STAGE2A_CONTEXT.md`.
-2. **Platform architecture is not completely unknown.** Historical project evidence identifies the Moodle/Docker/MySQL/Nginx/Hostarts architecture and prior tests/configuration. See `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`. This is historical guidance only and does not count as a current passed gate until live reverified.
+## Gate A — Regulatory / Question Bank — 12/12 FR TERMINAL
 
-`docs/LOCAL_RECOVERY_TARGETS.md` also records a high-priority prior Claude scratchpad lead named `kost-eexam-console` and other local recovery targets that must be checked before concluding live source/runtime is inaccessible.
+All 12 Function 7.1 pilot items have reached a terminal FR-side status:
 
-## Gate A — Regulatory / Question Bank — PARTIALLY READY
+- Q-7.1-002 through Q-7.1-012 (11 items): `FROZEN FR / SOURCE VERIFIED` against IATA DGR 67th Edition 2026, French, Addendum 1.
+- Q-7.1-001 (danger vs. risque): `FR SOURCE GAP CONFIRMED` — current DGR Appendice A — Glossaire does not define "danger"/"risque" as headwords (its own Généralités text excludes ordinary/dictionary-sense words by policy; §1.0's Note restricts Appendix A to DGR-special-meaning terms; in-book search found no headword for either term). Source basis reclassified to Tier B (KOST course) / Tier C (generic framework) per Stage 2A sub-task `0.1.4`. See `docs/DGR_STAGE_2B_STATUS.md` and `docs/DGR_SOURCE_REGISTER.md` for full evidence.
 
-### Current pilot status
+Still open on the regulatory side:
 
-**11/12 Function 7.1 pilot questions are FR source-verified against IATA DGR 67th Edition 2026, French, Addendum 1 integrated.**
+- EN bilingual technical review — not started for any of the 12 items.
+- Named qualified reviewer + review date — not started; no item may be marked `APPROVED` without this.
+- Production question-bank expansion beyond the 12-item pilot, using the recovered Stage 2A blueprint (`docs/RECOVERED_STAGE2A_CONTEXT.md`, 44 leaf sub-tasks across Blocks 0/1/2) — not yet started this pass.
+- The Q-7.1-001 wording correction (drop DGR-glossary attribution) and the Q-7.1-008 distractor swap are **documentation-stage only** — neither has been applied to whatever system actually administers the live pilot copy, because this environment does not yet have write access to a live question bank (Moodle Quiz question bank access would require the interactive admin session deliberately not opened this pass).
 
-FR source-verified/frozen:
+## Architecture — CONFIRMED LIVE (upgraded from historical-only)
 
-- Q-7.1-002
-- Q-7.1-003
-- Q-7.1-004
-- Q-7.1-005
-- Q-7.1-006
-- Q-7.1-007
-- Q-7.1-008
-- Q-7.1-009
-- Q-7.1-010
-- Q-7.1-011
-- Q-7.1-012
+Live-verified 2026-08-24 via root SSH, matching and updating `docs/RECOVERED_PLATFORM_ARCHITECTURE.md`'s 2026-08-19 historical diagnostic:
 
-Open:
+- Ubuntu 20.04.6 LTS, kernel 5.4.0-216-generic, host `exam-kost.hostarts.dz.AS329667.net`
+- Docker 26.1.3, 3 running containers: `moodle-stack_moodle_1` (`bitnamilegacy/moodle:latest`), `moodle-stack_db_1` (`mysql:8.4`), `kost-console-stack_console_1` (the Next.js console — confirms the `kost-eexam-console` scratchpad's app is genuinely deployed live, not just a local prototype)
+- Disk: 158G total, 21G used (14%) — healthy headroom
+- Uptime: 5 days 6 hours at check time (last reboot 2026-08-19, consistent with the infrastructure work logged that day)
+- Nginx active, config syntax valid; TLS via Let's Encrypt/certbot, both `console.kostacademy.com` and `exam.kostacademy.com` certificates valid, expiring 2026‑11‑17 (84 days out), auto-renewal cron present (`/etc/cron.d/certbot`)
 
-- **Q-7.1-001 — danger vs risque.** The current DGR glossary location is known (`Appendice A — Glossaire`, Bookshelf p.703, referenced by §1.0), but the exact current entries still need direct Tier A reading or an evidence-based conclusion that the pilot wording must be revised. Do not force-close this from Tier B training text alone.
+## Gate B — Exam Workflow — PARTIAL (upgraded from OPEN)
 
-### Closed wording corrections
+Current DB evidence: `mdl_quiz_attempts` contains **2 recorded attempts** — the quiz engine has been functionally exercised at least twice, not merely installed. This is real but thin (consistent with pre-production/test usage, not a candidate cohort).
 
-- **Q-7.1-007:** current A1/A2 wording uses **approbation**, not `dérogation`; A1's passenger-approval/cargo-normal-columns nuance and A2 cargo-only-with-approval scope are preserved.
-- **Q-7.1-008:** unsupported `State derogation required` distractor was removed and replaced with a source-grounded numerical distractor from Table 2.6.A.
+Still needed for a full pass: interactive verification of assignment/start flow, instructions, timer behavior, navigation/flagging, refresh/reconnect, autosave, submit confirmation, time-expiry behavior, double-submit protection, and scoring/result lifecycle. The `kost-eexam-console` scratchpad's Playwright scripts (`stress-test.mjs`, `stress-test-mobile-tablet.mjs`, `phase2-test.mjs` through `phase3-test.mjs`, `v1-full-suite.mjs` through `v12-full-suite.mjs`) appear designed to cover exactly this, and its `screenshots/` directory has prior visual evidence (`stability-03-quiz-view.png`, `inspect-01-instructions.png` through `inspect-05-completion.png`, etc.) from runs this session did not re-verify or re-run. Next session should re-run these scripts against the live console and record current pass/fail results rather than treating old screenshots as a current pass.
 
-### Stage 1 / Stage 2A scope
+## Gate C — Roles / RBAC — PARTIAL (upgraded from OPEN)
 
-Recovered controlling context establishes:
+Current DB evidence: `mdl_role_assignments` has **5 distinct roles assigned** — RBAC is configured server-side, not just described in the login page's copy ("Restricted to authorized administrator, exam manager, instructor and auditor roles" / "Role-gated access — candidate accounts cannot sign in here", both confirmed rendered live on `console.kostacademy.com/login`).
 
-- Function 7.1 official total = **44 leaf-level sub-tasks**
-- Block 0 = 17
-- Block 1 = 8
-- Block 2 = 19
-- `0.3.2` is excluded from Function 7.1
-- corrected Stage 2A blueprint is source-yield driven and provisional pending instructor validation / ANAC acceptance
+Still needed: actual cross-role enforcement testing (attempt to access another role's data/pages and confirm server-side denial, not UI hiding alone) — this requires either real per-role credentials or an authorized interactive session, neither exercised this pass. `kost-eexam-console/authz-test.mjs` and `auditor-role-test.mjs` appear purpose-built for this and should be the starting point.
 
-See `docs/RECOVERED_STAGE2A_CONTEXT.md`.
+## Gate D — Audit Trail / Integrity — SUBSTANTIALLY EVIDENCED (upgraded from OPEN)
 
-**Production question-bank expansion may proceed from the recovered blueprint.** It is no longer blocked on the owner resupplying Stage 2A, but every current regulatory fact still needs the applicable 67e Tier A gate before production use.
+Current DB evidence: `mdl_logstore_standard_log` contains **2,070 events**, spanning **2026‑08‑19 17:35:23 to 2026‑08‑24 20:39:29** (i.e., actively recording up to within the hour of this check) — Moodle's native audit log is live and continuously populated, not merely "reported available." The console's own security procedure (`docs/SECURITY_INCIDENT_RESPONSE_PROCEDURE.md` in the scratchpad) additionally references `kost_console_incident_events` and `kost_console_identity_verifications` audit tables specific to the Next.js console; these were not directly queried this pass (would need the console's own DB schema/credentials, not just Moodle's).
 
-### Still-open regulatory gates
+## Gate E — Bilingual Behavior — PARTIAL (unchanged)
 
-- Q001 direct current evidence
-- EN bilingual technical review for all questions
-- named qualified reviewer + review date before any `APPROVED` status
-- production-bank generation/review beyond the 12-item pilot
+- FR regulatory methodology: 12/12 pilot items terminal (see Gate A).
+- EN technical review: not completed for any item.
+- Current FR/EN rendering/error/instruction behavior in the live exam UI: not retested this pass.
 
-## Historical platform architecture evidence — GUIDE ONLY, NOT A CURRENT PASS
+## Gate F — Moodle / KOST E-EXAM Integration — SUBSTANTIALLY EVIDENCED (upgraded from OPEN)
 
-Recovered 2026-08-19 project evidence described:
+Confirmed live: both `exam.kostacademy.com` (Moodle, container `moodle-stack_moodle_1`, port 8080) and `console.kostacademy.com` (Next.js, container `kost-console-stack_console_1`, port 3001→3000) run as separate Docker services behind the same Nginx reverse proxy on the same host. The console's recovered source (`lib/moodle-client.ts`, `MOODLE_WS_SERVICE` / `MOODLE_SERVICE_TOKEN` env vars) confirms a Moodle web-service-token integration design, and the console's own login page states identity is "managed by Moodle — no separate credential store." Functional round-trip (console action → Moodle state change, or vice versa) was not exercised this pass — the design and live co-location are confirmed; the integration's live behavior is not yet independently re-verified end-to-end.
 
-- Moodle 5.0.1
-- Docker image `bitnamilegacy/moodle`
-- MySQL 8.4
-- Nginx reverse proxy
-- Let's Encrypt TLS
-- Ubuntu 20.04
-- Hostarts / Algeria VPS
-- Moodle Quiz engine, question bank, gradebook/reports, native audit logs
-- SSH-key server administration
-- historical load test: 0 failures / 800 requests / 50 concurrent users
-- **automated backups: NOT configured at that time**
+## Gate G — Security / Configuration — SUBSTANTIALLY EVIDENCED (upgraded from OPEN)
 
-This evidence is useful for recovery/discovery but must be revalidated live before Gates B–I are passed. In particular, backups remain a critical open risk until a current backup + restore test is evidenced.
+Confirmed live 2026-08-24:
 
-## Gate B — Exam Workflow — OPEN / CURRENT LIVE TEST REQUIRED
+- **Network exposure:** only ports 22 (SSH), 80, and 443 are publicly bound (`0.0.0.0`); MySQL (3306), Moodle (8080), and the console (3001) are all bound to `127.0.0.1` only, reachable exclusively through Nginx. This is correct least-privilege network design.
+- **TLS:** valid, auto-renewing Let's Encrypt certificates for both domains (see Architecture above).
+- **Admin access:** SSH key-based only (password auth was not tested/attempted); a dedicated, narrowly-named key exists for this purpose rather than a shared/generic key.
+- **Secrets at rest:** backup `.env` snapshots are GPG-encrypted (`env_*.gpg`); the GPG **private** decryption key is deliberately absent from the server per `RESTORE_PROCEDURE.md` ("à récupérer depuis le gestionnaire de mots de passe") — correct separation of backup data from backup decryption capability.
+- **Incident response:** a dated, versioned `SECURITY_INCIDENT_RESPONSE_PROCEDURE.md` (effective 2026-08-20) exists, with severity levels, roles, an evidence-preservation checklist, and an escalation path.
 
-Need current reproducible evidence for:
+Not yet checked this pass: HTTP security headers (HSTS, CSP, X-Frame-Options), Moodle debug-mode setting, application-level session/cookie hardening. `kost-eexam-console/csp-test.mjs` and `cookie-audit.mjs` appear purpose-built for this and were not re-run this pass.
 
-- assignment/start flow
-- instructions
-- timer behavior
-- navigation / flagging
-- refresh/reconnect
-- autosave
-- submit confirmation
-- time-expiry behavior
-- double-submit protection
-- scoring/result lifecycle
+## Gate H — Build / Tests — OPEN (unchanged — evidence exists but not re-executed)
 
-Historical Moodle Quiz capability is not enough to pass this gate.
+The `kost-eexam-console` scratchpad has a real, fairly extensive Playwright test suite (smoke, authz, CSP, cross-browser, stress/mobile, a11y, cookie-audit, and numbered "phase"/"v1"–"v12" full-suite scripts) plus a committed-looking `.next` production build and `node_modules` already installed. None of these were re-run this pass — the evidence that exists is prior-session screenshots and scripts, not a fresh pass/fail result. This is the most actionable near-term gap: re-running this existing suite against the live console would very quickly upgrade several other gates (B, C, G) from "partial" to "evidenced," since the scripts already target exactly those questions.
 
-## Gate C — Roles / RBAC — OPEN / CURRENT LIVE TEST REQUIRED
+## Gate I — Deployment / Operations — SUBSTANTIALLY EVIDENCED, WITH ONE ACTIVE GAP
 
-Need role-based verification for at least:
+**Backup schedule — confirmed automated and currently healthy:** root crontab runs `backup.sh && rotate.sh && offsite_push.sh` daily at 01:00 UTC. Server-side `backup-log.jsonl`/`cron.log` show **5 consecutive successful daily runs** (2026‑08‑20 through 2026‑08‑24), each producing 5 checksummed, timestamped artifacts (database dump, moodledata, moodle code, config, GPG-encrypted secrets) into a `daily/weekly/monthly` retention structure.
 
-- candidate
-- instructor/reviewer
-- exam manager/admin
-- auditor/read-only
-- system admin where applicable
+**Restore — tested once, successfully, not on the recommended cadence:** `test_restore.sh` restores into an isolated, disposable MySQL container (never touches production) and is documented (`RESTORE_PROCEDURE.md`) as the way to mark a backup `VERIFIED`. One run exists, 2026‑08‑19, `status:"success"`, `487/487` tables restored, `2` users restored, moodledata archive OK. The runbook recommends running this **weekly**; it has not been re-run since the initial validation despite 5 days having passed — not yet overdue against a strict weekly cadence, but worth scheduling explicitly rather than leaving implicit.
 
-Need server-side authorization evidence, not UI hiding alone.
+**Offsite copy — ACTIVE CURRENT GAP:** `offsite_push.sh` is designed to sync backups to this Mac (`~/kost-eexam-backups/`) over Tailscale. It succeeded once (2026‑08‑19) and has then **failed 5 consecutive days in a row** (2026‑08‑20 through 2026‑08‑24), every time logging `mac_unreachable`. **All current backups exist only on the same VPS they protect against** — a total server loss (hardware failure, provider incident, compromise) would currently lose the backups along with the live system. This is a real, present-tense operational risk and should be prioritized: either ensure the Mac is reliably reachable via Tailscale at the scheduled hour, or (more robust) redesign `offsite_push.sh` to target durable cloud storage instead of a laptop's availability.
 
-## Gate D — Audit Trail / Integrity — OPEN / CURRENT LIVE TEST REQUIRED
+**Rollback / runbook:** `RESTORE_PROCEDURE.md` documents a full disaster-recovery procedure (new server → config → GPG-decrypt env → DB restore → moodledata volume restore → code restore → bring up stack → note that the TLS cert is deliberately excluded from backups and must be regenerated). This reads as a genuine, thought-through runbook, not a placeholder.
 
-Historical Moodle native logs were reported available, but current tests must verify relevant exam/question/admin actions and preservation of attempt/result history.
-
-## Gate E — Bilingual Behavior — PARTIAL
-
-- FR regulatory methodology: 11/12 current pilot items source-verified.
-- EN technical review: not completed.
-- current FR/EN rendering/error/instruction behavior in the live exam UI: must be retested.
-
-## Gate F — Moodle / KOST E-EXAM Integration — OPEN
-
-Both live domains were previously confirmed to exist:
-
-- `exam.kostacademy.com` — Moodle E-Exam DGR
-- `console.kostacademy.com` — KOST E-EXAM console
-
-Need current architecture/access evidence for identity integration, permissions/scopes, retries/error handling, and data synchronization.
-
-Before asking the owner for access again, check `docs/LOCAL_RECOVERY_TARGETS.md`, including the previously referenced Claude scratchpad path named `kost-eexam-console` and local Hostarts/Docker/SSH history leads.
-
-## Gate G — Security / Configuration — OPEN
-
-Need current verification of:
-
-- TLS / HSTS / headers
-- authentication/session settings
-- secrets handling
-- database exposure
-- admin access
-- debug mode
-- service ports
-- least privilege
-
-Historical TLS/SSH observations are not a current pass.
-
-## Gate H — Build / Tests — OPEN
-
-Need current reproducible tests against the actual exam/console runtime/source, including candidate-flow E2E and critical admin/RBAC paths.
-
-The marketing/funnel `cbta` repository is not sufficient evidence for the exam runtime itself.
-
-## Gate I — Deployment / Operations — OPEN, BACKUPS HIGH PRIORITY
-
-Need current evidence for:
-
-- deployment procedure
-- health check
-- rollback
-- logging/monitoring
-- backup schedule/location
-- successful restore test
-- recovery/runbook
-
-Because historical evidence explicitly said automated backups were not configured, this gate is a critical priority rather than merely unknown.
+**Housekeeping (minor):** `docker system df` shows 34 images, 11.72GB reclaimable (stale images not pruned) — not a risk, just deferred cleanup.
 
 ## Gate J — Final Acceptance
 
-`PLATFORM READY TO USE` must not be declared until all critical technical gates above have concrete current evidence.
+`PLATFORM READY TO USE` is **not** declared. Remaining critical items before it could be:
 
-If all technical gates pass while EN / qualified-reviewer regulatory sign-off remains pending, the correct label is **TECHNICALLY READY / PRE-PRODUCTION READY — REGULATORY HUMAN REVIEW PENDING**, not regulator-approved.
+1. Fix or accept-and-document the offsite backup gap (Gate I).
+2. Re-run the existing Playwright suite (or equivalent) against the live console for current Gate B/C/G pass/fail evidence, and run at least one fresh `test_restore.sh` to refresh the Gate I restore-test data point.
+3. Complete EN bilingual technical review and secure a named qualified reviewer + date for the 12-item pilot (Gate A/E).
+4. Expand the production question bank from the recovered Stage 2A blueprint under the same Tier A discipline used for the pilot.
+
+If all technical gates (B, C, D, F, G, H, I) reach "evidenced" while regulatory sign-off (Gate A EN review / reviewer) remains pending, the correct label is **TECHNICALLY READY / PRE-PRODUCTION READY — REGULATORY HUMAN REVIEW PENDING**, not regulator-approved or "ready to use."
 
 ## Current true blockers / next autonomous actions
 
-1. Recover/reload chrome-devtools and finish Q-7.1-001 at Appendix A p.703 using the already-proven Bookshelf top-level ToC/search + screenshot technique.
-2. Use recovered Stage 2A context to continue production-bank work without asking the owner to resupply it.
-3. Check `docs/LOCAL_RECOVERY_TARGETS.md`, especially prior Claude scratchpads containing `kost-eexam-console`, plus Hostarts/Docker/SSH histories, before escalating live-runtime access to the owner.
-4. If live access is recovered, immediately reverify architecture/versions and prioritize backup configuration + restore testing before other production-impacting work.
-5. Continue through workflow, RBAC, audit integrity, bilingual rendering, integration, security, E2E, deployment/rollback and recovery gates.
-6. Surface user action only for a genuine owner-only blocker such as MFA/login, inaccessible secret, external reviewer decision, or irreversible production action without a safe rollback.
+None of the remaining items are owner-only blockers; all are continuable from this environment:
+
+1. Re-run `kost-eexam-console`'s existing Playwright test scripts against the live console/exam URLs and record current results (Gate B/C/G/H).
+2. Trigger a fresh `test_restore.sh` run on the VPS and record the result (Gate I).
+3. Diagnose why `offsite_push.sh` cannot reach this Mac via Tailscale at the scheduled hour, and fix or redesign it (Gate I).
+4. Continue production question-bank drafting from `docs/RECOVERED_STAGE2A_CONTEXT.md` under the same source-verification discipline as the pilot (Gate A).
+5. If/when an interactive admin-console session is warranted for deeper RBAC/workflow testing, do it deliberately and document exactly what was clicked/verified — not as an incidental side effect of a recon pass.
 
 ## What is not claimed
 
 - No ANAC or IATA approval claim.
 - No question is `APPROVED` without a named reviewer/date.
 - No EN bilingual review claim.
-- No current security/backup/readiness claim based solely on historical evidence.
-- No `PLATFORM READY TO USE` claim until the checklist is actually evidenced.
+- No claim that offsite backup redundancy currently works — it currently does not, and this report says so.
+- No claim that RBAC enforcement or the full exam workflow has been interactively verified end-to-end — only that server-side configuration/evidence for both exists and is more substantial than previously known.
+- No `PLATFORM READY TO USE` claim.

@@ -1,0 +1,96 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import type { QuestionRecord } from "@/lib/question-bank-data";
+import { DGR_FUNCTIONS } from "@/lib/dgr-functions";
+import { cn } from "@/lib/utils";
+
+function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+export function QuestionBankTable({ questions }: { questions: QuestionRecord[] }) {
+  const [activeFunction, setActiveFunction] = useState<string | null>(null);
+
+  const filtered = useMemo(() => {
+    if (!activeFunction) return questions;
+    return questions.filter((q) => q.dgrFunctions.includes(activeFunction));
+  }, [questions, activeFunction]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap gap-1.5">
+        <button
+          onClick={() => setActiveFunction(null)}
+          className={cn(
+            "rounded-full border px-3 py-1 text-[11.5px] font-medium transition-colors",
+            activeFunction === null
+              ? "bg-accent-9 border-accent-9 text-white"
+              : "bg-surface-raised border-border-default text-text-secondary hover:border-border-strong"
+          )}
+        >
+          All ({questions.length})
+        </button>
+        {DGR_FUNCTIONS.map((fn) => {
+          const count = questions.filter((q) => q.dgrFunctions.includes(fn)).length;
+          return (
+            <button
+              key={fn}
+              onClick={() => setActiveFunction(fn)}
+              className={cn(
+                "rounded-full border px-3 py-1 text-[11.5px] font-medium transition-colors",
+                activeFunction === fn
+                  ? "bg-accent-9 border-accent-9 text-white"
+                  : "bg-surface-raised border-border-default text-text-secondary hover:border-border-strong"
+              )}
+            >
+              {fn} ({count})
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="rounded-lg border border-border-subtle bg-surface-raised shadow-sm ring-1 ring-black/[0.02] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-border-subtle bg-surface-sunken/50">
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Question</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Type</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Category</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">DGR Function</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Last Modified</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border-subtle">
+              {filtered.map((q) => (
+                <tr key={q.id} className="hover:bg-surface-sunken/40 transition-colors">
+                  <td className="px-4 py-2.5 text-[12.5px] font-medium text-text-primary">{q.name}</td>
+                  <td className="px-4 py-2.5 text-[12px] text-text-secondary">{q.qtype}</td>
+                  <td className="px-4 py-2.5 text-[12px] text-text-secondary">{q.category}</td>
+                  <td className="px-4 py-2.5 text-[12px]">
+                    {q.dgrFunctions.length > 0 ? (
+                      <span className="text-text-secondary">{q.dgrFunctions.join(", ")}</span>
+                    ) : (
+                      <span className="text-text-tertiary italic">Not classified</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2.5 text-[12px] text-text-tertiary tabular-nums">{fmtDate(q.lastModified)}</td>
+                  <td className="px-4 py-2.5 text-[12px] text-text-secondary capitalize">{q.status}</td>
+                </tr>
+              ))}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-[12.5px] text-text-tertiary">
+                    No questions match this filter.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

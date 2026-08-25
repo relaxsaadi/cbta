@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   KOST E-EXAM — Design tokens v2
+   Aviation / enterprise compliance. Deep navy sidebar for brand presence
+   and depth, light content plane for scanability. Green reserved strictly
+   for VERIFIED status — never used decoratively.
+   ========================================================================== */
+
+:root {
+  /* Content plane */
+  --surface-base: #f4f5f7;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eceef1;
+  --surface-overlay: #ffffff;
+
+  /* Navy plane (sidebar, login panel) */
+  --navy-950: #050b16;
+  --navy-900: #081326;
+  --navy-800: #0d1c36;
+  --navy-700: #142848;
+  --navy-line: #1c3358;
+  --navy-text: #e8edf5;
+  --navy-text-dim: #a7b8d1;
+
+  /* Text on content plane */
+  --text-primary: #0c1220;
+  --text-secondary: #4b5568;
+  --text-tertiary: #838da0;
+  --text-inverse: #ffffff;
+
+  /* Borders */
+  --border-subtle: #e4e6eb;
+  --border-default: #d3d7de;
+  --border-strong: #aeb4c0;
+
+  /* Accent — KOST institutional blue */
+  --accent-9: #0a4f9e;
+  --accent-10: #073b78;
+  --accent-11: #0a4f9e;
+  --accent-glow: #2f7fd6;
+  --accent-contrast: #ffffff;
+  --accent-soft-bg: #e9f1fb;
+  --accent-soft-border: #c3daf3;
+
+  /* Semantic — green reserved for VERIFIED only */
+  --status-verified-bg: #e8f6ee;
+  --status-verified-border: #b9e4c9;
+  --status-verified-text: #157a3e;
+  --status-verified-dot: #1fa354;
+
+  --status-warning-bg: #fdf2df;
+  --status-warning-border: #f0d69f;
+  --status-warning-text: #8a5a05;
+  --status-warning-dot: #e3980f;
+
+  --status-critical-bg: #fbeaea;
+  --status-critical-border: #f0bfbf;
+  --status-critical-text: #a3201a;
+  --status-critical-dot: #d8342c;
+
+  --status-neutral-bg: #eceef1;
+  --status-neutral-border: #dadde3;
+  --status-neutral-text: #565f70;
+  --status-neutral-dot: #929aa8;
+
+  /* Shadows — layered, more depth than v1 */
+  --shadow-xs: 0 1px 2px 0 rgb(10 20 40 / 0.05);
+  --shadow-sm: 0 2px 4px -1px rgb(10 20 40 / 0.07), 0 1px 2px -1px rgb(10 20 40 / 0.05);
+  --shadow-md: 0 8px 16px -4px rgb(10 20 40 / 0.10), 0 3px 6px -3px rgb(10 20 40 / 0.06);
+  --shadow-lg: 0 20px 32px -8px rgb(10 20 40 / 0.16), 0 6px 12px -6px rgb(10 20 40 / 0.08);
+  --shadow-navy: 4px 0 24px -8px rgb(2 6 16 / 0.35);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+
+  --sidebar-width: 16.5rem;
+  --topbar-height: 3.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-base: #0a0d13;
+    --surface-raised: #12161e;
+    --surface-sunken: #0d1017;
+    --surface-overlay: #171b24;
+
+    --text-primary: #eef0f4;
+    --text-secondary: #9aa3b5;
+    --text-tertiary: #656e82;
+    --text-inverse: #0c1220;
+
+    --border-subtle: #1d222c;
+    --border-default: #262c38;
+    --border-strong: #363d4c;
+
+    --accent-9: #4a90e2;
+    --accent-10: #6ba5eb;
+    --accent-11: #6ba5eb;
+    --accent-glow: #6ba5eb;
+    --accent-contrast: #051020;
+    --accent-soft-bg: #12233d;
+    --accent-soft-border: #1e3a63;
+
+    --status-verified-bg: #0f2419;
+    --status-verified-border: #1c4530;
+    --status-verified-text: #4fd889;
+    --status-verified-dot: #2fbf6e;
+
+    --status-warning-bg: #2a2010;
+    --status-warning-border: #4a3a15;
+    --status-warning-text: #f0c05c;
+    --status-warning-dot: #e3980f;
+
+    --status-critical-bg: #2b1414;
+    --status-critical-border: #4d2222;
+    --status-critical-text: #f29a9a;
+    --status-critical-dot: #d8342c;
+
+    --status-neutral-bg: #171b24;
+    --status-neutral-border: #262c38;
+    --status-neutral-text: #9aa3b5;
+    --status-neutral-dot: #656e82;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface-base: #0a0d13;
+  --surface-raised: #12161e;
+  --surface-sunken: #0d1017;
+  --surface-overlay: #171b24;
+
+  --text-primary: #eef0f4;
+  --text-secondary: #9aa3b5;
+  --text-tertiary: #656e82;
+  --text-inverse: #0c1220;
+
+  --border-subtle: #1d222c;
+  --border-default: #262c38;
+  --border-strong: #363d4c;
+
+  --accent-9: #4a90e2;
+  --accent-10: #6ba5eb;
+  --accent-11: #6ba5eb;
+  --accent-glow: #6ba5eb;
+  --accent-contrast: #051020;
+  --accent-soft-bg: #12233d;
+  --accent-soft-border: #1e3a63;
+
+  --status-verified-bg: #0f2419;
+  --status-verified-border: #1c4530;
+  --status-verified-text: #4fd889;
+  --status-verified-dot: #2fbf6e;
+
+  --status-warning-bg: #2a2010;
+  --status-warning-border: #4a3a15;
+  --status-warning-text: #f0c05c;
+  --status-warning-dot: #e3980f;
+
+  --status-critical-bg: #2b1414;
+  --status-critical-border: #4d2222;
+  --status-critical-text: #f29a9a;
+  --status-critical-dot: #d8342c;
+
+  --status-neutral-bg: #171b24;
+  --status-neutral-border: #262c38;
+  --status-neutral-text: #9aa3b5;
+  --status-neutral-dot: #656e82;
+}
+
+@theme inline {
+  --color-surface-base: var(--surface-base);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-navy-line: var(--navy-line);
+  --color-navy-text: var(--navy-text);
+  --color-navy-text-dim: var(--navy-text-dim);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-inverse: var(--text-inverse);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent-9: var(--accent-9);
+  --color-accent-10: var(--accent-10);
+  --color-accent-11: var(--accent-11);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-soft-bg: var(--accent-soft-bg);
+  --color-accent-soft-border: var(--accent-soft-border);
+
+  --color-status-verified-bg: var(--status-verified-bg);
+  --color-status-verified-border: var(--status-verified-border);
+  --color-status-verified-text: var(--status-verified-text);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-warning-border: var(--status-warning-border);
+  --color-status-warning-text: var(--status-warning-text);
+  --color-status-critical-bg: var(--status-critical-bg);
+  --color-status-critical-border: var(--status-critical-border);
+  --color-status-critical-text: var(--status-critical-text);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+  --color-status-neutral-border: var(--status-neutral-border);
+  --color-status-neutral-text: var(--status-neutral-text);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+* {
+  border-color: var(--border-subtle);
+}
+
+body {
+  background: var(--surface-base);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent-soft-bg);
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Printable A4 report views (Audit Readiness Summary, Evidence Pack) —
+   hides app chrome, forces light background, clean page breaks. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #0d1c36 !important;
+  }
+  .print-page {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .print-avoid-break {
+    break-inside: avoid;
+  }
+  @page {
+    size: A4;
+    margin: 16mm 14mm;
+  }
+}

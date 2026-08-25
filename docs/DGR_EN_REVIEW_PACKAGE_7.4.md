@@ -1,10 +1,10 @@
-# DGR EN Review Package — Function 7.4 (Q-7.4-001 – Q-7.4-035)
+# DGR EN Review Package — Function 7.4 (Q-7.4-001 – Q-7.4-053)
 
-Prepared as bilingual (FR→EN) draft translation material for all 35
+Prepared as bilingual (FR→EN) draft translation material for all 53
 currently-drafted Function 7.4 production-bank items (Batch 1:
-`Q-7.4-001`–`016`; Batch 2: `Q-7.4-017`–`035`). This is **preparatory
-drafting work for a human reviewer to check — it is not a substitute for
-that review.**
+`Q-7.4-001`–`016`; Batch 2: `Q-7.4-017`–`035`; Batch 3: `Q-7.4-036`–`053`).
+This is **preparatory drafting work for a human reviewer to check — it is
+not a substitute for that review.**
 
 ## Status discipline — read before using anything below
 
@@ -20,7 +20,7 @@ that review.**
   rules 4–5.
 - **Critical: this package does NOT change any item's FR status.** Unlike
   Function 7.1's pilot (12 items already `FROZEN FR / SOURCE VERIFIED`
-  before their EN package was built), **all 35 Function 7.4 items remain
+  before their EN package was built), **all 53 Function 7.4 items remain
   `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`**, exactly as recorded
   in `docs/DGR_PRODUCTION_BANK_7.4.md`. Per `.claude/rules/dgr-stage2b.md`
   rule 5 (FR source verification and EN bilingual technical review are
@@ -46,15 +46,16 @@ composed to match those conclusions, not transcribed from an actual stored
 item.
 
 **Function 7.4 has no such gap.** Every stem and every answer option for all
-35 items was drafted and committed verbatim, this session, into
-`docs/DGR_PRODUCTION_BANK_7.4.md` (Batch 1 and Batch 2). The "FR text" shown
-for each item below is copied **directly and verbatim** from that file — not
-reconstructed, not paraphrased, not inferred from a source-basis summary.
-This is a genuine positive contrast to Function 7.1's package, not a repeat
-of its caveat: the reviewer does not need to separately track down a
-live-administered copy to know what the actual FR item text is — it is
-already here, and it is already the same text that will (once these items
-clear both open gates above) become the production item text.
+53 items was drafted and committed verbatim, across the Batch 1/2/3 drafting
+sessions, into `docs/DGR_PRODUCTION_BANK_7.4.md` (Batch 1, Batch 2, and
+Batch 3). The "FR text" shown for each item below is copied **directly and
+verbatim** from that file — not reconstructed, not paraphrased, not inferred
+from a source-basis summary. This is a genuine positive contrast to Function
+7.1's package, not a repeat of its caveat: the reviewer does not need to
+separately track down a live-administered copy to know what the actual FR
+item text is — it is already here, and it is already the same text that
+will (once these items clear both open gates above) become the production
+item text.
 
 What the reviewer still must do, exactly as for any function: (1) verify
 this package's copied FR text is unmodified from `docs/DGR_PRODUCTION_BANK_
@@ -66,7 +67,7 @@ above.
 
 ---
 
-## The 35 items
+## Batch 1 + Batch 2 — the first 35 items (Q-7.4-001–035)
 
 Each item cross-references its full sourcing/rationale (correct-answer
 rationale, distractor rationale, cited slide numbers) in
@@ -612,55 +613,350 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 ---
 
+## Batch 3 — 18 more items (Q-7.4-036–053)
+
+Drafted in a later session after Batch 1+2 (above). Same format, same
+provenance guarantee: every FR stem/option below is copied **directly and
+verbatim** from `docs/DGR_PRODUCTION_BANK_7.4.md`'s Batch 3 section — not
+reconstructed, not paraphrased. **These 18 items do not change any status
+recorded above for Q-7.4-001–035**, and their own FR status is, identically,
+`DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged by this
+package, per the same rule-5 separate-gates principle explained above).
+
+### Q-7.4-036 — Ce que les COMAT peuvent dissimuler malgré leur apparence anodine
+
+- **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses cachées
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged by this package)
+- **Source (production bank):** KOST F7.4 course, slide 49 (DGR 2.2.4), cross-checked against slides 43–44 and 50
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Exemples de MD cachées DGR 2.2.4), les COMAT (pièces détachées d'avion ou autres articles tels que les fusées de détresse, les trousses de premiers secours, etc.) ne sont généralement pas déclarés. Que peuvent-ils néanmoins contenir, selon le cours ?"*
+  - Options: **(Correct)** *"Des générateurs chimiques d'oxygène, des gaz comprimés, des liquides inflammables."* / *"Uniquement des pièces métalliques, sans aucun risque chimique associé."* / *"Des régulateurs de carburant et des réfrigérateurs uniquement."* / *"Rien de particulier : les COMAT sont par définition toujours exemptés des exigences DGR car ils appartiennent à l'exploitant."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Examples of Hidden Dangerous Goods, DGR 2.2.4), COMAT (aircraft spare parts or other articles such as distress flares, first-aid kits, etc.) are generally not declared. What can they nevertheless contain, according to the course?"*
+  - Options: **(Correct)** *"Chemical oxygen generators, compressed gases, flammable liquids."* / *"Only metal parts, with no associated chemical hazard."* / *"Fuel regulators and refrigerators only."* / *"Nothing in particular: COMAT are by definition always exempt from DGR requirements because they belong to the operator."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-037 — Les trois éléments de l'identification extérieure d'une ULD contenant des MD
+
+- **Sub-task:** 4.2.4 Apposer des étiquettes pour UC, le cas échéant
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 112, cross-checked against slide 114 (DGR 9.3.8.2) and its own closing sentence
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Identification des unités de chargement), pour toute ULD contenant des marchandises dangereuses, que doit-on avoir ?"*
+  - Options: **(Correct)** *"Une identification sur ses parois extérieures ; les classes ou divisions indiquées visiblement sur l'étiquette ; et, pour une ULD contenant un colis CAO, une étiquette le précisant."* / *"Une identification sur ses parois extérieures et les classes ou divisions sur l'étiquette uniquement ; aucune mention CAO n'est jamais requise sur une ULD."* / *"Uniquement l'étiquette à large bordure hachurée de rouge prévue par la DGR 9.3.8.2 ; aucune autre identification n'est nécessaire."* / *"Les mêmes étiquettes que celles apposées lors du chargement doivent rester apposées en permanence sur l'ULD, y compris après son déchargement."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Identification of Unit Load Devices), for any ULD containing dangerous goods, what must be provided?"*
+  - Options: **(Correct)** *"Identification on its outer walls; the classes or divisions visibly indicated on the label; and, for a ULD containing a CAO package, a label specifying this."* / *"Identification on its outer walls and the classes or divisions on the label only; no CAO marking is ever required on a ULD."* / *"Only the wide red-hatched-border label required under DGR 9.3.8.2; no other identification is necessary."* / *"The same labels affixed during loading must remain permanently affixed to the ULD, including after it is unloaded."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-038 — Dimension minimale de l'étiquette à bordure hachurée de rouge (DGR 9.3.8.2)
+
+- **Sub-task:** 4.2.4 Apposer des étiquettes pour UC, le cas échéant
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 114 (DGR 9.3.8.2)
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (DGR 9.3.8.2), quelle est la dimension minimale de l'étiquette à large bordure hachurée de rouge attachée à l'UC pour indiquer les marchandises dangereuses qu'elle contient ?"*
+  - Options: **(Correct)** *"148 x 210 mm."* / *"100 x 100 mm."* / *"148 x 297 mm (format A4)."* / *"210 x 297 mm."*
+- **EN draft translation:**
+  - Stem: *"According to the course (DGR 9.3.8.2), what is the minimum size of the wide red-hatched-border label attached to the ULD to indicate the dangerous goods it contains?"*
+  - Options: **(Correct)** *"148 x 210 mm."* / *"100 x 100 mm."* / *"148 x 297 mm (A4 size)."* / *"210 x 297 mm."*
+- **Note carried into EN:** per the production bank, the three wrong dimensions are explicitly flagged as plausible-but-fabricated distractors (no other dimension figure for this label appears anywhere else in the source) — the EN draft preserves this and must not be read as sourcing all four figures from the course.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-039 — Retrait des étiquettes de l'ULD après déchargement
+
+- **Sub-task:** 4.2.4 Apposer des étiquettes pour UC, le cas échéant
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 112 (closing sentence)
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Identification des unités de chargement), dans tous les cas, on procède au retrait des étiquettes de l'ULD après son déchargement."*
+  - Correct answer: **VRAI**
+- **EN draft translation:**
+  - Statement: *"True or False: according to the course (Identification of Unit Load Devices), in all cases, the labels are removed from the ULD after it is unloaded."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-040 — Définition complète d'une marchandise dangereuse (DGR 1.0)
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 15 (DGR 1.0), cross-checked against slides 13–14 and 16
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Généralités, DGR 1.0), quelle est la définition d'une marchandise dangereuse ?"*
+  - Options: **(Correct)** *"Un produit, un article ou une substance susceptible de présenter un danger pour la santé, la sécurité, la propriété ou l'environnement, ET qui figure dans la liste des marchandises dangereuses du règlement ou qui est classé conformément à ce règlement."* / *"Un objet dans sa forme complète, par opposition à une substance qui peut être solide, liquide ou gazeuse, et qui n'est dangereuse que si elle est contenue dans un tel objet."* / *"Tout produit potentiellement dangereux pour la santé, la sécurité, la propriété ou l'environnement, qu'il figure ou non dans une liste ou une classification réglementaire."* / *"Un produit relevant d'une exigence légale, d'une responsabilité réglementaire, de la sécurité opérationnelle et de l'efficacité."*
+- **EN draft translation:**
+  - Stem: *"According to the course (General Provisions, DGR 1.0), what is the definition of a dangerous good?"*
+  - Options: **(Correct)** *"A product, article, or substance capable of posing a hazard to health, safety, property, or the environment, AND which is listed in the Regulations' list of dangerous goods or is classified in accordance with these Regulations."* / *"An object in its complete form, as opposed to a substance which may be solid, liquid, or gaseous, and which is dangerous only if it is contained within such an object."* / *"Any product potentially dangerous to health, safety, property, or the environment, whether or not it is listed in a regulatory list or classification."* / *"A product falling under a legal requirement, a regulatory responsibility, operational safety, and efficiency."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-041 — Signification du code cargo IMP « ICE » (DGR B.2.2.4)
+
+- **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 28 (DGR B.2.2.4), cross-checked against slides 26–27
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Structure du DGR de l'IATA — Appendices, Codes cargo IMP DGR B.2.2.4), que signifie le code cargo IMP « ICE » ?"*
+  - Options: **(Correct)** *"Dioxyde de carbone solide (glace carbonique)."* / *"CAO — Avion cargo seulement."* / *"MAG — Masses magnétisées."* / *"RFL — Liquides inflammables."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Structure of the IATA DGR — Appendices, IMP Cargo Codes, DGR B.2.2.4), what does the IMP cargo code 'ICE' mean?"*
+  - Options: **(Correct)** *"Solid carbon dioxide (dry ice)."* / *"CAO — Cargo Aircraft Only."* / *"MAG — Magnetized material."* / *"RFL — Flammable liquids."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-042 — Obligations de formation de l'exploitant (DGR 1.5)
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 55 (DGR 1.5)
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Formation DGR 1.5), quelles obligations de formation la Réglementation impose-t-elle à tous les exploitants concernant les marchandises dangereuses ?"*
+  - Options: **(Correct)** *"Établir un programme de formation, qu'ils soient ou non agréés pour transporter des marchandises dangereuses en tant que fret, comprenant une formation initiale, une actualisation des connaissances tous les 2 ans, et une épreuve obligatoire pour chaque formation."* / *"Seuls les exploitants agréés pour transporter des marchandises dangereuses en tant que fret doivent établir un tel programme."* / *"Une actualisation des connaissances est requise chaque année, sans aucune épreuve obligatoire."* / *"La formation initiale suffit ; aucune actualisation périodique n'est prévue par la Réglementation."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Training, DGR 1.5), what training obligations does the Regulations impose on all operators regarding dangerous goods?"*
+  - Options: **(Correct)** *"Establish a training program, whether or not they are approved to carry dangerous goods as cargo, comprising initial training, a knowledge refresher every 2 years, and a mandatory test for each training."* / *"Only operators approved to carry dangerous goods as cargo must establish such a program."* / *"A knowledge refresher is required every year, with no mandatory test."* / *"Initial training is sufficient; the Regulations provide for no periodic refresher."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-043 — Portée d'une divergence d'État (DGR 2.8.1)
+
+- **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 58 (DGR 2.8.1), cross-checked against slide 59 (DGR 2.8.3) and slide 20 (AIEA role)
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Divergence d'État DGR 2.8.1), à quels États une divergence d'État peut-elle s'appliquer ?"*
+  - Options: **(Correct)** *"L'État d'origine/de départ, l'État de destination, et tous les États des escales de transit (exemple donné par le cours : ITG — Italie, ITG-01, ITG-02, ITG-03)."* / *"Uniquement à l'État d'origine ; les États de destination et de transit ne sont jamais concernés."* / *"Uniquement à l'exploitant qui opère le vol, comme illustré par l'exemple AH — Air Algérie, AH-01, AH-02."* / *"Uniquement aux États ayant ratifié une convention spécifique auprès de l'Agence internationale de l'énergie atomique (AIEA)."*
+- **EN draft translation:**
+  - Stem: *"According to the course (State Variation, DGR 2.8.1), to which States can a State Variation apply?"*
+  - Options: **(Correct)** *"The State of Origin/Departure, the State of Destination, and all States of transit stops (example given by the course: ITG — Italy, ITG-01, ITG-02, ITG-03)."* / *"Only to the State of Origin; the States of Destination and transit are never concerned."* / *"Only to the operator running the flight, as illustrated by the example AH — Air Algérie, AH-01, AH-02."* / *"Only to States that have ratified a specific convention with the International Atomic Energy Agency (IAEA)."*
+- **Terminology note — flagged:** "État d'origine/de départ" and "État de destination" here are the **shipment-level** sense (the flight's departure/destination States, DGR 2.8.1 State Variation context) — a **distinct concept** from "État d'origine de l'emballage" in Q-7.4-032 (the packaging's country of manufacture, a UN-marking element). The reviewer should confirm these two uses of "State of origin" are not conflated, exactly as already flagged for Q-7.4-032 itself.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-044 — Numéro ONU des piles et batteries au lithium métal transportées seules
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slides 95–96 (lithium metal vs. lithium-ion table)
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Batteries lithium-ion et métal), quel numéro ONU correspond aux piles et batteries au lithium métal transportées seules (non emballées avec ni contenues dans un équipement) ?"*
+  - Options: **(Correct)** *"UN 3090."* / *"UN 3091."* / *"UN 3480."* / *"UN 3481."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Lithium-ion and Lithium Metal Batteries), which UN number corresponds to lithium metal cells and batteries shipped alone (not packed with, or contained in, equipment)?"*
+  - Options: **(Correct)** *"UN 3090."* / *"UN 3091."* / *"UN 3480."* / *"UN 3481."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-045 — Division du Classe 5 illustrée par les résines pour kit de réparation
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 66 (DGR 3.0.2), cross-checked against slides 65, 67, and 100
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Les classes des marchandises dangereuses DGR 3.0.2), à quelle division appartiennent les peroxydes organiques, illustrés par l'exemple des résines pour kit de réparation ?"*
+  - Options: **(Correct)** *"Division 5.2 — Peroxyde organique (code IMP ROP)."* / *"Division 5.1 — Comburant (code IMP ROX), ex : nitrate d'ammonium, chlorate de calcium, engrais."* / *"Division 6.1 — Substance Toxique (code IMP RPB), ex : arsenic, cyanure, pesticides."* / *"Division 4.1 — Solide inflammable (code IMP RFS), ex : allumettes."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Dangerous Goods Classes, DGR 3.0.2), which division do organic peroxides belong to, illustrated by the example of repair kit resins?"*
+  - Options: **(Correct)** *"Division 5.2 — Organic Peroxide (IMP code ROP)."* / *"Division 5.1 — Oxidizer (IMP code ROX), e.g. ammonium nitrate, calcium chlorate, fertilizer."* / *"Division 6.1 — Toxic Substance (IMP code RPB), e.g. arsenic, cyanide, pesticides."* / *"Division 4.1 — Flammable Solid (IMP code RFS), e.g. matches."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-046 — Quatre qualités exigées des marquages de spécification (DGR 6.0.4)
+
+- **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 89
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Marquage à spécification des emballages), tout colis de marchandises dangereuses doit être marqué, et les marquages doivent être visibles, lisibles, durables, et pouvoir être exposés aux intempéries."*
+  - Correct answer: **VRAI**
+- **EN draft translation:**
+  - Statement: *"True or False: according to the course (Specification Marking of Packagings), every dangerous goods package must be marked, and the markings must be visible, legible, durable, and able to withstand exposure to the weather."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-047 — Fret ou bagages contaminés : obligation de l'exploitant avant de poursuivre le chargement
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slides 147–148
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Fret ou bagages contaminés), si une contamination est constatée sur un bagage ou du fret non déclaré comme contenant des marchandises dangereuses, et qu'une marchandise dangereuse est soupçonnée d'en être la cause, que doit faire l'exploitant ?"*
+  - Options: **(Correct)** *"Prendre les mesures nécessaires pour lever le doute avant de poursuivre le chargement du bagage ou du fret contaminé ; si la matière est confirmée comme dangereuse, prendre les mesures appropriées pour écarter tout risque identifié avant que le transport aérien puisse se poursuivre."* / *"Poursuivre immédiatement le chargement ; le doute pourra être levé après le vol."* / *"Détruire systématiquement le bagage ou le fret contaminé, sans vérification préalable."* / *"Contrôler uniquement l'emplacement où le colis a été initialement chargé dans l'avion, sans autre mesure."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Contaminated Cargo or Baggage), if contamination is found on baggage or cargo not declared as containing dangerous goods, and a dangerous good is suspected of being the cause, what must the operator do?"*
+  - Options: **(Correct)** *"Take the necessary measures to resolve the doubt before continuing to load the contaminated baggage or cargo; if the substance is confirmed to be dangerous, take appropriate measures to remove any identified risk before air transport may continue."* / *"Continue loading immediately; the doubt can be resolved after the flight."* / *"Systematically destroy the contaminated baggage or cargo, without prior verification."* / *"Only check the location where the package was originally loaded in the aircraft, with no other measure."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-048 — Disponibilité des renseignements d'intervention d'urgence (generic-awareness, binding caveat 7)
+
+- **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur — restricted framing per blueprint binding caveat 7: generic-awareness-only, no specific employer procedure content may be invented
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 143
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Information sur l'intervention d'urgence — Responsabilités de l'exploitant), pour toute expédition avec déclaration de marchandises dangereuses exigée, l'exploitant doit s'assurer que les renseignements appropriés sont immédiatement disponibles en tout temps pour une intervention d'urgence, et que ces renseignements sont à la disposition du commandant de bord."*
+  - Correct answer: **VRAI**
+- **EN draft translation:**
+  - Statement: *"True or False: according to the course (Emergency Response Information — Operator Responsibilities), for every shipment requiring a dangerous goods declaration, the operator must ensure that appropriate information is immediately available at all times for emergency response, and that this information is available to the pilot-in-command."*
+  - Correct answer: **TRUE**
+- **Restricted-framing note carried into EN:** exactly as recorded in the production bank (binding caveat 7), this item tests only the **generic obligation** that such information exist and be immediately available to the pilot-in-command — it must not be read as testing or implying any specific employer's actual emergency-response procedure content, which this course does not teach.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-049 — Orientation « This Way Up » des colis de marchandises dangereuses liquides
+
+- **Sub-task:** 4.2.3 Appliquer les prescriptions de rangement
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slides 117–118
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Procédures de stockage et de chargement — colis de MD liquides), que doit-on respecter lors du stockage, de la manutention et du chargement d'un colis de marchandises dangereuses liquides portant l'étiquette « This Way Up » (sens de chargement) ?"*
+  - Options: **(Correct)** *"Le sens indiqué par l'étiquette doit être respecté en toute circonstance ; les emballages uniques munis de fermetures d'extrémité doivent toujours être placés fermetures tournées vers le haut, même s'ils possèdent aussi des fermetures latérales."* / *"Le sens de l'étiquette ne doit être respecté que pendant le chargement à bord ; il n'a aucune importance durant le stockage en entrepôt."* / *"Si l'emballage possède une fermeture latérale, celle-ci doit être orientée vers le haut à la place de la fermeture d'extrémité."* / *"L'étiquette « This Way Up » est purement indicative et n'entraîne aucune obligation de positionnement particulière."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Storage and Loading Procedures — Liquid DG Packages), what must be observed when storing, handling, and loading a package of liquid dangerous goods bearing the 'This Way Up' (package orientation) label?"*
+  - Options: **(Correct)** *"The orientation indicated by the label must be respected under all circumstances; single packagings fitted with end closures must always be placed with the closures facing upward, even if they also have side closures."* / *"The orientation of the label need only be respected during loading onto the aircraft; it has no importance during warehouse storage."* / *"If the packaging has a side closure, that closure must be oriented upward instead of the end closure."* / *"The 'This Way Up' label is purely indicative and imposes no particular positioning obligation."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-050 — Comment l'indice de transport (IT) d'une expédition est déterminé
+
+- **Sub-task:** 6.1.4 Appliquer les prescriptions de rangement (stade chargement de l'aéronef)
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 127
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Base de la séparation des matières radioactives), comment l'indice de transport (IT) d'une expédition radioactive est-il déterminé ?"*
+  - Options: **(Correct)** *"Soit en additionnant les indices de transport de l'ensemble des colis contenus, soit en mesurant directement l'intensité de rayonnement."* / *"En consultant exclusivement l'étiquette CAO apposée sur le colis."* / *"Il est fixé une fois pour toutes par le fabricant de l'emballage et ne peut jamais être recalculé pour une expédition donnée."* / *"En multipliant le nombre de colis de l'expédition par l'indice de transport le plus élevé du lot."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Basis of Radioactive Material Segregation), how is the transport index (TI) of a radioactive shipment determined?"*
+  - Options: **(Correct)** *"Either by adding together the transport indices of all packages contained, or by directly measuring the radiation intensity."* / *"By exclusively consulting the CAO label affixed to the package."* / *"It is fixed once and for all by the packaging manufacturer and can never be recalculated for a given shipment."* / *"By multiplying the number of packages in the shipment by the highest transport index in the batch."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-051 — Les distances de séparation des tableaux sont des minimums
+
+- **Sub-task:** 6.1.4 Appliquer les prescriptions de rangement (stade chargement de l'aéronef)
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 130 (same slide as Q-7.4-011, distinct clause)
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Séparation des matières radioactives en fonction de l'indice de transport), les distances de séparation données dans les tableaux de la Réglementation sont des minimums que l'on s'efforcera de dépasser."*
+  - Correct answer: **VRAI**
+- **EN draft translation:**
+  - Statement: *"True or False: according to the course (Segregation of Radioactive Material by Transport Index), the separation distances given in the Regulations' tables are minimums that should be exceeded wherever possible."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-052 — Support documentaire de la NOTOC : distinct de la LTA, de la déclaration et des factures
+
+- **Sub-task:** 6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 136 (DGR 9.5.1.1.3)
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Notification des pilotes, DGR 9.5.1.1.3), sur quel type de document les renseignements destinés au commandant de bord doivent-ils être présentés ?"*
+  - Options: **(Correct)** *"Un document approprié, distinct de la lettre de transport aérien (LTA), de la déclaration de l'expéditeur de marchandises dangereuses, ou des factures — généralement fourni sous forme de NOTOC (Notification to Captain)."* / *"La LTA (lettre de transport aérien) elle-même, à laquelle aucune information supplémentaire n'est ajoutée."* / *"La déclaration de l'expéditeur de marchandises dangereuses, qui sert aussi de document de notification au commandant de bord."* / *"Une facture commerciale accompagnant la cargaison."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Notification to the Pilot-in-Command, DGR 9.5.1.1.3), on what type of document must the information intended for the pilot-in-command be presented?"*
+  - Options: **(Correct)** *"An appropriate document, separate from the air waybill (AWB), the shipper's dangerous goods declaration, or invoices — generally provided in the form of a NOTOC (Notification to Captain)."* / *"The AWB (air waybill) itself, with no additional information added."* / *"The shipper's dangerous goods declaration, which also serves as the notification document to the pilot-in-command."* / *"A commercial invoice accompanying the cargo."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.4-053 — Catégorie exemptée de figurer sur la NOTOC
+
+- **Sub-task:** 6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **Source (production bank):** KOST F7.4 course, slide 141, cross-checked against slides 137–138
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Notification des pilotes), laquelle des catégories suivantes de marchandises dangereuses la NOTOC n'est-elle PAS exigée pour ?"*
+  - Options: **(Correct)** *"Les matières biologiques de Catégorie B."* / *"Une marchandise dangereuse de Classe 3 (liquide inflammable) transportée comme fret commercial classique, pleinement soumise à la Réglementation."* / *"Une marchandise dangereuse de Classe 8 (matière corrosive) transportée comme fret commercial classique, pleinement soumise à la Réglementation."* / *"Une matière radioactive de catégorie II-Jaune ou III-Jaune, non en quantités exceptées."*
+- **EN draft translation:**
+  - Stem: *"According to the course (Notification to the Pilot-in-Command), for which of the following categories of dangerous goods is the NOTOC NOT required?"*
+  - Options: **(Correct)** *"Category B biological substances."* / *"A Class 3 dangerous good (flammable liquid) carried as ordinary commercial cargo, fully subject to the Regulations."* / *"A Class 8 dangerous good (corrosive substance) carried as ordinary commercial cargo, fully subject to the Regulations."* / *"A Category II-Yellow or III-Yellow radioactive material, not in excepted quantities."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
 ## Bilingual terminology table
 
 | FR term | EN term | Verification status | Appears in |
 |---|---|---|---|
 | Marchandise(s) dangereuse(s) (MD) | Dangerous Goods (DG) | Standard | All items |
-| Marchandise dangereuse cachée / MD cachée | Hidden dangerous goods (concealed DG) | Standard industry usage; not itself a DGR-glossary headword | Q-7.4-017, 018, 019, 020 |
+| Marchandise dangereuse cachée / MD cachée | Hidden dangerous goods (concealed DG) | Standard industry usage; not itself a DGR-glossary headword | Q-7.4-017, 018, 019, 020, 036 |
 | Exploitant | Operator | Standard | Most items |
-| Expéditeur | Shipper | Standard | Q-7.4-003, 012, 014, 019 (distractor), 021 (distractor), 025 (distractor), 026, 029, 035 (distractor) |
+| Expéditeur | Shipper | Standard | Q-7.4-003, 012, 014, 019 (distractor), 021 (distractor), 025 (distractor), 026, 029, 035 (distractor), 052 (distractor) |
 | Agent de fret | Freight/cargo agent | Standard | Q-7.4-026 |
 | Colis | Package | Standard | Most items |
 | Suremballage | Overpack | Standard, per Function 7.1's terminology table | Q-7.4-006, 021 |
-| Unité de chargement (UC) | Unit Load Device (ULD) | Standard IATA term | Q-7.4-007, 009, 010, 021, 022, 025 |
+| Unité de chargement (UC) | Unit Load Device (ULD) | Standard IATA term | Q-7.4-007, 009, 010, 021, 022, 025, 037, 038, 039 |
 | Groupe d'emballage | Packing Group | Standard, per Function 7.1's terminology table | Q-7.4-004, 031, 032 |
-| Classe / Division | Class / Division | Standard | Q-7.4-005, 008 |
+| Classe / Division | Class / Division | Standard | Q-7.4-005, 008, 044, 045, 053 (distractors) |
 | Étiquette de danger | Hazard label | Standard, per Function 7.1's terminology table | Q-7.4-006, 009, 034 |
 | Étiquette de manutention | Handling label | Standard | Q-7.4-006 |
 | Disposition spéciale | Special Provision | Standard, per Function 7.1's terminology table | Q-7.4-014 (distractor) |
-| Indice de transport (IT) | Transport Index (TI) | Standard | Q-7.4-011 |
-| Matières radioactives | Radioactive material | Standard | Q-7.4-002, 011 |
-| Catégorie I-Blanche / II-Jaune / III-Jaune | Category I-White / II-Yellow / III-Yellow | Standard | Q-7.4-010, 011 |
-| NOTOC | NOTOC | Unchanged (standard IATA acronym) | Q-7.4-012, 013, 035 |
-| Commandant de bord | Pilot-in-command (PIC) | Standard IATA/ICAO term (course's own French usage is informal "captain"-equivalent) | Q-7.4-012, 018, 021, 025 (distractor), 035 |
-| AWB / LTA (Lettre de Transport Aérien) | Air Waybill (AWB) | Standard | Q-7.4-012, 021 (distractor) |
+| Indice de transport (IT) | Transport Index (TI) | Standard | Q-7.4-011, 050, 051 |
+| Matières radioactives | Radioactive material | Standard | Q-7.4-002, 011, 050, 051, 053 (distractor) |
+| Catégorie I-Blanche / II-Jaune / III-Jaune | Category I-White / II-Yellow / III-Yellow | Standard | Q-7.4-010, 011, 053 (distractor) |
+| NOTOC | NOTOC | Unchanged (standard IATA acronym) | Q-7.4-012, 013, 035, 052, 053 |
+| Commandant de bord | Pilot-in-command (PIC) | Standard IATA/ICAO term (course's own French usage is informal "captain"-equivalent) | Q-7.4-012, 018, 021, 025 (distractor), 035, 048, 052 |
+| AWB / LTA (Lettre de Transport Aérien) | Air Waybill (AWB) | Standard | Q-7.4-012, 021 (distractor), 052 (distractor) |
 | Fiche de données de sécurité (SDS) | Safety Data Sheet (SDS) | Standard | Q-7.4-018, 020 |
-| Matériel Compagnie (COMAT) | Company Material (COMAT) | Standard | Q-7.4-018 |
+| Matériel Compagnie (COMAT) | Company Material (COMAT) | Standard | Q-7.4-018, 036 |
 | Pièces de rechange pour aéronefs au sol (AOG) | Aircraft-on-Ground (AOG) spare parts | Standard | Q-7.4-019 |
-| CAO (« Cargo Aircraft Only ») | CAO ("Cargo Aircraft Only") label | Standard, unchanged acronym | Q-7.4-009, 022 |
-| Glace carbonique / Dioxyde de carbone solide | Dry ice | Standard common usage; PSN-vs-common-name choice already flagged in Function 7.1's package | Q-7.4-028 |
+| CAO (« Cargo Aircraft Only ») | CAO ("Cargo Aircraft Only") label | Standard, unchanged acronym | Q-7.4-009, 022, 037, 038, 041 (distractor), 050 (distractor) |
+| Glace carbonique / Dioxyde de carbone solide | Dry ice | Standard common usage; PSN-vs-common-name choice already flagged in Function 7.1's package | Q-7.4-028, 041 |
 | Animaux vivants | Live animals | Standard | Q-7.4-010 |
 | Danger / Risque | Hazard / Risk | Tier B course-defined pairing; same EN word choice as Function 7.1's Q-7.1-001 for cross-function consistency | Q-7.4-027 |
 | Risque primaire / Risque subsidiaire | Primary hazard / Subsidiary risk | Working candidate — **unverified against supplied EN 67th Ed. text** | Q-7.4-034 |
-| Divergence d'État / Divergence de l'Exploitant | State Variation / Operator Variation | Standard IATA term | Q-7.4-030 |
+| Divergence d'État / Divergence de l'Exploitant | State Variation / Operator Variation | Standard IATA term | Q-7.4-030, 043 |
 | Compte rendu | Report / Reporting | Standard | Q-7.4-014, 015, 016 |
 | Accident / Incident | Accident / Incident | Standard | Q-7.4-001, 014 |
-| Agence internationale de l'énergie atomique (AIEA) | International Atomic Energy Agency (IAEA) | Standard | Q-7.4-002 |
+| Agence internationale de l'énergie atomique (AIEA) | International Atomic Energy Agency (IAEA) | Standard | Q-7.4-002, 043 (distractor) |
 | Sous-comité d'experts du Conseil économique et social des Nations-Unies (SCoETDG) | UN Sub-Committee of Experts on the Transport of Dangerous Goods (SCETDG) | **Flagged — course's own FR abbreviation ("SCoETDG") differs from the standard current EN abbreviation ("SCETDG"); reviewer should confirm which form to display** | Q-7.4-002 |
 | OACI | ICAO (International Civil Aviation Organization) | Standard | Q-7.4-002, 026, 030 |
 | Agence Nationale de l'Aviation Civile (ANAC) | National Civil Aviation Agency (ANAC) | Standard, Algeria-specific institutional name kept bilingual | Q-7.4-016 |
 | Accord multilatéral de trafic intercompagnies de l'IATA-fret | IATA Cargo Interline Traffic Agreement (multilateral) | Working candidate — **exact official EN title unverified against a supplied official text** | Q-7.4-026 |
 | Entrepôt | Warehouse | Standard | Multiple items |
 | Chargement / Déchargement | Loading / Unloading | Standard | Multiple items |
-| Contamination | Contamination | Standard | Q-7.4-024, 025 |
+| Contamination | Contamination | Standard | Q-7.4-024, 025, 047 |
 | Lieu sûr | Safe location | Standard | Q-7.4-024 |
 | Ballast | Ballast | Standard | Q-7.4-009 (distractor) |
 | Code du matériau d'emballage | Packaging material code | Standard | Q-7.4-032 |
-| État d'origine de l'emballage | State of origin of the packaging | Standard, but **a distinct concept from "État d'origine" (shipment country of origin) used in Function 7.1's A1/A2 terminology — flagged to prevent cross-function conflation** | Q-7.4-032 |
+| État d'origine de l'emballage | State of origin of the packaging | Standard, but **a distinct concept from "État d'origine" (shipment country of origin) used in Function 7.1's A1/A2 terminology, and from Q-7.4-043's "État d'origine/de départ" (State Variation, shipment-level sense) — flagged to prevent cross-item/cross-function conflation** | Q-7.4-032 |
 | Matières très/moyennement/faiblement dangereuses (Groupes I/II/III) | High/Medium/Low danger substances | Working candidate — **exact printed EN wording unverified** | Q-7.4-031 |
 | Aucune dérogation / Dérogation | No exemption / Exemption | Working candidate, consistent with Function 7.1's own flagged "dérogation" rendering | Q-7.4-009 (distractor) |
 | L'agent des opérations aériennes / Le régulateur de vols | Flight operations officer / Flight dispatcher | **Flagged — these terms are a confirmed course `SOURCE GAP` (no support anywhere in the FR source); EN rendering exists only because they appear as a deliberately unsupported wrong answer, not as evidence either exists as a real notification channel** | Q-7.4-025 (distractor), sub-task 6.1.6 (restricted, not tested — see Q-7.4-035) |
+| Article / Substance | Article / Substance | Standard DGR distinction (course's own DGR 1.0 usage, slides 13–14) | Q-7.4-040 (distractor) |
+| Fusées de détresse / Trousses de premiers secours | Distress flares / First-aid kits | Standard common usage, examples of items that may conceal hidden DG | Q-7.4-036 |
+| Étiquette à large bordure hachurée de rouge (DGR 9.3.8.2) | Wide red-hatched-border label | Standard, matches the DGR 9.3.8.2 citation shared by Q-7.4-037/038 | Q-7.4-037, 038 |
+| Codes cargo IMP | IMP Cargo Codes | Standard IATA appendix term (DGR Appendix B) | Q-7.4-041 |
+| Masses magnétisées (code IMP MAG) | Magnetized material (IMP code MAG) | Standard | Q-7.4-041 (distractor) |
+| Piles et batteries (lithium métal / lithium-ion) | Cells and batteries (lithium metal / lithium-ion) | Standard | Q-7.4-044 |
+| Peroxyde organique / Comburant | Organic Peroxide / Oxidizer | Standard, ties into the Division 4.1/5.2 storage-grouping distinction already flagged for Q-7.4-007 | Q-7.4-045 |
+| Fermeture d'extrémité / Fermeture latérale | End closure / Side closure | Standard packaging term | Q-7.4-049 |
+| « This Way Up » | "This Way Up" | Unchanged — the course's own French text already uses the English label name | Q-7.4-049 |
+| État d'Origine/de Départ / État de Destination (State Variation context, DGR 2.8.1) | State of Origin/Departure / State of Destination | Standard, shipment-level sense — **flagged as distinct from Q-7.4-032's "État d'origine de l'emballage" (packaging-manufacture sense); do not conflate** | Q-7.4-043 |
 
 **Reading this table:** "Standard" means the term is well-established IATA/UN dangerous-goods English usage with low translation risk, but — consistent with `.claude/rules/dgr-stage2b.md` rule 2 — none of these EN renderings were checked this session against a supplied official English 67th Edition text; they were not fabricated as citations, only used as ordinary professional-English DG terminology. "Flagged"/"working candidate"/"unverified" rows are genuine open questions for the reviewer, not settled translations.
 
@@ -675,11 +971,11 @@ rationale — only the FR text (verbatim) and its EN translation.
 1. **Text-fidelity check first:** confirm this package's FR text (copied verbatim above) still matches `docs/DGR_PRODUCTION_BANK_7.4.md` — a simple diff check, not a reconstruction exercise, since (unlike Function 7.1) the FR text here was never a gloss.
 2. **FR Tier A status reminder:** remember that a completed bilingual review of an item's EN draft does **not** resolve or imply resolution of that item's still-open Tier A FR regulatory verification (rule 5's separate-gates principle) — both gates must independently clear before any item nears `APPROVED`.
 3. **Regulatory accuracy — EN:** confirm the EN draft's terminology and facts against the current English-language IATA DGR 67th Edition text, resolving every item flagged "unverified"/"working candidate" in the terminology table above (Q-7.4-002's SCETDG/SCoETDG abbreviation; Q-7.4-009's "dérogation"→"exemption"; Q-7.4-026's IATA Cargo Interline Traffic Agreement title; Q-7.4-031's Packing Group danger-degree wording; Q-7.4-034's "subsidiary risk" wording).
-4. **Meaning-equivalence FR↔EN:** confirm the EN stem, correct answer, and every distractor carry the same regulatory meaning as the FR side — not a loose paraphrase. Pay special attention to Q-7.4-003 (passenger vs. cargo regime contrast), Q-7.4-013 (the unqualified exact-match NOTOC requirement, no non-DG carve-out), and Q-7.4-025/035 (the deliberately unsupported "agent des opérations aériennes"/"régulateur de vols" distractors, which must not be mistranslated into implied real channels).
-5. **Terminology consistency:** confirm EN terms match the terminology table and are used consistently across all 35 items (e.g., "Packing Group" not "packaging group"; "Unit Load Device (ULD)" not "loading unit"; "pilot-in-command" not inconsistently mixed with "captain").
+4. **Meaning-equivalence FR↔EN:** confirm the EN stem, correct answer, and every distractor carry the same regulatory meaning as the FR side — not a loose paraphrase. Pay special attention to Q-7.4-003 (passenger vs. cargo regime contrast), Q-7.4-013 (the unqualified exact-match NOTOC requirement, no non-DG carve-out), Q-7.4-025/035 (the deliberately unsupported "agent des opérations aériennes"/"régulateur de vols" distractors, which must not be mistranslated into implied real channels), and Q-7.4-038 (the three dimension distractors, explicitly flagged as fabricated-but-plausible figures, not alternate real course values).
+5. **Terminology consistency:** confirm EN terms match the terminology table and are used consistently across all 53 items (e.g., "Packing Group" not "packaging group"; "Unit Load Device (ULD)" not "loading unit"; "pilot-in-command" not inconsistently mixed with "captain"); for Batch 3 specifically, confirm Q-7.4-043's "State of Origin/Departure" (shipment-level) is not conflated with Q-7.4-032's "State of origin of the packaging" (packaging-manufacture sense) — both are flagged in the terminology table.
 6. **Distractor plausibility in English:** confirm each EN distractor remains plausible-but-wrong to an English-speaking candidate — a distractor that only "sounds wrong" in French, or that becomes obviously wrong for an EN-specific reason (e.g., an idiom that doesn't translate), should be flagged for revision.
-7. **Source-citation fidelity:** re-check each item's EN draft against its cited slide number(s)/DGR section in `docs/DGR_PRODUCTION_BANK_7.4.md` — confirm the EN translation has not drifted from the specific FR passage the item is sourced from, especially for the items built on a paragraph-level distinction within the same slide (Q-7.4-021 vs. 022, both slide 101; Q-7.4-023 vs. 025, both slide 102).
-8. **Restricted-framing compliance (Q-7.4-034, Q-7.4-035):** confirm the EN draft preserves each item's binding restricted framing exactly — Q-7.4-034 must stay an operational-stage awareness fact, never a classification-stage "determine the primary hazard" procedure; Q-7.4-035 must stay a "who is informed" role question, never implying "l'agent des opérations aériennes"/"le régulateur de vols" are informed.
+7. **Source-citation fidelity:** re-check each item's EN draft against its cited slide number(s)/DGR section in `docs/DGR_PRODUCTION_BANK_7.4.md` — confirm the EN translation has not drifted from the specific FR passage the item is sourced from, especially for the items built on a paragraph-level distinction within the same slide (Q-7.4-021 vs. 022, both slide 101; Q-7.4-023 vs. 025, both slide 102; Q-7.4-011 vs. 051, both slide 130; Q-7.4-012/013 vs. 052/053, all drawn from the same slides 136–141 NOTOC section).
+8. **Restricted-framing compliance (Q-7.4-034, Q-7.4-035, Q-7.4-048):** confirm the EN draft preserves each item's binding restricted framing exactly — Q-7.4-034 must stay an operational-stage awareness fact, never a classification-stage "determine the primary hazard" procedure; Q-7.4-035 must stay a "who is informed" role question, never implying "l'agent des opérations aériennes"/"le régulateur de vols" are informed; Q-7.4-048 (binding caveat 7) must stay a generic-awareness fact about the existence and availability of emergency-response information, never inventing or implying specific employer procedure content.
 
 **Sign-off format (required, per item):**
 
@@ -708,24 +1004,34 @@ sufficient for `APPROVED`.
 
 ## Summary
 
-- 35/35 currently-drafted Function 7.4 items translated to EN draft status.
-  0/35 reviewed.
-- All 35 items remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` on
+- 53/53 currently-drafted Function 7.4 items translated to EN draft status
+  (Batch 1+2: 35 items; Batch 3: 18 items, `Q-7.4-036`–`053`). 0/53 reviewed.
+- All 53 items remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` on
   the FR side, unchanged by this package — Tier A FR verification and
   bilingual EN review are tracked as two fully separate, both-still-open
   gates for every item here (a different starting point from Function 7.1's
   12 pilot items, which were already FR-terminal before their EN package was
   built).
 - Every FR stem/option shown above is copied verbatim from
-  `docs/DGR_PRODUCTION_BANK_7.4.md` — no working gloss was reconstructed,
-  unlike Function 7.1's pilot package.
-- 9 terminology points are explicitly flagged as working candidates/
+  `docs/DGR_PRODUCTION_BANK_7.4.md` (Batches 1, 2, and 3) — no working gloss
+  was reconstructed, unlike Function 7.1's pilot package.
+- 11 terminology points are explicitly flagged as working candidates/
   unverified for the reviewer (SCoETDG/SCETDG abbreviation, "dérogation"→
   "exemption," the IATA Cargo Interline Traffic Agreement's exact title,
-  Packing Group danger-degree wording, "subsidiary risk," and the
+  Packing Group danger-degree wording, "subsidiary risk," the
   deliberately-unsupported "agent des opérations aériennes"/"régulateur de
-  vols" distractor terms, among others); all are listed in the terminology
-  table above.
-- Two items (Q-7.4-034, Q-7.4-035) carry binding restricted framing from the
-  production bank that the EN draft explicitly preserves and the reviewer
-  checklist explicitly re-checks.
+  vols" distractor terms, and — new in Batch 3 — the two cross-item "State
+  of origin" senses in Q-7.4-032 vs. Q-7.4-043 that must not be conflated,
+  among others); all are listed in the terminology table above.
+- Three items (Q-7.4-034, Q-7.4-035, and — new in Batch 3 — Q-7.4-048) carry
+  binding restricted framing from the production bank that the EN draft
+  explicitly preserves and the reviewer checklist explicitly re-checks.
+- Batch 3 introduces 10 new terminology-table rows for terms not used in
+  Batch 1/2 (Article/Substance, distress flares/first-aid kits, the DGR
+  9.3.8.2 wide red-hatched-border label, IMP Cargo Codes, Magnetized
+  material, lithium cells/batteries, Organic Peroxide/Oxidizer, end/side
+  closures, "This Way Up," and the State of Origin/Departure/Destination
+  shipment-level pairing) — none duplicate an existing row; several extend
+  an existing row's "Appears in" list instead where the same established
+  term recurs (e.g. Unit Load Device (ULD), NOTOC, Transport Index (TI),
+  CAO label, pilot-in-command, Company Material (COMAT)).

@@ -33,6 +33,15 @@ const STATE_LABEL: Record<string, string> = {
   abandoned: "Abandonnée",
 };
 
+// lib/system-health.ts garde `label` en anglais (clé stable partagée avec
+// /system, qui a ses propres libellés français indépendants) — traduction
+// d'affichage uniquement, ici.
+const HEALTH_LABEL_FR: Record<string, string> = {
+  "Local Backup": "Sauvegarde locale",
+  "Off-site Backup": "Sauvegarde externalisée",
+  "Restore Test": "Test de restauration",
+};
+
 const SESSION_STATUS_LABEL: Record<string, { label: string; badge: "verified" | "warning" | "neutral" }> = {
   open: { label: "Ouverte", badge: "verified" },
   scheduled: { label: "Programmée", badge: "warning" },
@@ -196,7 +205,7 @@ export default async function OverviewPage({
             {health.map((item) => (
               <div key={item.label} className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-[13px] font-medium text-text-primary">{item.label}</p>
+                  <p className="text-[13px] font-medium text-text-primary">{HEALTH_LABEL_FR[item.label] ?? item.label}</p>
                   <p className="mt-0.5 text-[11.5px] text-text-tertiary">{item.detail}</p>
                 </div>
                 <StatusBadge

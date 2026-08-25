@@ -30,6 +30,7 @@ export async function getSessions(): Promise<SessionRecord[]> {
   const rows = await queryReadOnly<{
     id: number;
     name: string;
+    coursename: string;
     timeopen: number;
     timeclose: number;
     timelimit: number;
@@ -38,11 +39,12 @@ export async function getSessions(): Promise<SessionRecord[]> {
     inprogress: number;
   }>(
     `SELECT
-       q.id, q.name, q.timeopen, q.timeclose, q.timelimit,
+       q.id, q.name, c.fullname as coursename, q.timeopen, q.timeclose, q.timelimit,
        (SELECT COUNT(DISTINCT userid) FROM mdl_quiz_attempts qa WHERE qa.quiz = q.id AND qa.preview = 0) as started,
        (SELECT COUNT(*) FROM mdl_quiz_attempts qa WHERE qa.quiz = q.id AND qa.preview = 0 AND qa.state = 'finished') as completed,
        (SELECT COUNT(*) FROM mdl_quiz_attempts qa WHERE qa.quiz = q.id AND qa.preview = 0 AND qa.state = 'inprogress') as inprogress
      FROM mdl_quiz q
+     JOIN mdl_course c ON c.id = q.course
      ORDER BY q.timeopen DESC`
   );
 
@@ -56,6 +58,12 @@ export async function getSessions(): Promise<SessionRecord[]> {
     candidatesCompleted: r.completed,
     attemptsInProgress: r.inprogress,
     status: computeStatus(r.timeopen, r.timeclose),
-    scope: classifyScope(r.name),
+    // Même règle que exams-data.ts : nom du quiz + nom du cours — ne
+    // JAMAIS classifier seulement sur le nom du quiz, sinon un examen dont
+    // le cours est auto-déclaré "(Demo)" mais dont le nom de quiz ne
+    // contient aucun marqueur se retrouve classé "production" par erreur
+    // (bug réel trouvé par revue visuelle le 2026-08-25 : cette page et
+    // /exams affichaient deux périmètres différents pour le même examen).
+    scope: classifyScope(r.name, r.coursename),
   }));
 }

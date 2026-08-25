@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Topbar } from "@/components/layout/Topbar";
+import { ConsoleShell } from "@/components/layout/ConsoleShell";
 
 const ROLE_LABELS: Record<string, string> = {
   administrator: "Administrateur",
@@ -18,17 +17,14 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
   }
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar
-        user={{
-          name: session.fullName ?? session.username ?? "Unknown",
-          role: ROLE_LABELS[session.role ?? ""] ?? "Rôle inconnu",
-        }}
-      />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar systemOk={true} />
-        <main className="flex-1 overflow-y-auto bg-surface-base p-6">{children}</main>
-      </div>
-    </div>
+    <ConsoleShell
+      user={{
+        name: session.fullName ?? session.username ?? "Unknown",
+        role: ROLE_LABELS[session.role ?? ""] ?? "Rôle inconnu",
+      }}
+      systemOk={true}
+    >
+      {children}
+    </ConsoleShell>
   );
 }

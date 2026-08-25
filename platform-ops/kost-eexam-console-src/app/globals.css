@@ -26,7 +26,14 @@
   /* Text on content plane */
   --text-primary: #0c1220;
   --text-secondary: #4b5568;
-  --text-tertiary: #838da0;
+  /* Was #838da0 (2.9-3.3:1 vs surface-raised/sunken — WCAG 2 AA "serious"
+     color-contrast failure, axe-core, flagged on /login and /overview across
+     all 5 browser/device projects in the prior platform-readiness pass;
+     re-confirmed live post-translation 2026-08-25). Darkened to clear
+     4.5:1 against every surface it's actually used on (white, #eceef1,
+     #f4f5f7) with a comfortable margin (~5.1-5.9:1) — same hue family as
+     --text-secondary, just one step lighter. */
+  --text-tertiary: #5b6478;
   --text-inverse: #ffffff;
 
   /* Borders */

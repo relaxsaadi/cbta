@@ -60,9 +60,9 @@ export async function getSystemHealth(): Promise<HealthItem[]> {
 
   if (entries.length === 0) {
     return [
-      { label: "Local Backup", status: "not_available", detail: "No backup log found", timestamp: null },
-      { label: "Off-site Backup", status: "not_available", detail: "No backup log found", timestamp: null },
-      { label: "Restore Test", status: "not_available", detail: "No backup log found", timestamp: null },
+      { label: "Local Backup", status: "not_available", detail: "Aucun journal de sauvegarde trouvé", timestamp: null },
+      { label: "Off-site Backup", status: "not_available", detail: "Aucun journal de sauvegarde trouvé", timestamp: null },
+      { label: "Restore Test", status: "not_available", detail: "Aucun journal de sauvegarde trouvé", timestamp: null },
     ];
   }
 
@@ -76,8 +76,8 @@ export async function getSystemHealth(): Promise<HealthItem[]> {
     label: "Local Backup",
     status: db ? (db.status === "success" ? "verified" : "critical") : "not_available",
     detail: db
-      ? `${db.status === "success" ? "Last successful backup" : "Last attempt failed"}: ${formatDate(db.timestamp)}`
-      : "No local backup recorded yet",
+      ? `${db.status === "success" ? "Dernière sauvegarde réussie" : "Dernière tentative échouée"} : ${formatDate(db.timestamp)}`
+      : "Aucune sauvegarde locale enregistrée pour l'instant",
     timestamp: db?.timestamp ?? null,
   });
 
@@ -90,9 +90,9 @@ export async function getSystemHealth(): Promise<HealthItem[]> {
       : "not_available",
     detail: offsite
       ? offsite.status === "success"
-        ? `Verified copy: ${formatDate(offsite.timestamp)}`
-        : `Last attempt: ${offsite.detail ?? "failed"} (${formatDate(offsite.timestamp)})`
-      : "No off-site copy recorded yet",
+        ? `Copie vérifiée : ${formatDate(offsite.timestamp)}`
+        : `Dernière tentative : ${offsite.detail ?? "échec"} (${formatDate(offsite.timestamp)})`
+      : "Aucune copie externalisée enregistrée pour l'instant",
     timestamp: offsite?.timestamp ?? null,
   });
 
@@ -101,9 +101,9 @@ export async function getSystemHealth(): Promise<HealthItem[]> {
     status: restore ? (restore.status === "success" ? "verified" : "critical") : "not_available",
     detail: restore
       ? restore.status === "success"
-        ? `${restore.restored_table_count}/${restore.live_table_count} tables restored — ${formatDate(restore.timestamp)}`
-        : `Failed: ${formatDate(restore.timestamp)}`
-      : "No restore test recorded yet",
+        ? `${restore.restored_table_count}/${restore.live_table_count} tables restaurées — ${formatDate(restore.timestamp)}`
+        : `Échec : ${formatDate(restore.timestamp)}`
+      : "Aucun test de restauration enregistré pour l'instant",
     timestamp: restore?.timestamp ?? null,
   });
 

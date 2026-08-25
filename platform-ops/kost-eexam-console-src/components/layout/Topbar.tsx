@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Search, Bell, EyeOff, Eye } from "lucide-react";
+import { Search, Bell, EyeOff, Eye, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DEMO_MODE_COOKIE } from "@/lib/demo-mode";
 import { SEGMENT_LABELS } from "@/lib/nav-config";
@@ -12,7 +12,7 @@ function readDemoModeCookie(): boolean {
   return document.cookie.split("; ").some((c) => c === `${DEMO_MODE_COOKIE}=1`);
 }
 
-export function Topbar({ systemOk }: { systemOk: boolean }) {
+export function Topbar({ systemOk, onMenuClick }: { systemOk: boolean; onMenuClick: () => void }) {
   const pathname = usePathname();
   const segment = pathname?.split("/").filter(Boolean)[0] ?? "";
   const crumbs = ["KOST E-EXAM", SEGMENT_LABELS[segment] ?? segment];
@@ -38,22 +38,32 @@ export function Topbar({ systemOk }: { systemOk: boolean }) {
       className="no-print flex items-center justify-between gap-4 border-b border-border-subtle bg-surface-raised/90 backdrop-blur-sm px-6 sticky top-0 z-10"
       style={{ height: "var(--topbar-height)" }}
     >
-      <nav className="flex items-center gap-2 text-[13px] min-w-0">
-        {crumbs.map((crumb, i) => (
-          <span key={i} className="flex items-center gap-2 min-w-0">
-            {i > 0 && <span className="text-text-tertiary/60">/</span>}
-            <span
-              className={
-                i === crumbs.length - 1
-                  ? "font-display font-semibold text-text-primary truncate"
-                  : "text-text-tertiary truncate"
-              }
-            >
-              {crumb}
+      <div className="flex items-center gap-1 min-w-0">
+        <button
+          onClick={onMenuClick}
+          className="md:hidden flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-text-secondary hover:bg-surface-sunken transition-colors -ml-1.5"
+          aria-label="Ouvrir le menu"
+        >
+          <Menu size={18} />
+        </button>
+
+        <nav className="flex items-center gap-2 text-[13px] min-w-0">
+          {crumbs.map((crumb, i) => (
+            <span key={i} className="flex items-center gap-2 min-w-0">
+              {i > 0 && <span className="text-text-tertiary/60">/</span>}
+              <span
+                className={
+                  i === crumbs.length - 1
+                    ? "font-display font-semibold text-text-primary truncate"
+                    : "text-text-tertiary truncate"
+                }
+              >
+                {crumb}
+              </span>
             </span>
-          </span>
-        ))}
-      </nav>
+          ))}
+        </nav>
+      </div>
 
       <div className="flex items-center gap-2.5 shrink-0">
         <button

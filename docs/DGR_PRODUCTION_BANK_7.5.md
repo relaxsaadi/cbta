@@ -780,16 +780,19 @@ plus de 20 batteries."
   slide, which names both AEP and batteries as subject to the same
   operator-approval note.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 41 (DGR 2.3.A).
-"AEP" (Appareils Électroniques Portables) confirmed by the supporting Table
-2.3.A reference document (source item 6: "Batteries au lithium: Appareils
-électroniques portables (AEP)... Chaque personne est limitée à un maximum
-de 15 AEP"), used here only to confirm the acronym's meaning, not as an
-independent evidentiary source beyond the course's own slide. Corroborated
-at a topic level by Exam Q10 (medical-oxygen-bottle operator-approval rule
-— a related but distinct approval scenario), noted honestly as topic-level
-corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, read directly
+this session in the authenticated Bookshelf. §2.3.5.8.4(c): "Chaque
+personne est limitée à un maximum de 15 AEP; toutefois, l'exploitant peut
+approuver le transport de plus de 15 AEP." §2.3.5.8.3: "Chaque personne
+est limitée à un maximum de 20 batteries de rechange, incluant les
+batteries externes. Toutefois, l'exploitant peut approuver le transport de
+plus de 20 batteries de rechange, incluant les batteries externes." Both
+figures (15 AEP, 20 spare batteries) and both operator-approval mechanisms
+confirmed exactly as stated in the correct answer; the swapped-numbers
+distractor and the "no approval ever required" distractor are each
+directly contradicted by this text.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3,
+§2.3.5.8.4(c) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -905,17 +908,20 @@ which has course-slide evidence (SOURCE GAP notes 4/5 in
 `docs/DGR_STAGE1_FUNCTION_7.5_DRAFT.md`; leaf 5.2.3 remains hard-gated to 0
 and is not drawn anywhere in this batch).
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 42 (DGR 2.3.A).
-No direct exam/practice hit for this exact installed-battery threshold
-under a wheelchair framing specifically: Exam Q5's first sub-question
-("Qu'est-ce que l'exploitant devra vérifier avant d'accepter la chaise")
-tests the same general checkpoint (verifying the installed battery) in an
-open-ended, non-multiple-choice format, corroborating that this is
-genuinely examined content, though not a direct multiple-choice match; Exam
-Q8 (spare 100 Wh batteries, cabin-only, max 2) tests a related but distinct
-passenger-battery rule (spare, not installed), noted honestly as
-topic-adjacent, not direct corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.3.5.8.4(f),
+read directly this session in the authenticated Bookshelf: "Bagages avec
+des batteries au lithium installées dont le contenu en lithium métal
+excède 0,3 g ou 2,7 Wh: 1. si le bagage doit être enregistré, la batterie
+au lithium doit être retirée et transportée dans la cabine; ou 2. le
+bagage doit être transporté dans la cabine; 3. les bagages dont la
+batterie au lithium excède les limites indiquées en 2.3.5.8.4(f) et ne
+peut être enlevée sont interdits au transport." The stem's "installée et
+non amovible" wheelchair framing matches point 3's own "ne peut être
+enlevée" condition exactly. Same citation as this batch's `Q-7.3-002`
+(Function 7.3), an independently drafted item testing the identical
+underlying rule.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.4(f)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1040,9 +1046,9 @@ equivalent items).
 | Q-7.5-008 | 0.6.1 Bagage/fret contaminé | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slides 97–98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-009 | 0.3.3 Divergence d'exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 69 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-010 | 5.1.1 Critères DGR 2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-011 | 5.1.2 Seuils d'approbation AEP/batteries | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-011 | 5.1.2 Seuils d'approbation AEP/batteries | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-012 | 5.2.1 Hiérarchie des divergences appliquée | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 70 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-013 | 5.2.2 Seuil batterie installée (cadre WCHC borné) | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 42 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-013 | 5.2.2 Seuil batterie installée (cadre WCHC borné) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.4(f) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-014 | 5.2.2 Marquage glace carbonique (2,5 kg) | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-015 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-016 | 7.4 ANAC (Algérie) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2877,24 +2883,20 @@ portables, vélos électriques."
   46–47's own operator-property exemption categories (primary evidence for
   `Q-7.5-026`/`Q-7.5-027`) — a wrong-checkpoint distractor.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slides 89–90
-("Batteries lithium-ion et métal" table). **Evidence-basis note:** these
-two slides sit just outside the specific page ranges
-`docs/DGR_STAGE2A_FUNCTION_7.5_BLUEPRINT.md`'s own evidence-basis column
-originally cited for 5.2.2 (p.39–49/45–48) — flagged transparently here as
-newly identified evidence this session, squarely within 5.2.2's own remit
-(verifying a passenger's baggage battery content), not exceeding the leaf's
-numeric ceiling (this is its 5th of 7 possible items). Cross-checked against
-slide 42 (installed-battery threshold, source of one distractor, already
-noted in `Q-7.5-003`'s own source basis as "slides 89–90 (lithium battery
-table)" cross-check, not previously drawn upon as a primary tested fact
-until now). Corroborated at a topic level by Practice Q6 ("Les batteries au
-lithium intégrées dans les ordinateurs portables peuvent être: ... c)
-Transportées en cabine et en soute, sous conditions"), which confirms the
-lithium-ion/laptop association but tests a different specific fact (cabin/
-hold carriage permission, not the UN-number classification table itself),
-noted honestly as topic-level, not direct, corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §3.9.2.6.0
+("Rubriques affectées"), read directly this session in the authenticated
+Bookshelf: "ONU 3090 Piles au lithium métal[;] ONU 3091 Piles au lithium
+métal contenues dans un équipement ou emballées avec un équipement[;] ONU
+3480 Piles au lithium ionique[;] ONU 3481 Piles au lithium ionique
+contenues dans un équipement ou emballées avec un équipement." Confirms
+UN 3480/3481 = lithium-ion (the correct answer's category), UN 3090/3091 =
+lithium métal (the first distractor's category); the other two distractors
+(the §2.3.5.8.4(f) installed-battery threshold and the §2.5
+operator-property exemption) are each confirmed as real but
+different-checkpoint DGR provisions, already cited independently under
+`Q-7.5-013` and `Q-7.5-026`/`Q-7.5-027` respectively.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §3.9.2.6.0 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2918,7 +2920,7 @@ noted honestly as topic-level, not direct, corroboration.
 | Q-7.5-041 | 0.5.2 Autres étiquettes (danger chimique) | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | MCQ | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-042 | 0.6.1 Définition SDS/FDS | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.5 course slide 93 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-043 | 0.6.1 Quatre étapes initiales | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.5 course slide 95 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-044 | 5.2.2 Lithium métal vs lithium-ion (UN 3480/3481) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.5 course slides 89–90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-044 | 5.2.2 Lithium métal vs lithium-ion (UN 3480/3481) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 3 composition:** 12 MCQ + 3 True/False. Block spread: Block 0 = 14,
 Block 5 = 1, Block 7 = 0. Cumulative bank after Batch 1 + Batch 2 + Batch 3:

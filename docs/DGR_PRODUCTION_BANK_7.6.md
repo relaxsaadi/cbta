@@ -277,14 +277,21 @@ Division 5.1. Il en va de même pour les suremballages."
   to the lithium-battery co-loading rule, which slide 103 does not connect
   to radioactive categories at all.
 
-**Source basis:** Tier B — KOST Function 7.6 course, slide 103 (separation
-section, PI 965/968 co-loading prohibition), cross-checked against slide 110
-(radioactive TI, the third distractor's borrowed fact). No direct exam/
-practice hit for this specific co-loading list; Exam Q16 tests a related but
-distinct lithium-battery fact (fire/thermal-runaway hazard, not this
-co-loading restriction), noted honestly as topic-adjacent, not direct
-corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §9.3.2.1.3,
+read directly this session in the authenticated Bookshelf: "Les colis et
+les suremballages contenant des batteries au lithium ionique ONU 3480
+préparées conformément à la section IA ou IB de l'instruction d'emballage
+965, les colis et les suremballages contenant des batteries au lithium
+métal ONU 3090 préparées conformément à la section IA ou IB de
+l'instruction d'emballage 968 ... ne doivent pas être chargés à bord d'un
+aéronef à côté de colis ou de suremballages contenant des marchandises
+dangereuses portant une étiquette de danger de la classe 1, autre que la
+division 1.4S, la division 2.1, la classe 3, la division 4.1 ou la
+division 5.1..." Exact match to the course's own list (slide 103) and this
+item's correct answer. Same citation as this topic's `Q-7.3-012` (Function
+7.3), an independently drafted item testing the identical underlying rule.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.3.2.1.3 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -849,7 +856,7 @@ honestly as topic-level corroboration only.
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
 | Q-7.6-001 | 4.1.2 Tableau 9.3.A — classes absentes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 104 (DGR 9.3.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-002 | 4.1.2 Restriction chargement batteries lithium PI 965/968 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 103 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-002 | 4.1.2 Restriction chargement batteries lithium PI 965/968 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.3.2.1.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-003 | 4.3.1 Champs obligatoires NOTOC | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slides 117–118 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-004 | 4.3.1 Qui/quand fournit la NOTOC | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-005 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

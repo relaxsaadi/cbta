@@ -2123,14 +2123,16 @@ used for Batch 1's `Q-7.9-001` (slide 46's Taser note) and `Q-7.9-002`
   statement that the operator's approval becomes necessary beyond these
   thresholds.
 
-**Source basis:** Tier B — KOST F7.9 course, slide 45 ("Note" callout
-beneath the Table 2.3.A lithium-battery excerpt). Corroborated only at a
-topic level by Exam Q6's own second sub-question ("Le passager pourrait-il
-emporter avec lui 2 batteries de rechange?" — a quantity well under the
-20-battery default threshold, consistent with but not a verbatim
-number-for-number restatement of this item), noted honestly as
-topic-level corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, read directly
+this session in the authenticated Bookshelf. §2.3.5.8.4(c): "Chaque
+personne est limitée à un maximum de 15 AEP; toutefois, l'exploitant peut
+approuver le transport de plus de 15 AEP." §2.3.5.8.3: "Chaque personne
+est limitée à un maximum de 20 batteries de rechange, incluant les
+batteries externes. Toutefois, l'exploitant peut approuver le transport de
+plus de 20 batteries de rechange, incluant les batteries externes." Both
+figures (15 AEP, 20 spare batteries) confirmed exactly.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3,
+§2.3.5.8.4(c) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2204,23 +2206,15 @@ text-extraction layer) states that spare/replacement batteries for AEP
 "doivent être transportées uniquement dans les bagages de cabine" —
 direct match on the specific claim tested.
 
-**Source basis:** Tier B — KOST F7.9 course, slide 45 (Table 2.3.A
-excerpt, "batteries de rechange" row of the embedded regulatory table),
-visually read and transcribed this session — flagged with lower
-transcription-confidence than this batch's ordinarily text-extracted
-items, given the source is a compressed image rather than a clean text
-layer (see the sourcing-method note above), though the specific claim
-tested (spare-battery cabin-only carriage) is stated plainly and
-unambiguously in the visible table text. Cross-checked against slide 45's
-own machine-extracted "Note" callout (this batch's own `Q-7.9-032`
-source), which corroborates the same default-versus-approval framing for
-spare batteries specifically, on the same slide. No direct exam/practice
-hit for this exact "cabin-only" claim; Exam Q6's own second sub-question
-(spare-battery quantity) is topic-adjacent only, already cited under
-`Q-7.9-032`.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A. Given the
-image-sourced transcription noted above, this item in particular should be
-an early priority for Tier A re-verification.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.3.5.8.3.1,
+read directly this session in the authenticated Bookshelf: "Les batteries
+de rechange, incluant les batteries externes, sont interdites au transport
+dans les bagages enregistrés." Exact, direct confirmation of the tested
+claim (spare batteries — cabin baggage only, never checked baggage). The
+image-sourced transcription risk flagged in the prior draft is resolved —
+Tier A text confirms the transcription was accurate.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2474,9 +2468,9 @@ priority for Tier A re-verification, alongside `Q-7.9-034`.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.9-032 | 5.2.1 Seuils d'approbation AEP/batteries de rechange | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 45 (Note) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-032 | 5.2.1 Seuils d'approbation AEP/batteries de rechange | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-033 | 5.2.1 Facteurs d'autorisation de la glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 96 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-034 | 5.2.2 Batteries de rechange — cabine uniquement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A (image-sourced) | True/False | KOST F7.9 course slide 45 (table image) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-034 | 5.2.2 Batteries de rechange — cabine uniquement | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.3.5.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-035 | 6.2.1 Après confirmation de contamination | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-036 | 7.1+7.2 Portée du signalement (exceptions/dispositions spéciales) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-037 | 0.2.3 Tableau 2.3.A limité par les divergences | DRAFT — Tier A not attempted | True/False | KOST F7.9 course slide 43 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

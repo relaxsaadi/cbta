@@ -2640,14 +2640,17 @@ directly from the same table, each the correct answer to a different cell):**
 - UN 3481 — the same table's own Lithium-Ion row, "dans un équipement"
   variant — wrong chemistry and wrong variant.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slides 95–96 (lithium
-metal vs. lithium-ion battery distinction table: nature, UN numbers,
-examples, packing instructions PI 965/968, labelling). Distinct from
-Q-7.4-004/005 (Batch 1's own 0.4.1 items, drawn from the DG-list column
-structure, slide 80, and the Class 2 divisions, slide 63 — a different part
-of 0.4.1's evidence range). No exam/practice cross-reference found for this
-specific UN-number-table fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §3.9.2.6.0
+("Rubriques affectées"), read directly this session in the authenticated
+Bookshelf: "ONU 3090 Piles au lithium métal[;] ONU 3091 Piles au lithium
+métal contenues dans un équipement ou emballées avec un équipement[;] ONU
+3480 Piles au lithium ionique[;] ONU 3481 Piles au lithium ionique
+contenues dans un équipement ou emballées avec un équipement." Direct
+confirmation of UN 3090 = standalone lithium-metal batteries, matching the
+correct answer exactly; the three distractors (3091, 3480, 3481) are each
+a genuinely different cell of the same table, confirmed present.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §3.9.2.6.0 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3099,7 +3102,7 @@ is sourced from a different function's course material.
 | Q-7.4-041 | 0.1.2 Code IMP « ICE » | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 28 (DGR B.2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-042 | 0.3.1 Obligations de formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.4 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-043 | 0.3.3 Portée divergence d'État DGR 2.8.1 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 58 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-044 | 0.4.1 UN 3090 — lithium métal seules | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 95–96 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-044 | 0.4.1 UN 3090 — lithium métal seules | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-045 | 0.4.1 Division 5.2 — peroxyde organique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 66 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-046 | 0.5.1 Quatre qualités du marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-047 | 0.6.1 Fret/bagages contaminés — obligation exploitant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 147–148 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

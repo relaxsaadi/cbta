@@ -517,13 +517,15 @@ listed cell from the same table, for a different sub-case or chemistry):**
   column: a real UN number, correct sub-case (with/in equipment), but
   wrong chemistry (metal, not ion).
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 98 (lithium
-battery classification table), cross-checked against slide 97 (metal vs.
-ion distinction intro). Directly and strongly corroborated by Exam Q9
-(exact content match to this table's own "UN 3481 = lithium-ion in
-equipment" cell, though the exam PDF carries no marked key — the match is
-by content, not by a confirmed key marker).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §3.9.2.6.0
+("Rubriques affectées"), read directly this session in the authenticated
+Bookshelf: "ONU 3480 Piles au lithium ionique[;] ONU 3481 Piles au lithium
+ionique contenues dans un équipement ou emballées avec un équipement."
+Direct confirmation of UN 3481 = lithium-ion in/with equipment, matching
+the correct answer exactly; the three distractors (3480, 3090, 3091) are
+each a genuinely different cell of the same table, confirmed present.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §3.9.2.6.0 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -879,14 +881,16 @@ application procedure (how an approval is requested or processed), which
 the course does not teach and which binding caveat 2 explicitly forbids
 asserting.
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 45 (DGR
-2.3.A), cross-checked against slide 41 (DGR 1.2.5, the general Approvals
-definition). No direct exam/practice hit for this exact AEP/battery
-threshold fact — a full-text search of both the exam and practice book for
-"approb*" and "approuv*" returns zero hits in both instruments for both
-word forms, consistent with this leaf's own thin/untested Stage 1 and
-Stage 2A finding.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, read directly
+this session in the authenticated Bookshelf. §2.3.5.8.4(c): "Chaque
+personne est limitée à un maximum de 15 AEP; toutefois, l'exploitant peut
+approuver le transport de plus de 15 AEP." §2.3.5.8.3: "Chaque personne
+est limitée à un maximum de 20 batteries de rechange, incluant les
+batteries externes. Toutefois, l'exploitant peut approuver le transport de
+plus de 20 batteries de rechange, incluant les batteries externes." Both
+figures (15 AEP, 20 spare batteries) confirmed exactly.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3,
+§2.3.5.8.4(c) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1044,13 +1048,13 @@ for a DGR-numbered requirement.
 | Q-7.10-003 | 0.2.3 Allumettes chimiques / briquets interdits | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 44 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-004 | 0.2.3 Portée de l'interdiction des Tasers | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-005 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-006 | 0.4.1 UN3481 — batterie lithium-ion en équipement | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-006 | 0.4.1 UN3481 — batterie lithium-ion en équipement | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-008 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-009 | 3.4.1 Vérification documentaire — facture hypochlorite | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 58 + Practice Q19 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-010 | 3.4.2 Indices physiques — laquelle N'EST PAS un indice | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 62–64 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-011 | 5.1.1 Décision de contrôle — hors exceptions 2.3.2–2.3.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-013 | 7.1+7.2 Entités tenues au compte rendu (DGR 1.8) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 Note 3 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-014 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-015 | 7.3 ANAC (DGR 9.6.5) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2019,13 +2023,13 @@ listed cell from the same table, for a different sub-case or chemistry):**
   column: a real UN number (the correct answer for Q-7.10-006, Batch 1),
   but the wrong chemistry and wrong sub-case for this question.
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 98 (lithium
-battery classification table), cross-checked against slide 97 (metal vs.
-ion distinction intro, already partly cited in Q-7.10-006's own
-cross-check, Batch 1). No direct exam/practice hit for this exact
-standalone-lithium-metal cell; Exam Q9 corroborates the table's own
-lithium-ion/in-equipment cell (already Q-7.10-006's own direct
-corroboration), not this cell, noted honestly.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §3.9.2.6.0
+("Rubriques affectées"), read directly this session in the authenticated
+Bookshelf: "ONU 3090 Piles au lithium métal[;] ONU 3091 Piles au lithium
+métal contenues dans un équipement ou emballées avec un équipement."
+Direct confirmation of UN 3090 = standalone lithium-metal batteries,
+matching the correct answer exactly. Same table already cited for
+`Q-7.10-006`'s own UN 3481 cell (Batch 1).
 
 **Binding note:** this item deliberately tests a different cell of the
 same table already used for Q-7.10-006 (Batch 1: lithium-ion/in-equipment
@@ -2034,7 +2038,8 @@ cells is now tested at most once across the two batches (UN 3481 by
 Q-7.10-006, UN 3090 by this item), with UN 3480 and UN 3091 used only as
 distractors in both items, never asserted as a correct answer without
 their own dedicated item.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §3.9.2.6.0 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2108,7 +2113,7 @@ corroboration.
 | Q-7.10-028 | 0.2.3 Exemption propriété de l'exploitant (DGR 2.5) | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slides 49–51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-029 | 0.2.3 Tableau 2.3.A identification | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 56 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-030 | 0.4.1 9 classes de MD (DGR 3.0.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 + §3.0.2 intro (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-031 | 0.4.1 UN3090 — batterie lithium métal seule | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-031 | 0.4.1 UN3090 — batterie lithium métal seule | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-032 | 0.5.2 UN3245 — matières biologiques Catégorie B | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 12 MCQ + 5 True/False. All 17 items are Block 0,

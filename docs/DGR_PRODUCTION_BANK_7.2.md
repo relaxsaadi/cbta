@@ -2390,18 +2390,20 @@ question):**
   UN-number, packing-instruction, and labelling differentiation — not "no
   rule," not a maritime-only rule, and not a mass-threshold rule.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slides 92–93. Directly
-and strongly corroborated by **KOST Exam Q15**: "batteries au lithium sont
-soumises à: … b) Des dispositions spéciales (classifications, emballage,
-déclarations) selon le type et l'état de charge" — this item's correct
-answer and three wrong-answer options are independently confirmed against
-the course's own table, not assumed from the exam alone; the exam's own
-distractor set (a: "Aucune règle particulière"; c: "Uniquement à la
-réglementation maritime"; d: "Des règles quand elles dépassent 1000 kg")
-maps directly onto this item's options 2–4, near-verbatim, confirming this
-is real, examined content — the stem itself is independently built from
-the course's slide content, not copied from the exam.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §3.9.2.6.0
+("Rubriques affectées"), read directly this session in the authenticated
+Bookshelf: "ONU 3090 Piles au lithium métal[;] ONU 3091 Piles au lithium
+métal contenues dans un équipement ou emballées avec un équipement[;] ONU
+3480 Piles au lithium ionique[;] ONU 3481 Piles au lithium ionique
+contenues dans un équipement ou emballées avec un équipement." Confirms
+distinct UN numbers by chemistry (lithium métal vs lithium-ion) and by
+in/with-equipment status, matching the course's own table (slides 92–93)
+and KOST Exam Q15 exactly. The course's PI-968/PI-965 packing-instruction
+pairing is independently confirmed by §9.3.2.1.3 (Tier A, read this
+session, see `Q-7.3-012`/`Q-7.6-002`): PI 965 = lithium-ion (ONU 3480), PI
+968 = lithium métal (ONU 3090).
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §3.9.2.6.0 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3109,7 +3111,7 @@ exam/practice-book hit for the GHS-pictogram fact specifically.
 | Q-7.2-031 | 0.1.4 Exemple liquide inflammable | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-032 | 0.2.1 Raisons non-déclaration | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 38 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-033 | 0.2.2 COMAT | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-034 | 0.2.2 Batteries lithium | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 92–93, Exam Q15 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-034 | 0.2.2 Batteries lithium | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 (UN 3090/3091/3480/3481 table) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-035 | 0.3.1 Conformité expéditeur | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.3.1.1–1.3.1.2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-036 | 0.3.1 Formation exploitant | DRAFT — partially confirmed, flag for revision | MCQ | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; "test" framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

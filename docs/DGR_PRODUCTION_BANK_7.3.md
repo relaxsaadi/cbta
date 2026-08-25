@@ -292,13 +292,20 @@ components, deliberately misread):**
   concerns batteries described as "installées... non amovibles", not
   "amovibles."
 
-**Source basis:** Tier B — KOST Function 7.3 course, slide 47 ("DGR 2.3.A").
-No direct exam hit for this exact installed-battery threshold: Exam Q5 (the
-reduced-mobility passenger's electric-wheelchair scenario) tests a related
-but factually distinct lithium-battery provision (a mobility-aid battery
-under separate provisions, not the "installed in baggage" rule tested here)
-— noted honestly as topic-adjacent, not a direct corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.3.5.8.4(f),
+read directly this session in the authenticated Bookshelf: "Bagages avec
+des batteries au lithium installées dont le contenu en lithium métal
+excède 0,3 g ou 2,7 Wh: 1. si le bagage doit être enregistré, la batterie
+au lithium doit être retirée et transportée dans la cabine; ou 2. le
+bagage doit être transporté dans la cabine; 3. les bagages dont la
+batterie au lithium excède les limites indiquées en 2.3.5.8.4(f) et ne
+peut être enlevée sont interdits au transport." The stem's "installée et
+non amovible" framing matches point 3's own "ne peut être enlevée"
+condition exactly — confirming the correct answer (0.3g/2.7Wh threshold)
+and all three distractors (no threshold fixed; metal-only reading; removable-only
+reading), each directly contradicted by this text.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.4(f)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -761,14 +768,21 @@ même pour les suremballages."
   la division 5.2" — a separate warehouse/loading-planning notification, not
   the lithium-battery co-loading restriction on slide 261).
 
-**Source basis:** Tier B — KOST Function 7.3 course, slides 261–263 (DGR
-9.3.2.1.3, Table 9.3.A, warehouse/loading-planning notification list).
-Corroborated by Exam Q27 (identifies PI 965 Section IA/IB as the correct
-packing instruction for 20 Wh lithium-ion cells, confirming this
-instruction/section pairing is real, examined material) and topically by Q24
-and Q28 (related segregation/separation scenarios from the same general
-area, not this exact rule).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §9.3.2.1.3,
+read directly this session in the authenticated Bookshelf: "Les colis et
+les suremballages contenant des batteries au lithium ionique ONU 3480
+préparées conformément à la section IA ou IB de l'instruction d'emballage
+965, les colis et les suremballages contenant des batteries au lithium
+métal ONU 3090 préparées conformément à la section IA ou IB de
+l'instruction d'emballage 968 ... ne doivent pas être chargés à bord d'un
+aéronef à côté de colis ou de suremballages contenant des marchandises
+dangereuses portant une étiquette de danger de la classe 1, autre que la
+division 1.4S, la division 2.1, la classe 3, la division 4.1 ou la
+division 5.1..." Exact match to the course's own list (slide 261) and this
+item's correct answer; confirms PI 965 = lithium-ion, PI 968 = lithium
+métal.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.3.2.1.3 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -872,7 +886,7 @@ requirement.
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
 | Q-7.3-001 | 0.1.1 Définition | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-002 | 0.2.3 Batterie lithium en bagage | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 47 (DGR 2.3.A) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-002 | 0.2.3 Batterie lithium en bagage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.4(f) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-003 | 0.4.1 Priorité gaz Classe 2 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 82 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-004 | 0.4.3 Tableau 3.10.A exceptions | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 95–97 (DGR 3.10) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-005 | 0.5.3 Obligation DGD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.0.1.1–8.0.1.2 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -882,7 +896,7 @@ requirement.
 | Q-7.3-009 | 3.2.1 Exemption quantité nette | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 249 (Élément 35) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-010 | 3.2.2 Étiquetage non pertinent | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 251 (Élément 48) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-011 | 3.3.1 Obligation liste de contrôle | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-012 | 3.3.2 Séparation batteries lithium | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 261–263 (DGR 9.3.2.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-012 | 3.3.2 Séparation batteries lithium | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.3.2.1.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-013 | 7.3 MD non déclarées | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.2.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-014 | 7.4 Situations MD (ANAC) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
@@ -2116,17 +2130,22 @@ continuer à être utilisée jusqu'au 31 décembre 2026."
 - "Aucune taille minimale... seule la présence du numéro ONU" — contradicts
   the source's own explicit "Taille 100mm X 100 mm" specification.
 
-**Source basis:** Tier B — KOST Function 7.3 course, slide 162 (DGR
-7.1.5.5), cross-checked slide 159 (dry-ice/gas orientation-mark angle, for
-distractor sourcing only). Non-duplicate of Batch 1's Q-7.3-012 (slides
-261–263, DGR 9.3.2.1.3 lithium-battery **loading-segregation** rule) — this
-item tests the **marking-format** requirement for the same PI 965/968
-Section IB battery packages, a genuinely distinct fact. No direct exam hit
-for the marking-size fact specifically; Exam Q27 (PI selection for 20 Wh
-lithium-ion cells) corroborates that PI 965/968 Section IA/IB is real,
-examined material, but tests packing-instruction selection, not this
-marking dimension — noted as topic-adjacent corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §7.1.5.5.3,
+read directly this session in the authenticated Bookshelf: "La marque doit
+mesurer au minimum 100 mm de large × 100 mm de haut... Si la taille du
+colis l'exige, les dimensions peuvent être réduites à un minimum de 100 mm
+de large × 70 mm de haut." Direct match to the correct answer. §7.1.5.5.2(b)
+independently confirms the "12 mm" distractor figure's real but different
+referent: "le ou les numéros ONU indiqués sur la marque devraient avoir au
+moins 12 mm de haut" (UN-number text height, not the mark's own
+dimensions) — confirming that distractor's logic exactly. The Figure 7.1.C
+note is also confirmed verbatim: "La marque illustrée à la figure 7.1.C de
+la 63e édition de la présente Réglementation peut continuer à être
+utilisée jusqu'au 31 décembre 2026." §7.1.5.5.1 confirms the package scope
+(Section II of PI 966/967/969/970/977/978, Section IB of PI 965/968)
+matches the stem exactly.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §7.1.5.5.2(b),
+§7.1.5.5.3 (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2576,7 +2595,7 @@ corroborates the general separation topic, not this exact rule.
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
 | Q-7.3-033 | 0.5.1 Portée du marquage ONU | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 144 (DGR 6.0.4.0.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 162 (DGR 7.1.5.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §7.1.5.5.2(b), §7.1.5.5.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

@@ -7,6 +7,15 @@ and `docs/DGR_PRODUCTION_BANK_7.2.md` … `docs/DGR_PRODUCTION_BANK_7.10.md`
 (Functions 7.2–7.10, 434 items). Regulatory baseline: IATA DGR 67th Edition
 2026, French, Addendum 1 integrated.
 
+**Live status note (2026-08-25, updated after Topic 1):** the category
+counts and topic sublists below are a snapshot taken *before* topic-based
+navigation began. Topic 1 (lithium batteries, 14 items) is now fully
+resolved — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 1" entry. Current
+totals: **172 FROZEN, 13 GAP, 21 PARTIAL, 4 STALE, 243 NOTATTEMPTED** (453
+total). The tables below are left as the original baseline snapshot for
+audit purposes; do not re-derive counts from them without applying this
+note.
+
 Counting method: each function's own batch summary table is the canonical
 row set. For 7.1 the 19-row table in `DGR_STAGE_2B_STATUS.md` is used (its
 duplicate 7-row summary inside `DGR_PRODUCTION_BANK_7.1.md` is excluded to
@@ -116,10 +125,13 @@ remaining 183 NOTATTEMPTED items are untagged by these 5 topics and fall
 under priority-order item 8 ("remaining NOT ATTEMPTED items with genuine
 Tier A source paths").
 
-### Topic 1 — Lithium batteries (14 items)
+### Topic 1 — Lithium batteries (14 items) — ✅ RESOLVED 2026-08-25
 
 Passenger/baggage thresholds, installed/spare batteries, PI/restrictions,
-stale 66e thresholds.
+stale 66e thresholds. All 14 items below are now `FROZEN FR / SOURCE
+VERIFIED` (see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 1" entry for the
+four DGR sections read: §2.3.5.8.3/.3.1/.4(c)/.4(f), §3.9.2.6.0,
+§9.3.2.1.3, §7.1.5.5.2(b)/.3). No SOURCE GAP or SOURCE CONFLICT found.
 
 | ID | Sub-task |
 |---|---|

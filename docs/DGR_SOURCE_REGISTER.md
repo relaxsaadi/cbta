@@ -170,6 +170,52 @@ restructuring) and its 4-criterion list was incomplete against current
 §7.1.3.2. No Tier A evidence was fabricated; the one correction is fully
 documented with before/after text above.
 
+### 2026-08-25 (second Tier A phase) — Topic 1: Lithium batteries, 14 items cross-applied
+
+One Bookshelf session (search-across-book + direct ToC navigation) resolved
+all 14 items tagged to the lithium-battery topic in
+`docs/DGR_TIER_A_INVENTORY.md`, across Functions 7.2, 7.3, 7.4, 7.5, 7.6,
+7.9, and 7.10. Four distinct DGR sections were read directly this session:
+
+- **§2.3.5.8.3, §2.3.5.8.3.1, §2.3.5.8.4(c), §2.3.5.8.4(f)** (Part 2,
+  passenger/crew baggage AEP and spare-battery provisions): confirms the
+  15-AEP / 20-spare-battery operator-approval thresholds
+  (`Q-7.5-011`, `Q-7.9-032`, `Q-7.10-012`), the spare-battery
+  cabin-baggage-only / checked-baggage-prohibited rule (`Q-7.9-034`), and
+  the 0.3g-lithium-metal/2.7Wh installed-non-removable-battery prohibition
+  threshold (`Q-7.3-002`, `Q-7.5-013`).
+- **§3.9.2.6.0** (Part 3, Classification — "Rubriques affectées" table):
+  confirms the UN-number/chemistry/equipment-status assignment — ONU 3090
+  (lithium métal, seules), ONU 3091 (lithium métal, avec/dans équipement),
+  ONU 3480 (lithium ionique, seules), ONU 3481 (lithium ionique, avec/dans
+  équipement), plus ONU 3536 (batteries installées dans engins de
+  transport, new to this edition) — resolving `Q-7.2-034`, `Q-7.4-044`,
+  `Q-7.5-044`, `Q-7.10-006`, `Q-7.10-031`.
+- **§9.3.2.1.3** (Part 9, loading segregation): "Les colis et les
+  suremballages contenant des batteries au lithium ionique ONU 3480
+  préparées conformément à la section IA ou IB de l'instruction
+  d'emballage 965, [...] batteries au lithium métal ONU 3090 [...]
+  l'instruction d'emballage 968 [...] ne doivent pas être chargés à bord
+  d'un aéronef à côté de colis [...] portant une étiquette de danger de la
+  classe 1, autre que la division 1.4S, la division 2.1, la classe 3, la
+  division 4.1 ou la division 5.1" — exact match, resolving `Q-7.3-012`
+  and `Q-7.6-002`, and independently confirming the PI 965 (lithium-ion) /
+  PI 968 (lithium metal) pairing used by the §3.9.2.6.0 items above.
+- **§7.1.5.5.2(b), §7.1.5.5.3** (Part 7, marking): "La marque doit mesurer
+  au minimum 100 mm de large × 100 mm de haut... [réductible à] 100 mm de
+  large × 70 mm de haut" and "le ou les numéros ONU indiqués sur la marque
+  devraient avoir au moins 12 mm de haut" — resolves `Q-7.3-034`,
+  confirming both the correct 100×100mm answer and the real-but-different
+  referent of the "12 mm" distractor. The Figure 7.1.C grandfather-clause
+  note (63rd-edition mark usable until 31 December 2026) was also
+  confirmed verbatim.
+
+No SOURCE GAP or SOURCE CONFLICT found for any of the 14 items — all
+KOST Tier B content matched current DGR 67e AM1 text exactly, including
+distractor-level detail. All 14 marked `FROZEN FR / SOURCE VERIFIED` in
+their respective production banks; `docs/DGR_TIER_A_INVENTORY.md` updated
+accordingly (FROZEN 158→172, NOTATTEMPTED 257→243).
+
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see

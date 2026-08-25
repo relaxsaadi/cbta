@@ -393,3 +393,26 @@ pilot only); Gates 2, 3, and 4 passed by 0/453 items.** No reviewer has
 been named or engaged for Gates 2 or 3. This document is a map of the
 remaining path to `APPROVED`, not a step along it — it changes no item's
 status.
+
+## Second Tier A phase (started 2026-08-25) — topic-based sweep
+
+Per updated user instruction: the first complete 7.1→7.10 Tier A sweep
+(function-by-function) is finished (per-function summaries above). This
+second phase resolves the remaining DRAFT/PARTIALLY-CONFIRMED items by
+**regulatory topic** instead, since one current-source lookup often
+resolves items across several functions at once. Durable inventory and
+topic-priority order: `docs/DGR_TIER_A_INVENTORY.md`.
+
+- **Topic 1 — Lithium batteries: ✅ RESOLVED.** 14 items across Functions
+  7.2/7.3/7.4/7.5/7.6/7.9/7.10, all now `FROZEN FR / SOURCE VERIFIED`, no
+  SOURCE GAP or SOURCE CONFLICT found. Four DGR sections read this
+  session: §2.3.5.8.3/.3.1/.4(c)/.4(f) (passenger baggage AEP/spare
+  batteries), §3.9.2.6.0 (UN-number classification table), §9.3.2.1.3
+  (loading segregation, PI 965/968), §7.1.5.5.2(b)/.3 (marking, Figure
+  7.1.C). Full citations in `docs/DGR_SOURCE_REGISTER.md`.
+- **Program totals after Topic 1:** 172 FROZEN (up from 158), 243
+  NOTATTEMPTED (down from 257); GAP (13), PARTIAL (21), STALE (4)
+  unchanged (not this topic's scope).
+- Remaining topics (2–8) not yet started this phase — see
+  `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan for the priority order
+  and per-topic item lists.

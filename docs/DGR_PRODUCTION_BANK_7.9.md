@@ -1859,3 +1859,655 @@ at 0), well below the function's 82-question provisional ceiling.
 - Does not mark any item `APPROVED` — no qualified reviewer exists in this
   pass.
 - Does not touch Moodle or any live/production question-bank copy.
+
+
+---
+
+## Batch 3
+
+Third production batch for Function 7.9, drafted against the same
+`docs/DGR_STAGE2A_FUNCTION_7.9_BLUEPRINT.md` (PROVISIONAL/CEILING,
+82-question maximum, 24 leaf sub-tasks). Batch 1 (`Q-7.9-001`–`016`, 16
+items) and Batch 2 (`Q-7.9-017`–`031`, 15 items) together drafted 31 items,
+touching every leaf except the confirmed `SOURCE GAP` (0.3.2), but left
+**Block 5 and Block 7 below their own per-leaf ceilings** and **Block 6's
+6.2.1** below its own ceiling — Batch 2 was Block-0-only. Per this batch's
+own explicit instruction, this pass prioritizes exactly those Block 5/6/7
+leaves first. This batch drafts **8 new items**, `Q-7.9-032`–`039`,
+continuing the ID sequence directly from where Batch 2 stopped: **5 items
+in Blocks 5/6/7** (5.2.1×2, 5.2.2×1, 6.2.1×1, 7.1+7.2×1) plus **3
+opportunistic Block 0 items** (0.2.3×1, 0.4.1×1, 0.6.1×1) where a second,
+closer read of the same already-cited slide ranges surfaced genuinely new,
+clean, non-duplicate evidence not used by Batch 1 or 2. This is
+deliberately a **smaller** batch than Batch 1 (16) or Batch 2 (15) — see
+"Honest yield assessment" below for exactly which leaves were found
+genuinely exhausted rather than under-drawn for lack of effort.
+
+## Status of this batch — read before using any item below
+
+**All 8 items in this batch are `DRAFT`, Tier B basis only. None has been
+Tier A-verified against the current IATA DGR 67th Edition (2026, French,
+Addendum 1) text.**
+
+- Per the task's own explicit confirmation ahead of this batch, Tier A
+  verification remains blocked this session for a **different, more
+  specific technical reason** than Batches 1/2's own blocker (the owner's
+  pending 2FA re-login / a closed Bookshelf tab): `docs/AI_HANDOFF.md`'s
+  "2026-08-25 (still later same day) — Tier A retry #2" entry records that,
+  with the Bookshelf authenticated and open and remote debugging active,
+  every one of the three available `chrome-devtools` MCP tools (`navigate`,
+  `evaluate`, `screenshot`) returned the identical error `"The selected
+  page has been closed. Call list_pages to see open pages."` — a
+  connection/page-selection failure, not a content or credential problem.
+  Per the task's own explicit instruction, **no attempt at Tier A
+  verification was made this pass**, and **no Tier A content was
+  fabricated to compensate.** This entire batch is Tier B only, exactly
+  like Batches 1 and 2.
+- Every item below is sourced directly to the same **KOST Function 7.9
+  training material** (Tier B) already used for Batches 1/2, re-read this
+  session:
+  - `10_KOST_DGR_CBTA_Course_Function_7.9_FR_2025.pdf` — course, 120
+    slides. MD5 re-verified this session as
+    `67be0da4a4d7d4e1abf1ac320404b5ac`, identical to Batch 1's and Batch
+    2's own recorded hash — confirming the same file. Primary source,
+    cited below by printed slide number. Re-extracted fresh this session
+    with `pdftotext -layout`, independently page-split and spot-checked
+    against a handful of direct page renders (see the sourcing-method note
+    below).
+  - `12_KOST_DGR_CBTA_Exam_Function_7.9_FR_2025.pdf` (F-KOST 05, 20Q) — read
+    in full again this session; corroborating cross-reference only.
+  - `09_KOST_DGR_CBTA_Practice_Book_Function_7.9_FR_2025.pdf` (F-KOST 09,
+    20Q) — read in full again this session; corroborating cross-reference
+    only. No new practice-book item is used as a primary source this
+    batch (all 8 items are course-slide-primary, exam/practice
+    cross-referenced only, same discipline as Batches 1/2).
+- Every "DGR x.y.z" section number cited below is, as in Batches 1 and 2,
+  **as displayed on the KOST slide itself** — Tier B, not independently
+  re-verified against the current 67th Edition/Addendum-1 text. The course
+  remains built on the **66th Edition** (per its own p.25 and Stage 1's own
+  finding, unchanged).
+- Per `.claude/rules/dgr-stage2b.md` rule 4, **no item in this batch may be
+  marked `APPROVED`.** Status is `DRAFT` only.
+- **Leaf 6.2.3 is not touched at all this batch** — its ceiling of 1 was
+  already fully exhausted by Batch 1's `Q-7.9-013`, and per the task's own
+  explicit instruction this batch drafts no further item against it in any
+  form. **Leaf 0.3.2 remains a confirmed `SOURCE GAP` at 0**, unchanged.
+- Next session should re-attempt Tier A verification once the
+  `chrome-devtools` page-selection failure is resolved, to move these 8
+  items (and Batches 1/2's 31) from `DRAFT` toward `FR SOURCE VERIFIED` /
+  `FR SOURCE GAP CONFIRMED`.
+
+## Sourcing-method note (new this batch — read before using Q-7.9-034/039)
+
+Batches 1 and 2 sourced every item from `pdftotext -layout`'s
+machine-extracted text layer. This batch's closer re-read of the Block
+5/6/7 evidence slides found that **two facts used below exist only inside
+an image embedded on the slide, not in the machine-extracted text layer**
+— confirmed by this session's own fresh `pdftotext -layout` re-extraction,
+which captures only the short "Note" caption text on these slides, not the
+body of the pasted Table 2.3.A excerpt itself (slide 45) or the document
+cover photo (slide 109). Where this applies, the item below is flagged with
+an explicit "**Image-sourced**" note, and the quoted text is presented as a
+faithful transcription read directly from the rendered slide this session
+(via a direct page render, the same underlying PDF, same MD5), not a
+machine-OCR output and not an inference — consistent with rule 1 (no
+content beyond the supplied source) and rule 7 (record uncertainty rather
+than guess). Everything else in this batch is sourced from the ordinary
+machine-extracted text layer, exactly as in Batches 1/2.
+
+## Sub-task selection and ceiling compliance — Batch 3
+
+| Sub-task | Title | Blueprint ceiling | Drawn B1+B2 | Drawn B3 | New item(s) | Cumulative | Remaining headroom |
+|---|---|---|---|---|---|---|---|
+| 5.2.1 | Appliquer les prescriptions des exploitants | 3 | 1 | 2 | Q-7.9-032, Q-7.9-033 | 3 | 0 — ceiling reached |
+| 5.2.2 | Vérifier les prescriptions concernant les bagages des passagers | 8 | 2 | 1 | Q-7.9-034 | 3 | 5 |
+| 6.2.1 | S'occuper des marchandises dangereuses non permises dans les bagages | 4 | 1 | 1 | Q-7.9-035 | 2 | 2 (see honest-yield note) |
+| 7.1 + 7.2 (combined pool) | Signaler les accidents / les incidents de MD | 2 | 1 | 1 | Q-7.9-036 | 2 | 0 — ceiling reached |
+| 0.2.3 | Être au courant des dispositions s'appliquant aux passagers | 8 | 2 | 1 | Q-7.9-037 | 3 | 5 |
+| 0.4.1 | Trouver de l'information générale sur les classes et les divisions | 8 | 2 | 1 | Q-7.9-038 | 3 | 5 |
+| 0.6.1 | Créer une sensibilisation aux procédures d'urgence générales | 3 | 1 | 1 | Q-7.9-039 | 2 | 1 |
+| **Total** | | | | **8** | | | |
+
+**No per-sub-task ceiling is exceeded.** 5.2.1 and 7.1+7.2 are now drawn at
+their exact ceiling (3/3 and 2/2 respectively) — both pools' full,
+independently-justified evidence has now been used; no further item should
+be drawn from either without new source material. Every other touched leaf
+retains headroom below its own ceiling, but — per the honest-yield
+assessment below — that headroom is **not** all backed by genuinely
+distinct remaining evidence.
+
+## Honest yield assessment — leaves deliberately left under-drawn
+
+This is the section the task explicitly asked for: which leaves' remaining
+blueprint headroom is real (more distinct facts exist, just not drawn this
+batch) versus which is **not** backed by further distinct evidence, despite
+looking open on paper.
+
+**Genuinely exhausted — no further distinct fact found, despite remaining
+ceiling headroom:**
+
+- **7.3** (ceiling 3, drawn 1, headroom 2 on paper) — the leaf's entire
+  evidence base is a single slide (p.113) carrying one composite fact (who
+  reports + that the duty extends to baggage/on-person discoveries, not
+  only freight/mail), already fully tested by Batch 1's `Q-7.9-015`. No
+  second, independently-testable fact was found on this slide or its
+  practice-book corroboration (Q19, which restates the same composite
+  fact, already cited as Q-7.9-015's own corroboration). Left at 1 item.
+- **7.4** (ceiling 3, drawn 1, headroom 2 on paper) — per the blueprint's
+  own evidence-basis note, this leaf's content is exactly two facts: the
+  general reporting obligation (shared with 7.1+7.2's own pool, already
+  tested as *that* pool's own fact by `Q-7.9-014`/`Q-7.9-036` — re-testing
+  it under 7.4's own tag would be a reworded duplicate of an
+  already-drawn fact, not new content) and the Algeria/ANAC enrichment
+  (slide 117, fully tested by Batch 1's `Q-7.9-016` — a four-line slide
+  with no further sub-fact to draw). Left at 1 item.
+- **6.2.1** (ceiling 4, drawn 2 after this batch, headroom 2 on paper) —
+  this leaf's own dedicated content (p.111–113) is now fully drawn across
+  two sequential procedural facts: the suspicion-stage doubt-resolution
+  step (Batch 1's `Q-7.9-012`, slide 111) and the confirmed-stage
+  risk-elimination step (this batch's `Q-7.9-035`, slide 112). Slide 113's
+  own remaining fact belongs to 7.3's pool, already drawn there
+  (`Q-7.9-015`) — drawing it again under 6.2.1's own tag would duplicate
+  that item's underlying fact. No further distinct 6.2.1-specific evidence
+  was found. Left at 2 items.
+- **5.2.2** (ceiling 8, drawn 3 after this batch, headroom 5 on paper) —
+  this batch found one further clean, distinct fact (spare batteries:
+  cabin baggage only, `Q-7.9-034`), but a careful re-read of the
+  remaining p.36–52 shared-evidence-base slides found no further **clean**
+  fact to add safely: slide 50's worked examples list items (piles,
+  extincteurs, etc.) without stating which of DGR 2.5's five categories
+  each belongs to, so a "which category" item would require inferring an
+  unstated mapping — declined per rule 1. Slide 52's own self-check
+  exercise poses three True/False-style statements whose correct answers
+  depend on precisely parsing the same dense, image-embedded Table 2.3.A
+  excerpt (slide 45) that already required unusually careful handling for
+  this batch's own `Q-7.9-034` — attempting three more such items in one
+  pass was judged too high a transcription-risk for this batch and is
+  deferred, not because the leaf is truly exhausted (real headroom likely
+  exists here) but because doing it right requires more careful,
+  dedicated image-reading than this batch's remaining scope allowed.
+- **0.2.3** (ceiling 8, drawn 3 after this batch, headroom 5 on paper) —
+  similarly, one further clean fact was found and drawn (`Q-7.9-037`), but
+  slide 51 is a redundant restatement of slide 47 (already `Q-7.9-011`'s
+  own source) and slide 52's exercise carries the same table-dependent
+  risk noted above for 5.2.2. Real remaining headroom likely exists, gated
+  behind the same careful-table-reading work.
+
+**Real remaining headroom, not pursued this batch purely on priority
+grounds (task explicitly deferred Block 0 depth in favour of Block 5/6/7
+first):**
+
+- **0.4.1** (ceiling 8, drawn 3 after this batch) — the radioactive/TI
+  slides 100–101 still carry at least one more distinct, cleanly-citable
+  fact (slide 101's worked TI-separation example, RRY-coded), not drawn
+  this batch because its own worked numeric example lacks a stated
+  distance conclusion in the extracted material available this session —
+  a future batch should re-examine it at higher render resolution before
+  drafting from it, rather than risk an incomplete question.
+- **0.1.1, 0.1.2, 0.1.4, 0.2.1, 0.2.2, 0.3.1, 0.3.3, 0.5.1, 0.5.2, 0.5.3,
+  0.6.1** all retain genuine headroom not investigated in depth this
+  batch, since this batch's task explicitly prioritized Block 5/6/7 first.
+
+## Method notes on distractor sourcing (rule 6 compliance)
+
+Identical method to Batches 1/2: every distractor is grounded in something
+actually read this session — either (a) a different, correctly-stated fact
+from elsewhere in the same KOST Function 7.9 course, repurposed as a wrong
+answer to *this* question, (b) a direct contradiction of a specific clause
+in the same source passage the correct answer comes from, or (c) for the
+"which is NOT..." items (Q-7.9-033, Q-7.9-038), a plausible but genuinely
+absent claim clearly distinguishable from the source's own finite,
+enumerated list. No distractor asserts an invented regulatory fact, an
+invented numeric threshold not traceable to the source, or a fact sourced
+from a different function's course material.
+
+---
+
+## Q-7.9-032 — Seuils déclenchant l'approbation de l'exploitant : AEP et batteries de rechange au lithium
+
+**Sub-task:** 5.2.1 Appliquer les prescriptions des exploitants
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Marchandises dangereuses transportées par les
+passagers et l'équipage, DGR 2.3.A — batteries au lithium), au-delà de
+quels nombres l'exploitant doit-il donner son **approbation expresse**
+pour qu'un passager transporte davantage d'appareils électroniques
+portables (AEP) alimentés au lithium, et de piles/batteries de rechange,
+respectivement ?
+
+**Options:**
+- **(Correct)** Plus de 15 AEP, et plus de 20 batteries de rechange.
+- Plus de 20 AEP, et plus de 15 batteries de rechange.
+- Plus de 5 AEP, et plus de 10 batteries de rechange.
+- Aucune limite : l'exploitant n'a jamais besoin de donner son
+  approbation, quel que soit le nombre transporté.
+
+**Correct answer rationale:** Slide 45's own "Note" callout: "L'exploitant
+peut approuver le transport de plus de 15 AEP. L'exploitant peut approuver
+le transport de plus de 20 batteries." Direct, complete match — this Note
+is captured in full by this session's own machine text-extraction, unlike
+the dense table above it (see the sourcing-method note above; this item
+relies only on the clean, extractable Note text, the same method already
+used for Batch 1's `Q-7.9-001` (slide 46's Taser note) and `Q-7.9-002`
+(slide 44's allumettes/briquets note)).
+
+**Distractor rationale (source-grounded):**
+- "Plus de 20 AEP, et plus de 15 batteries" — swaps the two real numbers
+  from the same Note, testing whether the student attaches the right
+  figure to the right item category.
+- "Plus de 5... plus de 10..." — plausible-looking but invented numbers,
+  clearly distinguishable from the source's own explicitly stated 15/20
+  figures.
+- "Aucune limite..." — directly contradicts the Note's own express
+  statement that the operator's approval becomes necessary beyond these
+  thresholds.
+
+**Source basis:** Tier B — KOST F7.9 course, slide 45 ("Note" callout
+beneath the Table 2.3.A lithium-battery excerpt). Corroborated only at a
+topic level by Exam Q6's own second sub-question ("Le passager pourrait-il
+emporter avec lui 2 batteries de rechange?" — a quantity well under the
+20-battery default threshold, consistent with but not a verbatim
+number-for-number restatement of this item), noted honestly as
+topic-level corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-033 — Facteurs que l'exploitant doit prendre en compte avant d'autoriser la glace carbonique
+
+**Sub-task:** 5.2.1 Appliquer les prescriptions des exploitants
+**Type:** MCQ, single-answer ("lequel n'est PAS")
+
+**Stem (FR):** Selon le cours (Glace carbonique — Chargement du dioxyde de
+carbone solide), le transport de dioxyde de carbone solide (glace
+carbonique) est autorisé à condition que l'exploitant ait pris les
+arrangements voulus compte tenu de plusieurs facteurs. Laquelle des
+affirmations suivantes n'est **PAS** l'un des facteurs cités par le
+cours ?
+
+**Options:**
+- **(Correct)** Le nombre total de passagers à bord du vol.
+- Le type d'avion.
+- La méthode d'emballage et d'entreposage.
+- La présence ou non d'animaux à bord.
+
+**Correct answer rationale:** Slide 96: "Le dioxyde de carbone solide...
+peut être transporté à condition que l'exploitant ait pris les
+arrangements voulus compte tenu: du type d'avion, du taux de renouvellement
+de l'air de l'avion, de la méthode d'emballage et d'entreposage, de la
+présence ou non d'animaux à bord." Four factors, exhaustively listed;
+total passenger count is never among them.
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is drawn verbatim from slide 96's own enumerated list):**
+- "Le type d'avion" — the slide's own first-listed factor.
+- "La méthode d'emballage et d'entreposage" — the slide's own third-listed
+  factor.
+- "La présence ou non d'animaux à bord" — the slide's own fourth-listed
+  factor.
+
+**Source basis:** Tier B — KOST F7.9 course, slide 96, cross-checked
+against slide 97 (the 2.5 kg marking requirement, already `Q-7.9-010`'s own
+source — a distinct fact; this item does not retest the marking limit,
+only the operator's own pre-arrangement factors). No direct exam/practice
+hit for this exact four-factor list; Exam Q17 tests the 2.5 kg limit
+itself, not these arrangement factors, already used for `Q-7.9-010`, noted
+honestly as no independent corroboration found for this specific item.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-034 — Piles et batteries de rechange : bagages de cabine uniquement
+
+**Sub-task:** 5.2.2 Vérifier les prescriptions concernant les bagages des passagers
+**Type:** True/False
+**Image-sourced — see the sourcing-method note above.**
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Marchandises dangereuses
+transportées par les passagers et l'équipage, DGR 2.3.A — batteries de
+rechange), les piles et batteries de rechange (accumulateurs) destinées
+aux appareils électroniques portables des passagers doivent être
+transportées **uniquement dans les bagages de cabine**, et ne sont jamais
+autorisées dans les bagages enregistrés.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 45's own embedded Table 2.3.A excerpt (its "batteries
+de rechange" row, read directly from the rendered slide this session,
+since this row is part of an image, not this session's machine
+text-extraction layer) states that spare/replacement batteries for AEP
+"doivent être transportées uniquement dans les bagages de cabine" —
+direct match on the specific claim tested.
+
+**Source basis:** Tier B — KOST F7.9 course, slide 45 (Table 2.3.A
+excerpt, "batteries de rechange" row of the embedded regulatory table),
+visually read and transcribed this session — flagged with lower
+transcription-confidence than this batch's ordinarily text-extracted
+items, given the source is a compressed image rather than a clean text
+layer (see the sourcing-method note above), though the specific claim
+tested (spare-battery cabin-only carriage) is stated plainly and
+unambiguously in the visible table text. Cross-checked against slide 45's
+own machine-extracted "Note" callout (this batch's own `Q-7.9-032`
+source), which corroborates the same default-versus-approval framing for
+spare batteries specifically, on the same slide. No direct exam/practice
+hit for this exact "cabin-only" claim; Exam Q6's own second sub-question
+(spare-battery quantity) is topic-adjacent only, already cited under
+`Q-7.9-032`.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A. Given the
+image-sourced transcription noted above, this item in particular should be
+an early priority for Tier A re-verification.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-035 — Après confirmation qu'une contamination est due à une marchandise dangereuse
+
+**Sub-task:** 6.2.1 S'occuper des marchandises dangereuses non permises dans les bagages
+**Type:** True/False
+
+**⚠ Distinct-from-`Q-7.9-012` compliance note:** Batch 1's `Q-7.9-012`
+(slide 111) tests the **suspicion** stage: upon suspecting contamination,
+the operator must act to resolve the doubt *before continuing to load* the
+bag/freight. This item tests the **next, sequential** stage on the
+immediately following slide: once contamination is *confirmed* to be
+caused by an actual dangerous good, the operator must eliminate the
+identified risk *before air transport itself can continue*. These are two
+distinct, sequential procedural facts from the same "Fret ou bagages
+contaminés" sub-heading, not a reworded duplicate of the same fact.
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Fret ou bagages contaminés),
+s'il est déterminé que la matière à l'origine de la contamination d'un
+bagage ou d'un fret est bien une marchandise dangereuse au sens de la
+réglementation, l'exploitant doit prendre des mesures appropriées pour
+écarter tout risque identifié avant que le transport par voie aérienne
+puisse se poursuivre.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 112: "S'il est déterminé que la matière à l'origine
+de la contamination est une matière dangereuse aux termes de la
+réglementation sur les marchandises dangereuses, l'exploitant doit prendre
+des mesures appropriées pour écarter tout risque identifié avant que le
+transport par voie aérienne puisse se poursuivre." Direct, complete match.
+
+**Source basis:** Tier B — KOST F7.9 course, slide 112, the slide
+immediately following Batch 1's own `Q-7.9-012` source (slide 111). No
+direct exam/practice hit for this exact post-confirmation risk-elimination
+fact; Exam Q16's third sub-question (the aerosol scenario's "immediate
+actions" question) was already used as topic-level corroboration for
+`Q-7.9-012`'s suspicion-stage fact, not this confirmed-stage fact — no
+additional corroboration was found for this specific step, noted honestly.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-036 — Portée du signalement : inclut les MD exemptées ou sous disposition spéciale
+
+**Sub-task:** 7.1 + 7.2 (combined pool) Signaler les accidents / les incidents de marchandises dangereuses
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Compte rendu accidents et
+incidents), l'obligation de l'exploitant de signaler les accidents et
+incidents de marchandises dangereuses aux autorités compétentes s'étend
+également aux incidents impliquant des marchandises dangereuses qui **ne
+sont pas soumises à tout ou partie de la réglementation** en raison de
+l'application d'une exception ou d'une disposition spéciale.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 114's own second paragraph: "Cela comprend les
+incidents impliquant des marchandises dangereuses qui ne sont pas soumises
+à tout ou partie de la réglementation en raison de l'application d'une
+exception ou d'une disposition spéciale." Direct, complete match.
+
+**⚠ Distinct-from-`Q-7.9-014` compliance note:** Batch 1's `Q-7.9-014`
+tests slide 114's own **first** paragraph (to whom the operator must
+report — the competent authorities of both the operator's own state and
+the state where the event occurred). This item tests the same slide's
+**second** paragraph (the *scope* of what counts as reportable) — a
+distinct fact, previously used only as a distractor-refutation aid inside
+`Q-7.9-014`'s own rationale, never before as the tested/correct fact of
+any item.
+
+**Source basis:** Tier B — KOST F7.9 course, slide 114 (second paragraph),
+the same slide as `Q-7.9-014`'s own first-paragraph basis (Batch 1). No
+direct exam/practice hit for this exact scope-extension fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-037 — Le tableau 2.3.A peut être limité par les divergences des États ou des exploitants
+
+**Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Marchandises dangereuses
+transportées par les passagers et l'équipage, DGR 2.3.A), les dispositions
+du DGR 2.3 et du tableau 2.3.A peuvent être limitées par les divergences
+des États ou des exploitants, et les voyageurs devraient vérifier auprès
+du transporteur les dispositions en vigueur.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 43: "Note : Les dispositions de 2.3 et du tableau
+2.3.A peuvent être limitées par les divergences des États ou des
+exploitants. Les voyageurs devraient vérifier auprès du transporteur les
+dispositions en vigueur." Direct, complete match — the table's own opening
+caveat, immediately preceding the passenger-provisions walkthrough slides
+already used for Batch 1's `Q-7.9-001`/`Q-7.9-002` (slides 46/44).
+
+**Source basis:** Tier B — KOST F7.9 course, slide 43, cross-checked
+against slides 68–71 (0.3.3's own DGR 2.8 divergence content, already
+`Q-7.9-026`'s source) — the same general "divergence" concept, but applied
+here specifically to Table 2.3.A's own scope as a passenger-facing
+caveat, not `Q-7.9-026`'s own Air-Algérie/Italy example-matching fact — a
+distinct application, not a duplicate. No direct exam/practice hit for
+this exact caveat.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-038 — Emplacement interdit pour le chargement des matières radioactives (Catégories I-Blanc, II-Jaune, III-Jaune)
+
+**Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Transport de Matières Radioactives), dans
+quel emplacement les colis de matières radioactives des catégories
+**I-Blanc, II-Jaune ou III-Jaune** ne doivent-ils **JAMAIS** être chargés ?
+
+**Options:**
+- **(Correct)** Dans un compartiment occupé par des passagers ou des
+  membres d'équipage.
+- Sur le plancher d'un compartiment inférieur (soute).
+- À la position la plus arrière par rapport au poste de pilotage, dans un
+  avion cargo.
+- En dernier lieu, après le chargement des autres marchandises.
+
+**Correct answer rationale:** Slide 99: "Les matières radioactives des
+catégories I-Blanc, II-Jaune ou III-Jaune ne doivent pas être chargées
+dans un compartiment occupé par des passagers ou des membres d'équipage."
+Direct, complete match.
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is a real, correctly-stated course rule about where/when such
+packages *should* be loaded, drawn verbatim from the same slide):**
+- "Sur le plancher d'un compartiment inférieur (soute)" — the slide's own
+  stated allowed/required location ("les matières radioactives doivent
+  être chargées sur le plancher d'un compartiment inférieur").
+- "À la position la plus arrière... avion cargo" — the slide's own stated
+  cargo-aircraft alternative ("ou, dans le cas d'un avion cargo, à la
+  position la plus arrière par rapport au poste de pilotage").
+- "En dernier lieu..." — the slide's own stated loading-sequence
+  recommendation ("dans la mesure du possible, les matières radioactives
+  doivent être chargées en dernier").
+
+**Source basis:** Tier B — KOST F7.9 course, slide 99. Note on extraction:
+this slide's machine text layer interleaves the foreground bullet content
+quoted above with a recurring background/watermark paragraph ("Chaque
+jour, des matières radioactives sont utilisées...") that also appears
+standalone on slide 98 and repeated on slides 100–102 — the bullet content
+quoted above was isolated by cross-checking against the visually rendered
+slide this session to confirm it is the slide's own distinct foreground
+text, not a fragment of the repeating background box. Cross-checked
+against slide 102 (Category I-White's own TI/quantity rule, already
+`Q-7.9-003`'s own source — a distinct fact about loading *quantity*, not
+this item's own loading *location* fact) and slide 100 (excepted-package
+NOTOC exemption, already used as a `Q-7.9-003` distractor source). No
+direct exam/practice hit for this exact loading-location fact; Exam Q5 and
+Practice Q17 test the adjacent TI/separation-distance concept (already
+`Q-7.9-003`'s own corroboration), not this specific location prohibition.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.9-039 — Document OACI de référence pour l'intervention d'urgence (Doc 9481)
+
+**Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+**Type:** MCQ, single-answer
+**Image-sourced — see the sourcing-method note above.**
+
+**Stem (FR):** Selon le cours (Information sur l'intervention d'urgence),
+quel document de l'OACI le cours présente-t-il (page de couverture),
+sous cette rubrique, comme la référence pour l'intervention d'urgence en
+cas d'incidents d'aéronefs mettant en cause des marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** Doc 9481 — "Emergency Response Guidance for Aircraft
+  Incidents Involving Dangerous Goods."
+- Doc 9284 — les Instructions techniques de l'OACI.
+- Doc 9859.
+- Doc 7300.
+
+**Correct answer rationale:** Slide 109, under the heading "Information
+sur l'intervention d'urgence," displays the cover of ICAO Doc 9481 AN/928,
+titled "Emergency Response Guidance for Aircraft Incidents Involving
+Dangerous Goods" — read directly from the rendered slide this session,
+since this is a photographed document cover embedded as an image, not
+part of this session's own machine text-extraction (slide 109's own
+extracted text is otherwise blank apart from the page-footer number,
+independently reconfirmed this session).
+
+**Noteworthy finding — refines, without contradicting, Batch 1's own
+`Q-7.9-013` note:** Batch 1's `Q-7.9-013` observed that the term "Red
+Book"/"livre rouge" is never named anywhere in the course's
+machine-extracted text (independently reconfirmed again this session —
+zero hits for "livre rouge"/"Red Book"/"9481" in the text layer). That
+finding is still accurate for the text layer specifically, and this item
+does **not** reopen or expand `Q-7.9-013`'s own binding restriction —
+6.2.3 remains untouched this batch, and the prohibition on fire-fighting
+equipment, cabin-fire coordination, and PAN PAN/MAYDAY content (binding
+caveat 2) is unaffected, since this item tests only awareness that this
+specific reference document exists and its stated purpose, not any
+operational content from within it (which remains entirely unsupported by
+the course). The course DOES, however, visually display this exact
+document — the informal "Red Book," so called for its cover colour,
+visible in the render — under this general awareness-level heading,
+which is new evidence worth recording for a future session's own Tier A
+pass and for `docs/DGR_STAGE2A_FUNCTION_7.9_BLUEPRINT.md`'s own future
+revision, without altering any frozen item this batch.
+
+**Distractor rationale (source-grounded):**
+- "Doc 9284 — les Instructions techniques de l'OACI" — a real document
+  number from this same course, already Batch 2's own `Q-7.9-019` correct
+  answer (slides 21/23), but naming a different ICAO publication (the
+  general Technical Instructions for DG transport, not this specific
+  emergency-response guidance) — a swapped-document distractor. (Slide 23's
+  own hierarchy diagram lists "DOC 9284 -DOC 9481" together under
+  "Instructions techniques (TI)," already cited as evidence for
+  `Q-7.9-019` — this item is the first to identify what Doc 9481
+  specifically is.)
+- "Doc 9859" and "Doc 7300" — real ICAO-style document numbers reused from
+  Practice Q1's own distractor set (already used in `Q-7.9-019`), neither
+  ever named or shown anywhere in this function's own course material,
+  for any purpose — plausible-looking but genuinely absent options.
+
+**Source basis:** Tier B — KOST F7.9 course, slide 109 (document cover
+image), cross-checked against slide 23 (hierarchy diagram naming "Doc
+9481" as text, already `Q-7.9-019`'s own source) and the text-layer
+re-search confirming "livre rouge"/"Red Book" are never named as text,
+described above. No direct exam/practice hit for this exact
+document-identification fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A. Given the
+image-sourced transcription noted above, this item should be an early
+priority for Tier A re-verification, alongside `Q-7.9-034`.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Summary table — Batch 3
+
+| ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
+|---|---|---|---|---|---|---|
+| Q-7.9-032 | 5.2.1 Seuils d'approbation AEP/batteries de rechange | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 45 (Note) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-033 | 5.2.1 Facteurs d'autorisation de la glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 96 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-034 | 5.2.2 Batteries de rechange — cabine uniquement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A (image-sourced) | True/False | KOST F7.9 course slide 45 (table image) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-035 | 6.2.1 Après confirmation de contamination | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-036 | 7.1+7.2 Portée du signalement (exceptions/dispositions spéciales) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 114 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-037 | 0.2.3 Tableau 2.3.A limité par les divergences | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 43 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-038 | 0.4.1 Emplacement de chargement interdit (matières radioactives) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-039 | 0.6.1 Doc OACI 9481 (référence intervention d'urgence) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A (image-sourced) | MCQ | KOST F7.9 course slide 109 (cover image) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+**Batch composition:** 4 MCQ + 4 True/False. Block spread: Block 5 = 3
+(5.2.1×2, 5.2.2×1), Block 6 = 1 (6.2.1×1), Block 7 = 1 (7.1+7.2×1), Block 0
+= 3 opportunistic items (0.2.3×1, 0.4.1×1, 0.6.1×1). Combined with Batches
+1 and 2's 31 items, **39 items** have now been drafted for Function 7.9,
+still well below the function's 82-question provisional ceiling. 5.2.1 and
+7.1+7.2 are now drawn at their exact blueprint ceiling (3/3 and 2/2); no
+other leaf's ceiling is exceeded.
+
+## What this batch does NOT do
+
+- Does not exceed any per-sub-task ceiling in
+  `docs/DGR_STAGE2A_FUNCTION_7.9_BLUEPRINT.md` (see the ceiling-compliance
+  table above — 5.2.1 and 7.1+7.2 are now exactly at their own ceilings,
+  with no exception possible without new evidence; every other touched
+  leaf remains below its own ceiling).
+- Does not draft any item against the confirmed `SOURCE GAP` leaf (0.3.2) —
+  count remains 0, no exception, per binding caveat 1.
+- Does not touch 6.2.3 at all — its ceiling of 1 was already fully drawn by
+  Batch 1's `Q-7.9-013`, and this batch does not draft, reword, or add any
+  further item testing fire-response, cabin-fire coordination, or PAN
+  PAN/MAYDAY content, per binding caveat 2 — including in `Q-7.9-039`,
+  which tests only that a named reference document exists, never its
+  operational content.
+- Does not force items to fill 7.3's or 7.4's remaining on-paper headroom
+  — both leaves' single-slide evidence bases are confirmed genuinely
+  exhausted of further distinct, cleanly-citable facts this pass (see the
+  "Honest yield assessment" section above), left at 1 item each rather
+  than padded.
+- Does not attempt to parse slide 45's or slide 52's own dense,
+  multi-column, image-embedded Table 2.3.A content beyond the two specific
+  claims this batch was confident enough to transcribe cleanly
+  (`Q-7.9-032`'s Note callout, `Q-7.9-034`'s spare-battery-location row) —
+  the remaining table content and slide 52's own three-statement exercise
+  are deferred to a future batch with dedicated, careful image-reading
+  time, rather than risk a transcription error.
+- Does not draft against 0.1.1, 0.1.2, 0.1.4, 0.2.1, 0.2.2, 0.3.1, 0.3.3,
+  0.5.1, 0.5.2, or 0.5.3 this batch — each retains real, uninvestigated
+  headroom, left for a future batch since this batch's task explicitly
+  prioritized Block 5/6/7 first, with only incidental Block 0 additions
+  where evidence surfaced opportunistically while re-reading the same
+  cited slide ranges.
+- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification
+  for any of the 8 items in this batch, or for Batches 1/2's 31 — blocked
+  this pass by the specific `chrome-devtools` MCP page-selection failure
+  described in `docs/AI_HANDOFF.md`'s "Tier A retry #2" entry, not a
+  content issue. No Tier A content was fabricated to compensate.
+- Does not mark any item `APPROVED` — no qualified reviewer exists in this
+  pass.
+- Does not touch Moodle or any live/production question-bank copy.

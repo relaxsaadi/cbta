@@ -887,3 +887,928 @@ Block 6.2 = 5, Block 7 = 3.
 - Does not mark any item `APPROVED` — no qualified reviewer exists in this
   pass.
 - Does not touch Moodle or any live/production question-bank copy.
+
+---
+
+# Batch 2
+
+Second production drafting pass against
+`docs/DGR_STAGE2A_FUNCTION_7.7_BLUEPRINT.md` (PROVISIONAL/CEILING,
+85-question maximum). Batch 1 (`Q-7.7-001`–`015`, above) drew from 12 of
+Function 7.7's 26 non-gapped leaf sub-tasks. This batch continues the
+sequence at `Q-7.7-016`, prioritizing **the 12 of Block 0's 18 leaves Batch 1
+left completely untouched** (0.1.1, 0.1.2, 0.1.3, 0.1.4, 0.2.1, 0.2.3, 0.3.1,
+0.3.3, 0.4.2, 0.5.1, 0.5.3, 0.6.2), then rounding out remaining headroom in
+this function's two richest leaves, **0.4.1** (classes/divisions, ceiling 8,
+Batch 1 drew 2) and **6.2.2** (Interpréter la NOTOC, ceiling 8, Batch 1 drew
+2), per the task's explicit instruction.
+
+## Status of this batch — read before using any item below
+
+**All 18 items in this batch are `DRAFT`, Tier B basis only. None has been
+Tier A-verified against the current IATA DGR 67th Edition (2026, French,
+Addendum 1) text.**
+
+- The orchestrating session confirmed this pass that the `chrome-devtools`
+  MCP browser tab/session for the IATA Digital Publications Bookshelf is
+  either showing a Sign-In screen or has been closed entirely — **Tier A
+  verification is not currently possible** and no attempt was made to log
+  in or fabricate Tier A content to compensate. This entire batch is
+  therefore Tier B only, exactly like Batch 1 and every other function's
+  batches so far.
+- Every item below is sourced directly and verbatim-traced to the actual
+  KOST Function 7.7 course material (Tier B), re-extracted this session with
+  `pdftotext -layout`, per-page split so every quote is tied to an exact
+  printed slide number, from the same
+  `10_KOST_DGR_CBTA_Course_Function_7.7_FR_2025.pdf` (132 PDF pages, 131
+  numbered content slides) already used for Batch 1, plus the same
+  practice-book/exam PDFs re-extracted for cross-reference only, never
+  copied verbatim as a question stem.
+- Every "DGR x.y.z" section number cited below is, as in Batch 1, **as
+  displayed on the KOST slide itself** — Tier B, not independently
+  re-verified against the current 67th Edition/Addendum 1 text. The course
+  remains explicitly built on the 66th Edition.
+- Per `.claude/rules/dgr-stage2b.md` rule 4, **no item in this batch may be
+  marked `APPROVED`.** Status is `DRAFT` only.
+
+## Sub-task selection and ceiling compliance
+
+This batch drafts **18 items**, inside the task's 15–20 target range. Per
+the task's explicit instruction, selection prioritizes (a) the 12 of Block
+0's 18 leaves Batch 1 left completely uncovered — 1 item each, at or below
+each leaf's own "sample" figure — and (b) rounding out remaining headroom in
+this function's two richest, already-partially-drawn pools, 0.4.1 and 6.2.2
+(3 further items each, on top of Batch 1's own 2 each), still well inside
+each leaf's own 8-question ceiling.
+
+| Sub-task | Title | Ceiling | Sample | Batch 1 drawn | Batch 2 drawn | Running total | Remaining headroom |
+|---|---|---|---|---|---|---|---|
+| 0.1.1 | Comprendre la définition | 4 | 1 | 0 | 1 | 1 | 3 |
+| 0.1.2 | Reconnaître le cadre juridique | 4 | 1 | 0 | 1 | 1 | 3 |
+| 0.1.3 | Déterminer l'application et la portée | 1 | 1 | 0 | 1 | 1 | 0 |
+| 0.1.4 | Faire la distinction entre un danger et un risque | 3 | 1 | 0 | 1 | 1 | 2 |
+| 0.2.1 | Développer un flair pour les MD interdites | 4 | 1 | 0 | 1 | 1 | 3 |
+| 0.2.2 | Reconnaître les MD potentiellement cachées | 5 | 2 | 1 | 0 | 1 | 4 |
+| 0.2.3 | Être au courant des dispositions passagers | 4 | 1 | 0 | 1 | 1 | 3 |
+| 0.3.1 | Clarifier le rôle des parties prenantes | 3 | 1 | 0 | 1 | 1 | 2 |
+| 0.3.2 | Comprendre les responsabilités des passagers | 0 | 0 | 0 | 0 | 0 | 0 (SOURCE GAP, hard-gated) |
+| 0.3.3 | Reconnaître l'impact des divergences | 3 | 1 | 0 | 1 | 1 | 2 |
+| 0.4.1 | Trouver de l'information sur les classes/divisions | 8 | 2 | 2 | 3 | 5 | 3 |
+| 0.4.2 | Comprendre les groupes d'emballage | 3 | 1 | 0 | 1 | 1 | 2 |
+| 0.4.3 | Envisager de multiples dangers (restreint) | 1 | 0–1 | 1 | 0 | 1 | 0 |
+| 0.5.1 | Prescriptions de marquage | 3 | 1 | 0 | 1 | 1 | 2 |
+| 0.5.2 | Prescriptions d'étiquetage | 5 | 2 | 2 | 0 | 2 | 3 |
+| 0.5.3 | Déterminer les documents exigés | 3 | 1 | 0 | 1 | 1 | 2 |
+| 0.6.1 | Sensibilisation aux procédures d'urgence générales | 5 | 2 | 1 | 0 | 1 | 4 |
+| 0.6.2 | Exigences d'urgence de l'employeur (restreint) | 1 | 0–1 | 0 | 1 | 1 | 0 |
+| 6.2.1 | MD non permises dans les bagages (restreint) | 1 | 0–1 | 0 | 0 | 0 | 1 |
+| 6.2.2 | Interpréter la NOTOC | 8 | 2 | 2 | 3 | 5 | 3 |
+| 6.2.3 | Appliquer les procédures d'urgence | 3 | 1 | 1 | 0 | 1 | 2 |
+| 6.2.4 | Informer l'ATC (restreint) | 1 | 0–1 | 1 | 0 | 1 | 0 |
+| 6.2.5 | Informer les services d'urgence | 3 | 1 | 1 | 0 | 1 | 2 |
+| 7.1+7.2 | Signaler accidents/incidents (pool) | 3 | 1 | 1 | 0 | 1 | 2 |
+| 7.3 | Signaler les MD non/mal déclarées | 3 | 1 | 1 | 0 | 1 | 2 |
+| 7.4 | Signaler les situations MD (ANAC) | 3 | 1 | 1 | 0 | 1 | 2 |
+| **Total** | | **85** | | **15** | **18** | **33** | |
+
+**Block spread this batch:** Block 0 = 15 items (12 newly-touched leaves at 1
+each, plus 3 more in 0.4.1), Block 6.2 = 3 items (all in 6.2.2). 15 items
+touch a leaf Batch 1 left completely untouched; 6 items round out 0.4.1 and
+6.2.2 beyond Batch 1's own draw. Combined with Batch 1, 25 of Function 7.7's
+26 non-gapped leaves now carry at least one drafted item — only 6.2.1
+(thin/adjacent, restricted, sample 0–1) remains undrawn, deliberately, per
+below.
+
+**No per-sub-task ceiling is exceeded.** Every leaf's running total (Batch 1
++ Batch 2) sits at or below its blueprint ceiling — 0.4.1 and 6.2.2 each sit
+at 5 of 8 (3 further headroom remains in each for a possible future batch);
+every newly-touched Block 0 leaf sits at 1, at or below its own sample
+figure (including 0.1.3 and 0.6.2, whose ceiling of 1 is now fully used —
+correctly, not exceeded).
+
+**Deliberately not drafted this batch, and why:**
+
+- **0.3.2 — confirmed `SOURCE GAP`, count = 0, no exception, per blueprint
+  binding caveat 1.** Unchanged from Batch 1; no new evidence was sought or
+  found this session.
+- **6.2.1 — thin/adjacent, restricted-framing leaf (sample 0–1) — left at 0
+  again this batch.** Not in this batch's instructed scope (the task named
+  only the 12 uncovered Block 0 leaves plus 0.4.1/6.2.2 headroom); the same
+  real-but-thin evidence noted in Batch 1 still applies and still does not
+  cleanly frame the flight crew's own in-flight response as distinct from
+  the ground-acceptance procedure it is adjacent to.
+- **0.2.2, 0.5.2, 0.6.1 (Block 0) and 6.2.3, 6.2.4, 6.2.5 (Block 6.2) and all
+  three Block 7 pools — already carry a Batch 1 item and were not drawn
+  further this batch,** since the task's own instruction scoped this batch's
+  "round out headroom" pool to 0.4.1 and 6.2.2 specifically, not every
+  partially-drawn leaf. Headroom remains in several of these (0.2.2: 4 of 5
+  remaining; 0.6.1: 4 of 5 remaining) for a possible future batch.
+- **0.4.3 and 6.2.4 — already at their full ceiling of 1 (sample 0–1) from
+  Batch 1** — correctly left undrawn this batch; drafting a second item
+  against either would exceed its own hard ceiling.
+
+## Method notes on distractor sourcing (rule 6 compliance)
+
+Identical method to Batch 1 (see that batch's own "Method notes" section
+above): every distractor is grounded in something actually read this
+session — either a different, correctly-stated fact from elsewhere in the
+same KOST Function 7.7 course repurposed as a wrong answer (a "swapped-fact"
+distractor), or a direct contradiction of a specific clause in the same
+source passage the correct answer comes from (a "parsing" distractor), or,
+where flagged explicitly, a plausible-sounding but untaught claim honestly
+disclosed as such rather than asserted as a real course fact. No distractor
+asserts an invented regulatory fact, an invented numeric threshold, or a fact
+sourced from a different function's course material.
+
+---
+
+## Q-7.7-016 — Définition formelle des marchandises dangereuses (DGR 1.0)
+
+**Sub-task:** 0.1.1 Comprendre la définition
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (DGR 1.0, Généralités), une
+marchandise dangereuse est un produit, un article ou une substance
+susceptible de présenter un danger pour la santé, la sécurité, la propriété
+ou l'environnement, et qui figure dans la liste des marchandises dangereuses
+de la Réglementation ou qui est classée conformément à celle-ci.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 15: "Les marchandises dangereuses sont des produits,
+articles ou des substances susceptibles de présenter un danger pour :
+Santé, Sécurité, Propriété, Ou l'environnement... et qui figurent dans la
+liste des marchandises dangereuses du présent règlement ou qui sont
+classées conformément au présent règlement." Direct, complete verbatim
+match.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 15 (DGR 1.0),
+cross-checked against slide 8 ("Introduction," the safe-transport
+precondition statement), slides 11–14 (généralités, article/substance
+distinction) and slide 18 (historical-accident "Pourquoi Réglementer?"
+motivation slide, five named accidents). No direct exam/practice hit for
+this exact formal-definition wording; Exam Q1 (which publication provides
+the legal basis for safe air transport of DG) tests an adjacent fact — the
+*publication*, not the *definition* itself — noted honestly as topic-level
+corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-017 — Organisme responsable des recommandations pour le transport des matières radioactives
+
+**Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Fondements de la Réglementation DGR 1.1),
+quel organisme élabore des recommandations pour le transport sécuritaire des
+matières radioactives ?
+
+**Options:**
+- **(Correct)** L'Agence internationale de l'énergie atomique (AIEA).
+- Le Sous-comité d'experts du Conseil économique et social des
+  Nations-Unies (SCoETDG).
+- L'Organisation de l'Aviation Civile Internationale (OACI).
+- L'Association Internationale du Transport Aérien (IATA).
+
+**Correct answer rationale:** Slide 20: "L'AIEA élabore des recommandations
+pour le transport sécuritaire des matières radioactives. Ces prescriptions,
+telles qu'applicables au transport aérien, sont reflétées dans la partie 10
+du manuel de l'IATA."
+
+**Distractor rationale (source-grounded):**
+- "SCoETDG" — slide 19 explicitly **excludes** radioactive materials from
+  its own scope: "Le SCoETDG élabore des procédures recommandées pour le
+  transport de toutes les marchandises dangereuses, **à l'exception des
+  matières radioactives**." The cleanest possible distractor — the same
+  organization named in the wrong role, directly contradicted by its own
+  slide.
+- "OACI" — slide 21: builds the air-transport-specific Regulation (Annex
+  18/Instructions techniques) from the UN/AIEA recommendations, a
+  codification role, not a radioactive-specific recommendation-drafting
+  role.
+- "IATA" — slide 22: adds more restrictive operational specifications on top
+  of the IT, a different role again.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slides 19–22
+(Fondements de la Réglementation DGR 1.1, SCoETDG→AIEA→OACI→IATA hierarchy),
+cross-checked against slide 23 (combined hierarchy diagram). Corroborated at
+a topic level by Practice Q1 ("which body establishes DG classification
+criteria — Sous-comité d'experts des Nations Unies"), which tests a related
+but distinct fact (classification criteria, not radioactive-specific
+recommendations), noted honestly as topic-level only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-018 — Champ d'application du DGR de l'IATA (DGR 1.2.1)
+
+**Sub-task:** 0.1.3 Déterminer l'application et la portée
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Champ d'application DGR 1.2.1), à qui la
+Réglementation DGR de l'IATA est-elle applicable ?
+
+**Options:**
+- **(Correct)** Aux exploitants membres ou membres associés de l'IATA, aux
+  parties à l'accord multilatéral de trafic intercompagnies de l'IATA-fret,
+  ainsi qu'aux expéditeurs et agents de fret.
+- Uniquement aux exploitants membres ou membres associés de l'IATA, sans les
+  parties à l'accord multilatéral de trafic intercompagnies ni les
+  expéditeurs et agents de fret.
+- Uniquement aux expéditeurs et agents de fret, à l'exclusion des
+  exploitants.
+- À tous les exploitants aériens dans le monde, sans condition d'affiliation
+  à l'IATA.
+
+**Correct answer rationale:** Slide 30 lists exactly three groups: "Tous les
+exploitants qui sont : Membres ou membres associés de l'IATA[;] Parties à
+l'accord multilatéral de trafic intercompagnies de l'IATA- fret[;] Aux
+expéditeurs et agents de fret."
+
+**Distractor rationale (source-grounded — each drops or contradicts part of
+the same slide's own three-part list):**
+- "Uniquement... membres... sans les parties à l'accord... ni les
+  expéditeurs" — drops two of the slide's own three named groups, keeping
+  only the first.
+- "Uniquement... expéditeurs et agents de fret, à l'exclusion des
+  exploitants" — the opposite one-sided omission, keeping only the third
+  group.
+- "À tous les exploitants aériens... sans condition d'affiliation" —
+  directly contradicts the slide's own explicit "Membres ou membres
+  associés de l'IATA" condition.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 30 (DGR 1.2.1),
+the sole slide covering this leaf (a genuinely thin, single-fact sub-task
+per the Stage 2A blueprint's own "Adequate" rating, ceiling 1). No direct
+exam/practice hit for this exact scope fact, consistent with Stage 1's
+finding for this sub-task.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-019 — Définition du terme « Risque » (distinction danger/risque)
+
+**Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Faire la distinction entre un danger et un
+risque), comment le cours définit-il le terme « Risque » ?
+
+**Options:**
+- **(Correct)** Le degré de probabilité (forte ou faible chance) qu'un
+  danger quelconque cause réellement un dommage.
+- Quelque chose qui pourrait potentiellement causer des dommages.
+- Toute forme de liquide, de vapeur, de poussière, de fumées ou de gaz qui
+  pourrait se déverser, fuir ou être mal utilisé.
+- Un virus, une bactérie ou un champignon transmissible par morsure,
+  coupure, ou par contamination au contact d'une personne infectée.
+
+**Correct answer rationale:** Slide 31: "Risque: le degré de probabilité
+(forte ou faible chance) qu'un danger quelconque cause réellement un
+dommage[.] La possibilité qu'un préjudice (dommage, blessure, maladie ou
+mort) se produise en cas d'exposition à un danger."
+
+**Distractor rationale (source-grounded — each is the slide's own definition
+of a different, related term):**
+- "Quelque chose qui pourrait potentiellement causer des dommages" — slide
+  32's own definition of **"Danger,"** the term this item's own stem
+  explicitly contrasts against Risque — the classic confusion between the
+  two paired concepts.
+- "Toute forme de liquide, de vapeur..." — slide 32's own "dangers
+  chimiques" sub-example, a hazard category, not the definition of risk.
+- "Un virus, une bactérie ou un champignon..." — slide 32's own "dangers
+  biologiques" sub-example, likewise a hazard category, not risk.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slides 31–32
+(risque/danger definitions, chemical/radiation/biological hazard examples),
+cross-checked against slide 33 (worked flammable-liquid example) and slide
+34 (essence/gasoline exercise). Corroborated at a topic level by Practice Q2
+("differentiate danger/risque with named examples"), which tests the same
+general distinction at an open-response level, noted honestly as topic-level
+only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-020 — Accord de l'exploitant requis même pour une exception listée (DGR 1.2.7)
+
+**Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Exceptions DGR 1.2.7), même
+lorsqu'une marchandise dangereuse relève d'une exception listée dans la
+Réglementation (par exemple aide médicale, aide vétérinaire, ou usage
+agricole), l'accord de l'exploitant demeure indispensable.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 41: "Des Exceptions DGR 1.2.7[.] Celles listées dans la
+Réglementation: (aide médicale fournie à un patient ou visant à préserver
+des organes destinés à être utilisé, aide vétérinaire, utilisation
+agricole)[.] Dans tous les cas, l'accord de l'exploitant est indispensable."
+Direct, complete match.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 41 (DGR 1.2.7),
+cross-checked against slide 40 (DGR 1.2.5 approvals / DGR 1.2.6
+dérogations) and slides 38–39 (DGR 2.1/4.2, prohibited-in-all-circumstances
+material, this leaf's own other pole). No direct exam/practice hit for this
+exact "l'accord de l'exploitant... dans tous les cas" clause; Practice Q5
+(Class 1 explosives prohibited on passenger flights except special
+exemptions — T/F) tests an adjacent 0.2.1 fact, noted as topic-level
+corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-021 — Interdiction des armes électriques (Tasers) sur la personne, en cabine et en soute
+
+**Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Marchandises dangereuses
+transportées par les passagers et l'équipage, DGR 2.3.A), les armes
+électriques (par exemple les Tasers) contenant des éléments dangereux tels
+que des explosifs, des gaz comprimés ou des piles au lithium, sont interdites
+dans les bagages de cabine, les bagages enregistrés, et sur la personne du
+passager.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 45: "Les armes électriques (par exemple les Tasers)
+contenant des éléments dangereux tels que des explosifs, des gaz comprimés,
+des piles au lithium, etc., sont interdits dans les bagages de cabine ou les
+bagages enregistrés ou au transport sur la personne." Direct, complete
+match.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 45 (DGR 2.3.A
+note), cross-checked against slide 43 (chemical-match/lithium-lighter
+prohibition note) and slide 44 (>15 AEP/>20-battery operator-approval
+note). No direct exam/practice hit for this exact Taser fact; Exam Q9
+("les passagers peuvent-ils emporter un spray au poivre") tests a different,
+exam-beyond-course item on the same general "prohibited on the person"
+topic — per blueprint binding caveat 9, pepper spray is not itself a
+course-named example — noted honestly as topic-level only, not evidence for
+this item's own Taser fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-022 — Fréquence de l'actualisation des connaissances (DGR 1.5)
+
+**Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Formation DGR 1.5), à quelle fréquence
+l'exploitant doit-il assurer l'actualisation des connaissances (formation
+continue) du personnel formé aux marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** Tous les 2 ans.
+- Tous les ans.
+- Tous les 3 ans.
+- Une seule fois, lors de l'embauche, sans actualisation périodique par la
+  suite.
+
+**Correct answer rationale:** Slide 60: "une formation initiale[;] Une
+actualisation des connaissances (tous les 2 ans)[;] Une épreuve obligatoire
+pour chaque formation (test)."
+
+**Distractor rationale (source-grounded):**
+- "Tous les ans" / "Tous les 3 ans" — plausible alternative training-
+  interval figures, not the course's own stated "tous les 2 ans" figure —
+  standard wrong-number distractors for this specific fact, not asserted
+  elsewhere in this course as real figures.
+- "Une seule fois... sans actualisation périodique" — directly contradicts
+  the same slide's own explicit inclusion of a periodic refresher item.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 60 (DGR 1.5),
+cross-checked against slide 58 (shipper's 9-item duty wheel, DGR 1.3) and
+slide 59 (operator's 8-item duty wheel, DGR 1.4), this leaf's own broader
+evidence. Corroborated at a topic level by Exam Q2/Q6 (who is responsible
+for providing information/DG inspection — both keyed to "Exploitant") and
+Practice Q7 (responsibility matrix: acceptance/identification/loading/
+étiquetage), none of which tests this specific 2-year refresher figure
+directly, noted honestly as topic-level only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-023 — Exemple de divergence de l'exploitant (DGR 2.8.3)
+
+**Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Divergences d'États et d'Exploitant DGR 2.8),
+quel exemple le cours donne-t-il pour illustrer une **divergence de
+l'exploitant** (par opposition à une divergence d'État) ?
+
+**Options:**
+- **(Correct)** AH – Air Algérie.
+- ITG – Italie.
+- OACI – Organisation de l'Aviation Civile Internationale.
+- IATA – Association Internationale du Transport Aérien.
+
+**Correct answer rationale:** Slide 64: "Divergence de l'Exploitant DGR
+2.8.3... Exemple: AH: AIR ALGERIE[,] AH-01, AH-02."
+
+**Distractor rationale (source-grounded):**
+- "ITG – Italie" — slide 63's own named example, but for a **State**
+  divergence (DGR 2.8.1), not an exploitant divergence — a direct
+  wrong-category swap from the immediately preceding slide.
+- "OACI" and "IATA" — both real bodies named on slide 65's own
+  restriction-hierarchy diagram (OACI(IT)→IATA(DGR)→Divergences
+  États→Divergences exploitants), but neither is itself a divergence
+  *example* — they are the regulatory layers the divergences sit beneath.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slides 63–65 (DGR
+2.8.1/2.8.3, named ITG/AH examples, restriction-hierarchy diagram),
+cross-checked against slides 61–62 (DGR 2.8 introduction, State/operator
+notification to OACI/IATA). Corroborated at a topic level by Exam Q7 (term
+for derogations submitted by States/airlines — "variations des États et des
+exploitants"), which tests the general concept, not this item's specific
+which-example-is-which fact, noted honestly as topic-level only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-024 — Groupe d'emballage correspondant au degré de danger le plus élevé (DGR 3.0.3)
+
+**Sub-task:** 0.4.2 Comprendre les principes généraux des groupes d'emballage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Groupes d'emballage DGR 3.0.3), quel groupe
+d'emballage correspond au degré de danger le plus élevé ?
+
+**Options:**
+- **(Correct)** Groupe d'emballage I.
+- Groupe d'emballage II.
+- Groupe d'emballage III.
+- Il n'existe pas de hiérarchie entre les groupes d'emballage ; chacun
+  présente un degré de danger équivalent.
+
+**Correct answer rationale:** Slide 68: "GROUPE D'EMBALLAGE... Groupe
+d'emballage I – Matières très dangereuses[;] Groupe d'emballage II –
+Matières moyennement dangereuses[;] Groupe d'emballage III – Matières
+faiblement dangereuses."
+
+**Distractor rationale (source-grounded):**
+- "Groupe d'emballage II" / "Groupe d'emballage III" — both real groups from
+  the same table, but respectively "moyennement" and "faiblement"
+  dangereuses, not the highest.
+- "Il n'existe pas de hiérarchie... équivalent" — directly contradicts the
+  table's own explicit degré-de-danger-ranked structure.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 68 (DGR 3.0.3).
+Slide 69's own classification exercise ("Quelle classe couvre les
+substances infectieuses ?") was deliberately **not** used as this item's
+evidence — the extracted text carries no visible marked answer key for that
+exercise, and confirming a specific division number would require outside
+regulatory knowledge not confirmed within this course's own extracted text,
+which this pass declines to do per the standing "no inference beyond the
+supplied source" rule. Corroborated at a topic level by Practice Q14 ("list
+packing groups for given danger-degree levels"), which tests the same PG
+I/II/III concept from the reverse direction, noted honestly as topic-level,
+not a direct duplicate.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-025 — Lettre du code de matériau d'emballage désignant l'acier (DGR 6.0.3.2)
+
+**Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Code de matériau d'emballage DGR 6.0.3.2),
+quelle lettre désigne un emballage en acier ?
+
+**Options:**
+- **(Correct)** A.
+- B.
+- C.
+- H.
+
+**Correct answer rationale:** Slide 92: "6.0.3.2 Code de matériau
+d'emballage... A–Acier."
+
+**Distractor rationale (source-grounded — each names a different,
+correctly-labelled material from the same slide):**
+- "B" — same slide: "B–Aluminium."
+- "C" — same slide: "C–Bois naturel."
+- "H" — same slide: "H–Matière plastique."
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 92 (DGR
+6.0.3.1/6.0.3.2, packaging type/material code tables), cross-checked against
+slide 90 (UN-mark worked example, 4G/Y/30/S/13/CH/2176/CG) and slide 89
+(marking criteria: visible/lisible/durable/résistant aux intempéries). No
+direct exam/practice hit for this exact material-code-letter fact; Exam Q14
+("UN-spec packaging symbol identification") tests the same general marking
+topic at a different level of detail, noted honestly as topic-level only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-026 — Document obligatoire accompagnant un envoi de marchandises dangereuses (DGR 8.0.1)
+
+**Sub-task:** 0.5.3 Déterminer les documents exigés
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Documentation DGR 8.0.1, Exercice), quel
+document accompagne obligatoirement un envoi de marchandises dangereuses,
+sauf exemptions spécifiques ?
+
+**Options:**
+- **(Correct)** La déclaration de l'expéditeur (Shipper's Declaration).
+- La NOTOC.
+- Le rapport de vol.
+- La fiche de données de sécurité (SDS) uniquement, sans déclaration de
+  l'expéditeur.
+
+**Correct answer rationale:** Slide 99: "Une «Déclaration de l'expéditeur
+pour les marchandises dangereuses» (DGD) doit être remplie par l'expéditeur
+pour chaque envoi de marchandises dangereuses, sauf dans les cas prévus au
+8.0.1.2" — directly matching the exercise's own "sauf exemptions
+spécifiques" framing at slide 116.
+
+**Distractor rationale (source-grounded):**
+- "La NOTOC" and "Le rapport de vol" — both real options offered by the
+  exercise itself at slide 116 ("A. NOTOC[,] B. Déclaration de l'expéditeur
+  (Shipper's Declaration)[,] C. Rapport de vol"), but neither is the
+  document slide 99 states is mandatory for the shipment itself, subject to
+  exemptions.
+- "La SDS uniquement, sans déclaration de l'expéditeur" — contradicts slide
+  99's own DGD requirement; the SDS (slide 101) is a distinct, additional
+  safety-information document, not a substitute for the shipper's
+  declaration.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 116 (exercise
+stem, this leaf's own KOST course trace per the Stage 1 draft's sub-task
+enumeration), answered by direct content match with slide 99's DGD
+requirement (DGR 8.0.1). **The extracted exercise slide carries no marked
+answer key in the extraction; the correct option is identified by content
+match with slide 99's own stated fact, not by a key marker** — the same
+honest-disclosure method already used in Batch 1 for un-keyed
+course/exam material. Cross-checked against slide 100 (Air Waybill DGR 8.2
+handling-information box wording) and slide 101 (SDS).
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-027 — Disponibilité des renseignements d'urgence pour le commandant de bord (obligation de l'employeur)
+
+**Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
+**Type:** True/False
+
+> **Note on ceiling:** this leaf carries a ceiling of 1 (sample 0–1),
+> "adequate, generic-awareness only" per the Stage 2A blueprint — the same
+> constraint applied to this identical leaf in every prior function's
+> blueprint. This single item exhausts this leaf's own ceiling; no further
+> item may be drawn from this pool.
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Information sur l'intervention
+d'urgence — responsabilités de l'exploitant), pour toute expédition
+nécessitant une déclaration de marchandises dangereuses, l'exploitant doit
+s'assurer que les renseignements appropriés en cas d'urgence sont
+immédiatement disponibles en tout temps, y compris à la disposition du
+commandant de bord.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 117: "Pour toute expédition avec déclaration de
+marchandises dangereuses exigée, l'exploitant doit s'assurer que les
+renseignements appropriés sont immédiatement disponibles en tout temps afin
+d'être utilisés en cas d'intervention d'urgence occasionnée par un accident
+ou un incident mettant en cause des marchandises dangereuses[.] Ces
+renseignements doivent être à la disposition du commandant de bord." Direct,
+complete match.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 117 — the same
+slide 0.6.1's own Batch 1 evidence (Q-7.7-008) sits adjacent to, but this
+item draws specifically on this slide's own employer-obligation clause, a
+distinct fact from Q-7.7-008's own slide-119 4-step initial-response
+sequence. No direct exam/practice hit for this exact employer-obligation
+statement, consistent with every prior function's finding for this
+identical leaf.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-028 — Documentation requise pour les quantités limitées, par contraste avec les quantités exceptées (DGR 2.7 vs 2.6)
+
+**Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Quantités limitées DGR 2.7),
+comme pour les marchandises dangereuses en quantités exceptées (DGR 2.6), la
+déclaration de l'expéditeur, la liste de contrôle d'acceptation et la NOTOC
+ne sont pas requises pour les marchandises dangereuses en quantités
+limitées.
+
+**Correct answer:** Faux.
+
+**Rationale:** Slide 74 directly contradicts the stem: "Déclaration de
+l'expéditeur requise[.] La liste de contrôle d'acceptation est requise[.]
+La NOTOC est requis." — the **opposite** of the excepted-quantities
+documentation exemptions already drawn in Batch 1's Q-7.7-004 (slide 72,
+DGR 2.6). The course explicitly distinguishes the two quantity-exemption
+regimes: DGR 2.6 (quantités exceptées) waives these three documents; DGR 2.7
+(quantités limitées) requires all three.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 74 (DGR 2.7),
+directly cross-checked against slide 72 (DGR 2.6, this batch's own Batch 1
+Q-7.7-004 evidence) to confirm the contrast is genuine and not an
+extraction error — the two slides state opposite documentation requirements
+for two distinctly-numbered DGR provisions, this item's own deliberate
+contrast-pair design. No direct exam/practice hit for this specific
+limited-quantities documentation list; the exam/practice book's own
+quantity-related content (p.80–81 exercises) tests UN-number/PSN lookups,
+not this documentation distinction, noted honestly as no direct
+corroboration.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-029 — Signification du symbole « * » dans la Liste des marchandises dangereuses (DGR 4.2)
+
+**Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Liste des marchandises dangereuses —
+Symboles), que signifie le symbole « * » associé à une entrée de la Liste
+des marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** Un ou plusieurs noms techniques sont requis (voir
+  4.1.2.1(d)).
+- Des informations supplémentaires figurent à l'annexe A.
+- Le nom doit être classé en ordre alphabétique strict, comme s'il
+  s'agissait d'un seul mot.
+- Le symbole fait partie intégrante de la désignation exacte d'expédition
+  (PSN).
+
+**Correct answer rationale:** Slide 77: "«*» -Nom(s) technique(s) requis.
+Voir 4.1.2.1(d)."
+
+**Distractor rationale (source-grounded — each is drawn from the same
+slide, either as a swapped fact or a direct contradiction):**
+- "Des informations supplémentaires figurent à l'annexe A" — the same
+  slide's own meaning of the **different** symbol "†": "† -Des informations
+  supplémentaires figurent à l'annexe A" — a genuine swapped-symbol
+  distractor.
+- "Le nom doit être classé en ordre alphabétique strict..." — a real,
+  different rule from the same slide (how PSNs are ordered in the list
+  generally), not what "*" itself means.
+- "Le symbole fait partie intégrante de la désignation... (PSN)" — directly
+  contradicts the same slide's own closing clause: "Les symboles «*» et
+  «†» ne font pas partie du nom (PSN)."
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 77 (DGR 4.2 list
+symbols), cross-checked against slide 78 (bold/light-face PSN convention)
+and slide 76 (this batch's own Batch 1 Q-7.7-003 evidence, the column-letter
+structure — a related but distinct fact from this item's symbol-meaning
+focus). No direct exam/practice hit for this exact symbol-meaning fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-030 — Critère de classement de la Liste numérique des marchandises dangereuses (DGR 4.3)
+
+**Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Liste numérique des marchandises dangereuses
+DGR 4.3), selon quel critère les marchandises y sont-elles classées ?
+
+**Options:**
+- **(Correct)** L'ordre numérique croissant des numéros ONU/ID.
+- L'ordre alphabétique strict de la désignation exacte d'expédition en
+  français.
+- Le numéro de page associé dans la liste alphabétique.
+- L'ordre croissant du groupe d'emballage (I, II, III).
+
+**Correct answer rationale:** Slide 79: "Liste des marchandises dangereuses
+DGR 4.3 - Liste numérique des marchandises dangereuses... Ordre numérique
+croissant des numéros ONU/ID."
+
+**Distractor rationale (source-grounded, third option honestly flagged as
+untaught):**
+- "L'ordre alphabétique strict... en français" — this is the DGR **4.2**
+  alphabetical list's own ordering principle (slide 77: "Les noms sont
+  donnés dans l'ordre alphabétique strict du PSN"), a genuinely different
+  list from the DGR 4.3 numeric list this item tests — a correct
+  swapped-list distractor.
+- "Le numéro de page associé dans la liste alphabétique" — a real listed
+  field from the **same** slide 79 (one of the pieces of information the
+  numeric list itself provides per entry), misread here as the sort
+  criterion rather than a cross-reference field — a parsing distractor.
+- "L'ordre croissant du groupe d'emballage" — **untaught, not asserted as
+  a real course fact.** The course does not state anywhere that the numeric
+  list is ordered by packing group; flagged honestly as a plausible-sounding
+  but unsupported claim.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 79 (DGR 4.3),
+cross-checked against slide 77 (DGR 4.2's own alphabetical ordering
+principle, this item's own first distractor's evidence) and this batch's
+own Q-7.7-029 (symbols, same slide range). No direct exam/practice hit for
+this exact ordering-criterion fact; the exam/practice book's own UN-number
+exercises (p.80–81) test lookups within these lists, not their own internal
+ordering logic, noted honestly as no direct corroboration.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-031 — Catégorie non exemptée de figurer sur la NOTOC
+
+**Sub-task:** 6.2.2 Interpréter la NOTOC
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Notification des pilotes — Exemptions),
+laquelle des catégories suivantes **n'est PAS** exemptée de figurer sur la
+NOTOC ?
+
+**Options:**
+- **(Correct)** Une marchandise dangereuse classique soumise à une
+  déclaration complète de l'expéditeur.
+- Les marchandises dangereuses en quantités exceptées.
+- Les masses magnétisées.
+- Les organismes génétiquement modifiés (OGM).
+
+**Correct answer rationale:** Slide 109 lists exactly six exempted
+categories: "les marchandises dangereuses en quantités exceptées[;] les
+colis de matières radioactives en quantités exceptées[;] Les masses
+magnétisées[;] Les OGM[;] Les Matières biologiques, catégories B[;] Les
+marchandises dangereuses du tableau 9.5.A." A standard/"classique" DG
+shipment — the category the entire preceding NOTOC content-field section
+(slides 102–106, explicitly headed "Notification des pilotes marchandises
+dangereuses classiques") is about — is not on this exemption list and
+therefore requires the full NOTOC treatment.
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is named verbatim on slide 109's own exemption list):**
+- "Les marchandises dangereuses en quantités exceptées" — first item on
+  slide 109's list.
+- "Les masses magnétisées" — named on slide 109's list.
+- "Les OGM" — named on slide 109's list.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 109 (NOTOC
+exemptions list), cross-checked against slides 102–106 (the "marchandises
+dangereuses classiques" content-field section, this batch's own Batch 1
+Q-7.7-001 evidence) to confirm the "classique" vs. exempted-category
+contrast is genuine, not an extraction artifact. No direct exam/practice hit
+for this exact exemption-list fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-032 — Aéroport de déchargement et dérogations d'État comme champs de la NOTOC
+
+**Sub-task:** 6.2.2 Interpréter la NOTOC
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Notification des pilotes —
+marchandises dangereuses classiques), la NOTOC doit indiquer, le cas
+échéant, l'aéroport de déchargement du colis ainsi que les dérogations
+d'État applicables.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 105: "L'aéroport de déchargement du colis[.] La ou les
+dérogations d'Etat le cas échéant." Direct, complete match.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 105 (NOTOC
+content-field list, second half), cross-checked against slide 104 (first
+half of the same field list, this batch's own Batch 1 Q-7.7-001/Q-7.7-012
+evidence) — this item tests two distinct fields (discharge airport, State
+derogations) not drawn by either of those prior items, which focused
+respectively on the who/when/what summary and the class/division-or-
+subsidiary-risk field. No direct exam/practice hit for this exact
+discharge-airport/State-derogation fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.7-033 — Exigence de langue anglaise pour les renseignements écrits fournis au commandant de bord
+
+**Sub-task:** 6.2.2 Interpréter la NOTOC
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Notification des pilotes),
+outre les langues que peut exiger l'État de l'exploitant, l'anglais devrait
+être utilisé pour les renseignements écrits fournis au commandant de bord.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 108: "Outre les langues que peut exiger l'Etat de
+l'exploitant, l'anglais devrait être utilisé pour les renseignements fournis
+par écrit au commandant de bord." Direct, complete match.
+
+**Source basis:** Tier B — KOST Function 7.7 course, slide 108 (NOTOC
+accessibility/language requirement), cross-checked against Q-7.7-011's own
+prior use of this same slide (the "agent des opérations aériennes"
+routine-access clause, used there only as a distractor's grounding for a
+different, ATC-restricted item, per blueprint binding caveat 3) — this item
+tests a genuinely distinct fact from the same slide (the language
+requirement, not the accessibility-to-which-party fact), not a duplicate of
+Q-7.7-011's own tested fact. No direct exam/practice hit for this exact
+language-requirement fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Batch 2 summary table
+
+| ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
+|---|---|---|---|---|---|---|
+| Q-7.7-016 | 0.1.1 Définition formelle DGR 1.0 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 15 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-017 | 0.1.2 AIEA — matières radioactives | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 19–22 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-018 | 0.1.3 Champ d'application DGR 1.2.1 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 30 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-019 | 0.1.4 Définition du Risque | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 31–32 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-020 | 0.2.1 Accord de l'exploitant — exceptions DGR 1.2.7 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-021 | 0.2.3 Interdiction des Tasers | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-022 | 0.3.1 Actualisation des connaissances — 2 ans | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 60 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-023 | 0.3.3 Divergence exploitant — AH Air Algérie | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 63–65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-024 | 0.4.2 Groupe d'emballage I — degré le plus élevé | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 68 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-025 | 0.5.1 Code matériau — A = Acier | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-026 | 0.5.3 Document obligatoire — DGD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 99, 116 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-027 | 0.6.2 Disponibilité info urgence (employeur) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 117 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-028 | 0.4.1 Quantités limitées DGR 2.7 vs 2.6 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-029 | 0.4.1 Symbole « * » — DG List | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 77 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-030 | 0.4.1 Critère de tri — Liste numérique DGR 4.3 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 79 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-031 | 6.2.2 NOTOC — catégorie non exemptée | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 109 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-032 | 6.2.2 NOTOC — aéroport déchargement/dérogations | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-033 | 6.2.2 NOTOC — exigence de langue anglaise | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+**Batch composition:** 11 MCQ + 7 True/False. Block spread: Block 0 = 15
+(12 newly-touched leaves + 3 further 0.4.1 items), Block 6.2 = 3 (all
+6.2.2). Combined with Batch 1 (9 MCQ + 6 T/F, Block 0 = 7, Block 6.2 = 5,
+Block 7 = 3), the function-wide running total is **33 items** (20 MCQ + 13
+T/F; Block 0 = 22, Block 6.2 = 8, Block 7 = 3) of the 85-question ceiling.
+
+## What this batch does NOT do
+
+- Does not exceed any per-sub-task ceiling in
+  `docs/DGR_STAGE2A_FUNCTION_7.7_BLUEPRINT.md` — see the running-total table
+  above; every leaf's Batch 1 + Batch 2 combined count sits at or below its
+  blueprint ceiling (0.1.3 and 0.6.2 now sit exactly at their own ceiling of
+  1, correctly not exceeded).
+- Does not draft any item against the confirmed `SOURCE GAP` leaf (0.3.2) —
+  count remains 0, no exception, per binding caveat 1.
+- Does not draft any item from 6.2.1 this batch — the same real-but-thin
+  evidence noted in Batch 1 still applies, and this leaf was outside this
+  batch's own instructed scope (the 12 uncovered Block 0 leaves plus
+  0.4.1/6.2.2 headroom); it remains available for a future batch at its own
+  sample 0–1 ceiling.
+- Does not draft a second item against 0.4.3 or 6.2.4 — both are already at
+  their own full ceiling of 1 (sample 0–1) from Batch 1; drafting further
+  would exceed the blueprint's binding restricted-framing caps.
+- Does not draw further items from 0.2.2, 0.5.2, 0.6.1, 6.2.3, 6.2.5, or the
+  three Block 7 pools — each already carries a Batch 1 item and was outside
+  this batch's own instructed "round out 0.4.1/6.2.2" scope; real headroom
+  remains in several (0.2.2: 4 of 5 remaining; 0.6.1: 4 of 5 remaining;
+  0.5.2: 3 of 5 remaining) for a possible future batch.
+- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification for
+  any of these 18 items — the `chrome-devtools` MCP Bookshelf session was
+  confirmed this pass to be either showing a Sign-In screen or closed
+  entirely, so this remains blocked exactly as it was for Batch 1 and every
+  prior function's batches.
+- Does not mark any item `APPROVED` — no qualified reviewer exists in this
+  pass.
+- Does not touch Moodle or any live/production question-bank copy.
+- Does not modify or overwrite any Batch 1 item (`Q-7.7-001`–`015`) above —
+  this batch is purely additive.

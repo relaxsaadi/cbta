@@ -1,3 +1,28 @@
+# DGR Stage 1 — Function 7.10 — CROSS-VALIDATED (second pass CONFIRMED, two minor corrections)
+
+**Status update (2026-08-25): CROSS-VALIDATED.** An independent second pass
+is recorded in `docs/DGR_STAGE1_FUNCTION_7.10_CROSSVALIDATION.md`. Verdict:
+CONFIRMED — the 23-leaf-sub-task enumeration, the Block 0/3/5/7 structure,
+all four star ratings (including Function 7.10's own Block 7 single-★
+rating, independently re-verified), the three Block 0 wording variants vs.
+Function 7.5, the Block 5 (5.1 vs. Function 7.9's 5.2) distinction, the
+Cadre CBTA wrong-function finding, both SOURCE GAP/thin-evidence findings,
+and the DGR Part 1.7/p.68–69 findings are all independently reproduced.
+**Two minor, non-substantive corrections were made on cross-validation**:
+(1) the "fret" keyword count below is corrected from 4 to 5 occurrences
+(course page 30 contains two separate "fret" occurrences, not one); (2) the
+Cadre CBTA cross-check's claim of "zero occurrences of 'sûreté'" is
+corrected — the word appears once, inside the document's own
+self-contradictory function-mapping table, under the *wrong* function code
+(7.6, not 7.10) — see the cross-validation file for full detail. Neither
+correction changes the block structure, star ratings, leaf count, or any
+SOURCE GAP conclusion below. This file's own body text is left otherwise
+unchanged from the first-pass draft (with the two corrections applied
+in-line below); the cross-validation file is the authoritative record of
+what was independently re-checked and why.
+
+---
+
 # DGR Stage 1 — Function 7.10 — PROVISIONAL DRAFT — NOT YET VALIDATED
 
 **Function 7.10**: *Personnel chargé du contrôle de sécurité (bagages, fret
@@ -220,11 +245,22 @@ matières" (physical segregation/loading-plan compatibility), "Information
 and "Traçabilité opérations" — i.e. essentially a **shipper/cargo-agent
 and NOTOC-drafting role**, not a passenger/baggage/crew **security
 screening** role. A direct keyword check of the document's full extracted
-text confirms **zero occurrences** of "sûreté", "screening", "scanner", or
-"contrôle de sécurité" — the words that would be unavoidable in any
-genuine description of Function 7.10 — while "NOTOC" (1), "chargement"
-(implicit in "plan chargement"), and "acceptation" (repeated) all appear
-in a clearly cargo-operations framing. The document's own internal
+text confirms **zero occurrences** of "screening", "scanner", or the exact
+phrase "contrôle de sécurité" — the words/phrase that would be unavoidable
+in any genuine description of Function 7.10 — while "NOTOC" (3, all three
+clustered inside the single "Information équipage" competency row's own
+objective/method/evaluation columns; corrected on cross-validation from an
+originally reported "(1)"), "chargement" (implicit in "plan chargement"),
+and "acceptation" (repeated) all appear in a clearly cargo-operations
+framing. **Correction (cross-validation, see
+`docs/DGR_STAGE1_FUNCTION_7.10_CROSSVALIDATION.md` part (d)): "sûreté"
+itself is not a zero-occurrence word — it appears once, but only inside
+the document's own internal, self-contradictory "correspondance Table
+1.5.A" mapping table below, where it is misattributed to *Function 7.6*
+("7.6 | Personnel sûreté | ... | Contrôle sécurité"), not to Function 7.10
+itself. This does not weaken the wrong-function conclusion — if anything it
+reinforces it, since the one place this document does associate "sûreté"
+with a function code, it assigns that code incorrectly.** The document's own internal
 "correspondance Table 1.5.A" cross-reference table is also **directly
 self-contradictory with the real KOST course material already confirmed
 for other functions in this program**: it labels its own row "7.10 =
@@ -416,16 +452,21 @@ explicitly name **"fret et courrier"** ("freight and mail") alongside
 baggage as within this role's scope, and Block 3 ("Traitement et
 acceptation du fret") is rated at the function's highest weight (★★★,
 tied with Block 5). However, a full-text keyword search of the 114-slide
-course for **"fret"** returns only **four** hits total: the title slide
-itself, one incidental mention inside the IATA-membership/applicability
-slide (p.30, "agents de fret" as a class of entity the DGR applies to,
+course for **"fret"** returns **five** hits total (corrected on
+cross-validation from an original count of four — see
+`docs/DGR_STAGE1_FUNCTION_7.10_CROSSVALIDATION.md` part (e); course p.30
+contains two separate "fret" occurrences, not one): the title slide
+itself, the two mentions inside the IATA-membership/applicability
+slide (p.30: "...l'accord multilatéral de trafic intercompagnies de
+l'IATA-fret" and "agents de fret" as a class of entity the DGR applies to,
 unrelated to this function's own duties), one mention inside the security
 personnel's own role-and-responsibility slide (p.68, "...aux marchandises
 dangereuse[s]: Mettre en œuvre les procédures de contrôle prévues dans le
 plan (inspection des passagers, équipages, bagages, **fret**, zones
 sécurisées)" — a single clause, not a dedicated procedure), and one
 mention inside the reporting slide (p.107, "...découvertes dans le
-**fret** ou le courrier"). **"Courrier" appears only twice** — the title
+**fret** ou le courrier"). **"Courrier" appears only twice** (confirmed
+exactly on cross-validation) — the title
 slide and that same p.107 reporting sentence. **Unlike Function 7.2's
 course, which built a dedicated multi-slide cargo-acceptance workflow
 (AWB/packing-list/invoice review, "Not Restricted" endorsement, SDS

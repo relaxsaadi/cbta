@@ -546,15 +546,32 @@ the EN draft here as replacing or overriding the FR item of record.
 | Isoler / Isolement / Séparation | Isolate / Isolation / Separation | Standard | Q-7.2-008, 016, 028 |
 | Superviseur | Supervisor | Standard | Q-7.2-008 |
 | Envoi | Shipment | Standard | Most items |
-| Produits de consommation | Consumer product / **"Consumer Commodity"** (formal IATA term, e.g. ID8000) | **Flagged** — reviewer to pick one form for consistency | Q-7.2-024 |
+| Produits de consommation | Consumer product / **"Consumer Commodity"** (formal IATA term, e.g. ID8000) | **Flagged** — reviewer to pick one form for consistency | Q-7.2-024, 033 |
 | Symbole d'avertissement | Warning symbol | Standard | Q-7.2-024 |
 | Marquage à spécification | Specification Marking | Standard | Q-7.2-019 |
 | Case « Renseignements sur la manutention » (LTA) | "Handling Information" box (AWB) | Standard | Q-7.2-020 |
-| Documents d'expédition / de transport | Shipment documents / transport documents | Standard | Q-7.2-006, 007, 020 |
-| Conservation (des documents) | Retention | Standard | Q-7.2-006, 007, 020 |
-| Agrément | Approval / Authorization | Standard | Q-7.2-013 |
-| Intervention d'urgence | Emergency response | Standard | Q-7.2-021, 022 |
+| Documents d'expédition / de transport | Shipment documents / transport documents | Standard | Q-7.2-006, 007, 020, 044, 047 |
+| Conservation (des documents) | Retention | Standard | Q-7.2-006, 007, 020, 044, 047 |
+| Agrément | Approval / Authorization | Standard | Q-7.2-013, 035, 036 |
+| Intervention d'urgence | Emergency response | Standard | Q-7.2-021, 022, 045 |
 | Autorités aéroportuaires | Airport authorities | Standard | Q-7.2-022 |
+| Article / Substance | Article / Substance | Course-defined terminology pair; cognate translation, not independently checked against a Tier A English glossary text this session | Q-7.2-029 |
+| Base Réglementaire | Regulatory Basis | Standard | Q-7.2-030 |
+| Document « terrain » | "Field" document (working translation of "document terrain") | **Flagged** — no confirmed standard IATA English equivalent identified this session; reviewer to confirm preferred rendering | Q-7.2-030 |
+| COMAT | COMAT (Company Materiel — aircraft spare parts/materials) | Standard aviation abbreviation; kept unchanged | Q-7.2-033 |
+| Instruction d'emballage (PI) | Packing Instruction (PI) | Standard IATA term | Q-7.2-034 |
+| Formation initiale / Actualisation des connaissances / Épreuve obligatoire | Initial training / Knowledge refresher / Mandatory test | Standard | Q-7.2-036 |
+| Niveaux de restrictions | Levels of Restriction | Standard | Q-7.2-038 |
+| État(s) des escales de transit | State(s) of transit stops | Standard | Q-7.2-037 |
+| Risque d'explosion massive / Risque de projection (divisions Classe 1) | Mass explosion hazard / Projection hazard | Standard IATA Class 1 division terminology | Q-7.2-039 |
+| Code IMP (ex. REX) | IMP code (e.g. REX) | **Flagged** — course abbreviation kept as-is; reviewer to confirm its standard expansion/English usage | Q-7.2-039 |
+| Substance infectieuse | Infectious Substance | Standard | Q-7.2-040 |
+| Toxiques infectieuses (nom d'étiquette Classe 6) | Toxic and Infectious Substances | Candidate matching the standard IATA Class 6 label name; **flagged** for reviewer confirmation | Q-7.2-041 |
+| Matières biologiques de Catégorie B | Category B biological substances | Standard | Q-7.2-042 |
+| Vérifier la cohérence | Check/verify consistency | Standard | Q-7.2-046 |
+| Registre interne (traçabilité et audit) | Internal register (traceability and audit) | Standard | Q-7.2-046 |
+| Pictogramme SGH (Système Général Harmonisé) | GHS pictogram (Globally Harmonized System) | Standard | Q-7.2-049 |
+| Contenant | Container | Standard | Q-7.2-031 |
 
 **Reading this table:** "Standard" means the term is well-established
 IATA/UN dangerous-goods English usage with low translation risk. Consistent
@@ -566,7 +583,11 @@ questions for the reviewer, not settled translations: **"responsable DG,"
 "SCoETDG" vs. "SCETDG,"** and **"produits de consommation"/"Consumer
 Commodity"** each recur across multiple items, so a single reviewer
 decision on each will need to be applied consistently across the whole
-Function 7.2 EN bank, not decided item-by-item.
+Function 7.2 EN bank, not decided item-by-item. Batch 3 adds three further
+open flags on the same basis, none yet recurring elsewhere in the bank:
+**"document terrain,"** **"code IMP,"** and **"Toxiques infectieuses"/
+"Toxic and Infectious Substances."** See the "## Batch 3" section below for
+the item-level detail.
 
 **Spelling convention:** British/IATA spelling used throughout ("labelling"
 not "labeling"); "Oxidizer" uses the US -ize form matching common current
@@ -672,3 +693,378 @@ verification gate.
 - Q-7.2-024 is the only True/False item in this package whose correct
   answer is **False**; flagged explicitly in the reviewer checklist to
   avoid a polarity error in the answer key.
+
+---
+
+# Batch 3 — Q-7.2-029 to Q-7.2-049 (21 items)
+
+Prepared as bilingual (FR→EN) draft translation material for the 21
+Function 7.2 production-bank items drafted after Batches 1+2
+(`Q-7.2-029`–`049`). Same status discipline, provenance basis, and
+reviewer-authority rules as the "Batches 1 + 2" section above apply
+unchanged: **no item below may be marked `BILINGUAL TECHNICAL REVIEW
+COMPLETE` or `APPROVED`**; every item's EN status is `BILINGUAL TECHNICAL
+REVIEW REQUIRED` and every approval field is `PENDING REVIEWER + DATE`.
+This section does not change any item's FR status — it remains exactly
+what `docs/DGR_PRODUCTION_BANK_7.2.md` records for each item: `DRAFT —
+Tier B only, SOURCE REQUIRED for Tier A` (see that file's Batch 3 "Status
+of this batch" section). Per `.claude/rules/dgr-stage2b.md` rule 5, FR
+source verification and EN bilingual technical review remain separate
+gates; this section advances only the EN drafting stage.
+
+As with Batches 1+2, all 21 items' complete FR question text — stem and
+every answer option — is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.2.md`'s
+Batch 3 section (`Q-7.2-029`–`049`), not reconstructed or paraphrased from
+a separate source-basis note. The Tier A regulatory-verification risk is
+unchanged and still entirely open for every item below.
+
+## Q-7.2-029 — Distinction terminologique « Article » / « Substance »
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Généralités), comment le cours distingue-t-il un « Article » d'une « Substance » ?"*
+  - Options: **(Correct)** *"Un article est un objet dans sa forme complète (ex. une voiture) ; une substance, qui peut être solide, liquide ou gazeuse, est ce qui est éventuellement contenu dans un article (ex. le carburant est une substance dans un article ; le liquide des freins est une substance)."* / *"Un article est un produit, un objet ou une substance susceptible de présenter un danger pour la santé, la sécurité, la propriété ou l'environnement ; une substance est ce qui n'entre dans aucune de ces catégories."* / *"Un article est tout envoi transporté par avion qui n'est pas déclaré, identifié ou traité comme marchandise dangereuse ; une substance est un envoi correctement déclaré."* / *"Un article est le degré de probabilité qu'un danger cause réellement un dommage ; une substance est ce qui pourrait potentiellement causer des dommages."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General Provisions), how does the course distinguish an 'Article' from a 'Substance'?"*
+  - Options: **(Correct)** *"An article is an object in its complete form (e.g., a car); a substance, which may be solid, liquid, or gaseous, is what may be contained within an article (e.g., fuel is a substance within an article; brake fluid is a substance)."* / *"An article is a product, object, or substance capable of posing a hazard to health, safety, property, or the environment; a substance is anything that does not fall into any of these categories."* / *"An article is any shipment transported by air that is not declared, identified, or treated as dangerous goods; a substance is a properly declared shipment."* / *"An article is the degree of probability that a hazard will actually cause harm; a substance is something that could potentially cause harm."*
+- **Terminology decision:** "Article"/"Substance" kept as direct cognates
+  (see terminology table addition) — a course-defined pair, not
+  independently checked against a Tier A English glossary this session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-030 — Le DGR de l'IATA comme document « terrain » (DGR — Base Réglementaire)
+
+- **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Base Réglementaire), comment le manuel DGR de l'IATA est-il considéré, et par quelle organisation est-il reconnu comme tel ?"*
+  - Options: **(Correct)** *"Comme le document « terrain », reconnu comme tel par l'OACI."* / *"Comme l'organisme qui élabore des procédures recommandées pour le transport de toutes les marchandises dangereuses, à l'exception des matières radioactives."* / *"Comme l'organisme qui élabore des recommandations pour le transport sécuritaire des matières radioactives uniquement."* / *"Comme le texte codifié dans l'Annexe 18 et dans les Instructions techniques de l'OACI."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Regulatory Basis), how is the IATA DGR manual regarded, and by which organization is it recognized as such?"*
+  - Options: **(Correct)** *"As the 'field' document ('document terrain'), recognized as such by ICAO."* / *"As the body that develops recommended procedures for the transport of all dangerous goods, with the exception of radioactive material."* / *"As the body that develops recommendations for the safe transport of radioactive material only."* / *"As the text codified in Annex 18 and in ICAO's Technical Instructions."*
+- **Terminology decision — FLAGGED:** "document terrain" has no confirmed
+  standard IATA English equivalent identified this session; rendered
+  literally as **"'field' document"** with the French term kept
+  parenthetically. Reviewer should confirm whether KOST's own English
+  materials (if any) use a different established term.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-031 — Exemple travaillé : danger et risque du liquide inflammable
+
+- **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (exemple travaillé — Liquide inflammable), dans cet exemple précis, qu'est-ce qui illustre concrètement le « risque », par opposition au « danger » ?"*
+  - Options: **(Correct)** *"La probabilité que le liquide s'enflamme lors de son transport aérien — par exemple si son contenant est mal fermé, ou exposé au soleil ou à une source de chaleur."* / *"Son inflammabilité elle-même, le fait qu'il puisse s'enflammer facilement."* / *"Quelque chose qui pourrait potentiellement causer des dommages."* / *"Toute forme de liquide, de vapeur, de poussière, de fumées ou de gaz qui pourrait se déverser, fuir ou être mal utilisé."*
+- **EN draft translation:**
+  - Stem: *"Per the course (worked example — Flammable Liquid), in this specific example, what concretely illustrates 'risk,' as distinguished from 'hazard'?"*
+  - Options: **(Correct)** *"The probability that the liquid will ignite during air transport — for example if its container is poorly closed, or exposed to sunlight or a heat source."* / *"Its flammability itself, the fact that it can ignite easily."* / *"Something that could potentially cause harm."* / *"Any form of liquid, vapor, dust, fumes, or gas that could spill, leak, or be misused."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-032 — Raisons de la non-déclaration des marchandises dangereuses
+
+- **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours, pour quelles raisons les expéditeurs ou les passagers ne déclarent-ils pas les marchandises dangereuses ?"*
+  - Options: **(Correct)** *"Les coûts d'expédition généralement plus élevés pour les marchandises dangereuses, les pratiques indésirables, et la mauvaise compréhension des règles."* / *"Le degré de probabilité (forte ou faible chance) qu'un danger quelconque cause réellement un dommage."* / *"L'exigence légale, la responsabilité réglementaire, la sécurité opérationnelle, l'efficacité et la satisfaction."* / *"L'obligation pour tout exploitant d'établir un programme de formation sur les marchandises dangereuses, qu'il soit ou non agréé pour le fret DG."*
+- **EN draft translation:**
+  - Stem: *"Per the course, for what reasons do shippers or passengers fail to declare dangerous goods?"*
+  - Options: **(Correct)** *"The generally higher shipping costs for dangerous goods, undesirable practices, and poor understanding of the rules."* / *"The degree of probability (high or low likelihood) that any hazard will actually cause harm."* / *"The legal requirement, regulatory responsibility, operational safety, efficiency, and satisfaction."* / *"The requirement for every operator to establish a dangerous goods training program, whether or not it is approved to carry DG cargo."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-033 — COMAT : pièces d'avion et articles courants pouvant contenir des MD cachées
+
+- **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Exemples de DG cachées DGR 2.2.4), que sont les COMAT et pourquoi présentent-ils un risque de marchandises dangereuses cachées ?"*
+  - Options: **(Correct)** *"Des pièces détachées d'avion ou d'autres articles (par ex. fusées de détresse, trousses de premiers secours) généralement non déclarés, mais pouvant contenir des générateurs chimiques d'oxygène, des gaz comprimés ou des liquides inflammables."* / *"Des produits de consommation courante systématiquement accompagnés d'une Déclaration de l'expéditeur (DGD), donc toujours correctement déclarés."* / *"Des colis présentant un centre de gravité variable, laissant supposer un contenu liquide à l'intérieur."* / *"Des emballages réutilisés portant une étiquette de danger, de manutention liée au transport de marchandises dangereuses, ou un marquage spécifique pour MD."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Examples of Hidden DG, DGR 2.2.4), what is COMAT, and why does it present a hidden dangerous goods risk?"*
+  - Options: **(Correct)** *"Aircraft spare parts or other articles (e.g., distress flares, first-aid kits) that are generally not declared, but may contain chemical oxygen generators, compressed gases, or flammable liquids."* / *"Common consumer products systematically accompanied by a Shipper's Declaration (DGD), and therefore always correctly declared."* / *"Packages with a shifting/variable center of gravity, suggesting liquid content inside."* / *"Reused packaging bearing a hazard label, a handling label related to the transport of dangerous goods, or specific DG marking."*
+- **Terminology decision:** "COMAT" kept unchanged (standard aviation
+  abbreviation, "Company Materiel"). "Produits de consommation courante"
+  rendered as **"Common consumer products"** — same open flag already
+  carried in the terminology table for Q-7.2-024's "Consumer Commodity"
+  question; reviewer's single decision there should also govern this
+  item's option 2.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-034 — Batteries au lithium : dispositions spéciales selon le type et l'état de charge
+
+- **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Batteries lithium-ion et métal), à quoi sont soumises les batteries au lithium transportées par avion, et qu'est-ce qui fait varier ce traitement réglementaire ?"*
+  - Options: **(Correct)** *"À des dispositions spéciales (classification, emballage, déclaration) qui varient selon le type de batterie (lithium métal ou lithium-ion) et son état de charge — par exemple, un numéro ONU distinct par type (UN 3090/3091 pour le lithium métal, UN 3480/3481 pour le lithium-ion) et une instruction d'emballage différente (PI 968 contre PI 965)."* / *"Aucune règle particulière, les batteries au lithium n'étant pas classées comme marchandises dangereuses par le DGR."* / *"Uniquement à la réglementation maritime ; le transport aérien des batteries au lithium n'est pas couvert par le DGR."* / *"Des règles applicables uniquement lorsque leur masse dépasse 1000 kg."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Lithium-ion and Metal Batteries), what are lithium batteries transported by air subject to, and what causes this regulatory treatment to vary?"*
+  - Options: **(Correct)** *"Special Provisions (classification, packing, declaration) that vary depending on the battery type (lithium metal or lithium-ion) and its state of charge — for example, a distinct UN Number per type (UN 3090/3091 for lithium metal, UN 3480/3481 for lithium-ion) and a different Packing Instruction (PI 968 versus PI 965)."* / *"No particular rule, as lithium batteries are not classified as dangerous goods under the DGR."* / *"Maritime regulations only; air transport of lithium batteries is not covered by the DGR."* / *"Rules that apply only when their mass exceeds 1000 kg."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-035 — Conformité de l'expéditeur et sanctions légales (DGR 1.3.1)
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Responsabilités de l'expéditeur — Conformité DGR 1.3.1), à quelles réglementations l'expéditeur doit-il se conformer, et que risque-t-il en cas de violation ?"*
+  - Options: **(Correct)** *"Il doit se conformer entièrement au DGR (Instructions techniques de l'OACI) ainsi qu'à toute réglementation applicable établie par les États d'origine, de transit et de destination ; en cas de violation, il peut être en infraction avec la loi nationale et soumis à des sanctions légales."* / *"Il doit uniquement se conformer à la réglementation de l'État de destination de l'envoi ; aucune sanction n'est prévue en cas de manquement."* / *"Il doit se conformer aux responsabilités attribuées à l'exploitant (acceptation, chargement, entreposage, inspection, renseignement, compte rendu, conservation des documents, formation)."* / *"Il doit uniquement obtenir un agrément spécifique de l'IATA pour transporter des marchandises dangereuses en tant que fret."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Shipper's Responsibilities — Compliance, DGR 1.3.1), which regulations must the shipper comply with, and what does it risk in the event of a violation?"*
+  - Options: **(Correct)** *"It must comply fully with the DGR (ICAO Technical Instructions) as well as with any applicable regulations established by the States of Origin, Transit, and Destination; in the event of a violation, it may be in breach of national law and subject to legal sanctions."* / *"It must comply only with the regulations of the shipment's State of Destination; no sanction is provided for in the event of non-compliance."* / *"It must comply with the responsibilities assigned to the Operator (Acceptance, Loading, Storage, Inspection, Information, Reporting, document retention, training)."* / *"It must only obtain a specific IATA approval to transport dangerous goods as cargo."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-036 — Programme de formation de l'exploitant (DGR 1.5)
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Formation DGR 1.5), quels sont les éléments du programme de formation sur les marchandises dangereuses que tout exploitant doit établir ?"*
+  - Options: **(Correct)** *"Une formation initiale, une actualisation des connaissances tous les 2 ans, et une épreuve obligatoire (test) pour chaque formation — que l'exploitant soit ou non agréé pour transporter des marchandises dangereuses en tant que fret."* / *"Une formation initiale uniquement, sans actualisation ni épreuve, réservée aux seuls exploitants agréés pour le fret DG."* / *"Une conservation des documents de transport pendant une période minimale de 3 mois."* / *"Une confirmation par l'endossement de la lettre de transport aérien qu'aucune partie du contenu du colis n'est dangereuse."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Training, DGR 1.5), what are the elements of the dangerous goods training program that every operator must establish?"*
+  - Options: **(Correct)** *"Initial training, a knowledge refresher every 2 years, and a mandatory test for each training session — whether or not the operator is approved to carry dangerous goods as cargo."* / *"Initial training only, with no refresher or test, reserved solely for operators approved for DG cargo."* / *"Retention of transport documents for a minimum period of 3 months."* / *"Confirmation through the endorsement of the air waybill that no part of the package's contents is dangerous."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-037 — Divergence d'État : États concernés (DGR 2.8.1)
+
+- **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Divergence d'État — DGR 2.8.1), à quels États une divergence d'État notifiée peut-elle s'appliquer ?"*
+  - Options: **(Correct)** *"À l'État d'origine/de départ, à l'État de destination, et à tous les États des escales de transit."* / *"Uniquement à l'État d'origine ou de départ de l'envoi."* / *"Uniquement à l'État de destination de l'envoi."* / *"À tous les transports effectués par l'exploitant concerné, quel que soit l'État."*
+- **EN draft translation:**
+  - Stem: *"Per the course (State Variation — DGR 2.8.1), to which States can a notified State Variation apply?"*
+  - Options: **(Correct)** *"To the State of Origin/State of Departure, to the State of Destination, and to all States of transit stops."* / *"Only to the shipment's State of Origin or State of Departure."* / *"Only to the shipment's State of Destination."* / *"To all shipments carried by the operator concerned, regardless of State."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-038 — Niveaux de restrictions applicables au transport aérien des MD
+
+- **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** True/False
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Les niveaux de restrictions), l'ordre des niveaux de restriction applicables au transport aérien des marchandises dangereuses, du plus général au plus spécifique, est : OACI (IT) → IATA (DGR) → Divergences (États) → Divergences (exploitants)."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: Per the course (Levels of Restriction), the order of the restriction levels applicable to the air transport of dangerous goods, from most general to most specific, is: ICAO (Technical Instructions) → IATA (DGR) → (State) Variations → (Operator) Variations."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-039 — Division 1.1 : risque d'explosion massive (Classe 1)
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (classes des marchandises dangereuses — DGR 3.0.2), quelle division de la Classe 1 (Explosifs) correspond à un « risque d'explosion massive » (code IMP : REX) ?"*
+  - Options: **(Correct)** *"Division 1.1"* / *"Division 1.2 — présentant un risque de projection"* / *"Division 1.4 — ne présentant aucun danger significatif"* / *"Division 1.6 — articles extrêmement peu sensibles, ne présentant pas de risque d'explosion en masse"*
+- **EN draft translation:**
+  - Stem: *"Per the course (Dangerous Goods Classes, DGR 3.0.2), which division of Class 1 (Explosives) corresponds to a 'mass explosion hazard' (IMP code: REX)?"*
+  - Options: **(Correct)** *"Division 1.1"* / *"Division 1.2 — presenting a projection hazard"* / *"Division 1.4 — presenting no significant hazard"* / *"Division 1.6 — extremely insensitive articles which do not present a mass explosion hazard"*
+- **Terminology decision — FLAGGED:** "code IMP" kept as the course's own
+  abbreviation — reviewer to confirm its standard expansion/English usage
+  (working candidate only, not asserted as a verified regulatory term).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-040 — Division 6.2 : substance infectieuse
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (classes des marchandises dangereuses — DGR 3.0.2), quelle division couvre les substances infectieuses (par ex. virus, bactéries, déchets d'hôpitaux, sang contaminé) ?"*
+  - Options: **(Correct)** *"Division 6.2 — Substance Infectieuse"* / *"Division 6.1 — Substance Toxique"* / *"Division 5.1 — Comburant"* / *"Classe 9 — Matières et objets dangereux divers"*
+- **EN draft translation:**
+  - Stem: *"Per the course (Dangerous Goods Classes, DGR 3.0.2), which division covers infectious substances (e.g., viruses, bacteria, hospital waste, contaminated blood)?"*
+  - Options: **(Correct)** *"Division 6.2 — Infectious Substance"* / *"Division 6.1 — Toxic Substance"* / *"Division 5.1 — Oxidizer"* / *"Class 9 — Miscellaneous Dangerous Goods"*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-041 — Étiquette de danger de la Classe 6 (« Toxiques infectieuses »)
+
+- **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Les étiquettes de danger), à quelle classe de marchandises dangereuses correspond l'étiquette de danger catégorisée « Toxiques infectieuses » ?"*
+  - Options: **(Correct)** *"Classe 6"* / *"Classe 5 — Comburantes"* / *"Classe 8 — Corrosives"* / *"Classe 9 — Diverses"*
+- **EN draft translation:**
+  - Stem: *"Per the course (Hazard Labels), which dangerous goods class corresponds to the hazard label categorized 'Toxic and Infectious Substances'?"*
+  - Options: **(Correct)** *"Class 6"* / *"Class 5 — Oxidizing Substances"* / *"Class 8 — Corrosives"* / *"Class 9 — Miscellaneous"*
+- **Terminology decision — FLAGGED:** the FR label name "Toxiques
+  infectieuses" is rendered as **"Toxic and Infectious Substances,"** a
+  candidate matching the standard IATA Class 6 label name — reviewer to
+  confirm this against the current English 67th Edition text rather than
+  KOST's own (possibly abbreviated) FR wording.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-042 — UN 3245 : matières biologiques de Catégorie B
+
+- **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Autre étiquetage), quel numéro ONU est associé à l'étiquette des matières biologiques de Catégorie B ?"*
+  - Options: **(Correct)** *"UN 3245"* / *"UN 3090"* / *"UN 3480"* / *"UN 2023"*
+- **EN draft translation:**
+  - Stem: *"Per the course ('Other Labelling'), which UN Number is associated with the Category B biological substances label?"*
+  - Options: **(Correct)** *"UN 3245"* / *"UN 3090"* / *"UN 3480"* / *"UN 2023"*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-043 — Obligation de la Déclaration de l'expéditeur (DGD) pour chaque envoi (DGR 8.0.1)
+
+- **Sub-task:** 0.5.3 Déterminer les documents exigés
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** True/False
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Identifier la documentation requise — DGR 8.0.1), une Déclaration de l'expéditeur pour les marchandises dangereuses (DGD) doit être remplie par l'expéditeur pour chaque envoi de marchandises dangereuses, sauf dans les cas prévus au DGR 8.0.1.2."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: Per the course (Identifying Required Documentation — DGR 8.0.1), a Shipper's Declaration for Dangerous Goods (DGD) must be completed by the shipper for every shipment of dangerous goods, except in the cases provided for in DGR 8.0.1.2."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-044 — Conservation des documents : période minimale de 3 mois
+
+- **Sub-task:** 0.5.3 Déterminer les documents exigés
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** True/False
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Conserver les documents), la lettre de transport aérien (LTA) et les autres documents de transport doivent être conservés pendant une période minimale de 3 mois."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: Per the course (Retaining Documents), the air waybill (AWB) and other transport documents must be retained for a minimum period of 3 months."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-045 — Procédure en cas de contact corporel avec le contenu d'un colis de MD
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Procédures d'urgence générales — étape 5), que doit faire une personne dont le corps ou les vêtements sont entrés en contact avec le contenu d'un colis de marchandises dangereuses ?"*
+  - Options: **(Correct)** *"Laver le corps abondamment à l'eau, enlever les vêtements contaminés, ne pas boire/manger/fumer, ne pas toucher les yeux ni la bouche/le nez, et demander une assistance médicale ; les personnes impliquées et les témoins doivent rester sur place jusqu'à ce que leur identité soit notée."* / *"Nettoyer ou éliminer soi-même la marchandise dangereuse, sous sa propre responsabilité."* / *"Isoler le colis endommagé en manipulant directement son contenu pour l'identifier."* / *"Quitter immédiatement les lieux sans attendre, pour limiter l'exposition."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General Emergency Procedures — Step 5), what must a person whose body or clothing has come into contact with the contents of a dangerous goods package do?"*
+  - Options: **(Correct)** *"Wash the body thoroughly with water, remove contaminated clothing, not drink/eat/smoke, not touch the eyes, mouth, or nose, and request medical assistance; the persons involved and witnesses must remain on site until their identity has been recorded."* / *"Clean up or dispose of the dangerous goods themselves, on their own responsibility."* / *"Isolate the damaged package by directly handling its contents to identify it."* / *"Leave the scene immediately without waiting, in order to limit exposure."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-046 — En cas de doute sur un envoi : refus et traçabilité (vérifier la cohérence)
+
+- **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Traitement/Acceptation de la cargaison — Vérifier la cohérence), que doit faire le personnel d'acceptation en cas de doute sur la cohérence d'un envoi de fret général ?"*
+  - Options: **(Correct)** *"Refuser le colis pour le fret général et le soumettre à la procédure DG appropriée, et noter l'anomalie dans le registre interne pour traçabilité et audit."* / *"Accepter le colis sous réserve, en attendant une confirmation ultérieure de l'expéditeur."* / *"L'ouvrir lui-même afin d'identifier son contenu avant toute décision."* / *"L'envoyer directement au chargement, la décision finale revenant à l'équipage."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Cargo Handling/Acceptance — Checking Consistency), what must acceptance personnel do in the event of doubt about the consistency of a general cargo shipment?"*
+  - Options: **(Correct)** *"Refuse the package from general cargo and submit it to the appropriate DG procedure, and log the anomaly in the internal register for traceability and audit purposes."* / *"Accept the package conditionally, pending later confirmation from the shipper."* / *"Open it themselves in order to identify its contents before making any decision."* / *"Send it directly to loading, leaving the final decision to the crew."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-047 — Vérification de l'envoi contre les définitions de classes (DGR 2.2.4, première instruction)
+
+- **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (Procédures d'acceptation de la cargaison — DGR 2.2.4), lorsqu'un expéditeur propose un colis correspondant aux descriptions génériques visées en 2.2.4, quelle est la **première** vérification qui lui est demandée, avant même l'endossement de la LTA ?"*
+  - Options: **(Correct)** *"Vérifier son envoi par rapport aux définitions des classes et aux dispositions spéciales du Règlement."* / *"Vérifier que le colis porte l'étiquette de manutention appropriée."* / *"Vérifier que les documents de transport seront conservés pendant une période minimale de 3 mois."* / *"Vérifier que le colis a fait l'objet d'une inspection visuelle par le personnel d'acceptation."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Cargo Acceptance Procedures — DGR 2.2.4), when a shipper offers a package matching the generic descriptions referred to in 2.2.4, what is the **first** verification required of the shipper, even before the endorsement of the AWB?"*
+  - Options: **(Correct)** *"Check its shipment against the Regulations' class definitions and Special Provisions."* / *"Check that the package bears the appropriate handling label."* / *"Check that the transport documents will be retained for a minimum period of 3 months."* / *"Check that the package has undergone a visual inspection by acceptance personnel."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-048 — Caractéristiques physiques d'un emballage suspect
+
+- **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** MCQ, single-answer
+- **FR text (verbatim):**
+  - Stem: *"Selon le cours (inspection physique des colis — Contrôle des emballages suspects), lesquels des éléments suivants sont cités comme caractéristiques physiques d'un emballage suspect ?"*
+  - Options: **(Correct)** *"Un emballage trop lourd, scellé de façon inhabituelle ou endommagé, ou présentant des objets supplémentaires fixés ou collés à l'extérieur (adhésifs, étiquettes détournées, signes de récupération)."* / *"Un emballage portant une étiquette de danger chimique, accompagné d'une demande de clarification à l'expéditeur avant acceptation."* / *"Un emballage dont le contenu répond nécessairement aux critères de classification des marchandises dangereuses énoncés en section 3."* / *"Un emballage accompagné d'une lettre de transport aérien mentionnant « Cargo Aircraft Only (CAO) »."*
+- **EN draft translation:**
+  - Stem: *"Per the course (physical inspection of packages — Checking Suspect Packaging), which of the following are cited as physical characteristics of a suspect package?"*
+  - Options: **(Correct)** *"Packaging that is excessively heavy, sealed in an unusual manner, or damaged, or bearing additional objects fixed or stuck to the outside (adhesives, misapplied labels, signs of salvage/re-use)."* / *"Packaging bearing a chemical hazard label, accompanied by a request for clarification from the shipper before acceptance."* / *"Packaging whose contents necessarily meet the dangerous goods classification criteria set out in Section 3."* / *"Packaging accompanied by an air waybill bearing the statement 'Cargo Aircraft Only (CAO).'"*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+## Q-7.2-049 — Pictogrammes SGH (losange) et présence de marchandises dangereuses
+
+- **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Type:** True/False
+- **FR text (verbatim):**
+  - Statement: *"Vrai ou Faux : selon le cours (Procédures d'acceptation de la cargaison — DGR 9.1.1), les pictogrammes SGH en forme de losange apposés sur les emballages peuvent indiquer la présence de marchandises dangereuses — certains n'indiquant un danger que pour la fourniture et l'utilisation, tandis que d'autres contiennent des symboles largement équivalents à ceux des étiquettes de danger utilisées dans le transport (voir Annexe B, tableau B.4.A)."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: Per the course (Cargo Acceptance Procedures — DGR 9.1.1), diamond-shaped GHS pictograms affixed to packaging can indicate the presence of dangerous goods — some indicating a hazard only for supply and use, while others contain symbols largely equivalent to those on the hazard labels used in transport (see Appendix B, Table B.4.A)."*
+  - Correct answer: **TRUE**
+- **Terminology decision:** "SGH" (Système Général Harmonisé) rendered as
+  **"GHS" (Globally Harmonized System)** — standard, well-established
+  cross-reference between the French and English abbreviations for the
+  same UN system.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
+## Batch 3 summary
+
+- 21/21 Function 7.2 production-bank Batch 3 items (`Q-7.2-029`–`049`)
+  translated to EN draft status. 0/21 reviewed. Combined with Batches 1+2,
+  49/49 currently-drafted Function 7.2 production-bank items now have an
+  EN draft (0/49 reviewed).
+- All 21 items carry unchanged FR status `DRAFT — Tier B only, SOURCE
+  REQUIRED for Tier A` — this section does not advance or alter FR status,
+  per `.claude/rules/dgr-stage2b.md` rule 5.
+- No FR "working gloss" reconstruction was needed: every FR stem/option
+  pair above is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.2.md`'s
+  Batch 3 section, the actual, already-written source of record for these
+  items.
+- 5 terminology points are newly flagged for reviewer decision in this
+  batch: **"document terrain"** (Q-7.2-030), **"code IMP"** (Q-7.2-039),
+  **"Toxiques infectieuses"/"Toxic and Infectious Substances"**
+  (Q-7.2-041), plus two items (Q-7.2-029's Article/Substance pair,
+  Q-7.2-033's reuse of the already-flagged "produits de consommation")
+  noted for reviewer awareness without introducing a new open question.
+  All are recorded in the bilingual terminology table above.
+- No item in this batch may be marked `BILINGUAL TECHNICAL REVIEW
+  COMPLETE` or `APPROVED`; the same reviewer instructions, checklist, and
+  sign-off format defined in the "Reviewer instructions and checklist"
+  section above (following the Batch 1+2 items) apply unchanged to these
+  21 items.
+- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification
+  for any of the 21 items — unchanged, still entirely open, consistent
+  with `docs/DGR_PRODUCTION_BANK_7.2.md`'s own Batch 3 "does NOT do" note.

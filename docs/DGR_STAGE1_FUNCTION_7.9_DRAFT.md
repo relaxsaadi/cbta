@@ -423,12 +423,19 @@ was independently derived and triple-checked at high zoom this same pass.
 Per the standing rule to record `SOURCE CONFLICT` rather than silently
 guess or silently overwrite another session's committed claim: **this
 draft's own finding (★, single star, confirmed by direct high-magnification
-image inspection) is what this draft stands behind**, but the discrepancy
-with `docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md`'s claim is recorded here
-explicitly rather than quietly reconciled, since resolving it properly
-requires the 7.10 session (or a dedicated cross-validation pass) to
-re-examine its own crop of the identical page. See SOURCE GAP note 10
-below and the recommended next steps.
+image inspection) is what this draft stands behind**, and the discrepancy
+was recorded here explicitly rather than quietly reconciled.
+
+**RESOLVED 2026-08-25 (orchestrating session):** a fresh, independent
+400dpi render of PDF page 35 was performed specifically to settle this
+conflict. It confirms Function 7.9's Block 7 (leaves 7.1–7.4) carries a
+uniform **★ (single star)** — this draft's finding was correct.
+`docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md` has been corrected accordingly:
+Function 7.9 and Function 7.10 both carry a single-star Block 7 (alongside
+7.5), three functions total with this rating, not the two originally
+claimed. See SOURCE GAP note 10 below (retained for the historical
+evidence trail) and `docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md`'s own
+corrected note.
 
 ## Sub-task enumeration with KOST source trace
 
@@ -616,24 +623,15 @@ question number (F-KOST 05, 20Q), or practice-book question number (F-KOST
    "Fonction 7.6" instead of "Fonction 7.9" in its own worked example** —
    see the "minor course-authoring-error finding" note under source item 1
    above. Cosmetic only; not attributed to any sub-task.
-10. **SOURCE CONFLICT (cross-session, unresolved): Block 7's star rating.**
-    This draft independently re-derived and triple-checked (full-row crop,
-    isolated star-column crop, 3× zoom) that Function 7.9's Block 7 carries
-    a uniform **single ★**, matching Function 7.5's own table. The
-    concurrently-committed `docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md` states
-    the opposite — that Function 7.9's Block 7 carries **★★** — and uses
-    that claim to argue Function 7.10 (not 7.9) is "the second" single-star
-    function after 7.5. Both drafts were produced from independent direct
-    readings of the identical PDF page (page 35 of
-    `01_IATA_CBTA_Dangerous_Goods_Training_Guidance_Edition1_2023_FR.PDF`).
-    This draft's own finding is the one it stands behind (see the dedicated
-    Block 7 cross-check section above for the full verification trail), but
-    per the standing no-fabrication/no-silent-guess rule, this is recorded
-    as an explicit, unresolved `SOURCE CONFLICT` between two committed
-    Stage 1 drafts rather than silently corrected in either direction. A
-    future pass must open both drafts' underlying page-35 crops (or
-    re-render the page fresh a third time) and settle this before Function
-    7.9's or 7.10's Block 7 rating is treated as frozen for Stage 2A.
+10. **SOURCE CONFLICT — RESOLVED 2026-08-25.** This draft independently
+    re-derived and triple-checked (full-row crop, isolated star-column crop,
+    3× zoom) that Function 7.9's Block 7 carries a uniform **single ★**,
+    matching Function 7.5's own table. `docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md`
+    originally stated the opposite (★★) and has since been corrected. A
+    fourth independent render (400dpi, by the orchestrating session,
+    specifically to settle this) confirms this draft's original finding:
+    Function 7.9's Block 7 = ★ (single star). Three functions in the
+    program now carry a single-star Block 7 (7.5, 7.9, 7.10), not two.
 
 ## What this draft does NOT do
 
@@ -703,12 +701,7 @@ question number (F-KOST 05, 20Q), or practice-book question number (F-KOST
    any continuity from Function 7.9's own table — this pass did not derive
    Function 7.10's structure and makes no claim about it beyond confirming
    Table 7.9.A does not overflow onto that page.
-7. **Resolve the cross-session Block 7 star-rating SOURCE CONFLICT (note 10
-   above) before either Function 7.9's or Function 7.10's Block 7 rating is
-   treated as frozen.** `docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md` (committed
-   concurrently with this draft) asserts Function 7.9's Block 7 is ★★; this
-   draft's own triple-checked, high-magnification image inspection finds
-   ★ (single star). Whoever picks this up next should re-render PDF page 35
-   fresh (a third independent read) and update whichever draft is wrong,
-   then correct the corresponding row in
-   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` if needed.
+7. ~~Resolve the cross-session Block 7 star-rating SOURCE CONFLICT~~ —
+   **done 2026-08-25**, see note 10 above. Function 7.9's Block 7 = ★
+   (single star), confirmed by a fourth independent render;
+   `docs/DGR_STAGE1_FUNCTION_7.10_DRAFT.md` has been corrected.

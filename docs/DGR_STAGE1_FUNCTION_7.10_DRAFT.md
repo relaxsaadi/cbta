@@ -310,15 +310,27 @@ function — the inconsistency is specific to non-zero top-level blocks
    complete absence of Block 7) to depart from the standard four-leaf
    Block 7 pattern, but via a different route — a partial reduction, not
    a total absence.
-3. **First function whose Block 7 carries a uniform ★ (single star)
-   rating instead of ★★.** Function 7.5's table was the first to carry a
-   single-star Block 7 (per its own committed draft); every other
-   function with a Block 7 examined so far (7.1–7.4, 7.6, 7.7, and 7.9
-   per this pass's own direct reading) carries ★★. Function 7.10 is the
-   **second** function with a single-star Block 7, matching 7.5's rating
-   level (not 7.1–7.4/7.6/7.7/7.9's), though — as with the Block 0
-   composition note below — a matching star rating is not evidence of
-   matching wording and was not assumed to be.
+3. **SOURCE CONFLICT RESOLVED (2026-08-25, by the orchestrating session, not
+   the original author of this draft):** this section originally claimed
+   Function 7.9's Block 7 carries ★★ and called Function 7.10 "the second"
+   single-star Block 7 function after 7.5. That claim was **incorrect** — a
+   concurrently-committed `docs/DGR_STAGE1_FUNCTION_7.9_DRAFT.md` (produced
+   independently by a separate session, triple-checking its own read at
+   high zoom) found Function 7.9's Block 7 to be a uniform **single ★**, not
+   ★★, directly contradicting this draft's claim. Both drafts flagged the
+   discrepancy as an open `SOURCE CONFLICT` rather than silently picking a
+   side. **Resolved by a fresh, independent 400dpi render of PDF page 35
+   performed specifically to settle this**: Function 7.9's Block 7 (leaves
+   7.1–7.4) is confirmed **★ (single star)**, matching this draft's own
+   finding for 7.10, not the ★★ this passage originally claimed for 7.9.
+   Function 7.10 is therefore **not** "the second" single-star Block 7
+   function in some special sense distinct from 7.9 — **7.9 and 7.10 both
+   carry a single-star Block 7**, alongside 7.5, making three functions
+   with this rating (not the two originally claimed), out of the six
+   functions in the program that have a Block 7 at all (7.1–7.4, 7.6, 7.7
+   carry ★★; 7.8 has no Block 7). As with the Block 0 composition note
+   below, a matching star rating is not evidence of matching wording and is
+   not assumed to be.
 4. **Block 5 here activates sub-block 5.1 ("Traiter les bagages"), not
    5.2 ("Accepter les bagages") as Function 7.9's table does** — confirmed
    by this pass's own direct reading of PDF page 35 (Function 7.9's table,

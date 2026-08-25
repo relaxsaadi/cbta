@@ -413,6 +413,21 @@ topic-priority order: `docs/DGR_TIER_A_INVENTORY.md`.
 - **Program totals after Topic 1:** 172 FROZEN (up from 158), 243
   NOTATTEMPTED (down from 257); GAP (13), PARTIAL (21), STALE (4)
   unchanged (not this topic's scope).
-- Remaining topics (2–8) not yet started this phase — see
+- **Topic 2 — NOTOC: ✅ RESOLVED.** 23 items across Functions 7.3/7.4/7.6/
+  7.7/7.8, tagged to a single current-DGR section: §9.5.1.1 "Commandant de
+  bord" (Part 9, p.693). 20 items now `FROZEN FR / SOURCE VERIFIED`
+  (§9.5.1.1.1(a) who/when/what; §9.5.1.1.3(a)-(j) required-field list;
+  §9.5.1.1.6 document-distinctness; §9.5.1.1.9 ground-copy accessibility;
+  §9.5.1.1.10 English-language requirement; Tableau 9.5.A exemption list).
+  3 items (`Q-7.4-013`, `Q-7.6-009`, `Q-7.8-050`) moved to PARTIAL — KOST's
+  "plan de chargement"/NOTOC-purpose framing not independently located as
+  a standalone current-DGR clause (a full in-book search for "plan de
+  chargement" returns zero hits). One observed-but-non-blocking finding:
+  KOST's own required-field enumeration omits current §9.5.1.1.3(a) "la
+  date du vol."
+- **Program totals after Topic 2:** 192 FROZEN (up from 172), 24 PARTIAL
+  (up from 21), 220 NOTATTEMPTED (down from 243); GAP (13), STALE (4)
+  unchanged.
+- Remaining topics (3–8) not yet started this phase — see
   `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan for the priority order
   and per-topic item lists.

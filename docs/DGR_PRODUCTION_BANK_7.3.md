@@ -2310,11 +2310,16 @@ commandant de bord sont fournies sur une «NOTOC = Notification to Captain»
 contradiction — the course explicitly requires a document *other than* the
 LTA/DGD/invoices, not either of those documents themselves.
 
-**Source basis:** Tier B — KOST Function 7.3 course, slide 179 (DGR
-9.5.1.1/9.5.1.1.3), cross-checked slide 180 (worked NOTOC example, image
-only, no further extractable text). Not cited by any prior batch item. No
-direct exam hit for this specific document-independence fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §9.5.1.1.6,
+read directly this session in the authenticated Bookshelf: "Les
+renseignements à fournir au commandant de bord doivent être présentés sur
+un document approprié et ne peuvent l'être sur des lettres de transport
+aérien, des « Déclarations de l'expéditeur de marchandises dangereuses »,
+des factures, etc." Direct, exact confirmation — the current text uses
+"ne peuvent l'être" (cannot be) rather than the course's "autre que"
+(other than), a wording variant with the identical legal effect.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.5.1.1.6 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2599,7 +2604,7 @@ corroborates the general separation topic, not this exact rule.
 | Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 179 (DGR 9.5.1.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | DRAFT — citation likely stale (same finding as Q-7.2-021/022) | True/False | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-040 | 7.1 Destinataires signalement accident | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-041 | 7.2 Portée signalement incident (exemptions) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

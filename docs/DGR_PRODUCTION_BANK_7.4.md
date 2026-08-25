@@ -774,13 +774,22 @@ options is drawn verbatim from the enumerated list itself):**
 - "Le nombre de colis, la quantité nette ou brute" — named on slide 137's
   list.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slides 137–138 ("DGR
-9.5.1.1.3", full field enumeration). Strongly corroborated by Practice Q20,
-the practice book's own capstone loading-plan-vs-NOTOC discrepancy scenario
-(package B absent from NOTOC, package C quantity mismatch), which requires
-exactly this field-by-field knowledge of what the NOTOC must contain to
-identify a non-conforming package.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §9.5.1.1.3(a)-(j),
+read directly this session in the authenticated Bookshelf. The current
+required-field list is: (a) date du vol, (b) numéro de LTA, (c) désignation
+exacte d'expédition + numéro ONU/ID, (d) classe/division + dangers
+subsidiaires, (e) groupe d'emballage, (f)/(g) nombre de colis + quantité/
+poids + emplacement de chargement (non-radioactif/radioactif variants),
+(h) indication CAO, (i) aéroport de déchargement, (j) dérogation d'État.
+The shipper's own name/contact details are confirmed absent from this
+list, matching the correct answer exactly; all three distractors (LTA
+number, loading location, package count/quantity) are confirmed genuine
+required fields. **Note:** the current list's own field (a), "la date du
+vol," does not appear in the course's slide 137–138 enumeration — flagged
+here as an observed KOST omission, but it does not affect this item's own
+correctness since "date du vol" is not one of this item's tested options.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.5.1.1.3(a)-(j)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -804,16 +813,22 @@ course states an unqualified exact-match requirement with no carve-out for
 discrepancies limited to non-dangerous cargo — the stem's implied exception
 is not supported by the source.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slide 139 (DGR
-9.5.1.1.3, exact-correspondence statement), cross-checked against slides
-135–138 (NOTOC purpose and required fields) and slide 141 (NOTOC exemptions
-list — magnetized masses, GMOs, Category B biological substances, excepted
-quantities, and Table 9.5.A items are not required to appear on the NOTOC
-at all, a distinct fact from the exact-match requirement tested here).
-Strongly corroborated by Practice Q20's capstone scenario, which directly
-tests the practical consequence of this exact-match requirement (identifying
-non-conforming packages and the immediate pre-departure actions required).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§9.5.1.1, read directly this session in the authenticated Bookshelf, does
+not use the term "plan de chargement" anywhere in §9.5.1.1 (a full
+in-book search for "plan de chargement" across the entire current text
+returned zero matches). The closest confirmed Tier A anchor is §9.5.1.1.7:
+"Les renseignements fournis au commandant de bord doivent aussi contenir
+une confirmation signée ou toute autre indication, venant de la personne
+responsable du chargement, que rien n'indiquait que les colis chargés à
+bord de l'aéronef étaient endommagés ou fuyaient..." — confirms a loading-
+person accuracy/confirmation duty exists, but not the specific "exact
+match to the plan de chargement" framing tested here. Retained as Tier B
+(KOST slide 139) for the specific claim tested; not contradicted by
+current DGR text, but not independently verified either.
+**FR status:** DRAFT — general NOTOC-accuracy duty Tier A-confirmed
+(§9.5.1.1.7); the specific "plan de chargement" exact-match wording is
+Tier B only, not located in current DGR text under that name.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -955,8 +970,8 @@ requirement.
 | Q-7.4-009 | 4.1.2 Limitation de chargement DGR 9.3.1 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 109 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-010 | 4.2.3 Séparation animaux vivants DGR 9.3.13 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-011 | 6.1.4 IT Catégorie I-Blanche | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-012 | 6.1.5 Champs obligatoires NOTOC | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slides 137–138 (DGR 9.5.1.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-013 | 6.1.5 Correspondance exacte NOTOC | DRAFT — Tier A not attempted | True/False | KOST F7.4 course slide 139 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-012 | 6.1.5 Champs obligatoires NOTOC | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.3(a)-(j) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-013 | 6.1.5 Correspondance exacte NOTOC | DRAFT — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | True/False | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-014 | 7.1+7.2 Signalement accidents/incidents DGR 9.6.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-015 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-016 | 7.4 ANAC (DGR 9.6.5) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2014,12 +2029,16 @@ zero course/exam/practice evidence found in either Stage 1's or this
 session's re-check. This is the single permitted item for this sub-task's
 0–1 sample this batch.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slides 135–136 (DGR
-9.5.1.1.3), the same NOTOC evidence base already drawn on for Q-7.4-012/013
-in Batch 1, but this item tests the distinct "who must be informed" fact
-rather than "what the NOTOC must contain" or "how exactly it must match the
-cargo."
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §9.5.1.1.1(a),
+read directly this session in the authenticated Bookshelf: "l'exploitant
+d'un aéronef dans lequel des marchandises dangereuses doivent être
+transportées doit: (a) fournir au commandant de bord des renseignements
+écrits ou imprimés précis et lisibles concernant les marchandises
+dangereuses à transporter comme fret." Direct confirmation that the
+captain is the party who must be informed; none of the three distractors
+(ATC, shipper, nearby passenger) appears anywhere in §9.5.1.1's text.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.5.1.1.1(a)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2063,7 +2082,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-032 | 0.5.1 Code "Y" du marquage UN | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-033 | 0.6.1 Première action d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 145 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-034 | 0.4.3 Séparation — risque primaire/subsidiaire (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slides 106, 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-035 | 6.1.6 Notification du commandant de bord (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 135–136 (DGR 9.5.1.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-035 | 6.1.6 Notification du commandant de bord (restricted) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 17 MCQ + 2 True/False. Block spread: Block 0 = 9
 items (8 distinct leaves: 0.1.3, 0.1.4, 0.2.1, 0.2.2, 0.3.1, 0.3.3, 0.4.2,
@@ -3005,14 +3024,16 @@ documents the same sentence explicitly excludes):**
 - "Une facture commerciale" — explicitly excluded by "autre que... des
   factures."
 
-**Source basis:** Tier B — KOST Function 7.4 course, slide 136 (DGR
-9.5.1.1.3). Distinct from Q-7.4-012 (required NOTOC fields, slides 137–138)
-and Q-7.4-013 (exact-correspondence requirement, slide 139) — this item
-tests a third, separate fact from the same NOTOC section: what document
-type the information must be presented on, not what it must contain or how
-closely it must match the cargo. No exam/practice cross-reference found for
-this specific document-type fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §9.5.1.1.6,
+read directly this session in the authenticated Bookshelf: "Les
+renseignements à fournir au commandant de bord doivent être présentés sur
+un document approprié et ne peuvent l'être sur des lettres de transport
+aérien, des « Déclarations de l'expéditeur de marchandises dangereuses »,
+des factures, etc." Direct match to the correct answer; all three
+distractors (LTA, DGD, invoice) are exactly the three documents this
+clause excludes.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.5.1.1.6 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3059,15 +3080,15 @@ tested by Q-7.4-012) implicitly cover as ordinary classified cargo):**
   kind of shipment 6.1.4's own TI/category NOTOC field (slide 138) exists to
   capture, so it is not exempt.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slide 141 (NOTOC
-exemptions list), cross-checked against slides 137–138 (required NOTOC
-fields, already tested by Q-7.4-012) to confirm the three distractors are
-genuinely non-exempt categories, not merely absent from the exemptions list
-by omission. This fact was explicitly flagged as available-but-undrafted in
-Q-7.4-013's own Batch 1 rationale ("a distinct fact from the exact-match
-requirement tested here") and is drafted here as its own item, completing
-that flagged gap. No exam/practice cross-reference found.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, Tableau 9.5.A
+/ §9.5.1.1.3.4, read directly this session in the authenticated Bookshelf:
+the current table lists exactly this exemption ("ONU 3373... Matière
+biologique, catégorie B... Instruction d'emballage 650") among the items
+that "n'ont pas besoin de figurer dans les renseignements fournis au
+commandant de bord," alongside excepted quantities (§2.6.1), magnetized
+masses (ONU 2807), and GMOs. Direct confirmation of the correct answer.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 Tableau 9.5.A /
+§9.5.1.1.3.4 (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3110,8 +3131,8 @@ is sourced from a different function's course material.
 | Q-7.4-049 | 4.2.3 Orientation « This Way Up » | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 117–118 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-050 | 6.1.4 Détermination de l'indice de transport | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 127 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-051 | 6.1.4 Distances de séparation = minimums | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-052 | 6.1.5 Document NOTOC distinct de la LTA/déclaration/factures | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 136 (DGR 9.5.1.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-053 | 6.1.5 Catégorie exemptée de la NOTOC | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 141 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-052 | 6.1.5 Document NOTOC distinct de la LTA/déclaration/factures | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-053 | 6.1.5 Catégorie exemptée de la NOTOC | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 15 MCQ + 3 True/False. Block spread: Block 0 = 10
 items (9 distinct leaves: 0.1.1, 0.1.2, 0.2.1, 0.3.1, 0.3.3, 0.4.1 [x2],

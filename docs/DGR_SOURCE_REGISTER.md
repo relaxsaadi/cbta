@@ -216,6 +216,64 @@ distractor-level detail. All 14 marked `FROZEN FR / SOURCE VERIFIED` in
 their respective production banks; `docs/DGR_TIER_A_INVENTORY.md` updated
 accordingly (FROZEN 158→172, NOTATTEMPTED 257→243).
 
+### 2026-08-25 (second Tier A phase) — Topic 2: NOTOC, 23 items cross-applied (20 confirmed, 3 partial)
+
+One Bookshelf navigation to **§9.5.1 "Commandant de bord"** (the current
+edition's NOTOC section, confirmed at Part 9 p.693) resolved 20 of the 23
+items tagged to the NOTOC topic in `docs/DGR_TIER_A_INVENTORY.md`, across
+Functions 7.3, 7.4, 7.6, 7.7, and 7.8. Sub-sections read directly this
+session:
+
+- **§9.5.1.1.1(a)** — who/when/what: exploitant must give the captain
+  written/printed precise information before departure. Resolves
+  `Q-7.4-035`, `Q-7.6-004`, `Q-7.7-001`, `Q-7.8-025`.
+- **§9.5.1.1.3(a)-(j)** — the full required-field list (date du vol, LTA
+  number, exact shipping name+UN/ID, class/division+subsidiary risks,
+  packing group, package count/quantity/location, CAO indication,
+  discharge airport, State derogation). Shipper's own name/contact details
+  confirmed absent from this list. Resolves `Q-7.4-012`, `Q-7.6-003`,
+  `Q-7.8-001` (required-fields items) and `Q-7.7-012` (§9.5.1.1.3(d)
+  subsidiary-risk sub-clause) and `Q-7.7-032` (§9.5.1.1.3(i)-(j)
+  discharge-airport/derogation sub-clause).
+  **Observed KOST omission (not a correctness defect in any current
+  item):** the current field (a), "la date du vol," does not appear
+  anywhere in the KOST course's own field enumeration — flagged for
+  awareness if a future item ever tests the flight-date field.
+- **§9.5.1.1.6** — the NOTOC must be presented on a document distinct from
+  the LTA, the Shipper's Declaration, or invoices. Resolves `Q-7.3-038`,
+  `Q-7.4-052`, `Q-7.6-031`.
+- **§9.5.1.1.7** — loading-person confirmation/accuracy duty (general
+  anchor only — see caveat below).
+- **§9.5.1.1.9** — ground copy retained, accessible to the agent des
+  opérations aériennes / designated ground staff "jusqu'à l'arrivée du
+  vol." Resolves `Q-7.8-006`.
+- **§9.5.1.1.10** — English language requirement, verbatim match. Resolves
+  `Q-7.7-033`, `Q-7.8-049`.
+- **Tableau 9.5.A / §9.5.1.1.3.4** — the current NOTOC-exemption list
+  (excepted quantities §2.6.1, magnetized masses, GMOs, Category B
+  biological substances ONU 3373, certain lithium/sodium battery Section
+  II packages, radioactive excepted packages). Resolves `Q-7.4-053`,
+  `Q-7.6-030`, `Q-7.7-031`, `Q-7.8-023`, `Q-7.8-024`.
+
+**3 items left PARTIALLY CONFIRMED, not FROZEN:**
+- `Q-7.4-013`, `Q-7.6-009` — KOST's "NOTOC must exactly match the plan de
+  chargement" / "loading planner must issue an amended NOTOC on
+  divergence" claims. A full in-book search for "plan de chargement"
+  across the entire current DGR text returned **zero matches** — this
+  exact terminology is not DGR-defined. §9.5.1.1.7 confirms a general
+  loading-accuracy/confirmation duty exists, but not this specific
+  framing. Not contradicted, just not independently verified — left Tier
+  B for the specific claim.
+- `Q-7.8-050` — KOST's "principle justifying the NOTOC's existence"
+  framing (captain informed for emergency-response purposes) is not
+  found as a standalone DGR clause; §9.5.1.1 opens directly at the
+  operative rule with no separate rationale preamble. The item's own
+  first distractor remains independently confirmed wrong via §9.5.1.1.6.
+
+No SOURCE GAP or SOURCE CONFLICT found for any of the 23 items. Program
+totals after Topic 2: 192 FROZEN (was 172), 24 PARTIAL (was 21), 220
+NOTATTEMPTED (was 243); GAP (13) and STALE (4) unchanged.
+
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see

@@ -7,11 +7,12 @@ and `docs/DGR_PRODUCTION_BANK_7.2.md` … `docs/DGR_PRODUCTION_BANK_7.10.md`
 (Functions 7.2–7.10, 434 items). Regulatory baseline: IATA DGR 67th Edition
 2026, French, Addendum 1 integrated.
 
-**Live status note (2026-08-25, updated after Topic 1):** the category
+**Live status note (2026-08-25, updated after Topic 2):** the category
 counts and topic sublists below are a snapshot taken *before* topic-based
-navigation began. Topic 1 (lithium batteries, 14 items) is now fully
-resolved — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 1" entry. Current
-totals: **172 FROZEN, 13 GAP, 21 PARTIAL, 4 STALE, 243 NOTATTEMPTED** (453
+navigation began. Topic 1 (lithium batteries, 14 items) and Topic 2
+(NOTOC, 23 items — 20 confirmed, 3 moved to PARTIAL) are now resolved —
+see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 1"/"Topic 2" entries. Current
+totals: **192 FROZEN, 13 GAP, 24 PARTIAL, 4 STALE, 220 NOTATTEMPTED** (453
 total). The tables below are left as the original baseline snapshot for
 audit purposes; do not re-derive counts from them without applying this
 note.
@@ -70,7 +71,16 @@ retained; not an open lookup task).
 | Q-7.9-023 | Cross-applied |
 | Q-7.10-019 | Cross-applied |
 
-## PARTIALLY CONFIRMED — full list (21 items)
+## PARTIALLY CONFIRMED — full list (originally 21; now 24 after Topic 2 added 3)
+
+3 items added by Topic 2 (2026-08-25): `Q-7.4-013`, `Q-7.6-009` (KOST's
+"plan de chargement" exact-match terminology not found anywhere in current
+DGR text — zero hits on a full in-book search; general accuracy duty
+confirmed via §9.5.1.1.7 only) and `Q-7.8-050` (KOST's "principle
+justifying the NOTOC" framing not found as a standalone DGR clause; one
+distractor independently confirmed wrong via §9.5.1.1.6). See
+`docs/DGR_SOURCE_REGISTER.md`'s "Topic 2" entry for full citations. The
+table below is the original 21-item baseline; it is not re-derived here.
 
 Priority-order item 6. Each needs one further targeted lookup to close.
 
@@ -150,9 +160,12 @@ four DGR sections read: §2.3.5.8.3/.3.1/.4(c)/.4(f), §3.9.2.6.0,
 | Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries |
 | Q-7.10-031 | 0.4.1 UN3090 — batterie lithium métal seule |
 
-### Topic 2 — NOTOC (23 items)
+### Topic 2 — NOTOC (23 items) — ✅ RESOLVED 2026-08-25 (20 confirmed, 3 partial)
 
 Required fields, operational duties, radioactive/exception interactions.
+20 of 23 now `FROZEN FR / SOURCE VERIFIED` via §9.5.1.1.1(a)/.3(a)-(j)/.6/
+.9/.10 and Tableau 9.5.A. 3 items (`Q-7.4-013`, `Q-7.6-009`, `Q-7.8-050`)
+moved to PARTIAL — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 2" entry.
 
 | ID | Sub-task |
 |---|---|

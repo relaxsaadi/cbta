@@ -2078,14 +2078,16 @@ complete match — the marks certify that the design type passed the
 manufacture-stage performance tests, not that the packaging is fit for any
 particular substance.
 
-**Source basis:** Tier B — KOST Function 7.3 course, slide 144 (DGR
-6.0.4.0.1/6.0.4.2.1(a)), opening slide of the "Marquage et Étiquetage"
-sequence (slides 143–173), not cited by any prior batch item. No direct
-exam hit for this exact scope-of-marks nuance; the exercise slides 176–177
-(density-figure omission, drop-height-for-PG-II questions) test adjacent
-UN-packaging-spec knowledge, not this specific fact — noted as topic-level
-corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.0.1,
+read directly this session in the authenticated Bookshelf: "Les marques
+indiquent que l'emballage qui en porte correspond au modèle d'un type qui
+a subi avec succès les épreuves de résistance et qu'il est conforme aux
+dispositions énoncées en 6.2 et 6.3, qui traitent de la fabrication mais
+non de l'utilisation de l'emballage. Par conséquent, les marques en
+elles-mêmes ne confirment pas nécessairement que l'emballage peut être
+utilisé pour une matière déterminée." Verbatim, exact match.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.0.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2599,7 +2601,7 @@ corroborates the general separation topic, not this exact rule.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.3-033 | 0.5.1 Portée du marquage ONU | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 144 (DGR 6.0.4.0.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-033 | 0.5.1 Portée du marquage ONU | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §6.0.4.0.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §7.1.5.5.2(b), §7.1.5.5.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

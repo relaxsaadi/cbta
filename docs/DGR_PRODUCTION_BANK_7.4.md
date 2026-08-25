@@ -1885,12 +1885,18 @@ decoded element of the exact same marking string, from the same slide):**
   ("CH = Etat d'origine de l'emballage (Suisse)"), a different position in
   the same string.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slide 90 (UN-mark
-worked example), cross-checked against slides 92–93 (packaging type/
-material code tables). Corroborated at a topic level by Exam Q12 (a
-package-marking photo, circled-letter identification), a related but not
-identical marking-decoding fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.2.1(c),
+read directly this session in the authenticated Bookshelf: "la lettre X, Y
+ou Z désignant le ou les groupes d'emballage pour lesquels le modèle type
+a subi avec succès les épreuves de résistance: X pour le groupe
+d'emballage I... Y pour le groupe d'emballage II... Z pour le groupe
+d'emballage III." Direct, exact confirmation of the correct answer. The
+three distractors are each independently confirmed as real, different
+elements of the same mark: §6.0.4.2.1(b) (packaging-type/material code,
+"4G"), §6.0.4.2.1(f) (year of manufacture), §6.0.4.2.1(g) (State
+authorizing the mark, "CH").
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.2.1(c)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2079,7 +2085,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-029 | 0.3.1 Responsabilités Exploitant DGR 1.4 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-030 | 0.3.3 Divergence de l'Exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-031 | 0.4.2 Groupe d'emballage I | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-032 | 0.5.1 Code "Y" du marquage UN | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-032 | 0.5.1 Code "Y" du marquage UN | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-033 | 0.6.1 Première action d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 145 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-034 | 0.4.3 Séparation — risque primaire/subsidiaire (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slides 106, 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-035 | 6.1.6 Notification du commandant de bord (restricted) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

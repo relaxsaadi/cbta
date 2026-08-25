@@ -1471,18 +1471,13 @@ distractor):**
 - "13" is what the slide states represents the année de fabrication de
   l'emballage (2013), not Y.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 86 (DGR marking
-code decode example), cross-checked against slide 85 (marking-criteria
-intro: "Tout colis de marchandises dangereuses doit être marqué...
-Visibles/Lisibles/Durable/Pouvoir être exposées aux intempérie") and slide
-87 (second worked marking example: Chromium trioxide anhydrous UN1463, code
-"4G/Y30/S/12", "NL/VL456"). Corroborated at a topic level by Exam Q13
-(photo-based packaging-type-code identification question) and Practice Q22
-("Les emballages agréés pour MD doivent... porter un code d'homologation
-ONU"), each testing the broader UN-packaging-marking topic without directly
-matching this specific "Y=groupe d'emballage" fact, noted honestly as
-topic-level corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.2.1(c),
+read directly this session in the authenticated Bookshelf (see this
+topic's `Q-7.4-032` for the full citation). Direct confirmation of "Y =
+groupe d'emballage II"; each distractor (packaging code "4G", State "CH",
+year "13") independently confirmed as a real but different mark element.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.2.1(c)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1513,19 +1508,13 @@ code from the same table, a swapped-code distractor):**
 - "3–Jerrican" is a different code on the same table.
 - "5–Sac" is a different code on the same table.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 88 (DGR 6.0.3.1
-packaging-type code table / DGR 6.0.3.2 packaging-material code table),
-cross-checked against slide 86's own worked example, which uses code "4G"
-(packaging type 4 = Caisse, material G = Carton) — directly consistent with
-the table on slide 88. Per this batch's own "0.5.1 drawn at 2 items"
-rationale above, this item tests a distinct fact (the packaging-type code
-table) from `Q-7.5-021`'s (the UN-mark decode example), not a reworded
-repeat. Corroborated at a topic level by Exam Q13 (packaging-type-code
-photo-identification question — the same general code-reading skill,
-without a direct numeric match to the "4=Caisse" fact tested here) and
-Practice Q22 (UN homologation code requirement), noted honestly as
-topic-level corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.3.1, read
+directly this session in the authenticated Bookshelf: "Code de type —
+Emballage: 1 — Fût[;] 2 — Réservé[;] 3 — Jerrican[;] 4 — Caisse[;] 5 —
+Sac[;] 6 — Emballage composite." Direct, exact, complete match to the
+correct answer and all three distractors.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1883,8 +1872,8 @@ the source does not draw, per binding caveat 6.
 | Q-7.5-018 | 0.1.4 Danger/risque — exemple liquide inflammable | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-019 | 0.3.1 Responsabilités Expéditeur DGR 1.3 | DRAFT — distractors Tier A-confirmed absent from §1.4.1, correct answer's own citation unconfirmed | MCQ | DGR 67e §1.4.1 (p.11, distractors only) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-020 | 0.4.1 Neuf classes DGR 3.0.2 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §3.0.1.1 + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-021 | 0.5.1 Décoder marquage UN/4G/Y30/S/13/CH | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 86 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-022 | 0.5.1 Code de type d'emballage DGR 6.0.3.1 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 88 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-021 | 0.5.1 Décoder marquage UN/4G/Y30/S/13/CH | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-022 | 0.5.1 Code de type d'emballage DGR 6.0.3.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-023 | 0.2.2 Catégories associées aux MD cachées (AOG, etc.) | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-024 | 5.1.1 Niveaux d'interdiction — schéma des types | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-025 | 5.2.1 Portée des divergences d'État DGR 2.8.1 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 68 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

@@ -1575,12 +1575,13 @@ different marking element):**
 - "L'État d'origine de l'emballage" — that is what "CH" signifies on the
   same slide (Suisse), not "Y".
 
-**Source basis:** Tier B — KOST Function 7.8 course, slide 86 (full UN-mark
-breakdown), cross-checked against slide 85 (visible/lisible/durable
-marking criteria) and slide 88 (DGR 6.0.3.1/6.0.3.2 packaging-type/material
-codes). Corroborated by exam Q14 (circled letter on package photo) and
-practice Q25/Q26 (full UN-spec marking exercise, packaging-symbol meaning).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.2.1(c),
+read directly this session in the authenticated Bookshelf (see this
+topic's `Q-7.4-032` for the full citation). Direct confirmation of "Y =
+groupe d'emballage II"; each distractor (packaging code "4G", year "13",
+State "CH") independently confirmed as a real but different mark element.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.2.1(c)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2077,7 +2078,7 @@ entire p.106–111 pool, as already noted for 0.6.1/6.2.3 in Stage 1).
 | Q-7.8-019 | 0.2.1 Exemple interdit en toute circonstance | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 37 (DGR 4.2 table) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-020 | 0.3.3 Exemple de divergence d'État (ITG) | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slides 58–62 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-021 | 0.4.2 Groupe d'emballage I = très dangereuses | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-022 | 0.5.1 Lettre « Y » = groupe d'emballage II | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 86 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-022 | 0.5.1 Lettre « Y » = groupe d'emballage II | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-023 | 0.5.3 NOTOC non requise — quantités exceptées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 Tableau 9.5.A (§2.6.1) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-024 | 6.2.2 Situation où la NOTOC n'est pas exigée | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-025 | 6.2.2 Qui fournit la NOTOC au commandant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

@@ -1649,16 +1649,16 @@ signifie la lettre « Y » ?
   ("S = indique que l'emballage est fait pour contenir des solides ou des
   emballages intérieur"), not "Y" — a wrong-checkpoint distractor.
 
-**Source basis:** Tier B — KOST Function 7.9 course, slide 90 (full UN-mark
-decode: UN/4G/Y/30/S/13/CH/2176/CG), cross-checked against slide 89
-(marking criteria, this batch's own Q-7.9-027 source) and slide 92
-(packaging type/material letter-code tables, e.g. 4=Caisse,
-G=Carton — a related but distinct code system from the same course). No
-direct exam/practice hit for this exact "Y" letter-decode fact; Exam Q11
-(packaging-type letter identification from a photo) tests an adjacent but
-distinct fact from the same general area, noted honestly as topic-level
-only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.2.1(c),
+read directly this session in the authenticated Bookshelf (see this
+topic's `Q-7.4-032` for the full citation). Direct confirmation of "Y =
+groupe d'emballage II." The third distractor ("S = solides/emballages
+intérieurs") is independently confirmed as a real but different mark
+element by §6.0.4.2.1(e): "pour les emballages destinés à contenir des
+solides ou des emballages intérieurs, la lettre « S »" — a genuine
+wrong-checkpoint distractor, exactly as the course frames it.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.2.1(c)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1833,7 +1833,7 @@ this sub-task (no independent exam/practice cross-reference recorded).
 | Q-7.9-025 | 0.3.1 Huit responsabilités de l'Exploitant (DGR 1.4) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-026 | 0.3.3 Divergence de l'Exploitant — Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.9 course slide 71 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-027 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-028 | 0.5.1 Code « Y » du marquage UN | DRAFT — Tier A not attempted | MCQ | KOST F7.9 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-028 | 0.5.1 Code « Y » du marquage UN | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-029 | 0.5.3 Document accompagnant l'envoi (DGD) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-030 | 0.6.1 Nombre d'étapes (awareness, distinct from 6.2.3) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-031 | 0.6.2 Information d'urgence disponible pour le commandant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 107 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

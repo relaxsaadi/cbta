@@ -274,6 +274,36 @@ No SOURCE GAP or SOURCE CONFLICT found for any of the 23 items. Program
 totals after Topic 2: 192 FROZEN (was 172), 24 PARTIAL (was 21), 220
 NOTATTEMPTED (was 243); GAP (13) and STALE (4) unchanged.
 
+### 2026-08-25 (second Tier A phase) — Topic 3: Part 6/UN-spec packaging marks, 10 items cross-applied (all confirmed)
+
+Navigation to **Part 6 §6.0.3 and §6.0.4** (Bookshelf p.677) resolved all
+10 items tagged to the Part 6/UN-spec-mark topic, across Functions 7.3,
+7.4, 7.5, 7.6, 7.7, 7.8, 7.9, and 7.10 — the cleanest topic sweep so far
+(10/10 FROZEN, zero PARTIAL). Sections read directly this session:
+
+- **§6.0.3.1** — packaging type codes: 1=Fût, 2=Réservé, 3=Jerrican,
+  4=Caisse, 5=Sac, 6=Emballage composite. Resolves `Q-7.5-022`,
+  `Q-7.10-042`.
+- **§6.0.3.2** — packaging material codes: A=Acier, B=Aluminium, C=Bois
+  naturel, D=Contre-plaqué, F=Bois reconstitué, G=Carton, H=Matière
+  plastique, L=Textile, M=Papier multicouches, N=Métal autre, P=Verre/
+  porcelaine/grès. Resolves `Q-7.7-025`.
+- **§6.0.4.0.1** — marks certify the design type passed manufacture-stage
+  performance tests (§6.2/§6.3), not fitness for a specific substance —
+  verbatim match. Resolves `Q-7.3-033`.
+- **§6.0.4.2.1(c)** — the X/Y/Z packing-group letter: "X pour le groupe
+  d'emballage I... Y pour le groupe d'emballage II... Z pour le groupe
+  d'emballage III." Resolves `Q-7.4-032`, `Q-7.5-021`, `Q-7.6-024`,
+  `Q-7.8-022`, `Q-7.9-028`, `Q-7.10-023` (the 6-item "UN/4G/Y/30/S/13/CH"
+  worked-example cluster). Distractor elements independently confirmed at
+  §6.0.4.2.1(b) (packaging type/material code), (d) (max gross mass or
+  "S" for solids/inner packagings), (f) (year of manufacture), (g) (State
+  authorizing the mark).
+
+No SOURCE GAP or SOURCE CONFLICT found. Program totals after Topic 3: 202
+FROZEN (was 192), 210 NOTATTEMPTED (was 220); GAP (13), PARTIAL (24),
+STALE (4) unchanged.
+
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see

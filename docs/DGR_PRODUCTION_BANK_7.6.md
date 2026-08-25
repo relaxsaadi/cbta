@@ -1426,14 +1426,14 @@ correctly-labelled component from the same worked example):**
 - "L'année de fabrication de l'emballage" — that is what "13" represents,
   not "Y."
 
-**Source basis:** Tier B — KOST Function 7.6 course, slide 92 (UN-mark
-worked example, DGR 6.0.3), cross-checked against slide 91 (marking
-criteria) and slide 94 (packaging type/material code tables, DGR
-6.0.3.1/6.0.3.2). Corroborated by Practice Q16, which requires the
-candidate to derive the same kind of UN-spec marking string (including its
-own packing-group letter) for a UN3109 package — a direct application of
-the identical component-by-component marking skill.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.2.1(c),
+read directly this session in the authenticated Bookshelf (see this
+topic's `Q-7.4-032` for the full citation). Direct confirmation of "Y =
+groupe d'emballage II"; each distractor (packaging code "4G", year "13",
+State "CH") independently confirmed as a real but different mark element
+(§6.0.4.2.1(b), (f), (g)).
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.2.1(c)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1857,7 +1857,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-021 | 0.3.1 Entreposage = responsabilité exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-022 | 0.3.3 Divergence exploitant — Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slide 61 (DGR 2.8.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-023 | 0.4.2 Groupe d'emballage II — danger moyen | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-024 | 0.5.1 Lettre "Y" marquage UN-spec | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-024 | 0.5.1 Lettre "Y" marquage UN-spec | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-025 | 0.5.3 Mention LTA — DGD/CAO | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-026 | 0.6.1 Première mesure d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 128 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-027 | 0.6.2 Disponibilité renseignements urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 126 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

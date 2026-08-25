@@ -428,6 +428,15 @@ topic-priority order: `docs/DGR_TIER_A_INVENTORY.md`.
 - **Program totals after Topic 2:** 192 FROZEN (up from 172), 24 PARTIAL
   (up from 21), 220 NOTATTEMPTED (down from 243); GAP (13), STALE (4)
   unchanged.
-- Remaining topics (3–8) not yet started this phase — see
+- **Topic 3 — Part 6/UN-spec packaging marks: ✅ RESOLVED.** 10 items
+  across Functions 7.3/7.4/7.5/7.6/7.7/7.8/7.9/7.10, all now `FROZEN FR /
+  SOURCE VERIFIED` — the cleanest topic sweep so far, zero PARTIAL. Single
+  navigation to Part 6 §6.0.3 (packaging type/material codes) and §6.0.4
+  (mark scope + X/Y/Z packing-group letter) resolved the entire 6-item
+  "UN/4G/Y/30/S/13/CH" worked-example cluster plus 4 standalone items.
+- **Program totals after Topic 3:** 202 FROZEN (up from 192), 210
+  NOTATTEMPTED (down from 220); GAP (13), PARTIAL (24), STALE (4)
+  unchanged.
+- Remaining topics (4–8) not yet started this phase — see
   `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan for the priority order
   and per-topic item lists.

@@ -1438,14 +1438,13 @@ correctly-labelled material from the same slide):**
 - "C" — same slide: "C–Bois naturel."
 - "H" — same slide: "H–Matière plastique."
 
-**Source basis:** Tier B — KOST Function 7.7 course, slide 92 (DGR
-6.0.3.1/6.0.3.2, packaging type/material code tables), cross-checked against
-slide 90 (UN-mark worked example, 4G/Y/30/S/13/CH/2176/CG) and slide 89
-(marking criteria: visible/lisible/durable/résistant aux intempéries). No
-direct exam/practice hit for this exact material-code-letter fact; Exam Q14
-("UN-spec packaging symbol identification") tests the same general marking
-topic at a different level of detail, noted honestly as topic-level only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.3.2, read
+directly this session in the authenticated Bookshelf: "Code de matériau —
+Matériau: A — Acier (tous types et traitements de surface)[;] B —
+Aluminium[;] C — Bois naturel[;] ... H — Matière plastique." Direct,
+exact, complete match to the correct answer and all three distractors.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.3.2 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1782,7 +1781,7 @@ A), 2026-08-25.
 | Q-7.7-022 | 0.3.1 Actualisation des connaissances — 2 ans | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.5.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-023 | 0.3.3 Divergence exploitant — AH Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slides 63–65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-024 | 0.4.2 Groupe d'emballage I — degré le plus élevé | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-025 | 0.5.1 Code matériau — A = Acier | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-025 | 0.5.1 Code matériau — A = Acier | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.2 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-026 | 0.5.3 Document obligatoire — DGD | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-027 | 0.6.2 Disponibilité info urgence (employeur) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 117 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-028 | 0.4.1 Quantités limitées DGR 2.7 vs 2.6 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

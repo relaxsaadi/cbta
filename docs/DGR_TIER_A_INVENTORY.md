@@ -7,15 +7,16 @@ and `docs/DGR_PRODUCTION_BANK_7.2.md` … `docs/DGR_PRODUCTION_BANK_7.10.md`
 (Functions 7.2–7.10, 434 items). Regulatory baseline: IATA DGR 67th Edition
 2026, French, Addendum 1 integrated.
 
-**Live status note (2026-08-25, updated after Topic 2):** the category
+**Live status note (2026-08-25, updated after Topic 3):** the category
 counts and topic sublists below are a snapshot taken *before* topic-based
-navigation began. Topic 1 (lithium batteries, 14 items) and Topic 2
-(NOTOC, 23 items — 20 confirmed, 3 moved to PARTIAL) are now resolved —
-see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 1"/"Topic 2" entries. Current
-totals: **192 FROZEN, 13 GAP, 24 PARTIAL, 4 STALE, 220 NOTATTEMPTED** (453
-total). The tables below are left as the original baseline snapshot for
-audit purposes; do not re-derive counts from them without applying this
-note.
+navigation began. Topic 1 (lithium batteries, 14 items), Topic 2 (NOTOC,
+23 items — 20 confirmed, 3 moved to PARTIAL), and Topic 3 (Part 6/UN-spec
+marks, 10 items — all confirmed) are now resolved — see
+`docs/DGR_SOURCE_REGISTER.md`'s "Topic 1"/"Topic 2"/"Topic 3" entries.
+Current totals: **202 FROZEN, 13 GAP, 24 PARTIAL, 4 STALE, 210
+NOTATTEMPTED** (453 total). The tables below are left as the original
+baseline snapshot for audit purposes; do not re-derive counts from them
+without applying this note.
 
 Counting method: each function's own batch summary table is the canonical
 row set. For 7.1 the 19-row table in `DGR_STAGE_2B_STATUS.md` is used (its
@@ -193,10 +194,12 @@ moved to PARTIAL — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 2" entry.
 | Q-7.8-049 | 6.2.2 Langue anglaise exigée pour la NOTOC |
 | Q-7.8-050 | 6.2.2 Principe fondamental de la NOTOC |
 
-### Topic 3 — Part 6 / UN specification packaging marks (10 items)
+### Topic 3 — Part 6 / UN specification packaging marks (10 items) — ✅ RESOLVED 2026-08-25 (all 10 confirmed)
 
 Exact mark decoding, X/Y/Z, packaging type/material codes, year/state/
-manufacturer elements.
+manufacturer elements. All 10 now `FROZEN FR / SOURCE VERIFIED` via
+§6.0.3.1, §6.0.3.2, §6.0.4.0.1, §6.0.4.2.1(c) — see
+`docs/DGR_SOURCE_REGISTER.md`'s "Topic 3" entry.
 
 | ID | Sub-task |
 |---|---|

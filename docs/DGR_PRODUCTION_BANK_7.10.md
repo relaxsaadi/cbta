@@ -1656,14 +1656,14 @@ correctly-labelled field from the same worked example):**
 - "État d'origine de l'emballage" — same slide: that meaning belongs to
   "CH," not "Y."
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 93 (DGR
-6.0.3), cross-checked against slide 92 (general marking criteria:
-visible/lisible/durable) and slide 94 (chromium trioxide marking-use
-example). Corroborated at a topic level by Exam Q10 (circled-letter
-package-marking photo identification) and Practice Q17 (meaning of the
-"UN" abbreviation followed by a number), both testing the general
-UN-marking topic without directly matching this specific "Y" cell.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.4.2.1(c),
+read directly this session in the authenticated Bookshelf (see this
+topic's `Q-7.4-032` for the full citation). Direct confirmation of "Y =
+groupe d'emballage II"; each distractor ("4G" packaging code, "30" max
+gross mass, "CH" State) independently confirmed as a real but different
+mark element (§6.0.4.2.1(b), (d), (g)).
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.2.1(c)
+(Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2105,7 +2105,7 @@ corroboration.
 | Q-7.10-020 | 0.2.1 Caractéristiques DGR 2.1 (interdites en toute circonstance) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-021 | 0.2.2 Exemples de DG cachées (DGR 2.2.4) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 60–61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-022 | 0.3.3 Divergence de l'Exploitant (DGR 2.8.3) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 76 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-023 | 0.5.1 Code « Y » du marquage UN (DGR 6.0.3) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 93 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-023 | 0.5.1 Code « Y » du marquage UN (DGR 6.0.3) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-024 | 0.5.3 Document requis — DGD, pas NOTOC (DGR 8.0.1) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-025 | 0.6.1 Ordre de la première étape d'urgence | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-026 | 0.6.2 Renseignement d'urgence — DGR 1.4 wheel-item | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2915,14 +2915,12 @@ example's own "4G" element decodes, per this table, to "4–Caisse" +
 "G–Carton" — a genuine, source-grounded cross-check, not asserted as this
 item's own tested fact.
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 95 (DGR
-6.0.3.1/6.0.3.2), cross-checked against slide 93 (the full UN-mark worked
-example, already Q-7.10-023's evidence, Batch 2). No direct exam/practice
-hit for this exact code-table fact; Exam Q10 (circled-letter package-
-marking photo) and Practice Q17 (meaning of "UN" abbreviation) test the
-general marking topic without directly matching this specific code table,
-noted honestly as topic-level corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §6.0.3.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.5-022` for the full citation). Direct, exact, complete match to the
+correct answer and all three distractors.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3033,7 +3031,7 @@ rating for this leaf.
 | Q-7.10-039 | 0.2.3 Confort/besoins du passager | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-040 | 0.3.1 Neuf responsabilités de l'expéditeur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 70 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 75 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-042 | 0.5.1 Code de type d'emballage (4=Caisse) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 95 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-042 | 0.5.1 Code de type d'emballage (4=Caisse) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-043 | 0.5.2 Marquage bagage — glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-044 | 0.6.1 Contact corps/habits — 5 mesures | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 

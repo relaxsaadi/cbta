@@ -2135,3 +2135,985 @@ below the function's 76-question provisional ceiling.
 - Does not mark any item `APPROVED` — no qualified reviewer exists in this
   pass.
 - Does not touch Moodle or any live/production question-bank copy.
+
+## Batch 3
+
+Third production batch for Function 7.10, drafted against the same
+`docs/DGR_STAGE2A_FUNCTION_7.10_BLUEPRINT.md` (PROVISIONAL/CEILING,
+76-question maximum across 23 leaf sub-tasks — Block 0 = 59, Block 3 = 7,
+Block 5 = 4, Block 7 = 6). Batches 1+2 (`Q-7.10-001`–`032`, 32 items)
+touched 21 of Function 7.10's 22 non-gapped leaves but left real ceiling
+headroom on almost every leaf, concentrated most heavily in Block 3 (5 of 7
+remaining) and Block 5 (2 of 4 remaining, though 5.1.2 was already at its
+own hard ceiling of 1). Per this task's own explicit priority, this batch
+targets Block 3's and Block 5's remaining headroom first, then genuine
+remaining Block 0 headroom — **not** an exhaustive fill of every leaf's
+paper ceiling. This batch drafts **12 new items**, `Q-7.10-033`–`044`,
+continuing the ID sequence directly from where Batch 2 stopped: 2 items in
+Block 3 (one each for 3.4.1 and 3.4.2, genuinely new, previously-unused
+facts from the same shared evidence pool), 1 item in Block 7 (7.3, a
+genuinely new fact from the practice book, not yet drawn as its own
+dedicated item), and 9 items across 9 different Block 0 leaves (each a
+previously-unused primary slide, none a reworded duplicate of any Batch
+1/2 item). **Block 5 was re-examined in full but yielded no additional
+item this batch** — see the honest accounting below. This batch is
+explicitly the smallest and most source-constrained of the three, and this
+is treated as the expected, correct outcome of a third drafting pass, not
+a shortfall.
+
+## Status of this batch — read before using any item below
+
+**All 12 items in this batch are `DRAFT`, Tier B basis only. None has been
+Tier A-verified against the current IATA DGR 67th Edition (2026, French,
+Addendum 1) text.**
+
+- Per this task's own explicit framing, Tier A verification remains
+  blocked this session — a `chrome-devtools` MCP connection/page-selection
+  failure, not a content issue (see `docs/AI_HANDOFF.md`'s "Tier A retry
+  #2" entry). No attempt was made this pass, and **no Tier A content was
+  fabricated to compensate.** This entire batch is Tier B only, exactly
+  like Batches 1 and 2.
+- Every item below is sourced directly and verbatim-traced to the same
+  **KOST Function 7.10 training material** (Tier B) already used for
+  Batches 1 and 2, re-extracted this session with `pdftotext -layout` on a
+  per-page basis so every quote is tied to an exact printed slide number,
+  read directly from the raw source folder:
+  `/Users/mac/Documents/Fichiers/Algerie/CBTA final/yasmine cbta/wetransfer_supports-pedagogiques-dgr-cbta-kost-academy_2025-10-12_1842/COURS DGR-CBTA-IATA/DGR-FONCTION 7.10/`.
+  - `09_KOST_DGR_CBTA_Course_Function_7.10_FR_2025.pdf` — course, 114
+    slides. MD5 re-verified this session as
+    `aee456268737b0a4e99e597b89613480`, identical to Batch 1's, Batch 2's,
+    and Stage 1's own recorded hash — confirming the same file. Primary
+    source, cited below by printed slide number.
+  - `11_KOST_DGR_CBTA_Exam_Function_7.10_FR_2025.pdf` (F-KOST 05, 20Q) —
+    re-extracted and read in full again this session, MD5 re-verified as
+    `fc30963d24da5847565dc3d643d12b88` (matching Batches 1/2's own record);
+    corroborating cross-reference only. Carries no marked answer key, as
+    noted in both prior batches — where an exam item lacks a traceable
+    course-stated answer (e.g. Q15's UN1910 designation, Q19's "class
+    strictly prohibited in the hold"), it was deliberately **not** used as
+    the basis for a new item this batch, to avoid guessing at an unstated
+    answer — see the "Deliberately not drafted" notes below.
+  - `08_KOST_DGR_CBTA_Practice_Book_Function_7.10_FR_2025.pdf` (F-KOST 09,
+    20Q) — re-extracted and read in full again this session, MD5
+    re-verified as `cf300e211bd43d8a720108e8713ca182` (matching Batches
+    1/2's own record); corroborating cross-reference only, except for
+    Question 5 (Q-7.10-035 below), whose four-option structure and content
+    match against two independently-stated course facts (slides 107 and
+    69) are treated as sufficiently strong to anchor a new item — flagged
+    explicitly in that item's own compliance note, exactly like the
+    program's existing practice of using Practice Q19 (Batch 1's
+    Q-7.10-009) the same way.
+- Every "DGR x.y.z" section number cited below is, as in Batches 1 and 2,
+  **as displayed on the KOST slide itself** — Tier B, not independently
+  re-verified against the current 67th Edition/Addendum 1 text. The course
+  remains built on the **66th Edition** (per its own p.25 and Stage 1's own
+  finding).
+- Per `.claude/rules/dgr-stage2b.md` rule 4, **no item in this batch may be
+  marked `APPROVED`.** Status is `DRAFT` only.
+- **0.3.2 remains a confirmed `SOURCE GAP`, hard-gated to 0.** No item was
+  drafted against it this batch either; no new evidence was found this
+  session to change that status.
+- **5.1.2 remains at its own hard ceiling of 1** (drawn in Batch 1,
+  Q-7.10-012) — no further item was drawn or is permitted from this leaf's
+  pool without new evidence, per binding caveat 2.
+- **0.3.3 and 0.6.1 are now drawn at their exact ceiling** (Q-7.10-041 and
+  Q-7.10-044 respectively, both 2/2) — no further item may ever be drawn
+  from either leaf's pool without new evidence.
+- This batch's own honest yield assessment: of the function's 23 leaves,
+  9 (0.3.2, 5.1.2, 0.1.4, 0.2.2, 0.5.3, 7.1+7.2, 5.1.1, and now 0.3.3 and
+  0.6.1 as of this batch) are treated as genuinely exhausted or
+  functionally exhausted of further non-duplicative, well-evidenced
+  content without new source material — see the "What this batch does NOT
+  do" section below for the leaf-by-leaf accounting.
+
+## Sub-task selection and ceiling compliance — Batch 3
+
+This batch drafts **12 items**, touching **12 leaves**, none exceeding its
+own blueprint ceiling. Per the task's own explicit priority, Block 3 and
+Block 7 (the two blocks with the most headroom relative to their own small
+size) were examined first; Block 5 was re-examined in full and yielded
+nothing new (see below); the remaining items are spread across 9 different
+Block 0 leaves, one item each, chosen specifically because each rests on a
+genuinely new, previously-unused primary slide within that leaf's own
+evidence span — not a reworded restatement of any Batch 1/2 fact.
+
+| Sub-task | Title | Ceiling | Running total before | Batch 3 drawn | Running total after | New item |
+|---|---|---|---|---|---|---|
+| 3.4.1 | Vérifier la documentation... cachées ou non déclarées | 3 | 1 | 1 | 2 | Q-7.10-033 |
+| 3.4.2 | Vérifier les colis... cachées ou non déclarées | 4 | 1 | 1 | 2 | Q-7.10-034 |
+| 7.3 | Signaler les MD non déclarées ou mal déclarées | 4 | 2 | 1 | 3 | Q-7.10-035 |
+| 0.1.1 | Comprendre la définition | 4 | 1 | 1 | 2 | Q-7.10-036 |
+| 0.1.2 | Reconnaître le cadre juridique | 3 | 1 | 1 | 2 | Q-7.10-037 |
+| 0.2.1 | Développer un flair pour les MD interdites | 4 | 1 | 1 | 2 | Q-7.10-038 |
+| 0.2.3 | Être au courant des dispositions passagers | 8 | 4 | 1 | 5 | Q-7.10-039 |
+| 0.3.1 | Clarifier le rôle des parties prenantes | 5 | 3 | 1 | 4 | Q-7.10-040 |
+| 0.3.3 | Reconnaître l'impact des divergences | 2 | 1 | 1 | 2 (AT CEILING) | Q-7.10-041 |
+| 0.5.1 | Prescriptions de base — marquage | 4 | 1 | 1 | 2 | Q-7.10-042 |
+| 0.5.2 | Prescriptions de base — étiquetage | 8 | 3 | 1 | 4 | Q-7.10-043 |
+| 0.6.1 | Sensibilisation procédures d'urgence générales | 2 | 1 | 1 | 2 (AT CEILING) | Q-7.10-044 |
+| **Total** | | | | **12** | | |
+
+**Block spread:** Block 0 = 9, Block 3 = 2, Block 5 = 0, Block 7 = 1.
+Combined with Batches 1+2's 32 items, Function 7.10 now has **44 items
+total** against its 76-question provisional ceiling, still well below the
+ceiling — genuinely source-constrained at this point, not artificially
+capped.
+
+**No per-sub-task ceiling is exceeded.** 0.3.3 and 0.6.1 reach their exact
+ceiling of 2 this batch; every other leaf drawn this batch remains
+strictly below its own ceiling.
+
+**Deliberately not drafted this batch, and why:**
+
+- **0.3.2 ("Comprendre les responsabilités des passagers") — confirmed
+  `SOURCE GAP`, count = 0, per blueprint binding caveat 1.** Re-checked
+  this session; no new evidence found.
+- **5.1.2 ("Appliquer les prescriptions d'approbation") — remains at its
+  hard ceiling of 1 (Batch 1's Q-7.10-012).** Binding caveat 2 permits at
+  most one item from this leaf's thin two-slide pool (p.41, p.45), already
+  drawn; no exception without new evidence.
+- **5.1.1 ("Identifier les marchandises dangereuses interdites") —
+  genuine ceiling headroom (2 of 3) exists on paper, but was NOT drawn
+  this batch after active investigation, for two source-grounded reasons:**
+  (1) the leaf's own dedicated exercise (slide 57: a 120 Wh lithium
+  battery in checked baggage / gas lighters prohibited in all cases /
+  a medical-oxygen bottle authorized in cabin "sans aucune condition," all
+  phrased as apparent True/False prompts) carries **no course-stated
+  answer anywhere in the extracted text** — unlike Practice Q19 (used for
+  Q-7.10-009) or Practice Q5 (used for Q-7.10-035 below), there is no
+  companion course passage that states the correct resolution of any of
+  these three specific scenarios (in particular, no slide anywhere in the
+  114-slide deck states a checked-baggage restriction specific to a 120 Wh
+  lithium-ion battery); drafting an answer here would mean inferring a
+  regulatory conclusion the supplied KOST source does not itself state, a
+  direct violation of `.claude/rules/dgr-stage2b.md` rule 1. (2) Exam
+  Q19's "which class is strictly prohibited in an aircraft hold" was
+  actively checked against a full-text search of the course for "soute"
+  — the only two hits (p.58's baggage-hold hidden-DG clause and p.100's
+  dry-ice checked-baggage marking rule, the latter now used in
+  Q-7.10-043) establish no rule about a class being hold-prohibited, so
+  this exam item's own correct option cannot be traced to any course
+  statement either. **This leaf is honestly assessed as functionally
+  exhausted of safely-answerable evidence at this batch's own diligence
+  level** — its remaining paper headroom (2) should not be read as
+  "undrawn because unexamined."
+- **0.1.4 ("Faire la distinction entre un danger et un risque") —
+  genuine ceiling headroom (2 of 3) exists on paper, but this leaf's own
+  small 4-slide span (p.31–34) is now substantially consumed by
+  Q-7.10-019 (Batch 2, the essence/gasoline worked example, itself
+  cross-checking the leaf's own general definitions on p.31–32); no
+  further genuinely distinct fact was found this session without
+  re-testing the same danger/risque definitions already covered.
+- **0.2.2 ("Reconnaître les marchandises dangereuses potentiellement
+  cachées") — genuine ceiling headroom (3 of 4) exists on paper, but the
+  leaf's own remaining unused content (the p.66 exercise: fauteuil pour
+  dentiste / équipement de plongée / trousse à outils) carries no
+  course-stated answer in the extracted text** — the same rule-1 concern
+  as 5.1.1 above applies; not drawn.
+- **0.4.1 ("Trouver de l'information générale sur les classes et les
+  divisions") — genuine ceiling headroom (4 of 8) exists, and real,
+  distinct evidence for it was identified this session (the class-name
+  matching table on slide 79, corroborated by Exam Q18's own
+  division/class-to-name matching exercise), but was deliberately left
+  undrawn this batch** to keep this batch's own Block-0 selection focused
+  on leaves with zero or minimal prior coverage rather than a leaf already
+  drawn at 4 of its 8-ceiling — genuine headroom for a future batch, not
+  exhausted evidence.
+- **0.5.3 ("Déterminer les documents exigés") — genuine ceiling headroom
+  (1 of 2) exists on paper, but the leaf's own three-slide span (p.101–103)
+  is now fully consumed by Q-7.10-024 (Batch 2); no further distinct fact
+  was found this session.
+- **7.1 + 7.2 (combined pool) — genuine ceiling headroom (1 of 2) exists
+  on paper, but the pool's single shared slide (p.108–109) is already
+  fully consumed by Q-7.10-013 (Batch 1); no further distinct fact was
+  found this session without re-testing the same reporting-entities list.**
+- **Block 5 overall: re-examined in full this batch and yielded zero new
+  items** — 5.1.1's remaining headroom is unsafe to draw per the
+  rule-1 concern above, and 5.1.2 is at its own hard ceiling. This is the
+  block the task flagged as "only lightly drawn so far," and this batch's
+  finding is that its remaining paper headroom does not correspond to
+  genuinely usable, source-supported additional evidence at this
+  session's own diligence level — an honest result, not a shortfall in
+  drafting effort.
+
+## Method notes on distractor sourcing (rule 6 compliance)
+
+Every distractor below is grounded in something actually read this
+session, using the same two techniques as Batches 1 and 2: (a) a
+different, correctly-stated fact from elsewhere in the same KOST Function
+7.10 course, repurposed here as a wrong answer to *this* question (a
+"swapped-fact" or "wrong-checkpoint" distractor), or (b) a direct
+contradiction of a specific clause in the same source passage the correct
+answer comes from (a "parsing" distractor). No distractor asserts an
+invented regulatory fact, an invented numeric threshold, or a fact sourced
+from a different function's course material. Several items in this batch
+(Q-7.10-033, Q-7.10-034, Q-7.10-039, Q-7.10-040, Q-7.10-041) draw on
+evidence pools already shared with Batch 1/2 items under binding caveats 3
+and 4 — each such item carries its own explicit compliance note showing
+which specific fact/slide it tests and how that fact is distinct from
+every other item already drawn from the same pool in any batch, so no
+underlying fact is duplicated under a reworded stem.
+
+---
+
+## Q-7.10-033 — Motifs de non-déclaration des marchandises dangereuses par l'expéditeur ou les passagers
+
+**Sub-task:** 3.4.1 Vérifier la documentation pour voir s'il y a des indications concernant des marchandises dangereuses cachées ou non déclarées
+**Type:** MCQ, single-answer ("laquelle N'EST PAS")
+
+**Stem (FR):** Selon le cours (Pourquoi l'expéditeur ou les passagers ne
+déclarent pas les marchandises dangereuses ?), laquelle des raisons
+suivantes n'est **PAS** citée par le cours parmi les motifs de
+non-déclaration ?
+
+**Options:**
+- **(Correct)** L'absence de formation obligatoire du personnel chargé du
+  contrôle de sécurité.
+- Les coûts d'expédition généralement plus élevés pour les marchandises
+  dangereuses.
+- Les pratiques indésirables.
+- La mauvaise compréhension des règles.
+
+**Correct answer rationale:** Slide 59 lists exactly three motives: "Les
+coûts d'expédition sont généralement plus élevés pour les marchandises
+dangereuses[.] PRATIQUES INDÉSIRABLES[.] La mauvaise compréhension des
+règles." A lack of mandatory training for security personnel is not among
+them, and directly contradicts the course's own mandatory-training
+statement found elsewhere (slide 72: initial training + biennial
+refresher + mandatory test, already Q-7.10-027's evidence, Batch 2).
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is one of the three motives named on slide 59, verbatim or
+near-verbatim):**
+- "Les coûts d'expédition... plus élevés" — slide 59.
+- "Les pratiques indésirables" — slide 59 (as-worded on the slide itself).
+- "La mauvaise compréhension des règles" — slide 59.
+
+**Binding-caveat-4 compliance note:** this item draws on slide 59, a
+distinct slide from the ones already used for 0.2.2 (Q-7.10-021, Batch 2,
+slides 60–61's hidden-DG examples list), 3.4.2 (Q-7.10-010, Batch 1, slides
+62–64's physical-indicator list), and this leaf's own Q-7.10-009 (Batch 1,
+slide 58's hidden-DG definition + Practice Q19's invoice scenario) — no
+underlying fact is duplicated. It stays within 3.4.1's own official
+wording (verifying documentation for hidden/undeclared-DG indications) by
+testing background awareness of the motives a documentation-verifying
+agent should recognize, distinct from Q-7.10-009's own applied
+document-verification-decision scenario.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 59, cross-
+checked against slide 58 (hidden-DG definition, already Q-7.10-009's
+evidence, Batch 1) and slide 72 (DGR 1.7.2 mandatory training, already
+Q-7.10-027's evidence, Batch 2 — the correct-to-select option's own real
+but contradicting source). No direct exam/practice hit for this exact
+motives list.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-034 — Recommandations pour prévenir les scénarios de marchandises dangereuses cachées
+
+**Sub-task:** 3.4.2 Vérifier les colis pour voir s'il y a des indications concernant des marchandises dangereuses cachées ou non déclarées
+**Type:** MCQ, single-answer ("laquelle NE fait PAS partie")
+
+**Stem (FR):** Selon le cours (Recommandations pour éviter les scénarios de
+marchandises dangereuses cachées), laquelle des mesures suivantes ne fait
+**PAS** partie des recommandations citées par le cours ?
+
+**Options:**
+- **(Correct)** Isoler la menace (colis, bagage, zone) et protéger les
+  personnes.
+- Respecter la réglementation DGR.
+- Former le personnel.
+- Effectuer des inspections des bagages pendant le chargement.
+
+**Correct answer rationale:** Slide 65 lists exactly quatre
+recommandations : « Respecter la réglementation DGR[.] Former le
+personnel[.] Appliquer les affiches et le questionnaire verbal avec les
+passagers[.] Effectuer des inspections des bagages pendant le
+chargement. » « Isoler la menace... et protéger les personnes » n'en fait
+pas partie — il s'agit d'une mesure distincte, à un stade ultérieur
+(réponse d'urgence), nommée sur une autre diapositive (slide 69, déjà
+l'évidence de Q-7.10-002, Batch 1), pour une circonstance différente
+(réagir à une menace déjà détectée, et non prévenir qu'elle passe
+inaperçue).
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is one of slide 65's own four recommendations, verbatim or
+near-verbatim):**
+- "Respecter la réglementation DGR" — slide 65.
+- "Former le personnel" — slide 65.
+- "Effectuer des inspections des bagages pendant le chargement" — slide
+  65.
+
+**Binding-caveat-4/5 compliance note:** this item draws on slide 65, a
+distinct slide from the ones already used for 3.4.2 (Q-7.10-010, Batch 1,
+slides 62–64's physical-indicator list) and 0.2.2 (Q-7.10-021, Batch 2,
+slides 60–61's examples list) — no underlying fact duplicated. Per binding
+caveat 5, this item stays on 3.4.2's own detection/prevention-verification
+side (what preventive measures reduce hidden-DG risk before or during
+inspection), distinct from 7.3's own reporting/escalation-focused items
+(Q-7.10-014/015, Batch 1; Q-7.10-035 below) — the correct-to-select
+"isoler la menace" option is itself drawn from 0.3.1's own role-obligation
+content (Q-7.10-002), not from any 7.3 item, keeping the cross-leaf
+boundary clean.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 65, cross-
+checked against slide 69 (six emergency-response measures, already
+Q-7.10-002's evidence, Batch 1 — the correct-to-select option's own real
+but different source) and slides 62–64 (physical-indicator list, already
+Q-7.10-010's evidence, Batch 1). No direct exam/practice hit for this
+exact four-item prevention list.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-035 — Action immédiate face à une marchandise dangereuse non déclarée découverte en bagage cabine
+
+**Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le practice book (Question 5), en cas de découverte
+d'une marchandise dangereuse non déclarée dans un bagage cabine, que doit
+faire l'agent chargé du contrôle de sécurité ?
+
+**Options:**
+- **(Correct)** Informer immédiatement le superviseur et rédiger un
+  rapport d'incident.
+- Laisser le bagage passer discrètement.
+- Confisquer l'objet et le garder lui-même.
+- Rendre l'objet au passager, sans autre action.
+
+**Correct answer rationale:** Practice book Question 5 presents exactly
+ces quatre options pour exactement ce scénario. L'option « Informer
+immédiatement le superviseur et rédiger un rapport d'incident » est la
+seule cohérente avec l'obligation de signalement explicitement énoncée par
+le cours (slide 107 : « le personnel chargé du contrôle de sécurité... doit
+signaler tout cas où des marchandises dangereuses non déclarées ou mal
+déclarées ont été découvertes... [le signalement] s'applique aux...
+découvertes dans les bagages ou sur la personne... », déjà l'évidence de
+Q-7.10-014, Batch 1) et avec l'obligation propre au rôle de « communiquer
+immédiatement avec la chaîne hiérarchique » (slide 69, déjà l'évidence de
+Q-7.10-002, Batch 1).
+
+**Practice-book answer-key note (consistent with the program's existing
+practice for Practice Q19/Q-7.10-009):** Practice Q5 itself carries no
+marked answer key in the extracted text. The identification of the
+correct option above is by direct content match against two independently
+and explicitly stated course facts (slide 107's reporting-scope clause and
+slide 69's "communiquer immédiatement" instruction), not a confirmed key
+marker — flagged honestly, exactly as required for every other
+practice-book-anchored item in this program.
+
+**Distractor rationale (source-grounded — the three wrong-to-select
+options are Practice Q5's own genuine distractors, each directly
+contradicted by the course's own reporting duty):**
+- "Laisser le bagage passer discrètement" — contradicts slide 107's own
+  "doit signaler" instruction.
+- "Confisquer l'objet et le garder lui-même" — contradicts the role's own
+  "communiquer immédiatement avec la chaîne hiérarchique" duty (slide 69);
+  the course never authorizes the agent to personally retain a suspected
+  DG item instead of reporting it.
+- "Rendre l'objet au passager, sans autre action" — directly contradicts
+  both slide 107's reporting duty and slide 69's "isoler la menace"
+  instruction (already Q-7.10-002's evidence).
+
+**Binding-caveat-5 compliance note:** this item tests the reporting/
+escalation action itself (notify the supervisor + document, at the moment
+of discovery), keeping it on 7.3's own side of binding caveat 5's
+detection-vs-reporting distinction — distinct from 3.4.2's own items
+(Q-7.10-010, Batch 1; Q-7.10-034 above), which test detection/prevention
+only. It also does not duplicate Q-7.10-014 (Batch 1, which tests that the
+reporting SCOPE extends to baggage/on-person discoveries, a True/False on
+slide 107's own wording) or Q-7.10-015 (Batch 1, which tests the ANAC
+reporting DESTINATION) — this item instead tests the specific two-part
+immediate action (notify supervisor + write an incident report) required
+at the moment of discovery, a distinct fact from both.
+
+**Source basis:** Tier B — KOST Function 7.10 Practice book Question 5
+(four-option MCQ, cabin-baggage undeclared-DG scenario), cross-checked
+against slide 107 (DGR reporting duty, already Q-7.10-014's evidence,
+Batch 1) and slide 69 (six emergency-response measures including
+"communiquer immédiatement," already Q-7.10-002's evidence, Batch 1).
+Practice Q5 carries no marked answer key; the identification above is by
+content match against these two explicit course statements.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-036 — Accident historique associé à un réchaud de camping dans les bagages (301 morts)
+
+**Sub-task:** 0.1.1 Comprendre la définition
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Généralités — Pourquoi Réglementer?), quel
+accident historique cité par le cours est associé à un réchaud de camping
+placé dans les bagages, ayant causé la mort de 301 personnes ?
+
+**Options:**
+- **(Correct)** Saudi Arabian Airlines, Riyadh, 19 août 1980.
+- Pan Am, Boston, 3 novembre 1973 (acide nitrique — 3 membres d'équipage
+  périssent).
+- ValuJet, Everglades, 11 mai 1996 (générateurs d'oxygène — 110 morts).
+- UPS B-747, Dubaï, 3 septembre 2010 (2 membres d'équipage ont perdu la
+  vie).
+
+**Correct answer rationale:** Slide 18 states exactly this fact: "Saudi
+Arabian Airlines, Riyadh, 19 Aout 1980, Réchaud de camping dans les
+bagages – 301 morts."
+
+**Distractor rationale (source-grounded — each of the three wrong options
+is a different, genuinely-listed accident from the same slide-18 list,
+correctly attributed to its own real cause/date/casualty count, not to the
+camping-stove/301-death fact):**
+- Pan Am, Boston, 1973 — real, different accident (acide nitrique, 3
+  membres d'équipage).
+- ValuJet, Everglades, 1996 — real, different accident (générateurs
+  d'oxygène, 110 morts).
+- UPS B-747, Dubaï, 2010 — real, different accident (2 membres d'équipage).
+
+**Compliance note:** this item deliberately tests the Saudia Riyadh 1980
+fact from slide 18's own five-accident list, distinct from the ValuJet
+(1996) and Bhopal (1984) facts already flagged in Batch 1's own compliance
+note as drawn by Functions 7.5's and 7.6's own separately-sourced course
+copies (the reason this content was deliberately left undrawn for Function
+7.10 in Batch 1). This is also the same accident named by this function's
+own supplementary case-study video
+(`07_DGR_Case_Study_Saudia_Flight_163_1980.mp4`, referenced on slide 11 as
+"Vidéo le vol Saudia 163" per the Stage 1 draft), reinforcing that this is
+a genuinely emphasized fact in this function's own material.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 18 (Généralités,
+"Pourquoi Réglementer?" five-accident list), cross-checked against slide 11
+(the course's own reference to the Saudia 163 case-study video). No direct
+exam/practice hit for this exact accident fact (Exam Q1/Practice Q1 are
+both open-ended general-definition questions, not accident-specific).
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-037 — Signification du code IMP « CAO » (Annexe B, DGR structure)
+
+**Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Structure du DGR de l'IATA — Annexe B,
+Codes cargo IMP, B.2.2.4), que signifie le code IMP « CAO » ?
+
+**Options:**
+- **(Correct)** Cargo Aircraft Only (avion cargo seulement).
+- Déclaration de marchandises dangereuses de l'expéditeur.
+- Dioxyde de carbone solide (glace carbonique).
+- Liquides inflammables.
+
+**Correct answer rationale:** Slide 28: "CAO – Cargo Aircraft Only (avion
+cargo seulement)."
+
+**Distractor rationale (source-grounded — each names a different,
+correctly-defined IMP code from the same slide-28 list):**
+- "Déclaration de marchandises dangereuses de l'expéditeur" — same slide:
+  that meaning belongs to "DGD," not "CAO."
+- "Dioxyde de carbone solide (glace carbonique)" — same slide: that
+  meaning belongs to "ICE," not "CAO."
+- "Liquides inflammables" — same slide: that meaning belongs to "RFL,"
+  not "CAO."
+
+**Compliance note:** distinct fact from Q-7.10-017 (Batch 2, which tested
+which body — OACI — codifies the regulation, slide 21) — this item tests a
+specific structural/nomenclature detail (Annexe B IMP codes) not
+previously drawn in this program for Function 7.10.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 28 (DGR
+structure, Annexe B.2.2.4 IMP codes), cross-checked against slides 26–27
+(general structure/annexes overview) and slide 102 (CAO also appears in
+the LTA handling-information wording, already Q-7.10-024's cross-check
+evidence, Batch 2 — confirming this abbreviation's consistent meaning
+across both contexts). No direct exam/practice hit for this exact
+code-definition fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-038 — Exceptions DGR 1.2.7 (aide médicale, vétérinaire, agricole)
+
+**Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Interdites sauf dérogation, interdites sauf
+approbation — Exceptions DGR 1.2.7), lesquels des cas suivants sont cités
+par le cours comme relevant des Exceptions DGR 1.2.7, sous réserve dans
+tous les cas de l'accord de l'exploitant ?
+
+**Options:**
+- **(Correct)** L'aide médicale fournie à un patient ou visant à préserver
+  des organes destinés à être utilisés, l'aide vétérinaire, et
+  l'utilisation agricole.
+- Le transport de plus de 15 appareils électroniques portables, ou de plus
+  de 20 batteries.
+- Une autorisation, autre qu'un agrément, accordée par une autorité
+  nationale compétente, permettant de déroger aux dispositions du
+  règlement.
+- Les allumettes chimiques n'exigeant pas de frottoir, et certains
+  briquets à flamme bleue ou alimentés par pile au lithium.
+
+**Correct answer rationale:** Slide 42: "Des Exceptions DGR 1.2.7[:]
+Celles listées dans la Réglementation: (aide médicale fournie à un patient
+ou visant à préserver des organes destinés à être utilisé, aide
+vétérinaire, utilisation agricole. Dans tous les cas, l'accord de
+l'exploitant est indispensable."
+
+**Distractor rationale (source-grounded — each names a real but different
+mechanism from elsewhere in the same evidence span):**
+- "Plus de 15 AEP... plus de 20 batteries" — real content, but this is the
+  separate AEP/battery Approbation note (slide 45, already Q-7.10-012's
+  evidence, Batch 1), not the Exceptions DGR 1.2.7 list.
+- "Une autorisation, autre qu'un agrément... permettant de déroger" — real
+  content, but this is the definition of "Dérogations DGR 1.2.6" (slide
+  41), a different mechanism from "Exceptions DGR 1.2.7."
+- "Allumettes chimiques... briquets..." — real content, but this is the
+  separate lighter/match prohibition list (slide 44, already Q-7.10-003's
+  evidence, Batch 1), unrelated to Exceptions DGR 1.2.7.
+
+**Compliance note:** distinct fact from Q-7.10-020 (Batch 2, which tested
+DGR 2.1's "interdite en toute circonstance" characteristics, slide 39) —
+this item tests the separate DGR 1.2.7 Exceptions mechanism (slide 42),
+not previously drawn, within the same 0.2.1 leaf's broader
+prohibited-DG-awareness pool.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 42 (DGR
+1.2.7), cross-checked against slide 41 (DGR 1.2.5/1.2.6 definitions,
+distractor 2's own real but different source), slide 45 (AEP/battery
+Approbation note, distractor 1's own real but different source, already
+Q-7.10-012's evidence), and slide 44 (lighter/match prohibition list,
+distractor 3's own real but different source, already Q-7.10-003's
+evidence). No direct exam/practice hit for this exact Exceptions list.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-039 — Pourquoi un passager transporterait des marchandises dangereuses (confort et besoins)
+
+**Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+**Type:** MCQ, single-answer ("N'EST PAS cité")
+
+**Stem (FR):** Selon le cours (Pourquoi un passager transporterait des
+marchandises dangereuses ?), lequel des articles suivants n'est **PAS**
+cité par le cours parmi les exemples liés au confort et aux besoins d'un
+passager ?
+
+**Options:**
+- **(Correct)** Un extincteur portable.
+- Des articles de toilette.
+- Un fauteuil roulant électrique.
+- Des bouteilles d'oxygène médical.
+
+**Correct answer rationale:** Slide 36 lists exactly: "Articles de
+toilette, téléphone portable, ordinateur, fauteuil roulant électrique,
+Bouteilles d'oxygène médical… etc." A portable fire extinguisher is never
+named here — it belongs to the separate operator-property exemption list
+(slides 49–51, DGR 2.5, already Q-7.10-028's evidence, Batch 2).
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is a verbatim item from slide 36's own list):**
+- "Des articles de toilette" — slide 36.
+- "Un fauteuil roulant électrique" — slide 36.
+- "Des bouteilles d'oxygène médical" — slide 36.
+
+**Binding-caveat-3 compliance note:** this item tests general awareness of
+why a passenger might carry such items (the comfort/needs framing slide 36
+provides), distinct from 5.1.1's own active-screening-decision framing
+(Q-7.10-011, Batch 1). It also does not duplicate any of 0.2.3's own
+already-drawn items (Q-7.10-003/004, Batch 1: lighters/Tasers;
+Q-7.10-028/029, Batch 2: DGR 2.5 exemption/Table 2.3.A identification).
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 36, cross-
+checked against slides 49–51 (DGR 2.5 operator-property exemption list,
+already Q-7.10-028's evidence, Batch 2 — the correct-to-select option's
+own real but different source). No direct exam/practice hit for this
+exact comfort/needs list.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-040 — Les neuf responsabilités de l'expéditeur (DGR 1.3)
+
+**Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
+**Type:** MCQ, single-answer ("NE fait PAS partie")
+
+**Stem (FR):** Selon le cours (Rôle et responsabilité — Responsabilités
+Expéditeur DGR 1.3), lequel des éléments suivants ne fait **PAS** partie
+des neuf responsabilités de l'expéditeur énumérées par le cours ?
+
+**Options:**
+- **(Correct)** Renseignement en cas d'urgence.
+- Classification.
+- Étiquetage.
+- Conservation des documents.
+
+**Correct answer rationale:** Slide 70 lists exactly nine shipper duties:
+"Transport autorisé, Identification, Classification, Emballage, Marquage,
+Étiquetage, Déclaration, Conservation des documents, Formation."
+"Renseignement en cas d'urgence" is not among them — it is one of the
+Exploitant's own eight duties on the adjacent slide 71 (already
+Q-7.10-026's evidence, Batch 2).
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is a verbatim item from slide 70's own nine-item list):**
+- "Classification" — slide 70.
+- "Étiquetage" — slide 70.
+- "Conservation des documents" — slide 70.
+
+**Compliance note:** distinct fact from Q-7.10-001 (Batch 1, security-plan
+framework, slide 68), Q-7.10-002 (Batch 1, six emergency measures, slide
+69), and Q-7.10-027 (Batch 2, DGR 1.7.2 training requirement, slide 72) —
+this item tests the shipper's own nine-item duty wheel (slide 70), the
+last previously-uncovered slide in this leaf's own p.68–72 evidence span.
+No duplication with Q-7.10-026 (Batch 2, which tests the Exploitant's own
+eight-item wheel, slide 71, under 0.6.2) — the correct-to-select option
+here is itself drawn from that same Exploitant wheel, cited as a
+cross-leaf wrong-checkpoint distractor.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 70 (DGR 1.3),
+cross-checked against slide 71 (DGR 1.4 Exploitant's own eight-item wheel,
+already Q-7.10-026's evidence, Batch 2 — the correct-to-select option's
+own real but different source). Corroborated at a topic level by Exam
+Q5/Q6 and Practice Q9 (shipper/exploitant responsibility matrix — already
+Q-7.10-001's own topic-level corroboration, Batch 1), noted honestly as
+adjacent, not direct, corroboration for this exact nine-item list.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-041 — Portée d'une divergence d'État (DGR 2.8.1, exemple ITG/Italie)
+
+**Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Divergences d'États et d'Exploitant —
+Divergence d'État DGR 2.8.1), à quels trois États une divergence d'État
+peut-elle s'appliquer, selon l'exemple ITG (Italie) cité par le cours ?
+
+**Options:**
+- **(Correct)** L'État d'Origine/État de Départ, l'État de Destination, et
+  tous les États des escales de Transit.
+- Uniquement l'État d'origine du vol, à l'exclusion de tout autre État.
+- Uniquement les exploitants opérant depuis cet État, jamais les États
+  eux-mêmes.
+- Uniquement l'État de destination finale, à l'exclusion de l'État
+  d'origine et des États de transit.
+
+**Correct answer rationale:** Slide 75: "Divergence d'Etat DGR 2.8.1[:]
+État d'Origine / État de Départ[;] État de Destination[;] Tous les États
+des escales de Transit[.] Exemple: ITG: ITALIE -ITG-01, ITG-02, ITG-03,
+etc."
+
+**Distractor rationale (source-grounded — each narrows the three-state
+scope down to a single state or misattributes the mechanism to exploitants
+rather than States, contradicting slide 75's own three-part
+enumeration):**
+- "Uniquement l'État d'origine du vol" — omits the destination and
+  transit states slide 75 also names.
+- "Uniquement les exploitants... jamais les États eux-mêmes" — a
+  parsing-error distractor: this fact is specifically about a **State**
+  divergence, not an operator divergence (the separate DGR 2.8.3 mechanism
+  tested in Q-7.10-022, Batch 2, using the AH/Air Algérie example).
+- "Uniquement l'État de destination finale" — omits the origin and
+  transit states.
+
+**Compliance note:** distinct fact from Q-7.10-022 (Batch 2, which tested
+the OPERATOR divergence's own non-restriction rule, slide 76, using the
+AH/Air Algérie example) — this item tests the separate STATE divergence's
+own three-state scope (slide 75, ITG/Italy example), already flagged by
+Q-7.10-022's own third distractor as real-but-different content, and the
+leaf's own last previously-uncovered fact. **This is 0.3.3's final ceiling
+slot (2/2) — no further item possible without new evidence.**
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 75 (DGR
+2.8.1), cross-checked against slide 76 (DGR 2.8.3 Operator divergence,
+already Q-7.10-022's evidence, Batch 2) and slide 77 (restriction-
+hierarchy diagram). Corroborated at a topic level by Practice Q10 (DGR
+section-number recall, already Q-7.10-022's own topic-level corroboration,
+Batch 2), noted honestly as adjacent, not direct, corroboration.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-042 — Code de type d'emballage DGR 6.0.3.1 (chiffre « 4 » = Caisse)
+
+**Sub-task:** 0.5.1 Reconnaître les différentes prescriptions de base concernant le marquage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Emballage — Code de type d'emballage DGR
+6.0.3.1), que signifie le chiffre « 4 » dans le code de type d'emballage ?
+
+**Options:**
+- **(Correct)** Caisse.
+- Fût.
+- Jerrican.
+- Sac.
+
+**Correct answer rationale:** Slide 95's table: "6.0.3.1 Code de type
+d'emballage[:] 1–Fût[,] 2–Réservé[,] 3–Jerrican[,] 4–Caisse[,] 5–Sac[,]
+6–Emballage Composite."
+
+**Distractor rationale (source-grounded — each names a different,
+genuinely-listed code from the same table):**
+- "Fût" — same table, code "1," not "4."
+- "Jerrican" — same table, code "3," not "4."
+- "Sac" — same table, code "5," not "4."
+
+**Compliance note:** distinct fact from Q-7.10-023 (Batch 2, which tested
+the packing-group-letter "Y" in the full UN marking example "UN/4G/Y/30/S/
+13/CH/2176/CG," slide 93) — this item tests the separate packaging-type
+code table (slide 95). The two facts connect directly: the same worked
+example's own "4G" element decodes, per this table, to "4–Caisse" +
+"G–Carton" — a genuine, source-grounded cross-check, not asserted as this
+item's own tested fact.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 95 (DGR
+6.0.3.1/6.0.3.2), cross-checked against slide 93 (the full UN-mark worked
+example, already Q-7.10-023's evidence, Batch 2). No direct exam/practice
+hit for this exact code-table fact; Exam Q10 (circled-letter package-
+marking photo) and Practice Q17 (meaning of "UN" abbreviation) test the
+general marking topic without directly matching this specific code table,
+noted honestly as topic-level corroboration.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-043 — Marquage obligatoire d'un bagage de soute contenant de la glace carbonique
+
+**Sub-task:** 0.5.2 Reconnaître les différentes prescriptions de base concernant l'étiquetage
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Glace carbonique), il est
+impératif de marquer les bagages de soute des passagers et des équipages
+contenant du dioxyde de carbone solide (glace carbonique), en indiquant la
+quantité transportée.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 100: "Tel que requis par la réglementation, il est
+impératif de marquer les bagages de soute des passagers et des équipages
+comme tel [et] signaler la quantité de glace carbonique (2.5 kg ou moins)
+qu'elles contiennent. Pour aider à la manipulation d'un bagage de soute
+contenant du dioxyde de carbone, l'étiquette ci-dessous peut être
+utilisée." Direct, explicit match.
+
+**Compliance note:** distinct fact from Q-7.10-007/008 (Batch 1, the
+two-type label structure and the "autres étiquettes" clarification note,
+slides 88/91) and Q-7.10-032 (Batch 2, the UN 3245 biological-Category-B
+label, slide 90) — this item tests the separate dry-ice checked-baggage
+marking/labelling requirement (slide 100), previously uncovered within
+this leaf's own evidence span.
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 100,
+cross-checked against slide 99 (the operator's own dry-ice loading-
+arrangement conditions — aircraft type, air-exchange rate, packaging/
+storage method, presence of animals on board — background context for the
+same topic, not itself asserted as this item's own tested fact) and slide
+84's DG-list column D (label-type reference, already Q-7.10-005's
+evidence, Batch 1). No direct exam/practice hit for this exact dry-ice
+marking fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.10-044 — Mesures en cas de contact du produit avec le corps ou les habits
+
+**Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+**Type:** MCQ, single-answer ("NE fait PAS partie")
+
+**Stem (FR):** Selon le cours (Procédures générales — contact du produit
+avec le corps ou les habits), laquelle des actions suivantes ne fait
+**PAS** partie des mesures prescrites par le cours dans ce cas ?
+
+**Options:**
+- **(Correct)** Continuer le travail normalement après un simple rinçage
+  rapide à l'eau, sans retirer les vêtements contaminés.
+- Laver le corps avec beaucoup d'eau.
+- Enlever les vêtements contaminés.
+- Appeler un médecin.
+
+**Correct answer rationale:** Slide 106 lists exactly: "Laver le corps
+avec beaucoup d'eau[;] Enlever les vêtements contaminés[;] Ne pas boire ni
+manger, ni fumer[;] Ne pas toucher les yeux[;] Ne pas toucher la bouche et
+le nez avec les mains[;] Appeler un médecin[.] Les personnes impliquées et
+les témoins doivent rester sur place jusqu'à ce que leur identité soit
+notée." Continuing work normally after a quick rinse, without removing
+contaminated clothing, directly contradicts the "enlever les vêtements
+contaminés" instruction and omits "appeler un médecin."
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is a verbatim item from slide 106's own list):**
+- "Laver le corps avec beaucoup d'eau" — slide 106.
+- "Enlever les vêtements contaminés" — slide 106.
+- "Appeler un médecin" — slide 106.
+
+**Compliance note:** distinct fact from Q-7.10-025 (Batch 2, which tested
+the FIRST-step ordering of the separate 4-step initial-response procedure,
+slide 105) — this item tests the separate 5-step body/clothing-contact
+response (slide 106), the leaf's own remaining previously-uncovered slide.
+**This is 0.6.1's final ceiling slot (2/2) — no further item possible
+without new evidence.**
+
+**Source basis:** Tier B — KOST Function 7.10 course, slide 106,
+cross-checked against slide 105 (the 4-step initial response, already
+Q-7.10-025's evidence, Batch 2). No direct exam/practice hit for this
+exact 5-step sequence; the Block 7/3.4.2 suspect-package scenario items
+(Exam Q20, Practice Q18/Q20) exercise closely related judgment without
+directly restating this content, noted honestly as topic-level
+corroboration only, consistent with the Stage 1 draft's own "Adequate"
+rating for this leaf.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Summary table — Batch 3
+
+| ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
+|---|---|---|---|---|---|---|
+| Q-7.10-033 | 3.4.1 Motifs de non-déclaration | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-034 | 3.4.2 Recommandations de prévention | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-035 | 7.3 Action immédiate — bagage cabine (Practice Q5) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 Practice Q5 + slides 107, 69 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-036 | 0.1.1 Accident Saudia Riyadh 1980 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 18 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-037 | 0.1.2 Code IMP « CAO » | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 28 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-038 | 0.2.1 Exceptions DGR 1.2.7 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 42 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-039 | 0.2.3 Confort/besoins du passager | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-040 | 0.3.1 Neuf responsabilités de l'expéditeur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 70 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 75 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-042 | 0.5.1 Code de type d'emballage (4=Caisse) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 95 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-043 | 0.5.2 Marquage bagage — glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-044 | 0.6.1 Contact corps/habits — 5 mesures | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+**Batch composition:** 11 MCQ + 1 True/False. Block spread: Block 0 = 9,
+Block 3 = 2, Block 5 = 0, Block 7 = 1. Combined with Batches 1+2's 32
+items, **44 items** have now been drafted for Function 7.10, well below
+the function's 76-question provisional ceiling.
+
+## What this batch does NOT do
+
+- Does not exceed any per-sub-task ceiling in
+  `docs/DGR_STAGE2A_FUNCTION_7.10_BLUEPRINT.md` (see the ceiling-compliance
+  table above — every cumulative count is at or below its ceiling; 0.3.3
+  and 0.6.1 are now exactly at their own ceiling of 2, with no exception
+  possible without new evidence).
+- Does not draft any item against the confirmed `SOURCE GAP` leaf (0.3.2) —
+  count remains 0, no exception, per binding caveat 1.
+- Does not draw a further item from 5.1.2 — remains at its hard ceiling of
+  1 (Batch 1), per binding caveat 2.
+- **Does not draft any item this batch for Block 5's own remaining
+  headroom (5.1.1)**, despite this being one of the task's two named
+  priorities, after active investigation found the leaf's own remaining
+  unused evidence (the slide-57 exercise's three T/F prompts; Exam Q19's
+  "class prohibited in the aircraft hold") carries **no course-stated
+  answer** anywhere in the extracted text — see the "Deliberately not
+  drafted" notes above for the full reasoning. This is reported honestly
+  as a genuine, diligence-checked finding, not an oversight: Block 5 was
+  fully re-examined this batch and yielded zero additional items.
+- Does not draw a further item from 0.1.4, 0.2.2, 0.5.3, or the 7.1+7.2
+  combined pool — each retains real ceiling headroom on paper, but this
+  batch's own investigation found each leaf's remaining unused content
+  either already substantively tested by a prior item or, for 0.2.2's
+  p.66 exercise specifically, lacking a course-stated answer (the same
+  rule-1 concern as 5.1.1) — see the itemized notes above.
+- Does **not** draw a further item from 0.4.1, even though genuine,
+  distinct, previously-unused evidence was identified this session (the
+  slide-79 class-name-matching table, corroborated by Exam Q18) — left
+  undrawn deliberately, to keep this batch's own Block 0 selection focused
+  on leaves with the least prior coverage; this is real headroom for a
+  future batch, not exhausted evidence.
+- Does not test Table 1.7.A's detailed High-Consequence-DG class/division/
+  UN-number list as if it were its own dedicated classification sub-task —
+  no item in this batch touches DGR Part 1.7 content at all (binding
+  caveat 8 remains scoped to Batch 1's own Q-7.10-001/002 and Batch 2's
+  Q-7.10-027).
+- Does not fabricate a course-stated answer for any exam/practice-book
+  item that itself carries no marked or traceable key — Exam Q15 (UN1910
+  designation) and Exam Q19 (class prohibited in the aircraft hold) were
+  both actively checked against the full course text this session and
+  found to have no traceable course-stated answer; neither was used as
+  the basis for a new item, per `.claude/rules/dgr-stage2b.md` rule 1.
+- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification
+  for any of the 12 items in this batch, or for Batches 1/2's 32 items —
+  that remains the mandatory next step before any of these 44 items can
+  move past `DRAFT`, blocked this pass by a `chrome-devtools` MCP
+  connection/page-selection failure, not a content issue (see
+  `docs/AI_HANDOFF.md`'s "Tier A retry #2" entry).
+- Does not mark any item `APPROVED` — no qualified reviewer exists in this
+  pass.
+- Does not touch Moodle or any live/production question-bank copy.
+
+### Genuinely exhausted vs. real remaining headroom — honest accounting for a hypothetical Batch 4
+
+**Leaves assessed as genuinely exhausted or functionally exhausted of
+further safely-answerable, non-duplicative evidence at this session's own
+diligence level** (a Batch 4 should not expect to draw further from these
+without new source material): 0.3.2 (confirmed SOURCE GAP), 5.1.2 (hard
+ceiling reached, Batch 1), 5.1.1 (remaining evidence lacks a course-stated
+answer), 0.1.4 (leaf's own small evidence span substantially consumed),
+0.2.2 (remaining evidence — the p.66 exercise — lacks a course-stated
+answer), 0.5.3 (leaf's own three-slide span fully consumed), 7.1+7.2
+(single shared slide fully consumed), 0.3.3 (now at its own hard ceiling
+of 2, this batch), 0.6.1 (now at its own hard ceiling of 2, this batch).
+
+**Leaves with genuine, identified remaining headroom for a hypothetical
+Batch 4** (real, distinct, previously-unused course evidence exists, not
+yet drawn): **0.4.1** (slide 79's class-name-matching table + Exam Q18,
+headroom 4 of 8 — the strongest identified remaining opportunity in the
+whole function); **0.1.1** (three of slide 18's five accidents — Pan Am
+1973, ValuJet 1996, UPS Dubai 2010 — remain available as distinct
+future-item facts, plus slide 17's own untested "temperature/pressure/
+turbulence/altitude" danger-factors content, headroom 2 of 4); **0.1.2**
+(slide 29's symbol-meaning content — add/modify/delete/additional-
+requirement/appendix-reference symbols — remains untested, headroom 1 of
+3); **0.2.1** (slide 38's "types de MD" diagram was deliberately not used
+this batch due to a source-fidelity concern: `pdftotext -layout`'s
+extraction of this specific diagram's spatial/hierarchical structure is
+ambiguous and risks misrepresenting the actual tree relationships — a
+future batch should use direct page-image rendering, as Stage 1 did for
+TABLEAU 7.10.A's own qualification column, before attempting to draw from
+it; headroom 2 of 4); **0.2.3** (headroom 3 of 8 remains in this
+function's own richest leaf — the dedicated Table 2.3.A supporting
+document, `10_IATA_DGR_Table_2.3A_Passengers_Crew_FR_2023.pdf`, was not
+deeply mined this session beyond what the course slides themselves already
+cover); **0.3.1** (headroom 1 of 5, genuinely thin remaining — the leaf's
+own p.68–72 span is now almost fully consumed); **0.5.1** (slide 96's
+UN-spec packaging example is image-only per text extraction and would
+need direct visual inspection, headroom 2 of 4); **0.5.2** (headroom 4 of
+8 remains — slide 89's own handling-label image and the dedicated label
+reference sheet, source item 5
+`05_IATA_DGR_Danger_and_Handling_Labels_FR.pdf`, were not deeply mined
+this session); **3.4.1** (headroom 1 of 3, genuinely thin — this pool's
+main facts, definition/motives/Practice Q19 scenario, are now all used);
+**3.4.2** (headroom 2 of 4 — Exam Q12's own "hidden dangers in paint/
+frozen produce/household products" scenario remains uncited as a dedicated
+item, though it would need care to stay distinct from Q-7.10-010/034 under
+binding caveat 5); **7.3** (headroom 1 of 4 — Practice Q18/Q20 and Exam
+Q20 remain uncited as dedicated items, though each would need care to stay
+on the reporting side of binding caveat 5, distinct from 3.4.2's own
+detection-side items).
+

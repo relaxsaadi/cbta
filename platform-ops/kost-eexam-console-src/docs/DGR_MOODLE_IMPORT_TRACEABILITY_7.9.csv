@@ -1,0 +1,6 @@
+doc_id,function,cbta_subtask,source_status,moodle_category,category_id,dgr_reference,verification_date,reviewer_status,quiz_id
+Q-7.9-026,7.9,0.3.3 Reconnaître l'impact des divergences des États et des exploitants,FROZEN FR / SOURCE VERIFIED,Fonction 7.9,26,"§2.8.3.1, §2.8.3.5",2026-08-25,PENDING REVIEWER + DATE,20
+Q-7.9-028,7.9,0.5.1 Reconnaître les prescriptions de base concernant le marquage,FROZEN FR / SOURCE VERIFIED,Fonction 7.9,26,"§6.0.4.2.1(c), §6.0.4.2.1(e)",2026-08-25,PENDING REVIEWER + DATE,20
+Q-7.9-032,7.9,5.2.1 Appliquer les prescriptions des exploitants,FROZEN FR / SOURCE VERIFIED,Fonction 7.9,26,"§2.3.5.8.4(c), §2.3.5.8.3",2026-08-25,PENDING REVIEWER + DATE,20
+Q-7.9-034,7.9,5.2.2 Vérifier les prescriptions concernant les bagages des passagers,FROZEN FR / SOURCE VERIFIED,Fonction 7.9,26,§2.3.5.8.3.1,2026-08-25,PENDING REVIEWER + DATE,20
+Q-7.9-037,7.9,0.2.3 Être au courant des dispositions s'appliquant aux passagers,FROZEN FR / SOURCE VERIFIED,Fonction 7.9,26,§2.0,2026-08-25,PENDING REVIEWER + DATE,20

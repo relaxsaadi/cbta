@@ -268,14 +268,187 @@ Console refactor, ANAC PDF work, writing new questions, redoing Tier A
 verification itself. The ANAC demo (course 19/20, category 15/16, quiz
 10/11) is left exactly as-is.
 
+## 5bis. Function 7.1 controlled pilot — executed 2026-08-25 (superseding the "wait for go-ahead on all 218" pause above)
+
+Per explicit follow-up instruction: **Function 7.1 only**, not the other 9
+functions. Full detail/traceability in
+`docs/DGR_MOODLE_IMPORT_TRACEABILITY_7.1.csv`. Summary:
+
+- Function 7.1 has 19 items total: 18 `FROZEN FR / SOURCE VERIFIED`
+  (Q-7.1-002–019) + 1 `FR SOURCE GAP CONFIRMED` (Q-7.1-001, excluded).
+- Of the 18 FROZEN items, **13 had recoverable full question text** (10
+  already existed in Moodle as the ANAC-demo sample, category 16; 3 more —
+  Q-7.1-014/017/019 — had full verbatim text in
+  `docs/DGR_PRODUCTION_BANK_7.1.md`, not yet in Moodle).
+- **5 FROZEN items (Q-7.1-005/007/008/010/012) were NOT imported.** Their
+  full stem/options text does not exist in any source this session could
+  reach — confirmed via `docs/AI_HANDOFF.md`, `docs/PLATFORM_READINESS_
+  REPORT.md`, and `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`'s own provenance
+  note: by design (licensing rule 6), this repo stores only source
+  citations/conclusions for the original 12-item pilot, not the verbatim
+  text; "the live, administered copy of the pilot question text lives
+  outside this environment." A full read-only scan of every question
+  category in this Moodle instance confirms it is not there either.
+  Reconstructing wording from the citation notes would mean authoring new
+  question text — out of this mission's scope ("ne pas créer de nouvelles
+  questions") and a real regulatory-accuracy risk, so these 5 were left
+  out rather than guessed. They need the human owner to supply the live
+  copy (or explicitly authorize reconstruction from the source-register
+  notes for the 2 that have rich-enough detail: Q-7.1-007, Q-7.1-008).
+- The 10 existing questions were **moved** (not just referenced) from
+  category 16 into the new category 18 ("Fonction 7.1"), using Moodle's
+  own `question_move_questions_to_category()` API (handles file/tag/
+  context migration correctly) — verified safe beforehand: quiz 11
+  references questions by `questionbankentryid`, not by category, so this
+  move does not affect quiz 11 at all (re-verified after the move: quiz
+  11's 10 slots are unchanged). This was chosen over leaving them in place
+  so the new quiz can honestly be described as using ONLY the Fonction 7.1
+  production category, per instruction.
+- All 13 questions retrofitted/created with `idnumber` = doc ID and tags
+  `function-7.1`, `status-frozen-fr-verified`, `lang-fr`,
+  `reviewer-pending`.
+- New quiz: **"DGR — Fonction 7.1 — Échantillon réglementaire vérifié"**
+  (id 12), course `KOST-DGR-7.1-PILOT` (id 21, hidden), 13 fixed slots
+  (no random/category draw — `question_set_references` count = 0),
+  settings mirrored from quiz 11 (unlimited attempts, no in-attempt
+  review, 20 min).
+- End-to-end test: `test_candidate` (existing test account, already used
+  for Practice Test) enrolled, one real attempt driven through Moodle's
+  own quiz-attempt API (`quiz_prepare_and_start_new_attempt` +
+  `process_attempt`, not raw SQL) — attempt id 60, state `finished`,
+  13/13, grade 100% in `mdl_grade_grades`, confirmed queryable via the
+  same join shape the console's `results-data.ts` already uses.
+  (A first attempt, id 59, hit a real qtype_multichoice API-usage bug in
+  my own test script — `get_correct_response()`'s index format isn't what
+  `prepare_simulated_post_data()` expects; fixed to use the answer's text
+  instead — and was cleanly deleted via `quiz_delete_attempt()`.)
+- Isolation proof: all 13 slots resolve to category 18 only; Functions
+  7.2–7.10 categories (19–27) remain at 0 questions each — structurally
+  impossible for any other function's item to appear.
+- Rollback: high-water marks recorded in §4bis; additionally, everything
+  from this pilot is scoped to question ids 90–92 (new), qbe ids 90–92,
+  course id 21, quiz id 12, plus the category-16→18 move (reversible via
+  the same API in reverse) and the idnumber/tag additions on question ids
+  80–89 (reversible by clearing those fields). Full DB dump from §4bis
+  remains the whole-instance fallback.
+
+## 5ter. Functions 7.2–7.10 — full overnight run, executed 2026-08-25
+
+Per the follow-up "continue autonomously" instruction. One important
+correction discovered while building this: my earlier report's headline
+count of "218 FROZEN items across all functions" (from
+`DGR_TIER_A_INVENTORY.md`'s aggregate claim) does **not match** what is
+actually recorded per-item in each function's own
+`docs/DGR_PRODUCTION_BANK_7.X.md` file. A rigorous parser (built and
+self-validated against Function 7.1's known-good data before use) reading
+each item's own `**FR status:**` field directly finds:
+
+| Function | Items in file | FROZEN (per-item field) |
+|---|---|---|
+| 7.1 | 19 (12 in a separate pilot-status file + 7 here) | 18 |
+| 7.2 | 49 | 21 |
+| 7.3 | 45 | 7 |
+| 7.4 | 53 | 7 |
+| 7.5 | 44 | 7 |
+| 7.6 | 56 | 8 |
+| 7.7 | 53 | 7 |
+| 7.8 | 51 | 10 |
+| 7.9 | 39 | 5 |
+| 7.10 | 44 | 7 |
+| **Total** | **453** | **97** |
+
+The gap between 218 and 97 is likely because the topic-based
+"cross-application" verification passes described in
+`DGR_TIER_A_INVENTORY.md` updated that separate tracking document without
+always writing the promotion back into the item's own file. That's a
+process question for the parallel Tier-A project, not something resolved
+here — I'm importing strictly on each item's own recorded field, per this
+round's explicit instruction, and flagging the discrepancy rather than
+picking a number.
+
+All 97 FROZEN items across Functions 7.1–7.10 had full, recoverable stem +
+options text **except the 5 already reported for Function 7.1**
+(Q-7.1-005/007/008/010/012 — still not imported, unchanged from the pilot
+report). For Functions 7.2–7.10, every FROZEN item's text was complete and
+well-formed (verified programmatically: exactly one correct option per
+MCQ, a Vrai/Faux value for every True/False item) — zero exclusions for
+missing/ambiguous content this round.
+
+**Parser bugs found and fixed before trusting any output** (both would
+have silently under-imported or truncated content if missed):
+1. Options wrapping onto a second markdown line were being dropped
+   (continuation lines don't start with `-`) — fixed to accumulate wrapped
+   lines instead of discarding them.
+2. Function 7.6's later batches nest items one heading level deeper (`###`
+   instead of `##`, because they sit under a `## Batch 2` section) — the
+   original regex only matched `##`, silently missing every item in
+   Batches 2–3. Fixed to match `##`–`####`. After the fix, every function's
+   total parsed item count matches its expected total from
+   `DGR_TIER_A_INVENTORY.md` exactly (Function 7.1 excepted, for the
+   known, already-documented reason above).
+
+**Per-function result (all 9 ran clean, zero blockers):**
+
+| Function | Eligible (FROZEN, text-complete) | Imported | Category | Course/Quiz | Attempt result | Isolation |
+|---|---|---|---|---|---|---|
+| 7.2 | 21 | 21 | 19 (Fonction 7.2) | course 22 / quiz 13 | 21/21, 100% | PASS |
+| 7.3 | 7 | 7 | 20 (Fonction 7.3) | course 23 / quiz 14 | 7/7, 100% | PASS |
+| 7.4 | 7 | 7 | 21 (Fonction 7.4) | course 24 / quiz 15 | 7/7, 100% | PASS |
+| 7.5 | 7 | 7 | 22 (Fonction 7.5) | course 25 / quiz 16 | 7/7, 100% | PASS |
+| 7.6 | 8 | 8 | 23 (Fonction 7.6) | course 26 / quiz 17 | 8/8, 100% | PASS |
+| 7.7 | 7 | 7 | 24 (Fonction 7.7) | course 27 / quiz 18 | 7/7, 100% | PASS |
+| 7.8 | 10 | 10 | 25 (Fonction 7.8) | course 28 / quiz 19 | 10/10, 100% | PASS |
+| 7.9 | 5 | 5 | 26 (Fonction 7.9) | course 29 / quiz 20 | 5/5, 100% | PASS |
+| 7.10 | 7 | 7 | 27 (Fonction 7.10) | course 30 / quiz 21 | 7/7, 100% | PASS |
+
+Each function: questions created directly in its own system-context
+`Fonction 7.X` category (idnumber = doc ID, tags `function-7.X` /
+`status-frozen-fr-verified` / `lang-fr` / `reviewer-pending`), one new
+hidden course + quiz built with fixed slots only (zero
+`question_set_references`, so no random draw could ever cross a function
+boundary), `test_candidate` enrolled and run through one real attempt via
+Moodle's own quiz-attempt API (not raw SQL), isolation re-verified by
+direct query after each import. Full per-item traceability in
+`docs/DGR_MOODLE_IMPORT_TRACEABILITY_7.X.csv` for each function.
+
+**Console synchronization — verified read-only, zero code changes
+needed or deployed.** Reproduced the console's own queries
+(`question-bank-data.ts`, `exams-data.ts`, `data-scope.ts`'s
+`classifyScope()`) directly against Moodle: all 92 newly-tagged questions
+(13 for 7.1 + 79 for 7.2–7.10) and all 10 exams (the 7.1 pilot + 9 new)
+resolve to the correct `Function 7.X` label and `production` scope,
+automatically, through the console's existing, unmodified code — it
+already derives function from the `function-7.X` tag and scope from
+course/category naming, exactly matching what this import produces. (One
+false alarm during this check: my own first diagnostic script mis-used
+Moodle's `get_records_sql()`, which silently collapses multiple rows
+sharing a key — not a real data problem, just a bug in my own throwaway
+verification script, caught and fixed before trusting the result.) The
+only remaining "Non classée" production-scope questions are the 4
+pre-existing legacy "Secourisme" items, already flagged in this doc's
+§1.1/§3 — unrelated to tonight's work.
+
+**Not touched:** ANAC procedural demo (course 19/quiz 10), Function 7.1's
+ANAC Tier-A sample quiz (11 — its 10 questions were already moved into the
+production category during the 7.1 pilot, not tonight), the legacy
+Secourisme category, production/demo/practice separation intact throughout.
+
+**Backup:** fresh full `mysqldump` taken after this run
+(`local-data/moodle-backups/moodle_post_7.2-7.10_import_20260825.sql.gz`,
+gitignored), in addition to the pre-import one from the 7.1 pilot.
+Everything created tonight is additionally scoped to question ids 93–171,
+qbe ids 93–171, course ids 22–30, quiz ids 13–21 — a surgical rollback
+(delete only those ranges) remains possible without a full restore.
+
 ## 6. Unrelated finding surfaced during inspection (flagging, not fixing)
 
 `platform-ops/kost-eexam-console-src/smoke-test-prod.mjs` (tracked in git,
-imported into this repo as part of the recent "import kost-eexam-console
-live source as tracked baseline" commit) contains a **plaintext real
-Moodle account password** for `console_admin` in a committed test script.
-This is now in this repo's git history. Out of scope for this mission
-(console work is excluded), but flagging because it's a live credential in
-version control — worth rotating that account's password and scrubbing/
-git-history-cleaning that file when you next touch the console, whether or
-not this repo is ever pushed somewhere with broader access.
+imported into this repo as part of the "import kost-eexam-console live
+source as tracked baseline" commit) contained a **plaintext real Moodle
+account password** for `console_admin` in a committed test script.
+**Update: already fixed** — a concurrent session committed
+`41bd6a2 security(console): rotate leaked Moodle credentials, remove
+plaintext secrets from source` on this same branch while this pilot was
+in progress (password rotated, 12 affected files cleaned/removed). No
+action needed from this session; noting it only so the fix isn't
+mistaken for still-outstanding.

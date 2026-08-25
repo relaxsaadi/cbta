@@ -1,0 +1,8 @@
+doc_id,function,cbta_subtask,source_status,moodle_category,category_id,dgr_reference,verification_date,reviewer_status,quiz_id
+Q-7.4-012,7.4,6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef,FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,§9.5.1.1.3(a),2026-08-25,PENDING REVIEWER + DATE,15
+Q-7.4-030,7.4,0.3.3 Reconnaître l'impact des divergences des États et des exploitants,FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,"§2.8.3.1, §2.8.3",2026-08-25,PENDING REVIEWER + DATE,15
+Q-7.4-032,7.4,0.5.1 Reconnaître les prescriptions de base concernant le marquage,FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,"§6.0.4.2.1(c), §6.0.4.2.1(b), §6.0.4.2.1(f), §6.0.4.2.1(g)",2026-08-25,PENDING REVIEWER + DATE,15
+Q-7.4-035,7.4,"6.1.6 Informer le commandant de bord et l'agent des opérations aériennes ou le régulateur de vols — restricted framing per blueprint binding caveat 2: captain-notification obligation only; must never test informing ""l'agent des opérations aériennes"" or ""le régulateur de vols"" (confirmed SOURCE GAP)",FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,"§9.5.1.1.1(a), §9.5.1.1",2026-08-25,PENDING REVIEWER + DATE,15
+Q-7.4-044,7.4,0.4.1 Trouver de l'information générale sur les classes et les divisions,FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,§3.9.2.6.0,2026-08-25,PENDING REVIEWER + DATE,15
+Q-7.4-052,7.4,6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef,FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,§9.5.1.1.6,2026-08-25,PENDING REVIEWER + DATE,15
+Q-7.4-053,7.4,6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef,FROZEN FR / SOURCE VERIFIED,Fonction 7.4,21,"Tableau 9.5.A, §9.5.1.1.3.4, §2.6.1)",2026-08-25,PENDING REVIEWER + DATE,15

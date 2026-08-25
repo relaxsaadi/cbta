@@ -375,3 +375,21 @@ No item's EN status changed from `BILINGUAL TECHNICAL REVIEW REQUIRED`,
 no item's FR status changed, and no item is any closer to `APPROVED`
 than before this section was written. Tier A verification status is
 unchanged from the fourth-milestone entry above.
+
+## 2026-08-25 (still later same day) — sixth milestone: qualified-reviewer sign-off workflow documented (preparation only)
+
+`docs/DGR_REVIEWER_SIGNOFF_WORKFLOW.md` is a new file defining the full
+four-gate sequence an item must pass to reach `APPROVED` — Gate 1 (FR Tier
+A regulatory verification), Gate 2 (named FR qualified technical reviewer
+sign-off), Gate 3 (named EN bilingual reviewer sign-off, per
+`docs/DGR_EN_REVIEWER_GUIDE.md`), Gate 4 (`APPROVED` itself, requiring all
+three prior gates complete and dated simultaneously). It is grounded
+directly in the already-established binding restrictions (rules 8–10 of
+`docs/RECOVERED_STAGE2A_CONTEXT.md`'s "Binding source restrictions
+recovered" and rules 4–5 of `.claude/rules/dgr-stage2b.md`), not invented
+independently, and it restates — rather than changes — the current
+program-wide gate status: **Gate 1 passed by 12/453 items (Function 7.1's
+pilot only); Gates 2, 3, and 4 passed by 0/453 items.** No reviewer has
+been named or engaged for Gates 2 or 3. This document is a map of the
+remaining path to `APPROVED`, not a step along it — it changes no item's
+status.

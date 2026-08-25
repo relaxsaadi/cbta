@@ -4,18 +4,29 @@ Regulatory baseline: IATA DGR 67th Edition 2026, French, Addendum 1 integrated.
 
 | ID | FR status | Type | Current source basis | EN status | Approval |
 |---|---|---|---|---|---|
-| Q-7.1-001 | FR SOURCE GAP CONFIRMED — DGR silent by design; Tier B/C basis retained | Pilot item | Appendice A Généralités (p.703) + §1.0 Note (p.11): DGR glossary excludes ordinary/dictionary-sense terms by explicit policy; no "Danger"/"Risque" headword exists | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-002 | FROZEN FR / SOURCE VERIFIED | True/False | Table 4.2 Acétylène (liquide) + §2.1.1 + Note 1 + §2.1.2 distinction | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-003 | FROZEN FR / SOURCE VERIFIED | MCQ | §3.0.1.1 + §3.0.2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-004 | FROZEN FR / SOURCE VERIFIED | MCQ | §7.3.17 + Figure 7.3.V | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-005 | FROZEN FR / SOURCE VERIFIED | MCQ | Table 4.2, UN 1978 Propane | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-006 | FROZEN FR / SOURCE VERIFIED | Pilot item | §3.8.3.3.1–3 + Tableau 3.8.A (p.315) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-007 | FROZEN FR / SOURCE VERIFIED — final wording locked | Pilot item | §4.4 Dispositions particulières, A1 + A2 (p.424) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-008 | FROZEN FR / SOURCE VERIFIED — distractor corrected & revalidated | Pilot item | Tableau 2.6.A (p.12) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-009 | FROZEN FR / SOURCE VERIFIED | MCQ | PI 965, Section IA/IB, Tables 965-IA/965-IB | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-010 | FROZEN FR / SOURCE VERIFIED | MCQ | §7.1.4.1(d), UN 1845 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-011 | FROZEN FR / SOURCE VERIFIED | True/False | §7.2.7.1, labels-only scope | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-012 | FROZEN FR / SOURCE VERIFIED | True/False | §1.3.4.1; §1.3.4.2 supporting only | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-001 | FR SOURCE GAP CONFIRMED — DGR silent by design; Tier B/C basis retained | Pilot item | Appendice A Généralités (p.703) + §1.0 Note (p.11): DGR glossary excludes ordinary/dictionary-sense terms by explicit policy; no "Danger"/"Risque" headword exists | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-002 | FROZEN FR / SOURCE VERIFIED | True/False | Table 4.2 Acétylène (liquide) + §2.1.1 + Note 1 + §2.1.2 distinction | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-003 | FROZEN FR / SOURCE VERIFIED | MCQ | §3.0.1.1 + §3.0.2 | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-004 | FROZEN FR / SOURCE VERIFIED | MCQ | §7.3.17 + Figure 7.3.V | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-005 | FROZEN FR / SOURCE VERIFIED | MCQ | Table 4.2, UN 1978 Propane | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-006 | FROZEN FR / SOURCE VERIFIED | Pilot item | §3.8.3.3.1–3 + Tableau 3.8.A (p.315) | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-007 | FROZEN FR / SOURCE VERIFIED — final wording locked | Pilot item | §4.4 Dispositions particulières, A1 + A2 (p.424) | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-008 | FROZEN FR / SOURCE VERIFIED — distractor corrected & revalidated | Pilot item | Tableau 2.6.A (p.12) | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-009 | FROZEN FR / SOURCE VERIFIED | MCQ | PI 965, Section IA/IB, Tables 965-IA/965-IB | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-010 | FROZEN FR / SOURCE VERIFIED | MCQ | §7.1.4.1(d), UN 1845 | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-011 | FROZEN FR / SOURCE VERIFIED | True/False | §7.2.7.1, labels-only scope | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+| Q-7.1-012 | FROZEN FR / SOURCE VERIFIED | True/False | §1.3.4.1; §1.3.4.2 supporting only | EN DRAFT PREPARED — REVIEW REQUIRED (see `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) | PENDING REVIEWER + DATE |
+
+**EN status note (2026-08-25):** all 12 pilot items now have a drafted
+English translation, a bilingual terminology table, and a reviewer
+checklist/sign-off format in `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`. This is
+**not** a review — status stays `EN DRAFT PREPARED — REVIEW REQUIRED`
+until a named qualified bilingual DGR instructor completes the sign-off
+format in that file. The FR text used to build the EN drafts is a
+reconstructed working gloss (from documented source-basis conclusions),
+not a verbatim transcription of the live-administered pilot copy — see
+that file's Critical Provenance Note. Q-7.1-013–019 (Batch 1) are
+explicitly out of scope for this EN package.
 
 ## Production bank expansion — Batch 1 (Q-7.1-013–Q-7.1-019)
 

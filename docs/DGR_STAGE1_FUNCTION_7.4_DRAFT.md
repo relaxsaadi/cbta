@@ -1,12 +1,20 @@
-# DGR Stage 1 — Function 7.4 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.4 — CROSS-VALIDATED (second pass CONFIRMED)
 
 **Function 7.4**: *Personnel chargé de manutentionner le fret dans un
 entrepôt, de charger et décharger des unités de chargement (UC), et de
 charger et décharger des compartiments de fret des aéronefs.*
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a
-second pass, not reviewed by a qualified instructor, not accepted by ANAC,
-and not a Stage 2A blueprint.** This is the Function 7.4 counterpart to
+**Status: CROSS-VALIDATED — second independent pass CONFIRMED this draft's
+37-leaf-sub-task enumeration, the Block 0/4/6/7 structure, the star ratings,
+the Block 0 divergence findings (16 items not 17; 0.2.1/0.2.2 wording;
+0.5.3 absent), the "Cadre CBTA" wrong-function finding, and all four SOURCE
+GAP findings, with one non-substantive precision addendum. See
+`docs/DGR_STAGE1_FUNCTION_7.4_CROSSVALIDATION.md` for the full second-pass
+method and findings, and `docs/DGR_STAGE2A_FUNCTION_7.4_BLUEPRINT.md` for the
+resulting Stage 2A blueprint. This draft is still not reviewed by a qualified
+instructor, not accepted by ANAC, and not Tier A–verified against the current
+67th Edition/Addendum 1 text — those gates remain open.** This is the
+Function 7.4 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1), `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md`
 (Function 7.2), and `docs/DGR_STAGE1_FUNCTION_7.3_DRAFT.md` (Function 7.3),
 produced independently from Function 7.4's own source material per

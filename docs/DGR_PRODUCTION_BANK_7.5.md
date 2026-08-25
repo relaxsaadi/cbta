@@ -1685,20 +1685,18 @@ propriété de l'exploitant.
 Pièces pour avions." Direct, complete match — the stem tests the full
 five-item list.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 46 (DGR 2.5,
-general exemption-category list), cross-checked against slide 45 (AOG
-image slide: Fire Extinguishers/Hydraulic Fluid/Aircraft
-Batteries-Replacement Parts/Smoke Detectors/Fuel — a related but distinct,
-image-only illustration, not this slide's own text list) and slide 47
-(DGR 2.5's own separate specific-examples list, the primary evidence for
-`Q-7.5-027` below, not reused as the tested fact here). No direct
-exam/practice hit for this specific general-category list; corroborated
-only at a topic level by the p.48 exercise's own passenger-scenario framing
-(déodorants/générateur d'oxygène/alcool/e-cigarette/allumettes), noted
-honestly — that exercise poses open questions without a stated answer in
-the extracted course text, so it is not used as evidentiary content for any
-specific rule in this item (see "Deliberately not drafted" above).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.5.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.4-028` for the full SOURCE CONFLICT analysis). The tested 5-item list
+includes "pièces pour avions," which is not one of §2.5.1's real five
+categories (the actual 5th is "Produits d'hygiène," §2.5.1.4) — aircraft
+spare parts are instead governed by the non-exemption §2.5.2. The
+compound claim as stated is therefore not fully accurate under the
+current edition, even though four of its five named items are correct.
+**FR status:** DRAFT — SOURCE CONFLICT: tested list includes "pièces pour
+avions," not one of current DGR §2.5.1's 5 real exceptions (§2.5.1.4
+"Produits d'hygiène" is the actual 5th, omitted); §2.5.2 governs aircraft
+spare parts under a different, non-exemption rule.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1746,16 +1744,23 @@ etc."
 - "Articles à valeur déclarée... fret express..." — fabricated; no such
   category appears anywhere in the course.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 47 (DGR 2.5,
-specific worked-examples list), cross-checked against slide 46 (the
-general-category list, primary evidence for `Q-7.5-026` above) and slide 45
-(AOG image slide, source of one distractor). No direct exam/practice hit
-for this specific examples list as such; corroborated at a topic level by
-Exam Q9 (5 L / 30% alcohol), Q10 (medical oxygen bottle) and Practice Q7
-(dry ice weight limit/label), each testing an adjacent specific-item rule
-under the same general DGR 2.5/2.3.A evidence pool, without a direct match
-to this list-recognition fact, noted honestly.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.5.1, read directly this session in the authenticated Bookshelf. §2.5.1.2
+"Produits de consommation" confirms overlapping but not identical wording:
+"Aérosols, boissons alcoolisées, parfums, eaux de Cologne, briquets
+contenant du gaz liquéfié et appareils électroniques portables contenant
+des piles ou des batteries au lithium..." — parfums and boissons
+alcoolisées match the course's own list; "piles, extincteurs, équipements
+de sauvetage, fournitures d'oxygène portables, insecticides" are not named
+verbatim in current §2.5.1.1/.1.2 text (§2.5.1.1 "Équipement de bord" is
+worded generically, with no itemized example list). These items are
+plausible §2.5.1.1 "equipment required onboard" instances, but the
+specific worked-examples enumeration is not independently verified
+verbatim. Distractors (spare batteries, jet fuel, declared-value express
+freight) remain confirmed wrong-checkpoint/fabricated.
+**FR status:** DRAFT — general category (§2.5.1.1/.1.2) Tier A-confirmed,
+specific worked-example wording not verbatim-located in current DGR
+text.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1863,8 +1868,8 @@ the source does not draw, per binding caveat 6.
 | Q-7.5-023 | 0.2.2 Catégories associées aux MD cachées (AOG, etc.) | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-024 | 5.1.1 Niveaux d'interdiction — schéma des types | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-025 | 5.2.1 Portée des divergences d'État DGR 2.8.1 | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-026 | 5.2.2 Catégories générales exemptées DGR 2.5 | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-027 | 5.2.2 Exemples nommés DGR 2.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 47 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-026 | 5.2.2 Catégories générales exemptées DGR 2.5 | DRAFT — SOURCE CONFLICT: tested list includes "pièces pour avions," not one of current DGR §2.5.1's 5 real exceptions (§2.5.1.4 "Produits d'hygiène" is the actual 5th, omitted); §2.5.2 governs aircraft spare parts under a different, non-exemption rule | True/False | DGR 67e AM1 §2.5.1.1-.1.5, §2.5.2 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-027 | 5.2.2 Exemples nommés DGR 2.5 | DRAFT — general category (§2.5.1.1/.1.2) Tier A-confirmed, specific worked-example wording not verbatim-located in current DGR text | MCQ | DGR 67e AM1 §2.5.1.1, §2.5.1.2 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-028 | 7.1 Destinataires du compte rendu d'accident | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-029 | 7.2 Portée du signalement — MD exemptées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 

@@ -1864,17 +1864,21 @@ distinct fact from both Q-7.10-003/004's own named-prohibited-item facts
 framing (Q-7.10-011, Batch 1), consistent with binding caveat 3's
 shared-evidence restriction between 0.2.1/0.2.3 and 5.1.1.
 
-**Source basis:** Tier B — KOST Function 7.10 course, slides 49–51 (DGR
-2.5), cross-checked against slide 49's own AOG/fire-extinguisher/
-hydraulic-fluid/smoke-detector diagram and slide 51's own worked examples
-(piles, extincteurs, équipements de sauvetage, fournitures d'oxygène
-portables, insecticides, parfums, boissons alcoolisées, glace carbonique
-pour le service de restauration). No exam/practice hit — a full-text
-search of the exam and practice book for "propriété" and "exploitant"
-returns no on-topic hit beyond the unrelated shipper/exploitant
-responsibility-matrix items (Exam Q5/Q6, Practice Q9, already Q-7.10-001's
-own corroboration).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.5.1, read
+directly this session in the authenticated Bookshelf. §2.5.1 "Exceptions"
+confirms: "Les dispositions contenues dans la présente Réglementation ne
+s'appliquent pas aux articles et aux matières mentionnées en 2.5.1.1 à
+2.5.1.5" — directly refuting the stem's "aucun article... ne peut jamais
+bénéficier d'une exemption" claim (Faux is correct). This item's own
+parenthetical example list includes "pièces pour avions," which is not
+actually one of §2.5.1's five real categories (see this topic's
+`Q-7.4-028` for the full SOURCE CONFLICT analysis on that specific point)
+— however, the item's tested claim is the blanket "no exemption ever"
+denial, which is refuted regardless of that one parenthetical example's
+precision, since équipement de bord/consommation/glace carbonique/
+batterie are independently and correctly confirmed exempted.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.5.1 (Tier A),
+2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2105,7 +2109,7 @@ corroboration.
 | Q-7.10-025 | 0.6.1 Ordre de la première étape d'urgence | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-026 | 0.6.2 Renseignement d'urgence — DGR 1.4 wheel-item | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-027 | 0.3.1 Formation du personnel de sûreté (DGR 1.7.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-028 | 0.2.3 Exemption propriété de l'exploitant (DGR 2.5) | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slides 49–51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-028 | 0.2.3 Exemption propriété de l'exploitant (DGR 2.5) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.5.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-029 | 0.2.3 Tableau 2.3.A identification | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 56 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-030 | 0.4.1 9 classes de MD (DGR 3.0.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 + §3.0.2 intro (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-031 | 0.4.1 UN3090 — batterie lithium métal seule | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

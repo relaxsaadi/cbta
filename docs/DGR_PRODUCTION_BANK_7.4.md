@@ -1708,13 +1708,28 @@ carbonique pour restauration).
 - "Uniquement... vols cargo, jamais... passagers" — fabricated aircraft-type
   restriction; no such distinction appears on either slide.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slides 43–44 (DGR 2.5).
-Per Stage 1's own recorded interpretive-mapping decision (blueprint binding
-caveat 6), this is the material this function's 0.2.2 leaf is mapped to
-(the broader "potentially dangerous merchandise" scope, distinct from
-0.2.1's "hidden DG" scope) — this item is drafted consistently with that
-already-recorded mapping, not a new interpretive decision.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.5.1 and
+§2.5.2, read directly this session in the authenticated Bookshelf.
+**SOURCE CONFLICT found:** current §2.5.1 "Exceptions" lists exactly five
+categories (§2.5.1.1-.1.5): "Équipement de bord," "Produits de
+consommation," "Dioxyde de carbone solide (glace carbonique)," "Produits
+d'hygiène," and "Équipement électronique alimenté par une batterie." The
+course's own list swaps out "Produits d'hygiène" for "Pièces pour avions"
+— but aircraft spare parts are governed by a structurally different
+provision, §2.5.2 "Pièces de rechange d'aéronef," which states the
+*opposite* of an exemption: "les rechanges des articles... qui ont été
+enlevés pour être remplacés doivent être transportés conformément aux
+dispositions de la présente Réglementation" (sauf autorisation de l'État
+de l'exploitant) — i.e. removed/replacement parts generally lose the
+§2.5.1 exemption unless the State of the operator authorizes otherwise.
+The item's correct answer is therefore not fully accurate under the
+current edition; the general concept (some operator-property categories
+are exempted) remains correct, and distractors 2–4 remain independently
+wrong.
+**FR status:** DRAFT — SOURCE CONFLICT: correct answer names "pièces pour
+avions" as one of 5 exempted categories, but current DGR §2.5.2 governs
+aircraft spare parts as a DIFFERENT, non-exemption rule; the real 5th
+§2.5.1 category is "Produits d'hygiène" (§2.5.1.4), omitted entirely.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2083,7 +2098,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-025 | 6.3.1 Contrôle emplacement de chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 102 ¶2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-026 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-027 | 0.1.4 Distinction danger/risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-028 | 0.2.2 MD de la propriété de l'exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slides 43–44 (DGR 2.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-028 | 0.2.2 MD de la propriété de l'exploitant | DRAFT — SOURCE CONFLICT: correct answer names "pièces pour avions" as one of 5 exempted categories, but current DGR §2.5.2 governs aircraft spare parts as a DIFFERENT, non-exemption rule; the real 5th §2.5.1 category is "Produits d'hygiène" (§2.5.1.4), omitted entirely | MCQ | DGR 67e AM1 §2.5.1.1-.1.5, §2.5.2 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-029 | 0.3.1 Responsabilités Exploitant DGR 1.4 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-030 | 0.3.3 Divergence de l'Exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-031 | 0.4.2 Groupe d'emballage I | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

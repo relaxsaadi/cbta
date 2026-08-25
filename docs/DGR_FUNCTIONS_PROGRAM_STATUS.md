@@ -457,6 +457,26 @@ topic-priority order: `docs/DGR_TIER_A_INVENTORY.md`.
 - **Program totals after Topic 4:** 216 FROZEN (up from 202), 30 PARTIAL
   (up from 24), 5 STALE (up from 4), 189 NOTATTEMPTED (down from 210); GAP
   (13) unchanged.
-- Remaining topics (5–8) not yet started this phase — see
-  `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan for the priority order
-  and per-topic item lists.
+- **Topic 5 — §2.5 operator-property: ✅ RESOLVED (completes all 5
+  priority topics).** 7 items across Functions 7.4/7.5/7.6/7.8/7.9/7.10.
+  **Significant finding:** current DGR §2.5.1's real 5th exempted category
+  is "Produits d'hygiène" (§2.5.1.4, hand sanitizer/cleaning products for
+  passenger/crew hygiene) — KOST's course substitutes "pièces pour avions"
+  (aircraft parts) in its place, but aircraft spare parts are actually
+  governed by a separate, structurally different provision (§2.5.2) that
+  states essentially the *opposite* of an exemption (removed/replacement
+  parts generally must comply with the full Regulation unless the State of
+  the operator authorizes otherwise). This is a genuine content-correction
+  opportunity for KOST's own course material, independent of this bank's
+  fixes. 2 items (`Q-7.8-012`, `Q-7.10-028`) FROZEN — their own tested
+  fact is unaffected. 2 items (`Q-7.4-028`, `Q-7.5-026`) moved to STALE —
+  their own correct answer/claim asserts the wrong 5th category. 3 items
+  (`Q-7.5-027`, `Q-7.6-038`, `Q-7.9-009`) moved to PARTIAL — either a
+  distractor (not the correct answer) is affected, or the specific
+  worked-examples wording isn't verbatim-located.
+- **Program totals after Topic 5 (all 5 priority topics complete):** 218
+  FROZEN (up from 216), 33 PARTIAL (up from 30), 7 STALE (up from 5), 182
+  NOTATTEMPTED (down from 189); GAP (13) unchanged.
+- **Next phase work (priority items 6–8):** all 33 PARTIAL items, all 7
+  STALE items, and the remaining ~182 NOTATTEMPTED items with genuine Tier
+  A source paths — see `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan.

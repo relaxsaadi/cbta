@@ -808,17 +808,16 @@ above):**
   names only "Équipement électronique alimenté par une batterie" (an
   installed-battery device), not passenger-carried loose spare batteries.
 
-**Source basis:** Tier B — KOST Function 7.8 course, slide 43 (DGR 2.5
-exemption list), cross-checked against slide 44 (a parallel "Exemples"
-slide: piles, extincteurs, équipements de sauvetage, fournitures d'oxygène
-portables, insecticides/rafraîchisseurs d'air, parfums, boissons
-alcoolisées, glace carbonique pour restauration — a *restriction-examples*
-list, distinct from slide 43's own *exemption* list, not conflated here),
-slide 46 (the lighter/battery/oxygen exercise, the source of the first
-distractor), and slide 49 (the COMAT/flare example, the source of the
-second distractor). No direct exam/practice hit for this specific
-exemption-list fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.5.1.3, read
+directly this session in the authenticated Bookshelf: "Dioxyde de carbone
+solide (glace carbonique) utilisé pour conserver et rafraîchir la
+nourriture et les boissons destinées au service à bord de l'aéronef."
+Direct, exact confirmation of the correct answer — this specific tested
+fact is unaffected by the "pièces pour avions"/§2.5.2 conflict flagged
+elsewhere in this topic (see `Q-7.4-028`), since dry ice is independently
+and correctly one of §2.5.1's own five categories.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.5.1.3 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -995,7 +994,7 @@ equipment).
 | Q-7.8-009 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-010 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-011 | 0.2.3 Interdiction générale passagers/équipage (DGR 2.3) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-012 | 0.2.3 Exemption DGR 2.5 — glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 43 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-012 | 0.2.3 Exemption DGR 2.5 — glace carbonique | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.5.1.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-013 | 0.3.1 Responsabilité agent des opérations (practice Q10) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Practice Q10 (F-KOST 09); course slide 5 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-014 | 0.1.1 Accident historique UPS Dubaï 2010 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 18 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-015 | 0.2.2 Exemple DG cachée — appareils dentaires | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

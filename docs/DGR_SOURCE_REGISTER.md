@@ -365,6 +365,58 @@ standalone current-DGR clause:
 Program totals after Topic 4: 216 FROZEN (was 202), 30 PARTIAL (was 24), 5
 STALE (was 4), 189 NOTATTEMPTED (was 210); GAP (13) unchanged.
 
+### 2026-08-25 (second Tier A phase) — Topic 5: §2.5 operator-property, 7 items cross-applied (2 confirmed, 3 partial, 2 source conflict)
+
+Navigation to **§2.5 "Marchandises dangereuses en la possession de
+l'exploitant"** (Part 2) resolved all 7 items tagged to this topic, across
+Functions 7.4, 7.5, 7.6, 7.8, 7.9, 7.10.
+
+**Significant finding — KOST's "5-category" list does not match the
+current edition's structure.** Current DGR §2.5.1 "Exceptions" states:
+"Les dispositions contenues dans la présente Réglementation ne s'appliquent
+pas aux articles et aux matières mentionnées en 2.5.1.1 à 2.5.1.5," listing
+exactly five categories:
+- §2.5.1.1 Équipement de bord
+- §2.5.1.2 Produits de consommation
+- §2.5.1.3 Dioxyde de carbone solide (glace carbonique)
+- §2.5.1.4 **Produits d'hygiène** (disinfectants/cleaning products for
+  passenger/crew hygiene, carried by the operator)
+- §2.5.1.5 Équipement électronique alimenté par une batterie
+
+KOST's course list swaps out §2.5.1.4 "Produits d'hygiène" for "Pièces
+pour avions" (aircraft parts) — but aircraft spare parts are governed by a
+structurally different, separate provision, **§2.5.2 "Pièces de rechange
+d'aéronef,"** which states essentially the *opposite* of an exemption:
+removed/replacement parts of §2.5.1-exempted items must generally comply
+with the full Regulation unless the State of the operator authorizes
+otherwise (§2.5.2.1/.2.3/.2.4). The course appears to have mislabeled
+§2.5.2's spare-parts rule as if it were itself a 6th/alternate exemption
+category, while dropping the real 4th category entirely. **This is a
+genuine content-correction opportunity for KOST's own course material**,
+independent of this bank's own item-level fixes.
+
+Resolution per item:
+- `Q-7.8-012` (glace carbonique, §2.5.1.3), `Q-7.10-028` (Faux — some
+  exemptions do exist, §2.5.1) — FROZEN. Neither item's core tested fact
+  depends on the "pièces pour avions" question.
+- `Q-7.4-028`, `Q-7.5-026` — moved to **SOURCE CONFLICT**: their own
+  correct answer/tested claim asserts "pièces pour avions" as one of the
+  5 exempted categories, which current DGR does not support.
+- `Q-7.6-038`, `Q-7.9-009` — moved to PARTIAL: correct answer remains
+  valid (neither pharma nor passenger-carried DG is a §2.5.1 category
+  either way), but one distractor ("pièces pour avions") is presented as
+  if it were a genuine category, which current DGR does not support.
+- `Q-7.5-027` — moved to PARTIAL: the general category (§2.5.1.1/.1.2) is
+  confirmed, but the specific worked-examples list (piles, extincteurs,
+  équipements de sauvetage, etc.) is not verbatim-located in current DGR
+  text — §2.5.1.1 is worded generically with no itemized examples, and
+  §2.5.1.2's own examples list (aérosols, boissons alcoolisées, parfums,
+  eaux de Cologne, briquets) only partially overlaps.
+
+Program totals after Topic 5 (completing priority topics 1–5): 218 FROZEN
+(was 216), 33 PARTIAL (was 30), 7 STALE (was 5), 182 NOTATTEMPTED (was
+189); GAP (13) unchanged.
+
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see

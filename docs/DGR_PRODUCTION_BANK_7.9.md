@@ -582,18 +582,19 @@ options is named verbatim on slide 49's own list):**
   list.
 - "Pièces pour avions" — fifth item on slide 49's list.
 
-**Source basis:** Tier B — KOST Function 7.9 course, slide 49 (DGR 2.5
-exempted categories), cross-checked against slide 50 (worked examples:
-piles, extincteurs, équipements de sauvetage, oxygène portable,
-insecticides, parfums, alcool, glace carbonique de restauration) and
-slides 47/51 (the separate DGR 2.3 passenger-provisions section, the
-correct answer's own contrasting source). No direct exam/practice hit for
-this exact exempted-categories-list fact; Exam Q6's wheelchair scenario
-("Qu'est-ce que l'exploitant devra vérifier avant d'accepter la chaise")
-tests a related but distinct application of the operator's own
-prescriptions, not this specific exempted-list fact, noted honestly as
-topic-adjacent only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.5.1, read directly this session in the authenticated Bookshelf (see
+this topic's `Q-7.4-028` for the full SOURCE CONFLICT analysis). The
+correct answer (passenger-carried DG for personal use, governed by the
+separate §2.3 passenger provisions, not §2.5.1) is correctly absent from
+§2.5.1's real categories and remains valid. Distractor "pièces pour
+avions" is presented as a genuine §2.5.1 category — it is not; the real
+5th category is "Produits d'hygiène" (§2.5.1.4), and aircraft spare parts
+are instead governed by the separate, non-exemption §2.5.2.
+**FR status:** DRAFT — correct answer (passenger-carried DG) Tier
+A-confirmed absent from §2.5.1; one distractor ("pièces pour avions")
+falsely implied as a genuine 5th category — current DGR's real 5th
+category is "Produits d'hygiène" (§2.5.1.4).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -917,7 +918,7 @@ DGR-numbered requirement.
 | Q-7.9-006 | 0.2.2 Mesures recommandées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.9 course slide 61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-008 | 0.5.2 UN 3245 — étiquette biologique Cat. B | DRAFT — Tier A not attempted | MCQ | KOST F7.9 course slide 87 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-009 | 5.2.1 Catégories exemptées DGR 2.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.9 course slide 49 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-009 | 5.2.1 Catégories exemptées DGR 2.5 | DRAFT — correct answer (passenger-carried DG) Tier A-confirmed absent from §2.5.1; one distractor ("pièces pour avions") falsely implied as a genuine 5th category — current DGR's real 5th category is "Produits d'hygiène" (§2.5.1.4) | MCQ | DGR 67e AM1 §2.5.1.1-.1.5 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-010 | 5.2.2 Limite glace carbonique 2,5 kg | DRAFT — Tier A not attempted | True/False | KOST F7.9 course slide 97 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-011 | 5.2.2 Portée interdiction DGR 2.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-012 | 6.2.1 Lever le doute avant chargement | DRAFT — Tier A not attempted | True/False | KOST F7.9 course slide 111 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

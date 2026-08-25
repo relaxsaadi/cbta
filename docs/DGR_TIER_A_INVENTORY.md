@@ -7,17 +7,27 @@ and `docs/DGR_PRODUCTION_BANK_7.2.md` … `docs/DGR_PRODUCTION_BANK_7.10.md`
 (Functions 7.2–7.10, 434 items). Regulatory baseline: IATA DGR 67th Edition
 2026, French, Addendum 1 integrated.
 
-**Live status note (2026-08-25, updated after Topic 4):** the category
-counts and topic sublists below are a snapshot taken *before* topic-based
-navigation began. Topic 1 (lithium batteries, 14 items), Topic 2 (NOTOC,
-23 items — 20 confirmed, 3 moved to PARTIAL), Topic 3 (Part 6/UN-spec
-marks, 10 items — all confirmed), and Topic 4 (§2.8 divergences, 22 items
-incl. the Topic-2 overlap — 14 confirmed, 7 moved to PARTIAL, 1 moved to
-STALE) are now resolved — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic
-1"–"Topic 4" entries. Current totals: **216 FROZEN, 13 GAP, 30 PARTIAL, 5
-STALE, 189 NOTATTEMPTED** (453 total). The tables below are left as the
-original baseline snapshot for audit purposes; do not re-derive counts
-from them without applying this note.
+**Live status note (2026-08-25, updated after Topic 5 — all 5 priority
+topics complete):** the category counts and topic sublists below are a
+snapshot taken *before* topic-based navigation began. Topics 1–5 are now
+all resolved — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic 1"–"Topic 5"
+entries:
+- Topic 1 (lithium batteries, 14 items) — all confirmed.
+- Topic 2 (NOTOC, 23 items) — 20 confirmed, 3 moved to PARTIAL.
+- Topic 3 (Part 6/UN-spec marks, 10 items) — all confirmed.
+- Topic 4 (§2.8 divergences, 22 items incl. 1 Topic-2 overlap) — 14
+  confirmed, 7 moved to PARTIAL, 1 moved to STALE.
+- Topic 5 (§2.5 operator-property, 7 items) — 2 confirmed, 3 moved to
+  PARTIAL, 2 moved to STALE (KOST's "pièces pour avions" 5th-category
+  claim conflicts with current DGR's real 5th category, "Produits
+  d'hygiène," §2.5.1.4).
+
+Current totals: **218 FROZEN, 13 GAP, 33 PARTIAL, 7 STALE, 182
+NOTATTEMPTED** (453 total). Remaining phase work per the navigation plan:
+priority items 6 (all PARTIAL items), 7 (all STALE items), 8 (remaining
+NOTATTEMPTED items). The tables below are left as the original baseline
+snapshot for audit purposes; do not re-derive counts from them without
+applying this note.
 
 Counting method: each function's own batch summary table is the canonical
 row set. For 7.1 the 19-row table in `DGR_STAGE_2B_STATUS.md` is used (its
@@ -252,7 +262,17 @@ stated. 1 item (`Q-7.3-025`) moved to STALE CITATION — its own "2.8.3.4 et
 | Q-7.10-022 | 0.3.3 Divergence de l'Exploitant (DGR 2.8.3) |
 | Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) |
 
-### Topic 5 — Operator-property, §2.5 (7 items)
+### Topic 5 — Operator-property, §2.5 (7 items) — ✅ RESOLVED 2026-08-25 (2 confirmed, 3 partial, 2 source conflict)
+
+**Significant finding:** current DGR §2.5.1's real 5th exempted category
+is "Produits d'hygiène" (§2.5.1.4) — KOST's course substitutes "pièces
+pour avions" instead, which is actually governed by the separate,
+non-exemption §2.5.2. `Q-7.4-028`/`Q-7.5-026` moved to STALE (own claim
+asserts the wrong category); `Q-7.6-038`/`Q-7.9-009` moved to PARTIAL (a
+distractor, not the correct answer, is affected); `Q-7.5-027` moved to
+PARTIAL (worked-examples wording not verbatim-located); `Q-7.8-012`/
+`Q-7.10-028` FROZEN (their own tested fact is unaffected). See
+`docs/DGR_SOURCE_REGISTER.md`'s "Topic 5" entry for full citations.
 
 | ID | Sub-task |
 |---|---|

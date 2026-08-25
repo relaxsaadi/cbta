@@ -2367,16 +2367,21 @@ options is one of the five genuine categories named verbatim on slide 43):**
   slide 43.
 - "Les pièces pour avions" — fifth category on slide 43.
 
-**Source basis:** Tier B — KOST Function 7.6 course, slide 43 (DGR 2.5),
-cross-checked against slide 44 (worked examples: piles, extincteurs,
-équipements de sauvetage, fournitures d'oxygène portables, insecticides/
-rafraîchisseur d'air, parfums, boissons alcoolisées, glace carbonique de
-restauration). **Note:** Practice Q4 (physical loading precautions for
-lithium batteries) is topic-adjacent but, per Stage 1's own evidence note
-8, actually belongs to Function 7.4's physical-handling territory (4.2, not
-present in Function 7.6's own table) rather than this classification-scope
-fact — not cited as corroboration here for that reason.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.5.1, read directly this session in the authenticated Bookshelf (see
+this topic's `Q-7.4-028` for the full SOURCE CONFLICT analysis). The
+correct answer ("produits pharmaceutiques du fret commercial") is
+correctly absent from §2.5.1's real five categories and remains valid.
+However, distractor 4 ("les pièces pour avions") is presented as one of
+the five genuine categories — it is not; the real 5th category is
+"Produits d'hygiène" (§2.5.1.4), and aircraft spare parts are instead
+governed by the separate, non-exemption §2.5.2. This does not change
+which option is correct (pharma is still the only non-category among the
+four options), but the distractor's own grounding is imprecise.
+**FR status:** DRAFT — correct answer (pharma) Tier A-confirmed absent
+from §2.5.1; one distractor ("pièces pour avions") falsely implied as a
+genuine 5th category — current DGR's real 5th category is "Produits
+d'hygiène" (§2.5.1.4).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3094,7 +3099,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-035 | 0.1.1 Facteurs de danger en vol | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-036 | 0.1.2 Doc 9284 (OACI) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 23 + Practice Q1 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-037 | 0.2.1 États concernés — Exemptions vs Approbations | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slides 38–39 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-038 | 0.2.1 Catégories exemptées DGR 2.5 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 43 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-038 | 0.2.1 Catégories exemptées DGR 2.5 | DRAFT — correct answer (pharma) Tier A-confirmed absent from §2.5.1; one distractor ("pièces pour avions") falsely implied as a genuine 5th category — current DGR's real 5th category is "Produits d'hygiène" (§2.5.1.4) | MCQ | DGR 67e AM1 §2.5.1.1-.1.5 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-039 | 0.2.2 Définition MD cachée | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-040 | 0.3.1 Conformité expéditeur DGR 1.3.1 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.3.1.1-2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-041 | 0.3.1 Formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.6 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

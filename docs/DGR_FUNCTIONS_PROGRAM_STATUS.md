@@ -138,3 +138,84 @@ continue source-gated question drafting for Functions 7.2–7.10 (Function
 see their own rows above), not a new Stage 1/2A derivation pass for any
 function, since that derivation work is now finished for the whole
 7.1–7.10 program.
+
+## 2026-08-25 (later same day) — second milestone: every function now has Batch 1 + Batch 2 production questions AND an EN review package
+
+Following the Stage 1/2A milestone above, this same session continued
+autonomously (per the standing authorization in `.claude/rules/dgr-stage2b.md`)
+through two more full passes across all ten functions, each dispatched as
+parallel background agents, each verified and pushed individually. **Every
+one of the ten functions now has: (a) at least two drafted production
+question batches (Batch 1 + Batch 2, both Tier B `DRAFT`), and (b) a
+complete EN bilingual review package translating every currently-drafted
+item.** This is the second genuine programmatic milestone of the day, not
+merely another status update.
+
+### Exact per-function item counts as of this milestone
+
+| Function | Batch 1 | Batch 2 | Total drafted | Blueprint ceiling | EN package |
+|---|---|---|---|---|---|
+| 7.1 | 12 pilot (FR-terminal) + 7 batch | — | 19 (12 EN-reviewed, 7 not yet) | recovered/corrected (see `docs/RECOVERED_STAGE2A_CONTEXT.md`) | 12 items only (`docs/DGR_EN_REVIEW_PACKAGE_7.1.md`) — the 7 Batch 1 items are deliberately out of scope, not yet FR-terminal |
+| 7.2 | 11 | 17 | 28 | 89 | 28 items (`docs/DGR_EN_REVIEW_PACKAGE_7.2.md`) |
+| 7.3 | 14 | 18 | 32 | 117 | 32 items (`docs/DGR_EN_REVIEW_PACKAGE_7.3.md`) |
+| 7.4 | 16 | 19 | 35 | 111 | 35 items (`docs/DGR_EN_REVIEW_PACKAGE_7.4.md`) |
+| 7.5 | 16 | 13 | 29 | 67 | 29 items (`docs/DGR_EN_REVIEW_PACKAGE_7.5.md`) |
+| 7.6 | 15 | 18 | 33 | 89 | 33 items (`docs/DGR_EN_REVIEW_PACKAGE_7.6.md`) |
+| 7.7 | 15 | 18 | 33 | 85 | 33 items (`docs/DGR_EN_REVIEW_PACKAGE_7.7.md`) |
+| 7.8 | 15 | 17 | 32 | 78 | 32 items (`docs/DGR_EN_REVIEW_PACKAGE_7.8.md`) |
+| 7.9 | 16 | 15 | 31 | 82 | 31 items (`docs/DGR_EN_REVIEW_PACKAGE_7.9.md`) |
+| 7.10 | 15 | 17 | 32 | 76 | 32 items (`docs/DGR_EN_REVIEW_PACKAGE_7.10.md`) |
+| **Total** | **145** | **142** | **304** | **~901** (excl. 7.1) | **297 items translated** |
+
+Every batch strictly respects its own function's Stage 2A per-leaf
+ceilings, hard-gates every confirmed `SOURCE GAP` leaf to zero questions,
+and honors every restricted/distinct-framing binding caveat exactly as
+written. No production question anywhere in the program (except 11 of
+Function 7.1's 12 frozen pilot items) has Tier A regulatory verification.
+No item anywhere is `APPROVED`. No qualified human reviewer has signed off
+on anything.
+
+### Tier A verification — attempted and reconfirmed blocked this session
+
+Mid-session, the owner reported the IATA Digital Publications Bookshelf as
+authenticated and open with remote debugging active. This session
+connected via the `chrome-devtools` MCP and independently verified, across
+four separate checks (the orchestrating session directly, plus three more
+background agents that each rechecked before starting their own batch),
+that the reachable browser session/tab showed either an unauthenticated
+Sign-In screen (`login.vitalsource.com` / "Digital Publications Library:
+Sign In") or, later, no page at all ("the selected page has been closed").
+**No login was attempted at any point** — this is a 2FA-gated credential
+flow and a genuine owner-only blocker per the standing rules, not something
+to work around. Tier A verification for all ~292 non-Tier-A-verified items
+(304 total minus 11 already Tier A pilot items, treating the 12th pilot
+item's confirmed source gap as its own terminal state) remains the single
+largest open gate in the entire program, and requires the owner to
+personally re-authenticate that session (with 2FA if prompted) before any
+further Bookshelf-based verification can proceed.
+
+### What remains open — the honest full picture
+
+1. **Tier A regulatory verification** — blocked on owner Bookshelf
+   re-authentication, as above. This is the largest single remaining gate.
+2. **Deeper batches (Batch 3+)** — every function's Batch 1 + Batch 2
+   combined still covers well under half of its own blueprint ceiling (see
+   table above; e.g. 7.4 at 35/111, 7.3 at 32/117). More drafting is
+   possible and source-supported, just not yet done.
+3. **Human bilingual (EN) review** — every EN package is a translation
+   *draft* only; no qualified bilingual reviewer has checked any of the 297
+   translated items for meaning-equivalence or terminology accuracy.
+4. **Qualified-reviewer FR technical review and `APPROVED` sign-off** — has
+   not occurred for any item in any function, including the 12 frozen 7.1
+   pilot items (11 of which are Tier A verified but still not `APPROVED`
+   without a named reviewer + date).
+5. **Reviewer package assembly** — the EN packages and production banks
+   exist as separate per-function documents; no single consolidated
+   reviewer-facing packet spanning multiple functions has been assembled.
+
+None of the above changes the two-track label discipline in
+`docs/FULL_PROGRAM_READINESS_SCOPE.md` and `docs/PLATFORM_READINESS_REPORT.md`
+— Track B (the full question-bank program) remains explicitly **NOT
+complete**, and neither `PLATFORM READY TO USE` nor `FULL PROGRAM
+PRE-PRODUCTION READY` may be declared while items 1–4 above remain open for
+the great majority of the program's 304 drafted items.

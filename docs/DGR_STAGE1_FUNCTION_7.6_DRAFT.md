@@ -1,4 +1,4 @@
-# DGR Stage 1 — Function 7.6 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.6 — CROSS-VALIDATED (second pass CONFIRMED)
 
 **Function 7.6**: *Personnel chargé de la planification du chargement des
 aéronefs* (per KOST's own course title slide) — IATA's own Table 7.6.A gives
@@ -10,9 +10,19 @@ confirmed consistent with everything found in this pass, though this draft's
 actual sub-task content is derived strictly from the real source material
 below, not from the marketing description.
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a
-second pass, not reviewed by a qualified instructor, not accepted by ANAC,
-and not a Stage 2A blueprint.** This is the Function 7.6 counterpart to
+**Status: CROSS-VALIDATED — second independent pass CONFIRMED this draft's
+28-leaf-sub-task enumeration, the Block 0/4/6/7 structure, the star ratings
+(including a dedicated extra-zoomed star-column re-check for the ★★→★★★ and
+★★★→★★ transitions), the 18-item non-gapped Block 0 finding, the
+wrong-function "Cadre CBTA" finding, the NOTOC-issue-vs-verify
+complementary-role finding against Function 7.4's own independently
+re-rendered table, and both SOURCE GAP findings (0.3.2, 4.3.3), with one
+non-substantive precision addendum. See
+`docs/DGR_STAGE1_FUNCTION_7.6_CROSSVALIDATION.md` for the full second-pass
+method and findings, and `docs/DGR_STAGE2A_FUNCTION_7.6_BLUEPRINT.md` for the
+resulting Stage 2A blueprint. This draft is still not reviewed by a qualified
+instructor, not accepted by ANAC, and not Tier A–verified against the current
+67th Edition/Addendum 1 text.** This is the Function 7.6 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1),
 `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md` (Function 7.2),
 `docs/DGR_STAGE1_FUNCTION_7.3_DRAFT.md` (Function 7.3), and

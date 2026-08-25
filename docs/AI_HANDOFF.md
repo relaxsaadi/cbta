@@ -208,3 +208,119 @@ After each batch:
 2. Update `docs/DGR_SOURCE_REGISTER.md` with source references and unresolved gaps.
 3. Keep concise citations/locations only; do not commit large licensed IATA passages.
 4. Record any question text change and why it was necessary.
+
+## 2026-08-25 — DURABLE CHECKPOINT (owner going offline, connection about to drop)
+
+Written on explicit owner instruction to create a zero-loss, resumable
+checkpoint before a connection interruption. Everything below is verified
+against `git log`/`git status` at the moment of writing, not recalled from
+memory.
+
+**Branch:** `ai/dgr-stage2b-handoff`. **Latest pushed commit:** `e24f37a`
+(`docs(dgr): draft Function 7.7 production question Batch 1 (Tier B DRAFT)`).
+`git status` at checkpoint time showed a clean tree except one pre-existing,
+unrelated untracked file (`public/documents/Presentation-KOST-Academy-Formation-DGR.pdf`,
+dated 2026-08-20, present since before this session started, not part of the
+DGR/CBTA question-bank work) — deliberately left uncommitted, per the
+standing rule to never commit unrelated files.
+
+### Full per-function state at checkpoint
+
+All ten functions (7.1–7.10) now have: Stage 1 task/sub-task enumeration,
+independent second-pass cross-validation, and a Stage 2A PROVISIONAL/CEILING
+blueprint — this milestone was reached this session (Function 7.10's
+cross-validation, commit `ee1e211`, was the last one needed).
+
+Production question-bank Batch 1 status (all items Tier B `DRAFT`, none
+Tier A, none `APPROVED` — Tier A verification remains blocked pending the
+owner's manual IATA Bookshelf 2FA re-login, a genuine owner-only blocker):
+
+| Function | Batch 1 items | Commit |
+|---|---|---|
+| 7.1 | 12-item frozen pilot + 7-item Batch 1 (`Q-7.1-013`–`019`) | pre-existing, see `docs/DGR_PRODUCTION_BANK_7.1.md` |
+| 7.2 | 11 items (`Q-7.2-001`–`011`) | pre-existing, see `docs/DGR_PRODUCTION_BANK_7.2.md` |
+| 7.3 | 14 items (`Q-7.3-001`–`014`) | pre-existing, see `docs/DGR_PRODUCTION_BANK_7.3.md` |
+| 7.4 | 16 items (`Q-7.4-001`–`016`) | `2b39a66` |
+| 7.5 | 16 items (`Q-7.5-001`–`016`) | `c013c46` |
+| 7.6 | 15 items (`Q-7.6-001`–`015`) | `59f9f0e` |
+| 7.7 | 15 items (`Q-7.7-001`–`015`) | `e24f37a` |
+| 7.8 | 15 items (`Q-7.8-001`–`015`) | `3b2f063` |
+| 7.9 | **IN PROGRESS at checkpoint time — see below** | not yet committed |
+| 7.10 | 15 items (`Q-7.10-001`–`015`) | `c57f5d9` |
+
+Every batch respects its own function's Stage 2A per-leaf ceilings, hard-gates
+every confirmed `SOURCE GAP` leaf to 0 questions, and honors every
+restricted/distinct-framing binding caveat exactly as written in that
+function's own blueprint. `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` is
+up to date for all nine committed functions as of `e24f37a`.
+
+### Running background agent at checkpoint time — NOT YET COMPLETE
+
+**Task/agent ID:** `a58bf9be0008ce05c` (a retry — the first attempt at this
+exact task, agent `a44253bd83df16c86`, failed mid-run on a transient
+"Connection lost mid-response" API error before writing any file; confirmed
+via `git status` that it left no orphaned/partial file, so the retry is a
+clean run, nothing to merge).
+
+**What it is doing:** drafting Function 7.9's production question-bank
+Batch 1 (target file: NEW `docs/DGR_PRODUCTION_BANK_7.9.md`, ~12–16 items,
+IDs `Q-7.9-001` onward, Tier B `DRAFT`), plus updating only Function 7.9's
+row in `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`. Full task prompt (for exact
+resume/re-dispatch if needed) instructed it to: read
+`docs/DGR_STAGE1_FUNCTION_7.9_DRAFT.md` + `..._CROSSVALIDATION.md` +
+`docs/DGR_STAGE2A_FUNCTION_7.9_BLUEPRINT.md` (82-question ceiling: Block
+0=58, Block 5=11, Block 6=5, Block 7=8), hard-gate leaf 0.3.2 to 0, and apply
+a **binding prohibition** on leaf 6.2.3 (this function's highest-weight
+leaf): if drafted at all (ceiling 1), it must NOT include any
+fire-response/PAN-PAN/MAYDAY emergency-declaration content (that exact
+content is a confirmed SOURCE GAP — zero course-slide traceability), only
+genuinely course-evidenced generic emergency-procedure content. It was
+instructed to `git pull` before starting and again immediately before
+committing (not pushing) — same discipline used for all prior batches.
+
+**Last verified step:** dispatched, running for several minutes, no
+completion notification received before this checkpoint was written. Its
+work is NOT in this checkpoint's pushed commit `e24f37a` and is NOT yet
+safe/durable — it exists only in that agent's own in-memory session until it
+commits.
+
+**Exact next action on resume:**
+1. Check whether agent `a58bf9be0008ce05c` is still listed as running (via
+   the agent list) or has already produced a completion notification that
+   arrived after this checkpoint was written but wasn't yet processed.
+2. If it completed: `git pull origin ai/dgr-stage2b-handoff`, verify
+   `docs/DGR_PRODUCTION_BANK_7.9.md` exists and only Function 7.9's row in
+   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` changed, then
+   `git push origin ai/dgr-stage2b-handoff`.
+3. If it is still running: wait for its completion notification (do not
+   re-dispatch a third attempt while one is live — check `ListAgents`
+   first).
+4. If it died again without committing (check `git log` for a
+   `Q-7.9-...`/Function 7.9 commit and `git status` for an orphaned
+   `docs/DGR_PRODUCTION_BANK_7.9.md`): re-dispatch a fresh drafting agent
+   using the same task template as the other functions' Batch 1 agents
+   (see `docs/DGR_PRODUCTION_BANK_7.8.md`/`7.10.md` for the exact format to
+   follow), reading `docs/DGR_STAGE2A_FUNCTION_7.9_BLUEPRINT.md` for the
+   ceilings.
+5. Once Function 7.9's Batch 1 is committed and pushed, all ten functions
+   will have both a Stage 2A blueprint and a first production-question
+   batch — the next work per the standing autonomous-continuation
+   instruction is: (a) draft a second, deeper batch for functions whose
+   Batch 1 left many leaves uncovered (most functions only drew 10-16 of
+   20-30 non-gap leaves), (b) build English bilingual review packages for
+   Functions 7.2–7.10 (only 7.1 has one so far, at
+   `docs/DGR_EN_REVIEW_PACKAGE_7.1.md`), (c) re-attempt Tier A verification
+   once/if the owner has re-authenticated the IATA Bookshelf session
+   (2FA — owner-only action, do not attempt to work around), and (d) a
+   final holistic pass over `docs/PLATFORM_READINESS_REPORT.md` reflecting
+   the full ten-function Stage 1/2A completion milestone. Do not stop after
+   Function 7.9 alone — continue through this list per the standing
+   autonomous-execution authorization in `.claude/rules/dgr-stage2b.md`.
+
+### Platform Track A (runtime/security/RBAC/tests) — unchanged since prior
+checkpoint, already fully documented in `docs/PLATFORM_READINESS_REPORT.md`
+and `docs/PLATFORM_READY_CHECKLIST.md`; no platform-side work was in flight
+at this specific checkpoint moment. Two known open items remain, both
+correctly blocked on console source access this environment does not have
+(not reattempted or worked around this session): the WCAG AA color-contrast
+defect, and the exam-manager/instructor RBAC role implementation decision.

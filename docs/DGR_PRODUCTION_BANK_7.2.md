@@ -483,21 +483,20 @@ attributed to the shipper's LTA endorsement):**
   (sub-task 0.5.2), a different requirement from the LTA content-confirmation
   endorsement this question asks about.
 
-**Source basis:** Tier B, section context Tier A-confirmed 2026-08-25 — DGR
-67th Ed. 2026, §9.1.1.2 (Bookshelf p.693 area) confirms the surrounding
-mechanism: acceptance staff must "demander les documents de l'expéditeur
-prouvant que l'expédition ne contient pas de marchandises dangereuses tel
-qu'indiqué en 2.2." This confirms shipper-supplied proof-of-non-DG-content
-is a real current requirement. The specific phrase "Not Restricted" as the
-named example of such proof was not located in the current §9.1.1 or §2.2
-text read this pass — it may appear elsewhere in the book (e.g. §8 Part 8
-documentation provisions, not read this pass) or may be industry-standard
-shorthand the KOST course adds as a concrete illustration of the general
-requirement. Originally Tier B — KOST Function 7.2 course, slides 100–102.
-**FR status:** DRAFT — underlying requirement Tier A-confirmed (§9.1.1.2);
-the specific "Not Restricted" phrase itself not yet independently located
-in the current text — flag for a follow-up Part 8 search before treating
-the exact phrase as DGR-sourced.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §9.1.1.2 (Bookshelf p.693
+area) confirms the surrounding mechanism: acceptance staff must "demander
+les documents de l'expéditeur prouvant que l'expédition ne contient pas de
+marchandises dangereuses tel qu'indiqué en 2.2." **2026-08-25 follow-up
+confirmed the phrase itself:** §9.1.7 (same Part 9, Bookshelf p.693 area)
+uses and hyperlinks the term "marchandise non réglementée" directly to the
+Appendice A Glossaire entry `NOTRESTRICTED` — confirming "Not
+Restricted"/"marchandise non réglementée" is itself a defined current DGR
+term, not an industry-shorthand invention. Originally Tier B — KOST
+Function 7.2 course, slides 100–102.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25 —
+mechanism via §9.1.1.2, term itself via §9.1.7's glossary-linked usage;
+upgraded from the initial partial-confirmation recorded earlier this
+session).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -706,7 +705,7 @@ KOST Function 7.2 course, slide 110.
 | Q-7.2-004 | 0.4.1 Classes/divisions | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 UN1942 (p.385) + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-005 | 0.5.2 Étiquetage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-006 | 3.4.1 Vérif. documentation | DRAFT — general duty Tier A-confirmed, itemized list Tier B only | MCQ | DGR 67e §9.1.1.1–2 (p.693 area) — Tier A; itemized list — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-007 | 3.4.1 Endossement LTA | DRAFT — surrounding mechanism Tier A-confirmed, "Not Restricted" phrase unconfirmed | MCQ | DGR 67e §9.1.1.2 (p.693 area) — Tier A; exact phrase — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-007 | 3.4.1 Endossement LTA | FROZEN FR / SOURCE VERIFIED (upgraded — see Batch 2's §9.1.7 finding) | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-008 | 3.4.2 Vérif. colis | DRAFT — Tier A search found no direct match | MCQ | KOST F7.2 course slides 98–100 — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-009 | 7.3 MD non déclarées | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.2.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-010 | 7.4 Situations MD (ANAC) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -715,16 +714,18 @@ KOST Function 7.2 course, slide 110.
 **Batch composition:** 8 MCQ + 3 True/False. Block spread: Block 0 = 5,
 Block 3 = 3, Block 7 = 3.
 
-**2026-08-25 Tier A verification summary:** 6/11 `FROZEN FR / SOURCE
-VERIFIED` (001, 004, 005, 009, 010, 011), 1/11 `FR SOURCE GAP CONFIRMED`
-(002, cross-applies Q-7.1-001's DGR-wide finding), 4/11 remain `DRAFT` with
-their surrounding general duty Tier A-confirmed but their specific
-itemized/procedural wording not located verbatim in the current text this
-pass (003, 006, 007, 008) — see each item's Source basis for the exact
-finding. No content was fabricated to close these four; they are correctly
-flagged for a further, more targeted search (e.g. Part 8 documentation
-provisions for 007's "Not Restricted" phrase) before being asserted as
-DGR-sourced.
+**2026-08-25 Tier A verification summary:** 7/11 `FROZEN FR / SOURCE
+VERIFIED` (001, 004, 005, 007 [upgraded during Batch 2 work, see below],
+009, 010, 011), 1/11 `FR SOURCE GAP CONFIRMED` (002, cross-applies
+Q-7.1-001's DGR-wide finding), 3/11 remain `DRAFT` with their surrounding
+general duty Tier A-confirmed but their specific itemized/procedural
+wording not located verbatim in the current text this pass (003, 006,
+008) — see each item's Source basis for the exact finding. No content was
+fabricated to close these three; they are correctly flagged for a further,
+more targeted search before being asserted as DGR-sourced. (Q-7.2-007's
+"Not Restricted" phrase, initially unconfirmed, was subsequently located
+as the DGR-glossary term "marchandise non réglementée" — see that item's
+updated entry and Batch 2's `Q-7.2-024` finding.)
 
 ## What this batch does NOT do
 
@@ -964,13 +965,19 @@ using a real fact from a different slide):**
   3.4.2 physical-inspection actor (slide 99–100, tested in `Q-7.2-008`), not
   who the DGR itself applies to.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 31 ("Applicabilité
-— Champ d'application DGR 1.2.1"). Loosely corroborated by Practice Q4 ("La
-fonction 7.2 est directement concernée par : b) Le traitement et
-l'acceptation du fret général"), which tests Function 7.2's own scope from
-an adjacent angle, not this item's DGR-wide applicability fact — no direct
-exam/practice hit for this specific fact, noted honestly.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §1.2.1 Application (Partie 1,
+Bookshelf p.11), cross-applied from Function 7.1's `Q-7.1-015` verification
+(identical underlying DGR fact): "La Réglementation de l'IATA s'applique à :
+tous les exploitants qui sont membres ou membres associés de l'IATA; tous
+les exploitants qui sont parties à l'accord IATA sur le transport
+intertransporteurs de marchandises; et tous les expéditeurs et agents de
+fret qui présentent des marchandises dangereuses à ces exploitants." —
+confirms the correct answer's three categories. Current phrase is "accord
+IATA sur le transport intertransporteurs de marchandises" (KOST slide:
+"accord multilatéral de trafic intercompagnies de l'IATA-fret") — same
+concept, terminology drift, align final wording. Originally Tier B — KOST
+Function 7.2 course, slide 31.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1015,13 +1022,20 @@ prohibition):**
   properly declared, lawfully transportable DG shipment, not a prohibited
   one.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 37 ("Marchandises
-dangereuses interdite en toute circonstance — DGR 4.2"), slide 38 read
-alongside for context. Loosely corroborated by Practice Q6 ("Les articles
-interdits en tout temps par IATA sont appelés : b) Marchandises
-interdites"), which tests the terminology from the same section without
-duplicating this item's specific criteria-recognition fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §2.1.1 (Partie 2 —
+Restrictions, Bookshelf p.12 area), located during this session's Function
+7.1 research: "Les articles ou matières qui, telles qu'elles sont
+présentées au transport, risquent d'exploser, de réagir dangereusement, de
+produire une flamme ou un dégagement dangereux de chaleur ou une émission
+dangereuse de gaz ou de vapeurs toxiques, corrosifs ou inflammables dans les
+conditions normalement rencontrées pendant le transport aérien ne doivent
+en aucun cas être transportées par voie aérienne." — confirms the correct
+answer. **Citation note:** the KOST slide cites "DGR 4.2", but 4.2 is the
+List of Dangerous Goods table, not the absolute-prohibition criteria
+themselves — the current, applicable section is §2.1.1; align final
+citation. Originally Tier B — KOST Function 7.2 course, slide 37.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25;
+citation corrected from §4.2 to §2.1.1).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1047,14 +1061,17 @@ l'équipage. Limitations telles que décrites en 2.3(résumées dans le tableau
 2.3.A). Seuls les articles spécifiés aux points 2.3.2 à 2.3.5 sont
 autorisés, et uniquement pour un usage personnel." Direct, complete match.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 45 ("Limites —
-Dispositions relatives aux passagers et au fret"). No direct exam/practice-
-book hit found — this matches Stage 1's own finding for this sub-task
-("adequate at 'be aware' level… no exam/practice trace"), not a new gap
-introduced by this item. Note: this is sub-task 0.2.3's only allowed item —
-blueprint ceiling is 1 — so no second item should be drafted against it in
-any future batch without new source material.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §2.3.0.1 (Bookshelf p.12
+area) and its Note 2, cross-applied from Function 7.1's `Q-7.1-017`
+verification: "...sauf tel que permis en 2.3.2 à 2.3.5 pour un usage
+personnel," with Note 2 confirming "Les dispositions suivantes apparaissent
+aussi au tableau 2.3.A." — confirms both the general prohibition/exception
+structure and the table 2.3.A cross-reference this item's stem describes.
+Originally Tier B — KOST Function 7.2 course, slide 45.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
+Note: this is sub-task 0.2.3's only allowed item — blueprint ceiling is 1 —
+so no second item should be drafted against it in any future batch without
+new source material.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1096,14 +1113,19 @@ attributed to the exploitant):**
   content (slide 97, already tested in `Q-7.2-006`), a specific procedural
   step, not this slide's general responsibilities list.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 50
-("Responsabilités Exploitant DGR 1.4"), slide 49 read alongside for the
-contrasting shipper list. Corroborated by Exam Q7/Practice Q7, both of which
-present a responsibility matrix (Acceptation, Identification, Chargement,
-Inspection, etc.) asking the student to assign each duty to
-"Expéditeur"/"Exploitant" — the same underlying expéditeur/exploitant
-division tested here, confirmed as real examined material.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §1.4.1 Généralités (Partie 1,
+Bookshelf p.11): "Un exploitant qui accepte des marchandises dangereuses
+doit se conformer aux dispositions détaillées à la partie 9 et apparaissant
+ci-dessous : Acceptation; Entreposage; Chargement; Inspection;
+Renseignements à fournir, dont les informations à donner en cas d'urgence;
+Compte rendu; Conservation des documents; Formation." — all 6 items in the
+drafted correct answer (Acceptation, Chargement, Entreposage, Inspection,
+Renseignement en cas d'urgence, Compte rendu) are present in the current
+8-item list; the stem does not claim exhaustiveness, so the 2 additional
+current items (Conservation des documents, Formation) don't invalidate it,
+though a future revision could enrich the answer to the full 8-item list.
+Originally Tier B — KOST Function 7.2 course, slide 50.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1149,7 +1171,9 @@ AH-02."
 Practice Q8 ("Selon la règlementation IATA, quelle est la différence des
 divergences de l'exploitant ? a) Section 2.8"), which tests the section
 number from the same slide series, confirming its real examined relevance.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** DRAFT — Tier A not attempted this pass (§2.8 Divergences des
+États et des exploitants not read this session); no change from prior
+status.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1183,13 +1207,15 @@ different sub-task):**
   (slide 64, already tested in `Q-7.2-004`), not a packing group at all —
   a wrong-category distractor.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 69 ("Groupe
-d'emballage DGR 3.0.3", table: Groupe I/II/III with "Matières très/
-moyennement/faiblement dangereuses"). Corroborated by Exam Q8 and Practice
-Q12/Q13, both of which present the same three-row danger-degree/packing-
-group table as a fill-in-the-blank exercise — this item tests the identical
-underlying fact in closed-MCQ form, confirmed real examined material.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §3.0.3.1 (Partie 3, Bookshelf
+p.307), cross-applied from Function 7.1 research: "Groupe d'emballage I —
+grand danger[;] Groupe d'emballage II — danger moyen[;] Groupe d'emballage
+III — danger mineur." Confirms Group II = medium/moderate danger degree,
+matching the correct answer's "moyennement dangereuses" (current wording:
+"danger moyen" — same concept, minor phrasing variant). Distractor "Division
+5.1" confirmed wrong-category (a hazard class division, not a packing
+group) via §3.0.2. Originally Tier B — KOST Function 7.2 course, slide 69.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1211,15 +1237,22 @@ façon visible, lisible, durable, et pouvant résister aux intempéries.
 Pouvoir être exposées aux intempérie[s]." Direct, complete match on all four
 criteria.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 78 ("Marquage à
-spécification des emballages"), slide 77 read alongside for context (DGR
-6.0.4.0.1/6.0.4.2.1(a), UN-mark meaning — a different, already-used fact,
-see `Q-7.2-003`'s distractor rationale — not re-tested here). No direct
-exam/practice-book hit found, consistent with Stage 1's own finding for
-this sub-task. Note: this is sub-task 0.5.1's only allowed item — blueprint
-ceiling is 1 — no second item should be drafted against it without new
-source material.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §7.1.3.2 Qualité (Partie 7,
+Bookshelf p.688 area), cross-applied from Function 7.1's `Q-7.1-019`
+correction research: current text confirms 3 of the stem's 4 claimed
+criteria verbatim — (a) "durables", (b) "facilement visibles et lisibles",
+(c) "pouvoir être exposées aux intempéries sans dégradation notable" — plus
+a 4th current criterion, "apposées sur un fond de couleur contrastante,"
+that this stem does not mention. **Unlike Q-7.1-019, this item does not
+claim its list is exhaustive** ("doit être marqué de façon visible, lisible,
+durable, et pouvant résister aux intempéries" — a plain conjunction, not
+"les quatre caractéristiques" framing) — so the omitted 4th criterion does
+not make the Vrai/Faux claim false; the item remains valid as worded, though
+could optionally be enriched. Originally Tier B — KOST Function 7.2 course,
+slide 78.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
+Note: this is sub-task 0.5.1's only allowed item — blueprint ceiling is 1 —
+no second item should be drafted against it without new source material.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1272,7 +1305,8 @@ DGR ?"), which tests LTA content generally from a different angle
 téléphone transporteur — not this item's specific handling-information-box
 fact) — confirms LTA content is real examined material without duplicating
 this item.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** DRAFT — Tier A not attempted this pass (Part 8 Documentation
+not read this session); no change from prior status.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1319,7 +1353,19 @@ dégage une odeur forte lors du traitement — citez deux actions
 prioritaires à effectuer"), which tests the same emergency-response
 section from an open-ended angle, confirming real exam relevance without
 duplicating this item's specific "first action" fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** DRAFT — Tier A search performed 2026-08-25: current §9.5.1.2
+("Renseignements concernant les interventions d'urgence") addresses a
+**different topic** than what this item and its KOST citation describe —
+it covers the operator's duty to keep ICAO Doc 9481 emergency-response
+guidance available to the pilot-in-command, not a general
+damaged-package/first-responder procedure. The citation "DGR 9.5.1.2" is
+therefore stale/mismatched against the current edition's structure (same
+pattern as `Q-7.1-019`'s Part 6→7 finding). The general damaged-package
+first-action content this item actually tests was not independently
+located elsewhere in Part 9 this pass — retained Tier B pending a further,
+more exhaustive search (e.g. §9.3.6 "Colis de marchandises dangereuses
+endommagés," read only in part this session, may be the actual current
+source).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1359,7 +1405,11 @@ slide's own employer-responsibility sentence) — no duplication. No direct
 exam/practice-book hit, consistent with Stage 1's own finding. Note: this
 is sub-task 0.6.2's only allowed item — blueprint ceiling is 1 (generic-
 awareness only) — no second item should be drafted against it.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** DRAFT — same stale-citation finding as `Q-7.2-021`: current
+§9.5.1.2 covers a different topic (ICAO Doc 9481 availability to the
+pilot-in-command), not general employer/employee emergency-procedure
+awareness. Retained Tier B pending a further search of Part 9's other
+subsections for the actual current source, if one exists.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1408,12 +1458,22 @@ different step of the same procedural section, wrongly substituted here):**
   (slide 99, a different sub-task), not this slide's documentation-
   verification step.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slides 101 and 103
-("Procédures d'acceptation de la cargaison — DGR 9.1.1", DGR 9.1.1.2). No
-direct exam/practice-book hit for this specific SDS-request fact, matching
-the pattern already noted for this sub-task's Batch 1 items (`Q-7.2-006`,
-`Q-7.2-007`).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (mechanism + key term) — DGR 67th Ed. 2026,
+§9.1.1.2 (Bookshelf p.693 area) confirms acceptance staff must "demander
+les documents de l'expéditeur prouvant que l'expédition ne contient pas de
+marchandises dangereuses tel qu'indiqué en 2.2." Separately, §9.1.7
+(Bookshelf p.693 area) uses and hyperlinks the term "marchandise non
+réglementée" to the Appendice A glossary entry `NOTRESTRICTED` — confirming
+"Not Restricted"/"marchandise non réglementée" **is** a defined current DGR
+term, strengthening `Q-7.2-007`'s and this item's basis (see that item's
+updated note). The specific example "SDS" as the type of proof-document was
+not independently located in §9.1.1/§9.1.7 this pass — the general document-
+request duty and the "Not Restricted" terminology are Tier A confirmed, the
+SDS example itself remains Tier B. Originally Tier B — KOST Function 7.2
+course, slides 101 and 103.
+**FR status:** DRAFT — underlying mechanism and key terminology Tier A
+confirmed 2026-08-25 (§9.1.1.2, §9.1.7); the SDS example specifically not
+yet located verbatim.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1441,14 +1501,19 @@ avant d'accepter le colis comme « Not restricted »." The stem's claim
 ("répond nécessairement") is the direct negation of the source's own
 "ne répond pas nécessairement" wording — correct answer is Faux.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 106
-("Avertissements relatifs aux produits de consommation — DGR 9.1.7"), a
-different slide/fact from `Q-7.2-008`'s source (slides 98–100, isolation/
-detection actions for a suspect package already identified) and from the
-GHS-pictogram slide 105 (not itself the tested fact here, read for
-context only). No direct exam/practice-book hit found for this specific
-consumer-warning nuance.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §9.1.7 Avertissement au
+consommateur (Bookshelf p.693 area): "Un article ou un colis peut être
+porteur d'une étiquette ou d'un symbole de danger adressé au consommateur
+du produit. **Cela ne signifie pas nécessairement** que l'article ou la
+matière contenus dans le colis correspondent aux critères de classification
+indiqués dans la partie 3. Dans un tel cas et avant d'accepter le colis
+comme « marchandise non réglementée », des assurances devraient être
+obtenues de l'expéditeur." — exact match, current section number identical
+to the KOST slide's own citation; the stem's claim ("répond nécessairement")
+is the direct negation of the current text's own "ne signifie pas
+nécessairement," confirming "Faux". Originally Tier B — KOST Function 7.2
+course, slide 106.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1499,13 +1564,22 @@ facts.
   **includes** DG partially exempted from the regulation — an inclusion,
   not an exclusive trigger condition.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 110 ("Signaler
-les accidents et incidents impliquant des marchandises dangereuses") — the
-same single slide as `Q-7.2-011`, a different clause of it. Per Stage 1's
-cross-validation, this is the sole slide addressing 7.1/7.2 in the entire
-course, with zero exam/practice-book hits for either word — consistent,
-already-documented finding.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §9.6.1 (Bookshelf p.693 area),
+opening sentence, found during this same session's `Q-7.2-011` research:
+"L'exploitant doit signaler les accidents et incidents de marchandises
+dangereuses aux autorités compétentes de l'État de l'exploitant et de
+l'état dans lequel l'accident ou l'incident s'est produit, conformément aux
+exigences de signalement des autorités compétentes." — confirms the correct
+answer exactly (actor = exploitant; dual-state recipient). Distractors
+independently refuted: no DGR text anywhere names "l'expéditeur" as the
+reporting actor for this duty; §9.6.4's own ANAC-Algeria-specific line
+(cross-applied from `Q-7.2-010`) is a different, narrower sub-task, not a
+substitute for this general dual-state rule; the exemption-inclusion clause
+(§9.6.1 Note 1, per `Q-7.2-011`) is worded as inclusion, not an exclusive
+trigger condition, refuting the fourth distractor. Originally Tier B —
+KOST Function 7.2 course, slide 110 (same slide as `Q-7.2-011`, different
+clause).
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED. Note: with this item,
 the 7.1+7.2 combined pool has now drawn 2 of its 3-item ceiling (1
 remaining) — do not draft a third item without a genuinely new,
@@ -1549,15 +1623,19 @@ sub-task's "hidden in general cargo" example list):**
 - Acide sulfurique — per slide 67, corrosive-materials example, same
   wrong-list issue.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 40 ("Exemples de
-DG cachées DGR 2.2.4"), a different slide/fact from `Q-7.2-003`'s source
-(slides 42–43, physical detection indicators of an *already-suspected*
-package, not this slide's list of article *types* that may hide DG).
-**Directly and strongly corroborated by Exam Q10**: "Quelles matières
-dangereuses peuvent êtres non déclarées (cachées) dans l'appareillage pour
-dentiste ?" — an explicit, near-verbatim exam hit on this exact
-"appareils dentaires" example, confirming this is real, examined content.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §2.2.4 (Bookshelf p.12 area),
+found during this session's Function 7.1 research (`Q-7.1-016`): current
+list entry "APPAREILLAGE POUR DENTISTE — peut contenir des résines ou des
+diluants inflammables, du gaz comprimé ou liquéfié, du mercure et des
+matières radioactives" — confirms "appareils dentaires" is an explicit
+current example. The three distractors (nitrate d'ammonium, arsenic, acide
+sulfurique) are genuine named *substances* from Table 4.2/§3.0.2's
+classification examples, not §2.2.4's generic-description category list —
+structurally a different list by nature, confirming the distractor logic.
+Originally Tier B — KOST Function 7.2 course, slide 40. Directly and
+strongly corroborated by Exam Q10 ("Quelles matières dangereuses peuvent
+êtres non déclarées (cachées) dans l'appareillage pour dentiste ?").
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1581,15 +1659,16 @@ toxique … Ex : Azote, Hélium[;] Division 2.3 Gaz Toxique … Ex : Bombe
 anti-agression." Direct, complete match on the count and all three division
 labels.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 61 ("Les classes
-des marchandises dangereuses DGR 3.0.2", Class 2 sub-slide), a different
-slide/fact from `Q-7.2-004`'s source (slide 64, Division 5.1 examples).
-**Directly and strongly corroborated by Practice Q11**: "Il y'a trois
-divisions dans la classe 2 du DGR — a) Vrai b) Faux" — an explicit,
-near-verbatim practice-book hit on this exact fact, confirming this is real,
-examined content (a stronger direct match than `Q-7.2-004`'s own
-corroboration).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §3.0.2.2 Classe 2 — Gaz
+(Bookshelf p.307), found during this session's Function 7.1 research:
+"• Division 2.1 — Gaz inflammables. • Division 2.2 — Gaz ininflammables non
+toxiques. • Division 2.3 — Gaz toxiques." — confirms exactly three
+divisions with matching current labels (current "Gaz ininflammables non
+toxiques" vs. KOST's "Gaz non inflammable et non toxique" — trivial
+phrasing variant, same meaning). Originally Tier B — KOST Function 7.2
+course, slide 61. Directly and strongly corroborated by Practice Q11 ("Il
+y'a trois divisions dans la classe 2 du DGR — a) Vrai b) Faux").
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1631,11 +1710,20 @@ demander des clarifications à l'expéditeur."
   distinct sub-task's procedure, not what this specific chemical-hazard-
   label slide instructs.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 81 ("Autre
-étiquetage"), a different slide/fact from `Q-7.2-005`'s source (slide 79,
-the "two types of labels" definitional fact). No direct exam/practice-book
-hit found for this specific "demander des clarifications" nuance.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier B, context Tier A-confirmed — DGR 67th Ed. 2026,
+§9.1.7 (Bookshelf p.693 area, same provision confirmed for `Q-7.2-024`)
+confirms the surrounding context: a chemical-hazard/consumer-warning label
+does not necessarily mean the DGR Part 3 classification criteria are met,
+and "des assurances devraient être obtenues de l'expéditeur" before
+acceptance as "marchandise non réglementée" — a real, current, Tier A
+"seek assurance from the shipper" duty. The item's specific framing ("Autre
+étiquetage" slide, "penser à demander des clarifications") is a close
+paraphrase of this same duty, not a separate DGR provision — likely the
+same underlying §9.1.7 text, not independently re-confirmed as a distinct
+citation this pass. Originally Tier B — KOST Function 7.2 course, slide 81.
+**FR status:** DRAFT — underlying duty Tier A-confirmed via §9.1.7 (shared
+with `Q-7.2-024`); treat as the same provision rather than a separate DGR
+6.0.4-area citation before finalizing wording.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1645,26 +1733,41 @@ hit found for this specific "demander des clarifications" nuance.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.2-012 | 0.1.1 Définition fret général | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 16 (DGR 1.0) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-013 | 0.1.3 Champ d'application | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 31 (DGR 1.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-014 | 0.2.1 MD interdites | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 37 (DGR 4.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-015 | 0.2.3 Dispositions passagers | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-016 | 0.3.1 Responsabilités exploitant | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 50 (DGR 1.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-017 | 0.3.3 Divergences exploitant | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 54–56 (DGR 2.8.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-018 | 0.4.2 Groupes d'emballage | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 69 (DGR 3.0.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-019 | 0.5.1 Critères de marquage | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 78 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 86, 107–108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-021 | 0.6.1 Première action d'urgence | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 87–89 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-022 | 0.6.2 Info employés exploitant | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 87 (DGR 9.5.1.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-023 | 3.4.1 Demande SDS | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 101, 103 (DGR 9.1.1.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-024 | 3.4.2 Avertissement consommateur | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 106 (DGR 9.1.7) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-025 | 7.1+7.2 Qui/à qui | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-026 | 0.2.2 Exemple appareils dentaires | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 40 (DGR 2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-027 | 0.4.1 Classe 2, 3 divisions | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-028 | 0.5.2 Étiquette danger chimique | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 81 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-012 | 0.1.1 Définition fret général | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 16 (DGR 1.0) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-013 | 0.1.3 Champ d'application | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-014 | 0.2.1 MD interdites | FROZEN FR / SOURCE VERIFIED (citation corrected §4.2→§2.1.1) | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-015 | 0.2.3 Dispositions passagers | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 + Note 2 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-016 | 0.3.1 Responsabilités exploitant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-017 | 0.3.3 Divergences exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 54–56 (DGR 2.8.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-018 | 0.4.2 Groupes d'emballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-019 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 86, 107–108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-021 | 0.6.1 Première action d'urgence | DRAFT — citation stale (current §9.5.1.2 covers a different topic) | MCQ | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-022 | 0.6.2 Info employés exploitant | DRAFT — citation stale, same finding as Q-7.2-021 | True/False | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-023 | 3.4.1 Demande SDS | DRAFT — mechanism + "Not Restricted" term Tier A-confirmed, SDS example itself Tier B | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-024 | 3.4.2 Avertissement consommateur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-025 | 7.1+7.2 Qui/à qui | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-026 | 0.2.2 Exemple appareils dentaires | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.2.4 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-027 | 0.4.1 Classe 2, 3 divisions | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §3.0.2.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-028 | 0.5.2 Étiquette danger chimique | DRAFT — underlying duty Tier A-confirmed (shared with Q-7.2-024's §9.1.7), distinct citation unconfirmed | MCQ | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 2 composition:** 11 MCQ + 6 True/False. Block spread: Block 0 = 14,
 Block 3 = 2, Block 7 = 1.
+
+**2026-08-25 Tier A verification summary:** 10/17 `FROZEN FR / SOURCE
+VERIFIED` (013, 014, 015, 016, 018, 019, 024, 025, 026, 027 — several
+cross-applied from Function 7.1 research or from text already surfaced
+this session, one citation corrected 014's §4.2→§2.1.1). 2/17 (023, 028)
+have their general duty/underlying provision Tier A-confirmed but a
+specific detail (SDS example; the exact "Autre étiquetage" framing) not
+independently pinned down. 2/17 (021, 022) carry a **stale citation
+finding** — the KOST-cited §9.5.1.2 covers a different topic in the current
+edition (ICAO Doc 9481 availability to the pilot-in-command, not general
+employer/employee emergency-procedure awareness); the actual current source
+for their content was not located this pass. 3/17 (012, 017, 020) were not
+attempted this pass (no efficient cross-application available; would need
+dedicated new navigation to §1.0's "fret général" framing, §2.8, and Part 8
+Documentation respectively).
 
 **Combined Batch 1 + Batch 2 totals:** 28 items drawn (11 + 17) across 17 of
 23 sub-task leaves, out of the 89-question provisional ceiling. Block 0:
@@ -1691,12 +1794,9 @@ three pools touched).
 - Does not re-draft or duplicate any Batch 1 item's underlying fact — see
   the "Duplication check against Batch 1" section above for the explicit
   per-item verification.
-- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification for
-  any of the 17 items — blocked this pass on the Bookshelf's unauthenticated
-  Sign-In state, confirmed by a live `chrome-devtools` check at the start of
-  this batch (see "Status of this batch" above).
 - Does not mark any item `APPROVED` — no qualified reviewer exists in this
-  pass.
+  pass; Tier A verification (2026-08-25) and reviewer sign-off remain
+  separate gates.
 - Does not touch Moodle or any live/production question-bank copy.
 - Does not exhaust Block 0, Block 3, or Block 7 — after both batches, 6 of
   Block 0's 17 leaves (0.1.2, 0.1.4, plus the 0.4.3 gap) have headroom or

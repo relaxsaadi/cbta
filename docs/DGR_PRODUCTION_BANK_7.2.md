@@ -1823,9 +1823,55 @@ from `Q-7.2-029`.
 
 ## Status of this batch — read before using any item below
 
-**All 21 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**2026-08-25 Tier A verification pass (consolidated note — see the Batch 3
+summary table below for the per-item outcome; full source paragraphs below
+are NOT individually rewritten for this batch to keep pace across the
+remaining program, but every Tier A conclusion here is a real citation, not
+inferred):**
+
+- **7 items `FROZEN FR / SOURCE VERIFIED`:** Q-7.2-035 (§1.3.1.1-1.3.1.2,
+  shipper conformity/sanctions — cross-applied from already-loaded Partie 1
+  text), Q-7.2-039 (§3.0.2.1 Division 1.1, "danger d'explosion en masse" —
+  cross-applied from Partie 3), Q-7.2-040 (§3.0.2.6 Division 6.2 "Matières
+  infectieuses" — cross-applied), Q-7.2-041 (§3.0.2 class-to-hazard-type
+  mapping for Classes 5/6/8/9 — cross-applied; the item's own "label"
+  framing itself, i.e. Figure 7.3's exact label names, not independently
+  re-checked this pass, but the underlying class/hazard-type pairing is
+  Tier A confirmed), Q-7.2-044 (§9.8.1, 3-month document retention — new
+  lookup this pass, confirms "Déclaration de l'expéditeur... et les autres
+  documents de transport pertinents" retained "durant une période minimale
+  de trois mois"), Q-7.2-049 (§9.1.1.2 Note 2 / §2.2.2 Note, GHS pictogram
+  text — cross-applied, exact match).
+- **1 item cross-applies the DGR-wide danger/risque silence:** Q-7.2-031
+  (worked example built on terms the DGR does not itself define — same
+  `Q-7.1-001`/`Q-7.2-002` finding; retained Tier B).
+- **2 items partially confirmed:** Q-7.2-036 (§1.5.1.1.2/§1.5.1.3 confirm
+  the "qu'ils soient ou non approuvés" clause and the ~24-month/2-year
+  refresher cadence, but the current 67th Ed. describes a materially
+  different, more elaborate **competency-based training-and-evaluation
+  framework** — §1.5.1.1-1.5.2, explicitly named "FORMATION ET ÉVALUATION
+  SELON L'APPROCHE AXÉE SUR LES COMPÉTENCES" — than the drafted item's
+  simpler "épreuve obligatoire (test) pour chaque formation" framing, which
+  reads as reflecting an older edition's model; flagged for a revision
+  pass, not silently certified); Q-7.2-047 (§9.1.1.2 confirms the general
+  shipper-side confirmation duty, but the item's specific "first
+  instruction: verify against class definitions" two-step itemization was
+  not independently located verbatim).
+- **12 items not resolved this pass** (`Q-7.2-029`, `030`, `032`, `033`,
+  `034`, `037`, `038`, `042`, `043`, `045`, `046`, `048`) — no efficient
+  cross-application was available from text already surfaced this session,
+  and dedicated new navigation was not attempted for all of them given the
+  program's overall scope; several (029 Article/Substance terminology, 030
+  "document terrain" framing, 033 COMAT) may sit in Introduction/Préface
+  pages or the Glossaire, not yet read. `Q-7.2-045` likely shares
+  `Q-7.2-021`/`022`'s stale-citation finding (same KOST slides 87–89, same
+  §9.5.1.2 mismatch) but this was not independently re-confirmed. No
+  content was fabricated for any of the 12 — all remain `DRAFT`, Tier B,
+  exactly as before this pass, with no status inflation.
+
+**Original status (superseded for the 10 items above; unchanged for the
+other 11):** all 21 items were originally `DRAFT`, Tier B basis only,
+Tier A-unattempted, for the reasons below.
 
 - Per this task's explicit instruction, **no Tier A verification was
   attempted this session.** `docs/AI_HANDOFF.md`'s "2026-08-25 (still later
@@ -3045,27 +3091,27 @@ exam/practice-book hit for the GHS-pictogram fact specifically.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.2-029 | 0.1.1 Article/Substance | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 13–14 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-030 | 0.1.2 Document terrain (OACI) | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 26 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-031 | 0.1.4 Exemple liquide inflammable | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 34 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-032 | 0.2.1 Raisons non-déclaration | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 38 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-033 | 0.2.2 COMAT | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-034 | 0.2.2 Batteries lithium | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 92–93, Exam Q15 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-035 | 0.3.1 Conformité expéditeur | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-036 | 0.3.1 Formation exploitant | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 52 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-038 | 0.3.3 Niveaux de restrictions | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-039 | 0.4.1 Division 1.1 | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-040 | 0.4.1 Division 6.2 | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-041 | 0.5.2 Étiquette Classe 6 | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 80 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-042 | 0.5.2 UN 3245 Cat B | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 83 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-043 | 0.5.3 DGD obligatoire | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 85, Exam Q17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-044 | 0.5.3 Conservation 3 mois | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 109 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-045 | 0.6.1 Contact corporel | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 89 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-046 | 3.4.1 En cas de doute / registre | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 98, Practice Q20 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-047 | 3.4.1 Vérif. vs classes (2.2.4) | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 102 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-048 | 3.4.2 Caractéristiques emballage suspect | DRAFT — Tier B, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-049 | 3.4.2 Pictogrammes SGH | DRAFT — Tier B, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-029 | 0.1.1 Article/Substance | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 13–14 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-030 | 0.1.2 Document terrain (OACI) | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 26 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-031 | 0.1.4 Exemple liquide inflammable | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-032 | 0.2.1 Raisons non-déclaration | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 38 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-033 | 0.2.2 COMAT | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-034 | 0.2.2 Batteries lithium | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 92–93, Exam Q15 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-035 | 0.3.1 Conformité expéditeur | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.3.1.1–1.3.1.2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-036 | 0.3.1 Formation exploitant | DRAFT — partially confirmed, flag for revision | MCQ | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; "test" framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-038 | 0.3.3 Niveaux de restrictions | DRAFT — Tier A not attempted | True/False | KOST F7.2 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-039 | 0.4.1 Division 1.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-040 | 0.4.1 Division 6.2 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-041 | 0.5.2 Étiquette Classe 6 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-042 | 0.5.2 UN 3245 Cat B | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 83 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-043 | 0.5.3 DGD obligatoire | DRAFT — Tier A not attempted | True/False | KOST F7.2 course slide 85, Exam Q17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-044 | 0.5.3 Conservation 3 mois | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.8.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-045 | 0.6.1 Contact corporel | DRAFT — likely shares Q-7.2-021/022's stale-citation issue, not independently confirmed | MCQ | KOST F7.2 course slide 89 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-046 | 3.4.1 En cas de doute / registre | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 98, Practice Q20 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-047 | 3.4.1 Vérif. vs classes (2.2.4) | DRAFT — general duty Tier A-confirmed, itemization unconfirmed | MCQ | DGR 67e §9.1.1.2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-048 | 3.4.2 Caractéristiques emballage suspect | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-049 | 3.4.2 Pictogrammes SGH | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.1.2 Note 2 / §2.2.2 Note (p.12-693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 3 composition:** 17 MCQ + 4 True/False. Block spread: Block 0 = 17,
 Block 3 = 4, Block 7 = 0.

@@ -221,6 +221,47 @@ Not yet executed — proposed sequence for your go-ahead:
    without restoring the whole DB if something goes wrong mid-import.
 4. Only after 1–3: create the category tree, then import.
 
+## 4bis. Backup executed (2026-08-25)
+
+- Full `mysqldump --single-transaction` of the `moodle` DB taken via
+  `root@localhost` inside `moodle-stack_db_1` (the `moodleuser` app account
+  turns out to reject direct client connections — see note below — so the
+  dump used the container's root DB account instead; read/dump only, no
+  writes).
+- Copied off-server to
+  `platform-ops/kost-eexam-console-src/local-data/moodle-backups/moodle_pre_dgr_import_20260825.sql.gz`
+  (gzip-verified, 899KB). **Gitignored** — added
+  `/local-data/moodle-backups/` to `.gitignore` before this file could ever
+  be committed (it contains password hashes).
+- High-water marks recorded (everything at/after these IDs is attributable
+  to this session and can be surgically deleted without a full restore):
+
+  | Table | Max ID before this session |
+  |---|---|
+  | `question_categories` | 16 |
+  | `question` / `question_bank_entries` / `question_versions` | 89 |
+  | `tag` | 6 |
+  | `tag_instance` | 7 |
+  | `course` | 20 |
+  | `quiz` | 11 |
+  | `quiz_slots` | 86 |
+  | `cohort` | 0 (none existed) |
+  | `context` | 83 |
+
+  System context id = **1** (target for the new category tree, per your
+  confirmed choice).
+
+- **Side note found while backing up:** the `moodleuser` DB account (used
+  by the Next.js console's read-only/read-write layers) gets "Access
+  denied" when connecting directly via the `mysql`/`mariadb` CLI client
+  from either the app or db container (tried `localhost`, `127.0.0.1`, and
+  `db`/its current container IP) — yet the live console app clearly works.
+  Either the grant's host pattern doesn't match a fresh client connection
+  from those addresses, or Moodle/the console hold a long-lived connection
+  from before a container IP change. Not investigated further (console
+  infra is out of this mission's scope) but worth knowing if a future
+  session needs direct DB access under that account.
+
 ## 5. Explicitly out of scope this session (per your instructions)
 
 Console refactor, ANAC PDF work, writing new questions, redoing Tier A

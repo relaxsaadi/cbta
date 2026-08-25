@@ -163,7 +163,7 @@ export async function getComplianceData(): Promise<ComplianceCategory[]> {
           lastVerified: "2026-08-19",
           responsible: "Infrastructure (automated check)",
           evidence: {
-            source: "Playwright authorization test (Phase 1 audit)",
+            source: "Playwright authorization test (initial RBAC audit)",
             timestamp: "2026-08-19T22:00:00Z",
             technicalDetails:
               "4 scenarios tested server-side: Administrator (authorized), Moodle candidate account with no console role (rejected), invalid credentials (rejected), unauthenticated access (redirected). All server-enforced, not UI-only.",
@@ -235,7 +235,7 @@ export async function getComplianceData(): Promise<ComplianceCategory[]> {
           lastVerified: backup?.timestamp ?? null,
           responsible: "Infrastructure (automated check)",
           evidence: {
-            source: "Phase 0 backup log (backup-log.jsonl)",
+            source: "Automated backup log (backup-log.jsonl)",
             timestamp: backup?.timestamp ?? null,
             technicalDetails: `Local backup: ${backup?.detail ?? "n/a"}\nOff-site copy: ${offsite?.detail ?? "n/a"}\nRestore test: ${restore?.detail ?? "n/a"}`,
           },
@@ -247,7 +247,7 @@ export async function getComplianceData(): Promise<ComplianceCategory[]> {
           lastVerified: "2026-08-19",
           responsible: "Infrastructure (automated check)",
           evidence: {
-            source: "Phase 1 production security audit",
+            source: "Production security audit",
             timestamp: "2026-08-19T21:40:00Z",
             technicalDetails:
               "MySQL port 3306 confirmed unreachable externally (nc, ss -tlnp). Read-only console DB account restricted to SELECT on moodle.* from Docker-internal subnet only.",

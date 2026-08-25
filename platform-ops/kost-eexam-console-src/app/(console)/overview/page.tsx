@@ -22,7 +22,7 @@ import { getResults } from "@/lib/results-data";
 import { getSessions } from "@/lib/sessions-data";
 import { isDemoModeActive } from "@/lib/demo-mode-server";
 import { redactName } from "@/lib/demo-mode";
-import { parseScopeParam, SCOPE_LABELS, SCOPE_BADGE } from "@/lib/data-scope";
+import { parseScopeParam, SCOPE_LABELS } from "@/lib/data-scope";
 
 export const dynamic = "force-dynamic";
 

@@ -1,5 +1,19 @@
 # DGR/CBTA Question-Bank Program — Functions 7.1 → 7.10 Status
 
+> ⚠️ **2026-08-25 reconciliation note:** the "218 FROZEN" running totals
+> logged below (end of this file) are topic-analysis conclusions, not
+> what is currently stamped in each item's own `**FR status:**` field.
+> A strict per-item re-count found **97** items currently stamped FROZEN
+> (92 now integrated into Moodle across Functions 7.1–7.10). Full
+> reconciliation, method, and a concrete example of the gap are in
+> `docs/DGR_TIER_A_INVENTORY.md`'s own reconciliation section (top of
+> that file). No status below was changed to produce this note — it is a
+> pointer only. Per-function figures inside this file's own table cells
+> (e.g. "23/49", "20/45") describe analysis-session narratives at the
+> time they were written and are likewise not guaranteed to match each
+> item's current stamped field; treat this file as a session log, not a
+> live per-item dashboard.
+
 Scope expanded 2026-08-25 (user instruction, mid-session): after Function 7.1's
 Stage 2B.1 platform-readiness work, continue the production question-bank
 program through all ten KOST CBTA functions (7.1 → 7.2 → ... → 7.10). Each

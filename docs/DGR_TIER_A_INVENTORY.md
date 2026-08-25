@@ -1,5 +1,63 @@
 # DGR Tier A Inventory — Second Tier A Phase (2026-08-25)
 
+## ⚠️ STATUS RECONCILIATION (added 2026-08-25, during Moodle integration / pre-audit data sync — read this before using any total below)
+
+**This file's "Current totals" line ("218 FROZEN…") reflects topic/
+priority-item ANALYSIS CONCLUSIONS reached during the second Tier A phase
+— it is not what is actually stamped in each item's own `**FR status:**`
+field inside its `docs/DGR_PRODUCTION_BANK_7.X.md` file.** Those two
+things have diverged: several topic-based findings recorded here (e.g.
+"Q-7.2-036 → PARTIAL") were never written back into that item's own file.
+
+A strict, read-only, per-item re-count — reading each item's own `FR
+status` field directly, via a parser built and self-validated against
+Function 7.1's already-known-correct data — found:
+
+| Status (per item's own FR status field, current as of 2026-08-25) | Count |
+|---|---|
+| FROZEN FR / SOURCE VERIFIED | **97** |
+| FR SOURCE GAP CONFIRMED | 5 |
+| STALE CITATION / SOURCE CONFLICT | 2 |
+| PARTIALLY CONFIRMED (stamped at the item's own file level) | 0 — see note below |
+| DRAFT (Tier B only / not Tier-A-attempted / inconclusive search — not distinguished from each other at the file level) | 349 |
+| **Total** | **453** |
+
+**Concrete, checkable example of the gap:** `Q-7.2-036` is listed later in
+this file (§ "PARTIALLY CONFIRMED") as a topic-analysis finding. Its own
+file, `docs/DGR_PRODUCTION_BANK_7.2.md`, still reads verbatim: `**FR
+status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` — unchanged.
+The same pattern (a real analysis conclusion, not yet propagated to the
+item's own stamped field) plausibly accounts for most of the gap between
+this file's 218/33/17/3/182 figures and the 97/0/5/2/349 figures above —
+not an error in either accounting, but two different things being counted
+("analysed and concluded" vs. "actually stamped on the item").
+
+**No item's status was changed to produce this reconciliation** — it is a
+read-only re-count, run specifically because 97, not 218, is what the
+downstream Moodle-integration work actually consumed (an item's own file
+field is the only thing that can be imported as real question text). Of
+the 97 FROZEN items, **92 are now integrated into Moodle** across
+Functions 7.1–7.10; **5 Function 7.1 items remain excluded** (FROZEN per
+status, but their full administered wording is not safely recoverable
+from any source reached this session — see
+`docs/DGR_MOODLE_BANK_INTEGRATION_PLAN.md` and the per-function
+`docs/DGR_MOODLE_IMPORT_TRACEABILITY_7.X.csv` files, on branch
+`console/finalization-2026-08-25`, for the full audit trail). No DRAFT/
+PARTIAL/STALE item was imported.
+
+**Audit-facing summary statement:** 453 questions exist in the working
+program. 97 currently carry individually-stamped FROZEN FR / SOURCE
+VERIFIED status. 92 of those are integrated in Moodle across Functions
+7.1–7.10. 5 Function 7.1 items remain excluded because their exact full
+question wording is not safely recoverable. No DRAFT/PARTIAL/STALE item
+was imported.
+
+The table below and the rest of this file are left exactly as originally
+written (a valid historical record of the analysis pass) — do not read
+"218 FROZEN" as the current per-item-stamped count without this note.
+
+---
+
 Durable exact inventory of the 453-item KOST DGR/CBTA production question bank
 (Functions 7.1–7.10), taken at the start of the second Tier A verification
 phase. Source of truth: `docs/DGR_STAGE_2B_STATUS.md` (Function 7.1, 19 items)

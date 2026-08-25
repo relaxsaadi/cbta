@@ -2,6 +2,15 @@
 
 This register stores concise regulatory source locations and validation conclusions. It must not contain large copied passages from licensed publications.
 
+> ⚠️ **2026-08-25 reconciliation note:** this file's "218 FROZEN" program
+> total (below, "Program totals after Topic 5") is a topic-analysis
+> conclusion, not what is currently stamped in each item's own `**FR
+> status:**` field in its `docs/DGR_PRODUCTION_BANK_7.X.md` file. A
+> strict per-item re-count found 97 items currently stamped FROZEN (92
+> integrated into Moodle). Full reconciliation in
+> `docs/DGR_TIER_A_INVENTORY.md`'s own reconciliation section. No status
+> below was changed — pointer only.
+
 ## Regulatory source state
 
 - Edition: IATA DGR 67th Edition — 2026

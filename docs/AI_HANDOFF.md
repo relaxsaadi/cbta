@@ -336,3 +336,50 @@ at this specific checkpoint moment. Two known open items remain, both
 correctly blocked on console source access this environment does not have
 (not reattempted or worked around this session): the WCAG AA color-contrast
 defect, and the exam-manager/instructor RBAC role implementation decision.
+
+## 2026-08-25 (still later same day) — Tier A retry #2: a different, more specific technical blocker
+
+After the second Track B milestone (304 items, Batch 1+2 + EN packages for
+all ten functions — see `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`'s "second
+milestone" section and this report's eighth-pass note), the owner reported
+the IATA Bookshelf as authenticated and open in Chrome again, with remote
+debugging active on `127.0.0.1:9222`, and asked for a retry before any
+further Batch 3+ expansion.
+
+**Retry result: still blocked, but for a different and more specific
+reason than the first retry.** The first retry (documented above) found a
+genuine unauthenticated Sign-In screen — a credential/session problem. This
+second retry found something more specific: **every one of the three
+available `chrome-devtools` MCP tools (`navigate`, `evaluate`, `screenshot`)
+returns the identical error `"The selected page has been closed. Call
+list_pages to see open pages."`** The error message itself references a
+`list_pages` tool to recover — but no such tool (nor any `select_page`/
+`list_targets` equivalent) exists in this session's available toolset,
+confirmed via an explicit tool-search covering `chrome-devtools` broadly.
+This means the MCP connection's previously-bound browser tab/target has
+been closed (by the browser, the user, or the debugging connection
+resetting), and there is no tool available in this environment to rebind
+to a different open tab — even if the authenticated DGR tab genuinely is
+open in the same Chrome instance right now, as reported.
+
+**This is not a credential/2FA issue and not something to guess around.**
+No login was attempted (none was possible or relevant here — the failure
+is at the page-selection layer, before any page content, including a
+Sign-In form, is even reachable). No workaround was attempted beyond
+exhausting all three available tools identically.
+
+**Consequence, per explicit owner instruction:** the Tier A verification
+track is stopped here, cleanly, with this exact reason recorded. Track B
+work that does NOT depend on Tier A (further production-question batches,
+i.e. Batch 3+ for functions with remaining Stage 2A headroom) continues
+per the "if the reader is still not accessible... continue only work that
+does not pretend Tier A verification" instruction. No item's FR status was
+changed by this retry attempt.
+
+**Exact next action to unblock Tier A**, for the owner or a future session:
+the chrome-devtools MCP connection itself needs to be re-established with
+a bound target (e.g. the MCP client/tooling that provides `navigate`/
+`evaluate`/`screenshot` needs to reconnect to the browser and select the
+authenticated DGR tab as its active page) — this is outside what the
+`navigate`/`evaluate`/`screenshot` tool trio alone can fix from inside a
+running session, since all three depend on a page already being selected.

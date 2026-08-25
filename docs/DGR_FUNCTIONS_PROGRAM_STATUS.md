@@ -175,7 +175,20 @@ Function 7.1's 12 frozen pilot items) has Tier A regulatory verification.
 No item anywhere is `APPROVED`. No qualified human reviewer has signed off
 on anything.
 
-### Tier A verification — attempted and reconfirmed blocked this session
+### Tier A verification — retried a second time, blocked again (different, more specific reason)
+
+**Update, same day, after the owner reported re-establishing the
+authenticated Bookshelf session:** a second retry found all three
+available `chrome-devtools` MCP tools (`navigate`, `evaluate`,
+`screenshot`) returning the identical error `"The selected page has been
+closed. Call list_pages to see open pages"` — a page-selection/connection
+problem, not a credential/2FA problem this time, and no `list_pages` tool
+exists in this session's toolset to recover a target. Full detail and the
+exact next action to unblock it is in `docs/AI_HANDOFF.md`'s "Tier A retry
+#2" entry. Per explicit instruction, the Tier A track is stopped here with
+this reason recorded; Batch 3+ non-Tier-A drafting continues.
+
+### Tier A verification — first attempt, blocked (original account)
 
 Mid-session, the owner reported the IATA Digital Publications Bookshelf as
 authenticated and open with remote debugging active. This session

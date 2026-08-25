@@ -1,4 +1,4 @@
-# DGR Stage 1 — Function 7.9 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.9 — CROSS-VALIDATED (second pass CONFIRMED, 2026-08-25)
 
 **Function 7.9**: *Personnel de cabine* (cabin crew) — per both KOST's own
 course title slide (*"DGR IATA CBTA - Fonction 7.9 — Equipage de cabine"*)
@@ -7,9 +7,24 @@ Personnel de cabine**" — *"Les tâches qui suivent sont celles que le
 personnel de cabine accomplit habituellement et pour lesquelles une
 formation et une évaluation seraient nécessaires."*
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a
-second pass, not reviewed by a qualified instructor, not accepted by ANAC,
-and not a Stage 2A blueprint.** This is the Function 7.9 counterpart to
+**Status: CROSS-VALIDATED (second pass CONFIRMED, 2026-08-25) — see
+`docs/DGR_STAGE1_FUNCTION_7.9_CROSSVALIDATION.md`.** An independent second
+pass re-rendered TABLEAU 7.9.A at 300/400dpi, re-extracted the Cadre CBTA
+matrix, re-ran every keyword search underlying the SOURCE GAP/over-teaching
+findings, and rebuilt the ten-function practice-book MD5 table from scratch.
+**Outcome: CONFIRMED, with one non-substantive precision correction** to
+SOURCE GAP note 8 (the DGR 4.2/DGR 2.1 citation note — see the corrected
+note below and the cross-validation file's own section (h) for the full
+detail: Function 7.5's own course cites *both* DGR 2.1 and DGR 4.2 across
+its two-slide treatment of this topic, not DGR 2.1 alone). The 24-leaf
+enumeration, block/star structure (including the already-resolved single-★
+Block 7 rating), the 0.2.1/0.2.2 wording-diff finding, the Cadre CBTA
+wrong-function finding, the 6.2.3 major partial SOURCE GAP, the 0.3.2 SOURCE
+GAP, and all four over-teaching findings are unchanged. This draft remains
+**not** reviewed by a qualified instructor, **not** accepted by ANAC, and
+this file does not itself contain a Stage 2A blueprint — see
+`docs/DGR_STAGE2A_FUNCTION_7.9_BLUEPRINT.md` for that. This is the Function
+7.9 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1),
 `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md` (Function 7.2),
 `docs/DGR_STAGE1_FUNCTION_7.3_DRAFT.md` (Function 7.3),
@@ -618,7 +633,20 @@ question number (F-KOST 05, 20Q), or practice-book question number (F-KOST
    material, or two different (both potentially valid) DGR cross-references
    for the same rule; not resolved in this pass, flagged for whoever does
    Function 7.9's eventual Tier A pass, since it affects which section
-   number a future Tier A check should even start from.
+   number a future Tier A check should even start from. **CORRECTED
+   2026-08-25 (cross-validation pass, see
+   `docs/DGR_STAGE1_FUNCTION_7.9_CROSSVALIDATION.md` section (h)):** a direct
+   re-check of Function 7.5's own course (not just its draft's prose) finds
+   Function 7.5 runs the identical two-slide treatment of this topic and
+   cites **both** DGR 2.1 (first slide, p.37 of its own course) **and** DGR
+   4.2 (second/repeated-title slide, p.38) — i.e. 7.5's course does not cite
+   DGR 2.1 alone. Function 7.9's own two slides (p.39–40) both cite DGR 4.2
+   only. The discrepancy is real but narrower than originally stated: the
+   two functions' courses **agree** on the second slide's citation (both
+   "DGR 4.2") and diverge only in that 7.5's own first slide carries an
+   additional "DGR 2.1" citation that 7.9's own first slide does not
+   reproduce. Still unresolved, still Tier B, still flagged for the eventual
+   Tier A pass — only the framing of the inconsistency is corrected here.
 9. **The course's own CBTA-concept slide (p.3) misnames this function as
    "Fonction 7.6" instead of "Fonction 7.9" in its own worked example** —
    see the "minor course-authoring-error finding" note under source item 1
@@ -670,9 +698,11 @@ question number (F-KOST 05, 20Q), or practice-book question number (F-KOST
 
 ## Recommended next steps
 
-1. Have a second pass (or a qualified instructor) confirm or correct this
-   24-item enumeration before treating it as frozen, the same two-pass
-   discipline used for Functions 7.1 and 7.3.
+1. ~~Have a second pass (or a qualified instructor) confirm or correct this
+   24-item enumeration before treating it as frozen~~ — **done 2026-08-25**,
+   see `docs/DGR_STAGE1_FUNCTION_7.9_CROSSVALIDATION.md` (CONFIRMED, one
+   non-substantive precision correction to SOURCE GAP note 8). A qualified
+   instructor review is still outstanding.
 2. Locate additional KOST material — if any exists — covering in-flight
    fire-fighting equipment, cabin-fire-response coordination, and
    PAN PAN/MAYDAY emergency-declaration procedure before drafting any

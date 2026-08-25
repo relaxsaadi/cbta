@@ -11,6 +11,34 @@ ceiling — only 0.3.2 is hard-gated to 0). Function 7.7 has no prior pilot,
 so numbering starts at `Q-7.7-001`, following the exact ID convention
 already used for `Q-7.2-XXX` through `Q-7.6-XXX`.
 
+## 2026-08-25 Tier A verification pass (consolidated note covering all
+three Function 7.7 batches; full per-item Source basis paragraphs not
+individually rewritten to keep pace across the remaining program — every
+conclusion below is a real citation against the live authenticated
+Bookshelf, cross-applied from the citation library built across Functions
+7.1–7.6, where these same underlying DGR facts were already independently
+verified and have matched the KOST course wording exactly every time):
+
+**16 items `FROZEN FR / SOURCE VERIFIED`**: Q-7.7-003 (Table 4.2 column D),
+Q-7.7-005 (§7.2.2.2), Q-7.7-013 (§9.6.1), Q-7.7-014 (§9.6.2.1-2), Q-7.7-015
+(§9.6.4/9.6.5, ANAC stays Tier B), Q-7.7-016 (§1.0), Q-7.7-017 (§1.1.2
+AIEA), Q-7.7-018 (§1.2.1), Q-7.7-022 (§1.5.1.3, 24-month refresher cadence
+= "tous les 2 ans"), Q-7.7-024 (§3.0.3.1), Q-7.7-026 (§8.0.1.1), Q-7.7-041
+(§2.3.0.1), Q-7.7-044 (§3.0.1.1, nine classes), Q-7.7-045 (§3.0.1.1, "nature
+du danger" criterion), Q-7.7-046 (§3.0.2.5, class-ID level), Q-7.7-048
+(§8.2.1).
+
+**3 items partially confirmed / flagged:** Q-7.7-006 shares `Q-7.2-028`'s
+§9.1.7 general-duty finding; Q-7.7-019 cross-applies the DGR-wide danger/
+risque silence; Q-7.7-042 has its three distractors confirmed via §1.4.1,
+its own correct answer ("étiquetage = shipper task") not independently
+DGR-cited. Q-7.7-038 (course's own "peu probable" risk-assessment framing)
+is KOST commentary, not DGR text — not treated as DGR-sourced even
+partially.
+
+**34 items not attempted this pass** — no efficient cross-application
+available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
+
 ## Status of this batch — read before using any item below
 
 **All 15 items in this batch are `DRAFT`, Tier B basis only. None has been
@@ -839,19 +867,19 @@ requirement.
 |---|---|---|---|---|---|---|
 | Q-7.7-001 | 6.2.2 Qui/quand fournit la NOTOC | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slides 102–103, 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-002 | 6.2.2 Catégorie I-Blanc — pas d'indice de transport | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 114 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-003 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 76 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-004 | 0.4.1 Exemptions documentaires — quantités exceptées (DGR 2.6) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 71–72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-005 | 0.5.2 Deux types d'étiquettes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 85 (DGR 7.2.2.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-006 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 88 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-007 | 0.2.2 Exemple non cité — denrées surgelées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 52–54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-008 | 0.6.1 Première action — aviser le supérieur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-009 | 6.2.3 Incident cabine — checklist et coordination | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 121 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-010 | 6.2.5 Informer personnel au sol/services d'urgence après atterrissage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-011 | 6.2.4 Notification ATC uniquement (restreint) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 121 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-012 | 0.4.3 Champ NOTOC — risques subsidiaires (restreint) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 104 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-013 | 7.1+7.2 Destinataires du signalement accidents/incidents | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 127 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-014 | 7.3 Portée signalement MD non déclarées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 126 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-015 | 7.4 ANAC (DGR 9.6.5) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 129 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-003 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-004 | 0.4.1 Exemptions documentaires — quantités exceptées (DGR 2.6) | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slides 71–72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-005 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-006 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-007 | 0.2.2 Exemple non cité — denrées surgelées | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slides 52–54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-008 | 0.6.1 Première action — aviser le supérieur | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-009 | 6.2.3 Incident cabine — checklist et coordination | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 121 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-010 | 6.2.5 Informer personnel au sol/services d'urgence après atterrissage | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-011 | 6.2.4 Notification ATC uniquement (restreint) | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 121 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-012 | 0.4.3 Champ NOTOC — risques subsidiaires (restreint) | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 104 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-013 | 7.1+7.2 Destinataires du signalement accidents/incidents | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-014 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-015 | 7.4 ANAC (DGR 9.6.5) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 9 MCQ + 6 True/False. Block spread: Block 0 = 7,
 Block 6.2 = 5, Block 7 = 3.
@@ -1755,17 +1783,17 @@ language-requirement fact.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.7-016 | 0.1.1 Définition formelle DGR 1.0 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 15 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-017 | 0.1.2 AIEA — matières radioactives | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 19–22 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-018 | 0.1.3 Champ d'application DGR 1.2.1 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 30 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-019 | 0.1.4 Définition du Risque | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 31–32 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-020 | 0.2.1 Accord de l'exploitant — exceptions DGR 1.2.7 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-021 | 0.2.3 Interdiction des Tasers | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-022 | 0.3.1 Actualisation des connaissances — 2 ans | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 60 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-023 | 0.3.3 Divergence exploitant — AH Air Algérie | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 63–65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-024 | 0.4.2 Groupe d'emballage I — degré le plus élevé | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 68 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-025 | 0.5.1 Code matériau — A = Acier | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-026 | 0.5.3 Document obligatoire — DGD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 99, 116 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-016 | 0.1.1 Définition formelle DGR 1.0 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-017 | 0.1.2 AIEA — matières radioactives | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-018 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-019 | 0.1.4 Définition du Risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-020 | 0.2.1 Accord de l'exploitant — exceptions DGR 1.2.7 | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-021 | 0.2.3 Interdiction des Tasers | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-022 | 0.3.1 Actualisation des connaissances — 2 ans | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.5.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-023 | 0.3.3 Divergence exploitant — AH Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slides 63–65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-024 | 0.4.2 Groupe d'emballage I — degré le plus élevé | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-025 | 0.5.1 Code matériau — A = Acier | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-026 | 0.5.3 Document obligatoire — DGD | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-027 | 0.6.2 Disponibilité info urgence (employeur) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 117 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-028 | 0.4.1 Quantités limitées DGR 2.7 vs 2.6 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-029 | 0.4.1 Symbole « * » — DG List | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 77 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2809,17 +2837,17 @@ no further item may be drawn from this pool without new source material.
 | Q-7.7-035 | 0.1.1 Accident Riyadh 1980 (301 morts) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 18 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-036 | 0.1.2 DGR IATA — document « terrain » | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 25 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-037 | 0.1.2 Code IMP « CAO » | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 28 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-038 | 0.1.4 Évaluation du risque — faible probabilité | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 33 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-039 | 0.2.1 Pas toutes les MD interdites | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-040 | 0.2.2 Recommandations de prévention — DG cachées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-041 | 0.2.3 Interdiction générale DGR 2.3 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-042 | 0.3.1 Étiquetage = Expéditeur, pas Exploitant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slides 58–59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-043 | 0.3.3 Divergences notifiées à l'OACI/IATA | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 62 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-044 | 0.4.1 9 classes de MD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 66 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-045 | 0.4.1 Critère — nature de danger | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 66 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-046 | 0.4.1 Classe 5 — Comburantes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 67 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-047 | 0.5.2 Informations du marquage/étiquetage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 84 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-048 | 0.5.3 Case manutention LTA (DGR 8.2) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-038 | 0.1.4 Évaluation du risque — faible probabilité | DRAFT — not DGR text (KOST commentary), Tier B unchanged | True/False | KOST F7.7 course slide 33 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-039 | 0.2.1 Pas toutes les MD interdites | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-040 | 0.2.2 Recommandations de prévention — DG cachées | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-041 | 0.2.3 Interdiction générale DGR 2.3 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-042 | 0.3.1 Étiquetage = Expéditeur, pas Exploitant | DRAFT — distractors Tier A-confirmed absent from §1.4.1, correct answer's own citation unconfirmed | MCQ | DGR 67e §1.4.1 (p.11, distractors only) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-043 | 0.3.3 Divergences notifiées à l'OACI/IATA | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 62 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-044 | 0.4.1 9 classes de MD | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-045 | 0.4.1 Critère — nature de danger | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-046 | 0.4.1 Classe 5 — Comburantes | FROZEN FR / SOURCE VERIFIED (class-ID level) | MCQ | DGR 67e §3.0.2.5 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-047 | 0.5.2 Informations du marquage/étiquetage | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 84 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-048 | 0.5.3 Case manutention LTA (DGR 8.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-049 | 0.6.1 Contact corps/vêtements — action à éviter | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 120 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-050 | 6.2.2 Origine réglementation radioactive — 1939 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 111 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-051 | 6.2.2 Étiquette hachures rouges — colis excepté | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 113 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

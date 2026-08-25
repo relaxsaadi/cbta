@@ -262,6 +262,18 @@ exact task, agent `a44253bd83df16c86`, failed mid-run on a transient
 via `git status` that it left no orphaned/partial file, so the retry is a
 clean run, nothing to merge).
 
+**UPDATE — this retry also failed**, this time explicitly because "Your
+computer went to sleep mid-response" (the owner's machine disconnecting, the
+same event this checkpoint is being written for), not a logic/content
+error — it was mid-way through reading Function 7.9's course pages
+(0.2.2/0.2.3 territory) when it stopped. `git status` reconfirmed immediately
+after: still clean, no orphaned `docs/DGR_PRODUCTION_BANK_7.9.md`, nothing
+to recover. **A third attempt was deliberately NOT dispatched** at this
+point — with the owner's machine going offline, spawning another background
+agent right now would likely orphan the same way. This is intentionally left
+as the next session's very first action instead (see "Exact next action on
+resume" below, still accurate/unchanged).
+
 **What it is doing:** drafting Function 7.9's production question-bank
 Batch 1 (target file: NEW `docs/DGR_PRODUCTION_BANK_7.9.md`, ~12–16 items,
 IDs `Q-7.9-001` onward, Tier B `DRAFT`), plus updating only Function 7.9's

@@ -1,10 +1,21 @@
-# DGR Stage 1 — Function 7.2 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.2 — CROSS-VALIDATED 2026-08-25 (second pass — CONFIRMED, no corrections)
 
 **Function 7.2**: *Personnel chargé de traiter ou d'accepter des marchandises dangereuses présentées comme du fret général.*
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a second
-pass, not reviewed by a qualified instructor, not accepted by ANAC, and not a
-Stage 2A blueprint.** This is the Function 7.2 counterpart to
+**Status: CROSS-VALIDATED 2026-08-25 — second independent pass complete, all
+findings CONFIRMED, no corrections required.** A second Claude Code session
+independently re-read the same source PDFs (not just the draft's prose),
+including direct visual inspection of the rendered IATA "Orientations" PDF
+pages, and an exhaustive keyword search of the full KOST course/exam/practice
+text. Every load-bearing claim in this file — the TABLEAU 7.2.A location and
+star ratings, the Block 0 verbatim match with Function 7.1, the 0.4.3 SOURCE
+GAP, and the 7.1/7.2 thin/merged accident-vs-incident evidence — was
+independently reproduced. See "## Second-pass cross-validation (2026-08-25)"
+below for the full methodology and evidence. This file is **still not**
+reviewed by a qualified human instructor, not accepted by ANAC, and this
+cross-validation pass does **not** itself constitute the Stage 2A blueprint
+(that is `docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md`, produced immediately
+after this cross-validation). This is the Function 7.2 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1), produced independently
 from Function 7.2's own source material per `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`.
 Do **not** assume Function 7.1's 44-subtask/3-block structure, its two-column
@@ -204,6 +215,130 @@ exam question number (F-KOST 05), or practice-book question number
    future Tier A pass for Function 7.2 must not assume any of these
    section numbers are unchanged in the 67th Edition.
 
+## Second-pass cross-validation (2026-08-25)
+
+Performed by an independent Claude Code session, re-reading the primary
+sources directly rather than trusting this draft's prose. Method and
+findings for each of the three items specifically flagged for re-check:
+
+### (a) TABLEAU 7.2.A location, title, and star-rating column — CONFIRMED
+
+Rendered `01_IATA_Orientations_Formation_Marchandises_Dangereuses_CBTA_Edition1_2023_FR.PDF`
+pages 20–29 to PNG at 200 DPI (`pdftoppm -png -r 200`) and visually inspected
+each page directly (not OCR/text extraction). Findings:
+- PDF page 27 = printed page 23 = the start of **TABLEAU 7.2.A**, titled
+  *"Exemple de liste de tâches pour le personnel chargé du traitement ou de
+  l'acceptation des marchandises présentées comme du fret général"* —
+  confirmed verbatim, confirmed page numbers exactly as this draft states.
+- The table has exactly **one** qualification column, headed
+  **"Traitement/acceptation du fret"** — confirmed, one column only (Table
+  7.1.A immediately preceding it, by contrast, visibly has two columns,
+  "Classification des marchandises dangereuses" / "Préparation des
+  expéditions de marchandises dangereuses" — the structural difference this
+  draft asserts is directly visible on the page, not inferred).
+- Star ratings confirmed exactly as tabulated in this draft: Block 0 rows all
+  carry a single ★; sub-block 3.4 (and both its leaves 3.4.1/3.4.2) carry
+  ★★★; all four Block 7 leaves (7.1–7.4) carry ★★. The block-3 header row
+  ("3 Traitement et acceptation du fret") itself carries no star, matching
+  this draft's note — confirmed by direct visual read, not assumption.
+- Also newly noted (does not change any conclusion): section 6.7 of the same
+  document contains a master cross-function matrix, **TABLEAU 6.7.B**
+  ("Liste des tâches associées aux marchandises dangereuses"), listing every
+  task 0–7 with one column per competency unit. Sub-block 3.4's wording
+  ("Traiter et accepter le fret autre que des marchandises dangereuses",
+  3.4.1/3.4.2) in 6.7.B is verbatim identical to what appears in Table 7.2.A
+  — an independent corroboration of the exact task wording from a second
+  location in the same source document.
+
+### (b) Block 0's 17 sub-tasks match Function 7.1's Block 0 verbatim — CONFIRMED
+
+Directly compared the rendered images of Table 7.1.A's Block 0 (PDF pages
+25–26, printed 21–22) against Table 7.2.A's Block 0 (PDF page 27, printed
+23) side by side, item by item. Every sub-task ID and wording (0.1.1–0.1.4,
+0.2.1–0.2.3, 0.3.1, 0.3.3, 0.4.1–0.4.3, 0.5.1–0.5.3, 0.6.1–0.6.2 — 17 items,
+0.3.2 skipped in both) is identical text between the two tables — the only
+difference is the star column(s) (7.1 shows two independent ★/★★★ columns
+per row per its Classification/Préparation split; 7.2 shows one ★ column
+throughout Block 0). Table 7.3.A's Block 0 (PDF page 28, printed 24) was
+also visually checked as a bonus cross-check and carries the same 17-item
+wording again (with one cosmetic label difference: 7.3's "0.4" heading reads
+"...l'importance **critique**..." vs 7.1/7.2's plain "...l'importance..." —
+the three leaf items 0.4.1–0.4.3 under it are unaffected and still identical
+wording). Confirmed: Block 0 is a shared generic block reused verbatim
+across functions, exactly as this draft claims.
+
+### (c-i) 0.4.3 "Envisager de multiples dangers" — SOURCE GAP CONFIRMED
+
+Ran an exhaustive case-insensitive keyword search across the full
+`pdftotext -layout` extraction of all three real KOST Function 7.2
+documents (course, 1619 lines; exam, 264 lines; practice book, 242 lines)
+for every plausible French rendering of "subsidiary/multiple hazard":
+`danger[s]? subsidiaire`, `risque[s]? subsidiaire`, `multiple[s]? danger`,
+`plusieurs danger`, `dangers multiples`, `danger secondaire`, bare
+`subsidiaire`, DGR section number `3.10`, and `plusieurs/deux classes` /
+`plus d'une classe`. **Zero matches in all three documents for every
+pattern.** This independently reproduces the draft's SOURCE GAP finding —
+if anything, more decisively than the draft's own qualitative "no dedicated
+slide found" statement, since this pass confirms the term and its usual
+DGR cross-reference (§3.10) are entirely absent from the extracted text,
+not merely under a different heading the draft's reader might have missed.
+Also confirmed the course PDF is genuinely 117 pages (`pdfinfo`), matching
+the draft's stated slide count, so this is not an incomplete-extraction
+artifact.
+
+### (c-ii) 7.1 vs 7.2 (accident/incident) — thin/merged evidence CONFIRMED, and found to be even more absolute than stated
+
+Located every occurrence of "accident" and "incident" (case-insensitive) in
+the full course text. Result: **every single occurrence of either word in
+all 117 slides pairs them together** — "accidents et incidents" /
+"accident ou incident" — with no sentence anywhere treating "incident" on
+its own or drawing a conceptual line between the two terms. The one
+dedicated slide (confirmed at PDF page 110, verbatim text: *"Signaler les
+accidents et incidents impliquant des marchandises dangereuses… L'exploitant
+doit signaler les accidents et incidents de marchandises dangereuses aux
+autorités compétentes de l'Etat de l'exploitant ainsi qu'aux ceux de celui
+dans lequel l'accident ou l'incident s'est produit"*) is the sole source for
+both 7.1 and 7.2. Zero occurrences of either word in the exam or practice
+book text. This is a stronger finding than the draft's own wording ("thin,
+merged evidence") — there is **no** independently-worded content for 7.2
+distinct from 7.1 anywhere in the real KOST material, which is decision-
+relevant for Stage 2A (see the Stage 2A blueprint's combined-pool decision
+for 7.1/7.2). Also spot-verified: PDF page 111 = 7.3's dedicated,
+distinctly-worded slide ("Signaler les marchandises dangereuses non
+déclarées/mal déclarées"), and PDF pages 112–113 = 7.4's dedicated slide +
+the Algeria/ANAC-specific enrichment slide — both confirmed clean, distinct
+matches exactly as the draft states, which is the correct contrast case
+that shows 7.1/7.2's merger is a genuine source characteristic and not an
+artifact of how any slide in this section happens to be written.
+
+### Other spot-checks performed (not specifically requested, done for corroboration)
+
+- `pdfinfo` confirmed exact page counts matching the draft's citations:
+  course 117 pages, exam 8 pages, practice book 7 pages.
+- Exam text confirmed 45-minute time limit, 80% pass mark, document ID
+  "F-KOST 05", and numbered items running through "20." — consistent with
+  "20 questions" as stated.
+- Practice book text confirmed numbered items running through "20." —
+  consistent with "20 questions" as stated.
+- 0.2.3 (passenger provisions) confirmed: course text at the "Limites" slide
+  literally reads "2.3 (résumées dans le tableau 2.3.A)", matching the
+  draft's characterization of a pointer-to-reference rather than itemized
+  content.
+
+### Cross-validation conclusion
+
+**No errors found. No corrections made to the 23-sub-task enumeration, the
+block/star structure, the source trace table, or either flagged
+gap/thin-evidence note.** This file's findings are corroborated by
+independent re-derivation, not merely re-read. The 23-leaf-sub-task count
+(Block 0 = 17, Block 3 = 2, Block 7 = 4) is treated as validated for
+purposes of the Stage 2A blueprint in
+`docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md`. This remains Tier B/C
+structural evidence (IATA's own generic Orientations guide + the real KOST
+course/exam/practice materials) — it is not a Tier A DGR 67th Edition
+regulatory-text verification, which remains a separate, later gate per
+`.claude/rules/dgr-stage2b.md`.
+
 ## What this draft does NOT do
 
 - Does not produce a Stage 2A exam blueprint (question counts, sample
@@ -217,14 +352,25 @@ exam question number (F-KOST 05), or practice-book question number
 
 ## Recommended next steps
 
-1. Have a second pass (or a qualified instructor) confirm or correct this
-   23-item enumeration before treating it as frozen, the same two-pass
-   discipline Function 7.1 used (draft → corrected final).
-2. Decide how to handle 7.1/7.2's thin/merged evidence (accident vs.
-   incident reporting) before Stage 2A question-count allocation.
-3. Resolve or explicitly carry forward the 0.4.3 SOURCE GAP — do not draft
-   a question against it without new evidence.
+1. ~~Have a second pass (or a qualified instructor) confirm or correct this
+   23-item enumeration before treating it as frozen~~ — **DONE 2026-08-25**,
+   see "Second-pass cross-validation" above. A qualified human instructor
+   review is still a separate, not-yet-done gate (this was an independent
+   second AI pass, not a human/ANAC review).
+2. ~~Decide how to handle 7.1/7.2's thin/merged evidence~~ — **decision
+   recorded in `docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md`**: treated as a
+   single combined question pool, dual-tagged to both official sub-task IDs,
+   because the source contains no independently-worded content for either
+   code alone.
+3. ~~Resolve or explicitly carry forward the 0.4.3 SOURCE GAP~~ — **carried
+   forward**: `docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md` records 0.4.3 at
+   0 questions with an explicit gap note. Do not draft a question against it
+   without new evidence.
 4. When Function 7.2 reaches its own Tier A revalidation gate, re-verify
    every DGR section number cited above against the current 67th Edition
    (French, Addendum 1) text, the same way Q-7.1-001 through Q-7.1-012 were
    handled for Function 7.1.
+5. Proceed to source-verified question drafting against
+   `docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md`'s per-sub-task ceilings, in
+   the same Tier B draft → Tier A gate → FR verify → EN review → named-
+   reviewer-approval sequence used for Function 7.1.

@@ -12,14 +12,19 @@ const execFileAsync = promisify(execFile);
 // this suite — this test suite is tied to this specific live environment,
 // not meant to be portable/CI-generic.
 async function queryAttemptState(attemptId) {
+  // Base64-encode + pipe to mysql's stdin rather than an -e "..." argument —
+  // avoids nested shell-quoting conflicts if the SQL ever needs a string
+  // literal (bit us in mutation-rbac.spec.mjs; kept consistent here even
+  // though this particular query has no literals today).
   const sql = `SELECT state, timefinish FROM moodle.mdl_quiz_attempts WHERE id=${Number(attemptId)};`;
+  const b64 = Buffer.from(sql, 'utf8').toString('base64');
   const { stdout } = await execFileAsync('ssh', [
     '-i', `${process.env.HOME}/.ssh/hostarts_kost_moodle`,
     '-o', 'ConnectTimeout=10', '-o', 'BatchMode=yes',
     'root@102.206.40.221',
-    `docker exec moodle-stack_db_1 sh -c 'mysql -u root -p"$MYSQL_ROOT_PASSWORD" -N -e "${sql}" 2>/dev/null'`,
+    `echo ${b64} | base64 -d | docker exec -i moodle-stack_db_1 sh -c 'mysql -u root -p"$MYSQL_ROOT_PASSWORD" -N moodle 2>/dev/null'`,
   ]);
-  const line = stdout.trim().split('\n').filter(l => l && !l.startsWith('**')).pop();
+  const line = stdout.trim().split('\n').filter(l => l && !l.startsWith('**') && !l.includes('openssh.com')).pop();
   if (!line) return null;
   const [state, timefinish] = line.split('\t');
   return { state, timefinish };

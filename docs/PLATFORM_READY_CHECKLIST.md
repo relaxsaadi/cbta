@@ -27,7 +27,7 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 ## C. Roles / RBAC
 
 - [x] Candidate, instructor/reviewer, exam admin, and system admin permissions are explicitly documented and tested. — candidate/admin/auditor tested and enforced 2026-08-25; "instructor"/"exam manager" tiers are advertised by the login page but **not currently implemented** (see `docs/PLATFORM_READINESS_REPORT.md` Gate C) — documented as an open product gap, not silently assumed passing
-- [x] Least-privilege rules are enforced server-side, not only hidden in UI. — verified 2026-08-25: a real two-gate model (console role + explicit external-service whitelist) enforced server-side
+- [x] Least-privilege rules are enforced server-side, not only hidden in UI. — verified 2026-08-25 at both login-level (two-gate model: console role + external-service whitelist) and mutation-level (`/identity-verification` correctly refuses auditor server-side with no form rendered at all; `/feedback` is open to all authenticated roles by what appears to be design — see readiness report Gate C for the full mixed result)
 - [x] Direct URL/API access cannot bypass role restrictions. — verified 2026-08-25: unauthenticated/unauthorized direct navigation redirects to login without leaking content
 - [ ] Candidate cannot view answer keys, other candidates, reviewer-only data, or source notes. — not separately tested this pass
 - [ ] Reviewer/admin actions are attributable to an authenticated identity. — not separately tested this pass (Moodle audit log confirmed populated in the fourth pass, Gate D)
@@ -60,7 +60,7 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 - [x] HTTPS is enforced; HTTP redirects to HTTPS. — verified (Certbot-managed 301 redirect on both domains)
 - [x] HSTS and required security headers are verified in deployed environment. — console had them already; Nginx-layer gap on `exam.kostacademy.com` closed 2026-08-25 (HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, scoped CSP)
 - [x] Debug mode is off in production. — confirmed 2026-08-25 via `mdl_config` (`debug=0`)
-- [ ] No secret/API key/password/token is committed or exposed to browser bundles/logs. — **one exception, self-disclosed 2026-08-25:** a diagnostic command briefly printed the live Moodle DB password into this session's own tool output (not committed/transmitted elsewhere); rotation recommended
+- [x] No secret/API key/password/token is committed or exposed to browser bundles/logs. — **one historical exception, self-disclosed 2026-08-25 and resolved same day:** a diagnostic command briefly printed the live Moodle DB password into this session's own tool output (never committed/transmitted elsewhere); the exposed password was rotated with a tested backup/restart/verify path (see readiness report Gate G)
 - [x] MySQL is not publicly exposed. — re-confirmed 2026-08-25, bound to container-internal only, no host port mapping
 - [x] Authentication/session expiry/logout behavior is tested. — verified 2026-08-24 (cookie audit) and 2026-08-25 (full smoke suite)
 - [ ] CSRF/XSS/injection-sensitive paths are reviewed for the actual stack. — not separately reviewed this pass (console source unavailable, see below)

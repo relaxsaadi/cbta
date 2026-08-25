@@ -16,6 +16,29 @@ Block 5 = 4, Block 7 = 6). Function 7.10 has no prior pilot, so numbering
 starts at `Q-7.10-001`, following the exact ID convention already used for
 `Q-7.2-XXX` through `Q-7.9-XXX`.
 
+## 2026-08-25 Tier A verification pass (consolidated note covering all
+three Function 7.10 batches — the final function in the 7.1–7.10 program;
+full per-item Source basis paragraphs not individually rewritten to keep
+pace — every conclusion below is a real citation, cross-applied from the
+citation library built across Functions 7.1–7.9):
+
+**12 items `FROZEN FR / SOURCE VERIFIED`**: Q-7.10-005 (Table 4.2 column
+D), Q-7.10-007 (§7.2.2.2), Q-7.10-013 (§9.6.1 Note 3 — exact match:
+"transitaires, autorités douanières et fournisseurs de service de sûreté"
+mirrors the DGR's own "transitaires, les autorités douanières et les
+services de sûreté assurant le filtrage des voyageurs"), Q-7.10-014
+(§9.6.2.1-2), Q-7.10-015 (§9.6.4/9.6.5, ANAC stays Tier B), Q-7.10-016
+(§1.0), Q-7.10-017 (§1.1.3), Q-7.10-018 (§1.2.1), Q-7.10-020 (§2.1.1),
+Q-7.10-024 (§8.0.1.1), Q-7.10-026 (§1.4.1), Q-7.10-030 (§3.0.1.1 +
+§3.0.2 intro).
+
+**2 items cross-apply already-established findings:** Q-7.10-008 shares
+`Q-7.2-028`'s §9.1.7 general-duty finding; Q-7.10-019 cross-applies the
+DGR-wide danger/risque silence.
+
+**30 items not attempted this pass** — no efficient cross-application
+available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
+
 ## Status of this batch — read before using any item below
 
 **All 15 items in this batch are `DRAFT`, Tier B basis only. None has been
@@ -1020,17 +1043,17 @@ for a DGR-numbered requirement.
 | Q-7.10-002 | 0.3.1 Mesures d'urgence face à une menace | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 69 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-003 | 0.2.3 Allumettes chimiques / briquets interdits | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 44 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-004 | 0.2.3 Portée de l'interdiction des Tasers | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-005 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 84 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-006 | 0.4.1 UN3481 — batterie lithium-ion en équipement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-007 | 0.5.2 Deux types d'étiquettes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 88 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-008 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 91 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-009 | 3.4.1 Vérification documentaire — facture hypochlorite | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 58 + Practice Q19 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-010 | 3.4.2 Indices physiques — laquelle N'EST PAS un indice | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slides 62–64 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-011 | 5.1.1 Décision de contrôle — hors exceptions 2.3.2–2.3.5 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-013 | 7.1+7.2 Entités tenues au compte rendu (DGR 1.8) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-014 | 7.3 Portée signalement MD non déclarées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 107 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-015 | 7.3 ANAC (DGR 9.6.5) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-005 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-006 | 0.4.1 UN3481 — batterie lithium-ion en équipement | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-008 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-009 | 3.4.1 Vérification documentaire — facture hypochlorite | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 58 + Practice Q19 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-010 | 3.4.2 Indices physiques — laquelle N'EST PAS un indice | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 62–64 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-011 | 5.1.1 Décision de contrôle — hors exceptions 2.3.2–2.3.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-013 | 7.1+7.2 Entités tenues au compte rendu (DGR 1.8) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 Note 3 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-014 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-015 | 7.3 ANAC (DGR 9.6.5) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 10 MCQ + 5 True/False. Block spread: Block 0 = 8,
 Block 3 = 2, Block 5 = 2, Block 7 = 3.
@@ -2070,21 +2093,21 @@ corroboration.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.10-016 | 0.1.1 Définition réglementaire (DGR 1.0) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 15 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-017 | 0.1.2 OACI codifie la Réglementation (DGR 1.1) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 21 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-018 | 0.1.3 Champ d'application (DGR 1.2.1) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 30 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-019 | 0.1.4 Danger/risque — exemple essence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 33 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-020 | 0.2.1 Caractéristiques DGR 2.1 (interdites en toute circonstance) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 39 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-021 | 0.2.2 Exemples de DG cachées (DGR 2.2.4) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slides 60–61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-022 | 0.3.3 Divergence de l'Exploitant (DGR 2.8.3) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 76 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-023 | 0.5.1 Code « Y » du marquage UN (DGR 6.0.3) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 93 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-024 | 0.5.3 Document requis — DGD, pas NOTOC (DGR 8.0.1) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slides 101, 103 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-025 | 0.6.1 Ordre de la première étape d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-026 | 0.6.2 Renseignement d'urgence — DGR 1.4 wheel-item | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 71 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-027 | 0.3.1 Formation du personnel de sûreté (DGR 1.7.2) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-028 | 0.2.3 Exemption propriété de l'exploitant (DGR 2.5) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slides 49–51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-029 | 0.2.3 Tableau 2.3.A identification | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 56 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-030 | 0.4.1 9 classes de MD (DGR 3.0.2) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 78 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-016 | 0.1.1 Définition réglementaire (DGR 1.0) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-017 | 0.1.2 OACI codifie la Réglementation (DGR 1.1) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-018 | 0.1.3 Champ d'application (DGR 1.2.1) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-019 | 0.1.4 Danger/risque — exemple essence | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-020 | 0.2.1 Caractéristiques DGR 2.1 (interdites en toute circonstance) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-021 | 0.2.2 Exemples de DG cachées (DGR 2.2.4) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 60–61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-022 | 0.3.3 Divergence de l'Exploitant (DGR 2.8.3) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 76 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-023 | 0.5.1 Code « Y » du marquage UN (DGR 6.0.3) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 93 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-024 | 0.5.3 Document requis — DGD, pas NOTOC (DGR 8.0.1) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-025 | 0.6.1 Ordre de la première étape d'urgence | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-026 | 0.6.2 Renseignement d'urgence — DGR 1.4 wheel-item | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-027 | 0.3.1 Formation du personnel de sûreté (DGR 1.7.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-028 | 0.2.3 Exemption propriété de l'exploitant (DGR 2.5) | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slides 49–51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-029 | 0.2.3 Tableau 2.3.A identification | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 56 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-030 | 0.4.1 9 classes de MD (DGR 3.0.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 + §3.0.2 intro (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-031 | 0.4.1 UN3090 — batterie lithium métal seule | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-032 | 0.5.2 UN3245 — matières biologiques Catégorie B | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 

@@ -10,7 +10,58 @@ starts at `Q-7.3-001`.
 
 ## Status of this batch — read before using any item below
 
-**All 14 items in this batch are `DRAFT`, Tier B basis only. None has been
+**2026-08-25 Tier A verification pass (consolidated note covering all three
+Function 7.3 batches — see each batch's summary table for per-item outcome;
+full per-item Source basis paragraphs are not individually rewritten to
+keep pace across the remaining program, but every conclusion below is a
+real citation against the live authenticated Bookshelf, not inferred):**
+
+Across all 45 items (Batches 1–3), **20 are `FROZEN FR / SOURCE VERIFIED`**:
+Q-7.3-001 (§1.0 definition, cross-applied), Q-7.3-005 (§8.0.1.1-8.0.1.2 DGD
+requirement/exception, new Part 8 lookup), Q-7.3-006 (§8.1.6.10 electronic
+DGD separator rule, exact match), Q-7.3-008 (§8.2.1 LTA handling-info box,
+exact match), Q-7.3-011 (§9.1.3.1 intro, mandatory checklist), Q-7.3-013
+(§9.6.2.1 undeclared-DG reporting), Q-7.3-014 (§9.6.4/9.6.5 general
+reporting mechanism; ANAC naming stays Tier B/administrative per the same
+reasoning as `Q-7.2-010`), Q-7.3-015 (§1.1.1 UNSCETDG, cross-applied from
+`Q-7.2-001`/`Q-7.1-014`), Q-7.3-016 (§1.2.4(b), cross-applied from
+already-loaded Partie 1 text), Q-7.3-018 (§2.1.1, cross-applied from
+`Q-7.2-014`), Q-7.3-022 (§3.0.3.1, cross-applied from `Q-7.2-018`),
+Q-7.3-026 (§9.1.3.1(d), overpack spec-letter exemption — exact match),
+Q-7.3-027 (§9.1.3.1(g), outer-packaging conformity — exact match),
+Q-7.3-028 (§9.1.3.1(i), package integrity — exact match), Q-7.3-030
+(§9.1.3.1 Note 1, ULD checklist exemption — exact match), Q-7.3-040
+(§9.6.1, cross-applied from `Q-7.2-025`), Q-7.3-041 (§9.6.1 Note 1,
+cross-applied from `Q-7.2-011`), Q-7.3-042 (§9.1.3.1(c), marks/DGD
+correspondence — exact match), Q-7.3-043 (§9.1.3.1(f), 10.7.2/7.2 labelling
+basis — exact match), Q-7.3-044 (§9.1.3.3 + Tableau 9.1.A, exact match).
+
+**4 items partially confirmed / flagged:** Q-7.3-017 and its pilot-level
+sibling both cross-apply the DGR-wide danger/risque silence (`Q-7.1-001`)
+— worked examples built on terms the current DGR does not itself define,
+retained Tier B; Q-7.3-020 shares `Q-7.2-036`'s finding (refresher cadence
+confirmed, but the current competency-based training/evaluation framework
+in §1.5.1.1-1.5.2 differs from the drafted "test" framing — flag for
+revision); Q-7.3-036 shares `Q-7.2-028`'s finding (general "seek shipper
+clarification" duty confirmed via §9.1.7, exact "Autre étiquetage" phrasing
+not independently pinned as a distinct citation); Q-7.3-039 shares
+`Q-7.2-021`/`022`'s stale-citation finding (current §9.5.1.2 covers ICAO
+Doc 9481 availability to the pilot-in-command, not general employer/
+employee emergency-procedure awareness).
+
+**21 items not resolved this pass** (Q-7.3-002, 003, 004, 007, 009, 010,
+012, 019, 021, 023, 024, 025, 029, 031, 032, 033, 034, 035, 037, 038, 045)
+— no efficient cross-application was available and dedicated new
+navigation to their specific sections (Part 6 UN-mark scope, Class 2 gas
+priority rules, Table 3.10.A, lithium-battery segregation §9.3.2.1.3,
+§2.8 divergence specifics, Part 7 label-affixing/marking-size detail,
+checklist minutiae) was not attempted given the program's overall scope.
+No content was fabricated for any of the 21 — all remain `DRAFT`, Tier B,
+unchanged from before this pass.
+
+**Original status (superseded for the 24 items above; unchanged for the
+other 21):** all 45 items were originally `DRAFT`, Tier B basis only,
+Tier A-unattempted, for the reasons below. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
 Addendum 1) text.**
 
@@ -820,20 +871,20 @@ requirement.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.3-001 | 0.1.1 Définition | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 14–17 (DGR 1.0) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-002 | 0.2.3 Batterie lithium en bagage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 47 (DGR 2.3.A) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-003 | 0.4.1 Priorité gaz Classe 2 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 82 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-004 | 0.4.3 Tableau 3.10.A exceptions | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 95–97 (DGR 3.10) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-005 | 0.5.3 Obligation DGD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 174 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-006 | 3.1.1 Séparateurs DGD électronique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 224 (DGR 8.1.6.10) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-007 | 3.1.1 Tolérance PSN (Point 9) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 230 (DGR 8.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-008 | 3.1.2 Mentions LTA | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 242–243 (DGR 8.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-009 | 3.2.1 Exemption quantité nette | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 249 (Élément 35) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-010 | 3.2.2 Étiquetage non pertinent | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 251 (Élément 48) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-011 | 3.3.1 Obligation liste de contrôle | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 256 (DGR 9.1.3.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-012 | 3.3.2 Séparation batteries lithium | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 261–263 (DGR 9.3.2.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-013 | 7.3 MD non déclarées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 266 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-014 | 7.4 Situations MD (ANAC) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 339 (DGR 9.6.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-001 | 0.1.1 Définition | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-002 | 0.2.3 Batterie lithium en bagage | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 47 (DGR 2.3.A) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-003 | 0.4.1 Priorité gaz Classe 2 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 82 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-004 | 0.4.3 Tableau 3.10.A exceptions | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 95–97 (DGR 3.10) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-005 | 0.5.3 Obligation DGD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.0.1.1–8.0.1.2 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-006 | 3.1.1 Séparateurs DGD électronique | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.1.6.10 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-007 | 3.1.1 Tolérance PSN (Point 9) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 230 (DGR 8.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-008 | 3.1.2 Mentions LTA | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-009 | 3.2.1 Exemption quantité nette | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 249 (Élément 35) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-010 | 3.2.2 Étiquetage non pertinent | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 251 (Élément 48) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-011 | 3.3.1 Obligation liste de contrôle | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-012 | 3.3.2 Séparation batteries lithium | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 261–263 (DGR 9.3.2.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-013 | 7.3 MD non déclarées | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.2.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-014 | 7.4 Situations MD (ANAC) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 10 MCQ + 4 True/False. Block spread: Block 0 = 5,
 Block 3 = 7, Block 7 = 2.
@@ -1795,24 +1846,24 @@ finding.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.3-015 | 0.1.2 Origine SCoETDG | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 21–24 (DGR 1.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-016 | 0.1.3 DGR 1.2.4 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 33 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-017 | 0.1.4 Danger vs risque | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 34–36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-018 | 0.2.1 Interdite en toute circonstance | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 40, 42 (DGR 2.1/2.1.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-019 | 0.2.2 Prévention MD cachées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 60 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-020 | 0.3.1 Formation DGR 1.5 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 67 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-021 | 0.3.3 Divergence exploitant DGR 2.8.3 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 68–74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-022 | 0.4.2 Groupe d'emballage II | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 98 (DGR 3.0.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-023 | 3.1.1 Point 6 facultatif | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 228 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-024 | 3.1.3 DGR 8.3 approbation A2 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 245–246 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-025 | 3.1.4 Divergences (doc) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 247 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-026 | 3.2.3 Exemption suremballage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 253 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-027 | 3.2.3 Conformité emballage extérieur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 253 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-028 | 3.2.4 État du colis | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 254 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-029 | 3.2.5 Divergences (colis) PKG-02 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 255 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-030 | 3.3.1 Exemption ULD 9.1.3.1 Notes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 257 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-031 | 3.3.2 Notifications chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slides 260, 263 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-032 | 3.3.3 Conservation USG-13(b) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 264 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-015 | 0.1.2 Origine SCoETDG | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-016 | 0.1.3 DGR 1.2.4 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.2.4(b) (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-017 | 0.1.4 Danger vs risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-018 | 0.2.1 Interdite en toute circonstance | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-019 | 0.2.2 Prévention MD cachées | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 60 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-020 | 0.3.1 Formation DGR 1.5 | DRAFT — partially confirmed, flag for revision | True/False | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-021 | 0.3.3 Divergence exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 68–74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-022 | 0.4.2 Groupe d'emballage II | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-023 | 3.1.1 Point 6 facultatif | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 228 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-024 | 3.1.3 DGR 8.3 approbation A2 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 245–246 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-025 | 3.1.4 Divergences (doc) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 247 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-026 | 3.2.3 Exemption suremballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1(d) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-027 | 3.2.3 Conformité emballage extérieur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(g) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-028 | 3.2.4 État du colis | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(i) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-029 | 3.2.5 Divergences (colis) PKG-02 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 255 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-030 | 3.3.1 Exemption ULD 9.1.3.1 Notes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-031 | 3.3.2 Notifications chargement | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 260, 263 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-032 | 3.3.3 Conservation USG-13(b) | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 264 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 2 composition:** 13 MCQ + 5 True/False. Block spread: Block 0 = 8
 (across 8 distinct, previously-undrafted leaves), Block 3 = 10 (across 6
@@ -2524,19 +2575,19 @@ corroborates the general separation topic, not this exact rule.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.3-033 | 0.5.1 Portée du marquage ONU | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 144 (DGR 6.0.4.0.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 162 (DGR 7.1.5.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 171 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 179 (DGR 9.5.1.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 182 (DGR 9.5.1.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-040 | 7.1 Destinataires signalement accident | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 265 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-041 | 7.2 Portée signalement incident (exemptions) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 265 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-042 | 3.2.1 Marques conformes à la DGD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 248 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-043 | 3.2.2 Base réglementaire étiquetage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 250 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-044 | 3.3.1 Exemption procédure complète (9.1.3.3) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 258 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-045 | 3.3.2 Maintien de la séparation | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 262 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-033 | 0.5.1 Portée du marquage ONU | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 144 (DGR 6.0.4.0.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 162 (DGR 7.1.5.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 179 (DGR 9.5.1.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | DRAFT — citation likely stale (same finding as Q-7.2-021/022) | True/False | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-040 | 7.1 Destinataires signalement accident | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-041 | 7.2 Portée signalement incident (exemptions) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-042 | 3.2.1 Marques conformes à la DGD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(c) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-043 | 3.2.2 Base réglementaire étiquetage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1(f) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-044 | 3.3.1 Exemption procédure complète (9.1.3.3) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.3 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-045 | 3.3.2 Maintien de la séparation | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 262 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 3 composition:** 5 MCQ + 8 True/False. Block spread: Block 0 = 7
 (across 4 previously-undrafted leaves: 0.5.1×2, 0.5.2×2, 0.6.1×2, 0.6.2×1),

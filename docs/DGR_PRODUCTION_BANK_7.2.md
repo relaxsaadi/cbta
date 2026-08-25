@@ -1305,8 +1305,15 @@ DGR ?"), which tests LTA content generally from a different angle
 téléphone transporteur — not this item's specific handling-information-box
 fact) — confirms LTA content is real examined material without duplicating
 this item.
-**FR status:** DRAFT — Tier A not attempted this pass (Part 8 Documentation
-not read this session); no change from prior status.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25,
+during Function 7.3 research) — DGR 67th Ed. 2026, §8.2.1 "Déclaration
+pour la manutention" (Partie 8, Bookshelf p.690 area): "Une lettre de
+transport aérien qui accompagne une expédition de marchandises dangereuses,
+pour laquelle une Déclaration de l'expéditeur est exigée, doit contenir les
+descriptions suivantes dans la case ‹ Informations de traitement › : (a)
+« Dangerous goods as per associated Shipper's Declaration » ou « Dangerous
+Goods as per associated DGD »...; (b) « Cargo Aircraft Only » (Aéronef
+cargo seulement) ou « CAO »." — exact match.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1741,7 +1748,7 @@ with `Q-7.2-024`); treat as the same provision rather than a separate DGR
 | Q-7.2-017 | 0.3.3 Divergences exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 54–56 (DGR 2.8.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-018 | 0.4.2 Groupes d'emballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-019 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 86, 107–108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-021 | 0.6.1 Première action d'urgence | DRAFT — citation stale (current §9.5.1.2 covers a different topic) | MCQ | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-022 | 0.6.2 Info employés exploitant | DRAFT — citation stale, same finding as Q-7.2-021 | True/False | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-023 | 3.4.1 Demande SDS | DRAFT — mechanism + "Not Restricted" term Tier A-confirmed, SDS example itself Tier B | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2797,7 +2804,13 @@ toujours un envoi de marchandises dangereuses par aéronef (sauf exceptions
 prévues)? … b) Déclaration de marchandises dangereuses signée" — same
 "always, except stated exceptions" framing, confirming this is real,
 examined content.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25,
+during Function 7.3 research) — DGR 67th Ed. 2026, §8.0.1.1 (Partie 8,
+Bookshelf p.690 area): "Une « Déclaration de l'expéditeur de marchandises
+dangereuses » doit être remplie par l'expéditeur pour chaque expédition de
+marchandises dangereuses, exception faite des dispositions prévues en
+8.0.1.2." — exact match, current section number identical to KOST's own
+citation.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3105,7 +3118,7 @@ exam/practice-book hit for the GHS-pictogram fact specifically.
 | Q-7.2-040 | 0.4.1 Division 6.2 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-041 | 0.5.2 Étiquette Classe 6 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-042 | 0.5.2 UN 3245 Cat B | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 83 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-043 | 0.5.3 DGD obligatoire | DRAFT — Tier A not attempted | True/False | KOST F7.2 course slide 85, Exam Q17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-043 | 0.5.3 DGD obligatoire | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | True/False | DGR 67e §8.0.1.1-2 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-044 | 0.5.3 Conservation 3 mois | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.8.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-045 | 0.6.1 Contact corporel | DRAFT — likely shares Q-7.2-021/022's stale-citation issue, not independently confirmed | MCQ | KOST F7.2 course slide 89 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-046 | 3.4.1 En cas de doute / registre | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 98, Practice Q20 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

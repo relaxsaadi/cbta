@@ -1,4 +1,4 @@
-# DGR Stage 1 — Function 7.8 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.8 — CROSS-VALIDATED (second pass CONFIRMED, 2026-08-25)
 
 **Function 7.8**: *Agents des opérations aériennes et régulateurs de vols*
 (per KOST's own course title slide) — IATA's own Table 7.8.A gives the
@@ -10,9 +10,24 @@ everything found in this pass, though this draft's actual sub-task content
 is derived strictly from the real source material below, not from the
 marketing description.
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a
-second pass, not reviewed by a qualified instructor, not accepted by ANAC,
-and not a Stage 2A blueprint.** This is the Function 7.8 counterpart to
+**Status: CROSS-VALIDATED — second pass CONFIRMED, 2026-08-25.** See
+`docs/DGR_STAGE1_FUNCTION_7.8_CROSSVALIDATION.md` for the full independent
+second-pass verification: the 23-leaf-sub-task enumeration, the Block
+0/6.2-only structure (no Block 7 at all, independently re-verified with a
+dedicated below-the-table crop specifically built to rule out a
+missed/truncated block), the star ratings, the Block 0 composition/wording
+finding, the wrong-function Cadre CBTA finding, and the two SOURCE GAPs are
+all **CONFIRMED with no correction required**. One minor, non-substantive
+correction was recorded in the cross-validation (the Cadre CBTA document's
+own supporting word-frequency counts: "chargement" is 8, not 6 as
+originally stated below; "manutention" is 10, not 9) — it does not change
+the wrong-function conclusion or any Stage 1/2A count. This draft is **not**
+reviewed by a qualified instructor, **not** accepted by ANAC, and **not**
+Tier A–verified against the current 67th Edition/Addendum 1 text — those
+gates remain open. The Stage 2A blueprint built on this cross-validated
+draft is at `docs/DGR_STAGE2A_FUNCTION_7.8_BLUEPRINT.md`.
+
+This is the Function 7.8 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1),
 `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md` (Function 7.2),
 `docs/DGR_STAGE1_FUNCTION_7.3_DRAFT.md` (Function 7.3),
@@ -551,9 +566,13 @@ elaborate items test this block directly, consistent with its ★★★ rating.
 
 ## Recommended next steps
 
-1. Have a second pass (or a qualified instructor) confirm or correct this
+1. ~~Have a second pass (or a qualified instructor) confirm or correct this
    23-item enumeration before treating it as frozen, the same two-pass
-   discipline used for Functions 7.1 and 7.3.
+   discipline used for Functions 7.1 and 7.3.~~ **DONE 2026-08-25** — see
+   `docs/DGR_STAGE1_FUNCTION_7.8_CROSSVALIDATION.md`: CONFIRMED, no
+   correction to the enumeration required (one minor, non-substantive Cadre
+   CBTA word-count correction only). The Stage 2A blueprint is now produced
+   at `docs/DGR_STAGE2A_FUNCTION_7.8_BLUEPRINT.md`.
 2. Resolve the 6.2.4/6.2.5 SOURCE GAPs and the 6.2.1 imperfect-fit
    question — either locate additional KOST material (a supplementary
    module, perhaps the unwatched videos, may or may not cover any of

@@ -1,4 +1,4 @@
-# DGR Stage 1 — Function 7.7 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.7 — CROSS-VALIDATED (second pass CONFIRMED)
 
 **Function 7.7**: *Équipage de conduite* (flight crew / pilots) — per both KOST's
 own course title slide and IATA's own Table 7.7.A heading, which reads
@@ -6,9 +6,26 @@ verbatim "**7.7 Fonction : Équipage de conduite**" — *"Les tâches qui suiven
 sont celles que l'équipage de conduite accomplit habituellement et pour
 lesquelles une formation et une évaluation seraient donc nécessaires."*
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a
-second pass, not reviewed by a qualified instructor, not accepted by ANAC,
-and not a Stage 2A blueprint.** This is the Function 7.7 counterpart to
+**Status: CROSS-VALIDATED — independent second pass CONFIRMED with no
+correction, 2026-08-25.** See `docs/DGR_STAGE1_FUNCTION_7.7_CROSSVALIDATION.md`
+for the full second-pass method and findings (fresh 600dpi zoomed re-read of
+TABLEAU 7.7.A's ★ column with particular attention to the ★★ Block 7 rating,
+an independent side-by-side re-render of Function 7.6's own table, a
+ten-function 0.2.1/0.2.2 wording cross-check, a direct `unzip -l` archive
+comparison for the Cadre CBTA absence claim, both functions' exam text for
+the NOTOC complementary-role pairing, and keyword spot-checks for every
+claimed SOURCE GAP). Every load-bearing claim below — the 27-leaf enumeration,
+the block/sub-block structure, all three star ratings, the Block 0
+cross-function wording finding, the confirmed Cadre CBTA absence, the
+7.6/7.7 complementary NOTOC-role pairing, and the SOURCE GAP/partial-gap
+findings — is independently verified accurate, no correction required. This
+file's own enumeration and evidence tables are otherwise unchanged from the
+first-pass draft below. It remains **not** reviewed by a qualified
+instructor, **not** accepted by ANAC, and **not** Tier A–verified against the
+current 67th Edition/Addendum 1 text. The Stage 2A blueprint built on this
+cross-validated draft is at `docs/DGR_STAGE2A_FUNCTION_7.7_BLUEPRINT.md`.
+
+This is the Function 7.7 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1),
 `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md` (Function 7.2),
 `docs/DGR_STAGE1_FUNCTION_7.3_DRAFT.md` (Function 7.3),
@@ -536,9 +553,12 @@ item (Q30) directly combines both.
 
 ## Recommended next steps
 
-1. Have a second pass (or a qualified instructor) confirm or correct this
-   27-item enumeration before treating it as frozen, the same two-pass
-   discipline used for Functions 7.1 and 7.3.
+1. ~~Have a second pass (or a qualified instructor) confirm or correct this
+   27-item enumeration before treating it as frozen~~ — **DONE.** An
+   independent second pass confirmed the full enumeration with no correction;
+   see `docs/DGR_STAGE1_FUNCTION_7.7_CROSSVALIDATION.md`. A qualified
+   instructor's review is still outstanding and separate from this
+   AI-to-AI second pass.
 2. Resolve the 0.3.2 and 6.2.1 SOURCE GAPs, and the 6.2.4 partial-coverage
    finding — either locate additional KOST material (the unwatched Saudia
    case-study video, or the new Emergency Response Codes reference sheet,

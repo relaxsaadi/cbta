@@ -968,7 +968,7 @@ record behind each item.
 | Risque | Risk | Tier B, same caveat | Q-022, 023 |
 | Indice de transport (T.I.) | Transport Index (TI) | Standard | Q-003 |
 | Matières radioactives | Radioactive material | Standard | Q-003 |
-| Catégorie I-Blanc | Category I-White | Standard, consistent with Function 7.7's Q-7.7-002 and Function 7.3's Q-7.3-029 | Q-003 |
+| Catégorie I-Blanc | Category I-White | Standard, consistent with Function 7.7's Q-7.7-002 and Function 7.3's Q-7.3-029 | Q-003, 038 |
 | Séparation (requise) | Segregation | Standard | Q-003 |
 | Classe / Division | Class / Division | Standard | Q-004 |
 | Groupe d'emballage | Packing Group | Standard | Q-028 |
@@ -980,7 +980,7 @@ record behind each item.
 | Organisme génétiquement modifié (OGM) | Genetically modified organism (GMO) | Standard | Q-007 |
 | Marchandises dangereuses de l'exploitant (DGR 2.5) | Operator's Dangerous Goods | Standard, fixed IATA DGR 2.5 section title | Q-009 |
 | Équipement de bord | Aircraft equipment | Standard | Q-009 |
-| Dioxyde de carbone solide (glace carbonique) | Solid carbon dioxide (dry ice) | Standard | Q-009, 010 |
+| Dioxyde de carbone solide (glace carbonique) | Solid carbon dioxide (dry ice) | Standard | Q-009, 010, 033 |
 | Pièces pour avions | Aircraft parts | Standard | Q-009 |
 | Bagages de soute / bagages enregistrés | Checked baggage | Standard | Q-001, 010, 011 |
 | Bagage de cabine / bagage à main | Cabin baggage / carry-on baggage | Standard | Q-001, 011 |
@@ -988,10 +988,10 @@ record behind each item.
 | Armes électriques (Tasers) | Electroshock weapons (Tasers) | Standard, consistent with Function 7.7's Q-7.7-021 | Q-001 |
 | Allumettes chimiques (n'exigeant pas de frottoir) | 'Strike-anywhere' matches | **Flagged — candidate, unverified against a supplied EN 67th Ed. text** | Q-002 |
 | Piles au lithium | Lithium batteries | Standard | Q-001, 002 |
-| Fret ou bagages contaminés | Contaminated cargo or baggage | Standard | Q-012 |
+| Fret ou bagages contaminés | Contaminated cargo or baggage | Standard | Q-012, 035 |
 | Lever le doute | Resolve the doubt | Standard | Q-012 |
-| Accidents et incidents | Accidents and incidents | Standard | Q-014, 016 |
-| Autorités compétentes | Competent authorities | Standard | Q-014 |
+| Accidents et incidents | Accidents and incidents | Standard | Q-014, 016, 036 |
+| Autorités compétentes | Competent authorities | Standard | Q-014, 036 |
 | État de l'exploitant | State of the Operator | Standard IATA institutional term, consistent with Function 7.7's Q-7.7-013/033 | Q-014 |
 | Marchandises dangereuses non déclarées ou mal déclarées | Undeclared or misdeclared dangerous goods | Standard | Q-015 |
 | Membres d'équipage | Crew members | Standard | Q-015 |
@@ -1011,7 +1011,7 @@ record behind each item.
 | Exception (usage médical/vétérinaire/agricole) | Exception (medical/veterinary/agricultural use) | Standard, consistent with Function 7.7's Q-7.7-020 | Q-024 |
 | Responsabilités de l'Exploitant (DGR 1.4) | Operator responsibilities (DGR 1.4) | Standard | Q-025 |
 | Classification / Acceptation / Compte rendu / Formation | Classification / Acceptance / Reporting / Training | Standard | Q-025 |
-| Divergence d'État / divergence de l'exploitant | State variation / Operator variation | **Flagged — standard candidate term "Variation," unverified this session**, consistent with Function 7.7's Q-7.7-023/032 and Function 7.3's package | Q-026 |
+| Divergence d'État / divergence de l'exploitant | State variation / Operator variation | **Flagged — standard candidate term "Variation," unverified this session**, consistent with Function 7.7's Q-7.7-023/032 and Function 7.3's package | Q-026, 037 |
 | Marquage | Marking (as distinct from labelling) | Standard | Q-027, 028 |
 | Résistant aux chocs mécaniques | Resistant to mechanical shock | Standard | Q-027 |
 | Code de marquage UN/4G/Y30/S… | UN packaging mark UN/4G/Y30/S… | Standard, code elements unchanged | Q-028 |
@@ -1022,6 +1022,15 @@ record behind each item.
 | Aviser immédiatement son supérieur | Immediately notify their supervisor | Standard | Q-013 |
 | Renseignements appropriés en cas d'urgence | Appropriate emergency response information | Standard, consistent with Function 7.7's Q-7.7-027 | Q-031 |
 | Immédiatement disponibles en tout temps | Immediately available at all times | Standard, consistent with Function 7.7's Q-7.7-027 | Q-031 |
+| Appareils électroniques portables (AEP) | Portable electronic devices (PEDs) | **Flagged — candidate acronym**, consistent with Function 7.5's Q-7.5-011 and Function 7.10's Q-012, unverified against a supplied EN 67th Ed. text this session | Q-032, 034 |
+| Piles / batteries de rechange | Spare batteries | Standard candidate, new to this package | Q-032, 034 |
+| Catégorie II-Jaune / Catégorie III-Jaune | Category II-Yellow / Category III-Yellow | Standard, consistent with the Category I-White rendering already used in this package | Q-038 |
+| Compartiment occupé par des passagers ou des membres d'équipage | Compartment occupied by passengers or crew members | Standard | Q-038 |
+| Poste de pilotage | Flight deck | Standard | Q-003, 038 |
+| Écarter tout risque identifié | Eliminate any identified risk | Standard | Q-035 |
+| Disposition spéciale | Special provision | Standard | Q-036 |
+| Doc 9481 — "Emergency Response Guidance for Aircraft Incidents Involving Dangerous Goods" | (same — already English on the source slide) | Reproduced unchanged, not re-translated, same method as Q-029 | Q-039 |
+| Livre rouge / "Red Book" (informal document nickname, per the production bank's own rationale) | Red Book | Not tested by any item — mentioned only for reviewer awareness, never in a stem or option | — |
 
 **Reading this table:** "Standard" means the term is well-established
 IATA/UN dangerous-goods English usage with low translation risk, but —
@@ -1161,3 +1170,341 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
 - No item in this package is marked `BILINGUAL TECHNICAL REVIEW COMPLETE`
   or `APPROVED`. No qualified bilingual reviewer has been named. No review
   date has been recorded.
+
+---
+
+## Batch 3
+
+Prepared as bilingual (FR→EN) draft translation material for the 8 items
+drafted in `docs/DGR_PRODUCTION_BANK_7.9.md`'s own "## Batch 3" section
+(`Q-7.9-032`–`Q-7.9-039`), continuing directly from Batches 1 and 2 above.
+Same status discipline as the header at the top of this file: **no item
+below may be marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or `APPROVED`**;
+every item carries status `BILINGUAL TECHNICAL REVIEW REQUIRED` and
+approval `PENDING REVIEWER + DATE`; no item's FR status changes — all 8
+remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
+recorded in `docs/DGR_PRODUCTION_BANK_7.9.md`'s own Batch 3 section, per
+`.claude/rules/dgr-stage2b.md` rule 5 (FR/EN are separate gates). The FR
+text below is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.9.md`'s
+Batch 3 entries — no reconstruction, no gloss.
+
+Two items in this batch (`Q-7.9-034`, `Q-7.9-039`) are **image-sourced**:
+their FR text was transcribed by the production bank directly from an
+image embedded on the source slide, not the machine-extracted text layer.
+Both carry the production bank's own note flagging them as an early
+priority for Tier A re-verification; this translation pass introduces no
+new claim beyond the transcribed FR text in either case.
+
+Leaf 6.2.3 is **not** touched by any Batch 3 item — its ceiling of 1 was
+already fully drawn by Batch 1's `Q-7.9-013`, and per the production
+bank's own explicit confirmation, this batch drafts no further item
+against it in any form, including in `Q-7.9-039` (0.6.1), which merely
+identifies that an ICAO reference document exists and never tests its
+operational content. `Q-7.9-039`'s own note below carries forward the same
+binding restriction already established for `Q-7.9-013`/`Q-7.9-030` (no
+fire-response/PAN-PAN/MAYDAY content), out of caution, since it shares the
+same emergency-response subject area even though it is tagged to a
+different leaf.
+
+### Q-7.9-032 — Seuils déclenchant l'approbation de l'exploitant : AEP et batteries de rechange au lithium
+
+- **Sub-task:** 5.2.1 Appliquer les prescriptions des exploitants
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Marchandises dangereuses transportées par les
+    passagers et l'équipage, DGR 2.3.A — batteries au lithium), au-delà de
+    quels nombres l'exploitant doit-il donner son approbation expresse pour
+    qu'un passager transporte davantage d'appareils électroniques portables
+    (AEP) alimentés au lithium, et de piles/batteries de rechange,
+    respectivement ?"*
+  - Options: **(Correct)** *"Plus de 15 AEP, et plus de 20 batteries de
+    rechange."* / *"Plus de 20 AEP, et plus de 15 batteries de rechange."*
+    / *"Plus de 5 AEP, et plus de 10 batteries de rechange."* / *"Aucune
+    limite : l'exploitant n'a jamais besoin de donner son approbation, quel
+    que soit le nombre transporté."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Dangerous goods carried by passengers and crew,
+    DGR 2.3.A — lithium batteries), beyond what numbers must the operator
+    give express approval for a passenger to carry more lithium-powered
+    portable electronic devices (PEDs), and more spare batteries,
+    respectively?"*
+  - Options: **(Correct)** *"More than 15 PEDs, and more than 20 spare
+    batteries."* / *"More than 20 PEDs, and more than 15 spare batteries."*
+    / *"More than 5 PEDs, and more than 10 spare batteries."* / *"No limit:
+    the operator never needs to give approval, regardless of the number
+    carried."*
+- **Terminology decision — FLAGGED:** "AEP" (Appareils Électroniques
+  Portables) → **"PED" (Portable Electronic Devices)**, the same candidate
+  rendering already flagged and used in Function 7.5's Q-7.5-011 and
+  Function 7.10's Q-012, not independently verified against a supplied
+  English 67th Edition text this session. "Batteries de rechange" →
+  **"spare batteries"**, a new candidate rendering added to this package's
+  terminology table.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-033 — Facteurs que l'exploitant doit prendre en compte avant d'autoriser la glace carbonique
+
+- **Sub-task:** 5.2.1 Appliquer les prescriptions des exploitants
+- **Type:** MCQ, single-answer ("lequel n'est PAS")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Glace carbonique — Chargement du dioxyde de
+    carbone solide), le transport de dioxyde de carbone solide (glace
+    carbonique) est autorisé à condition que l'exploitant ait pris les
+    arrangements voulus compte tenu de plusieurs facteurs. Laquelle des
+    affirmations suivantes n'est PAS l'un des facteurs cités par le
+    cours ?"*
+  - Options: **(Correct)** *"Le nombre total de passagers à bord du vol."*
+    / *"Le type d'avion."* / *"La méthode d'emballage et d'entreposage."* /
+    *"La présence ou non d'animaux à bord."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Dry Ice — Loading of Solid Carbon Dioxide), the
+    carriage of solid carbon dioxide (dry ice) is permitted provided the
+    operator has made the necessary arrangements, taking several factors
+    into account. Which of the following statements is NOT one of the
+    factors the course cites?"*
+  - Options: **(Correct)** *"The total number of passengers on board the
+    flight."* / *"The type of aircraft."* / *"The packing and storage
+    method."* / *"Whether or not animals are on board."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-034 — Piles et batteries de rechange : bagages de cabine uniquement
+
+- **Sub-task:** 5.2.2 Vérifier les prescriptions concernant les bagages des passagers
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A (image-sourced)` (unchanged)
+- **⚠ Image-sourced note carried over from the production bank, unchanged
+  by this translation pass:** this item's FR text is transcribed from an
+  image embedded on slide 45 (the "batteries de rechange" row of the
+  Table 2.3.A excerpt), not from the machine-extracted text layer — see
+  `docs/DGR_PRODUCTION_BANK_7.9.md`'s Batch 3 sourcing-method note. Per the
+  production bank's own note, this item should be an early priority for
+  Tier A re-verification, alongside Q-7.9-039. This EN translation
+  introduces no new claim beyond the transcribed FR text.
+- **FR text (verbatim from production bank):**
+  - Statement: *"Vrai ou Faux : selon le cours (Marchandises dangereuses
+    transportées par les passagers et l'équipage, DGR 2.3.A — batteries de
+    rechange), les piles et batteries de rechange (accumulateurs) destinées
+    aux appareils électroniques portables des passagers doivent être
+    transportées uniquement dans les bagages de cabine, et ne sont jamais
+    autorisées dans les bagages enregistrés."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Dangerous goods carried by
+    passengers and crew, DGR 2.3.A — spare batteries), spare/replacement
+    batteries (cells and batteries) for passengers' portable electronic
+    devices must be carried only in cabin baggage, and are never permitted
+    in checked baggage."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-035 — Après confirmation qu'une contamination est due à une marchandise dangereuse
+
+- **Sub-task:** 6.2.1 S'occuper des marchandises dangereuses non permises dans les bagages
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Distinct-from-Q-7.9-012 note carried over, unchanged:** Q-7.9-012 tests
+  the *suspicion* stage (resolve the doubt before continuing to load); this
+  item tests the *next, sequential* stage — once contamination is
+  confirmed to be caused by an actual dangerous good, the operator must
+  eliminate the identified risk before air transport itself can continue.
+  Two distinct, sequential procedural facts, not a reworded duplicate.
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Fret ou bagages contaminés),
+    s'il est déterminé que la matière à l'origine de la contamination d'un
+    bagage ou d'un fret est bien une marchandise dangereuse au sens de la
+    réglementation, l'exploitant doit prendre des mesures appropriées pour
+    écarter tout risque identifié avant que le transport par voie aérienne
+    puisse se poursuivre."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Contaminated Cargo or
+    Baggage), if it is determined that the substance causing the
+    contamination of baggage or cargo is indeed a dangerous good within the
+    meaning of the Regulations, the operator must take appropriate measures
+    to eliminate any identified risk before air transport can continue."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-036 — Portée du signalement : inclut les MD exemptées ou sous disposition spéciale
+
+- **Sub-task:** 7.1 + 7.2 (combined pool) Signaler les accidents / les incidents de marchandises dangereuses
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **Distinct-from-Q-7.9-014 note carried over, unchanged:** Q-7.9-014 tests
+  slide 114's first paragraph (to whom the operator must report); this
+  item tests the same slide's second paragraph (the scope of what counts
+  as reportable) — a distinct fact, previously used only as a
+  distractor-refutation aid inside Q-7.9-014's own rationale, never before
+  as the tested/correct fact of any item.
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Compte rendu accidents et
+    incidents), l'obligation de l'exploitant de signaler les accidents et
+    incidents de marchandises dangereuses aux autorités compétentes
+    s'étend également aux incidents impliquant des marchandises
+    dangereuses qui ne sont pas soumises à tout ou partie de la
+    réglementation en raison de l'application d'une exception ou d'une
+    disposition spéciale."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Accident and Incident
+    Reporting), the operator's obligation to report dangerous goods
+    accidents and incidents to the competent authorities also extends to
+    incidents involving dangerous goods that are not subject to all or
+    part of the Regulations due to the application of an exception or a
+    special provision."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-037 — Le tableau 2.3.A peut être limité par les divergences des États ou des exploitants
+
+- **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Marchandises dangereuses
+    transportées par les passagers et l'équipage, DGR 2.3.A), les
+    dispositions du DGR 2.3 et du tableau 2.3.A peuvent être limitées par
+    les divergences des États ou des exploitants, et les voyageurs
+    devraient vérifier auprès du transporteur les dispositions en
+    vigueur."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Dangerous goods carried by
+    passengers and crew, DGR 2.3.A), the provisions of DGR 2.3 and Table
+    2.3.A may be limited by State or Operator variations, and travellers
+    should check the provisions in force with the carrier."*
+  - Correct answer: **TRUE**
+- **Terminology decision:** "divergences des États ou des exploitants" →
+  **"State or Operator variations"**, reusing the same flagged candidate
+  rendering already established for Q-7.9-026 in this package's
+  terminology table (see that row's updated "Appears in" column).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-038 — Emplacement interdit pour le chargement des matières radioactives (Catégories I-Blanc, II-Jaune, III-Jaune)
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Transport de Matières Radioactives), dans quel
+    emplacement les colis de matières radioactives des catégories
+    I-Blanc, II-Jaune ou III-Jaune ne doivent-ils JAMAIS être chargés ?"*
+  - Options: **(Correct)** *"Dans un compartiment occupé par des passagers
+    ou des membres d'équipage."* / *"Sur le plancher d'un compartiment
+    inférieur (soute)."* / *"À la position la plus arrière par rapport au
+    poste de pilotage, dans un avion cargo."* / *"En dernier lieu, après le
+    chargement des autres marchandises."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Carriage of Radioactive Material), in which
+    location must packages of radioactive material in Categories I-White,
+    II-Yellow, or III-Yellow NEVER be loaded?"*
+  - Options: **(Correct)** *"In a compartment occupied by passengers or
+    crew members."* / *"On the floor of a lower compartment (hold)."* / *"At
+    the rearmost position relative to the flight deck, on a cargo
+    aircraft."* / *"Last, after all other goods have been loaded."*
+- **Terminology decision:** "Catégorie I-Blanc" → **"Category I-White"**,
+  the same rendering already established in this package's terminology
+  table (Q-7.9-003); "II-Jaune" / "III-Jaune" → **"Category II-Yellow" /
+  "Category III-Yellow"**, new candidate renderings following the same
+  colour-category naming pattern, added to the terminology table.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.9-039 — Document OACI de référence pour l'intervention d'urgence (Doc 9481)
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A (image-sourced)` (unchanged)
+- **⚠ Image-sourced note carried over from the production bank, unchanged
+  by this translation pass:** the correct answer is transcribed from a
+  photographed document-cover image embedded on slide 109, not the
+  machine-extracted text layer. Per the production bank's own note, this
+  item should be an early priority for Tier A re-verification, alongside
+  Q-7.9-034.
+- **⚠ Scope note carried over from the production bank, unchanged — read
+  before using this item:** this item tests only that this specific ICAO
+  reference document exists and its stated title/purpose, under the
+  course's general "Information sur l'intervention d'urgence" awareness
+  heading. It does **not** reopen or expand Q-7.9-013's or Q-7.9-030's
+  binding restriction on leaf 6.2.3/0.6.1 content — the course's informal
+  "Red Book" nickname for this document is visible on the slide but is
+  never named as text anywhere in the course, and this item tests none of
+  the document's own operational content (fire-fighting equipment,
+  cabin-fire crew coordination, or PAN PAN/MAYDAY emergency declaration).
+  The EN translation must not expand this item toward that content.
+- **FR text:**
+  - Stem: *"Selon le cours (Information sur l'intervention d'urgence),
+    quel document de l'OACI le cours présente-t-il (page de couverture),
+    sous cette rubrique, comme la référence pour l'intervention d'urgence
+    en cas d'incidents d'aéronefs mettant en cause des marchandises
+    dangereuses ?"*
+  - Options: **(Correct)** *"Doc 9481 — « Emergency Response Guidance for
+    Aircraft Incidents Involving Dangerous Goods »."* / *"Doc 9284 — les
+    Instructions techniques de l'OACI."* / *"Doc 9859."* / *"Doc 7300."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Emergency Response Information), which ICAO
+    document does the course present (cover page), under this heading, as
+    the reference for emergency response to aircraft incidents involving
+    dangerous goods?"*
+  - Options: **(Correct)** *"Doc 9481 — 'Emergency Response Guidance for
+    Aircraft Incidents Involving Dangerous Goods.'"* / *"Doc 9284 — ICAO's
+    Technical Instructions."* / *"Doc 9859."* / *"Doc 7300."*
+- **Terminology decision:** the correct option's document title, "Emergency
+  Response Guidance for Aircraft Incidents Involving Dangerous Goods," is
+  already given in English on the KOST slide itself; reproduced unchanged
+  rather than re-translated, the same method already used for Q-7.9-029's
+  "(Shipper's Declaration for Dangerous Goods — DGD)" / "(NOTOC
+  (Notification to Captain))" and Function 7.7's Q-7.7-004/026.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
+## Batch 3 summary
+
+- 8/8 Batch 3 items translated to EN draft status (`Q-7.9-032`–`039`).
+  Combined with Batches 1 and 2, **39/39 Function 7.9 items** now have an
+  EN draft translation. 0/39 reviewed.
+- All 8 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
+  Tier A`, unchanged by this pass, per `.claude/rules/dgr-stage2b.md` rule
+  5 (FR source verification and EN bilingual review are separate gates).
+  This translation pass changes no item's FR status and closes no gate in
+  `docs/DGR_STAGE_2B_STATUS.md` or `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`.
+- 2 terminology points are newly flagged/added for the reviewer: the
+  "AEP"→"PED" (Portable Electronic Devices) candidate (Q-7.9-032,
+  Q-7.9-034 — same flag already carried from Function 7.5's Q-7.5-011 and
+  Function 7.10's Q-012), and "batteries de rechange"→"spare batteries"
+  (Q-7.9-032, Q-7.9-034), new to this package. Q-7.9-037 and Q-7.9-038
+  reuse already-flagged candidate terms from Batches 1/2 ("State/Operator
+  variation," "Category I-White") rather than introducing new open
+  questions; the new "Category II-Yellow"/"Category III-Yellow" renderings
+  (Q-7.9-038) follow the same established naming pattern.
+- 2 items (Q-7.9-034, Q-7.9-039) are **image-sourced** — their FR text was
+  transcribed by the production bank from an image embedded on the source
+  slide, not the machine-extracted text layer. Both carry a note flagging
+  them as an early priority for Tier A re-verification; this EN
+  translation pass introduces no new claim beyond the transcribed FR text
+  in either case.
+- 2 items (Q-7.9-035, Q-7.9-036) each carry a binding "distinct-from-"
+  compliance note (from Q-7.9-012 and Q-7.9-014 respectively), carried
+  forward unchanged, clarifying that each tests a genuinely separate
+  sequential/scope fact from the same source slide as its Batch 1
+  counterpart, not a reworded duplicate.
+- Q-7.9-039 carries forward, out of caution, the function's binding
+  6.2.3/0.6.1 restricted-framing caveat already established for
+  Q-7.9-013 and Q-7.9-030 in Batches 1/2 — this item tests only that the
+  ICAO Doc 9481 reference document exists, never any
+  fire-response/PAN-PAN/MAYDAY operational content from within it,
+  consistent with the production bank's own explicit confirmation that
+  Batch 3 does not touch leaf 6.2.3 in any form.
+- No item in this package — Batch 1, 2, or 3 — is marked `BILINGUAL
+  TECHNICAL REVIEW COMPLETE` or `APPROVED`. No qualified bilingual
+  reviewer has been named. No review date has been recorded.

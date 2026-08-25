@@ -668,6 +668,33 @@ record behind each item.
 | Organismes génétiquement modifiés (OGM) | Genetically modified organisms (GMOs) | Standard | Q-031 |
 | Aéroport de déchargement | Discharge airport | Standard candidate ("unloading airport" also plausible; not independently verified) | Q-032 |
 | Anglais devrait être utilisé | English should be used | Standard | Q-033 |
+| Article | Article | Standard | Q-034 |
+| Substance | Substance | Standard | Q-034 |
+| Pourquoi Réglementer? | Why Regulate? | **Flagged — candidate section-title rendering, unverified** | Q-035 |
+| Base Réglementaire | Regulatory Basis | **Flagged — candidate section-title rendering, unverified** | Q-036 |
+| Document « terrain » | "Field" document | **Flagged — candidate, unverified against a supplied EN 67th Ed. text** | Q-036 |
+| Codes cargo IMP (Annexe B.2.2.4) | Cargo IMP Codes (Appendix B.2.2.4) | Standard | Q-037 |
+| CAO — Cargo Aircraft Only | Cargo Aircraft Only (CAO) | Unchanged — already English on the source slide, reproduced not re-translated | Q-037, 048 |
+| Dioxyde de carbone solide (glace carbonique) | Solid carbon dioxide (dry ice) | Standard | Q-037 |
+| Évaluation du risque | Risk assessment | Standard, consistent with "Risque"→"Risk" (Q-019) | Q-038 |
+| Fouille corporelle | Body search | Standard | Q-040 |
+| Affiches et questionnaire verbal | Posters and verbal questionnaire | Standard | Q-040 |
+| Bagage à main | Carry-on baggage | Standard candidate — possibly the same concept as "Bagages de cabine"/"Cabin baggage" (Q-021); reviewer to confirm if the course intends a distinct term | Q-041 |
+| Roues des responsabilités DGR 1.3/1.4 | DGR 1.3/1.4 responsibility wheels | **Flagged — candidate, unverified** | Q-042 |
+| Étiquetage / Acceptation / Chargement / Entreposage | Labelling / Acceptance / Loading / Storage | Standard | Q-042 |
+| Expéditeur | Shipper | Standard, consistent with Q-018's "Shippers and cargo agents" | Q-042 |
+| Nature de danger (classes-establishment criterion) | Nature of the hazard | **Flagged — deliberately kept distinct from "degree of danger" below; see Q-7.7-045's own terminology decision** | Q-045 |
+| Degré de danger (Packing Group criterion) | Degree of danger | Standard, reusing Q-7.7-024's own "highest degree of danger" phrasing | Q-045 |
+| Classe 5 — Comburantes | Class 5 — Oxidizing substances | Standard | Q-046 |
+| Renseignements sur la manutention (case LTA, DGR 8.2) | "Handling Information" box | **Flagged — candidate, unverified** | Q-048 |
+| Carnet de maintenance | Maintenance log | Standard — already glossed in English on the KOST slide itself | Q-052, 053 |
+| Guide d'intervention d'urgence de l'OACI / Guide OACI | ICAO Emergency Response Guide / ICAO Guide | Standard, consistent with Q-009/010/011's "ICAO Guide" shorthand | Q-052, 053 |
+| Étiquette à hachures rouges | Red-hatched label | **Flagged — candidate, unverified** | Q-051 |
+| Toboggans d'évacuation d'urgence | Emergency evacuation slides | Standard | Q-052 |
+| Compartiments à cargaison / compartiments cargo | Cargo compartments | Standard | Q-052 |
+| Débarquer les passagers et l'équipage | Deplane the passengers and crew | Standard candidate ("disembark" also plausible) | Q-052 |
+| Déversement ou fuite | Spill or leak | Standard | Q-052 |
+| Service postal | Postal service | Standard | Q-050 |
 
 **Reading this table:** "Standard" means the term is well-established
 IATA/UN dangerous-goods English usage with low translation risk, but —
@@ -797,3 +824,576 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
 - No item in this package is marked `BILINGUAL TECHNICAL REVIEW COMPLETE`
   or `APPROVED`. No qualified bilingual reviewer has been named. No review
   date has been recorded.
+
+---
+
+# Batch 3 (Q-7.7-034 – Q-7.7-053)
+
+Translation pass covering the 20 items `docs/DGR_PRODUCTION_BANK_7.7.md`'s
+own "Batch 3" section added after this package's original 33-item Batch
+1+2 pass. Combined with those 33 items, Function 7.7 now has **53 of 53**
+currently-drafted production-bank items translated to EN draft status
+(53 of the blueprint's 85-question ceiling).
+
+## Status discipline for this batch — same rules as Batch 1+2, restated
+
+- **No item below may be marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or
+  `APPROVED`.** No qualified bilingual DGR instructor has reviewed any
+  translation in this pass, exactly as for Batch 1+2.
+- Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
+  REQUIRED`**, and every approval field reads **`PENDING REVIEWER + DATE`**.
+- **This batch does not change any item's FR status.** All 20 items remain
+  `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as recorded in
+  `docs/DGR_PRODUCTION_BANK_7.7.md`'s own Batch 3 section. Per
+  `.claude/rules/dgr-stage2b.md` rule 5, FR source verification and EN
+  bilingual technical review remain separate gates — this batch closes
+  neither.
+- This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
+  `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
+  same separate EN/human-reviewer gate described above for Batch 1+2.
+- Like Batch 1+2, the FR text below is copied **verbatim** from
+  `docs/DGR_PRODUCTION_BANK_7.7.md`'s Batch 3 section — no reconstruction, no
+  working gloss. Every "DGR x.y.z" section number quoted is exactly as
+  displayed on the KOST slide (course built on DGR 66th Edition, not the
+  67th Edition/Addendum 1 baseline this repository otherwise targets) —
+  Tier B, not independently re-verified as still-current numbering.
+- No Tier A verification was attempted for any of these 20 items, per this
+  task's own explicit instruction and consistent with
+  `docs/DGR_PRODUCTION_BANK_7.7.md`'s own Batch 3 status note (the
+  `chrome-devtools` MCP Bookshelf session remaining unreachable this pass).
+
+### Q-7.7-034 — Distinction entre un article et une substance (DGR 1.0)
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Généralités), laquelle des affirmations
+    suivantes illustre correctement la distinction entre un « article » et
+    une « substance » ?"*
+  - Options: **(Correct)** *"Une voiture est un article ; le liquide des
+    freins qu'elle contient est une substance."* / *"Une voiture est une
+    substance ; le carburant qu'elle contient est un article."* / *"Un
+    article ne peut jamais contenir de substance."* / *"Une substance est
+    nécessairement solide, alors qu'un article peut être solide, liquide ou
+    gazeux."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General), which of the following statements
+    correctly illustrates the distinction between an 'article' and a
+    'substance'?"*
+  - Options: **(Correct)** *"A car is an article; the brake fluid it
+    contains is a substance."* / *"A car is a substance; the fuel it
+    contains is an article."* / *"An article can never contain a
+    substance."* / *"A substance is necessarily solid, whereas an article
+    can be solid, liquid, or gaseous."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-035 — Accident historique associé à un réchaud de camping dans les bagages
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Pourquoi Réglementer?), quel accident historique
+    est associé à un réchaud de camping placé dans des bagages et a fait 301
+    morts ?"*
+  - Options: **(Correct)** *"Saudi Arabian Airlines, Riyadh, 19 août
+    1980."* / *"ValuJet, Everglades, 11 mai 1996."* / *"Union Carbide,
+    Bhopal, 3 décembre 1984."* / *"UPS B-747, Dubaï, 3 septembre 2010."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Why Regulate?), which historical accident is
+    associated with a camping stove placed in baggage and caused 301
+    deaths?"*
+  - Options: **(Correct)** *"Saudi Arabian Airlines, Riyadh, 19 August
+    1980."* / *"ValuJet, Everglades, 11 May 1996."* / *"Union Carbide,
+    Bhopal, 3 December 1984."* / *"UPS B-747, Dubai, 3 September 2010."*
+- **Terminology decision — FLAGGED:** "Pourquoi Réglementer?" (KOST slide
+  section title) → **"Why Regulate?"**, a candidate rendering, not
+  independently verified against a supplied English 67th Edition text this
+  session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-036 — Le manuel DGR de l'IATA comme document « terrain » reconnu par l'OACI
+
+- **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Base Réglementaire), le
+    manuel DGR de l'IATA est considéré comme le document « terrain » et est
+    reconnu comme tel par l'OACI."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Regulatory Basis), the IATA
+    DGR manual is considered the 'field' document and is recognized as such
+    by ICAO."*
+  - Correct answer: **TRUE**
+- **Terminology decision — FLAGGED:** "document « terrain »" → **"'field'
+  document"**, a candidate rendering (kept in quotes, as on the KOST slide),
+  not independently verified against a supplied English 67th Edition text
+  this session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-037 — Signification du code IATA Cargo IMP « CAO » (Annexe B.2.2.4)
+
+- **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Structure du DGR de l'IATA — Annexe B.2.2.4,
+    Codes cargo IMP), que signifie le code « CAO » ?"*
+  - Options: **(Correct)** *"Cargo Aircraft Only (avion cargo seulement)."*
+    / *"Déclaration de marchandises dangereuses de l'expéditeur."* /
+    *"Dioxyde de carbone solide (glace carbonique)."* / *"Masses
+    magnétisées."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Structure of the IATA DGR — Appendix B.2.2.4,
+    Cargo IMP Codes), what does the code 'CAO' mean?"*
+  - Options: **(Correct)** *"Cargo Aircraft Only."* / *"Shipper's
+    Declaration (for Dangerous Goods, DGD)."* / *"Solid carbon dioxide (dry
+    ice)."* / *"Magnetized material."*
+- **Terminology decision:** the correct option's French parenthetical gloss
+  "(avion cargo seulement)" is dropped in the EN rendering as redundant once
+  the surrounding language is English; the English term "Cargo Aircraft
+  Only" is reproduced unchanged from the KOST slide itself, the same method
+  used for Q-7.7-004/026. The second option is rendered using this
+  package's already-established "Shipper's Declaration (for Dangerous
+  Goods, DGD)" term (see terminology table) rather than a fresh
+  translation, for consistency.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-038 — Faible probabilité d'incident lorsque les MD sont préparées et manipulées conformément à la Réglementation
+
+- **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (exemple du liquide
+    inflammable — évaluation du risque), il est très peu probable que les
+    marchandises dangereuses causent un problème lorsqu'elles sont préparées
+    et manipulées conformément à la réglementation IATA sur les
+    marchandises dangereuses."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (flammable liquid example —
+    risk assessment), it is very unlikely that dangerous goods will cause a
+    problem when they are prepared and handled in accordance with the IATA
+    Dangerous Goods Regulations."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-039 — Toutes les marchandises dangereuses ne sont pas interdites à bord d'un avion
+
+- **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours, il n'est pas possible
+    d'interdire la totalité des marchandises dangereuses au transport aérien
+    — certaines sont acceptables selon le cas."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course, it is not possible to
+    prohibit all dangerous goods from air transport — some are acceptable
+    depending on the case."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-040 — Mesure non citée parmi les recommandations pour prévenir le transport de marchandises dangereuses cachées
+
+- **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Reconnaissance des marchandises dangereuses non
+    déclarées — recommandations), laquelle des mesures suivantes n'est PAS
+    citée par le cours parmi les recommandations pour prévenir le transport
+    de marchandises dangereuses cachées ?"*
+  - Options: **(Correct)** *"Exiger une fouille corporelle systématique de
+    chaque passager."* / *"Appliquer les affiches et le questionnaire
+    verbal avec les passagers."* / *"Effectuer des inspections des bagages
+    pendant le chargement."* / *"Demander la fiche de données de sécurité
+    (SDS)."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Recognizing undeclared dangerous goods —
+    recommendations), which of the following measures is NOT cited by the
+    course among the recommendations for preventing the carriage of hidden
+    dangerous goods?"*
+  - Options: **(Correct)** *"Require a systematic body search of every
+    passenger."* / *"Apply the posters and verbal questionnaire with
+    passengers."* / *"Carry out baggage inspections during loading."* /
+    *"Request the safety data sheet (SDS)."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-041 — Interdiction générale du transport de MD par les passagers ou l'équipage (DGR 2.3)
+
+- **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (MD transportées par les
+    passagers ou l'équipage, DGR 2.3), les marchandises dangereuses, y
+    compris les colis exceptés de matières radioactives, sont interdites au
+    transport par les passagers ou l'équipage — que ce soit dans les
+    bagages enregistrés, en bagage à main, ou sur leur personne — sauf dans
+    les cas autorisés aux points 2.3.2 à 2.3.5 pour un usage personnel."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Dangerous goods carried by
+    passengers or crew, DGR 2.3), dangerous goods, including excepted
+    packages of radioactive material, are forbidden from carriage by
+    passengers or crew — whether in checked baggage, in carry-on baggage,
+    or on their person — except in the cases authorized under 2.3.2 to
+    2.3.5 for personal use."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-042 — Tâche relevant de l'expéditeur (DGR 1.3), et non de l'exploitant (DGR 1.4)
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Rôle et responsabilité — roues des
+    responsabilités DGR 1.3/1.4), laquelle des tâches suivantes relève de la
+    responsabilité de l'EXPÉDITEUR, et non de l'EXPLOITANT ?"*
+  - Options: **(Correct)** *"L'étiquetage."* / *"L'acceptation."* / *"Le
+    chargement."* / *"L'entreposage."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Role and Responsibility — DGR 1.3/1.4
+    responsibility wheels), which of the following tasks is the
+    responsibility of the SHIPPER, and not the OPERATOR?"*
+  - Options: **(Correct)** *"Labelling."* / *"Acceptance."* / *"Loading."*
+    / *"Storage."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-043 — Notification des divergences d'État et d'exploitant à l'OACI et à l'IATA (DGR 2.8)
+
+- **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Divergences d'États et
+    d'Exploitant, DGR 2.8), tout État ou exploitant peut marquer sa
+    différence avec la Réglementation ; ces divergences sont notifiées à
+    l'OACI et à l'IATA."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (State and Operator
+    Variations, DGR 2.8), any State or operator may register its
+    difference from the Regulations; these variations are notified to
+    ICAO and IATA."*
+  - Correct answer: **TRUE**
+- **Terminology decision:** "divergence(s)" rendered **"variation(s)"**,
+  reusing the same flagged candidate already established for Q-7.7-023 (see
+  terminology table) — the reviewer's eventual resolution of that flag
+  should be applied here too.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-044 — Nombre de classes de marchandises dangereuses (DGR 3.0.2)
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Les classes des marchandises dangereuses, DGR
+    3.0.2), combien de classes de marchandises dangereuses existe-t-il ?"*
+  - Options: **(Correct)** *"9."* / *"7."* / *"8."* / *"10."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Classes of dangerous goods, DGR 3.0.2), how many
+    classes of dangerous goods are there?"*
+  - Options: **(Correct)** *"9."* / *"7."* / *"8."* / *"10."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-045 — Critère d'établissement des classes de marchandises dangereuses (DGR 3.0.2)
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Les classes des marchandises dangereuses, DGR
+    3.0.2), selon quel critère les classes de marchandises dangereuses
+    sont-elles établies ?"*
+  - Options: **(Correct)** *"La nature de danger qu'elles représentent."* /
+    *"Le degré de danger qu'elles représentent."* / *"L'inflammabilité des
+    produits."* / *"La commodité de transport."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Classes of dangerous goods, DGR 3.0.2), on what
+    criterion are the classes of dangerous goods established?"*
+  - Options: **(Correct)** *"The nature of the hazard they present."* /
+    *"The degree of danger they present."* / *"The flammability of the
+    products."* / *"Transport convenience."*
+- **Terminology decision — FLAGGED:** the FR source deliberately uses two
+  different phrases — "nature de danger" (this item's correct answer, the
+  classes-establishment criterion) and "degré de danger" (a swapped-concept
+  distractor drawn from the real, but different, Packing Group criterion —
+  see Q-7.7-024's own evidence). The EN draft preserves this distinction
+  ("nature of the hazard" vs. "degree of danger," the latter reusing
+  Q-7.7-024's own established phrasing "highest degree of danger" for
+  consistency) rather than collapsing both to the same English wording,
+  which would blur the distractor's own swapped-concept logic. Neither
+  rendering is independently verified against a supplied English 67th
+  Edition text this session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-046 — Correspondance classe/type de risque — Classe 5 (comburantes)
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Les classes des marchandises dangereuses —
+    étiquettes de danger), à quelle classe de marchandises dangereuses
+    correspond le type de risque « Comburantes » ?"*
+  - Options: **(Correct)** *"Classe 5."* / *"Classe 3."* / *"Classe 6."* /
+    *"Classe 8."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Classes of dangerous goods — hazard labels),
+    which class of dangerous goods corresponds to the hazard type
+    'Oxidizing substances'?"*
+  - Options: **(Correct)** *"Class 5."* / *"Class 3."* / *"Class 6."* /
+    *"Class 8."*
+- **Terminology decision:** "Comburantes" → **"Oxidizing substances"**, the
+  standard IATA/UN Class 5 hazard-type name.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-047 — Informations fournies par un bon marquage et étiquetage des colis DG
+
+- **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (De l'importance du marquage et étiquetage),
+    laquelle des informations suivantes n'est PAS citée par le cours parmi
+    celles données par un bon marquage et étiquetage des colis de
+    marchandises dangereuses ?"*
+  - Options: **(Correct)** *"Le prix du transport."* / *"La nature du
+    risque."* / *"Le stockage et la manutention."* / *"Le respect des
+    normes standards."*
+- **EN draft translation:**
+  - Stem: *"Per the course (The importance of marking and labelling), which
+    of the following pieces of information is NOT cited by the course among
+    those provided by proper marking and labelling of dangerous goods
+    packages?"*
+  - Options: **(Correct)** *"The cost of transport."* / *"The nature of
+    the risk."* / *"Storage and handling."* / *"Compliance with standard
+    norms."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-048 — Contenu de la case « Renseignements sur la manutention » de la LTA (DGR 8.2)
+
+- **Sub-task:** 0.5.3 Déterminer les documents exigés
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Documentation DGR 8.0.1 — Lettre de transport
+    aérien, DGR 8.2), que doit comprendre la case « Renseignements sur la
+    manutention » de la LTA pour un envoi de marchandises dangereuses, selon
+    le cas ?"*
+  - Options: **(Correct)** *"La mention « Dangerous goods as per associated
+    Shipper's Declaration » (ou DGD) et, le cas échéant, « Cargo Aircraft
+    Only » (CAO)."* / *"Uniquement le numéro de vol et la date
+    d'expédition."* / *"La signature manuscrite du commandant de bord."* /
+    *"Le numéro NOTOC de l'envoi."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Documentation, DGR 8.0.1 — Air Waybill, DGR
+    8.2), what must the AWB's 'Handling Information' box include for a
+    dangerous goods shipment, as applicable?"*
+  - Options: **(Correct)** *"The statement 'Dangerous goods as per
+    associated Shipper's Declaration' (or DGD) and, where applicable, 'Cargo
+    Aircraft Only' (CAO)."* / *"Only the flight number and shipment
+    date."* / *"The captain's handwritten signature."* / *"The shipment's
+    NOTOC number."*
+- **Terminology decision:** the correct option's English phrases
+  ("Dangerous goods as per associated Shipper's Declaration," "Cargo
+  Aircraft Only") are already given in English on the KOST slide itself, so
+  the EN draft reproduces them unchanged, the same method as Q-7.7-004/026
+  and this batch's own Q-7.7-037.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-049 — Action non recommandée en cas de contact du produit avec le corps ou les vêtements
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Procédures générales — étape 5, contact du
+    produit avec le corps ou les vêtements), laquelle des actions suivantes
+    n'est PAS recommandée ?"*
+  - Options: **(Correct)** *"Boire immédiatement de l'eau pour diluer le
+    produit."* / *"Laver le corps avec beaucoup d'eau."* / *"Enlever les
+    vêtements contaminés."* / *"Appeler un médecin."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General Procedures — step 5, product contact
+    with the body or clothing), which of the following actions is NOT
+    recommended?"*
+  - Options: **(Correct)** *"Immediately drink water to dilute the
+    product."* / *"Wash the body with plenty of water."* / *"Remove
+    contaminated clothing."* / *"Call a doctor."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-050 — Origine de la réglementation du transport des matières radioactives (service postal, 1939)
+
+- **Sub-task:** 6.2.2 Interpréter la NOTOC
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Transport de Matières Radioactives), quel
+    organisme a initié, en 1939, la réglementation concernant le transport
+    des matières radioactives ?"*
+  - Options: **(Correct)** *"Le service postal, en 1939."* / *"L'AIEA, en
+    1939."* / *"L'OACI, en 1939."* / *"Le SCoETDG, en 1939."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Carriage of Radioactive Material), which body
+    initiated, in 1939, the regulation of radioactive material transport?"*
+  - Options: **(Correct)** *"The postal service, in 1939."* / *"The IAEA,
+    in 1939."* / *"ICAO, in 1939."* / *"The UNCETDG, in 1939."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-051 — Mention obligatoire sur l'étiquette à hachures rouges d'un colis excepté de matières radioactives
+
+- **Sub-task:** 6.2.2 Interpréter la NOTOC
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Transport de Matières
+    Radioactives), un colis excepté de matières radioactives doit comporter
+    une étiquette à hachures rouges portant la mention selon laquelle les
+    informations relatives à ce colis n'ont pas besoin de figurer dans la
+    notification au commandant de bord (NOTOC)."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Carriage of Radioactive
+    Material), an excepted package of radioactive material must bear a
+    red-hatched label carrying the statement that the information relating
+    to that package does not need to appear in the Notification to Captain
+    (NOTOC)."*
+  - Correct answer: **TRUE**
+- **Terminology decision — FLAGGED:** "étiquette à hachures rouges" →
+  **"red-hatched label,"** a candidate rendering, not independently
+  verified against a supplied English 67th Edition text this session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-052 — Action requise avant l'ouverture des portes des compartiments cargo après l'atterrissage
+
+- **Sub-task:** 6.2.3 Appliquer les procédures en cas d'urgence
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Un avion vient d'atterrir après un déversement ou une fuite de
+    marchandises dangereuses en soute. Selon le Guide d'intervention
+    d'urgence de l'OACI (après l'atterrissage), quelle action l'équipage
+    doit-il entreprendre avant d'ouvrir les portes des compartiments à
+    cargaison ?"*
+  - Options: **(Correct)** *"Débarquer les passagers et l'équipage."* /
+    *"Informer immédiatement le personnel au sol/les services d'urgence."*
+    / *"Faire l'entrée appropriée dans le carnet de maintenance."* /
+    *"Déployer les toboggans d'évacuation d'urgence."*
+- **EN draft translation:**
+  - Stem: *"An aircraft has just landed following a spill or leak of
+    dangerous goods in the hold. Per the ICAO Emergency Response Guide
+    (after landing), what action must the crew take before opening the
+    cargo compartment doors?"*
+  - Options: **(Correct)** *"Deplane the passengers and crew."* /
+    *"Immediately inform ground personnel/emergency services."* / *"Make
+    the appropriate entry in the maintenance log."* / *"Deploy the
+    emergency evacuation slides."*
+- **Terminology decision:** "Guide d'intervention d'urgence de l'OACI" →
+  **"ICAO Emergency Response Guide,"** consistent with the "Guide OACI" →
+  "ICAO Guide" shorthand already used in Q-7.7-009/010/011.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.7-053 — Inscription au carnet de maintenance après un incident de marchandises dangereuses
+
+- **Sub-task:** 6.2.3 Appliquer les procédures en cas d'urgence
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le Guide d'intervention d'urgence de
+    l'OACI (après l'atterrissage), l'équipage de conduite doit également
+    effectuer l'inscription appropriée dans le carnet de maintenance
+    concernant l'incident de marchandises dangereuses."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the ICAO Emergency Response Guide
+    (after landing), the flight crew must also make the appropriate entry
+    in the maintenance log concerning the dangerous goods incident."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
+## Batch 3 summary table
+
+| ID | EN status | Approval |
+|---|---|---|
+| Q-7.7-034 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-035 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-036 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-037 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-038 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-039 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-040 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-041 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-042 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-043 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-044 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-045 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-046 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-047 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-048 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-049 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-050 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-051 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-052 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-053 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+**New terminology introduced this batch:** 12 new rows added to the shared
+"Bilingual terminology table" above (in place, not duplicated) — see that
+table for the full list; 6 are flagged as unverified candidates ("Why
+Regulate?", "'field' document", the "nature of the hazard"/"degree of
+danger" distinction, "DGR 1.3/1.4 responsibility wheels," "'Handling
+Information' box," "red-hatched label"). The "divergence(s)"→"variation(s)"
+flag already raised for Q-7.7-023 in Batch 2 recurs at Q-7.7-043 and should
+be resolved consistently across both items.
+
+## Batch 3 summary
+
+- 20/20 Batch 3 items translated to EN draft status (`Q-7.7-034`–`053`).
+  Combined with Batch 1+2, **53/53 currently-drafted Function 7.7 items**
+  now have an EN draft translation.
+- No FR "working gloss" reconstruction needed — every FR stem, option set,
+  and statement above is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.7.md`'s
+  own Batch 3 section, itself sourced verbatim (with printed slide
+  citations) from the actual KOST Function 7.7 course PDF, re-extracted this
+  session with `pdftotext -layout`.
+- All 20 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
+  Tier A`, unchanged by this batch, per `.claude/rules/dgr-stage2b.md` rule
+  5 (FR source verification and EN bilingual review are separate gates).
+- No item in this batch is marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or
+  `APPROVED`. No qualified bilingual reviewer has been named. No review
+  date has been recorded.
+- The reviewer checklist, sign-off format, and "who may complete this"
+  restriction set out in this package's "Reviewer instructions and
+  checklist" section above apply identically to these 20 items — no
+  separate checklist is needed for Batch 3.

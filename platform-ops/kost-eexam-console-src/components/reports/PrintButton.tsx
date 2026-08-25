@@ -2,7 +2,7 @@
 
 import { Printer } from "lucide-react";
 
-export function PrintButton({ label = "Print / Export PDF" }: { label?: string }) {
+export function PrintButton({ label = "Imprimer / Exporter en PDF" }: { label?: string }) {
   return (
     <button
       onClick={() => window.print()}

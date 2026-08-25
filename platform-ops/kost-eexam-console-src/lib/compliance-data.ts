@@ -137,29 +137,29 @@ export async function getComplianceData(): Promise<ComplianceCategory[]> {
         {
           requirement: "OS compatibility",
           status: "partial",
-          evidenceSummary: "Only tested from macOS (test runner) + Linux (Docker container host) — no native Windows test performed",
+          evidenceSummary: "Testé uniquement depuis macOS (poste de test) + Linux (hôte du conteneur Docker) — aucun test natif Windows effectué",
           lastVerified: CROSS_BROWSER_MATRIX[0]?.timestamp ?? null,
           responsible: "KOST Technical Team",
           notes:
-            "Running Chromium/Firefox/WebKit via Playwright proves browser-engine compatibility, not OS compatibility — Playwright's browser binaries are OS-independent by design. A real OS compatibility claim requires testing on native Windows, macOS, and Linux desktops, which has not been done. Kept explicitly separate from cross-browser compatibility to avoid overstating what was verified.",
+            "Exécuter Chromium/Firefox/WebKit via Playwright prouve la compatibilité moteur-navigateur, pas la compatibilité système d'exploitation — les binaires navigateur de Playwright sont indépendants de l'OS par conception. Une vraie preuve de compatibilité OS nécessite un test sur des postes Windows, macOS et Linux natifs, ce qui n'a pas été fait. Volontairement gardé séparé de la compatibilité multi-navigateurs pour ne pas surévaluer ce qui a été vérifié.",
         },
         {
           requirement: "Online help / support resources",
           status: "verified",
-          evidenceSummary: "Help & Support page live — User/Candidate/Instructor guides, FAQ, technical requirements, real contact channels",
+          evidenceSummary: "Page Aide & support en ligne — guides Utilisateur/Candidat/Instructeur, FAQ, prérequis techniques, vrais canaux de contact",
           lastVerified: new Date().toISOString(),
           responsible: "KOST Technical Team",
           evidence: {
             source: "Console page (/support)",
             timestamp: new Date().toISOString(),
             technicalDetails:
-              "Deployed and reachable from the sidebar for every authenticated console role. Contact channels shown (email, WhatsApp) are the platform's real, currently configured channels — no placeholder numbers.",
+              "Déployée et accessible depuis le menu latéral pour chaque rôle console authentifié. Les canaux de contact affichés (e-mail, WhatsApp) sont les canaux réels actuellement configurés de la plateforme — aucun numéro fictif.",
           },
         },
         {
           requirement: "Account and role management",
           status: "verified",
-          evidenceSummary: "Moodle RBAC + console role gate, tested end-to-end",
+          evidenceSummary: "RBAC Moodle + verrou de rôle console, testé de bout en bout",
           lastVerified: "2026-08-19",
           responsible: "Infrastructure (automated check)",
           evidence: {

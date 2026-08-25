@@ -21,14 +21,14 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KOST E-EXAM Console",
-  description: "KOST Academy — Secure Aviation Examination & Compliance Platform",
+  title: "Console KOST E-EXAM",
+  description: "KOST Academy — Plateforme sécurisée d'examen et de conformité aviation",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

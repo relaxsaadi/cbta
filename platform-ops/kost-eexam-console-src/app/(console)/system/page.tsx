@@ -10,6 +10,13 @@ function toBadgeStatus(s: HealthStatus): BadgeStatus {
   return s;
 }
 
+const STATUS_LABEL: Record<HealthStatus, string> = {
+  verified: "Vérifié",
+  warning: "Attention",
+  critical: "Critique",
+  not_available: "N/D",
+};
+
 export default async function SystemStatusPage() {
   const health = await getSystemHealth();
   const backup = health.find((h) => h.label === "Local Backup");
@@ -21,42 +28,42 @@ export default async function SystemStatusPage() {
       icon: Globe,
       label: "Application",
       status: "verified" as HealthStatus,
-      detail: "exam.kostacademy.com — HTTPS active (Let's Encrypt)",
+      detail: "exam.kostacademy.com — HTTPS actif (Let's Encrypt)",
     },
     {
       icon: Database,
-      label: "Database",
+      label: "Base de données",
       status: "verified" as HealthStatus,
-      detail: "MySQL 8.4 — not publicly exposed, internal network only",
+      detail: "MySQL 8.4 — non exposée publiquement, réseau interne uniquement",
     },
     {
       icon: Server,
-      label: "Server",
+      label: "Serveur",
       status: "verified" as HealthStatus,
-      detail: "Ubuntu 20.04 · Docker · Hostarts VPS (Algeria)",
+      detail: "Ubuntu 20.04 · Docker · VPS Hostarts (Algérie)",
     },
     {
       icon: HardDrive,
-      label: "Storage",
+      label: "Stockage",
       status: "verified" as HealthStatus,
-      detail: "160 GB provisioned, ample headroom",
+      detail: "160 Go provisionnés, marge confortable",
     },
   ];
 
   const dynamicItems = [
-    { icon: Database, label: "Local Backup", health: backup },
-    { icon: Cloud, label: "Off-site Backup", health: offsite },
-    { icon: RotateCcw, label: "Last Restore Test", health: restore },
+    { icon: Database, label: "Sauvegarde locale", health: backup },
+    { icon: Cloud, label: "Sauvegarde externalisée", health: offsite },
+    { icon: RotateCcw, label: "Dernier test de restauration", health: restore },
   ];
 
   return (
     <div className="mx-auto flex max-w-[1280px] flex-col gap-6">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          System Status
+          Système
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Real infrastructure state — sourced from live checks and Phase 0 backup logs
+          État réel de l&apos;infrastructure — vérifications en direct et journal de sauvegarde automatisé.
         </p>
       </div>
 
@@ -70,28 +77,28 @@ export default async function SystemStatusPage() {
             icon={item.icon}
             label={item.label}
             status={item.health?.status ?? "not_available"}
-            detail={item.health?.detail ?? "No data recorded yet"}
+            detail={item.health?.detail ?? "Aucune donnée enregistrée pour l'instant"}
           />
         ))}
       </div>
 
       <Card>
         <CardHeader
-          title="Backup Retention Policy"
-          description="Configured in Phase 0 — verified operational"
+          title="Politique de rétention des sauvegardes"
+          description="Automatisée et vérifiée en continu — voir les statuts ci-dessus pour la dernière exécution réelle"
         />
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <p className="text-[20px] font-semibold text-text-primary tabular-nums">7</p>
-            <p className="text-[12px] text-text-tertiary">Daily backups</p>
+            <p className="text-[12px] text-text-tertiary">Sauvegardes quotidiennes</p>
           </div>
           <div>
             <p className="text-[20px] font-semibold text-text-primary tabular-nums">4</p>
-            <p className="text-[12px] text-text-tertiary">Weekly backups</p>
+            <p className="text-[12px] text-text-tertiary">Sauvegardes hebdomadaires</p>
           </div>
           <div>
             <p className="text-[20px] font-semibold text-text-primary tabular-nums">3</p>
-            <p className="text-[12px] text-text-tertiary">Monthly backups</p>
+            <p className="text-[12px] text-text-tertiary">Sauvegardes mensuelles</p>
           </div>
         </div>
       </Card>
@@ -131,9 +138,7 @@ function StatusCard({
             <p className="mt-0.5 text-[12px] text-text-tertiary">{detail}</p>
           </div>
         </div>
-        <StatusBadge status={toBadgeStatus(status)}>
-          {status === "not_available" ? "N/A" : status}
-        </StatusBadge>
+        <StatusBadge status={toBadgeStatus(status)}>{STATUS_LABEL[status]}</StatusBadge>
       </div>
     </Card>
   );

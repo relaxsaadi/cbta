@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { StatusPill } from "./StatusPill";
 import type { ComplianceCategory } from "@/lib/compliance-data";
+import { trCat, trReq } from "@/lib/compliance-labels-fr";
 import { cn, slugify } from "@/lib/utils";
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 export function ComplianceCategoryCard({ category }: { category: ComplianceCategory }) {
@@ -32,9 +33,9 @@ export function ComplianceCategoryCard({ category }: { category: ComplianceCateg
   return (
     <div className="rounded-lg border border-border-subtle bg-surface-raised shadow-sm ring-1 ring-black/[0.02] overflow-hidden">
       <div className="flex items-center justify-between border-b border-border-subtle px-5 py-3.5">
-        <h3 className="font-display text-[14px] font-semibold text-text-primary">{category.name}</h3>
+        <h3 className="font-display text-[14px] font-semibold text-text-primary">{trCat(category.name)}</h3>
         <span className="text-[11.5px] font-medium text-text-tertiary tabular-nums">
-          {verified}/{category.items.length} verified
+          {verified}/{category.items.length} vérifié{verified !== 1 ? "s" : ""}
         </span>
       </div>
 
@@ -48,7 +49,7 @@ export function ComplianceCategoryCard({ category }: { category: ComplianceCateg
                 className="w-full flex items-center gap-4 px-5 py-3.5 text-left hover:bg-surface-sunken/50 transition-colors"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-text-primary">{item.requirement}</p>
+                  <p className="text-[13px] font-medium text-text-primary">{trReq(item.requirement)}</p>
                   <p className="mt-0.5 text-[12px] text-text-tertiary">{item.evidenceSummary}</p>
                 </div>
                 <div className="hidden sm:block text-[11.5px] text-text-tertiary w-24 shrink-0">
@@ -76,11 +77,11 @@ export function ComplianceCategoryCard({ category }: { category: ComplianceCateg
                   <div className="rounded-md bg-surface-sunken border border-border-subtle p-3.5">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[11px] font-semibold uppercase tracking-wide text-text-tertiary">
-                        Evidence
+                        Preuve
                       </span>
                       {item.evidence.timestamp && (
                         <span className="font-mono text-[10.5px] text-text-tertiary">
-                          {new Date(item.evidence.timestamp).toLocaleString("en-GB")}
+                          {new Date(item.evidence.timestamp).toLocaleString("fr-FR")}
                         </span>
                       )}
                     </div>

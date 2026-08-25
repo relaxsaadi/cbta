@@ -14,7 +14,7 @@ export async function loginAction(_prev: LoginResult, formData: FormData): Promi
   const password = String(formData.get("password") ?? "");
 
   if (!username || !password) {
-    return { error: "Username and password are required." };
+    return { error: "Le nom d'utilisateur et le mot de passe sont obligatoires." };
   }
 
   let token: string;
@@ -22,9 +22,9 @@ export async function loginAction(_prev: LoginResult, formData: FormData): Promi
     token = await loginToMoodle(username, password);
   } catch (err) {
     if (err instanceof MoodleAuthError) {
-      return { error: "Invalid credentials, or this account is not authorized for console access." };
+      return { error: "Identifiants invalides, ou ce compte n'est pas autorisé à accéder à la console." };
     }
-    return { error: "Unable to reach the authentication service. Please try again." };
+    return { error: "Impossible de contacter le service d'authentification. Veuillez réessayer." };
   }
 
   const info = await getSiteInfo(token);
@@ -32,7 +32,7 @@ export async function loginAction(_prev: LoginResult, formData: FormData): Promi
 
   if (!role) {
     return {
-      error: "This Moodle account does not have a recognized console role. Contact an administrator.",
+      error: "Ce compte Moodle n'a pas de rôle console reconnu. Contactez un administrateur.",
     };
   }
 

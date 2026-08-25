@@ -16,43 +16,43 @@ export const dynamic = "force-dynamic";
 const STEPS = [
   {
     icon: ShieldCheck,
-    title: "Before you start",
-    body: "An instructor verifies your identity (ID document + attendance sheet) before granting access, consistent with in-person exam sessions. You will log in to a Moodle account created for you — the console itself is a staff tool, not the candidate exam interface.",
+    title: "Avant de commencer",
+    body: "Un instructeur vérifie votre identité (pièce d'identité + feuille de présence) avant de vous donner accès, comme pour une session d'examen en présentiel. Vous vous connectez à un compte Moodle créé pour vous — la console elle-même est un outil réservé au personnel, pas l'interface de passage d'examen des candidats.",
   },
   {
     icon: Monitor,
-    title: "Technical requirements",
-    body: "A current browser (Chrome, Firefox, Edge or Safari) and a stable internet connection for the full exam duration. The exam is served over HTTPS at exam.kostacademy.com.",
+    title: "Prérequis techniques",
+    body: "Un navigateur récent (Chrome, Firefox, Edge ou Safari) et une connexion Internet stable pendant toute la durée de l'examen. L'examen est servi en HTTPS sur exam.kostacademy.com.",
   },
   {
     icon: Navigation,
-    title: "Exam navigation",
-    body: "Questions are presented one at a time. Use the Previous / Next controls to move between questions — navigation mode is configured per exam in Moodle Quiz (free navigation on the current sample and practice configurations).",
+    title: "Navigation dans l'examen",
+    body: "Les questions sont présentées une par une. Utilisez les commandes Précédent / Suivant pour naviguer — le mode de navigation est configuré par examen dans Moodle Quiz (navigation libre sur les configurations actuelles d'échantillon et d'entraînement).",
   },
   {
     icon: Timer,
-    title: "Timer",
-    body: "Each exam has a fixed time limit, shown on screen and counting down. The current sample DGR exam is configured for 60 minutes; the Practice Test is configured for 10 minutes so you can see the same mechanism before a real exam.",
+    title: "Chronomètre",
+    body: "Chaque examen a une durée fixe, affichée à l'écran et décomptée. L'examen DGR d'échantillon actuel est configuré pour 60 minutes ; le Test pratique est configuré pour 10 minutes afin d'observer le même mécanisme avant un vrai examen.",
   },
   {
     icon: Flag,
-    title: "Flagging questions",
-    body: "Moodle Quiz supports flagging a question to revisit it later in the same attempt, using the flag icon on the question page.",
+    title: "Signaler une question",
+    body: "Moodle Quiz permet de marquer une question pour y revenir plus tard dans la même tentative, via l'icône de drapeau sur la page de la question.",
   },
   {
     icon: Send,
-    title: "Submitting the examination",
-    body: "You submit manually once you have answered as many questions as you intend to. A confirmation step summarizes any unanswered questions before final submission.",
+    title: "Envoi de l'examen",
+    body: "Vous envoyez manuellement une fois que vous avez répondu à autant de questions que vous le souhaitez. Une étape de confirmation résume les questions sans réponse avant l'envoi final.",
   },
   {
     icon: AlertOctagon,
-    title: "What happens when time expires",
-    body: "If the timer reaches zero before you submit, the attempt is submitted automatically — this is Moodle's native \"autosubmit\" overdue handling, verified on the configured sample exam and Practice Test.",
+    title: "Quand le temps est écoulé",
+    body: "Si le chronomètre atteint zéro avant l'envoi, la tentative est envoyée automatiquement — c'est le comportement natif « envoi automatique en cas de dépassement » de Moodle, vérifié sur l'examen d'échantillon configuré et sur le Test pratique.",
   },
   {
     icon: LifeBuoy,
-    title: "Troubleshooting",
-    body: "If something goes wrong during a session, notify your instructor immediately. Technical issues are logged through the console's incident tracker — see Report Technical Issue.",
+    title: "En cas de problème",
+    body: "Si un problème survient pendant une session, prévenez immédiatement votre instructeur. Les incidents techniques sont journalisés via le suivi d'incidents de la console — voir Signaler un incident technique.",
   },
 ];
 
@@ -61,11 +61,10 @@ export default function ExamPreparationPage() {
     <div className="mx-auto flex max-w-[900px] flex-col gap-6">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Exam Preparation
+          Préparation des examens
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          What to expect before sitting a real DGR examination — describes this platform's actual
-          behavior only, nothing hypothetical.
+          Ce à quoi s&apos;attendre avant de passer un vrai examen DGR — décrit uniquement le comportement réel de cette plateforme, rien d&apos;hypothétique.
         </p>
       </div>
 
@@ -90,14 +89,14 @@ export default function ExamPreparationPage() {
 
       <Card>
         <CardHeader
-          title="Try it yourself"
-          description="The Practice Test lets you experience navigation, the timer, and submission with generic, non-regulatory questions."
+          title="Essayez par vous-même"
+          description="Le Test pratique permet de découvrir la navigation, le chronomètre et l'envoi avec des questions génériques, non réglementaires."
         />
         <Link
           href="/practice-test"
           className="inline-flex w-fit items-center gap-2 rounded-md bg-accent-9 px-3.5 py-2 text-[13px] font-medium text-white hover:bg-accent-10 transition-colors"
         >
-          Go to Practice Test →
+          Aller au Test pratique →
         </Link>
       </Card>
     </div>

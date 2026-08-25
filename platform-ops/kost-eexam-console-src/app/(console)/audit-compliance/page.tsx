@@ -35,137 +35,137 @@ export default async function AuditCompliancePage() {
     <div className="mx-auto flex max-w-[1280px] flex-col gap-8">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Audit &amp; Compliance
+          Audit &amp; conformité
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          ANAC readiness checklist, backed exclusively by verifiable technical evidence.
+          Checklist de préparation ANAC, appuyée exclusivement sur des preuves techniques vérifiables.
         </p>
       </div>
 
-      {/* Summary strip */}
+      {/* Bandeau de synthèse */}
       <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border-subtle bg-surface-raised px-5 py-3.5 shadow-sm">
         <span className="text-[12.5px] font-medium text-text-secondary mr-1">
-          {summary.total} requirements tracked
+          {summary.total} exigences suivies
         </span>
-        <StatusBadge status="verified">{summary.verified} Verified</StatusBadge>
-        <StatusBadge status="warning">{summary.partial} Partial</StatusBadge>
-        <StatusBadge status="neutral">{summary.notConfigured} Not Configured</StatusBadge>
+        <StatusBadge status="verified">{summary.verified} Vérifiées</StatusBadge>
+        <StatusBadge status="warning">{summary.partial} Partielles</StatusBadge>
+        <StatusBadge status="neutral">{summary.notConfigured} Non configurées</StatusBadge>
         <span className="ml-auto text-[11px] text-text-tertiary">
-          No status is ever shown as Verified without a checked, real source.
+          Un statut n&apos;est jamais affiché « Vérifié » sans source réelle contrôlée.
         </span>
       </div>
 
-      {/* Evidence Center */}
+      {/* Centre de preuves */}
       <div>
-        <h2 className="font-display text-[15px] font-semibold text-text-primary mb-3">Evidence Center</h2>
+        <h2 className="font-display text-[15px] font-semibold text-text-primary mb-3">Centre de preuves</h2>
         <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-3">
           <EvidenceCard
             icon={ShieldCheck}
             title="HTTPS / TLS"
             status={httpsItem?.status ?? "not_configured"}
-            summary={httpsItem?.evidenceSummary ?? "No data"}
+            summary={httpsItem?.evidenceSummary ?? "Aucune donnée"}
           />
           <EvidenceCard
             icon={Database}
-            title="Backups"
+            title="Sauvegardes"
             status={backupItem?.status ?? "not_configured"}
-            summary={backupItem?.evidenceSummary ?? "No data"}
+            summary={backupItem?.evidenceSummary ?? "Aucune donnée"}
           />
           <EvidenceCard
             icon={RotateCcw}
-            title="Restore Test"
+            title="Test de restauration"
             status={
               categories
                 .find((c) => c.name === "Security")
                 ?.items.find((i) => i.requirement === "Automated, verified backups")?.status ?? "not_configured"
             }
-            summary="See Security category for full restore-test evidence"
+            summary="Voir la catégorie Sécurité pour la preuve complète du test de restauration"
           />
           <EvidenceCard
             icon={Cloud}
-            title="Off-site Replication"
+            title="Réplication externalisée"
             status={backupItem?.status ?? "not_configured"}
-            summary="Encrypted copy replicated off-server (Tailscale)"
+            summary="Copie chiffrée répliquée hors serveur (Tailscale)"
           />
           <EvidenceCard
             icon={Gauge}
-            title="Load Testing"
+            title="Test de charge"
             status={loadTestItem?.status ?? "not_configured"}
-            summary={loadTestItem?.evidenceSummary ?? "No data"}
+            summary={loadTestItem?.evidenceSummary ?? "Aucune donnée"}
           />
           <EvidenceCard
             icon={Users}
-            title="User Roles"
+            title="Rôles utilisateurs"
             status={rolesItem?.status ?? "not_configured"}
-            summary={rolesItem?.evidenceSummary ?? "No data"}
+            summary={rolesItem?.evidenceSummary ?? "Aucune donnée"}
           />
           <EvidenceCard
             icon={Library}
-            title="Question Bank Structure"
+            title="Structure de la banque de questions"
             status={qbankItem?.status ?? "not_configured"}
-            summary={qbankItem?.evidenceSummary ?? "No data"}
+            summary={qbankItem?.evidenceSummary ?? "Aucune donnée"}
             href="/question-bank"
           />
           <EvidenceCard
             icon={ScrollText}
-            title="Audit Logs"
+            title="Journaux d'audit"
             status={logsItem?.status ?? "not_configured"}
-            summary={logsItem?.evidenceSummary ?? "No data"}
+            summary={logsItem?.evidenceSummary ?? "Aucune donnée"}
             href="/audit-logs"
           />
           <EvidenceCard
             icon={LifeBuoy}
-            title="Technical Support"
+            title="Support technique"
             status={supportItem?.status ?? "not_configured"}
-            summary={supportItem?.evidenceSummary ?? "No data"}
+            summary={supportItem?.evidenceSummary ?? "Aucune donnée"}
             href="/support"
           />
           <EvidenceCard
             icon={GraduationCap}
-            title="Practice Test"
+            title="Test pratique"
             status={practiceItem?.status ?? "not_configured"}
-            summary={practiceItem?.evidenceSummary ?? "No data"}
+            summary={practiceItem?.evidenceSummary ?? "Aucune donnée"}
             href="/practice-test"
           />
           <EvidenceCard
             icon={MessageSquareHeart}
-            title="Feedback"
+            title="Retours"
             status={feedbackItem?.status ?? "not_configured"}
-            summary={feedbackItem?.evidenceSummary ?? "No data"}
+            summary={feedbackItem?.evidenceSummary ?? "Aucune donnée"}
             href="/feedback"
           />
           <EvidenceCard
             icon={ListChecks}
-            title="Results Reporting"
+            title="Rapport de résultats"
             status={resultsItem?.status ?? "not_configured"}
-            summary={resultsItem?.evidenceSummary ?? "No data"}
+            summary={resultsItem?.evidenceSummary ?? "Aucune donnée"}
             href="/results"
           />
           <EvidenceCard
             icon={BookMarked}
             title="Documentation"
             status={docsItem?.status ?? "not_configured"}
-            summary={docsItem?.evidenceSummary ?? "No data"}
+            summary={docsItem?.evidenceSummary ?? "Aucune donnée"}
             href="/documentation"
           />
           <EvidenceCard
             icon={Globe}
-            title="Browser Compatibility"
+            title="Compatibilité navigateurs"
             status={browserItem?.status ?? "not_configured"}
-            summary={browserItem?.evidenceSummary ?? "No data"}
+            summary={browserItem?.evidenceSummary ?? "Aucune donnée"}
           />
           <EvidenceCard
             icon={BadgeCheck}
-            title="Identity Verification"
+            title="Vérification d'identité"
             status={identityItem?.status ?? "not_configured"}
-            summary={identityItem?.evidenceSummary ?? "No data"}
+            summary={identityItem?.evidenceSummary ?? "Aucune donnée"}
             href="/identity-verification"
           />
           <EvidenceCard
             icon={FileWarning}
-            title="Incident Response Procedure"
+            title="Procédure de réponse aux incidents"
             status={breachItem?.status ?? "not_configured"}
-            summary={breachItem?.evidenceSummary ?? "No data"}
+            summary={breachItem?.evidenceSummary ?? "Aucune donnée"}
             href="/security-procedure"
           />
         </div>
@@ -173,7 +173,7 @@ export default async function AuditCompliancePage() {
 
       {/* Category breakdown */}
       <div className="flex flex-col gap-4">
-        <h2 className="font-display text-[15px] font-semibold text-text-primary">Compliance Checklist</h2>
+        <h2 className="font-display text-[15px] font-semibold text-text-primary">Checklist de conformité</h2>
         {categories.map((category) => (
           <ComplianceCategoryCard key={category.name} category={category} />
         ))}

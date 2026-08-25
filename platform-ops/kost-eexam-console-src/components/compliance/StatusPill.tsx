@@ -2,10 +2,10 @@ import { StatusBadge } from "@/components/ui/Badge";
 import type { ComplianceStatus } from "@/lib/compliance-data";
 
 const LABELS: Record<ComplianceStatus, string> = {
-  verified: "Verified",
-  partial: "Partial",
-  not_configured: "Not Configured",
-  not_applicable: "Not Applicable",
+  verified: "Vérifié",
+  partial: "Partiel",
+  not_configured: "Non configuré",
+  not_applicable: "Non applicable",
 };
 
 export function StatusPill({ status }: { status: ComplianceStatus }) {

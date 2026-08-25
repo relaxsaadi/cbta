@@ -1804,11 +1804,13 @@ par les exploitants concernés[.] Exemple : AH: AIR ALGERIE[,] AH-01, AH-02."
 - "Ne s'appliquent qu'aux vols internationaux... jamais... domestiques" —
   fabricated scope restriction, not stated on this slide.
 
-**Source basis:** Tier B — KOST Function 7.4 course, slide 59 (DGR 2.8.3),
-cross-checked against slides 56–58 (general divergence framework, State-
-divergence example ITG/Italy). No direct exam/practice hit for this specific
-operator-divergence fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.2-017` for the full citation). Exact match to the correct answer;
+distractor 3 ("seuls les États peuvent notifier") is directly contradicted
+by §2.8.3's own existence as a dedicated operator-divergence mechanism.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2083,7 +2085,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-027 | 0.1.4 Distinction danger/risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-028 | 0.2.2 MD de la propriété de l'exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slides 43–44 (DGR 2.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-029 | 0.3.1 Responsabilités Exploitant DGR 1.4 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-030 | 0.3.3 Divergence de l'Exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-030 | 0.3.3 Divergence de l'Exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-031 | 0.4.2 Groupe d'emballage I | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-032 | 0.5.1 Code "Y" du marquage UN | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-033 | 0.6.1 Première action d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 145 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2626,11 +2628,16 @@ escales de Transit[.] Exemple: ITG : ITALIE -ITG-01, ITG-02, ITG-03, etc."
   material anywhere in this course (its own role is confined to slide 20,
   radioactive-materials recommendations).
 
-**Source basis:** Tier B — KOST Function 7.4 course, slide 58 (DGR 2.8.1),
-cross-checked against slide 59 (DGR 2.8.3, Operator divergence, already
-tested by Q-7.4-030) and slide 20 (AIEA role, already tested by Q-7.4-002).
-No exam/practice cross-reference found.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.8.1, read directly this session in the authenticated Bookshelf, does
+not state the simple 3-State list as a general rule (see this topic's
+`Q-7.2-037` for the full analysis). The actual current rule
+(§2.8.1.1.2-.1.1.3) is territorial/sovereignty-based, not a shipment-
+routing checklist. The item's distractors 3 and 4 (operator-divergence
+misattribution; AIEA fabrication) remain independently confirmed wrong.
+**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
+sovereignty rule instead.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3128,7 +3135,7 @@ is sourced from a different function's course material.
 | Q-7.4-040 | 0.1.1 Définition complète DGR 1.0 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-041 | 0.1.2 Code IMP « ICE » | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 28 (DGR B.2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-042 | 0.3.1 Obligations de formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.4 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-043 | 0.3.3 Portée divergence d'État DGR 2.8.1 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 58 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-043 | 0.3.3 Portée divergence d'État DGR 2.8.1 | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-044 | 0.4.1 UN 3090 — lithium métal seules | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-045 | 0.4.1 Division 5.2 — peroxyde organique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 66 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-046 | 0.5.1 Quatre qualités du marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

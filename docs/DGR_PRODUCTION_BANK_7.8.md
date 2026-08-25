@@ -1490,14 +1490,15 @@ divergence d'exploitant) est cité par le cours ?
   divergence example; no Algeria-specific État divergence code appears
   anywhere in the 119-slide course.
 
-**Source basis:** Tier B — KOST Function 7.8 course, slides 58–62
-(Divergences d'États et d'Exploitant DGR 2.8, État/Exploitant examples,
-niveaux-de-restrictions diagram). No exam/practice-book reinforcement
-exists for this sub-task — independently re-confirmed this session (`grep
--i "divergence"` against the extracted exam and practice-book text returns
-zero hits in both), the same "taught but, for the first time in this
-program, entirely untested" finding already recorded in Stage 1.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.1.3 and
+§2.8.3.5, read directly this session in the authenticated Bookshelf.
+§2.8.1.3 ("Liste," State divergences) confirms "Italie ITG" is a real
+current entry; §2.8.3.5 ("Liste," operator divergences) confirms "Air
+Algérie AH" is a real current entry, the wrong-category distractor. The
+"DZ: Algérie" option remains confirmed fabricated — no Algeria-specific
+État divergence code appears in either current list.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.1.3 (ITG),
+§2.8.3.5 (AH) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2076,7 +2077,7 @@ entire p.106–111 pool, as already noted for 0.6.1/6.2.3 in Stage 1).
 | Q-7.8-017 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-018 | 0.1.4 Définition du Risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-019 | 0.2.1 Exemple interdit en toute circonstance | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 37 (DGR 4.2 table) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-020 | 0.3.3 Exemple de divergence d'État (ITG) | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slides 58–62 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-020 | 0.3.3 Exemple de divergence d'État (ITG) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.1.3 (ITG), §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-021 | 0.4.2 Groupe d'emballage I = très dangereuses | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-022 | 0.5.1 Lettre « Y » = groupe d'emballage II | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-023 | 0.5.3 NOTOC non requise — quantités exceptées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 Tableau 9.5.A (§2.6.1) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2823,18 +2824,13 @@ source):**
   effectués par les exploitants concernés") states no domestic/
   international distinction.
 
-**Source basis:** Tier B — KOST Function 7.8 course, slide 61 (Divergence de
-l'Exploitant DGR 2.8.3), cross-checked against slide 60 (Divergence d'État
-DGR 2.8.1, Q-7.8-020's own basis) and slide 59 (the shared
-notification-to-OACI/IATA fact, common to both divergence types). This
-leaf's ceiling (2) is now fully drawn — Q-7.8-020 (État example) and this
-item (Exploitant rule) each test a genuinely distinct fact from the same
-5-slide pool, mirroring the exhaustion discipline already used for
-6.2.1/6.2.4/0.1.3 in Batches 1–2. No exam/practice-book reinforcement exists
-for this sub-task — independently re-confirmed this session (fresh
-`grep -i "divergence"` against the exam and practice book: zero hits in
-both, unchanged from Batch 2's own finding).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1 and
+§2.8.3.5, read directly this session in the authenticated Bookshelf (see
+this topic's `Q-7.6-022`/`Q-7.8-020` for the full citations). Direct match
+to the correct answer; the reciprocal ITG/Italy distractor confirmed as
+the genuinely different State-divergence example.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1,
+§2.8.3.5 (AH) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3351,7 +3347,7 @@ entire p.106–111 pool).
 | Q-7.8-038 | 0.2.2 Exemple de MD cachée — COMAT | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 49 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-039 | 0.3.1 Responsabilité de l'Acceptation | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-040 | 0.3.1 Fréquence de formation (DGR 1.5) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.5.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-041 | 0.3.3 Règle des divergences de l'Exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-041 | 0.3.3 Règle des divergences de l'Exploitant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-042 | 0.4.1 Colonne N — Code Urgences (DGR 4.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-043 | 0.5.1 Caractéristiques des marquages | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-044 | 0.5.2 Raison du marquage/étiquetage (exam Q18/practice Q21) | DRAFT — Tier A not attempted | MCQ | Exam Q18; practice Q21; course slide 80 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

@@ -437,6 +437,26 @@ topic-priority order: `docs/DGR_TIER_A_INVENTORY.md`.
 - **Program totals after Topic 3:** 202 FROZEN (up from 192), 210
   NOTATTEMPTED (down from 220); GAP (13), PARTIAL (24), STALE (4)
   unchanged.
-- Remaining topics (4–8) not yet started this phase — see
+- **Topic 4 — §2.8 State/operator divergences: ✅ RESOLVED.** 22 items
+  (incl. one Topic-2 overlap) across Functions 7.2/7.3/7.4/7.5/7.6/7.7/
+  7.8/7.9/7.10. 14 now `FROZEN FR / SOURCE VERIFIED` via §2.8.3.1
+  (operator-divergence rule, verbatim match), §2.8.3.5/§2.8.1.3 (confirms
+  "Air Algérie AH" and "Italie ITG" as real current entries), §2.0 (Table
+  2.3.A limitability), and an exact match on the Pakistan PKG-02
+  divergence text. 7 items moved to PARTIAL: KOST's simplified "État
+  d'Origine/Départ, État de Destination, tous les États des escales de
+  Transit" 3-State scope list does not appear in current DGR — the actual
+  rule (§2.8.1.1.2-.1.1.3) is territorial-sovereignty-based and
+  restrictiveness-dependent, materially more complex; the course's own
+  4-level restriction-hierarchy diagram was not located as a standalone
+  DGR clause; and the blanket "notified to OACI and IATA" claim doesn't
+  match the more precise text (État: OACI *or* IATA; Exploitant: IATA
+  Secretariat specifically). 1 item (`Q-7.3-025`) moved to STALE CITATION
+  — its own "2.8.3.4" reference is actually "Calendrier" (submission
+  deadlines) in the current edition, not an enumeration pointer.
+- **Program totals after Topic 4:** 216 FROZEN (up from 202), 30 PARTIAL
+  (up from 24), 5 STALE (up from 4), 189 NOTATTEMPTED (down from 210); GAP
+  (13) unchanged.
+- Remaining topics (5–8) not yet started this phase — see
   `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan for the priority order
   and per-topic item lists.

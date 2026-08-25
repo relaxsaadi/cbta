@@ -304,6 +304,67 @@ No SOURCE GAP or SOURCE CONFLICT found. Program totals after Topic 3: 202
 FROZEN (was 192), 210 NOTATTEMPTED (was 220); GAP (13), PARTIAL (24),
 STALE (4) unchanged.
 
+### 2026-08-25 (second Tier A phase) — Topic 4: §2.8 State/operator divergences, 21 items cross-applied (14 confirmed, 6 partial, 1 stale citation)
+
+Navigation to **§2.8** (Part 2, Bookshelf p.13, with the operator-divergence
+sub-section at p.96) resolved the 21 remaining items tagged to the §2.8
+divergence topic (a 22nd, `Q-7.6-009`, was already resolved as PARTIAL
+under Topic 2/NOTOC). Sections read directly this session:
+
+- **§2.8.3.1** — the operator-divergence rule: "Les divergences des
+  exploitants... ne peuvent pas être moins restrictives que les
+  dispositions de la présente Réglementation; et... sont applicables à
+  tout transport assuré par les exploitants concernés." Exact match to
+  KOST's "ne doivent pas être moins restrictives... applicables à tous les
+  transports." Resolves `Q-7.2-017`, `Q-7.3-021`, `Q-7.4-030`, `Q-7.5-009`,
+  `Q-7.6-042`, `Q-7.8-041`, `Q-7.10-022`.
+- **§2.8.3.5 "Liste"** — confirms "Air Algérie AH" is a real, current
+  operator-divergence entry. Combined with §2.8.3.1, resolves `Q-7.6-022`,
+  `Q-7.7-023`, `Q-7.8-020`, `Q-7.9-026`.
+- **§2.8.1.3 "Liste"** — confirms "Italie ITG" is a real, current
+  State-divergence entry (used in `Q-7.8-020`'s own distractor logic).
+- **§2.0** — "Les États et les exploitants peuvent imposer des
+  dispositions plus strictes... sous forme de divergences (voir 2.8)"
+  (already read during Topic 1). Resolves `Q-7.5-036`, `Q-7.9-037` (Table
+  2.3.A limitability).
+- **Divergence PKG-02 (Pakistan)** — exact verbatim match: "Toutes les
+  étiquettes de danger doivent comprendre un texte assez court, rédigé en
+  anglais, indiquant la nature du danger (voir 7.2.2.3, 7.2.2.4 et
+  10.7.2)." Resolves `Q-7.3-029`.
+
+**1 item moved to STALE CITATION:** `Q-7.3-025`'s correct answer cites
+"les divergences de l'opérateur sont énumérées dans 2.8.3.4 et 2.8.4" —
+but current DGR's §2.8.3.4 is titled "Calendrier" (submission deadlines),
+not an enumeration reference; the actual cross-reference (§2.8.3.1) points
+to §2.8.4 alone.
+
+**6 items moved to PARTIAL** — two distinct nuances, neither found as a
+standalone current-DGR clause:
+- `Q-7.2-037`, `Q-7.4-043`, `Q-7.5-025`, `Q-7.10-041`: KOST's simplified
+  "État d'Origine/Départ, État de Destination, tous les États des escales
+  de Transit" 3-State list does not appear as a general rule anywhere in
+  current §2.8.1. The actual current rule (§2.8.1.1.2-.1.1.3) is
+  territorial-sovereignty-based: MORE-restrictive State divergences apply
+  to/from/via the notifying State's own territory (by all operators) PLUS
+  outside it (only by operators whose "État de l'exploitant" is that
+  State); LESS-restrictive State divergences apply only within the
+  notifying State's own territory, only to operators of that State.
+- `Q-7.5-012`: the named 4-level "OACI(IT)→IATA(DGR)→Divergences
+  États→Divergences exploitants" hierarchy diagram was not independently
+  located as a standalone current-DGR clause/figure — the underlying
+  most-restrictive-rule-wins mechanic is consistent with confirmed text
+  (§2.8.3.1, §2.8.1.1.2), but the diagram itself appears to be the
+  course's own pedagogical synthesis.
+- `Q-7.7-043`: the blanket "notifiées à l'OACI et à l'IATA" claim (for
+  both État and Exploitant divergences alike) is not confirmed as stated.
+  Current text: État divergences → "notifiées à l'OACI **ou** à l'IATA"
+  (§2.8.1.1.1, OR not AND); Exploitant divergences → submitted to "le
+  Secrétariat de l'IATA" specifically (§2.8.3.0), no OACI channel
+  mentioned for operators.
+
+Program totals after Topic 4: 216 FROZEN (was 202), 30 PARTIAL (was 24), 5
+STALE (was 4), 189 NOTATTEMPTED (was 210); GAP (13) unchanged.
+
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see

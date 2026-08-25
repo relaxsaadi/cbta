@@ -1566,14 +1566,13 @@ cité par le cours ?
   slide 71's own opening line describing operator divergences: "Ne doivent
   **pas** être moins restrictives que le Règlement."
 
-**Source basis:** Tier B — KOST Function 7.9 course, slide 71 (DGR 2.8.3,
-Divergence de l'Exploitant, Air Algérie example), cross-checked against
-slide 68–69 (DGR 2.8 general framing, notification requirement) and slide
-70 (DGR 2.8.1, Divergence d'État, Italy example — the first distractor's
-own source). Directly corroborated by Exam Q14: "[Quel est le] terme pour
-[les] dérogations soumises par [les] États/compagnies aériennes" — a
-direct topic-level match ("divergence des États et des exploitants").
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1 and
+§2.8.3.5, read directly this session in the authenticated Bookshelf (see
+this topic's `Q-7.6-022` for the full citation). "Air Algérie AH" confirmed
+current; §2.8.3.1's own text directly contradicts distractor 4 ("peut être
+moins restrictive").
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1,
+§2.8.3.5 (AH) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1831,7 +1830,7 @@ this sub-task (no independent exam/practice cross-reference recorded).
 | Q-7.9-023 | 0.1.4 Exemple liquide inflammable | FR SOURCE GAP CONFIRMED (cross-applied) | True/False | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-024 | 0.2.1 Accord de l'exploitant toujours requis (citation-safe) | DRAFT — Tier A not attempted | True/False | KOST F7.9 course slide 42 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-025 | 0.3.1 Huit responsabilités de l'Exploitant (DGR 1.4) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-026 | 0.3.3 Divergence de l'Exploitant — Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.9 course slide 71 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-026 | 0.3.3 Divergence de l'Exploitant — Air Algérie | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-027 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-028 | 0.5.1 Code « Y » du marquage UN | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-029 | 0.5.3 Document accompagnant l'envoi (DGD) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2320,14 +2319,13 @@ dispositions en vigueur." Direct, complete match — the table's own opening
 caveat, immediately preceding the passenger-provisions walkthrough slides
 already used for Batch 1's `Q-7.9-001`/`Q-7.9-002` (slides 46/44).
 
-**Source basis:** Tier B — KOST F7.9 course, slide 43, cross-checked
-against slides 68–71 (0.3.3's own DGR 2.8 divergence content, already
-`Q-7.9-026`'s source) — the same general "divergence" concept, but applied
-here specifically to Table 2.3.A's own scope as a passenger-facing
-caveat, not `Q-7.9-026`'s own Air-Algérie/Italy example-matching fact — a
-distinct application, not a duplicate. No direct exam/practice hit for
-this exact caveat.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.0, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.5-036` for the full citation): "Les États et les exploitants peuvent
+imposer des dispositions plus strictes que celles de la présente
+Réglementation sous forme de divergences (voir 2.8)." Direct confirmation.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.0 (Tier A),
+2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2473,7 +2471,7 @@ priority for Tier A re-verification, alongside `Q-7.9-034`.
 | Q-7.9-034 | 5.2.2 Batteries de rechange — cabine uniquement | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.3.5.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-035 | 6.2.1 Après confirmation de contamination | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-036 | 7.1+7.2 Portée du signalement (exceptions/dispositions spéciales) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-037 | 0.2.3 Tableau 2.3.A limité par les divergences | DRAFT — Tier A not attempted | True/False | KOST F7.9 course slide 43 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-037 | 0.2.3 Tableau 2.3.A limité par les divergences | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-038 | 0.4.1 Emplacement de chargement interdit (matières radioactives) | DRAFT — Tier A not attempted | MCQ | KOST F7.9 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-039 | 0.6.1 Doc OACI 9481 (référence intervention d'urgence) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.5.1.2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 

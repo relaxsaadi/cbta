@@ -1345,12 +1345,13 @@ State-divergence side, not the operator side):**
 - "Tous les États des escales de transit" — the third State-divergence
   category on slide 60, same misapplication.
 
-**Source basis:** Tier B — KOST Function 7.6 course, slide 61 (DGR 2.8.3,
-operator divergence example), cross-checked against slide 60 (DGR 2.8.1,
-State divergence example/categories) and slide 62 (restriction-hierarchy
-diagram: OACI→IATA→État→Exploitant). No direct exam/practice hit for this
-sub-task, consistent with Stage 1's finding.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1 and
+§2.8.3.5, read directly this session in the authenticated Bookshelf.
+§2.8.3.1 confirms the operator-divergence rule; §2.8.3.5 ("Liste") lists
+the participating operators and confirms "Air Algérie AH" is a real,
+current entry. Direct match to the correct answer.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1,
+§2.8.3.5 (AH) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1855,7 +1856,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-019 | 0.2.2 Prévention des MD cachées | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slide 49 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-020 | 0.2.3 Interdiction transport MD par passagers DGR 2.3 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-021 | 0.3.1 Entreposage = responsabilité exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-022 | 0.3.3 Divergence exploitant — Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slide 61 (DGR 2.8.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-022 | 0.3.3 Divergence exploitant — Air Algérie | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-023 | 0.4.2 Groupe d'emballage II — danger moyen | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-024 | 0.5.1 Lettre "Y" marquage UN-spec | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-025 | 0.5.3 Mention LTA — DGD/CAO | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2500,12 +2501,13 @@ must **not** be less restrictive than the Regulation — the opposite of the
 stem's first clause (the stem's second clause, universal application, is
 correctly stated but does not rescue the false first clause).
 
-**Source basis:** Tier B — KOST Function 7.6 course, slide 61 (DGR 2.8.3),
-cross-checked against slide 60 (State divergence, already Batch 2's
-`Q-7.6-022` evidence basis for the AH/ITG naming distinction — this item
-tests the governing RULE, a distinct fact from `Q-7.6-022`'s own
-example-identification fact). No direct exam/practice hit.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.2-017` for the full citation): "ne peuvent pas être moins restrictives
+que les dispositions de la présente Réglementation." Direct contradiction
+of the stem's first clause, confirming the correct answer (Faux).
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3096,7 +3098,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-039 | 0.2.2 Définition MD cachée | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-040 | 0.3.1 Conformité expéditeur DGR 1.3.1 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.3.1.1-2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-041 | 0.3.1 Formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.6 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-042 | 0.3.3 Règle divergence exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | True/False | KOST F7.6 course slide 61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-042 | 0.3.3 Règle divergence exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-043 | 0.4.1 Neuf classes de MD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §3.0.1.1 + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-044 | 0.4.1 Division 5.1 vs 5.2 | FROZEN FR / SOURCE VERIFIED (class-ID level; specific examples not DGR-text-sourced) | MCQ | DGR 67e §3.0.2.5 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-045 | 0.4.1 Division 6.2 exemples | FROZEN FR / SOURCE VERIFIED (class-ID level; specific examples not DGR-text-sourced) | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

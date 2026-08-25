@@ -1358,14 +1358,14 @@ l'exploitant** (par opposition à une divergence d'État) ?
   États→Divergences exploitants), but neither is itself a divergence
   *example* — they are the regulatory layers the divergences sit beneath.
 
-**Source basis:** Tier B — KOST Function 7.7 course, slides 63–65 (DGR
-2.8.1/2.8.3, named ITG/AH examples, restriction-hierarchy diagram),
-cross-checked against slides 61–62 (DGR 2.8 introduction, State/operator
-notification to OACI/IATA). Corroborated at a topic level by Exam Q7 (term
-for derogations submitted by States/airlines — "variations des États et des
-exploitants"), which tests the general concept, not this item's specific
-which-example-is-which fact, noted honestly as topic-level only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1 and
+§2.8.3.5, read directly this session in the authenticated Bookshelf (see
+this topic's `Q-7.6-022` for the full citation). "Air Algérie AH" confirmed
+as a real current operator-divergence entry; "Italie ITG" confirmed as a
+real current State-divergence entry (§2.8.1.3) — the wrong-category
+distractor.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1,
+§2.8.3.5 (AH) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1779,7 +1779,7 @@ A), 2026-08-25.
 | Q-7.7-020 | 0.2.1 Accord de l'exploitant — exceptions DGR 1.2.7 | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 41 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-021 | 0.2.3 Interdiction des Tasers | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 45 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-022 | 0.3.1 Actualisation des connaissances — 2 ans | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.5.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-023 | 0.3.3 Divergence exploitant — AH Air Algérie | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slides 63–65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-023 | 0.3.3 Divergence exploitant — AH Air Algérie | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-024 | 0.4.2 Groupe d'emballage I — degré le plus élevé | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-025 | 0.5.1 Code matériau — A = Acier | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.2 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-026 | 0.5.3 Document obligatoire — DGD | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2387,16 +2387,20 @@ l'IATA.
 différence avec la Réglementation. On parle alors de divergences. Ces
 divergences sont notifiées à l'OACI et à l'IATA." Direct, complete match.
 
-**Source basis:** Tier B — KOST Function 7.7 course, slide 62, cross-checked
-against slide 61 (introductory framing: States/companies limiting existing
-rules for security reasons) and slides 63–65 (Batch 2's own Q-7.7-023
-evidence, the named ITG/AH divergence examples and restriction-hierarchy
-diagram) — this item tests the general notification mechanism, a distinct
-fact from Q-7.7-023's own which-example-is-which focus. No direct
-exam/practice hit for this exact notification-to-OACI/IATA clause; Exam Q7
-(term for State/operator derogations) tests the general concept only, noted
-honestly as topic-level corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.8, read directly this session in the authenticated Bookshelf, does not
+support the blanket "notifiées à l'OACI et à l'IATA" claim for both types
+uniformly. §2.8.1.1.1 (State divergences): "qui ont été notifiées à
+l'OACI **ou** à l'IATA" (OR, not AND). §2.8.3.0/.3.1 (Operator
+divergences): submitted to "le Secrétariat de l'IATA" specifically, with
+no OACI channel mentioned. The general concept tested (any State or
+operator can mark a difference from the Regulation) remains true and
+supported by §2.8.0.1, but the specific "notified to both OACI and IATA"
+mechanism is not confirmed as stated.
+**FR status:** DRAFT — blanket "notifiées à l'OACI et à l'IATA" claim not
+confirmed for both types; current DGR states État divergences notified to
+OACI OU IATA (§2.8.1.1.1), Exploitant divergences to IATA Secretariat
+specifically (§2.8.3.0).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2831,7 +2835,7 @@ no further item may be drawn from this pool without new source material.
 | Q-7.7-040 | 0.2.2 Recommandations de prévention — DG cachées | DRAFT — Tier A not attempted | MCQ | KOST F7.7 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-041 | 0.2.3 Interdiction générale DGR 2.3 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-042 | 0.3.1 Étiquetage = Expéditeur, pas Exploitant | DRAFT — distractors Tier A-confirmed absent from §1.4.1, correct answer's own citation unconfirmed | MCQ | DGR 67e §1.4.1 (p.11, distractors only) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-043 | 0.3.3 Divergences notifiées à l'OACI/IATA | DRAFT — Tier A not attempted | True/False | KOST F7.7 course slide 62 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-043 | 0.3.3 Divergences notifiées à l'OACI/IATA | DRAFT — blanket "notifiées à l'OACI et à l'IATA" claim not confirmed for both types; current DGR states État divergences notified to OACI OU IATA (§2.8.1.1.1), Exploitant divergences to IATA Secretariat specifically (§2.8.3.0) | True/False | DGR 67e AM1 §2.8.1.1.1, §2.8.3.0 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-044 | 0.4.1 9 classes de MD | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-045 | 0.4.1 Critère — nature de danger | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-046 | 0.4.1 Classe 5 — Comburantes | FROZEN FR / SOURCE VERIFIED (class-ID level) | MCQ | DGR 67e §3.0.2.5 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

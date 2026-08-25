@@ -672,18 +672,11 @@ AH-01, AH-02."
   parle alors de divergences. Ces divergences sont notifiées à l'OACI et à
   l'IATA."
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 69 (DGR 2.8.3),
-cross-checked against slides 66–68 (divergence concept intro, DGR 2.8.1
-State-divergence example — Italy/ITG) and slide 70 (restriction-hierarchy
-diagram). Per blueprint binding caveat 5, this item shares its evidence
-pool with 5.2.1 but is drafted here to test 0.3.3's own generic-awareness
-framing of the divergence concept, not 5.2.1's applied-acceptance-decision
-framing (see Q-7.5-012 below for that distinct depth). Corroborated by Exam
-Q15 (compagnie stricter than IATA on lithium batteries — "une divergence
-d'exploitant") and Practice Q13 (State divergence prohibiting an item IATA
-allows conditionally), each testing the broader divergence concept without
-directly matching this specific DGR 2.8.3 operator-divergence-rule fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.2-017` for the full citation). Exact match to the correct answer.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -840,22 +833,21 @@ restrictive layer that applies.
   levels cumulatively and states nothing about a State divergence
   cancelling or blocking an Operator divergence for the same article.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 70
-(restriction-hierarchy diagram), cross-checked against slides 66–69 (DGR
-2.8 divergence concept, DGR 2.8.1 State-divergence example — Italy/ITG, DGR
-2.8.3 Operator-divergence example — Air Algérie/AH). Per blueprint binding
-caveat 5, this item shares its evidence base with 0.3.3 (Q-7.5-009 above)
-but is drafted here to test *applying* the hierarchy to an acceptance
-decision, a distinct procedural depth from 0.3.3's generic-concept framing.
-Strongly corroborated by Practice Q13 ("Si une divergence d'État interdit
-un article que l'IATA DGR autorise sous conditions, quelle règle doit
-appliquer l'agent d'escale? ... b) Toujours la règle la plus stricte, donc
-la divergence d'État"), a direct, concretely-worded confirmation of the
-same most-restrictive-rule-wins principle tested here (independently
-reworded, not copied verbatim, per this task's instruction), and by Exam
-Q15 (operator stricter than IATA on lithium batteries — "une divergence
-d'exploitant").
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.8, read directly this session in the authenticated Bookshelf, confirms
+the underlying most-restrictive-rule-wins mechanics: §2.8.3.1 (operator
+divergences cannot be less restrictive than the Regulation) and
+§2.8.1.1.2 (State divergences that are MORE restrictive apply broadly).
+This is consistent with a cumulative, most-restrictive-layer-applies
+system. However, the specific named 4-level hierarchy diagram ("OACI
+(IT)→IATA (DGR)→Divergences États→Divergences exploitants") itself was
+not independently located as a standalone current-DGR clause or figure —
+it appears to be the course's own pedagogical visualization of the
+combined effect of §1.2, §2.8.1, and §2.8.3, not a verbatim DGR diagram.
+The correct answer's underlying principle is not contradicted.
+**FR status:** DRAFT — most-restrictive-rule-wins principle consistent
+with §2.8.3.1/§2.8.1.1.2, but the named 4-level hierarchy diagram itself
+not independently located in current DGR text.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1044,10 +1036,10 @@ equivalent items).
 | Q-7.5-006 | 0.2.3 Interdiction générale + exceptions | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-008 | 0.6.1 Bagage/fret contaminé | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slides 97–98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-009 | 0.3.3 Divergence d'exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 69 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-009 | 0.3.3 Divergence d'exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-010 | 5.1.1 Critères DGR 2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-011 | 5.1.2 Seuils d'approbation AEP/batteries | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-012 | 5.2.1 Hiérarchie des divergences appliquée | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 70 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-012 | 5.2.1 Hiérarchie des divergences appliquée | DRAFT — most-restrictive-rule-wins principle consistent with §2.8.3.1/§2.8.1.1.2, but the named 4-level "OACI→IATA→État→Exploitant" hierarchy diagram itself not independently located in current DGR text | MCQ | DGR 67e AM1 §2.8 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-013 | 5.2.2 Seuil batterie installée (cadre WCHC borné) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.4(f) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-014 | 5.2.2 Marquage glace carbonique (2,5 kg) | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-015 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1658,21 +1650,15 @@ des escales de Transit. Exemple: ITG: ITALIE -ITG-01, ITG-02, ITG-03, etc."
   slide never states, and directly contradicts the slide's own explicit
   inclusion of transit States.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 68 (DGR 2.8.1,
-État-divergence scope), cross-checked against slide 69 (DGR 2.8.3,
-Operator-divergence example — Air Algérie/AH, the primary evidence already
-used for Batch 1's `Q-7.5-009`, not reused as the tested fact here) and
-slide 70 (restriction-hierarchy diagram, the primary evidence already used
-for Batch 1's `Q-7.5-012`). Per blueprint binding caveat 5, this item tests
-5.2.1's own "applying" framing via a distinct clause (which States'
-divergences are relevant to an acceptance decision) from both `Q-7.5-009`'s
-(0.3.3's generic operator-divergence-rule fact) and `Q-7.5-012`'s (the
-4-level hierarchy-application fact) — a third, non-duplicate angle on the
-same shared p.66–70 evidence pool. Corroborated at a topic level by
-Practice Q13 (State divergence prohibiting an item IATA allows
-conditionally) and Exam Q15, noted honestly as topic-level corroboration,
-not a direct match for this specific three-State-scope fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.8.1, read directly this session in the authenticated Bookshelf, does
+not state the simple 3-State list as a general rule (see this topic's
+`Q-7.2-037` for the full analysis). The actual current rule
+(§2.8.1.1.2-.1.1.3) is territorial/sovereignty-based, not a shipment-
+routing checklist.
+**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
+sovereignty rule instead.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1876,7 +1862,7 @@ the source does not draw, per binding caveat 6.
 | Q-7.5-022 | 0.5.1 Code de type d'emballage DGR 6.0.3.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-023 | 0.2.2 Catégories associées aux MD cachées (AOG, etc.) | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-024 | 5.1.1 Niveaux d'interdiction — schéma des types | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-025 | 5.2.1 Portée des divergences d'État DGR 2.8.1 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 68 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-025 | 5.2.1 Portée des divergences d'État DGR 2.8.1 | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-026 | 5.2.2 Catégories générales exemptées DGR 2.5 | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-027 | 5.2.2 Exemples nommés DGR 2.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 47 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-028 | 7.1 Destinataires du compte rendu d'accident | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2483,17 +2469,16 @@ peuvent être limitées par les divergences des États ou des exploitants. Les
 voyageurs devraient vérifier auprès du transporteur les dispositions en
 vigueur." Direct, complete match.
 
-**Source basis:** Tier B — KOST Function 7.5 course, slide 40 (DGR 2.3.A,
-note), cross-checked against slides 66–70 (the divergence concept generally
-— State/operator divergence examples and restriction hierarchy, primary
-evidence for `Q-7.5-009`/`Q-7.5-012`/`Q-7.5-025`). This item tests 0.2.3's
-own generic-awareness framing (being aware that the passenger table itself
-can be limited by divergences) rather than 0.3.3's/5.2.1's own
-concept/application framing of the divergence mechanism itself, avoiding
-duplication of those items' own tested facts. No direct exam/practice hit
-for this specific table-limitation note; noted honestly as an
-uncorroborated but directly source-traced item.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.0, read
+directly this session in the authenticated Bookshelf (during Topic 1
+navigation): "Les États et les exploitants peuvent imposer des
+dispositions plus strictes que celles de la présente Réglementation sous
+forme de divergences (voir 2.8)." Confirms the general principle that any
+part of the Regulation, including Table 2.3.A's own provisions, can be
+limited by State or operator divergences. Direct, exact confirmation of
+the tested claim.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.0 (Tier A),
+2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2901,7 +2886,7 @@ A), 2026-08-25.
 | Q-7.5-033 | 0.1.4 Catégorie « dangers chimiques » | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 32 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-034 | 0.2.1 Définition « MD cachée » DGR 2.2 | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-035 | 0.2.1 Recommandations préventives | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-036 | 0.2.3 Limitation tableau 2.3.A par divergences | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 40 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-036 | 0.2.3 Limitation tableau 2.3.A par divergences | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-037 | 0.3.1 Formation DGR 1.5 (3 composantes) | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.5 course slide 65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-038 | 0.3.1 Renseignement en cas d'urgence (Exploitant) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-039 | 0.4.1 Classe 3 = Liquides inflammables | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

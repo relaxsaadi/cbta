@@ -1350,14 +1350,15 @@ AH-01, AH-02.)
   State divergences, not a replacement of them; slide 69 states "Tout État
   ou exploitant peut ainsi marquer sa différence" — both apply cumulatively.
 
-**Source basis:** Tier B — KOST Function 7.3 course slides 68–74 (DGR 2.8,
-State example ITG/Italy at slide 70, Operator example AH/Air Algérie at
-slide 72, restriction-hierarchy diagram at slide 74), cross-checked slide 43
-(Dérogation, a distinct concept from a "divergence"). No direct exam hit at
-this generic-awareness level — consistent with Stage 1's own note that
-concrete named-example testing for this material occurs separately, at the
-acceptance-procedure stage (3.1.4/3.2.5 — see Q-7.3-025 and Q-7.3-029 below).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.2-017` for the full citation). Direct confirmation of the correct
+answer's core rule; distractor 4 ("remplacent automatiquement les
+divergences de l'État") remains a fair inference — nothing in §2.8.1 or
+§2.8.3 states operator divergences override or replace State divergences;
+both layers are confirmed to apply cumulatively.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1539,17 +1540,22 @@ specifically asks for operator divergences.
   by Q-7.3-011), but it is the acceptance-checklist requirement itself, not
   the State/operator-divergence reference points this question asks about.
 
-**Source basis:** Tier B — KOST Function 7.3 course slide 247 ("Vérifier les
-divergences de l'État/Exploitant", documentation-verification stage),
-cross-checked slide 255 (the package-verification-stage repeat of the same
-generic rule, plus its own named Pakistan/Lanco worked examples — see
-Q-7.3-029 below) and slide 74 (0.3.3's restriction-hierarchy diagram). No
-direct exam hit. **Distinct procedural context from Q-7.3-029 per blueprint
-binding caveat 4:** this item tests the abstract documentation-verification
-reference points (where to look), while Q-7.3-029 tests the concrete named
-divergence as applied during physical package inspection — the two items do
-not restate the same fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, read directly
+this session in the authenticated Bookshelf. **STALE CITATION found:**
+§2.8.3.1 states "Les divergences des exploitants, qui ont été notifiées à
+l'IATA à la mise sous presse, figurent en 2.8.4" — the actual current
+cross-reference for where operator divergences are enumerated is **§2.8.4
+alone**. §2.8.3.4 is titled "Calendrier" and covers submission deadlines
+(31 March), not an enumeration reference. The course's own "2.8.3.4 et
+2.8.4" citation (slide 247) does not match current DGR structure — the
+correct citation is §2.8.4 (with §2.8.3.5 "Liste" providing the index of
+participating operators). The item's correct answer is very close but not
+exact; the underlying operator/État distinction it tests (distractor 1)
+remains valid, since §2.8.1.1.1 confirms State divergences are enumerated
+at §2.8.2, a genuinely different reference from the operator one.
+**FR status:** DRAFT — STALE CITATION: correct answer's own "2.8.3.4 et
+2.8.4" reference does not match current DGR (§2.8.3.4 is "Calendrier"/
+deadlines, unrelated; actual cross-ref is §2.8.4 alone, per §2.8.3.1).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1699,17 +1705,13 @@ but the wrong one):**
   exception permise : l'apposition du nom et de l'adresse complets de
   l'expéditeur/destinataire."
 
-**Source basis:** Tier B — KOST Function 7.3 course slide 255 ("Vérifier les
-divergences de l'État/exploitant", package-verification stage — the
-named-example slide), cross-checked slide 322 (radioactive-specific repeat,
-Condor Flugdienst example) and slide 330 (radioactive-specific repeat, Air
-Niugini PX-04 example — a third distinct named example, not used as a
-distractor here to avoid an overlong option set) for distractor sourcing.
-No direct exam hit. **Distinct procedural context from Q-7.3-025 per
-blueprint binding caveat 4:** this item tests the concrete named divergence
-as applied at the physical-package-inspection stage, while Q-7.3-025 tests
-the abstract documentation-verification reference points.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, read directly
+this session in the authenticated Bookshelf: "PKG-02 Toutes les étiquettes
+de danger doivent comprendre un texte assez court, rédigé en anglais,
+indiquant la nature du danger (voir 7.2.2.3, 7.2.2.4 et 10.7.2)." Exact,
+verbatim, complete match to the correct answer, including the citation.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1, Divergence
+PKG-02 (Pakistan) (Tier A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1866,15 +1868,15 @@ finding.
 | Q-7.3-018 | 0.2.1 Interdite en toute circonstance | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-019 | 0.2.2 Prévention MD cachées | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 60 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-020 | 0.3.1 Formation DGR 1.5 | DRAFT — partially confirmed, flag for revision | True/False | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-021 | 0.3.3 Divergence exploitant DGR 2.8.3 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 68–74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-021 | 0.3.3 Divergence exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-022 | 0.4.2 Groupe d'emballage II | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-023 | 3.1.1 Point 6 facultatif | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 228 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-024 | 3.1.3 DGR 8.3 approbation A2 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 245–246 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-025 | 3.1.4 Divergences (doc) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 247 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-025 | 3.1.4 Divergences (doc) | DRAFT — STALE CITATION: correct answer's own "2.8.3.4 et 2.8.4" reference does not match current DGR (§2.8.3.4 is "Calendrier"/deadlines, unrelated; actual cross-ref is §2.8.4 alone, per §2.8.3.1) | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-026 | 3.2.3 Exemption suremballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1(d) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-027 | 3.2.3 Conformité emballage extérieur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(g) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-028 | 3.2.4 État du colis | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(i) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-029 | 3.2.5 Divergences (colis) PKG-02 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 255 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-029 | 3.2.5 Divergences (colis) PKG-02 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1, Divergence PKG-02 (Pakistan) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-030 | 3.3.1 Exemption ULD 9.1.3.1 Notes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-031 | 3.3.2 Notifications chargement | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 260, 263 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-032 | 3.3.3 Conservation USG-13(b) | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 264 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

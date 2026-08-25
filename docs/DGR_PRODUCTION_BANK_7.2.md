@@ -1166,14 +1166,17 @@ AH-02."
   contradicts the explicit "Ne doivent pas être moins restrictives que le
   Règlement" clause on the same slide.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slides 54–56
-("Divergences d'État et d'Exploitant DGR 2.8"). Loosely corroborated by
-Practice Q8 ("Selon la règlementation IATA, quelle est la différence des
-divergences de l'exploitant ? a) Section 2.8"), which tests the section
-number from the same slide series, confirming its real examined relevance.
-**FR status:** DRAFT — Tier A not attempted this pass (§2.8 Divergences des
-États et des exploitants not read this session); no change from prior
-status.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1, read
+directly this session in the authenticated Bookshelf: "Les divergences des
+exploitants... ne peuvent pas être moins restrictives que les dispositions
+de la présente Réglementation; et... sont applicables à tout transport
+assuré par les exploitants concernés." Exact match to the correct answer.
+Distractor 2 (State-only scope) is a different divergence type; distractor
+3 ("uniquement OACI, jamais IATA") is confirmed wrong since §2.8.3.0/.3.1
+confirm operator divergences are notified to the IATA Secretariat;
+distractor 4 (can be less restrictive) is directly contradicted.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1745,7 +1748,7 @@ with `Q-7.2-024`); treat as the same provision rather than a separate DGR
 | Q-7.2-014 | 0.2.1 MD interdites | FROZEN FR / SOURCE VERIFIED (citation corrected §4.2→§2.1.1) | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-015 | 0.2.3 Dispositions passagers | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 + Note 2 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-016 | 0.3.1 Responsabilités exploitant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-017 | 0.3.3 Divergences exploitant | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slides 54–56 (DGR 2.8.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-017 | 0.3.3 Divergences exploitant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-018 | 0.4.2 Groupes d'emballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-019 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2550,14 +2553,25 @@ ITG-03, etc."
   (slide 56, already the correct answer of `Q-7.2-017`) — an operator-wide
   rule, not a State's own territorial-scope rule; wrong divergence type.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 55 ("Divergence
-d'Etat DGR 2.8.1"), a different slide/fact from `Q-7.2-017`'s source (slide
-56, the exploitant's own divergence rule; slide 55 was cited there only as
-a distractor's partial source, not as this item's own full three-state
-fact). Loosely corroborated by Practice Q8, which tests the divergence
-section number from the same slide series without duplicating this item's
-specific state-scope fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.8.1, read directly this session in the authenticated Bookshelf, does
+**not** state the simple "État d'Origine/Départ, État de Destination,
+tous les États des escales de Transit" list as a general rule anywhere
+found this session. The actual current rule (§2.8.1.1.2-.1.1.3) is more
+nuanced: when a State divergence imposes MORE restrictive provisions, it
+applies (a) to/from/via any territory under that State's sovereignty, by
+ALL operators, AND (b) outside that territory, by operators for whom that
+State is their own "État de l'exploitant." When a State divergence
+authorizes LESS restrictive treatment, it applies ONLY within the
+notifying State's own territory, by operators for whom it is their State
+of the operator. This is a genuinely different legal mechanism from the
+course's shipment-routing-style "origin/destination/transit" checklist.
+Not contradicted at a topic level (both describe State divergences having
+territorial scope), but the specific 3-state list is not independently
+verified.
+**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
+sovereignty rule instead.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3114,7 +3128,7 @@ exam/practice-book hit for the GHS-pictogram fact specifically.
 | Q-7.2-034 | 0.2.2 Batteries lithium | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 (UN 3090/3091/3480/3481 table) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-035 | 0.3.1 Conformité expéditeur | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.3.1.1–1.3.1.2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-036 | 0.3.1 Formation exploitant | DRAFT — partially confirmed, flag for revision | MCQ | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; "test" framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-038 | 0.3.3 Niveaux de restrictions | DRAFT — Tier A not attempted | True/False | KOST F7.2 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-039 | 0.4.1 Division 1.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-040 | 0.4.1 Division 6.2 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

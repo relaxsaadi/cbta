@@ -1614,16 +1614,11 @@ AH-02."
   slide 76 lists AH under "Divergence de l'Exploitant," not under the
   separate State-divergence example (ITG/Italie, slide 75).
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 76 (DGR
-2.8.3), cross-checked against slide 75 (DGR 2.8.1, State-divergence/ITG
-example, distractor 3's own real but different source) and slides 73–74
-(general divergence rationale). Corroborated at a topic level by Practice
-Q10 ("Selon la règlementation IATA, quelle est la différence des
-divergences de l'exploitant? a) Section 2.8...") which tests the DGR
-section number rather than this item's own substantive restriction rule,
-noted honestly as adjacent, not direct, corroboration, consistent with the
-Stage 1 draft's own "Adequate" rating for this leaf.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026 + Addendum 1, §2.8.3.1, read
+directly this session in the authenticated Bookshelf (see this topic's
+`Q-7.2-017` for the full citation). Exact match to the correct answer.
+**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier
+A), 2026-08-25.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2104,7 +2099,7 @@ corroboration.
 | Q-7.10-019 | 0.1.4 Danger/risque — exemple essence | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-020 | 0.2.1 Caractéristiques DGR 2.1 (interdites en toute circonstance) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-021 | 0.2.2 Exemples de DG cachées (DGR 2.2.4) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 60–61 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-022 | 0.3.3 Divergence de l'Exploitant (DGR 2.8.3) | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 76 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-022 | 0.3.3 Divergence de l'Exploitant (DGR 2.8.3) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-023 | 0.5.1 Code « Y » du marquage UN (DGR 6.0.3) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-024 | 0.5.3 Document requis — DGD, pas NOTOC (DGR 8.0.1) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-025 | 0.6.1 Ordre de la première étape d'urgence | DRAFT — Tier A not attempted | True/False | KOST F7.10 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2871,13 +2866,16 @@ Q-7.10-022's own third distractor as real-but-different content, and the
 leaf's own last previously-uncovered fact. **This is 0.3.3's final ceiling
 slot (2/2) — no further item possible without new evidence.**
 
-**Source basis:** Tier B — KOST Function 7.10 course, slide 75 (DGR
-2.8.1), cross-checked against slide 76 (DGR 2.8.3 Operator divergence,
-already Q-7.10-022's evidence, Batch 2) and slide 77 (restriction-
-hierarchy diagram). Corroborated at a topic level by Practice Q10 (DGR
-section-number recall, already Q-7.10-022's own topic-level corroboration,
-Batch 2), noted honestly as adjacent, not direct, corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A (partial) — DGR 67th Ed. 2026 + Addendum 1
+§2.8.1, read directly this session in the authenticated Bookshelf, does
+not state the simple 3-State list as a general rule (see this topic's
+`Q-7.2-037` for the full analysis). §2.8.1.3 confirms "Italie ITG" is a
+real current State-divergence entry, but the actual scope rule
+(§2.8.1.1.2-.1.1.3) is territorial/sovereignty-based, not a shipment-
+routing checklist.
+**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
+sovereignty rule instead.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3030,7 +3028,7 @@ rating for this leaf.
 | Q-7.10-038 | 0.2.1 Exceptions DGR 1.2.7 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 42 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-039 | 0.2.3 Confort/besoins du passager | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-040 | 0.3.1 Neuf responsabilités de l'expéditeur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 70 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 75 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3, §2.8.1.3 (ITG) (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-042 | 0.5.1 Code de type d'emballage (4=Caisse) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-043 | 0.5.2 Marquage bagage — glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-044 | 0.6.1 Contact corps/habits — 5 mesures | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

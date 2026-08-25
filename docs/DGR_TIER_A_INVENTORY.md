@@ -7,16 +7,17 @@ and `docs/DGR_PRODUCTION_BANK_7.2.md` … `docs/DGR_PRODUCTION_BANK_7.10.md`
 (Functions 7.2–7.10, 434 items). Regulatory baseline: IATA DGR 67th Edition
 2026, French, Addendum 1 integrated.
 
-**Live status note (2026-08-25, updated after Topic 3):** the category
+**Live status note (2026-08-25, updated after Topic 4):** the category
 counts and topic sublists below are a snapshot taken *before* topic-based
 navigation began. Topic 1 (lithium batteries, 14 items), Topic 2 (NOTOC,
-23 items — 20 confirmed, 3 moved to PARTIAL), and Topic 3 (Part 6/UN-spec
-marks, 10 items — all confirmed) are now resolved — see
-`docs/DGR_SOURCE_REGISTER.md`'s "Topic 1"/"Topic 2"/"Topic 3" entries.
-Current totals: **202 FROZEN, 13 GAP, 24 PARTIAL, 4 STALE, 210
-NOTATTEMPTED** (453 total). The tables below are left as the original
-baseline snapshot for audit purposes; do not re-derive counts from them
-without applying this note.
+23 items — 20 confirmed, 3 moved to PARTIAL), Topic 3 (Part 6/UN-spec
+marks, 10 items — all confirmed), and Topic 4 (§2.8 divergences, 22 items
+incl. the Topic-2 overlap — 14 confirmed, 7 moved to PARTIAL, 1 moved to
+STALE) are now resolved — see `docs/DGR_SOURCE_REGISTER.md`'s "Topic
+1"–"Topic 4" entries. Current totals: **216 FROZEN, 13 GAP, 30 PARTIAL, 5
+STALE, 189 NOTATTEMPTED** (453 total). The tables below are left as the
+original baseline snapshot for audit purposes; do not re-derive counts
+from them without applying this note.
 
 Counting method: each function's own batch summary table is the canonical
 row set. For 7.1 the 19-row table in `DGR_STAGE_2B_STATUS.md` is used (its
@@ -214,7 +215,17 @@ manufacturer elements. All 10 now `FROZEN FR / SOURCE VERIFIED` via
 | Q-7.10-023 | 0.5.1 Code « Y » du marquage UN (DGR 6.0.3) |
 | Q-7.10-042 | 0.5.1 Code de type d'emballage (4=Caisse) |
 
-### Topic 4 — State/operator divergences, §2.8 (22 items)
+### Topic 4 — State/operator divergences, §2.8 (22 items) — ✅ RESOLVED 2026-08-25 (14 confirmed, 7 partial, 1 stale)
+
+14 now `FROZEN FR / SOURCE VERIFIED` via §2.8.3.1 (operator rule),
+§2.8.3.5/§2.8.1.3 (AH/ITG lists), §2.0 (Table 2.3.A limitability), and the
+exact PKG-02 divergence text. 7 items (`Q-7.2-037`, `Q-7.4-043`,
+`Q-7.5-012`, `Q-7.5-025`, `Q-7.6-009` [Topic 2 overlap], `Q-7.7-043`,
+`Q-7.10-041`) moved to PARTIAL — KOST's 3-State scope list, hierarchy
+diagram, and OACI+IATA notification claim not independently confirmed as
+stated. 1 item (`Q-7.3-025`) moved to STALE CITATION — its own "2.8.3.4 et
+2.8.4" reference doesn't match current DGR structure. See
+`docs/DGR_SOURCE_REGISTER.md`'s "Topic 4" entry for full citations.
 
 | ID | Sub-task |
 |---|---|

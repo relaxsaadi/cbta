@@ -600,6 +600,15 @@ file's fuller sourcing notes.
 | Liste de contrôle d'acceptation | Acceptance checklist | Standard | Multiple items |
 | Élément [n°] / Point n° [n] (de la liste de contrôle) | Element [n] / Point [n] (of the checklist) | Standard, kept as the checklist's own numbering system | Q-7.3-007, Q-7.3-009, Q-7.3-010, Q-7.3-023 |
 | TACT / Résolution 600(a) de la CSC | TACT Rules / CSC Resolution 600(a) | Standard industry acronyms, not independently EN-verified this session | Q-7.3-008 |
+| Marque(s) / Marquage (générique) | Marking(s) | Standard | Q-7.3-033, Q-7.3-042 |
+| Figure 7.1.C | Figure 7.1.C | Unchanged — standard DGR figure reference | Q-7.3-034 |
+| Apposition (d'une étiquette) / apposer | Affixing (a label) / affix | Standard, not independently EN-verified this session | Q-7.3-035 |
+| Étiquette de danger chimique | Chemical hazard label (candidate) | **Flagged — KOST course's own informal category for non-DGR chemical-hazard pictograms, not a defined DGR term; kept distinct from the standard "Hazard label" row above** | Q-7.3-036 |
+| Procédures d'urgence (générales) | (General) emergency procedures | Standard | Q-7.3-037 |
+| Notification au commandant de bord | Notification to the captain | Standard | Q-7.3-038 |
+| Information/intervention d'urgence | Emergency response (information) | Standard | Q-7.3-039 |
+| Accident / Incident (de marchandises dangereuses) | Dangerous goods accident / incident | Standard | Q-7.3-040, Q-7.3-041 |
+| Disposition spéciale | Special provision (candidate) | **Flagged — reviewer should confirm whether this is the same DGR 4.4-numbered "Special Provision (SP)" mechanism already flagged above (Q-7.3-024's "disposition particulière (DP)") or a distinct, non-numbered course usage** | Q-7.3-041 |
 
 **Reading this table:** "Standard" means the term is well-established IATA/UN dangerous-goods English usage with low translation risk, but — consistent with `.claude/rules/dgr-stage2b.md` rule 2 — none of these EN renderings were checked this session against a supplied official English 67th Edition text; they were used as ordinary professional DG English terminology, not fabricated as citations. "Flagged" rows are genuine open questions for the reviewer, not settled translations, and the reviewer's resolution of any flagged term should be applied consistently to every item listed in its "Appears in" column.
 
@@ -668,3 +677,240 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
 - No item in this package is marked `BILINGUAL TECHNICAL REVIEW COMPLETE`
   or `APPROVED`. No qualified bilingual reviewer has been named. No review
   date has been recorded.
+
+---
+
+## Batch 3 (Q-7.3-033 – Q-7.3-045)
+
+Batch 3 was drafted after this package's original 32-item pass and adds
+the 13 items `Q-7.3-033`–`Q-7.3-045` from `docs/DGR_PRODUCTION_BANK_7.3.md`'s
+Batch 3 section. Same method as Batches 1/2: the FR text below is copied
+verbatim from the production bank (stem/options or statement, and the
+marked correct answer); no gloss or reconstruction step was needed. Batch
+3 closes out full leaf coverage for Function 7.3 — every one of the
+function's 33 leaf sub-tasks now has at least one drafted (and, with this
+package, EN-drafted) item.
+
+The same status discipline stated at the top of this package applies
+unchanged to every item below: no `BILINGUAL TECHNICAL REVIEW COMPLETE` or
+`APPROVED` status, no named reviewer, no review date, and no change to any
+item's separate FR status (`DRAFT — Tier B only, SOURCE REQUIRED for
+Tier A`).
+
+### Q-7.3-033 — Portée du marquage de spécification ONU (DGR 6.0.4.0.1)
+
+- **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Marquage des emballages de spécification ONU — DGR 6.0.4.0.1), les marques de spécification ONU apposées sur un emballage confirment que cet emballage peut être utilisé pour transporter n'importe quelle marchandise dangereuse déterminée."*
+  - Correct answer: **Faux**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Marking of UN specification packagings — DGR 6.0.4.0.1), UN specification markings affixed to a packaging confirm that the packaging may be used to transport any particular dangerous good."*
+  - Correct answer: **FALSE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-034 — Format de la marque des piles/batteries au lithium (DGR 7.1.5.5)
+
+- **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Piles au lithium — DGR 7.1.5.5), quelle est la taille de la marque illustrée à la figure 7.1.C, apposée sur un colis de piles ou batteries au lithium préparé conformément à la Section II des PI 966, 967, 969 et 970, ou à la Section IB des PI 965 et 968 ?"*
+  - Options: **(Correct)** *"100 mm x 100 mm."* / *"12 mm x 12 mm."* / *"120 mm x 120 mm."* / *"Aucune taille minimale n'est spécifiée ; seule la présence du numéro ONU est requise."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Lithium batteries — DGR 7.1.5.5), what is the size of the mark illustrated in Figure 7.1.C, affixed to a package of lithium cells or batteries prepared in accordance with Section II of PI 966, 967, 969, and 970, or Section IB of PI 965 and 968?"*
+  - Options: **(Correct)** *"100 mm x 100 mm."* / *"12 mm x 12 mm."* / *"120 mm x 120 mm."* / *"No minimum size is specified; only the presence of the UN number is required."*
+- **Terminology decision:** "Figure 7.1.C" and the PI numbers (965/966/967/968/969/970) are kept unchanged, as fixed DGR figure/Packing Instruction references (same convention as the existing "Instruction d'emballage (PI)" → "Packing Instruction (PI)" row).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-035 — Règles d'apposition des étiquettes (DGR 7.2.6)
+
+- **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Apposition des étiquettes — DGR 7.2.6), laquelle des règles suivantes ne fait PAS partie des exigences relatives à l'apposition d'une étiquette sur un colis de marchandises dangereuses ?"*
+  - Options: **(Correct)** *"Elle doit être apposée sur une face du colis différente de celle portant la marque de désignation officielle de transport (PSN), afin d'éviter toute confusion visuelle."* / *"Elle doit être visible et lisible, et ne pas être masquée par une autre marque ou étiquette."* / *"Elle ne doit pas être pliée de façon à ce que des parties apparaissent sur différentes faces de l'emballage."* / *"Les risques principaux, subsidiaires ou multiples doivent être apposés de manière adjacente sur la même surface du colis."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Affixing labels — DGR 7.2.6), which of the following rules is NOT part of the requirements for affixing a label to a dangerous goods package?"*
+  - Options: **(Correct)** *"It must be affixed on a face of the package different from the one bearing the proper shipping name (PSN) mark, to avoid any visual confusion."* / *"It must be visible and legible, and must not be obscured by another mark or label."* / *"It must not be folded in such a way that parts appear on different faces of the packaging."* / *"Primary, subsidiary, or multiple hazards must be affixed adjacent to one another on the same surface of the package."*
+- **Terminology decision — new term:** "Apposition (d'une étiquette)" / "apposer" → **"Affixing (a label)" / "affix"**, standard English usage for this DGR concept; not independently verified against a supplied English 67th Edition text this session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-036 — Étiquettes de danger chimique non réglementaires ("Autre étiquetage")
+
+- **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Autre étiquetage), la présence d'une étiquette de danger chimique sur un colis signifie automatiquement que son contenu répond à la classification des marchandises dangereuses selon la Réglementation ; aucune clarification supplémentaire auprès de l'expéditeur n'est nécessaire avant l'acceptation."*
+  - Correct answer: **Faux**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Other labelling), the presence of a chemical hazard label on a package automatically means its contents meet the dangerous goods classification under the Regulations; no further clarification from the shipper is necessary before acceptance."*
+  - Correct answer: **FALSE**
+- **Terminology decision — FLAGGED:** "étiquette de danger chimique" → **"chemical hazard label"** (working candidate) — the KOST course's own informal category for non-DGR chemical-hazard pictograms (e.g., GHS-style labels) that may appear on a package, not a defined DGR term; kept distinct from the standard DGR "hazard label" (Class/Division label) already in this table.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-037 — Conduite face à un colis endommagé (Procédures d'urgence générales)
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Procédures d'urgence générales), si un colis de marchandises dangereuses est endommagé et que cela peut se faire sans danger, laquelle des actions suivantes n'est PAS recommandée par le cours ?"*
+  - Options: **(Correct)** *"Nettoyer immédiatement la matière déversée à l'aide de l'équipement disponible sur place, avant l'arrivée de tout spécialiste."* / *"Identifier la marchandise dangereuse en se référant au DGD ou aux marques et étiquettes des emballages."* / *"Si possible, isoler le colis endommagé en retirant les marchandises avoisinantes."* / *"Isoler la zone et prévenir les services d'urgence conformément aux procédures locales."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General emergency procedures), if a dangerous goods package is damaged and it is safe to do so, which of the following actions is NOT recommended by the course?"*
+  - Options: **(Correct)** *"Immediately clean up the spilled material using equipment available on site, before any specialist arrives."* / *"Identify the dangerous good by referring to the DGD or to the markings and labels on the packaging."* / *"If possible, isolate the damaged package by removing the surrounding goods."* / *"Isolate the area and notify emergency services in accordance with local procedures."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-038 — Support documentaire du NOTOC (DGR 9.5.1.1)
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Notification au commandant de bord — DGR 9.5.1.1), les renseignements sur les marchandises dangereuses transportées comme fret doivent être fournis au commandant de bord sur la lettre de transport aérien (LTA) ou sur la déclaration de l'expéditeur elle-même, et non sur un document distinct."*
+  - Correct answer: **Faux**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Notification to the captain — DGR 9.5.1.1), information on dangerous goods carried as cargo must be provided to the captain on the air waybill (AWB) or on the shipper's declaration itself, and not on a separate document."*
+  - Correct answer: **FALSE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-039 — Responsabilité de l'exploitant pour l'information des employés (DGR 9.5.1.2)
+
+- **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Information sur l'intervention d'urgence — DGR 9.5.1.2), il incombe à l'exploitant d'informer tous ses employés des procédures d'intervention d'urgence, lesquelles doivent être disponibles partout où des marchandises dangereuses sont manipulées."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Emergency response information — DGR 9.5.1.2), it is the operator's responsibility to inform all its employees of emergency response procedures, which must be available wherever dangerous goods are handled."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-040 — Destinataires du signalement d'un accident (DGR 9.6.5)
+
+- **Sub-task:** 7.1 Signaler les accidents de marchandises dangereuses
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Signaler les accidents et incidents impliquant des marchandises dangereuses), à qui l'exploitant doit-il signaler un accident de marchandises dangereuses ?"*
+  - Options: **(Correct)** *"Aux autorités compétentes de l'État de l'exploitant ainsi qu'à celles de l'État dans lequel l'accident s'est produit."* / *"Uniquement aux autorités compétentes de l'État dans lequel l'accident s'est produit, et non à celles de l'État de l'exploitant."* / *"Uniquement à l'expéditeur d'origine des marchandises dangereuses impliquées dans l'accident."* / *"Uniquement à l'Agence Nationale de l'Aviation Civile (ANAC), quel que soit l'État où l'accident s'est produit."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Reporting dangerous goods accidents and incidents), whom must the operator report a dangerous goods accident to?"*
+  - Options: **(Correct)** *"The competent authorities of the State of the Operator, as well as those of the State in which the accident occurred."* / *"Only the competent authorities of the State in which the accident occurred, and not those of the State of the Operator."* / *"Only the original shipper of the dangerous goods involved in the accident."* / *"Only the National Civil Aviation Agency (ANAC), regardless of the State where the accident occurred."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-041 — Portée du signalement d'un incident : marchandises exemptées
+
+- **Sub-task:** 7.2 Signaler les incidents de marchandises dangereuses
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Signaler les accidents et incidents impliquant des marchandises dangereuses), l'obligation de signalement des incidents s'étend également aux marchandises dangereuses qui ne sont pas soumises à tout ou partie de la Réglementation en raison de l'application d'une exception ou d'une disposition spéciale."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Reporting dangerous goods accidents and incidents), the obligation to report incidents also extends to dangerous goods that are not subject to all or part of the Regulations due to the application of an exception or a special provision."*
+  - Correct answer: **TRUE**
+- **Terminology decision — FLAGGED:** "disposition spéciale" is rendered as **"special provision"** (lower-case, generic sense) — the same English word family as the table's existing "disposition particulière (DP)" → "Special Provision (SP)" row (Q-7.3-024), but the FR wording here differs from that item's own phrase; reviewer should confirm whether the course intends the same DGR 4.4-numbered "Special Provision" mechanism or a looser, non-numbered sense of the phrase.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-042 — Correspondance des marques avec la déclaration de l'expéditeur
+
+- **Sub-task:** 3.2.1 Vérifier les marques
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Vérifier les marques), l'exploitant doit vérifier que les marques figurant sur le ou les colis, le ou les suremballages ou le ou les conteneurs de fret correspondent aux détails indiqués sur la déclaration de l'expéditeur qui les accompagne, et sont clairement visibles."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Checking markings), the operator must check that the markings on the package(s), overpack(s), or freight container(s) correspond to the details shown on the accompanying shipper's declaration, and are clearly visible."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-043 — Base réglementaire de la conformité de l'étiquetage (10.7.2 vs 7.2)
+
+- **Sub-task:** 3.2.2 Vérifier les étiquettes
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Vérifier les étiquettes), à quelles dispositions l'étiquetage du ou des colis, suremballages ou conteneurs de fret doit-il être conforme, respectivement pour les matières radioactives et pour les autres marchandises dangereuses ?"*
+  - Options: **(Correct)** *"DGR 10.7.2 pour les matières radioactives, et DGR 7.2 pour les autres marchandises dangereuses."* / *"DGR 9.1.3 pour les matières radioactives, et DGR 8.1.3 pour les autres marchandises dangereuses."* / *"DGR 7.2 pour les matières radioactives, et DGR 10.7.2 pour les autres marchandises dangereuses."* / *"DGR 6.0.4 dans les deux cas, sans distinction entre matières radioactives et autres marchandises dangereuses."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Checking labels), which provisions must the labelling of the package(s), overpack(s), or freight container(s) conform to, respectively for radioactive material and for other dangerous goods?"*
+  - Options: **(Correct)** *"DGR 10.7.2 for radioactive material, and DGR 7.2 for other dangerous goods."* / *"DGR 9.1.3 for radioactive material, and DGR 8.1.3 for other dangerous goods."* / *"DGR 7.2 for radioactive material, and DGR 10.7.2 for other dangerous goods."* / *"DGR 6.0.4 in both cases, with no distinction between radioactive material and other dangerous goods."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-044 — Articles exemptés de la procédure d'acceptation complète (DGR 9.1.3.3)
+
+- **Sub-task:** 3.3.1 Remplir la liste de contrôle pour l'acceptation
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (DGR 9.1.3.3), tous les articles de marchandises dangereuses, sans exception, doivent suivre les procédures d'acceptation complètes énumérées au 9.1.3.1."*
+  - Correct answer: **Faux**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (DGR 9.1.3.3), all dangerous goods articles, without exception, must follow the full acceptance procedures listed in 9.1.3.1."*
+  - Correct answer: **FALSE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.3-045 — Maintien de la séparation tout au long de l'acceptation et du chargement
+
+- **Sub-task:** 3.3.2 Fournir les renseignements sur l'expédition pour la planification du chargement
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (DGR 9.3.2.1), la séparation entre marchandises dangereuses, une fois établie sur la base des étiquettes de danger de l'emballage, doit être maintenue tout au long de l'acceptation, de la manutention et du chargement."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (DGR 9.3.2.1), segregation between dangerous goods, once established on the basis of the packaging's hazard labels, must be maintained throughout acceptance, handling, and loading."*
+  - Correct answer: **TRUE**
+- **Terminology decision:** "séparation" → **"segregation"**, reusing the standard IATA term already established for this same concept in Q-7.3-025 ("Séparation entre colis" → "Segregation between packages"), kept consistent here for the parallel "séparation entre marchandises dangereuses" phrasing.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
+## Batch 3 summary
+
+- 13/13 Function 7.3 Batch 3 items (`Q-7.3-033`–`Q-7.3-045`) translated to
+  EN draft status, following the same verbatim-FR-source method as Batches
+  1 and 2 — every FR stem/statement/option quoted above is copied verbatim
+  from `docs/DGR_PRODUCTION_BANK_7.3.md`'s Batch 3 section.
+- Combined Batch 1 + Batch 2 + Batch 3 total: **45/45** Function 7.3 items
+  now have an EN draft translation (`Q-7.3-001`–`Q-7.3-045`), matching the
+  full current production bank (`docs/DGR_PRODUCTION_BANK_7.3.md`).
+- All 13 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
+  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
+  rule 5 (FR source verification and EN bilingual review are separate
+  gates).
+- 3 new terminology points introduced by Batch 3 and flagged for the
+  reviewer, added to the terminology table above: "apposer/apposition" →
+  "affix/affixing" (Q-7.3-035, standard but unverified); "étiquette de
+  danger chimique" → "chemical hazard label" (Q-7.3-036, flagged as a
+  KOST-informal, non-DGR category); and "disposition spéciale" → "special
+  provision" (Q-7.3-041, flagged for reviewer confirmation against the
+  existing "disposition particulière (DP)" → "Special Provision (SP)" row).
+  All other Batch 3 terms reuse EN equivalents already established in the
+  terminology table (e.g., "Hazard label," "Overpack," "Freight
+  container," "Air waybill (AWB)," "Segregation," "NOTOC," "State of the
+  Operator," "Radioactive material," "Packing Instruction (PI)").
+- No item in Batch 3 is marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or
+  `APPROVED`. No qualified bilingual reviewer has been named. No review
+  date has been recorded. The same reviewer instructions and sign-off
+  format given above for Batches 1/2 apply unchanged to these 13 items.

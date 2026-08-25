@@ -1,13 +1,28 @@
-# DGR Stage 1 — Function 7.5 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.5 — CROSS-VALIDATED (second pass CONFIRMED)
 
 **Function 7.5**: *Personnel chargé d'accepter les bagages des passagers et
 des membres d'équipage, de gérer les zones d'embarquement des aéronefs et
 d'effectuer d'autres tâches impliquant un contact direct avec les passagers
 dans un aéroport.*
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a
-second pass, not reviewed by a qualified instructor, not accepted by ANAC,
-and not a Stage 2A blueprint.** This is the Function 7.5 counterpart to
+**Status: CROSS-VALIDATED — an independent second pass
+(`docs/DGR_STAGE1_FUNCTION_7.5_CROSSVALIDATION.md`) re-read the same source
+PDFs, re-rendered TABLEAU 7.5.A at 400dpi (full page plus two dedicated
+high-resolution star-column crops), re-ran every MD5 filing check, re-opened
+and re-transcribed the "Cadre CBTA" matrix, watched the previously-unwatched
+lithium-battery/passenger-handling video frame-by-frame, and independently
+re-derived the 25-leaf-sub-task count, the single-star (★) Block 7 rating,
+the 16-item Block 0 composition (0.3.2 active, 0.4.2/0.4.3 both absent), the
+four SOURCE GAPs, and the wheelchair-scenario gap. Verdict: CONFIRMED — no
+correction to the enumeration, star ratings, or SOURCE GAP findings below is
+required. One evidentiary strengthening is recorded in the cross-validation
+file (the lithium-battery video, previously only flagged as unwatched, has
+now been watched and confirmed to contain no wheelchair/PRM content,
+removing the "plausible source" caveat and firming up SOURCE GAP note 5).
+This draft is still not reviewed by a qualified instructor, not accepted by
+ANAC, and this file alone is not a Stage 2A blueprint** — see
+`docs/DGR_STAGE2A_FUNCTION_7.5_BLUEPRINT.md` for that. This file remains the
+Function 7.5 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1), `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md`
 (Function 7.2), `docs/DGR_STAGE1_FUNCTION_7.3_DRAFT.md` (Function 7.3), and
 `docs/DGR_STAGE1_FUNCTION_7.4_DRAFT.md` (Function 7.4), produced independently

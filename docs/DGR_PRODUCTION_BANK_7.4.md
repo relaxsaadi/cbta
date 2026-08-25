@@ -952,3 +952,1123 @@ Block 4 = 4, Block 6 = 3, Block 7 = 3.
 - Does not mark any item `APPROVED` — no qualified reviewer exists in this
   pass.
 - Does not touch Moodle or any live/production question-bank copy.
+
+
+---
+
+# Batch 2
+
+Second production-drafting pass against
+`docs/DGR_STAGE2A_FUNCTION_7.4_BLUEPRINT.md` (PROVISIONAL/CEILING,
+111-question maximum across 37 sub-tasks). Batch 1 drafted 16 items
+(`Q-7.4-001`–`016`) across 13 of 37 leaves. This batch continues the ID
+sequence from `Q-7.4-017`.
+
+## Status of this batch — read before using any item below
+
+**All 19 items in this batch are `DRAFT`, Tier B basis only. None has been
+Tier A-verified against the current IATA DGR 67th Edition (2026, French,
+Addendum 1) text.**
+
+- A quick, cautious check of the `chrome-devtools` Bookshelf session was made
+  at the start of this batch, per standing instruction. Result: **no page was
+  open at all** (`evaluate` returned "The selected page has been closed. Call
+  list_pages to see open pages.") — not even a Sign-In screen, simply no
+  active browser session in this environment. No attempt was made to open a
+  new session, navigate to a login flow, or authenticate. Per standing
+  instruction, this is expected and correct, not a failure, and this entire
+  batch is Tier B only, exactly like Batch 1 and every prior function's
+  Batch 1/2s.
+- Every item below is sourced directly and verbatim-traced to the same real
+  **KOST Function 7.4 training material** already used for Batch 1 (Tier B),
+  re-extracted this session with `pdftotext -layout` on the exact page ranges
+  cited per item, from
+  `/Users/mac/Documents/Fichiers/Algerie/CBTA final/yasmine cbta/wetransfer_supports-pedagogiques-dgr-cbta-kost-academy_2025-10-12_1842/COURS DGR-CBTA-IATA/DGR-FONCTION 7.4/`:
+  - `03_KOST_DGR_CBTA_Course_Function_7.4_FR_2025.pdf` — course, 155 slides.
+    Primary source, cited below by printed slide number (confirmed against
+    each extracted page's own visible footer number).
+  - `01_KOST_DGR_CBTA_Exam_Function_7.4_FR_Rev00_2025.pdf.pdf` (F-KOST 05,
+    20Q) — corroborating cross-reference only, re-read in full this session.
+  - `04_KOST_DGR_CBTA_Practice_Book_Function_7.4_FR_2025.pdf` (F-KOST 09,
+    20Q) — corroborating cross-reference only, re-read in full this session;
+    also used directly as the source of one distractor (Q-7.4-021, Practice
+    Q17), flagged honestly per Stage 1's own SOURCE GAP note 7.
+- Every "DGR x.y.z" section number cited below is, exactly as in Batch 1,
+  **as displayed on the KOST slide itself** — Tier B, built on the course's
+  own 66th Edition baseline, not independently re-verified against the
+  current 67th Edition/Addendum 1 text in this pass.
+- Per `.claude/rules/dgr-stage2b.md` rule 4, **no item in this batch may be
+  marked `APPROVED`.** Status is `DRAFT` only.
+
+## Sub-task selection and ceiling compliance
+
+This batch drafts **19 items**, inside the task's 15–20 target range. Per
+Priority 1, it deliberately tackles the six caveat-4 shared-evidence-pool
+leaves plus their 0.2.1 Block 0 anchor — left as a group at the end of
+Batch 1 specifically so they could be drafted together, carefully, with each
+item genuinely tied to its own distinct lifecycle-stage checkpoint rather
+than restating the same underlying fact with only the stage label changed.
+Per Priority 2, it rounds out most of Block 0's remaining leaves and two more
+Block 6 leaves, and — as explicitly invited by this task's brief — draws the
+single permitted item from each of the two restricted-framing leaves
+(0.4.3, 6.1.6) left at 0 by Batch 1.
+
+| Sub-task | Title | Blueprint ceiling / sample | Batch 1 drawn | Batch 2 drawn | Remaining after Batch 2 | New item(s) |
+|---|---|---|---|---|---|---|
+| 0.1.3 | Déterminer l'application et la portée | 2 / 1 | 0 | 1 | 1 | Q-7.4-026 |
+| 0.1.4 | Faire la distinction entre un danger et un risque | 2 / 1 | 0 | 1 | 1 | Q-7.4-027 |
+| 0.2.1 | Développer un flair pour les MD cachées (anchor of the 4-way hidden-DG pool) | 3 / 1 | 0 | 2 | 1 | Q-7.4-017, Q-7.4-018 |
+| 0.2.2 | Reconnaître les MD potentiellement dangereuses | 3 / 1 | 0 | 1 | 2 | Q-7.4-028 |
+| 0.3.1 | Clarifier le rôle des parties prenantes | 3 / 1 | 0 | 1 | 2 | Q-7.4-029 |
+| 0.3.3 | Reconnaître l'impact des divergences États/Exploitants | 3 / 1 | 0 | 1 | 2 | Q-7.4-030 |
+| 0.4.2 | Comprendre les groupes d'emballage | 3 / 1 | 0 | 1 | 2 | Q-7.4-031 |
+| 0.4.3 | Envisager de multiples dangers (restricted, caveat 3) | 1 / 0–1 | 0 | 1 | 0 | Q-7.4-034 |
+| 0.5.1 | Reconnaître les prescriptions de marquage | 3 / 1 | 0 | 1 | 2 | Q-7.4-032 |
+| 0.6.1 | Sensibilisation aux procédures d'urgence générales | 3 / 1 | 0 | 1 | 2 | Q-7.4-033 |
+| 4.2.1 | Vérifier les colis — MD cachées (pré-chargement entrepôt) | 2 / 1 | 0 | 1 | 1 | Q-7.4-019 |
+| 4.2.2 | Vérifier dommages/fuites (pré-chargement entrepôt) | 3 / 1 | 0 | 1 | 2 | Q-7.4-021 |
+| 6.1.2 | Vérifier les colis — MD cachées (chargement avion) | 2 / 1 | 0 | 1 | 1 | Q-7.4-020 |
+| 6.1.3 | Vérifier dommages/fuites (chargement avion) | 3 / 1 | 0 | 1 | 2 | Q-7.4-022 |
+| 6.1.6 | Informer le commandant de bord (restricted, caveat 2) | 1 / 0–1 | 0 | 1 | 0 | Q-7.4-035 |
+| 6.3.1 | Appliquer les consignes de déchargement spécifiques | 2 / 1 | 0 | 1 | 1 | Q-7.4-025 |
+| 6.3.2 | Vérifier les colis — MD cachées (déchargement) | 2 / 1 | 0 | **0 — see note below** | 2 | — |
+| 6.3.3 | Vérifier dommages/fuites (déchargement) | 3 / 1 | 0 | 2 | 1 | Q-7.4-023, Q-7.4-024 |
+| **Total** | | | | **19** | | |
+
+**No per-sub-task ceiling is exceeded.** 0.4.3 and 6.1.6 are each drawn at
+their full permitted figure (1, their restricted sample ceiling); every
+other sub-task drawn is at or below its own ceiling, most leaving headroom
+for a future batch.
+
+### 6.3.2 — attempted, honestly left at 0 this batch (real yield lower than ceiling)
+
+Per the blueprint's own "Recommended next steps" #2 ("if a drafter cannot
+find a genuinely distinct angle for a given pool member, that pool member's
+real yield may be lower than this ceiling, and the smaller real yield wins
+per the standing no-padding rule"), this batch's drafting session actively
+attempted a 6.3.2 item (hidden-DG verification at the post-flight unloading
+checkpoint) and did not draft one. The full re-extracted p.48–52 slide range
+(the entire hidden-DG evidence pool) contains **no sentence framed at the
+unloading/arrival stage** — its only stage-specific operational language is
+"effectuer des inspections des bagages **pendant le chargement**" (p.51),
+which is unambiguously a loading-stage fact and is the basis for this
+batch's 6.1.2 item (Q-7.4-020) instead. Re-using the same COMAT/AOG examples
+(p.49–50) under a relabelled "at unloading" stem, with no textual basis for
+that stage, would be exactly the same-fact-repeated drift binding caveat 4
+warns against and would violate rule 1 (never infer beyond the supplied
+source). **Decision: 0 items for 6.3.2 this batch, honestly recorded, not a
+missed leaf.** Real, ceiling-permitted headroom (2) remains for a future
+batch if new source material narrows this gap.
+
+## Priority 1 — the deliberately-deferred shared-evidence-pool group (12 items)
+
+This section covers the six caveat-4 leaves (4.2.1, 4.2.2, 6.1.2, 6.1.3,
+6.3.2, 6.3.3) plus their Block 0 anchor (0.2.1), exactly as Batch 1 left them
+for "a future batch that can give the distinct-lifecycle-stage-framing
+discipline the careful, dedicated attention it requires." Two shared
+evidence pools are involved:
+
+- **Hidden-DG recognition** (0.2.1 + 4.2.1 + 6.1.2 + 6.3.2), all drawing on
+  course p.48–52. Yield this batch: 0.2.1 = 2 items (general
+  definition/awareness, Block 0's own ★ level — no operational-stage split
+  needed for this leaf), 4.2.1 = 1 item (warehouse-receiving checkpoint,
+  p.50), 6.1.2 = 1 item (loading-moment checkpoint, p.51), 6.3.2 = 0 items
+  (no distinct unloading-stage evidence found — see note above).
+- **Damage/leak verification** (4.2.2 + 6.1.3 + 6.3.3), all drawing on course
+  p.101–103. This pool's evidence turned out to have a genuinely clean
+  three-way split once the two paragraphs on p.101 were read closely: the
+  slide's **first** paragraph addresses an individual **colis/suremballage**
+  inspected before it is loaded into an avion **or** placed in a UC (the
+  warehouse/pre-load checkpoint, 4.2.2); its **second**, separate paragraph
+  addresses **unités de chargement** inspected immediately before being
+  placed **in the avion itself** (the aircraft-loading checkpoint, 6.1.3) —
+  a real, source-stated package-level-vs-ULD-level distinction, not an
+  invented one. p.102 (déchargement) and p.103 (fuite ou dommage constaté)
+  were read as one continuous discovery-then-response narrative and both
+  assigned to 6.3.3 (post-flight unloading), since p.103's "retiré de
+  l'avion" phrasing (removed *from* the aircraft) most naturally continues
+  the p.102 unloading-discovery scenario rather than the pre-load one (a
+  package would not yet be "in the aircraft" to be "removed from" it at the
+  warehouse pre-load stage). This attribution is a judgment call, flagged
+  honestly here exactly as blueprint binding caveat 6 flagged its own
+  0.2.2-mapping judgment call — a future qualified-instructor pass may
+  reasonably re-attribute p.103 to 6.1.3 instead. p.102's own second clause
+  (checking the *original loading location* for contamination) was kept
+  separate from the core inspection duty and assigned to 6.3.1 instead
+  (a specific unloading *instruction*, distinct from 6.3.3's *verification*
+  duty) — see Priority 2 below.
+
+---
+
+## Q-7.4-017 — Définition de la marchandise dangereuse cachée (DGR 2.2)
+
+**Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses cachées
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Reconnaissance des marchandises dangereuses
+non déclarées, DGR 2.2), laquelle des définitions suivantes correspond à une
+« marchandise dangereuse cachée » ?
+
+**Options:**
+- **(Correct)** Un produit ou une substance classé comme dangereux selon les
+  réglementations internationales (OACI ou IATA), mais transporté par un
+  passager sous forme dissimulée, non déclarée ou mal déclarée,
+  volontairement ou par négligence.
+- Une marchandise dangereuse dont le transport aérien est rigoureusement
+  interdit en toutes circonstances.
+- Un article normalement soumis à la Réglementation mais exempté des
+  exigences relatives aux marchandises dangereuses parce qu'il appartient à
+  l'exploitant.
+- Une marchandise dangereuse correctement déclarée et acceptée conformément
+  à la Réglementation.
+
+**Correct answer rationale:** Slide 48: "La MD cachée : se réfère à des
+produits ou substances classées comme dangereuses selon les réglementations
+internationales (l'OACI ou de l'IATA), mais qui sont transportées par les
+passagers sous forme dissimulée non déclarée ou mal déclarée volontairement
+ou par négligence, Ces marchandises peuvent être cachées dans les bagages à
+main ou en soute et ne sont pas déclarées comme telles."
+
+**Distractor rationale (source-grounded — each is a different, correctly-
+stated category from elsewhere in the same course, used as a wrong-category
+distractor):**
+- "Interdite en toutes circonstances" — slide 36 (DGR 2.1): "Marchandises
+  dangereuses dont le transport aérien est rigoureusement interdit" — a real,
+  distinct category (total prohibition), not concealment.
+- "Exempté... parce qu'il appartient à l'exploitant" — slides 43–44 (DGR
+  2.5): the operator-property exemption list (équipement de bord, glace
+  carbonique, piles, extincteurs, etc.) — a real, distinct category
+  (lawfully exempted, not hidden/undeclared).
+- "Correctement déclarée et acceptée" — directly contradicts the correct
+  definition's own "non déclarée ou mal déclarée" element; describes the
+  opposite case.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 48 (DGR 2.2,
+"MD cachée" definition), cross-checked against slides 36 and 43–44 for the
+distractor categories. No direct exam/practice hit for this specific
+definition-recital fact; Exam Q14/Q15 test the applied recognition of hidden
+DG in named examples, a related but distinct fact from the bare definition
+tested here, noted honestly as topic-level corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-018 — Mesures de prévention contre les MD cachées
+
+**Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses cachées
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Recommandations de prévention), laquelle des
+mesures suivantes fait partie des recommandations données pour éviter le
+transport de marchandises dangereuses cachées ou non déclarées ?
+
+**Options:**
+- **(Correct)** Demander la fiche de données de sécurité (SDS).
+- Interdire systématiquement l'acceptation de tout matériel compagnie
+  (COMAT), sans aucune exception.
+- Exiger une autorisation écrite du commandant de bord avant l'acceptation
+  de chaque colis.
+- Vérifier uniquement les bagages en soute ; les bagages à main ne sont
+  jamais concernés.
+
+**Correct answer rationale:** Slide 51: "Pour éviter de tels scénarios, il
+est recommandé : Respecter la réglementation DGR[,] Former le personnel[,]
+Appliquer les affiches et le questionnaire verbal avec les passagers[,]
+Effectuer des inspections des bagages pendant le chargement[,] Demander la
+fiche de données de sécurité (SDS)."
+
+**Distractor rationale (source-grounded):**
+- "Interdire systématiquement tout COMAT" — contradicts slide 49, which
+  treats COMAT as legitimately acceptable provided it is "classées et
+  transportées conformément aux règlements," not banned outright.
+- "Autorisation écrite du commandant de bord avant l'acceptation de chaque
+  colis" — a fabricated procedure; the captain's documented role in this
+  course is pre-departure NOTOC notification (slides 135–139), not a
+  per-package acceptance sign-off, and this fact does not appear on the
+  prevention-recommendations slide.
+- "Uniquement... en soute; les bagages à main ne sont jamais concernés" —
+  contradicts slide 48's own definition, which names both "bagages à main
+  ou en soute" as places hidden DG may be concealed, with no soute-only
+  restriction on the inspection recommendation.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 51 (prevention
+recommendations list), cross-checked against slides 48–49. No direct exam/
+practice hit for this specific recommendations-list fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-019 — Pièces AOG pouvant dissimuler des MD à la réception en entrepôt
+
+**Sub-task:** 4.2.1 Vérifier les colis pour indications de MD cachées et non déclarées (checkpoint entrepôt/pré-chargement)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Exemples de MD cachées DGR 2.2.4), lors de la
+réception à l'entrepôt de pièces de rechange pour aéronefs au sol (AOG),
+laquelle des catégories suivantes est explicitement citée par le cours comme
+pouvant dissimuler des marchandises dangereuses non déclarées ?
+
+**Options:**
+- **(Correct)** Les régulateurs de carburant et les réfrigérateurs.
+- Les extincteurs et les équipements de sauvetage, systématiquement
+  exemptés dès lors qu'ils appartiennent à l'exploitant.
+- Les documents de transport et les déclarations de l'expéditeur.
+- Les bagages à main des passagers.
+
+**Correct answer rationale:** Slide 50 (Exemples de DG cachées DGR 2.2.4):
+"Pièces de rechange pour les aéronefs au sol (AOG)[,] Automobiles, Pièces
+détachées et fournitures pour automobiles[,] Appareils dentaires[,]
+Echantillons de diagnostic[,] Régulateurs de carburant[,] Réfrigérateurs[,]
+Kits de réparation[,] Échantillons pour les tests."
+
+**Distractor rationale (source-grounded — each names a real item from a
+different slide's own distinct list):**
+- "Extincteurs et équipements de sauvetage... exemptés" — slide 44's
+  operator-property exemption examples list ("Extincteurs[,] Equipements de
+  sauvetage"), a different category (lawful exemption, not warehouse-
+  receiving hidden-DG risk) from a different slide.
+- "Documents de transport et déclarations de l'expéditeur" — not a physical
+  item capable of concealing DG; a category-confusion distractor with no
+  basis in slide 50's list.
+- "Bagages à main des passagers" — belongs to slide 48's general hidden-DG
+  definition (passenger-carried concealment), not slide 50's AOG/warehouse-
+  cargo examples list — a genuine wrong-checkpoint distractor drawn from the
+  0.2.1 pool this item is deliberately distinguished from.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 50 (DGR 2.2.4, AOG
+parts examples), cross-checked against slides 44 and 48. Corroborated at a
+topic level by Exam Q14 ("dangers cachés... pièces de rechange d'avion,
+COMAT"), a related but not identical example set. Framed specifically as a
+warehouse-receiving/pre-load checkpoint fact to distinguish it from 0.2.1's
+general-definition items above.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-020 — Inspection des bagages pendant le chargement lui-même
+
+**Sub-task:** 6.1.2 Vérifier les colis pour indications de MD cachées et non déclarées (checkpoint chargement de l'aéronef)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Recommandations de prévention), quelle action
+concrète est recommandée pour être réalisée **pendant le chargement
+lui-même**, afin d'aider à détecter des marchandises dangereuses cachées ?
+
+**Options:**
+- **(Correct)** Effectuer des inspections des bagages pendant le chargement.
+- Former le personnel.
+- Demander la fiche de données de sécurité (SDS).
+- Appliquer les affiches et le questionnaire verbal avec les passagers.
+
+**Correct answer rationale:** Slide 51: "Effectuer des inspections des
+bagages pendant le chargement" is the only one of the five listed prevention
+measures explicitly tied to the loading moment itself.
+
+**Distractor rationale (source-grounded — all four options, including the
+three wrong ones, are drawn verbatim from the same slide 51 list; only one
+is tied to the loading moment specifically):**
+- "Former le personnel" — a real listed measure, but an organizational/
+  training measure applied generally, not an action performed at the moment
+  of loading.
+- "Demander la fiche de données de sécurité (SDS)" — a real listed measure,
+  but a documentary/pre-acceptance check, not a physical loading-moment
+  inspection.
+- "Appliquer les affiches et le questionnaire verbal avec les passagers" — a
+  real listed measure, but a passenger-facing check-in/acceptance-stage
+  measure, not a loading-moment action.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 51. This item is
+deliberately built to test the same list as Q-7.4-018 (0.2.1) but keyed to
+the one loading-stage-specific item, per binding caveat 4's distinct-framing
+instruction — 0.2.1's item tests general-recommendation recognition (SDS),
+this item tests the specific loading-moment action.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-021 — Inspection du colis/suremballage avant chargement (checkpoint entrepôt)
+
+**Sub-task:** 4.2.2 Vérifier s'il y a des dommages et/ou des fuites (checkpoint entrepôt/pré-chargement)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Procédures de stockage et de chargement —
+Inspection), avant qu'un colis ou un suremballage de marchandises
+dangereuses ne soit chargé dans un avion **ou** placé dans une unité de
+chargement, que doivent s'assurer les exploitants ?
+
+**Options:**
+- **(Correct)** Que le colis ou le suremballage a été inspecté et qu'aucune
+  trace visible de fuite ou de dommage n'y a été trouvée.
+- Que le colis a été pesé et que son poids correspond exactement à celui
+  indiqué sur la LTA.
+- Que le colis a été ouvert pour en vérifier le contenu réel.
+- Que le colis porte la signature manuscrite du commandant de bord.
+
+**Correct answer rationale:** Slide 101: "Avant qu'un colis ou suremballage
+ne soit chargé dans un avion ou placé dans une unité de chargement, les
+exploitants doivent s'assurer que le colis ou le suremballage a été inspecté
+et qu'on n'y a trouvé aucune trace visible de fuite ou de dommage."
+
+**Distractor rationale:**
+- "Pesé... poids correspond exactement à la LTA" — a fabricated requirement;
+  no weighing/LTA-reconciliation step appears on this slide.
+- "Ouvert pour en vérifier le contenu réel" — directly contradicts Practice
+  Q17's own confirmed answer ("Les manutentionnaires sont autorisés à ouvrir
+  les colis... — Faux"), a genuine, distinct KOST source fact (flagged by
+  Stage 1 as having no dedicated course slide of its own, but a real,
+  directly-read practice-book fact, cited honestly here as such rather than
+  as course-slide content).
+- "Signature manuscrite du commandant de bord" — fabricated; the captain's
+  role in this course is pre-departure NOTOC notification (slides 135–139),
+  never an individual package sign-off at the warehouse pre-load stage.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 101, first
+paragraph (package/overpack-level inspection, stated to occur before loading
+into an avion **or** placement in a UC — the warehouse/pre-load checkpoint).
+One distractor additionally grounded in KOST Function 7.4 Practice Book
+Q17 (F-KOST 09), read in full this session — see Stage 1's own SOURCE GAP
+note 7 for the honest disclosure that this specific fact has no dedicated
+course slide.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-022 — Inspection des unités de chargement avant leur placement dans l'avion
+
+**Sub-task:** 6.1.3 Vérifier s'il y a des dommages et/ou des fuites (checkpoint chargement de l'aéronef)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Procédures de stockage et de chargement —
+Inspection), avant que les unités de chargement (UC) ne soient placées
+**dans l'avion**, quelle vérification les exploitants doivent-ils effectuer ?
+
+**Options:**
+- **(Correct)** Que les UC sont inspectées et que les colis de marchandises
+  dangereuses qu'elles contiennent ne présentent aucune trace de fuite ou de
+  dommage.
+- Que chaque colis individuel est retiré de l'UC puis réinspecté séparément
+  une seconde fois avant d'être remis dans l'UC.
+- Que les UC sont pesées afin de vérifier qu'elles ne dépassent pas une
+  limite de masse brute autorisée.
+- Que seule l'étiquette CAO est vérifiée ; aucune autre inspection n'est
+  requise.
+
+**Correct answer rationale:** Slide 101, second paragraph: "Avant d'être
+placées dans un avion, les unités de chargement doivent être inspectées et
+les colis de marchandises dangereuses qui s'y trouvent ne doivent présenter
+aucune trace de fuite ou de dommage."
+
+**Distractor rationale:**
+- "Chaque colis... retiré... réinspecté séparément" — a fabricated
+  double-unpacking procedure; the slide describes an inspection of the UC
+  and its contents in place, not a repackaging step.
+- "UC... pesées... limite de masse brute" — fabricated; no weight-check
+  requirement appears on this slide.
+- "Seule l'étiquette CAO est vérifiée" — contradicts the slide's own
+  broader leak/damage-inspection requirement; CAO labelling is a separate
+  ULD-identification topic (slides 112–114, sub-task 4.2.4), not a
+  substitute for this inspection.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 101, second
+paragraph — deliberately distinguished from Q-7.4-021 (same slide, first
+paragraph): this item tests the **ULD-level** inspection immediately before
+placement **in the aircraft**, per binding caveat 4's distinct-framing
+instruction, while Q-7.4-021 tests the **individual package/overpack-level**
+inspection before it is loaded into an avion or placed in a UC in the first
+place.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-023 — Inspection dès le déchargement de l'avion
+
+**Sub-task:** 6.3.3 Vérifier s'il y a des dommages et/ou des fuites (checkpoint déchargement de l'aéronef)
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Procédures de stockage et de chargement —
+Déchargement), à quel moment les colis contenant des marchandises
+dangereuses doivent-ils être inspectés pour rechercher des traces de
+dommages ou de fuite, à l'arrivée ?
+
+**Options:**
+- **(Correct)** Dès leur déchargement de l'avion ou de l'unité de chargement.
+- Uniquement si le destinataire final en fait la demande expresse.
+- Uniquement au moment de la facturation, plusieurs jours après le vol.
+- Seulement si l'équipage a signalé un incident pendant le vol.
+
+**Correct answer rationale:** Slide 102: "Déchargement : Les colis
+contenant des marchandises dangereuses doivent, dès leur déchargement de
+l'avion ou de l'unité de chargement, être inspectés pour rechercher des
+traces de dommages ou de fuite."
+
+**Distractor rationale (source-grounded — each attaches a fabricated
+condition the slide's own unconditional wording does not support):**
+- "Uniquement si le destinataire... en fait la demande" — contradicts the
+  unconditional "doivent, dès leur déchargement... être inspectés" wording.
+- "Uniquement... facturation, plusieurs jours après" — contradicts "dès
+  leur déchargement" (immediately upon unloading), a specific timing the
+  slide itself states.
+- "Seulement si l'équipage a signalé un incident" — contradicts the same
+  unconditional duty; no incident-report precondition appears on this slide.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 102, first
+paragraph (post-flight unloading inspection duty) — deliberately
+distinguished from Q-7.4-021/022 (pre-load/loading-stage inspection duties)
+per binding caveat 4.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-024 — Fuite ou dommage constaté : réponse immédiate
+
+**Sub-task:** 6.3.3 Vérifier s'il y a des dommages et/ou des fuites (checkpoint déchargement de l'aéronef)
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Fuite ou dommage constaté),
+tout colis présentant des dommages ou des traces de fuite doit être retiré
+de l'avion et placé en lieu sûr, et en cas de fuite, l'exploitant doit
+s'assurer que le reste de l'expédition est en bon état et qu'aucun autre
+colis ou article de fret n'a été contaminé.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 103: "Tout colis qui présente des dommages ou de trace
+de fuite devra être retiré de l'avion pour être placé en lieu sûr. En cas de
+fuite, l'exploitant doit s'assurer que le reste de l'expédition est en bon
+état et qu'aucun autre colis ou article de fret n'a été contaminé." Direct,
+complete match.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 103, read
+directly after slide 102's unloading-discovery paragraph. **Attribution
+note (interpretive judgment call, flagged honestly):** this slide's
+"retiré de l'avion" phrasing (removed *from* the aircraft) is read here as
+continuing the p.102 post-unloading discovery scenario, rather than as a
+pre-load (4.2.2) fact, since a package would not yet be "in the aircraft" to
+be "removed from" it at the warehouse pre-load stage. A future
+qualified-instructor pass may reasonably re-attribute this slide to 6.1.3
+(loading-stage discovery) instead — the underlying course text itself does
+not explicitly label which of the two in-aircraft stages this response
+procedure belongs to.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Priority 2 — rounding out Block 0's remaining leaves, plus two more Block 6 leaves (7 items)
+
+---
+
+## Q-7.4-025 — Consigne spécifique de déchargement : contrôle de l'emplacement de chargement d'origine
+
+**Sub-task:** 6.3.1 Appliquer les consignes de déchargement spécifiques
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Procédures de stockage et de chargement —
+Déchargement), si des traces de dommage ou de fuite sont découvertes sur un
+colis lors du déchargement, quelle consigne spécifique le cours demande-t-il
+d'appliquer, **en plus** de l'inspection du colis lui-même ?
+
+**Options:**
+- **(Correct)** Contrôler l'emplacement où les colis ou l'unité de
+  chargement ont été chargés dans l'avion, pour rechercher toute trace de
+  dommage ou de contamination ; si contamination il y a, elle devra être
+  éliminée.
+- Informer immédiatement l'agent des opérations aériennes ou le régulateur
+  de vols.
+- Renvoyer automatiquement le colis à l'expéditeur d'origine, sans autre
+  vérification.
+- Détruire immédiatement le colis sur place, sans consulter l'exploitant.
+
+**Correct answer rationale:** Slide 102, second paragraph: "Si on trouve des
+traces, contrôler l'emplacement où les colis ou l'unité de chargement ont
+été chargés dans l'avion pour rechercher toute trace de dommage ou de
+contamination[.] Si contamination il y a, elle devra être éliminée."
+
+**Distractor rationale:**
+- "Informer... l'agent des opérations aériennes ou le régulateur de vols" —
+  a deliberately named but unsupported channel: per blueprint binding
+  caveat 2, no mention of "l'agent des opérations aériennes" or "le
+  régulateur de vols" appears anywhere in this course — a confirmed SOURCE
+  GAP, included here specifically as a wrong answer, not as an implied fact.
+- "Renvoyer automatiquement... à l'expéditeur, sans autre vérification" —
+  fabricated procedure, no such automatic-return step appears on this
+  slide.
+- "Détruire immédiatement le colis... sans consulter l'exploitant" —
+  contradicts the exploitant's own central role stated throughout this
+  section (e.g., slide 103: "l'exploitant doit s'assurer que...").
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 102, second
+paragraph — deliberately kept separate from Q-7.4-023 (6.3.3, same slide's
+first paragraph): this item tests the specific **follow-up instruction**
+(check the original loading location; remediate contamination), while
+Q-7.4-023 tests the **initial verification duty** itself.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-026 — Champ d'application de la Réglementation (DGR 1.2.1)
+
+**Sub-task:** 0.1.3 Déterminer l'application et la portée
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Applicabilité DGR 1.2.1), à qui la
+Réglementation IATA sur les marchandises dangereuses (DGR) s'applique-t-elle ?
+
+**Options:**
+- **(Correct)** Aux exploitants membres ou membres associés de l'IATA, aux
+  parties à l'accord multilatéral de trafic intercompagnies de l'IATA-fret,
+  ainsi qu'aux expéditeurs et agents de fret.
+- Uniquement aux exploitants membres de l'IATA ; les expéditeurs et agents
+  de fret ne sont pas concernés par la Réglementation.
+- Uniquement aux États ayant ratifié une convention spécifique auprès de
+  l'OACI ; les exploitants n'y sont pas directement soumis.
+- À tous les transporteurs aériens dans le monde, qu'ils soient ou non
+  membres de l'IATA ou parties à un accord de trafic.
+
+**Correct answer rationale:** Slide 30: "DGR de l'IATA est applicable à :
+Tous les exploitants qui sont : Membres ou membres associés de l'IATA[,]
+Parties à l'accord multilatéral de trafic intercompagnies de l'IATA-fret[.]
+Aux expéditeurs et agents de fret."
+
+**Distractor rationale:**
+- "Uniquement... membres de l'IATA; les expéditeurs et agents... ne sont pas
+  concernés" — drops the shippers/freight agents the same slide names.
+- "Uniquement aux États... l'OACI; les exploitants n'y sont pas directement
+  soumis" — confuses this slide's operator/shipper-level scope with the
+  State/OACI layer taught on a different slide (slide 21).
+- "Tous les transporteurs... qu'ils soient ou non membres" — overstates the
+  scope; the slide names specific membership/party categories, not a
+  membership-independent universal application.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 30 (DGR 1.2.1).
+Corroborated at a topic level by Practice Q2 (this function's own
+scope-boundary question — the handling personnel's role vs. the acceptance
+functions' role), a related but distinct scope question from the same
+general applicability area.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-027 — Distinction danger/risque — exemple du liquide inflammable
+
+**Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Faire la distinction entre un danger et un
+risque — exemple du liquide inflammable), laquelle des affirmations
+suivantes illustre correctement la différence entre le danger et le risque ?
+
+**Options:**
+- **(Correct)** Le danger est l'inflammabilité elle-même (le fait que le
+  liquide puisse s'enflammer facilement) ; le risque est la probabilité
+  qu'il s'enflamme réellement pendant le transport aérien, par exemple si
+  le contenant est mal fermé ou exposé à la chaleur.
+- Le danger et le risque désignent exactement la même chose : la
+  probabilité qu'un accident se produise.
+- Le risque est la caractéristique physique intrinsèque du produit ; le
+  danger est la probabilité qu'un accident survienne.
+- Selon l'évaluation du cours, il est très probable que les marchandises
+  dangereuses causent un problème même lorsqu'elles sont préparées et
+  manipulées conformément à la réglementation IATA.
+
+**Correct answer rationale:** Slides 31–33: "Risque: le degré de probabilité
+... qu'un danger quelconque cause réellement un dommage" / "Danger: quelque
+chose qui pourrait potentiellement causer des dommages" ; worked example,
+slide 33: "Danger : son inflammabilité, le fait qu'il puisse s'enflammer
+facilement[.] Risque : quelle est la probabilité qu'il s'enflamme lors de
+son transport aérien ? contenant est mal fermé, exposé au soleil ou à une
+source de chaleur."
+
+**Distractor rationale:**
+- "Le danger et le risque désignent exactement la même chose" — contradicts
+  the course's own explicit two-definition structure.
+- "Le risque est la caractéristique physique... le danger est la
+  probabilité" — inverts the two definitions.
+- "Il est très probable que les MD causent un problème même... conformes" —
+  directly contradicts slide 33's own conclusion: "il est très **peu**
+  probable que les marchandises dangereuses causent un problème lorsqu'elles
+  sont préparées et manipulées conformément à la réglementation IATA."
+
+**Source basis:** Tier B — KOST Function 7.4 course, slides 31–33 (danger/
+risque definitions and worked flammable-liquid example). No direct exam/
+practice hit for this specific definitional-distinction fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-028 — Marchandises dangereuses de la propriété de l'exploitant (DGR 2.5)
+
+**Sub-task:** 0.2.2 Reconnaître les marchandises potentiellement dangereuses
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Limites — Marchandises dangereuses de
+l'exploitant DGR 2.5), laquelle des affirmations suivantes est correcte ?
+
+**Options:**
+- **(Correct)** Certains articles normalement classés comme marchandises
+  dangereuses (équipement de bord, produits de consommation, glace
+  carbonique, équipement électronique alimenté par batterie, pièces pour
+  avions) sont exemptés des exigences de la Réglementation lorsqu'ils
+  appartiennent à l'exploitant.
+- Aucune exemption n'existe pour les marchandises dangereuses appartenant à
+  l'exploitant ; toutes sont soumises intégralement à la Réglementation.
+- Cette exemption s'applique uniquement aux extincteurs, à l'exclusion de
+  tout autre article.
+- Cette exemption ne s'applique qu'aux vols cargo, jamais aux vols passagers.
+
+**Correct answer rationale:** Slide 43: "La Réglementation ne s'applique pas
+aux articles suivants : Équipement de bord[,] Produits de consommation[,]
+Dioxyde de carbone solide (glace carbonique)[,] Équipement électronique
+alimenté par une batterie[,] Pièces pour avions." Slide 44 adds further
+named examples (piles, extincteurs, équipements de sauvetage, fournitures
+d'oxygène portables, insecticides, parfums, boissons alcoolisées, glace
+carbonique pour restauration).
+
+**Distractor rationale (source-grounded):**
+- "Aucune exemption n'existe... toutes soumises intégralement" — directly
+  contradicts slides 43–44's own stated exemption list.
+- "Uniquement aux extincteurs" — understates the list; extincteurs is only
+  one of many named items on slide 44.
+- "Uniquement... vols cargo, jamais... passagers" — fabricated aircraft-type
+  restriction; no such distinction appears on either slide.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slides 43–44 (DGR 2.5).
+Per Stage 1's own recorded interpretive-mapping decision (blueprint binding
+caveat 6), this is the material this function's 0.2.2 leaf is mapped to
+(the broader "potentially dangerous merchandise" scope, distinct from
+0.2.1's "hidden DG" scope) — this item is drafted consistently with that
+already-recorded mapping, not a new interpretive decision.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-029 — Responsabilités de l'exploitant (DGR 1.4)
+
+**Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Rôle et responsabilité — Responsabilités
+Exploitant DGR 1.4), laquelle des listes suivantes correspond aux
+responsabilités attribuées à **l'exploitant** (et non à l'expéditeur) ?
+
+**Options:**
+- **(Correct)** Acceptation, chargement, entreposage, inspection,
+  renseignement en cas d'urgence, compte rendu, conservation des documents,
+  formation.
+- Classification, emballage, marquage et étiquetage du colis.
+- Déclaration du contenu et conservation des documents, à la charge
+  exclusive de l'expéditeur.
+- Uniquement la formation du personnel ; les autres tâches reviennent
+  exclusivement à l'expéditeur.
+
+**Correct answer rationale:** Slide 54 (DGR 1.4): "Acceptation[,]
+Chargement[,] Entreposage[,] inspection[,] Renseignement -en cas
+d'urgence-[,] Compte rendu[,] Conservation documents[,] Formation."
+
+**Distractor rationale (source-grounded — the shipper's own duty wheel is
+used as a wrong-party distractor):**
+- "Classification, emballage, marquage et étiquetage" — slide 53's own
+  shipper (expéditeur) duty wheel: "3-Classification[,] 4-Emballage[,]
+  5-Marquage[,] 6-Etiquetage" — a real, distinct list, but the shipper's,
+  not the operator's.
+- "Déclaration... à la charge exclusive de l'expéditeur" — slide 53 lists
+  "7-Déclaration" under the shipper's own duties, while omitting the
+  operator's own "Conservation documents" duty named on slide 54.
+- "Uniquement la formation... exclusivement à l'expéditeur" — understates
+  the operator's actual 8-item duty list on slide 54, of which training is
+  only one item.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 54 (DGR 1.4),
+cross-checked against slide 53 (DGR 1.3, shipper duties). Directly
+corroborated by Exam Q6 (a responsibility matrix distinguishing "Expéditeur"
+vs. "Exploitant" across acceptance/identification/loading/inspection), a
+close match to the shipper-vs-operator distinction this item tests.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-030 — Divergences propres à un exploitant (DGR 2.8.3)
+
+**Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Divergences d'État et d'Exploitant DGR
+2.8.3), laquelle des affirmations suivantes est correcte concernant les
+divergences propres à un exploitant ?
+
+**Options:**
+- **(Correct)** Les divergences de l'exploitant ne doivent pas être moins
+  restrictives que la Réglementation, et elles s'appliquent à tous les
+  transports effectués par les exploitants concernés (exemple : AH — Air
+  Algérie, AH-01, AH-02).
+- Les divergences de l'exploitant peuvent être moins restrictives que la
+  Réglementation, à condition d'être notifiées à l'OACI.
+- Seuls les États peuvent notifier des divergences ; les exploitants n'ont
+  pas ce droit.
+- Les divergences de l'exploitant ne s'appliquent qu'aux vols
+  internationaux de cet exploitant, jamais à ses vols domestiques.
+
+**Correct answer rationale:** Slide 59: "Divergence de l'Exploitant DGR
+2.8.3[:] Ne doivent pas être moins restrictives que le Règlement[;] Les
+divergences de l'exploitant sont applicables à tous les transports effectués
+par les exploitants concernés[.] Exemple : AH: AIR ALGERIE[,] AH-01, AH-02."
+
+**Distractor rationale (source-grounded):**
+- "Peuvent être moins restrictives... notifiées à l'OACI" — contradicts the
+  slide's own explicit "ne doivent pas être moins restrictives" requirement;
+  slide 57's general notification statement ("notifiées à l'OACI et à
+  l'IATA") does not override this specific restriction named on slide 59.
+- "Seuls les États peuvent notifier... les exploitants n'ont pas ce droit" —
+  contradicts slide 59's own heading and content, which is specifically
+  titled "Divergence de l'Exploitant."
+- "Ne s'appliquent qu'aux vols internationaux... jamais... domestiques" —
+  fabricated scope restriction, not stated on this slide.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 59 (DGR 2.8.3),
+cross-checked against slides 56–58 (general divergence framework, State-
+divergence example ITG/Italy). No direct exam/practice hit for this specific
+operator-divergence fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-031 — Degré de danger du Groupe d'emballage I (DGR 3.0.3)
+
+**Sub-task:** 0.4.2 Comprendre les principes généraux des groupes d'emballage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Emballage — Groupes d'emballage DGR 3.0.3), à
+quel degré de danger correspond le Groupe d'emballage I ?
+
+**Options:**
+- **(Correct)** Matières très dangereuses.
+- Matières moyennement dangereuses.
+- Matières faiblement dangereuses.
+- Matières non dangereuses, mais soumises à un contrôle documentaire
+  renforcé.
+
+**Correct answer rationale:** Slide 72: "GROUPE D'EMBALLAGE ... Groupe
+d'emballage I — Matières très dangereuses[;] Groupe d'emballage II —
+Matières moyennement dangereuses[;] Groupe d'emballage III — Matières
+faiblement dangereuses."
+
+**Distractor rationale (source-grounded — the two wrong groups' own real
+labels from the same table, plus a fabricated fourth category):**
+- "Matières moyennement dangereuses" — the same table's own Groupe II row,
+  not Groupe I.
+- "Matières faiblement dangereuses" — the same table's own Groupe III row,
+  not Groupe I.
+- "Matières non dangereuses... contrôle documentaire renforcé" — a
+  fabricated fourth category; the table names exactly three groups (I/II/
+  III), never a "non-dangereux" tier.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 72 (DGR 3.0.3).
+Corroborated directly by Exam Q7 (matches degrees of danger — grand/moyen/
+mineur — to packing groups) and Practice Q10/Q11 (packing-group count;
+Group III = "matières faiblement dangereuses"), a close, direct match for
+the table structure tested here.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-032 — Signification du code de groupe d'emballage dans le marquage UN
+
+**Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Marquage des emballages à spécifications),
+dans le marquage « UN 4G/Y/30/S/13/CH/2176/CG », que signifie la lettre
+« Y » ?
+
+**Options:**
+- **(Correct)** Le groupe d'emballage II.
+- Le code du matériau d'emballage (bois).
+- L'année de fabrication de l'emballage.
+- L'État d'origine de l'emballage.
+
+**Correct answer rationale:** Slide 90: "Y= Groupe d'emballage
+(X=groupe I -Y=groupe II et Z =groupe III)."
+
+**Distractor rationale (source-grounded — each names a different, correctly
+decoded element of the exact same marking string, from the same slide):**
+- "Code du matériau d'emballage (bois)" — slides 92–93's own material-code
+  table lists "C–Bois naturel," a different coding system entirely, not
+  this marking's "Y" position.
+- "Année de fabrication" — the same marking's own "13" element ("13 = Année
+  de fabrication de l'emballage (2013)"), a different position in the same
+  string.
+- "État d'origine de l'emballage" — the same marking's own "CH" element
+  ("CH = Etat d'origine de l'emballage (Suisse)"), a different position in
+  the same string.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 90 (UN-mark
+worked example), cross-checked against slides 92–93 (packaging type/
+material code tables). Corroborated at a topic level by Exam Q12 (a
+package-marking photo, circled-letter identification), a related but not
+identical marking-decoding fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-033 — Première action des procédures générales d'urgence
+
+**Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Procédures générales — intervention
+d'urgence), quelle est la toute première action à entreprendre en cas
+d'incident impliquant des marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** Aviser immédiatement son supérieur.
+- Isoler le colis endommagé en retirant les marchandises avoisinantes.
+- Identifier la marchandise dangereuse, si possible.
+- Appeler immédiatement un médecin, avant toute autre action.
+
+**Correct answer rationale:** Slide 145, step 1 of the 4-step "Procédures
+générales" list: "1 – Aviser immédiatement votre supérieur[,] 2 – Si
+possible, identifier la marchandise dangereuse[,] 3 – Si possible, isoler le
+colis endommagé en retirant les marchandises avoisinantes[,] 4 - Eviter le
+contact avec le contenu du colis."
+
+**Distractor rationale (source-grounded — each is a real listed step from
+the same course, but the wrong ordinal position):**
+- "Isoler le colis endommagé..." — the same slide's own step 3, not step 1.
+- "Identifier la marchandise dangereuse..." — the same slide's own step 2,
+  not step 1.
+- "Appeler immédiatement un médecin, avant toute autre action" — belongs to
+  the later, separate 5-step body-contact response sequence (slide 146,
+  "Si le produit entre contact avec le corps ou les habits"), not the
+  4-step initial-response sequence this stem asks about, and even within
+  that later sequence "appeler un médecin" is not its first listed action.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slide 145 (4-step
+initial response), cross-checked against slide 146 (5-step body-contact
+response — used only as the source of the fourth distractor, kept clearly
+separate from the sequence actually tested here). Corroborated at a topic
+level by Exam Q11 ("Prévenir son supérieur et suivre les recommandations du
+Red book de l'OACI"), a direct match for the "notify your supervisor first"
+principle tested here.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-034 — Séparation applicable à tout risque, primaire ou subsidiaire (restricted framing, binding caveat 3)
+
+**Sub-task:** 0.4.3 Envisager de multiples dangers — **restricted framing per blueprint binding caveat 3: operational-stage awareness fact only, never a classification-stage "determine the primary hazard" procedure**
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Base de la séparation des
+marchandises dangereuses, DGR 9.3.2.1), les prescriptions de séparation
+s'appliquent à **toutes** les étiquettes de danger apposées sur un colis,
+qu'il s'agisse d'un risque primaire ou d'un risque subsidiaire.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 106: "Les prescriptions relatives à la séparation
+s'appliquent à toutes les étiquettes de danger appliquées sur l'emballage,
+qu'ils s'agissent de risques primaires ou subsidiaires." Reinforced verbatim
+on slide 110: "Séparation pour toutes les étiquettes de danger de
+l'emballage (risque primaire ou subsidiaire). Séparation maintenue tout au
+long de l'acceptation, la manutention et le chargement."
+
+**Restricted-framing compliance note (per blueprint binding caveat 3, read
+in full before drafting this item):** this item deliberately tests only the
+operational-stage awareness fact stated on slides 106/110 — that separation
+rules under DGR 9.3.2.1 cover every hazard label a package carries, primary
+or subsidiary, once it reaches the warehouse/loading stage. It does **not**
+test, and must never be read as testing, a classification-stage "how do you
+determine which hazard is primary vs. subsidiary" procedure (DGR
+3.10-equivalent) — that determination method is not taught anywhere in this
+course, per Stage 1's own confirmed finding. This is the single permitted
+item for this sub-task's 0–1 sample this batch.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slides 106 and 110
+(DGR 9.3.2.1), the same two passing mentions of "risques primaires ou
+subsidiaires" already identified in Stage 1 and carried into the blueprint's
+binding caveat 3. No exam/practice hit for this specific fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.4-035 — Notification du commandant de bord avant le départ (restricted framing, binding caveat 2)
+
+**Sub-task:** 6.1.6 Informer le commandant de bord et l'agent des opérations aériennes ou le régulateur de vols — **restricted framing per blueprint binding caveat 2: captain-notification obligation only; must never test informing "l'agent des opérations aériennes" or "le régulateur de vols" (confirmed SOURCE GAP)**
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Notification des pilotes), qui l'exploitant
+doit-il informer, avant le départ, au moyen de renseignements écrits ou
+imprimés précis concernant les marchandises dangereuses transportées comme
+fret ?
+
+**Options:**
+- **(Correct)** Le commandant de bord.
+- Le contrôleur aérien de l'aéroport de destination.
+- L'expéditeur d'origine du colis.
+- Le passager assis le plus près de la soute cargo.
+
+**Correct answer rationale:** Slide 135: "L'un de ces principes veut que le
+commandant de bord soit informé de ce qu'il transporte à bord de l'avion
+car, en cas d'urgence par exemple, il faut tenir compte de la nature des
+marchandises dangereuses pour prendre les mesures appropriées." Slide 136:
+"Avant le départ, l'exploitant d'un avion transportant des marchandises
+dangereuses doit fournir **au commandant de bord** des renseignements écrits
+ou imprimés précis concernant les marchandises dangereuses à transporter
+comme fret."
+
+**Distractor rationale:**
+- "Le contrôleur aérien de l'aéroport de destination" — fabricated
+  recipient; no mention of air traffic control appears anywhere in this
+  course's NOTOC material.
+- "L'expéditeur d'origine du colis" — wrong direction; the shipper is the
+  source of the original declaration (slide 53's own duty wheel), not the
+  recipient of the pre-departure NOTOC briefing.
+- "Le passager... le plus près de la soute cargo" — fabricated, included
+  only to keep the item unambiguous; no such notification target appears
+  anywhere in the source.
+
+**Restricted-framing compliance note (per blueprint binding caveat 2, read
+in full before drafting this item):** this item is deliberately framed as a
+role/responsibility question — *who* must be informed before departure —
+exactly as the caveat instructs, not a NOTOC-content-accuracy question (that
+territory belongs to Q-7.4-012/013, already drafted under 6.1.5 in Batch 1).
+It does **not** test, name, or imply that "l'agent des opérations aériennes"
+or "le régulateur de vols" are informed by this same mechanism — that half
+of this sub-task's official wording remains a confirmed SOURCE GAP, with
+zero course/exam/practice evidence found in either Stage 1's or this
+session's re-check. This is the single permitted item for this sub-task's
+0–1 sample this batch.
+
+**Source basis:** Tier B — KOST Function 7.4 course, slides 135–136 (DGR
+9.5.1.1.3), the same NOTOC evidence base already drawn on for Q-7.4-012/013
+in Batch 1, but this item tests the distinct "who must be informed" fact
+rather than "what the NOTOC must contain" or "how exactly it must match the
+cargo."
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Method notes on distractor sourcing (rule 6 compliance) — Batch 2
+
+Exactly as in Batch 1, every distractor above is grounded in something
+actually read this session: either (a) a different, correctly-stated fact
+from elsewhere in the same KOST Function 7.4 course (or, for one item,
+Q-7.4-021, from the Function 7.4 Practice Book, honestly flagged as such),
+repurposed as a wrong answer to *this* question, or (b) a direct
+contradiction of a specific clause in the same source passage the correct
+answer comes from. No distractor asserts an invented regulatory fact, an
+invented numeric threshold, or a fact sourced from a different function's
+course material. Where a caveat-2 or caveat-4 item names an unsupported
+notification channel as a deliberate wrong answer (Q-7.4-025, Q-7.4-035),
+this is flagged explicitly in that item's own rationale so no future reader
+mistakes the distractor's mention of "l'agent des opérations aériennes" or
+"le régulateur de vols" for evidence that either is actually informed.
+
+## Summary table — Batch 2
+
+| ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
+|---|---|---|---|---|---|---|
+| Q-7.4-017 | 0.2.1 Définition MD cachée | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 48 (DGR 2.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-018 | 0.2.1 Mesures de prévention | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-019 | 4.2.1 AOG — checkpoint entrepôt | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 50 (DGR 2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-020 | 6.1.2 Inspection pendant le chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-021 | 4.2.2 Inspection colis avant chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 101 ¶1 + Practice Q17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-022 | 6.1.3 Inspection UC avant placement avion | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 101 ¶2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-023 | 6.3.3 Inspection dès déchargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 102 ¶1 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-024 | 6.3.3 Fuite/dommage constaté — réponse | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 103 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-025 | 6.3.1 Contrôle emplacement de chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 102 ¶2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-026 | 0.1.3 Champ d'application DGR 1.2.1 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 30 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-027 | 0.1.4 Distinction danger/risque | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 31–33 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-028 | 0.2.2 MD de la propriété de l'exploitant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 43–44 (DGR 2.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-029 | 0.3.1 Responsabilités Exploitant DGR 1.4 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-030 | 0.3.3 Divergence de l'Exploitant DGR 2.8.3 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 59 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-031 | 0.4.2 Groupe d'emballage I | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 72 (DGR 3.0.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-032 | 0.5.1 Code "Y" du marquage UN | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-033 | 0.6.1 Première action d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 145 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-034 | 0.4.3 Séparation — risque primaire/subsidiaire (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slides 106, 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-035 | 6.1.6 Notification du commandant de bord (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 135–136 (DGR 9.5.1.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+**Batch composition:** 17 MCQ + 2 True/False. Block spread: Block 0 = 9
+items (8 distinct leaves: 0.1.3, 0.1.4, 0.2.1, 0.2.2, 0.3.1, 0.3.3, 0.4.2,
+0.4.3, 0.5.1, 0.6.1 — 10 leaves, since 0.2.1 alone carries 2 items), Block 4
+= 2 items (2 leaves: 4.2.1, 4.2.2), Block 6 = 8 items (5 leaves: 6.1.2,
+6.1.3, 6.1.6, 6.3.1, 6.3.3 — 6.3.3 alone carries 2 items).
+
+**Combined Batch 1 + Batch 2 total: 35 items** (16 + 19), against the
+111-question provisional ceiling — a source-yield ceiling, not a quota, per
+standing instruction.
+
+## What this batch does NOT do
+
+- Does not exceed any per-sub-task ceiling in
+  `docs/DGR_STAGE2A_FUNCTION_7.4_BLUEPRINT.md` — see the ceiling-compliance
+  table above; every drawn count (including the combined Batch 1 + Batch 2
+  total per leaf) is at or below its ceiling.
+- Does not draft any item against the three confirmed `SOURCE GAP` leaves
+  (4.2.5, 6.1.1, 6.3.4) — count remains 0 for all three across both
+  batches, no exception, per binding caveat 1.
+- Does not draft a second item for 0.4.3 or 6.1.6 beyond the single
+  restricted-framing item each already carries at their 0–1 sample ceiling —
+  both are now fully drawn at their maximum permitted figure (1), correctly,
+  never testing the unsupported half of either sub-task (flight-ops/
+  dispatch notification for 6.1.6; classification-stage hazard
+  determination for 0.4.3).
+- Does not draft an item for 6.3.2 — attempted and honestly declined this
+  batch after finding no textually-distinct unloading-stage fact in the
+  hidden-DG evidence pool (p.48–52); real yield lower than the leaf's own
+  ceiling (2), per the blueprint's own no-padding instruction. Headroom (2)
+  remains for a future batch if new source material narrows this gap.
+- Does not draft any item from 4.2.4 (ULD labelling, real evidence p.112–
+  114) or 0.6.2 (generic-awareness-only, sample 0–1, binding caveat 7) —
+  left for a future batch; 0.6.2 in particular should stay minimal even
+  then.
+- **Leaves with zero items drawn across both Batch 1 and Batch 2, after this
+  batch:** 4.2.4, 0.6.2 (real evidence, simply not yet drafted), 6.3.2
+  (attempted, no distinct evidence found this batch), and the three
+  confirmed `SOURCE GAP` leaves (4.2.5, 6.1.1, 6.3.4), which by definition
+  will never carry an item without new source material.
+- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification for
+  any of the 35 items now in this bank (16 from Batch 1, 19 from Batch 2) —
+  that remains the mandatory next step before any of these can move past
+  `DRAFT`, blocked this pass on the confirmed absence of an authenticated
+  Bookshelf session in this environment (see "Status of this batch" above).
+- Does not mark any item `APPROVED` — no qualified reviewer exists in this
+  pass.
+- Does not touch Moodle or any live/production question-bank copy.

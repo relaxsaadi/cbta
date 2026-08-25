@@ -232,3 +232,53 @@ None of the above changes the two-track label discipline in
 complete**, and neither `PLATFORM READY TO USE` nor `FULL PROGRAM
 PRE-PRODUCTION READY` may be declared while items 1–4 above remain open for
 the great majority of the program's 304 drafted items.
+
+## 2026-08-25 (still later same day) — third milestone: Batch 3 (deeper coverage) drafted for all ten functions
+
+After the Tier A retry documented above found a different, more specific
+technical blocker (see the "Tier A verification — retried a second time"
+section), the owner's fallback instruction ("continue only work that does
+not pretend Tier A verification") was followed: a third drafting pass
+(Batch 3) was dispatched for every function with meaningful remaining
+Stage 2A headroom, each batch instructed explicitly to **report genuine
+diminishing yield honestly rather than pad toward the blueprint ceiling**.
+
+### Exact per-function totals after Batch 3
+
+| Function | Batch 1 | Batch 2 | Batch 3 | Total drafted | Blueprint ceiling | % of ceiling |
+|---|---|---|---|---|---|---|
+| 7.1 | 12 pilot + 7 batch | — | — | 19 | recovered/corrected | n/a |
+| 7.2 | 11 | 17 | 21 | 49 | 89 | 55% |
+| 7.3 | 14 | 18 | 13 | 45 | 117 | 38% |
+| 7.4 | 16 | 19 | 18 | 53 | 111 | 48% |
+| 7.5 | 16 | 13 | 15 | 44 | 67 | 66% |
+| 7.6 | 15 | 18 | 23 | 56 | 89 | 63% |
+| 7.7 | 15 | 18 | 20 | 53 | 85 | 62% |
+| 7.8 | 15 | 17 | 19 | 51 | 78 | 65% |
+| 7.9 | 16 | 15 | 8 | 39 | 82 | 48% |
+| 7.10 | 15 | 17 | 12 | 44 | 76 | 58% |
+| **Total** | **145** | **142** | **149** | **453** | **~901** (excl. 7.1) | **~53%** avg |
+
+Every Batch 3 explicitly distinguished, per function and per leaf, **leaves
+confirmed genuinely exhausted of distinct source evidence** (real yield
+below ceiling — not a shortfall) from **leaves with real remaining
+headroom for a hypothetical Batch 4** — this distinction is recorded in
+each function's own `docs/DGR_PRODUCTION_BANK_7.X.md` file, not just
+asserted here. Function 7.3 and 7.4 both reached full leaf coverage (every
+non-gapped leaf has at least one item) during Batch 3. Function 7.9's
+Batch 3 was deliberately small (8 items) — the most honest diminishing-yield
+result of the three batches, explicitly documented rather than padded.
+Several batches also found and excluded unmarked/unkeyed course exercises
+(no stated answer in the source) rather than guessing at a correct answer,
+consistent with rule 1's no-inference standard, and several flagged course
+content that maps to no official CBTA leaf at all (an "over-teaching beyond
+the table" pattern already established for several functions during Stage
+1) — correctly left undrafted rather than force-fit to the nearest leaf.
+
+**No item in Batch 3, or anywhere in the 453-item program, has Tier A
+verification.** This does not change the remaining-work list above (items
+1, 3, 4, 5 are unchanged and still fully open); item 2 ("deeper batches")
+is now substantially addressed — the program sits at roughly half its
+combined blueprint ceiling on average — but genuine further headroom does
+remain per-function for a possible Batch 4, honestly documented rather than
+exhausted everywhere. Track B remains **NOT complete**.

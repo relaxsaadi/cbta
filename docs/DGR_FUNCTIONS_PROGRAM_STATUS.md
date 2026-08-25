@@ -319,3 +319,59 @@ unchanged (`chrome-devtools` still returns "the selected page has been
 closed", no `list_pages` tool available) — the Tier A track remains
 stopped, per standing instruction, until the connection is fixed on the
 owner's end.
+
+## 2026-08-25 (still later same day) — fifth milestone: reviewer-preparation materials assembled (preparation only, no review performed)
+
+Two new files now exist to prepare the ground for a real, qualified
+bilingual (FR/EN) DGR reviewer to pick up the EN review gate:
+`docs/DGR_EN_TERMINOLOGY_MASTER.md` and `docs/DGR_EN_REVIEWER_GUIDE.md`.
+**This is preparation work only.** No terminology decision was resolved,
+no item was reviewed, and no item moved closer to `APPROVED` — see the
+explicit restatement at the end of this section.
+
+**`docs/DGR_EN_TERMINOLOGY_MASTER.md`** cross-references all ten EN
+review packages' terminology tables (654 rows read in full) and
+consolidates every French DGR/CBTA term that recurs in more than one
+function's table (87 such terms out of 416 distinct FR term strings
+found across the ten packages):
+
+- **16 terms are flagged CROSS-FUNCTION INCONSISTENCY** — different
+  functions chose different English wording for the same French term
+  (e.g. "Commandant de bord" → "Captain" in Functions 7.7/7.8/7.9 vs.
+  "Pilot-in-command (PIC)" in Functions 7.4/7.6; "SCoETDG" rendered three
+  different ways across 8 functions; four different word-orderings of
+  "IATA Cargo (Multilateral) Interline Traffic Agreement" across 6
+  functions; "dry ice" vs. "solid carbon dioxide" leading inconsistently
+  across 9 functions). These are flagged for the reviewer to resolve —
+  **not resolved by this pass** — because resolving each one once
+  corrects every affected item across every affected function at once.
+- **6 terms are consistently translated the same way across every
+  function that used them, but every single instance is still flagged
+  unverified** (e.g. "dérogation"→"Exemption" across 8 functions,
+  "divergence d'État/d'exploitant"→"State variation/Operator variation"
+  across 8 functions) — no disagreement exists, but Tier A English-text
+  confirmation is still outstanding for all of them.
+- **65 terms are consistently translated and carry "Standard"
+  (low-risk) verification status** across the functions that use them —
+  ready for the reviewer to bulk-confirm rather than re-litigate
+  per-function.
+
+**`docs/DGR_EN_REVIEWER_GUIDE.md`** is a single onboarding entry point for
+a real qualified bilingual DGR reviewer: what the EN bilingual review gate
+is and is not (explicitly: a separate gate from Tier A FR regulatory
+verification and from FR technical reviewer sign-off, per
+`.claude/rules/dgr-stage2b.md` rules 4–5 — completing EN review alone
+never produces `APPROVED`), where to find every relevant file, the exact
+sign-off format and status/approval fields to edit per item, and a
+suggested (non-mandatory) review order prioritizing the terminology
+master's cross-function conflicts first.
+
+**Explicit restatement, per this rule file's own discipline:** producing
+these two files is preparation work performed by Claude Code, not a
+review. No qualified bilingual DGR reviewer has reviewed any item. No
+terminology conflict listed in `docs/DGR_EN_TERMINOLOGY_MASTER.md` was
+resolved — each remains an open flag for the human reviewer to decide.
+No item's EN status changed from `BILINGUAL TECHNICAL REVIEW REQUIRED`,
+no item's FR status changed, and no item is any closer to `APPROVED`
+than before this section was written. Tier A verification status is
+unchanged from the fourth-milestone entry above.

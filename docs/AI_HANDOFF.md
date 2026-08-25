@@ -339,9 +339,11 @@ defect, and the exam-manager/instructor RBAC role implementation decision.
 
 ## 2026-08-25 (still later same day) — Tier A retry #2: a different, more specific technical blocker
 
-After the second Track B milestone (304 items, Batch 1+2 + EN packages for
-all ten functions — see `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`'s "second
-milestone" section and this report's eighth-pass note), the owner reported
+After the second Track B milestone (304 items total; Batch 2 drafted for
+Functions 7.2–7.10 specifically, with Function 7.1 unchanged at its own
+19-item pilot/Batch-1 state; EN review packages for all ten functions — see
+`docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`'s "second milestone" section and
+this report's eighth-pass note), the owner reported
 the IATA Bookshelf as authenticated and open in Chrome again, with remote
 debugging active on `127.0.0.1:9222`, and asked for a retry before any
 further Batch 3+ expansion.

@@ -139,17 +139,21 @@ see their own rows above), not a new Stage 1/2A derivation pass for any
 function, since that derivation work is now finished for the whole
 7.1–7.10 program.
 
-## 2026-08-25 (later same day) — second milestone: every function now has Batch 1 + Batch 2 production questions AND an EN review package
+## 2026-08-25 (later same day) — second milestone: Batch 2 drafted for Functions 7.2–7.10, and every function now has an EN review package
 
 Following the Stage 1/2A milestone above, this same session continued
 autonomously (per the standing authorization in `.claude/rules/dgr-stage2b.md`)
-through two more full passes across all ten functions, each dispatched as
-parallel background agents, each verified and pushed individually. **Every
-one of the ten functions now has: (a) at least two drafted production
-question batches (Batch 1 + Batch 2, both Tier B `DRAFT`), and (b) a
-complete EN bilingual review package translating every currently-drafted
-item.** This is the second genuine programmatic milestone of the day, not
-merely another status update.
+through two more full passes, each dispatched as parallel background
+agents, each verified and pushed individually. **Functions 7.2–7.10 each
+now have at least two drafted production question batches (Batch 1 +
+Batch 2, both Tier B `DRAFT`); Function 7.1 does not use this Batch 1/2/3
+scheme and remains at its own existing 12-item frozen pilot + 7-item
+Batch 1 state (19 items total, unchanged this pass — see its row below).
+Separately, all ten functions, including 7.1, now have an EN bilingual
+review package** — 7.1's package covers its 12 FR-terminal pilot items
+only, deliberately excluding its still-`DRAFT` 7-item batch (see that
+row's own note). This is the second genuine programmatic milestone of the
+day, not merely another status update.
 
 ### Exact per-function item counts as of this milestone
 
@@ -233,15 +237,20 @@ complete**, and neither `PLATFORM READY TO USE` nor `FULL PROGRAM
 PRE-PRODUCTION READY` may be declared while items 1–4 above remain open for
 the great majority of the program's 304 drafted items.
 
-## 2026-08-25 (still later same day) — third milestone: Batch 3 (deeper coverage) drafted for all ten functions
+## 2026-08-25 (still later same day) — third milestone: Batch 3 drafted for Functions 7.2–7.10
 
 After the Tier A retry documented above found a different, more specific
 technical blocker (see the "Tier A verification — retried a second time"
 section), the owner's fallback instruction ("continue only work that does
 not pretend Tier A verification") was followed: a third drafting pass
-(Batch 3) was dispatched for every function with meaningful remaining
-Stage 2A headroom, each batch instructed explicitly to **report genuine
+(Batch 3) was dispatched for **Functions 7.2–7.10** — every function that
+uses the Batch 1/2/3 drafting scheme and had meaningful remaining Stage 2A
+headroom — each batch instructed explicitly to **report genuine
 diminishing yield honestly rather than pad toward the blueprint ceiling**.
+**Function 7.1 does not use this scheme and received no Batch 2 or Batch 3
+this pass** — it remains at its existing 19-item state (12 frozen pilot +
+7-item Batch 1), unchanged since the second milestone above; see its row
+in the table below.
 
 ### Exact per-function totals after Batch 3
 
@@ -275,8 +284,12 @@ content that maps to no official CBTA leaf at all (an "over-teaching beyond
 the table" pattern already established for several functions during Stage
 1) — correctly left undrafted rather than force-fit to the nearest leaf.
 
-**No item in Batch 3, or anywhere in the 453-item program, has Tier A
-verification.** This does not change the remaining-work list above (items
+**No Batch 3 item has Tier A verification. Across the full 453-item
+program, the only Tier A verified items remain 11 of Function 7.1's 12
+frozen pilot items (the 12th is `FR SOURCE GAP CONFIRMED`); every other
+item — all of Function 7.1's 7-item Batch 1 and all of Functions
+7.2–7.10's Batches 1–3 — remains non-Tier-A.** This does not change the
+remaining-work list above (items
 1, 3, 4, 5 are unchanged and still fully open); item 2 ("deeper batches")
 is now substantially addressed — the program sits at roughly half its
 combined blueprint ceiling on average — but genuine further headroom does

@@ -606,16 +606,16 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 | FR term | EN term | Verification status | Appears in |
 |---|---|---|---|
 | Marchandise(s) dangereuse(s) | Dangerous Goods (DG) | Standard, well-established | All items |
-| Personnel de sûreté / personnel chargé du contrôle de sécurité | Security personnel / security screening personnel | Standard, per task instruction ("contrôle de sûreté"→"security screening") | Q-001, 002, 011, 013, 014, 027 |
+| Personnel de sûreté / personnel chargé du contrôle de sécurité | Security personnel / security screening personnel | Standard, per task instruction ("contrôle de sûreté"→"security screening") | Q-001, 002, 011, 013, 014, 027, 033, 035 |
 | Plan de sûreté (DGR 1.7.4.2) | Security plan | Standard | Q-001 |
-| Divergence d'État / divergence de l'exploitant | State variation / Operator variation | **Flagged — candidate term "Variation," unverified**, reused from Function 7.7's Q-7.7-023 | Q-001, 022 |
+| Divergence d'État / divergence de l'exploitant | State variation / Operator variation | **Flagged — candidate term "Variation," unverified**, reused from Function 7.7's Q-7.7-023 | Q-001, 022, 041 |
 | Prescriptions d'approbation de l'exploitant (DGR 1.2.5) | Operator's approval requirements | Standard | Q-001, 012 |
 | Documentation de l'expéditeur (DGR 8.0.1) | Shipper documentation | Standard | Q-001, 024 |
 | Chaîne hiérarchique | Chain of command | Standard | Q-002 |
 | Autorités compétentes | Competent authorities | Standard | Q-002, 013 |
 | Superviseur sûreté / PAF / pompiers | Security supervisor / border police (PAF) / fire department | **Flagged — PAF acronym candidate, unverified** | Q-002 |
-| Allumettes chimiques / frottoir | Chemical matches / striker | **Flagged — "frottoir" candidate, unverified** | Q-003 |
-| Briquets à flamme bleue / allume-cigares | Blue-flame lighters / cigar lighters | Standard | Q-003 |
+| Allumettes chimiques / frottoir | Chemical matches / striker | **Flagged — "frottoir" candidate, unverified** | Q-003, 038 |
+| Briquets à flamme bleue / allume-cigares | Blue-flame lighters / cigar lighters | Standard | Q-003, 038 |
 | Bagage cabine / bagage enregistré / sur la personne | Cabin baggage / checked baggage / on the person | Standard, per task instruction ("bagages"→"baggage") | Multiple |
 | Armes électriques (Tasers) | Electroshock weapons (Tasers) | Standard, consistent with Function 7.7's Q-7.7-021 | Q-004 |
 | Colonne / Liste des marchandises dangereuses (DGR 4.2) | Column / Dangerous Goods List | Standard | Q-005, 029 |
@@ -627,9 +627,9 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 | Fret / courrier | Cargo / mail | Standard, per task instruction ("fret et courrier"→"cargo and mail") | Q-009, 013, 014 |
 | Marchandise dangereuse non déclarée / mal déclarée | Undeclared / misdeclared dangerous goods | Standard | Q-009, 013, 014 |
 | Inspection physique d'un colis | Physical inspection of a package | Standard, per task instruction ("inspection physique"→"physical inspection") | Q-010 |
-| Cargo Aircraft Only (CAO) | Cargo Aircraft Only (CAO) | Unchanged (already English on the source slide) | Q-010 |
+| Cargo Aircraft Only (CAO) | Cargo Aircraft Only (CAO) | Unchanged (already English on the source slide) | Q-010, 037 |
 | Lettre de transport aérien (LTA) | Air waybill (AWB) | Standard, consistent with Function 7.7's terminology table | Q-010 |
-| Agent de contrôle de sécurité | Security screening agent | Standard, per task instruction | Q-011 |
+| Agent de contrôle de sécurité | Security screening agent | Standard, per task instruction | Q-011, 035 |
 | Colis exceptés de matières radioactives | Excepted radioactive material packages | Standard | Q-011 |
 | Appareils électroniques portables (AEP) | Portable electronic devices (PEDs) | Standard | Q-012 |
 | Transitaires / autorités douanières / fournisseurs de service de sûreté | Freight forwarders / customs authorities / security service providers | Standard | Q-013 |
@@ -657,6 +657,19 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 | Liste numérique des marchandises dangereuses (DGR 4.3) | Numeric list of dangerous goods | Standard, consistent with Function 7.7's Q-7.7-030 | Q-029 |
 | Classes / Divisions | Classes / Divisions | Standard | Q-005, 030 |
 | Matières dangereuses pour l'environnement / organismes génétiquement modifiés (OGM) / produit radioactif | Environmentally hazardous substances / genetically modified organisms (GMOs) / radioactive material | Standard, GMO consistent with Function 7.7's own equivalent | Q-032 |
+| Pratiques indésirables / mauvaise compréhension des règles | Undesirable practices / misunderstanding of the rules | **Flagged — "undesirable practices" candidate, unverified** | Q-033 |
+| Rapport d'incident | Incident report | Standard | Q-035 |
+| Réchaud de camping | Camping stove | Standard | Q-036 |
+| Annexe B / Codes cargo IMP (DGR B.2.2.4) | Appendix B / IMP cargo codes | **Flagged — "Appendix" candidate for "Annexe," unverified; "IMP" itself left unexpanded, standard aviation-cargo-messaging acronym** | Q-037 |
+| Dérogation(s) (DGR 1.2.6) / déroger aux dispositions | Exemption(s) / a departure from the provisions | **Flagged — reused from Function 7.7's Q-7.7-032 candidate ("dérogation"→"Exemption"); kept distinct from "Exceptions DGR 1.2.7" (same word FR/EN) so the two separate DGR 1.2.6/1.2.7 mechanisms are not conflated** | Q-038 |
+| Agrément (vs. approbation) | Approval | **Flagged — this package renders both "agrément" and "approbation" as "approval"; unverified whether the course/DGR intends two distinct mechanisms** | Q-001, 012, 038 |
+| Exceptions (DGR 1.2.7) | Exceptions | Standard (identical FR/EN term) | Q-038 |
+| Confort et besoins du passager / articles de toilette / fauteuil roulant électrique / bouteilles d'oxygène médical | Passenger comfort and needs / toiletries / electric wheelchair / medical oxygen bottles | Standard | Q-039 |
+| Responsabilités de l'expéditeur (DGR 1.3) | Shipper responsibilities | Standard | Q-040 |
+| Renseignement en cas d'urgence | Emergency response information | Standard, consistent with Q-7.10-026's own rendering (Batch 2) | Q-026, 040 |
+| État d'Origine / État de Départ / État de Destination / États des escales de Transit | State of Origin / State of Departure / State of Destination / States of Transit | Standard | Q-041 |
+| Code de type d'emballage (DGR 6.0.3.1) / Caisse / Fût / Jerrican / Sac | Packaging type code / Box / Drum / Jerrican / Bag | **Flagged — candidate renderings, unverified; distinct from the separate "caisse en carton"/"fibreboard box" packaging-material-code flag at Q-023, which concerns a different digit/letter position of the same "4G" worked example** | Q-042 |
+| Bagage de soute | Checked baggage | **Flagged — treated as equivalent to "bagage enregistré" (already tabled above); unverified whether the course intends a distinct hold-baggage category** | Q-043 |
 
 **Reading this table:** "Standard" means the term is well-established
 IATA/UN dangerous-goods English usage with low translation risk, but —
@@ -835,6 +848,304 @@ for production use. For every one of the ten functions:
 - Full human bilingual technical review of every EN package (the work this
   package, and the nine before it, exist to prepare for) remains open — no
   item across any function has a named qualified reviewer and a review
+  date.
+- No item in any function's production bank may be marked `APPROVED`
+  (`.claude/rules/dgr-stage2b.md` rule 4) until both gates above are
+  independently closed for that item.
+
+Per `.claude/rules/dgr-stage2b.md` rule 16, this milestone does not permit
+declaring `PLATFORM READY TO USE` — see `docs/FULL_PROGRAM_READINESS_SCOPE.md`
+and `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` for the narrower pre-production
+label and the remaining open gates across the full ten-function program.
+
+---
+
+## Batch 3
+
+Preparatory bilingual (FR→EN) draft translation for the 12 Batch 3
+production items (`Q-7.10-033`–`Q-7.10-044`), drafted in
+`docs/DGR_PRODUCTION_BANK_7.10.md`'s own "## Batch 3" section after Batches
+1+2's EN package (above) was already prepared. **This closes the catch-up
+gap for Function 7.10 — the last of the ten 7.1–7.10 functions to still
+need its Batch 3 EN translation.**
+
+The same status discipline stated at the top of this file applies in full,
+unchanged, to every item below:
+
+- **No item in this section may be marked `BILINGUAL TECHNICAL REVIEW
+  COMPLETE` or `APPROVED`.** No qualified bilingual DGR instructor has
+  reviewed any translation in this pass.
+- Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
+  REQUIRED`** (translation drafted, not yet reviewed).
+- Every approval field reads **`PENDING REVIEWER + DATE`**.
+- **This section does not change any item's FR status.** All 12 items
+  remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
+  recorded in `docs/DGR_PRODUCTION_BANK_7.10.md`'s "## Batch 3" section.
+  Per `.claude/rules/dgr-stage2b.md` rule 5, FR source verification and EN
+  bilingual technical review remain separate gates — closing neither gate
+  for any item here.
+- This section closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
+  `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
+  separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
+  rules 4–5.
+- The FR text quoted below (stem + options, or statement for the one
+  True/False item) is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.10.md`'s
+  Batch 3 section, itself sourced verbatim, with printed slide citations, from
+  the actual KOST Function 7.10 course/practice-book PDFs — no reconstruction,
+  no gloss. That file remains the authoritative FR source of record and
+  carries the fuller rationale, distractor-sourcing notes, binding-caveat
+  compliance notes, and slide citations not repeated here.
+- The course underlying this batch is, as for Batches 1/2, explicitly built
+  on the IATA DGR **66th Edition**, not the 67th Edition/Addendum 1 baseline
+  this repository otherwise targets. Every "DGR x.y.z" section number quoted
+  below is exactly as displayed on the KOST slide — Tier B, not
+  independently re-verified as still-current numbering.
+- **Terminology reuse note:** this section reuses this package's own
+  Batch 1/2 terminology decisions wherever the same DGR concept recurs
+  ("security screening personnel"/"security screening agent," "State
+  variation," "checked baggage," "Isolate the threat... and protect
+  people," "Emergency response information") and reuses Function 7.7's
+  Q-7.7-032 flagged candidate ("dérogation"→"Exemption") for the one item
+  where that term newly recurs in Function 7.10 (Q-7.10-038) — the only
+  one of the task's four example cross-function terms that had not yet
+  recurred in this function through Batch 2. New terminology candidates
+  introduced by this batch are flagged individually below and added to the
+  terminology table above, not silently assumed.
+
+---
+
+### Q-7.10-033 — Motifs de non-déclaration des marchandises dangereuses par l'expéditeur ou les passagers
+
+- **Sub-task:** 3.4.1 Vérifier la documentation pour voir s'il y a des indications concernant des marchandises dangereuses cachées ou non déclarées
+- **Type:** MCQ, single-answer ("laquelle N'EST PAS")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Pourquoi l'expéditeur ou les passagers ne déclarent pas les marchandises dangereuses ?), laquelle des raisons suivantes n'est PAS citée par le cours parmi les motifs de non-déclaration ?"*
+  - Options: **(Correct)** *"L'absence de formation obligatoire du personnel chargé du contrôle de sécurité."* / *"Les coûts d'expédition généralement plus élevés pour les marchandises dangereuses."* / *"Les pratiques indésirables."* / *"La mauvaise compréhension des règles."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Why do shippers or passengers not declare dangerous goods?), which of the following reasons is NOT cited by the course among the motives for non-declaration?"*
+  - Options: **(Correct)** *"The absence of mandatory training for security screening personnel."* / *"Shipping costs generally being higher for dangerous goods."* / *"Undesirable practices."* / *"Misunderstanding of the rules."*
+- **Terminology decision — FLAGGED:** "pratiques indésirables" → **"undesirable practices"** — candidate rendering, not independently verified against a supplied English 67th Edition text this session.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-034 — Recommandations pour prévenir les scénarios de marchandises dangereuses cachées
+
+- **Sub-task:** 3.4.2 Vérifier les colis pour voir s'il y a des indications concernant des marchandises dangereuses cachées ou non déclarées
+- **Type:** MCQ, single-answer ("laquelle NE fait PAS partie")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Recommandations pour éviter les scénarios de marchandises dangereuses cachées), laquelle des mesures suivantes ne fait PAS partie des recommandations citées par le cours ?"*
+  - Options: **(Correct)** *"Isoler la menace (colis, bagage, zone) et protéger les personnes."* / *"Respecter la réglementation DGR."* / *"Former le personnel."* / *"Effectuer des inspections des bagages pendant le chargement."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Recommendations for avoiding hidden dangerous goods scenarios), which of the following measures is NOT among the recommendations cited by the course?"*
+  - Options: **(Correct)** *"Isolate the threat (package, baggage, area) and protect people."* / *"Comply with the DGR Regulations."* / *"Train personnel."* / *"Carry out baggage inspections during loading."*
+- **Terminology decision:** "Isoler la menace (colis, bagage, zone) et protéger les personnes" reused verbatim from Q-7.10-002's own EN rendering (Batch 1), for consistency within this package.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-035 — Action immédiate face à une marchandise dangereuse non déclarée découverte en bagage cabine
+
+- **Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le practice book (Question 5), en cas de découverte d'une marchandise dangereuse non déclarée dans un bagage cabine, que doit faire l'agent chargé du contrôle de sécurité ?"*
+  - Options: **(Correct)** *"Informer immédiatement le superviseur et rédiger un rapport d'incident."* / *"Laisser le bagage passer discrètement."* / *"Confisquer l'objet et le garder lui-même."* / *"Rendre l'objet au passager, sans autre action."*
+- **EN draft translation:**
+  - Stem: *"Per the practice book (Question 5), upon discovering an undeclared dangerous good in cabin baggage, what must the security screening agent do?"*
+  - Options: **(Correct)** *"Immediately inform the supervisor and write an incident report."* / *"Let the baggage pass through discreetly."* / *"Confiscate the item and keep it personally."* / *"Return the item to the passenger, with no further action."*
+- **Terminology decision:** "agent chargé du contrôle de sécurité" → **"security screening agent"**, reusing Q-7.10-011's own established rendering (Batch 1).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-036 — Accident historique associé à un réchaud de camping dans les bagages (301 morts)
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Généralités — Pourquoi Réglementer?), quel accident historique cité par le cours est associé à un réchaud de camping placé dans les bagages, ayant causé la mort de 301 personnes ?"*
+  - Options: **(Correct)** *"Saudi Arabian Airlines, Riyadh, 19 août 1980."* / *"Pan Am, Boston, 3 novembre 1973 (acide nitrique — 3 membres d'équipage périssent)."* / *"ValuJet, Everglades, 11 mai 1996 (générateurs d'oxygène — 110 morts)."* / *"UPS B-747, Dubaï, 3 septembre 2010 (2 membres d'équipage ont perdu la vie)."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General — Why Regulate?), which historical accident cited by the course is associated with a camping stove placed in baggage, which caused the deaths of 301 people?"*
+  - Options: **(Correct)** *"Saudi Arabian Airlines, Riyadh, 19 August 1980."* / *"Pan Am, Boston, 3 November 1973 (nitric acid — 3 crew members perish)."* / *"ValuJet, Everglades, 11 May 1996 (oxygen generators — 110 deaths)."* / *"UPS B-747, Dubai, 3 September 2010 (2 crew members lost their lives)."*
+- **Terminology decision:** "réchaud de camping" → **"camping stove"**, standard rendering.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-037 — Signification du code IMP « CAO » (Annexe B, DGR structure)
+
+- **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Structure du DGR de l'IATA — Annexe B, Codes cargo IMP, B.2.2.4), que signifie le code IMP « CAO » ?"*
+  - Options: **(Correct)** *"Cargo Aircraft Only (avion cargo seulement)."* / *"Déclaration de marchandises dangereuses de l'expéditeur."* / *"Dioxyde de carbone solide (glace carbonique)."* / *"Liquides inflammables."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Structure of the IATA DGR — Appendix B, IMP cargo codes, B.2.2.4), what does the IMP code 'CAO' mean?"*
+  - Options: **(Correct)** *"Cargo Aircraft Only."* / *"Shipper's Declaration for Dangerous Goods."* / *"Solid carbon dioxide (dry ice)."* / *"Flammable liquids."*
+- **Terminology decision — FLAGGED:** "Annexe B" → **"Appendix B"** — candidate rendering, not independently verified which exact IATA DGR structural term ("Appendix," "Attachment," or otherwise) corresponds to "Annexe" in the current English 67th Edition text. "Codes cargo IMP" → **"IMP cargo codes"** (the "IMP" acronym itself left unexpanded, a standard aviation-cargo-messaging acronym, same treatment as "COMAT"/"AOG" in Q-7.10-021). "Déclaration de marchandises dangereuses de l'expéditeur" reuses the existing terminology table's "Shipper's Declaration for Dangerous Goods (DGD)" rendering (Q-7.10-024). "Dioxyde de carbone solide (glace carbonique)" reuses "dry ice," already established (Q-7.10-028).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-038 — Exceptions DGR 1.2.7 (aide médicale, vétérinaire, agricole)
+
+- **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Interdites sauf dérogation, interdites sauf approbation — Exceptions DGR 1.2.7), lesquels des cas suivants sont cités par le cours comme relevant des Exceptions DGR 1.2.7, sous réserve dans tous les cas de l'accord de l'exploitant ?"*
+  - Options: **(Correct)** *"L'aide médicale fournie à un patient ou visant à préserver des organes destinés à être utilisés, l'aide vétérinaire, et l'utilisation agricole."* / *"Le transport de plus de 15 appareils électroniques portables, ou de plus de 20 batteries."* / *"Une autorisation, autre qu'un agrément, accordée par une autorité nationale compétente, permettant de déroger aux dispositions du règlement."* / *"Les allumettes chimiques n'exigeant pas de frottoir, et certains briquets à flamme bleue ou alimentés par pile au lithium."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Forbidden unless exempted, forbidden unless approved — Exceptions under DGR 1.2.7), which of the following cases are cited by the course as falling under the Exceptions of DGR 1.2.7, subject in every case to the operator's agreement?"*
+  - Options: **(Correct)** *"Medical aid provided to a patient or intended to preserve organs for use, veterinary aid, and agricultural use."* / *"The carriage of more than 15 portable electronic devices, or of more than 20 batteries."* / *"An authorization, other than an approval, granted by a competent national authority, permitting a departure from the provisions of the Regulations."* / *"Chemical matches not requiring a striker, and certain blue-flame or lithium battery-powered lighters."*
+- **Terminology decision — FLAGGED:** "dérogation"/"déroger" → **"exemption"/"a departure from"** — reusing Function 7.7's Q-7.7-032 flagged candidate ("dérogation"→"Exemption") for this session's first recurrence of that term in Function 7.10; rendered as "forbidden unless exempted" in the section title and descriptively as "a departure from the provisions" in the distractor option, deliberately kept distinct from "Exceptions DGR 1.2.7" (identical FR/EN term) so the two separate DGR 1.2.6/1.2.7 mechanisms are not conflated — reviewer should confirm this distinction survives. "Agrément" → **"approval"**, the same rendering already used for "approbation" elsewhere in this package (Q-7.10-001, Q-7.10-012) — **FLAGGED** as a possible ambiguity: unverified whether "agrément" and "approbation" denote two distinct DGR mechanisms that should carry two distinct EN terms.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-039 — Pourquoi un passager transporterait des marchandises dangereuses (confort et besoins)
+
+- **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+- **Type:** MCQ, single-answer ("N'EST PAS cité")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Pourquoi un passager transporterait des marchandises dangereuses ?), lequel des articles suivants n'est PAS cité par le cours parmi les exemples liés au confort et aux besoins d'un passager ?"*
+  - Options: **(Correct)** *"Un extincteur portable."* / *"Des articles de toilette."* / *"Un fauteuil roulant électrique."* / *"Des bouteilles d'oxygène médical."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Why would a passenger carry dangerous goods?), which of the following items is NOT cited by the course among the examples related to a passenger's comfort and needs?"*
+  - Options: **(Correct)** *"A portable fire extinguisher."* / *"Toiletries."* / *"An electric wheelchair."* / *"Medical oxygen bottles."*
+- **Terminology decision:** "articles de toilette" → **"toiletries"**; "fauteuil roulant électrique" → **"electric wheelchair"**; "bouteilles d'oxygène médical" → **"medical oxygen bottles"** — all standard.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-040 — Les neuf responsabilités de l'expéditeur (DGR 1.3)
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
+- **Type:** MCQ, single-answer ("NE fait PAS partie")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Rôle et responsabilité — Responsabilités Expéditeur DGR 1.3), lequel des éléments suivants ne fait PAS partie des neuf responsabilités de l'expéditeur énumérées par le cours ?"*
+  - Options: **(Correct)** *"Renseignement en cas d'urgence."* / *"Classification."* / *"Étiquetage."* / *"Conservation des documents."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Role and Responsibility — Shipper Responsibilities, DGR 1.3), which of the following elements is NOT among the nine shipper responsibilities listed by the course?"*
+  - Options: **(Correct)** *"Emergency response information."* / *"Classification."* / *"Labelling."* / *"Record-keeping."*
+- **Terminology decision:** "Renseignement en cas d'urgence" → **"Emergency response information"**, reusing Q-7.10-026's own established rendering (Batch 2, where the same phrase appears as one of the Operator's eight duties — here it is the cross-checkpoint distractor content, reused verbatim per binding-caveat compliance). "Conservation des documents" → **"Record-keeping"**, consistent with this package's general terminology.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-041 — Portée d'une divergence d'État (DGR 2.8.1, exemple ITG/Italie)
+
+- **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Divergences d'États et d'Exploitant — Divergence d'État DGR 2.8.1), à quels trois États une divergence d'État peut-elle s'appliquer, selon l'exemple ITG (Italie) cité par le cours ?"*
+  - Options: **(Correct)** *"L'État d'Origine/État de Départ, l'État de Destination, et tous les États des escales de Transit."* / *"Uniquement l'État d'origine du vol, à l'exclusion de tout autre État."* / *"Uniquement les exploitants opérant depuis cet État, jamais les États eux-mêmes."* / *"Uniquement l'État de destination finale, à l'exclusion de l'État d'origine et des États de transit."*
+- **EN draft translation:**
+  - Stem: *"Per the course (State and Operator Variations — State Variation, DGR 2.8.1), to which three States can a State variation apply, per the course's own ITG (Italy) example?"*
+  - Options: **(Correct)** *"The State of Origin/State of Departure, the State of Destination, and all States of Transit stops."* / *"Only the flight's State of origin, excluding any other State."* / *"Only the operators operating from that State, never the States themselves."* / *"Only the final State of destination, excluding the State of origin and the States of transit."*
+- **Terminology decision:** "divergence d'État" → **"State variation"**, reusing this package's own established candidate (Q-7.10-001, Q-7.10-022, itself reused from Function 7.7's Q-7.7-023).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-042 — Code de type d'emballage DGR 6.0.3.1 (chiffre « 4 » = Caisse)
+
+- **Sub-task:** 0.5.1 Reconnaître les différentes prescriptions de base concernant le marquage
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Emballage — Code de type d'emballage DGR 6.0.3.1), que signifie le chiffre « 4 » dans le code de type d'emballage ?"*
+  - Options: **(Correct)** *"Caisse."* / *"Fût."* / *"Jerrican."* / *"Sac."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Packaging — Packaging type code, DGR 6.0.3.1), what does the digit '4' mean in the packaging type code?"*
+  - Options: **(Correct)** *"Box."* / *"Drum."* / *"Jerrican."* / *"Bag."*
+- **Terminology decision — FLAGGED:** "Caisse" → **"Box"**; "Fût" → **"Drum"**; "Sac" → **"Bag"** — candidate renderings, not independently verified against a supplied English 67th Edition text this session. "Jerrican" reproduced unchanged (already the standard UN packaging-code English term). This flag concerns the packaging-type digit code, distinct from the separate "caisse en carton"/"fibreboard box" packaging-material-letter-code flag already raised at Q-7.10-023 (Batch 2) — both concern different positions of the same "UN/4G/Y/..." worked example and should not be merged or conflated by the reviewer.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-043 — Marquage obligatoire d'un bagage de soute contenant de la glace carbonique
+
+- **Sub-task:** 0.5.2 Reconnaître les différentes prescriptions de base concernant l'étiquetage
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Statement: *"Vrai ou Faux : selon le cours (Glace carbonique), il est impératif de marquer les bagages de soute des passagers et des équipages contenant du dioxyde de carbone solide (glace carbonique), en indiquant la quantité transportée."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Dry Ice), it is mandatory to mark passengers' and crew members' checked baggage containing solid carbon dioxide (dry ice), indicating the quantity carried."*
+  - Correct answer: **TRUE**
+- **Terminology decision — FLAGGED:** "bagage de soute" → **"checked baggage"**, treated as equivalent to the already-tabled "bagage enregistré" (both course phrases denoting the same hold-baggage concept) — not independently verified whether the course intends these as two distinct terms; reviewer should confirm.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.10-044 — Mesures en cas de contact du produit avec le corps ou les habits
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer ("NE fait PAS partie")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Procédures générales — contact du produit avec le corps ou les habits), laquelle des actions suivantes ne fait PAS partie des mesures prescrites par le cours dans ce cas ?"*
+  - Options: **(Correct)** *"Continuer le travail normalement après un simple rinçage rapide à l'eau, sans retirer les vêtements contaminés."* / *"Laver le corps avec beaucoup d'eau."* / *"Enlever les vêtements contaminés."* / *"Appeler un médecin."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General Procedures — product contact with the body or clothing), which of the following actions is NOT among the measures prescribed by the course in this case?"*
+  - Options: **(Correct)** *"Continue working normally after a quick rinse with water, without removing contaminated clothing."* / *"Wash the body with plenty of water."* / *"Remove contaminated clothing."* / *"Call a doctor."*
+- **Terminology decision:** none new; consistent with this package's general emergency-procedure vocabulary (Q-7.10-025's "General Procedures").
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
+### Batch 3 summary
+
+- 12/12 Function 7.10 Batch 3 items translated to EN draft status
+  (`Q-7.10-033`–`Q-7.10-044`). 0/12 reviewed. Combined with Batches 1+2,
+  **all 44 items currently in `docs/DGR_PRODUCTION_BANK_7.10.md` are now
+  EN-drafted** (32 from Batches 1+2, above, + 12 from Batch 3, this
+  section).
+- As with Batches 1/2, no FR "working gloss" reconstruction was needed —
+  every FR stem, option set, and statement above is copied verbatim from
+  `docs/DGR_PRODUCTION_BANK_7.10.md`'s own Batch 3 section, itself sourced
+  verbatim (with printed slide/practice-book citations) from the actual
+  KOST Function 7.10 course/practice-book PDFs.
+- All 12 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
+  Tier A`, unchanged by this section, per `.claude/rules/dgr-stage2b.md`
+  rule 5.
+- Terminology consistency approach: this section reuses this package's own
+  established Batch 1/2 candidates wherever the same concept recurs
+  ("security screening personnel"/"security screening agent," "State
+  variation," "Isolate the threat... and protect people," "Emergency
+  response information," "checked baggage") and reuses Function 7.7's
+  Q-7.7-032 flagged "dérogation"→"Exemption" candidate for its first
+  recurrence in Function 7.10 (Q-7.10-038). 11 further terminology points
+  are newly flagged for this batch specifically: "pratiques indésirables"
+  (Q-033), "Annexe"→"Appendix" and "IMP cargo codes" (Q-037),
+  "dérogation"/"déroger" and the "agrément" vs. "approbation" ambiguity
+  (Q-038), "Caisse/Fût/Sac" packaging-type-code names (Q-042), and
+  "bagage de soute" vs. "bagage enregistré" (Q-043) — all added to the
+  terminology table above, not silently assumed.
+- No item in this section is marked `BILINGUAL TECHNICAL REVIEW COMPLETE`
+  or `APPROVED`. No qualified bilingual reviewer has been named. No review
+  date has been recorded.
+
+### Programmatic milestone — Batch 3 catch-up complete for all ten functions
+
+**With this section, Function 7.10 becomes the last of the ten 7.1–7.10
+functions to have its Batch 3 items translated into its EN review
+package.** All ten functions' EN review packages
+(`docs/DGR_EN_REVIEW_PACKAGE_7.1.md` through
+`docs/DGR_EN_REVIEW_PACKAGE_7.10.md`) are now current with their
+respective production banks through each function's own Batch 3.
+
+**This is a drafting-currency milestone only, not a readiness milestone.**
+It does not mean any item, function, or the platform overall is ready for
+production use. For every one of the ten functions, unchanged from the
+programmatic milestone recorded above:
+
+- FR Tier A verification remains open, blocked pending the owner's IATA
+  Bookshelf 2FA re-login.
+- Full human bilingual technical review of every EN package remains open —
+  no item across any function has a named qualified reviewer and a review
   date.
 - No item in any function's production bank may be marked `APPROVED`
   (`.claude/rules/dgr-stage2b.md` rule 4) until both gates above are

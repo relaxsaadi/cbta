@@ -1,6 +1,25 @@
+// Legacy standalone smoke script (kept for historical/manual use — the
+// actively maintained equivalent is platform-ops/kost-eexam-console/tests/
+// smoke.spec.mjs, run via `npx playwright test`).
+//
+// SECURITY: never hardcode credentials here. Run with real values supplied
+// via environment, e.g.:
+//   CONSOLE_ADMIN_USER=... CONSOLE_ADMIN_PASS=... node smoke-test-prod.mjs
+// or with a local, gitignored env file (Node 20.6+ native support):
+//   node --env-file=.env.local smoke-test-prod.mjs
 import { chromium } from "playwright";
 
 const BASE = "https://console.kostacademy.com";
+const ADMIN_USER = process.env.CONSOLE_ADMIN_USER;
+const ADMIN_PASS = process.env.CONSOLE_ADMIN_PASS;
+if (!ADMIN_USER || !ADMIN_PASS) {
+  console.error(
+    "Missing CONSOLE_ADMIN_USER / CONSOLE_ADMIN_PASS in the environment. " +
+      "Run with `node --env-file=.env.local smoke-test-prod.mjs` or export them inline."
+  );
+  process.exit(1);
+}
+
 const results = [];
 
 function check(name, ok, detail = "") {
@@ -13,12 +32,12 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 900 
 const page = await context.newPage();
 
 // 1. Middleware redirects unauthenticated users to /login
-const res1 = await page.goto(`${BASE}/overview`, { waitUntil: "networkidle" });
+await page.goto(`${BASE}/overview`, { waitUntil: "networkidle" });
 check("Unauthenticated /overview redirects to /login", page.url().endsWith("/login"), page.url());
 
-// 2. Login page renders correctly
+// 2. Login page renders correctly (FR copy since the 2026-08-25 finalization pass)
 const title = await page.title();
-check("Login page title correct", title === "Sign in — KOST E-EXAM", title);
+check("Login page title correct", title === "Connexion — KOST E-EXAM", title);
 await page.screenshot({ path: "screenshots/prod-01-login.png" });
 
 // 3. Wrong credentials are rejected
@@ -26,12 +45,12 @@ await page.fill('input[name="username"]', "wrong_user");
 await page.fill('input[name="password"]', "wrong_password_123");
 await page.click('button[type="submit"]');
 await page.waitForTimeout(1500);
-const errorVisible = await page.locator("text=Invalid credentials").isVisible().catch(() => false);
+const errorVisible = await page.locator("text=Identifiants invalides").isVisible().catch(() => false);
 check("Wrong credentials rejected with error message", errorVisible);
 
-// 4. Real Moodle login succeeds (real non-admin account, real Moodle backend)
-await page.fill('input[name="username"]', "console_admin");
-await page.fill('input[name="password"]', "Kcdf0583b303968ff7ee42!A1");
+// 4. Real Moodle login succeeds (real admin account, real Moodle backend — credentials from env only)
+await page.fill('input[name="username"]', ADMIN_USER);
+await page.fill('input[name="password"]', ADMIN_PASS);
 await page.click('button[type="submit"]');
 try {
   await page.waitForURL("**/overview", { timeout: 15000 });
@@ -51,17 +70,17 @@ await page.screenshot({ path: "screenshots/prod-03-system.png", fullPage: true }
 const welcomeText = await page.goto(`${BASE}/overview`, { waitUntil: "networkidle" }).then(() =>
   page.locator("h1").first().textContent()
 );
-check("Real Moodle full name displayed", welcomeText?.includes("Console Administrator") ?? false, welcomeText ?? "");
+check("Real Moodle full name displayed", welcomeText?.trim().startsWith("Bienvenue") ?? false, welcomeText ?? "");
 await page.screenshot({ path: "screenshots/prod-04-overview-final.png", fullPage: true });
 
-// 7. Phase 2 placeholder honest state
-await page.goto(`${BASE}/exams`, { waitUntil: "networkidle" });
-const noFakeData = await page.locator("text=Coming in Phase 2").isVisible().catch(() => false);
-check("Phase 2 placeholder shows honest state, no fake data", noFakeData);
-await page.screenshot({ path: "screenshots/prod-05-exams-placeholder.png", fullPage: true });
+// 7. Candidates page (was a Phase 2 placeholder before the 2026-08-25 finalization — now real, un-gated)
+await page.goto(`${BASE}/candidates`, { waitUntil: "networkidle" });
+const noPlaceholder = (await page.locator("text=Coming in Phase 2").isVisible().catch(() => false)) === false;
+check("Candidates page has no leftover Phase 2 placeholder", noPlaceholder);
+await page.screenshot({ path: "screenshots/prod-05-candidates.png", fullPage: true });
 
 // 8. Logout works
-await page.locator('button[type="submit"]:has-text("Log out")').click();
+await page.locator('button[type="submit"]:has-text("Se déconnecter")').click();
 await page.waitForURL("**/login", { timeout: 10000 }).catch(() => {});
 check("Logout redirects to /login", page.url().endsWith("/login"), page.url());
 

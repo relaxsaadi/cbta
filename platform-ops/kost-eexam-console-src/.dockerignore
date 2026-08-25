@@ -3,6 +3,7 @@ node_modules
 .git
 screenshots
 local-data
+.env
 .env.local
 .env*.local
 *.log

@@ -1,11 +1,20 @@
-# DGR Stage 1 — Function 7.3 — PROVISIONAL DRAFT — NOT YET VALIDATED
+# DGR Stage 1 — Function 7.3 — CROSS-VALIDATED (second pass CONFIRMED)
 
 **Function 7.3**: *Personnel chargé de traiter ou d'accepter des expéditions
 de marchandises dangereuses.*
 
-**Status: PROVISIONAL — first derivation pass. Not cross-validated by a second
-pass, not reviewed by a qualified instructor, not accepted by ANAC, and not a
-Stage 2A blueprint.** This is the Function 7.3 counterpart to
+**Status: CROSS-VALIDATED — an independent second pass
+(`docs/DGR_STAGE1_FUNCTION_7.3_CROSSVALIDATION.md`) re-read the same source
+PDFs, re-rendered the TABLEAU 7.1.A/7.2.A/7.3.A pages as images, re-checked
+MD5s, and re-derived the 33-leaf-sub-task count, the star ratings, the
+3.1–3.3 (not 3.4) Block 3 activation, the practice-book SOURCE GAP, and the
+0.4.3 coverage claim independently. Verdict: CONFIRMED, no correction to the
+enumeration below required (one precision-only addition recorded in the
+cross-validation file, not affecting any count or conclusion). This draft is
+still not reviewed by a qualified instructor, not accepted by ANAC, and this
+file alone is not a Stage 2A blueprint** — see
+`docs/DGR_STAGE2A_FUNCTION_7.3_BLUEPRINT.md` for that. This file remains the
+Function 7.3 counterpart to
 `docs/RECOVERED_STAGE2A_CONTEXT.md` (Function 7.1) and
 `docs/DGR_STAGE1_FUNCTION_7.2_DRAFT.md` (Function 7.2), produced independently
 from Function 7.3's own source material per `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`.

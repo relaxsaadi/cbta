@@ -90,6 +90,42 @@ This register stores concise regulatory source locations and validation conclusi
 - Conclusion: **current DGR 67th Edition (FR, Addendum 1) does not define "danger" or "risque" as distinct regulatory terms.** This is a confirmed, current, Tier A absence — not an unread gap and not an inference. Q-7.1-001's danger/risque distinction is not DGR-glossary-sourced; retain it on its Tier B (KOST Function 7.1 course) / Tier C (generic competency framework) basis per Stage 2A sub-task `0.1.4 Danger vs risque`, and word the item so it does not attribute the distinction to the DGR glossary or any appendix. See `docs/DGR_STAGE_2B_STATUS.md` Q-7.1-001 note for the full wording guidance.
 - Retrieval method: `chrome-devtools` MCP attached to the user's already-authenticated Chrome, book `DGR-6066-67`. Reader chrome (ToC, "Search across book") lives in the top-level `digitalpublications.iata.org` frame and is directly clickable/typeable via `evaluate()`; `screenshot()` captures the cross-origin `jigsaw.iata.org` reader iframe's rendered content at the compositor level. Full-text "Search across book" results are virtualized (only rendered near the current scroll position), so a query must return a small-enough result set (tens, not thousands) for `Array.from(document.querySelectorAll(...))` to actually see every group header — this is why "Risque" (62 hits) worked directly where "Danger" (5005 hits) did not; for a noisy term, either find a rarer distinguishing phrase or accept the policy-based inference as done here.
 
+### Q-7.1-013 — Définition réglementaire d'une marchandise dangereuse — DIRECT TIER A VERIFIED
+- §1.0 Définition des marchandises dangereuses, Partie 1 — Champ d'application, Bookshelf p.11
+- Exact current text: "Les marchandises dangereuses sont des matières ou objets qui présentent un danger pour la santé, la sécurité, les biens ou l'environnement, qui sont énumérés dans la liste des marchandises dangereuses de la présente Réglementation ou qui, s'ils ne figurent pas sur cette liste, sont classés conformément à la Réglementation."
+- Conclusion: confirms the drafted correct answer's two-clause structure (danger criterion + listed-or-classified criterion) essentially verbatim. No wording change needed.
+
+### Q-7.1-014 — Cadre juridique : codification de l'Annexe 18 — DIRECT TIER A VERIFIED
+- §1.1.1 (UNSCETDG — all transport modes except radioactive materials), §1.1.2 (AIEA — radioactive materials only, reflected in Part 10), §1.1.3 (OACI — codifies Annexe 18 + IT Doc 9284), §1.1.4 (IATA DGR incorporates all IT specs plus stricter additions), Partie 1, Bookshelf p.11
+- Conclusion: correct answer OACI confirmed by §1.1.3; all three distractors (IATA, SCoETDG/UNSCETDG, AIEA) refuted by their own adjoining sub-clauses. Current DGR acronym is "UNSCETDG" (KOST slide used "SCoETDG") — same body; align final wording to current term.
+
+### Q-7.1-015 — Champ d'application du DGR — DIRECT TIER A VERIFIED
+- §1.2.1 Application, Partie 1, Bookshelf p.11
+- Exact current text: "La Réglementation de l'IATA s'applique à : • tous les exploitants qui sont membres ou membres associés de l'IATA; • tous les exploitants qui sont parties à l'accord IATA sur le transport intertransporteurs de marchandises; et • tous les expéditeurs et agents de fret qui présentent des marchandises dangereuses à ces exploitants."
+- Conclusion: all three categories in the stem confirmed in scope — "Vrai" verified. Current text phrase is "accord IATA sur le transport intertransporteurs de marchandises" (KOST slide: "accord multilatéral de trafic intercompagnies de l'IATA-fret") — same concept, terminology evolved; recommend aligning stem wording.
+
+### Q-7.1-016 — Marchandise dangereuse potentiellement cachée (échantillons diagnostiques) — DIRECT TIER A VERIFIED
+- §2.2.4, Partie 2 — Restrictions, Bookshelf p.12 area
+- Current list (much longer, alphabetized A–Z vs. KOST's 8-item excerpt) confirmed to include: "ÉCHANTILLONS DIAGNOSTIQUES", "PIÈCES DE RECHANGE POUR AÉRONEF AU SOL", "RÉGULATEURS DE CARBURANT", "REFRIGÉRATEURS", "TROUSSES DE RÉPARATION", "ÉCHANTILLONS POUR ESSAIS"
+- Distractors "Vêtements neufs sous emballage plastique", "Livres et documents imprimés", "Denrées alimentaires non réfrigérées" confirmed absent from the current list (checked by targeted text search of the retrieved list content).
+- Conclusion: correct answer confirmed; align exact wording to current heading term "Échantillons diagnostiques" (adjective form) rather than "Échantillons de diagnostic."
+
+### Q-7.1-017 — Marchandises dangereuses transportées par les passagers — DIRECT TIER A VERIFIED
+- §2.3.0.1, Partie 2, Bookshelf p.12 area
+- Exact current text: "Les marchandises dangereuses, incluant les colis exceptés de matières radioactives, sont interdites au transport par les passagers ou les membres d'équipage : • dans les bagages enregistrés ou comme bagages enregistrés; • dans les bagages de cabine ou comme bagages de cabine; ou • sur la personne; sauf tel que permis en 2.3.2 à 2.3.5 pour un usage personnel."
+- Conclusion: "Vrai" confirmed. Current term "bagages de cabine" = KOST slide's "bagage à main," same concept.
+
+### Q-7.1-018 — Classe de l'acide sulfurique / acide de batterie — DIRECT TIER A VERIFIED, citation corrected
+- §3.0.2 Classes de danger, Partie 3, Bookshelf p.307 — pure class-name taxonomy (Classe 1–9 + divisions), **no named substance examples**; confirmed not the actual evidentiary source despite the KOST slide's "DGR 3.0.2" citation. Retained only as the source for the three distractor class labels: "3.0.2.3 Classe 3 — Liquides inflammables", "3.0.2.6 Division 6.1 — Matières toxiques" (under Classe 6), "3.0.2.9 Classe 9 — Matières et objets dangereux divers..." — all confirmed real, distinct current classes.
+- **Table 4.2**, entry `1830` — Désignation: "Acide sulfurique contenant plus de 51% d'acide" — Cl. ou div. [C] = **8**, Étiquette de danger [D] = **Corrosif**, Gr. d'emb. [E] = II — Bookshelf p.326.
+- Appendice A — Glossaire, Bookshelf p.703: entries for "ACIDE SULFURIQUE FUMANT", "ACIDE SULFURIQUE RÉSIDUAIRE," and electrolyte/battery-acid description confirm "acide de batterie" is the common term for diluted acide sulfurique — same substance/class as UN1830.
+- Conclusion: Classe 8 — Matières corrosives confirmed as correct answer. Source citation reassigned from §3.0.2 to Table 4.2 (UN1830) + Appendice A; §3.0.2 retained only for the distractor class-label taxonomy.
+
+### Q-7.1-019 — Caractéristiques requises des marquages — SOURCE CONFLICT RESOLVED, content corrected
+- KOST slide 141 cited "DGR 6.0.4.2.1(c)" — **this section does not exist in the current 67th Edition structure.** Current Part 6 = "PARTIE 6 — SPÉCIFICATIONS ET ÉPREUVES DE RÉSISTANCE POUR LES EMBALLAGES" (packaging performance tests); marking/labeling is **Part 7**, consistent with frozen pilot items Q-7.1-004/010/011 (all cite Part 7 sections). Conclusion: the KOST slide's citation reflects an older DGR edition's part numbering and is stale in the current baseline.
+- Current applicable provision: **§7.1.3.2 "Qualité"**, Partie 7 — Marquage et Étiquetage, Bookshelf p.688 area. Exact current text: "Toutes les marques doivent être : (a) durables et être imprimées ou autrement apposées sur la surface extérieure du colis ou du suremballage; (b) facilement visibles et lisibles; (c) pouvoir être exposées aux intempéries sans dégradation notable; et (d) apposées sur un fond de couleur contrastante."
+- Conclusion: the drafted correct answer ("Visibles, lisibles, durables, et pouvant résister aux intempéries") is **incomplete** against the current 4-item list — it omits criterion (d), "apposées sur un fond de couleur contrastante" (contrasting-colour background), entirely. **Correction applied 2026-08-25:** stem and correct answer revised to the current §7.1.3.2 four-item list; existing distractors remain valid (still refuted by the corrected list). See `docs/DGR_PRODUCTION_BANK_7.1.md` for revised question text.
+
 ## Production bank expansion (Batch 1: Q-7.1-013–Q-7.1-019)
 
 Full question text, sub-task mapping, and per-item source/distractor
@@ -122,26 +158,29 @@ sources used (all read directly this session from the actual KOST Function
   des emballages," DGR 6.0.4.2.1(c) (visible/lisible/durable/résistant aux
   intempéries).
 
-**Tier A status: not attempted to completion.** The `chrome-devtools` MCP
-(the established technique for reading the authenticated IATA Bookshelf,
-book `DGR-6066-67`) hung for the full 1800s timeout on the first
-`evaluate()` call this session and was not retried further, per the task's
-authorized honest-fallback path — no Tier A evidence was fabricated to
-compensate. All 7 items are `DRAFT`, Tier B only, `SOURCE REQUIRED` for
-Tier A DGR 67th Edition (2026, Addendum 1) verification. Every "DGR x.y.z"
-citation above is exactly as displayed on the KOST slide — not
-independently re-verified against the current 67th Edition text.
+**Tier A status: COMPLETE as of 2026-08-25.** All 7 items were Tier A
+verified this session via the `chrome-devtools` MCP attached to the
+authenticated IATA Digital Publications Bookshelf (book `DGR-6066-67`, 67th
+Ed., Addendum 1 integrated) — see the dedicated per-item entries above (in
+the "Verified references" section, above this Batch 1 heading) for full
+citations. 6 of 7 KOST-slide citations/content were confirmed as drafted;
+1 (Q-7.1-019) required a content correction because the KOST slide's
+section citation was stale (superseded by the current edition's Part 6/7
+restructuring) and its 4-criterion list was incomplete against current
+§7.1.3.2. No Tier A evidence was fabricated; the one correction is fully
+documented with before/after text above.
 
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see
 above for its resolution._
 
-_Production bank Batch 1 (Q-7.1-013–019): all 7 items pending Tier A
-verification via the `chrome-devtools` MCP Bookshelf technique — see
-`docs/DGR_PRODUCTION_BANK_7.1.md` for the full per-item source list and
-suggested Bookshelf search terms (derivable from each item's cited DGR
-section number)._
+_Production bank Batch 1 (Q-7.1-013–019): none — all 7 Tier A verified
+2026-08-25 (see per-item entries above). Function 7.1 Batch 1 is fully
+Tier A closed. Do not start a Batch 4 for Function 7.1 while a session has
+live Tier A Bookshelf access without prior explicit instruction — priority
+is Functions 7.2–7.10's own Tier A backlog first, per the standing
+production-scope rule in `.claude/rules/dgr-stage2b.md`._
 
 ### 2026-08-24 session — 3 of 4 items resolved; Q-7.1-001 blocked mid-retrieval by a tooling failure
 Working via the `chrome-devtools` MCP attached to the user's already-open, already-authenticated Chrome (book `DGR-6066-67`, matches current baseline). Discovered the reader's chrome (search box, table of contents, page navigator) renders in the **top-level frame** (`digitalpublications.iata.org`), not inside the cross-origin `jigsaw.iata.org` reader iframe — so it is directly clickable/typeable via `evaluate()`, and `screenshot()` captures the actual page content (including the cross-origin iframe) at the browser-compositor level regardless of the JS same-origin restriction. This combination (in-app "Search across book" + Table-of-Contents navigation + screenshot reading) let this session retrieve real page content for the first time.

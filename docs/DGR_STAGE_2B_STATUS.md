@@ -32,26 +32,113 @@ explicitly out of scope for this EN package.
 
 New sub-tasks beyond the 12-item pilot, per `docs/RECOVERED_STAGE2A_CONTEXT.md`'s
 Block 0 rows. Full question text, distractor rationale, and source detail in
-`docs/DGR_PRODUCTION_BANK_7.1.md`. **All DRAFT — Tier B only; not FROZEN,
-not SOURCE VERIFIED, not APPROVED.** Tier A verification (chrome-devtools
-MCP against the IATA Bookshelf) was attempted once this pass and hung for
-the full 1800s timeout; not retried further this pass — honest fallback to
-Tier B per the standing no-fabrication rule.
+`docs/DGR_PRODUCTION_BANK_7.1.md`. **2026-08-25: all 7 items Tier A verified**
+against the live authenticated IATA Digital Publications Bookshelf
+(`DGR-6066-67`, 67th Ed., Addendum 1 integrated) via `chrome-devtools` MCP —
+see per-item notes below and full citations in `docs/DGR_SOURCE_REGISTER.md`.
+Six items (013–018) confirmed the KOST Tier B draft's substance; one item
+(019) required a **content correction** — the KOST slide's section citation
+was stale and its 4-criterion list incomplete against the current 67th
+Edition text. All 7 are now `FROZEN FR / SOURCE VERIFIED`; none is
+`APPROVED` (no named qualified reviewer + date yet — separate gate).
 
 | ID | FR status | Type | Current source basis | EN status | Approval |
 |---|---|---|---|---|---|
-| Q-7.1-013 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slide 16 (DGR 1.0), sub-task 0.1.1 Définition MD | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-014 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slides 20–24 (DGR 1.1), sub-task 0.1.2 Cadre juridique | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-015 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.1 course slide 31 (DGR 1.2.1), sub-task 0.1.3 Application/portée | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-016 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slides 47–48 (DGR 2.2.4), sub-task 0.2.2 MD cachées | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-017 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.1 course slides 44–45 (DGR 2.3), sub-task 0.2.3 Passagers | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-018 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course "DGR 3.0.2" slide series + Practice Book Q10, sub-task 0.4.1 Classes/divisions | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.1-019 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slide 141 (DGR 6.0.4.2.1(c)), sub-task 0.5.1 Marquage | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-013 | FROZEN FR / SOURCE VERIFIED | MCQ | §1.0 Définition des marchandises dangereuses (Partie 1, Bookshelf p.11), sub-task 0.1.1 Définition MD | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-014 | FROZEN FR / SOURCE VERIFIED | MCQ | §1.1.1–1.1.4 Fondements de la présente Réglementation (Partie 1, Bookshelf p.11), sub-task 0.1.2 Cadre juridique | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-015 | FROZEN FR / SOURCE VERIFIED | True/False | §1.2.1 Application (Partie 1, Bookshelf p.11), sub-task 0.1.3 Application/portée | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-016 | FROZEN FR / SOURCE VERIFIED | MCQ | §2.2.4 Marchandises dangereuses cachées, liste d'exemples (Partie 2, Bookshelf p.12 area), sub-task 0.2.2 MD cachées | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-017 | FROZEN FR / SOURCE VERIFIED | True/False | §2.3.0.1 (Partie 2, Bookshelf p.12 area), sub-task 0.2.3 Passagers | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-018 | FROZEN FR / SOURCE VERIFIED | MCQ | Table 4.2, UN1830 Acide sulfurique (Bookshelf p.326) + Appendice A Glossaire (p.703); §3.0.2 (p.307) for class-label taxonomy only, sub-task 0.4.1 Classes/divisions | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-019 | FROZEN FR / SOURCE VERIFIED — wording corrected, stale KOST citation superseded | MCQ | §7.1.3.2 Qualité (Partie 7 — Marquage et Étiquetage, Bookshelf p.688 area), sub-task 0.5.1 Marquage | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 Batch composition: 5 MCQ + 2 True/False. Q-7.1-018 deliberately tests a
 different angle (specific-substance class assignment) from the frozen
 Q-7.1-003 (count of hazard classes) to avoid content overlap under the same
 sub-task 0.4.1.
+
+### 2026-08-25 Tier A verification session — 6/7 confirmed as drafted, 1/7 corrected
+
+Retrieval method: `chrome-devtools` MCP attached to the user's already-open,
+already-authenticated Chrome tab on the IATA Digital Publications Bookshelf
+reader (`DGR-6066-67`). Table of Contents navigation (top-level frame,
+directly clickable) + `take_snapshot()` (the accessibility tree, which
+— unlike `evaluate()` — reads through the cross-origin `jigsaw.iata.org`
+reader iframe) retrieved full section text reliably this session, including
+Table 4.2 substance entries via the in-app "Search across book" feature.
+No licensed text was bulk-copied out of the tool session; only short
+verification quotes are recorded below and in the source register.
+
+- **Q-7.1-013** — current §1.0 text confirms the two-clause definition
+  (danger criterion + listed-in-table-or-classified-per-Regulation
+  criterion) essentially verbatim to the drafted correct answer. No change
+  needed.
+- **Q-7.1-014** — current §1.1.1–1.1.4 confirms OACI codifies Annexe 18/IT
+  (1.1.3); UNSCETDG covers all modes except radioactive materials (1.1.1);
+  AIEA covers radioactive materials only, reflected in Part 10 (1.1.2); IATA
+  DGR incorporates all IT specs plus stricter additions (1.1.4). **Wording
+  note:** the current DGR text uses the acronym "UNSCETDG", not the KOST
+  slide's "SCoETDG" — same body; align final wording to "UNSCETDG" (or its
+  full French name) to match the current source term.
+- **Q-7.1-015** — current §1.2.1 confirms all three categories (IATA
+  member/associate-member operators; operators party to the IATA
+  interline-traffic agreement; shippers/agents presenting DG to those
+  operators) are explicitly in scope — "Vrai" confirmed. **Wording note:**
+  current text says "accord IATA sur le transport intertransporteurs de
+  marchandises," not the KOST slide's "accord multilatéral de trafic
+  intercompagnies de l'IATA-fret" — same concept, terminology has evolved;
+  recommend updating the stem to the current phrase.
+- **Q-7.1-016** — current §2.2.4's hidden-DG example list (now a much
+  longer A–Z list than the KOST 8-item excerpt) explicitly includes
+  "ÉCHANTILLONS DIAGNOSTIQUES" (= the item's correct answer), plus
+  "PIÈCES DE RECHANGE POUR AÉRONEF AU SOL", "RÉGULATEURS DE CARBURANT",
+  "REFRIGÉRATEURS", "TROUSSES DE RÉPARATION", "ÉCHANTILLONS POUR ESSAIS" —
+  all terms the KOST slide cited are present in the current list. The three
+  distractors ("Vêtements neufs...", "Livres et documents imprimés",
+  "Denrées alimentaires non réfrigérées") do **not** appear anywhere in the
+  current list. **Wording note:** current heading term is "Échantillons
+  diagnostiques" (adjective form); align the correct-answer wording to this
+  exact current term instead of "Échantillons de diagnostic."
+- **Q-7.1-017** — current §2.3.0.1 confirms the prohibition covers
+  registered baggage, cabin baggage ("bagages de cabine" — same concept as
+  the KOST slide's "bagage à main"), and on the person, with exceptions at
+  §2.3.2–2.3.5 for personal use — "Vrai" confirmed.
+- **Q-7.1-018** — **citation corrected.** Current §3.0.2 itself is pure
+  class-name taxonomy (Classe 1 through Classe 9, with divisions) — it
+  contains **no** named substance examples, so it cannot be the actual
+  evidentiary source for "sulfuric/battery acid = Class 8," despite the
+  KOST slide citing "DGR 3.0.2." The real Tier A evidence is **Table 4.2**,
+  entry `UN1830 Acide sulfurique (contenant plus de 51% d'acide)` = Classe
+  8, étiquette "Corrosif" (Bookshelf p.326), corroborated by the Appendice A
+  Glossaire's entry describing "acide de batterie"/electrolyte as the common
+  term for diluted sulfuric acid (p.703). §3.0.2 remains valid *only* as the
+  source for the three distractor class *labels* ("Classe 3 — Liquides
+  inflammables", "Division 6.1 — Matières toxiques", "Classe 9 — ...divers",
+  all confirmed as real, distinct current classes). Correct answer content
+  unchanged; source citation reassigned from §3.0.2 to Table 4.2 UN1830 +
+  Appendice A.
+- **Q-7.1-019 — CONTENT CORRECTED, not just re-cited.** The KOST slide's
+  citation "DGR 6.0.4.2.1(c)" does not exist in the current 67th Edition
+  structure at all: Part 6 is now "SPÉCIFICATIONS ET ÉPREUVES DE RÉSISTANCE
+  POUR LES EMBALLAGES" (packaging performance tests), and marking/labeling
+  is **Part 7** — consistent with the frozen pilot items Q-7.1-004/010/011,
+  which already cite Part 7 sections. This confirms the KOST slide's
+  citation is stale (an older DGR edition's part numbering). The current,
+  applicable provision is **§7.1.3.2 "Qualité"** (Partie 7 — Marquage et
+  Étiquetage, Bookshelf p.688 area), which reads: *"Toutes les marques
+  doivent être : (a) durables et être imprimées ou autrement apposées sur la
+  surface extérieure du colis ou du suremballage; (b) facilement visibles et
+  lisibles; (c) pouvoir être exposées aux intempéries sans dégradation
+  notable; et (d) apposées sur un fond de couleur contrastante."* This is a
+  **materially different 4-item list** from the drafted correct answer
+  ("Visibles, lisibles, durables, et pouvant résister aux intempéries") —
+  the draft's list omits criterion (d), "apposées sur un fond de couleur
+  contrastante" (placed on a contrasting-colour background), entirely.
+  **Correction applied** per rule 8 (current-source correction): the stem
+  and correct answer are revised to the current §7.1.3.2 four-item list;
+  the three existing distractors remain valid (still directly refuted by
+  the corrected list). See `docs/DGR_PRODUCTION_BANK_7.1.md` for the revised
+  question text.
 
 ## Frozen wording notes
 

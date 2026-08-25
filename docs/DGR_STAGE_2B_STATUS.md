@@ -17,6 +17,31 @@ Regulatory baseline: IATA DGR 67th Edition 2026, French, Addendum 1 integrated.
 | Q-7.1-011 | FROZEN FR / SOURCE VERIFIED | True/False | §7.2.7.1, labels-only scope | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.1-012 | FROZEN FR / SOURCE VERIFIED | True/False | §1.3.4.1; §1.3.4.2 supporting only | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
+## Production bank expansion — Batch 1 (Q-7.1-013–Q-7.1-019)
+
+New sub-tasks beyond the 12-item pilot, per `docs/RECOVERED_STAGE2A_CONTEXT.md`'s
+Block 0 rows. Full question text, distractor rationale, and source detail in
+`docs/DGR_PRODUCTION_BANK_7.1.md`. **All DRAFT — Tier B only; not FROZEN,
+not SOURCE VERIFIED, not APPROVED.** Tier A verification (chrome-devtools
+MCP against the IATA Bookshelf) was attempted once this pass and hung for
+the full 1800s timeout; not retried further this pass — honest fallback to
+Tier B per the standing no-fabrication rule.
+
+| ID | FR status | Type | Current source basis | EN status | Approval |
+|---|---|---|---|---|---|
+| Q-7.1-013 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slide 16 (DGR 1.0), sub-task 0.1.1 Définition MD | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-014 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slides 20–24 (DGR 1.1), sub-task 0.1.2 Cadre juridique | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-015 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.1 course slide 31 (DGR 1.2.1), sub-task 0.1.3 Application/portée | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-016 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slides 47–48 (DGR 2.2.4), sub-task 0.2.2 MD cachées | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-017 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.1 course slides 44–45 (DGR 2.3), sub-task 0.2.3 Passagers | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-018 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course "DGR 3.0.2" slide series + Practice Book Q10, sub-task 0.4.1 Classes/divisions | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.1-019 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.1 course slide 141 (DGR 6.0.4.2.1(c)), sub-task 0.5.1 Marquage | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+Batch composition: 5 MCQ + 2 True/False. Q-7.1-018 deliberately tests a
+different angle (specific-substance class assignment) from the frozen
+Q-7.1-003 (count of hazard classes) to avoid content overlap under the same
+sub-task 0.4.1.
+
 ## Frozen wording notes
 
 ### Q-7.1-001 — FINAL, source basis reclassified Tier B/C

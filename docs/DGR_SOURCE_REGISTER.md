@@ -90,9 +90,58 @@ This register stores concise regulatory source locations and validation conclusi
 - Conclusion: **current DGR 67th Edition (FR, Addendum 1) does not define "danger" or "risque" as distinct regulatory terms.** This is a confirmed, current, Tier A absence — not an unread gap and not an inference. Q-7.1-001's danger/risque distinction is not DGR-glossary-sourced; retain it on its Tier B (KOST Function 7.1 course) / Tier C (generic competency framework) basis per Stage 2A sub-task `0.1.4 Danger vs risque`, and word the item so it does not attribute the distinction to the DGR glossary or any appendix. See `docs/DGR_STAGE_2B_STATUS.md` Q-7.1-001 note for the full wording guidance.
 - Retrieval method: `chrome-devtools` MCP attached to the user's already-authenticated Chrome, book `DGR-6066-67`. Reader chrome (ToC, "Search across book") lives in the top-level `digitalpublications.iata.org` frame and is directly clickable/typeable via `evaluate()`; `screenshot()` captures the cross-origin `jigsaw.iata.org` reader iframe's rendered content at the compositor level. Full-text "Search across book" results are virtualized (only rendered near the current scroll position), so a query must return a small-enough result set (tens, not thousands) for `Array.from(document.querySelectorAll(...))` to actually see every group header — this is why "Risque" (62 hits) worked directly where "Danger" (5005 hits) did not; for a noisy term, either find a rarer distinguishing phrase or accept the policy-based inference as done here.
 
+## Production bank expansion (Batch 1: Q-7.1-013–Q-7.1-019)
+
+Full question text, sub-task mapping, and per-item source/distractor
+rationale are in `docs/DGR_PRODUCTION_BANK_7.1.md`. Summary of Tier B
+sources used (all read directly this session from the actual KOST Function
+7.1 training material, not inferred):
+
+- Source files: `01_KOST_DGR_CBTA_Function_7.1_Training_Course_FR_2025.pdf`
+  (course), `03_KOST_DGR_CBTA_Exam_Function_7.1_FR_Rev00_2025.pdf` (exam,
+  corroboration only), `KOST_DGR_CBTA_Practice_Book_Function_7.1_FR_2025.pdf`
+  (practice book, corroboration only), all at
+  `/Users/mac/Documents/Fichiers/Algerie/CBTA final/yasmine cbta/wetransfer_supports-pedagogiques-dgr-cbta-kost-academy_2025-10-12_1842/COURS DGR-CBTA-IATA/DGR-FONCTION 7.1/`.
+- Q-7.1-013 (0.1.1 Définition MD): course slide 16, "Généralités DGR 1.0."
+- Q-7.1-014 (0.1.2 Cadre juridique): course slides 20–24, "Cadre juridique —
+  Fondements de la Réglementation DGR 1.1" (SCoETDG/AIEA → OACI [Annexe 18]
+  → IATA hierarchy).
+- Q-7.1-015 (0.1.3 Application/portée): course slide 31, "Applicabilité —
+  Champ d'application DGR 1.2.1."
+- Q-7.1-016 (0.2.2 MD cachées): course slides 47–48, "DG cachées DGR2.2" /
+  "Exemples de DG cachées DGR 2.2.4."
+- Q-7.1-017 (0.2.3 Passagers): course slides 44–45, "MD Transportées par les
+  passagers ou l'équipage DGR 2.3" / "Limites — Dispositions relatives aux
+  passagers et au fret."
+- Q-7.1-018 (0.4.1 Classes/divisions): course "Les classes des marchandises
+  dangereuses DGR 3.0.2" slide series, Class 8 (matières corrosives, ex.
+  acide sulfurique/acide de batterie) vs. Class 3/Division 6.1/Class 9's own
+  named examples; corroborated by KOST Practice Book Q10 asking the
+  identical fact directly.
+- Q-7.1-019 (0.5.1 Marquage): course slide 141, "Marquage à spécification
+  des emballages," DGR 6.0.4.2.1(c) (visible/lisible/durable/résistant aux
+  intempéries).
+
+**Tier A status: not attempted to completion.** The `chrome-devtools` MCP
+(the established technique for reading the authenticated IATA Bookshelf,
+book `DGR-6066-67`) hung for the full 1800s timeout on the first
+`evaluate()` call this session and was not retried further, per the task's
+authorized honest-fallback path — no Tier A evidence was fabricated to
+compensate. All 7 items are `DRAFT`, Tier B only, `SOURCE REQUIRED` for
+Tier A DGR 67th Edition (2026, Addendum 1) verification. Every "DGR x.y.z"
+citation above is exactly as displayed on the KOST slide — not
+independently re-verified against the current 67th Edition text.
+
 ## Pending source targets
 
-_None — Q-7.1-001 was the last open pilot item; see above for its resolution._
+_Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see
+above for its resolution._
+
+_Production bank Batch 1 (Q-7.1-013–019): all 7 items pending Tier A
+verification via the `chrome-devtools` MCP Bookshelf technique — see
+`docs/DGR_PRODUCTION_BANK_7.1.md` for the full per-item source list and
+suggested Bookshelf search terms (derivable from each item's cited DGR
+section number)._
 
 ### 2026-08-24 session — 3 of 4 items resolved; Q-7.1-001 blocked mid-retrieval by a tooling failure
 Working via the `chrome-devtools` MCP attached to the user's already-open, already-authenticated Chrome (book `DGR-6066-67`, matches current baseline). Discovered the reader's chrome (search box, table of contents, page navigator) renders in the **top-level frame** (`digitalpublications.iata.org`), not inside the cross-origin `jigsaw.iata.org` reader iframe — so it is directly clickable/typeable via `evaluate()`, and `screenshot()` captures the actual page content (including the cross-origin iframe) at the browser-compositor level regardless of the JS same-origin restriction. This combination (in-app "Search across book" + Table-of-Contents navigation + screenshot reading) let this session retrieve real page content for the first time.

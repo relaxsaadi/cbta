@@ -152,6 +152,50 @@ Resumed per `.claude/rules/dgr-stage2b.md`; pulled latest (already up to date). 
 
 **Next steps for continuation:** (1) verify and, if needed, finish reconciling the two background agents' commits (Function 7.1 expansion + Function 7.2 Stage 1 draft); (2) continue the Stage 1 → Stage 2A → question-drafting pipeline for Function 7.2, then 7.3–7.10 in order, one function at a time, per `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`'s recommended order; (3) if console UI source/access is ever recovered, fix the WCAG AA color-contrast finding; (4) consider a dedicated stabilization pass for the Firefox/WebKit candidate-flow timing sensitivity if broader cross-browser certainty is needed; (5) periodically confirm Tailscale stays connected on this Mac for the offsite-backup fix (per fourth pass); (6) rotate the Moodle DB `moodleuser` password out of caution per the disclosure above.
 
+## Session log — 2026-08-25, fifth-pass background task (Claude Code) — Function 7.1 production bank Batch 1 drafted (Tier B, DRAFT)
+
+Dispatched as one of the fifth pass's two follow-on background tasks (see
+the "fifth pass" log entry above). Continued per `.claude/rules/dgr-stage2b.md`'s authorization to move from the
+completed 12-item pilot into production-bank expansion. Drafted 7 new items
+(`Q-7.1-013`–`Q-7.1-019`) in the new `docs/DGR_PRODUCTION_BANK_7.1.md`,
+covering 7 Block 0 sub-tasks not used by the frozen pilot (0.1.1, 0.1.2,
+0.1.3, 0.2.2, 0.2.3, 0.4.1, 0.5.1).
+
+**Tier A blocked this pass.** The `chrome-devtools` MCP was tried once
+(`evaluate()` against the current page) and hung for the full 1800s timeout
+before erroring (`"sent no response or progress for 1800s"`) — consistent
+with the intermittent connection failures already logged in earlier passes.
+Given the cost of repeated 30-minute hangs, it was not retried further this
+pass. No Tier A content was fabricated to compensate, per the standing
+no-fabrication rule.
+
+**Fell back to genuine Tier B evidence instead of generic/inferred content.**
+Located and read (via `pdftotext -layout`) the actual KOST Function 7.1
+training material at
+`/Users/mac/Documents/Fichiers/Algerie/CBTA final/yasmine cbta/wetransfer_supports-pedagogiques-dgr-cbta-kost-academy_2025-10-12_1842/COURS DGR-CBTA-IATA/DGR-FONCTION 7.1/`
+— the real course deck (`01_KOST_DGR_CBTA_Function_7.1_Training_Course_FR_2025.pdf`,
+3,700 extracted lines), exam (`03_...Exam...Rev00_2025.pdf`), and practice
+book (`KOST_DGR_CBTA_Practice_Book_Function_7.1_FR_2025.pdf`) — the same
+source pool `docs/RECOVERED_STAGE2A_CONTEXT.md` identifies as this
+function's Tier B basis. Each of the 7 new items cites an exact course slide
+number and is cross-referenced (topic only, never copied text) against the
+real exam/practice-book question numbers where one exists, avoiding the
+recovered context's binding restriction against reusing historical
+exam/practice-book question text as regulatory authority.
+
+All 7 items are `DRAFT` — Tier B only, `SOURCE REQUIRED` for Tier A DGR 67th
+Edition (2026, Addendum 1) verification; none is `APPROVED` or `FROZEN`.
+`docs/DGR_STAGE_2B_STATUS.md` and `docs/DGR_SOURCE_REGISTER.md` were updated
+with the new items; the 12 frozen pilot items (`Q-7.1-001`–`Q-7.1-012`) were
+not touched or renumbered.
+
+**Next steps:** re-attempt the `chrome-devtools` MCP Bookshelf technique
+(reload the MCP client if it is still hanging) to Tier-A-verify
+`Q-7.1-013`–`Q-7.1-019` against the current DGR 67th Edition text, the same
+way the pilot's items were closed out; then continue drafting further
+production-bank batches from the remaining uncovered Block 0/Block 1
+sub-tasks (thin, source-yield-driven batches, not bulk padding).
+
 ## Update discipline
 
 After each batch:

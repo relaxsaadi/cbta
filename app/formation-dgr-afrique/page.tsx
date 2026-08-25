@@ -6,9 +6,9 @@ import WhatsAppSticky from "@/components/WhatsAppSticky";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR en Afrique — Centre CBTA Certifié pour toute l'Afrique",
+  title: "Formation IATA DGR Afrique — 1er Centre CBTA Algérie",
   description:
-    "KOST GROUP, 1er centre IATA CBTA Provider certifié d'Algérie, forme les professionnels du transport aérien dans toute l'Afrique : Maroc, Sénégal, Côte d'Ivoire, Cameroun, Gabon, Mali.",
+    "1er centre IATA CBTA certifié d'Algérie, forme vos équipes DGR 7.1-7.10 dans toute l'Afrique francophone : Maroc, Sénégal, Côte d'Ivoire, Cameroun, Gabon.",
   alternates: { canonical: "/formation-dgr-afrique" },
   keywords: [
     "formation IATA DGR Afrique",

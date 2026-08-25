@@ -6,6 +6,7 @@ import { redactName } from "@/lib/demo-mode";
 import { Card } from "@/components/ui/Card";
 import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SCOPE_LABELS, SCOPE_BADGE } from "@/lib/data-scope";
 
 export const dynamic = "force-dynamic";
 
@@ -16,15 +17,15 @@ const STATE_BADGE: Record<string, BadgeStatus> = {
   abandoned: "neutral",
 };
 const STATE_LABEL: Record<string, string> = {
-  finished: "Completed",
-  inprogress: "In Progress",
-  overdue: "Overdue",
-  abandoned: "Abandoned",
+  finished: "Terminée",
+  inprogress: "En cours",
+  overdue: "Hors délai",
+  abandoned: "Abandonnée",
 };
 
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 function fmtDuration(s: number | null): string {
   if (s === null) return "—";
@@ -41,19 +42,19 @@ export default async function ResultsPage() {
   return (
     <div className="mx-auto flex max-w-[1280px] flex-col gap-6">
       <div>
-        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Results</h1>
+        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Résultats</h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Live from Moodle — official grades only, never recalculated by this console.
+          En direct depuis Moodle — notes officielles uniquement, jamais recalculées par cette console. Toutes tentatives confondues (production, démo, entraînement) — voir la colonne Périmètre.
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
-        <Stat label="Total attempts" value={String(summary.totalAttempts)} />
-        <Stat label="Completed" value={String(summary.completedAttempts)} />
-        <Stat label="Pass rate" value={summary.passRate !== null ? `${summary.passRate.toFixed(0)}%` : "No data"} />
+        <Stat label="Tentatives totales" value={String(summary.totalAttempts)} />
+        <Stat label="Terminées" value={String(summary.completedAttempts)} />
+        <Stat label="Taux de réussite" value={summary.passRate !== null ? `${summary.passRate.toFixed(0)}%` : "Aucune donnée"} />
         <Stat
-          label="Avg. completion time"
-          value={summary.averageDurationSeconds !== null ? fmtDuration(Math.round(summary.averageDurationSeconds)) : "No data"}
+          label="Durée moyenne"
+          value={summary.averageDurationSeconds !== null ? fmtDuration(Math.round(summary.averageDurationSeconds)) : "Aucune donnée"}
         />
       </div>
 
@@ -61,8 +62,8 @@ export default async function ResultsPage() {
         <Card>
           <EmptyState
             icon={ListChecks}
-            title="No attempts recorded yet"
-            description="Results appear here automatically once a candidate completes a real Moodle Quiz attempt. Nothing is shown until then."
+            title="Aucune tentative enregistrée"
+            description="Les résultats apparaissent ici automatiquement dès qu'un candidat termine une vraie tentative Moodle Quiz. Rien n'est affiché avant cela."
           />
         </Card>
       ) : (
@@ -71,7 +72,7 @@ export default async function ResultsPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-border-subtle bg-surface-sunken/50">
-                  {["Candidate", "Exam", "Attempt", "Started", "Finished", "Duration", "Grade", "Result", "Status"].map((h) => (
+                  {["Candidat", "Examen", "Périmètre", "Tentative", "Début", "Fin", "Durée", "Note", "Résultat", "Statut"].map((h) => (
                     <th key={h} className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary whitespace-nowrap">
                       {h}
                     </th>
@@ -87,6 +88,7 @@ export default async function ResultsPage() {
                       </Link>
                     </td>
                     <td className="px-4 py-2.5 text-[12px] text-text-secondary max-w-[220px] truncate">{r.examName}</td>
+                    <td className="px-4 py-2.5"><StatusBadge status={SCOPE_BADGE[r.scope]}>{SCOPE_LABELS[r.scope]}</StatusBadge></td>
                     <td className="px-4 py-2.5 text-[12px] text-text-tertiary tabular-nums">#{r.attemptNumber}</td>
                     <td className="px-4 py-2.5 text-[11.5px] text-text-tertiary tabular-nums whitespace-nowrap">{fmtDate(r.timeStart)}</td>
                     <td className="px-4 py-2.5 text-[11.5px] text-text-tertiary tabular-nums whitespace-nowrap">{fmtDate(r.timeFinish)}</td>
@@ -95,8 +97,8 @@ export default async function ResultsPage() {
                       {r.officialGrade !== null ? `${r.officialGrade.toFixed(2)} / ${r.gradeMax.toFixed(0)}` : "—"}
                     </td>
                     <td className="px-4 py-2.5">
-                      {r.passFail === "pass" && <StatusBadge status="verified">Pass</StatusBadge>}
-                      {r.passFail === "fail" && <StatusBadge status="critical">Fail</StatusBadge>}
+                      {r.passFail === "pass" && <StatusBadge status="verified">Réussi</StatusBadge>}
+                      {r.passFail === "fail" && <StatusBadge status="critical">Échoué</StatusBadge>}
                       {r.passFail === "not_applicable" && <StatusBadge status="neutral">N/A</StatusBadge>}
                     </td>
                     <td className="px-4 py-2.5">
@@ -111,10 +113,10 @@ export default async function ResultsPage() {
       )}
 
       <p className="text-[11.5px] text-text-tertiary">
-        Moodle already treats a finished attempt with auto-graded questions (MCQ / True-False) as
-        final — no separate "Pending Review / Validated" workflow is applied here, since building
-        one would be artificial for content that requires no manual grading. This will be
-        revisited if manually-graded question types (e.g. essay) are introduced.
+        Moodle considère déjà une tentative terminée dont les questions sont corrigées automatiquement (QCM / Vrai-Faux)
+        comme définitive — aucun flux « En attente de relecture / Validé » séparé n&apos;est appliqué ici, car en
+        construire un serait artificiel pour un contenu qui ne nécessite pas de correction manuelle. Ce point sera
+        réexaminé si des types de questions à correction manuelle (ex. réponse libre) sont introduits.
       </p>
     </div>
   );

@@ -1,5 +1,6 @@
 import "server-only";
 import { queryReadOnly } from "@/lib/db-readonly";
+import { classifyScope, type DataScope } from "@/lib/data-scope";
 
 export type AttemptState = "inprogress" | "finished" | "overdue" | "abandoned";
 
@@ -22,6 +23,7 @@ export interface ResultRecord {
   passingGrade: number | null;
   percentage: number | null; // derived only for display, from the official grade — not a substitute for it
   passFail: "pass" | "fail" | "not_applicable";
+  scope: DataScope;
 }
 
 function stateLabel(s: string): AttemptState {
@@ -108,6 +110,7 @@ export async function getResults(): Promise<ResultRecord[]> {
       passingGrade,
       percentage,
       passFail,
+      scope: classifyScope(r.examname),
     };
   });
 }

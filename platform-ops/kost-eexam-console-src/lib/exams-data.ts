@@ -1,5 +1,6 @@
 import "server-only";
 import { queryReadOnly } from "@/lib/db-readonly";
+import { classifyScope, type DataScope } from "@/lib/data-scope";
 
 export interface ExamRecord {
   id: number;
@@ -17,6 +18,7 @@ export interface ExamRecord {
   shuffleAnswers: boolean;
   overdueHandling: string;
   status: "open" | "scheduled" | "closed" | "no_window";
+  scope: DataScope;
 }
 
 function computeStatus(timeOpen: number, timeClose: number): ExamRecord["status"] {
@@ -84,5 +86,6 @@ export async function getExams(): Promise<ExamRecord[]> {
     shuffleAnswers: r.shuffleanswers === 1,
     overdueHandling: r.overduehandling,
     status: computeStatus(r.timeopen, r.timeclose),
+    scope: classifyScope(r.name, r.coursename),
   }));
 }

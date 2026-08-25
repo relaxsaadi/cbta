@@ -4,20 +4,8 @@ import { usePathname } from "next/navigation";
 import { Search, Bell, EyeOff, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DEMO_MODE_COOKIE } from "@/lib/demo-mode";
+import { SEGMENT_LABELS } from "@/lib/nav-config";
 import { cn } from "@/lib/utils";
-
-const LABELS: Record<string, string> = {
-  overview: "Overview",
-  exams: "Exams",
-  sessions: "Sessions",
-  "question-bank": "Question Bank",
-  candidates: "Candidates",
-  results: "Results",
-  reports: "Reports",
-  "audit-compliance": "Audit & Compliance",
-  system: "System",
-  support: "Support",
-};
 
 function readDemoModeCookie(): boolean {
   if (typeof document === "undefined") return false;
@@ -27,7 +15,7 @@ function readDemoModeCookie(): boolean {
 export function Topbar({ systemOk }: { systemOk: boolean }) {
   const pathname = usePathname();
   const segment = pathname?.split("/").filter(Boolean)[0] ?? "";
-  const crumbs = ["KOST E-EXAM", LABELS[segment] ?? segment];
+  const crumbs = ["KOST E-EXAM", SEGMENT_LABELS[segment] ?? segment];
   const [demoMode, setDemoMode] = useState(false);
 
   useEffect(() => {
@@ -70,10 +58,10 @@ export function Topbar({ systemOk }: { systemOk: boolean }) {
       <div className="flex items-center gap-2.5 shrink-0">
         <button
           className="flex items-center gap-2 rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[12.5px] text-text-tertiary hover:border-border-strong transition-colors"
-          aria-label="Search"
+          aria-label="Rechercher"
         >
           <Search size={14} />
-          <span className="hidden lg:inline">Search…</span>
+          <span className="hidden lg:inline">Rechercher…</span>
           <kbd className="hidden lg:inline ml-2 rounded border border-border-default bg-surface-raised px-1 py-[1px] text-[10px] font-mono text-text-tertiary">
             ⌘K
           </kbd>
@@ -90,7 +78,7 @@ export function Topbar({ systemOk }: { systemOk: boolean }) {
             />
           </span>
           <span className="text-[12px] font-medium text-text-secondary">
-            {systemOk ? "Operational" : "Issue detected"}
+            {systemOk ? "Opérationnel" : "Anomalie détectée"}
           </span>
         </div>
 
@@ -98,7 +86,7 @@ export function Topbar({ systemOk }: { systemOk: boolean }) {
 
         <button
           onClick={toggleDemoMode}
-          title="Audit Presentation Mode — redacts names/emails/IPs on screen only, never alters underlying data"
+          title="Mode Présentation — masque à l'écran noms/e-mails/IP pour une démonstration ; ne modifie jamais les données réelles"
           className={cn(
             "hidden sm:flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase transition-colors",
             demoMode
@@ -107,13 +95,16 @@ export function Topbar({ systemOk }: { systemOk: boolean }) {
           )}
         >
           {demoMode ? <EyeOff size={12} /> : <Eye size={12} />}
-          {demoMode ? "Presentation Mode" : "Presentation"}
+          {demoMode ? "Mode présentation actif" : "Mode présentation"}
         </button>
 
         <div className="hidden md:block h-4 w-px bg-border-default" />
 
-        <span className="hidden md:inline-flex items-center rounded-full border border-accent-soft-border bg-accent-soft-bg px-2.5 py-1 text-[11px] font-semibold tracking-wide text-accent-11 uppercase">
-          Production
+        <span
+          className="hidden md:inline-flex items-center rounded-full border border-accent-soft-border bg-accent-soft-bg px-2.5 py-1 text-[11px] font-semibold tracking-wide text-accent-11 uppercase"
+          title="Environnement de production du logiciel console — n'indique pas que toutes les données affichées sont des tentatives d'examen réelles ; voir le filtre de périmètre sur Vue d'ensemble / Rapports"
+        >
+          Environnement de production
         </span>
 
         <button

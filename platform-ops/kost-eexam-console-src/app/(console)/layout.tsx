@@ -5,10 +5,10 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
 
 const ROLE_LABELS: Record<string, string> = {
-  administrator: "Administrator",
-  exam_manager: "Exam Manager",
-  instructor: "Instructor",
-  auditor: "Auditor",
+  administrator: "Administrateur",
+  exam_manager: "Responsable d'examen",
+  instructor: "Instructeur",
+  auditor: "Auditeur",
 };
 
 export default async function ConsoleLayout({ children }: { children: ReactNode }) {
@@ -22,7 +22,7 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
       <Sidebar
         user={{
           name: session.fullName ?? session.username ?? "Unknown",
-          role: ROLE_LABELS[session.role ?? ""] ?? "Unknown role",
+          role: ROLE_LABELS[session.role ?? ""] ?? "Rôle inconnu",
         }}
       />
       <div className="flex min-w-0 flex-1 flex-col">

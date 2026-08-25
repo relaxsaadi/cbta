@@ -4,27 +4,30 @@ import { DGR_FUNCTIONS } from "@/lib/dgr-functions";
 import { getExams } from "@/lib/exams-data";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { parseScopeParam } from "@/lib/data-scope";
 
 export const dynamic = "force-dynamic";
 
 function fmtDuration(s: number | null): string {
-  if (s === null) return "No data";
+  if (s === null) return "Aucune donnée";
   const m = Math.floor(s / 60);
   const sec = Math.round(s % 60);
   return `${m}m ${sec}s`;
 }
 function fmtPercent(n: number | null): string {
-  return n !== null ? `${n.toFixed(0)}%` : "No data";
+  return n !== null ? `${n.toFixed(0)}%` : "Aucune donnée";
 }
 
 export default async function ReportsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ exam?: string; dgrFunction?: string }>;
+  searchParams: Promise<{ exam?: string; dgrFunction?: string; scope?: string }>;
 }) {
   const params = await searchParams;
+  const scope = parseScopeParam(params.scope);
+  const isAllScope = scope.length > 1;
   const [data, exams] = await Promise.all([
-    getReportsData({ examName: params.exam, dgrFunction: params.dgrFunction }),
+    getReportsData({ examName: params.exam, dgrFunction: params.dgrFunction, scope }),
     getExams(),
   ]);
   const examNames = Array.from(new Set(exams.map((e) => e.name)));
@@ -32,44 +35,52 @@ export default async function ReportsPage({
   return (
     <div className="mx-auto flex max-w-[1280px] flex-col gap-6">
       <div>
-        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Reports</h1>
+        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Rapports</h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Aggregate statistics computed exclusively from real Moodle results — zero fictitious data.
+          Statistiques agrégées calculées exclusivement à partir des vraies données Moodle — aucune donnée fictive.
         </p>
       </div>
 
       <form className="flex flex-wrap items-center gap-2.5" method="get">
         <select name="exam" defaultValue={params.exam ?? ""} className="rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[12.5px] text-text-secondary">
-          <option value="">All exams</option>
+          <option value="">Tous les examens</option>
           {examNames.map((n) => (
             <option key={n} value={n}>{n}</option>
           ))}
         </select>
         <select name="dgrFunction" defaultValue={params.dgrFunction ?? ""} className="rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[12.5px] text-text-secondary">
-          <option value="">All DGR functions</option>
+          <option value="">Toutes les fonctions DGR</option>
           {DGR_FUNCTIONS.map((f) => (
             <option key={f} value={f}>{f}</option>
           ))}
         </select>
+        <select name="scope" defaultValue={isAllScope ? "all" : "production"} className="rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[12.5px] text-text-secondary">
+          <option value="production">Production uniquement</option>
+          <option value="all">Toutes les données (démos/entraînement inclus)</option>
+        </select>
         <button type="submit" className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10 transition-colors">
-          Apply filters
+          Appliquer les filtres
         </button>
       </form>
 
       <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-5">
-        <Stat label="Exams completed" value={String(data.examsCompleted)} />
-        <Stat label="Candidates assessed" value={String(data.candidatesAssessed)} />
-        <Stat label="Pass rate" value={fmtPercent(data.passRate)} />
-        <Stat label="Average score" value={fmtPercent(data.averageScorePercent)} />
-        <Stat label="Avg. completion time" value={fmtDuration(data.averageDurationSeconds)} />
+        <Stat label="Examens terminés" value={String(data.examsCompleted)} />
+        <Stat label="Candidats évalués" value={String(data.candidatesAssessed)} />
+        <Stat label="Taux de réussite" value={fmtPercent(data.passRate)} />
+        <Stat label="Note moyenne" value={fmtPercent(data.averageScorePercent)} />
+        <Stat label="Durée moyenne" value={fmtDuration(data.averageDurationSeconds)} />
       </div>
 
       {data.byExam.length === 0 ? (
         <Card>
           <EmptyState
             icon={BarChart3}
-            title="No data for this filter"
-            description="Reports are built exclusively from real completed Moodle attempts. Adjust filters or wait for real activity."
+            title="Aucune donnée pour ce filtre"
+            description={
+              isAllScope
+                ? "Les rapports sont construits exclusivement à partir de vraies tentatives Moodle terminées. Ajustez les filtres ou attendez une activité réelle."
+                : "Aucune tentative de production ne correspond à ce filtre. Essayez « Toutes les données » pour inclure les tentatives de démonstration/entraînement."
+            }
           />
         </Card>
       ) : (
@@ -78,7 +89,7 @@ export default async function ReportsPage({
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-border-subtle bg-surface-sunken/50">
-                  {["Exam", "DGR Function", "Attempts", "Pass rate", "Average score"].map((h) => (
+                  {["Examen", "Fonction DGR", "Tentatives", "Taux de réussite", "Note moyenne"].map((h) => (
                     <th key={h} className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary whitespace-nowrap">
                       {h}
                     </th>
@@ -89,7 +100,7 @@ export default async function ReportsPage({
                 {data.byExam.map((row) => (
                   <tr key={row.examName} className="hover:bg-surface-sunken/40 transition-colors">
                     <td className="px-4 py-2.5 text-[12.5px] font-medium text-text-primary max-w-[240px] truncate">{row.examName}</td>
-                    <td className="px-4 py-2.5 text-[12px] text-text-secondary">{row.dgrFunctions.join(", ") || "Not classified"}</td>
+                    <td className="px-4 py-2.5 text-[12px] text-text-secondary">{row.dgrFunctions.join(", ") || "Non classée"}</td>
                     <td className="px-4 py-2.5 text-[12px] text-text-tertiary tabular-nums">{row.attempts}</td>
                     <td className="px-4 py-2.5 text-[12px] text-text-primary tabular-nums">{fmtPercent(row.passRate)}</td>
                     <td className="px-4 py-2.5 text-[12px] text-text-primary tabular-nums">{fmtPercent(row.averageScorePercent)}</td>

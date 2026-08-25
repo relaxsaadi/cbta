@@ -1,6 +1,7 @@
 import "server-only";
 import { getResults, type ResultRecord } from "@/lib/results-data";
 import { getExams } from "@/lib/exams-data";
+import { DEFAULT_SCOPE_FILTER, type DataScope } from "@/lib/data-scope";
 
 export interface ReportsData {
   examsCompleted: number;
@@ -17,10 +18,15 @@ export interface ReportsData {
   }[];
 }
 
-export async function getReportsData(filters?: { examName?: string; dgrFunction?: string }): Promise<ReportsData> {
+export async function getReportsData(filters?: {
+  examName?: string;
+  dgrFunction?: string;
+  scope?: DataScope[];
+}): Promise<ReportsData> {
   const [results, exams] = await Promise.all([getResults(), getExams()]);
 
-  let filtered = results.filter((r) => r.state === "finished");
+  const scope = filters?.scope ?? DEFAULT_SCOPE_FILTER;
+  let filtered = results.filter((r) => r.state === "finished" && scope.includes(r.scope));
   if (filters?.examName) {
     filtered = filtered.filter((r) => r.examName === filters.examName);
   }

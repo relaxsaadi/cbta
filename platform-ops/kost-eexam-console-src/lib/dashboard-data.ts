@@ -1,13 +1,17 @@
 import "server-only";
-import { callMoodleServiceWs } from "@/lib/moodle-client";
-import { queryReadOnly } from "@/lib/db-readonly";
+import { getExams } from "@/lib/exams-data";
+import { getResults, computeResultsSummary } from "@/lib/results-data";
+import { getCandidates } from "@/lib/candidates-data";
+import { getQuestions } from "@/lib/question-bank-data";
+import { DEFAULT_SCOPE_FILTER, type DataScope } from "@/lib/data-scope";
 
 export interface DashboardKpis {
   activeExams: number | null;
   candidates: number | null;
   completedExams: number | null;
-  passRate: number | null; // pourcentage, null si aucune tentative
+  passRate: number | null; // pourcentage, null si aucune tentative terminée dans le périmètre
   questionBankSize: number | null;
+  scope: DataScope[];
 }
 
 // Chaque KPI est indépendant : l'échec d'un appel ne doit jamais faire
@@ -21,55 +25,46 @@ async function safe<T>(fn: () => Promise<T>): Promise<T | null> {
   }
 }
 
-export async function getDashboardKpis(): Promise<DashboardKpis> {
-  const [activeExams, candidates, completedExams, passRate, questionBankSize] = await Promise.all([
-    safe(async () => {
-      const courses = await queryReadOnly<{ id: number }>(
-        `SELECT id FROM mdl_course WHERE id != 1`
-      );
-      if (courses.length === 0) return 0;
-      const result = await callMoodleServiceWs<
-        { quizzes: unknown[] }
-      >("mod_quiz_get_quizzes_by_courses", {
-        "courseids[0]": courses[0].id,
-      });
-      return result.quizzes?.length ?? 0;
-    }),
-    safe(async () => {
-      const rows = await queryReadOnly<{ count: number }>(
-        `SELECT COUNT(DISTINCT ue.userid) as count
-         FROM mdl_user_enrolments ue
-         JOIN mdl_enrol e ON e.id = ue.enrolid
-         JOIN mdl_course c ON c.id = e.courseid
-         WHERE c.id != 1`
-      );
-      return rows[0]?.count ?? 0;
-    }),
-    safe(async () => {
-      const rows = await queryReadOnly<{ count: number }>(
-        `SELECT COUNT(*) as count FROM mdl_quiz_attempts WHERE state = 'finished'`
-      );
-      return rows[0]?.count ?? 0;
-    }),
-    safe(async () => {
-      const rows = await queryReadOnly<{ total: number; passed: number }>(
-        `SELECT COUNT(*) as total,
-                SUM(CASE WHEN gg.finalgrade >= gi.gradepass THEN 1 ELSE 0 END) as passed
-         FROM mdl_grade_grades gg
-         JOIN mdl_grade_items gi ON gi.id = gg.itemid
-         WHERE gi.itemtype = 'mod' AND gi.itemmodule = 'quiz' AND gg.finalgrade IS NOT NULL`
-      );
-      const total = rows[0]?.total ?? 0;
-      if (total === 0) return null;
-      return Math.round(((rows[0]?.passed ?? 0) / total) * 100);
-    }),
-    safe(async () => {
-      const rows = await queryReadOnly<{ count: number }>(
-        `SELECT COUNT(*) as count FROM mdl_question WHERE parent = 0`
-      );
-      return rows[0]?.count ?? 0;
-    }),
+/**
+ * IMPORTANT — définition unique du KPI : cette fonction ne fait plus AUCUNE
+ * requête SQL indépendante. Elle réutilise exactement les mêmes fonctions
+ * (getExams / getResults / getCandidates / getQuestions) que les pages
+ * Examens, Résultats, Rapports et Banque de questions — donc les mêmes
+ * nombres partout, par construction, plutôt que par coïncidence.
+ *
+ * Avant ce correctif, "Active Exams" utilisait une requête WS Moodle limitée
+ * à un seul cours choisi arbitrairement (`courses[0].id`, sans tri garanti)
+ * — ce qui affichait 0 alors qu'un examen réel était bien ouvert dans un
+ * AUTRE cours. Et "Pass Rate" agrégeait mdl_grade_grades (une note par
+ * utilisateur, y compris sur des quiz d'entraînement/démo sans seuil de
+ * réussite réel, donc "réussis" par défaut), alors que Rapports/Résultats
+ * comptent par tentative avec la même règle de réussite partout. Les deux
+ * bugs sont corrigés en supprimant la duplication de logique.
+ *
+ * `scope` filtre les KPI orientés pilotage (Examens actifs, Taux de
+ * réussite) aux données de production par défaut — voir lib/data-scope.ts.
+ * Candidats et Banque de questions restent des comptages globaux (une
+ * personne ou une question n'a pas de "périmètre" au même sens qu'une
+ * tentative d'examen).
+ */
+export async function getDashboardKpis(scope: DataScope[] = DEFAULT_SCOPE_FILTER): Promise<DashboardKpis> {
+  const [exams, results, candidates, questions] = await Promise.all([
+    safe(getExams),
+    safe(getResults),
+    safe(getCandidates),
+    safe(getQuestions),
   ]);
 
-  return { activeExams, candidates, completedExams, passRate, questionBankSize };
+  const scopedExams = exams?.filter((e) => scope.includes(e.scope)) ?? null;
+  const scopedResults = results?.filter((r) => scope.includes(r.scope)) ?? null;
+  const summary = scopedResults ? computeResultsSummary(scopedResults) : null;
+
+  return {
+    activeExams: scopedExams ? scopedExams.filter((e) => e.status === "open").length : null,
+    candidates: candidates ? candidates.length : null,
+    completedExams: summary ? summary.completedAttempts : null,
+    passRate: summary ? (summary.passRate !== null ? Math.round(summary.passRate) : null) : null,
+    questionBankSize: questions ? questions.length : null,
+    scope,
+  };
 }

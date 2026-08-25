@@ -5,19 +5,20 @@ import { isDemoModeActive } from "@/lib/demo-mode-server";
 import { redactName } from "@/lib/demo-mode";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
+import { SCOPE_LABELS, SCOPE_BADGE } from "@/lib/data-scope";
 
 export const dynamic = "force-dynamic";
 
 const STATE_LABEL: Record<string, string> = {
-  finished: "Completed",
-  inprogress: "In Progress",
-  overdue: "Overdue",
-  abandoned: "Abandoned",
+  finished: "Terminée",
+  inprogress: "En cours",
+  overdue: "Hors délai",
+  abandoned: "Abandonnée",
 };
 
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 function fmtDuration(s: number | null): string {
   if (s === null) return "—";
@@ -36,13 +37,13 @@ export default async function ResultDetailPage({ params }: { params: Promise<{ a
     <div className="mx-auto flex max-w-[760px] flex-col gap-6">
       <div>
         <Link href="/results" className="text-[12.5px] text-text-tertiary hover:text-text-secondary">
-          ← Back to Results
+          ← Retour aux résultats
         </Link>
         <h1 className="mt-2 font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Result Details
+          Détail du résultat
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Attempt #{result.attemptNumber} — {result.examName}
+          Tentative n°{result.attemptNumber} — {result.examName}
         </p>
       </div>
 
@@ -51,34 +52,38 @@ export default async function ResultDetailPage({ params }: { params: Promise<{ a
           title={displayName}
           description={demoMode ? "@•••" : `@${result.candidateUsername}`}
           action={
-            result.passFail === "pass" ? (
-              <StatusBadge status="verified">Pass</StatusBadge>
-            ) : result.passFail === "fail" ? (
-              <StatusBadge status="critical">Fail</StatusBadge>
-            ) : (
-              <StatusBadge status="neutral">N/A</StatusBadge>
-            )
+            <div className="flex items-center gap-2">
+              <StatusBadge status={SCOPE_BADGE[result.scope]}>{SCOPE_LABELS[result.scope]}</StatusBadge>
+              {result.passFail === "pass" ? (
+                <StatusBadge status="verified">Réussi</StatusBadge>
+              ) : result.passFail === "fail" ? (
+                <StatusBadge status="critical">Échoué</StatusBadge>
+              ) : (
+                <StatusBadge status="neutral">N/A</StatusBadge>
+              )}
+            </div>
           }
         />
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 border-t border-border-subtle pt-4">
-          <Field label="Exam" value={result.examName} />
-          <Field label="Attempt" value={`#${result.attemptNumber}`} />
-          <Field label="Status" value={STATE_LABEL[result.state]} />
-          <Field label="Official grade" value={result.officialGrade !== null ? `${result.officialGrade.toFixed(2)} / ${result.gradeMax.toFixed(0)}` : "—"} />
-          <Field label="Passing threshold" value={result.passingGrade !== null ? `${result.passingGrade.toFixed(0)} / ${result.gradeMax.toFixed(0)}` : "Not set"} />
-          <Field label="Percentage" value={result.percentage !== null ? `${result.percentage.toFixed(1)}%` : "—"} />
-          <Field label="Started" value={fmtDate(result.timeStart)} />
-          <Field label="Submitted" value={fmtDate(result.timeFinish)} />
-          <Field label="Duration" value={fmtDuration(result.durationSeconds)} />
-          <Field label="Answered questions" value={String(result.answeredCount)} />
-          <Field label="Unanswered questions" value={String(result.unansweredCount)} />
+          <Field label="Examen" value={result.examName} />
+          <Field label="Tentative" value={`#${result.attemptNumber}`} />
+          <Field label="Statut" value={STATE_LABEL[result.state]} />
+          <Field label="Note officielle" value={result.officialGrade !== null ? `${result.officialGrade.toFixed(2)} / ${result.gradeMax.toFixed(0)}` : "—"} />
+          <Field label="Seuil de réussite" value={result.passingGrade !== null ? `${result.passingGrade.toFixed(0)} / ${result.gradeMax.toFixed(0)}` : "Non défini"} />
+          <Field label="Pourcentage" value={result.percentage !== null ? `${result.percentage.toFixed(1)}%` : "—"} />
+          <Field label="Début" value={fmtDate(result.timeStart)} />
+          <Field label="Soumise le" value={fmtDate(result.timeFinish)} />
+          <Field label="Durée" value={fmtDuration(result.durationSeconds)} />
+          <Field label="Questions répondues" value={String(result.answeredCount)} />
+          <Field label="Questions sans réponse" value={String(result.unansweredCount)} />
         </div>
 
         <div className="mt-4 border-t border-border-subtle pt-3.5 flex flex-col gap-2">
           <p className="text-[11.5px] text-text-tertiary">
-            Official grade sourced directly from Moodle's grade book (mdl_grade_grades) — never
-            recalculated by this console. Correct answers and question content are not shown here,
-            consistent with this quiz's Moodle review options (no answer disclosure configured).
+            Note officielle directement issue du carnet de notes Moodle (mdl_grade_grades) — jamais
+            recalculée par cette console. Les bonnes réponses et le contenu des questions ne sont pas
+            affichés ici, conformément aux options de relecture Moodle de ce quiz (aucune divulgation
+            des réponses configurée).
           </p>
           <a
             href={`https://exam.kostacademy.com/mod/quiz/view.php?id=${result.examCmid}`}
@@ -86,7 +91,7 @@ export default async function ResultDetailPage({ params }: { params: Promise<{ a
             rel="noreferrer"
             className="w-fit rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[12px] font-medium text-text-secondary hover:border-border-strong transition-colors"
           >
-            View exam in Moodle
+            Voir l&apos;examen dans Moodle
           </a>
         </div>
       </Card>

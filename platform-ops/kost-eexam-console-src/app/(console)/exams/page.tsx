@@ -1,21 +1,22 @@
 import { FileCheck2 } from "lucide-react";
 import { getExams } from "@/lib/exams-data";
-import { Card, CardHeader } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SCOPE_LABELS, SCOPE_BADGE } from "@/lib/data-scope";
 
 export const dynamic = "force-dynamic";
 
 const STATUS_LABEL: Record<string, { label: string; badge: "verified" | "warning" | "neutral" | "critical" }> = {
-  open: { label: "Open", badge: "verified" },
-  scheduled: { label: "Scheduled", badge: "warning" },
-  closed: { label: "Closed", badge: "neutral" },
-  no_window: { label: "No window set", badge: "neutral" },
+  open: { label: "Ouvert", badge: "verified" },
+  scheduled: { label: "Programmé", badge: "warning" },
+  closed: { label: "Fermé", badge: "neutral" },
+  no_window: { label: "Aucune fenêtre définie", badge: "neutral" },
 };
 
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function ExamsPage() {
@@ -24,9 +25,9 @@ export default async function ExamsPage() {
   return (
     <div className="mx-auto flex max-w-[1280px] flex-col gap-6">
       <div>
-        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Exams</h1>
+        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Examens</h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Live from Moodle Quiz — {exams.length} exam{exams.length !== 1 ? "s" : ""} configured
+          En direct depuis Moodle Quiz — {exams.length} examen{exams.length !== 1 ? "s" : ""} configuré{exams.length !== 1 ? "s" : ""}
         </p>
       </div>
 
@@ -34,8 +35,8 @@ export default async function ExamsPage() {
         <Card>
           <EmptyState
             icon={FileCheck2}
-            title="No exams configured yet"
-            description="Exams are created directly in Moodle Quiz. Once configured, they appear here automatically with real settings — nothing is simulated."
+            title="Aucun examen configuré"
+            description="Les examens sont créés directement dans Moodle Quiz. Une fois configurés, ils apparaissent ici automatiquement avec leurs vrais réglages — rien n'est simulé."
           />
         </Card>
       ) : (
@@ -49,6 +50,7 @@ export default async function ExamsPage() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-display text-[15px] font-semibold text-text-primary">{exam.name}</h3>
                       <StatusBadge status={status.badge}>{status.label}</StatusBadge>
+                      <StatusBadge status={SCOPE_BADGE[exam.scope]}>{SCOPE_LABELS[exam.scope]}</StatusBadge>
                     </div>
                     <p className="mt-1 text-[12.5px] text-text-tertiary">{exam.course}</p>
                     {exam.dgrFunctions.length > 0 && (
@@ -64,14 +66,14 @@ export default async function ExamsPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4 border-t border-border-subtle pt-4">
-                  <Field label="Duration" value={`${exam.durationMinutes} min`} />
-                  <Field label="Passing score" value={exam.passingScore !== null ? `${exam.passingScore}/${exam.maxGrade}` : "Not set"} />
+                  <Field label="Durée" value={`${exam.durationMinutes} min`} />
+                  <Field label="Seuil de réussite" value={exam.passingScore !== null ? `${exam.passingScore}/${exam.maxGrade}` : "Non défini"} />
                   <Field label="Questions" value={String(exam.numQuestions)} />
-                  <Field label="Attempts allowed" value={exam.attemptsAllowed === Infinity ? "Unlimited" : String(exam.attemptsAllowed)} />
-                  <Field label="Randomize answers" value={exam.shuffleAnswers ? "Yes" : "No"} />
-                  <Field label="Overdue handling" value={exam.overdueHandling === "autosubmit" ? "Auto-submit" : exam.overdueHandling} />
-                  <Field label="Opens" value={fmtDate(exam.timeOpen)} />
-                  <Field label="Closes" value={fmtDate(exam.timeClose)} />
+                  <Field label="Tentatives autorisées" value={exam.attemptsAllowed === Infinity ? "Illimitées" : String(exam.attemptsAllowed)} />
+                  <Field label="Réponses mélangées" value={exam.shuffleAnswers ? "Oui" : "Non"} />
+                  <Field label="Dépassement de délai" value={exam.overdueHandling === "autosubmit" ? "Envoi automatique" : exam.overdueHandling} />
+                  <Field label="Ouverture" value={fmtDate(exam.timeOpen)} />
+                  <Field label="Fermeture" value={fmtDate(exam.timeClose)} />
                 </div>
 
                 <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3.5">
@@ -81,7 +83,7 @@ export default async function ExamsPage() {
                     rel="noreferrer"
                     className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[12px] font-medium text-text-secondary hover:border-border-strong transition-colors"
                   >
-                    Configure in Moodle
+                    Configurer dans Moodle
                   </a>
                 </div>
               </Card>

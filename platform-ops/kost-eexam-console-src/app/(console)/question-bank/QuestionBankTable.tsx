@@ -3,10 +3,12 @@
 import { useState, useMemo } from "react";
 import type { QuestionRecord } from "@/lib/question-bank-data";
 import { DGR_FUNCTIONS } from "@/lib/dgr-functions";
+import { SCOPE_LABELS, SCOPE_BADGE } from "@/lib/data-scope";
+import { StatusBadge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 
 function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 export function QuestionBankTable({ questions }: { questions: QuestionRecord[] }) {
@@ -29,7 +31,7 @@ export function QuestionBankTable({ questions }: { questions: QuestionRecord[] }
               : "bg-surface-raised border-border-default text-text-secondary hover:border-border-strong"
           )}
         >
-          All ({questions.length})
+          Toutes ({questions.length})
         </button>
         {DGR_FUNCTIONS.map((fn) => {
           const count = questions.filter((q) => q.dgrFunctions.includes(fn)).length;
@@ -57,10 +59,11 @@ export function QuestionBankTable({ questions }: { questions: QuestionRecord[] }
               <tr className="border-b border-border-subtle bg-surface-sunken/50">
                 <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Question</th>
                 <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Type</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Category</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">DGR Function</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Last Modified</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Status</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Catégorie</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Périmètre</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Fonction DGR</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Modifiée le</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Statut</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border-subtle">
@@ -69,21 +72,24 @@ export function QuestionBankTable({ questions }: { questions: QuestionRecord[] }
                   <td className="px-4 py-2.5 text-[12.5px] font-medium text-text-primary">{q.name}</td>
                   <td className="px-4 py-2.5 text-[12px] text-text-secondary">{q.qtype}</td>
                   <td className="px-4 py-2.5 text-[12px] text-text-secondary">{q.category}</td>
+                  <td className="px-4 py-2.5">
+                    <StatusBadge status={SCOPE_BADGE[q.scope]}>{SCOPE_LABELS[q.scope]}</StatusBadge>
+                  </td>
                   <td className="px-4 py-2.5 text-[12px]">
                     {q.dgrFunctions.length > 0 ? (
                       <span className="text-text-secondary">{q.dgrFunctions.join(", ")}</span>
                     ) : (
-                      <span className="text-text-tertiary italic">Not classified</span>
+                      <span className="text-text-tertiary italic">Non classée</span>
                     )}
                   </td>
                   <td className="px-4 py-2.5 text-[12px] text-text-tertiary tabular-nums">{fmtDate(q.lastModified)}</td>
-                  <td className="px-4 py-2.5 text-[12px] text-text-secondary capitalize">{q.status}</td>
+                  <td className="px-4 py-2.5 text-[12px] text-text-secondary capitalize">{q.status === "ready" ? "Prête" : q.status === "draft" ? "Brouillon" : q.status}</td>
                 </tr>
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-[12.5px] text-text-tertiary">
-                    No questions match this filter.
+                  <td colSpan={7} className="px-4 py-8 text-center text-[12.5px] text-text-tertiary">
+                    Aucune question ne correspond à ce filtre.
                   </td>
                 </tr>
               )}

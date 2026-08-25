@@ -1,5 +1,6 @@
 import "server-only";
 import { queryReadOnly } from "@/lib/db-readonly";
+import { classifyScope, type DataScope } from "@/lib/data-scope";
 
 export interface QuestionRecord {
   id: number;
@@ -10,14 +11,15 @@ export interface QuestionRecord {
   tags: string[];
   lastModified: string;
   status: string;
+  scope: DataScope;
 }
 
 const QTYPE_LABELS: Record<string, string> = {
-  multichoice: "MCQ",
-  multichoiceset: "Multiple response",
-  truefalse: "True / False",
-  essay: "Open answer",
-  shortanswer: "Short answer",
+  multichoice: "QCM",
+  multichoiceset: "Réponses multiples",
+  truefalse: "Vrai / Faux",
+  essay: "Réponse libre",
+  shortanswer: "Réponse courte",
 };
 
 export async function getQuestions(): Promise<QuestionRecord[]> {
@@ -59,6 +61,7 @@ export async function getQuestions(): Promise<QuestionRecord[]> {
       tags: tags.filter((t) => !t.startsWith("function-")),
       lastModified: new Date(r.timemodified * 1000).toISOString(),
       status: r.status,
+      scope: classifyScope(r.name, r.category),
     };
   });
 }

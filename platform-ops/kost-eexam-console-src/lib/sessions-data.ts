@@ -1,5 +1,6 @@
 import "server-only";
 import { queryReadOnly } from "@/lib/db-readonly";
+import { classifyScope, type DataScope } from "@/lib/data-scope";
 
 // Moodle n'a pas d'entité "session" distincte : une session d'examen est
 // dérivée de la fenêtre d'ouverture/fermeture réelle du Quiz + de ses
@@ -14,6 +15,7 @@ export interface SessionRecord {
   candidatesCompleted: number;
   attemptsInProgress: number;
   status: "scheduled" | "open" | "closed" | "no_window";
+  scope: DataScope;
 }
 
 function computeStatus(timeOpen: number, timeClose: number): SessionRecord["status"] {
@@ -54,5 +56,6 @@ export async function getSessions(): Promise<SessionRecord[]> {
     candidatesCompleted: r.completed,
     attemptsInProgress: r.inprogress,
     status: computeStatus(r.timeopen, r.timeclose),
+    scope: classifyScope(r.name),
   }));
 }

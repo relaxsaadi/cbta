@@ -39,7 +39,7 @@ export function KpiCard({
           unavailable ? "text-[15px] font-medium text-text-tertiary" : "text-[26px] font-semibold text-text-primary"
         )}
       >
-        {unavailable ? "Not available" : value}
+        {unavailable ? "Non disponible" : value}
       </p>
     </div>
   );

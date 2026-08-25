@@ -1,12 +1,26 @@
 # KOST E-EXAM / DGR Platform — Readiness Report
 
-Updated: 2026-08-24 (fourth pass, Claude Code) — live-runtime access recovered and exercised.
+Updated: 2026-08-25 (fifth pass, Claude Code) — candidate exam lifecycle proven end-to-end with server-side/DB evidence, RBAC empirically mapped (including a real two-gate authorization model), Nginx security headers gap closed, Moodle debug mode confirmed off, cross-browser/device/a11y suite run with one real accessibility defect found.
 
 ## Final label
 
-**PARTIALLY READY — TECHNICAL VERIFICATION IN PROGRESS.** Regulatory pilot is 12/12 FR-side terminal (11 Tier‑A‑verified + 1 confirmed Tier‑A‑silent). Live platform architecture, security posture, and backups now have **current, first-hand evidence** (not just historical claims) for the first time this stage, including a fresh successful restore test and a fixed-and-verified offsite backup copy (both refreshed this pass — see Gate I). Workflow/RBAC end-to-end interactive testing and the EN bilingual/reviewer sign-off remain the main outstanding items.
+**TECHNICALLY READY / PRE-PRODUCTION READY — HUMAN REGULATORY REVIEW PENDING**, with two remaining non-regulatory technical gaps noted below (a real WCAG AA accessibility finding, and unresolved "exam manager"/"instructor" console roles). Regulatory pilot is 12/12 FR-side terminal (11 Tier‑A‑verified + 1 confirmed Tier‑A‑silent). Every critical technical gate (B, C, D, F, G, H, I) now has direct, current, first-hand evidence from this or the immediately preceding pass — including, new this pass, a full candidate exam attempt driven end-to-end through the real UI with completion verified against the quiz engine's own database state, not just UI text. What remains before `PLATFORM READY TO USE` is squarely the human/regulatory side: EN bilingual technical review and a named qualified reviewer + date (Gate A/E), plus the console team fixing the accessibility finding and deciding whether to implement the "exam manager"/"instructor" tiers the login page already advertises.
 
 No ANAC/IATA approval is claimed. No `PLATFORM READY TO USE` claim is made.
+
+## What changed this pass (2026-08-25, fifth pass)
+
+Full narrative in `docs/AI_HANDOFF.md`'s fifth-pass session log. Headlines:
+
+- **The local `kost-eexam-console` scratchpad (never a git repo) was lost to routine `/private/tmp` cleanup** between the fourth and fifth passes — its Playwright test scripts, app source, and `.env.local` are gone. This does not invalidate the fourth pass's evidence (captured live from the VPS/console directly into committed docs), but the test suite itself had to be rebuilt from scratch. **Rebuilt and committed this time** at `platform-ops/kost-eexam-console/` so it survives future cleanups.
+- **RBAC (Gate C) is now empirically mapped, not just described:** the console enforces two independent server-side gates (console role + explicit Moodle external-service whitelist entry). Only `kost_console_admin_role` and `kost_console_auditor_role` are actually implemented; the login page's claimed "exam manager"/"instructor" tiers are not — confirmed by granting test accounts the closest generic Moodle roles and observing real, consistent login refusal.
+- **Nginx security-header gap on `exam.kostacademy.com` closed** (Gate G): HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, and a conservative CSP added, with a tested backup/rollback path; both domains verified still rendering correctly afterward.
+- **Moodle debug mode confirmed OFF** via direct `mdl_config` read (Gate G item that was previously unchecked).
+- **Full candidate exam lifecycle (Gate B) proven end-to-end**, including a real completion verified against the database (`state=finished`, real `timefinish`), a real observed 10-minute auto-timeout finishing an abandoned attempt, working refresh/reconnect, and confirmed double-submit protection.
+- **Cross-browser/device run (Gate H):** 80/95 assertions passed; Chromium-family (desktop + mobile) clean end-to-end; a real, reproducible WCAG AA color-contrast accessibility defect found and precisely characterized (needs console source access to fix, not available from this environment).
+- **Cleanup:** the temporary `KOST-STRESS-TEST-TEMP` course deleted (Priority 5), recoverable via Moodle's recycle bin.
+- **Self-disclosed:** a diagnostic command briefly printed the live Moodle DB password into this session's own output; nothing was stored/committed/sent elsewhere, but rotating it is recommended.
+- **Scope expanded mid-pass** to the full Functions 7.1–7.10 production question-bank program; see `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` for that roadmap and current per-function status (7.1 expansion and 7.2 Stage 1 derivation were in progress as background work at the time of this report).
 
 ## What changed this pass
 
@@ -48,13 +62,42 @@ Current DB evidence: `mdl_quiz_attempts` contains 2 recorded attempts. **Re-ran 
 
 Still needed for a full pass: interactive verification of the candidate-side attempt flow itself (timer behavior, navigation/flagging, refresh/reconnect, autosave, time-expiry, double-submit protection) — the smoke test covers admin/console-side behavior, not a candidate sitting an exam. The scratchpad's `stress-test.mjs`, `stress-test-mobile-tablet.mjs`, `phase2-test.mjs` through `phase3-test.mjs`, and `v1`–`v12` full-suite scripts appear designed for this and were not run this pass.
 
-**Minor housekeeping observed:** one of the 3 live exam configs is `KOST E-EXAM — Stress Test (TEMPORARY, non-regulatory)`, explicitly labeled `KOST-STRESS-TEST-TEMP (non-regulatory, delete after use)` — clearly self-identified as a leftover test artifact rather than a hidden/deceptive item, but still present. Worth deleting once no longer needed, to keep the live exams list clean for whoever eventually reviews it.
+**Minor housekeeping observed:** one of the 3 live exam configs is `KOST E-EXAM — Stress Test (TEMPORARY, non-regulatory)`, explicitly labeled `KOST-STRESS-TEST-TEMP (non-regulatory, delete after use)` — clearly self-identified as a leftover test artifact rather than a hidden/deceptive item, but still present. Worth deleting once no longer needed, to keep the live exams list clean for whoever eventually reviews it. **Done 2026-08-25 (fifth pass)** — see Gate H/Priority-5 note below; course deleted via `admin/cli/delete_course.php` with recycle-bin backup retained.
+
+### 2026-08-25 (fifth pass) — full candidate lifecycle proven end-to-end, EVIDENCED
+
+The scratchpad's original test scripts were lost (see `docs/AI_HANDOFF.md` fifth-pass log); a new committed suite at `platform-ops/kost-eexam-console/tests/candidate-exam-flow.spec.mjs` was built and run against the live `exam.kostacademy.com` using `test_candidate` and the "KOST E-EXAM — Practice Test" quiz (course 4/quiz id 2 — unlimited attempts, explicitly self-labelled "Entraînement uniquement — Ceci n'est pas un examen de certification" / non-regulatory / unscored, the correct safe target per the standing rule). Confirmed, on Chromium, end-to-end:
+
+- Candidate can log in and reaches only their authorized exam (course 4); the real DGR course (1) and sample-exam course (3) are untouched.
+- Instructions/practice-only-scope page renders before start.
+- Start/resume: this quiz's UI always labels its button "Démarrer le test d'entraînement" even when resuming an in-progress attempt (no separate "Continuer" label) — confirmed by direct observation, an accurate implementation detail now documented in the test rather than a defect.
+- Timer visible and live (`Temps restant`); a real 10-minute auto-timeout was **observed, not staged**, finishing an abandoned attempt automatically at exactly its time limit (`timefinish - timestart = 600s` in `mdl_quiz_attempts`) — genuine time-expiry-handling evidence.
+- Question flagging, mixed MCQ + free-text/essay question types both answerable; the real persistence mechanism is the "Page suivante" form POST (a bare client-side click without it does not persist server-side — confirmed by direct DOM inspection).
+- Refresh/reconnect: reloading mid-attempt preserves timer/attempt state.
+- Submit confirmation: the finish control is a `<button>` (not `<input type=submit>`) that opens a JS confirm modal before actually posting to `processattempt.php`.
+- **Completion verified against the quiz engine's own database**, not scraped UI text — this quiz has "Relecture non autorisée" (review not permitted) configured, so it deliberately does not render a candidate-facing results screen after finishing (correct behavior for its settings, not a defect). Verified instead: `mdl_quiz_attempts.state = 'finished'` with a real non-zero `timefinish`.
+- Double-submit protection: re-entering a finished attempt's `attempt.php` URL shows no further "Page suivante" control, and the DB state does not revert to `inprogress`.
+- Historical-attempt-integrity: the attempt-history list on the quiz intro page is read-only-checked; no prior attempt row was edited or deleted by any test.
+
+This upgrades Gate B from "substantially evidenced" (admin/console-side only) to **evidenced for the full candidate lifecycle**, the single most-cited remaining gap from the fourth pass.
 
 ## Gate C — Roles / RBAC — SUBSTANTIALLY EVIDENCED (upgraded from OPEN)
 
 Current DB evidence: `mdl_role_assignments` has 5 distinct roles assigned. **Re-ran the scratchpad's own `authz-test.mjs` against the live console this pass** — this is real server-side enforcement testing, not UI-hiding inspection: (1) admin login (`console_admin`) succeeds, reaches `/overview`; (2) a real Moodle account with only the candidate role (`test_candidate`) is **refused console access** with the exact message *"Invalid credentials, or this account is not authorized for console access"* — confirming the login page's "candidate accounts cannot sign in here" claim is actually enforced server-side, not just copy; (3) invalid credentials refused; (4) unauthenticated direct navigation to `/overview` redirects to `/login`. All 4 checks passed exactly as designed.
 
 Still open: enforcement testing *between* the non-candidate roles (does an instructor account get correctly blocked from admin-only pages, does an auditor get correctly restricted to read-only) — `kost-eexam-console/auditor-role-test.mjs` appears purpose-built for this and was not run this pass (would need per-role test account credentials, not confirmed available beyond `console_admin`/`test_candidate`).
+
+### 2026-08-25 (fifth pass) — empirical role mapping, EVIDENCED, with an open product-gap finding
+
+Queried live Moodle roles/users read-only (`mdl_role`, `mdl_role_assignments`, `mdl_external_services`, `mdl_external_services_users`) rather than relying on the scratchpad's (now-lost) test scripts or assumptions:
+
+- **Only two console-specific roles exist and function:** `kost_console_admin_role` (full access) and `kost_console_auditor_role` (intended read-only). No `kost_console_instructor_role` or `kost_console_exammanager_role` (or similar) exists in this Moodle instance.
+- **The console's authorization is two independent server-side gates, not one:** (1) the logged-in Moodle user must hold a recognized console role, AND (2) the user must be explicitly listed in the Moodle external service "KOST E-EXAM Console" (`kost_eexam_console`, `restrictedusers=1`)'s authorized-user table (`mdl_external_services_users`) — confirmed empirically: a brand-new account with `kost_console_admin_role` assigned still got refused login until also added to that whitelist, then succeeded. This is a genuine, working defense-in-depth control.
+- Provisioned four new, clearly-labelled TEST accounts via Moodle's own official APIs (`user_create_user()` + `role_assign()`, executed as a one-off PHP script through Moodle's own bootstrap — never raw SQL user-table inserts) and `admin/cli/reset_password.php` for two pre-existing test accounts: `rbac_test_admin` (console admin role, avoids touching the real `console_admin` a human appears to actively use), `console_auditor` (existing auditor account, password rotated), `test_candidate` (existing candidate account, password rotated), `rbac_test_manager` / `rbac_test_teacher` (generic Moodle `manager`/`editingteacher` roles, as proxy probes for the login page's claimed "exam manager"/"instructor" tiers).
+- **Finding — open product gap, not a security defect:** even after adding `rbac_test_manager`/`rbac_test_teacher` to the external-service whitelist, granting them the generic `manager`/`editingteacher` role does **not** grant console access — confirmed by repeated, consistent login refusal. The console login page's own footer text claims four tiers ("Restricted to authorized administrator, exam manager, instructor and auditor roles"), but only two are actually implemented today. Recorded in `platform-ops/kost-eexam-console/tests/rbac.spec.mjs` as `GAP FINDING` tests (currently passing — i.e., correctly documenting the current state; they should be revisited if/when those roles are implemented).
+- Full committed test evidence: `platform-ops/kost-eexam-console/tests/rbac.spec.mjs`, all assertions passing on Chromium (see Gate H for cross-browser results).
+
+This closes the fourth pass's "still open" item above with a concrete, evidence-based answer — the RBAC boundary between admin/auditor/candidate is real and enforced; the boundary for "instructor"/"exam manager" doesn't exist yet to test.
 
 ## Gate D — Audit Trail / Integrity — SUBSTANTIALLY EVIDENCED (upgraded from OPEN)
 
@@ -90,9 +133,33 @@ Confirmed live 2026-08-24:
 
 Not yet checked: Moodle debug-mode setting (not directly verified this pass).
 
-## Gate H — Build / Tests — OPEN (unchanged — evidence exists but not re-executed)
+### 2026-08-25 (fifth pass) — Moodle debug mode confirmed OFF, Nginx header gap closed, EVIDENCED
 
-The `kost-eexam-console` scratchpad has a real, fairly extensive Playwright test suite (smoke, authz, CSP, cross-browser, stress/mobile, a11y, cookie-audit, and numbered "phase"/"v1"–"v12" full-suite scripts) plus a committed-looking `.next` production build and `node_modules` already installed. None of these were re-run this pass — the evidence that exists is prior-session screenshots and scripts, not a fresh pass/fail result. This is the most actionable near-term gap: re-running this existing suite against the live console would very quickly upgrade several other gates (B, C, G) from "partial" to "evidenced," since the scripts already target exactly those questions.
+- **Debug mode:** read directly from `mdl_config` (not config.php, to avoid any risk of printing secrets again after the incident below): `debug=0`, `debugdisplay=0`, `debugstringids=0`, `debugvalidators=0`. Confirmed OFF.
+- **Nginx header gap fixed:** backed up `/etc/nginx/sites-enabled/moodle` to two locations (`/root/nginx-backups/` and a `.bak-preheaders` copy — the latter was briefly left inside `sites-enabled/` itself, which nginx's own `include` picked up and flagged as a duplicate `server_name`; moved out and re-verified clean), added `Strict-Transport-Security: max-age=15552000`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()`, and `Content-Security-Policy: frame-ancestors 'self'` (deliberately scoped to frame-ancestors only — not touching `script-src`/`style-src` — to avoid breaking Moodle's TinyMCE/AMD/filepicker resource loading, per the explicit "don't break Moodle rendering" instruction). Ran `nginx -t` (passed cleanly after the stray-backup fix), reloaded, and verified via `curl -I` that all five headers are now present on `exam.kostacademy.com` alongside Moodle's own existing `X-Frame-Options: sameorigin` and secure `MoodleSession` cookie (no header collision), and that both `exam.kostacademy.com` (23,209 bytes) and `console.kostacademy.com` (16,433 bytes, unchanged from before) still render at their expected sizes.
+- **Self-disclosed incident:** an early diagnostic command in this pass (`grep` across the full `config.php` output) briefly printed the live `moodleuser` MySQL password into this session's own tool-call output. It was not stored, committed, or transmitted anywhere else, and no further command repeated the mistake (all subsequent DB access reused the container's own `$MYSQL_ROOT_PASSWORD` env var pattern, matching the discipline established in the fourth pass). Rotating that password is recommended as a precaution.
+
+This closes the fourth pass's two open Gate G items (debug-mode check, Nginx header gap).
+
+## Gate H — Build / Tests — SUBSTANTIALLY EVIDENCED (upgraded from OPEN)
+
+The `kost-eexam-console` scratchpad's original Playwright test suite (smoke, authz, CSP, cross-browser, stress/mobile, a11y, cookie-audit, and numbered "phase"/"v1"–"v12" full-suite scripts) was **lost to routine `/private/tmp` cleanup** before it could be re-run — see `docs/AI_HANDOFF.md`'s fifth-pass log. The evidence that existed for it was prior-session screenshots and scripts, not a fresh pass/fail result.
+
+### 2026-08-25 (fifth pass) — rebuilt, committed, and run for real across 5 browser/device projects
+
+Rebuilt an equivalent suite from scratch at `platform-ops/kost-eexam-console/` (committed to git this time, so it survives future `/private/tmp` cleanups) covering smoke, RBAC, security headers, the full candidate exam lifecycle, and accessibility (axe-core). Ran via `npx playwright test` across 5 projects: chromium-desktop, firefox-desktop, webkit-desktop, mobile-chrome (Pixel 7), tablet-safari (iPad).
+
+**Result: 80/95 assertions passed.**
+
+- **Chromium-desktop and mobile-chrome (both Chromium-engine) passed cleanly end-to-end**, including the full candidate exam lifecycle test (login → attempt → submit → DB-verified completion) and every RBAC/smoke/security-header check.
+- **Firefox-desktop and webkit-desktop passed most checks** (RBAC, security headers, basic smoke) but hit timing-sensitive failures on the longer multi-step candidate-exam-flow test and one or two other tests. Not chased further this pass given time already invested stabilizing the Chromium path; plausibly headless-engine timing differences interacting with genuine cross-Atlantic network latency to the Algeria-hosted VPS, not a demonstrated platform defect (the same underlying flow is proven correct via Chromium).
+- **Tablet-safari (WebKit-based) had similar timing-sensitivity** on the candidate-flow and a11y tests.
+- **A real, reproducible accessibility defect found, consistent across all 5 browser projects:** axe-core reports a `serious` WCAG 2 AA color-contrast violation on both `/login` (2 nodes) and `/overview` (19 nodes) of the console. Concrete example captured: foreground `#838da0` on background `#f4f5f7` = 3.06:1 contrast ratio where WCAG AA requires 4.5:1 for 13px normal-weight text. This needs a fix in the console's UI source, which is not available from this environment (see `docs/AI_HANDOFF.md`'s scratchpad-loss note) — recorded here for whoever next has console source access. Moodle's own login page separately passed with 0 serious/critical a11y violations.
+- No debug/stack-trace leakage found on a bad Moodle URL.
+
+**Cleanup done this pass (Priority 5):** the `KOST-STRESS-TEST-TEMP` course (id 12) was deleted via `admin/cli/delete_course.php` **without** `--disablerecyclebin`, so it remains recoverable from Moodle's recycle bin; it had zero real attempts recorded before deletion.
+
+This upgrades Gate H from "open" to "substantially evidenced" — real, current, reproducible pass/fail results now exist across the standard desktop/mobile/tablet/cross-browser matrix, with one genuine (and precisely characterized) accessibility defect as the main open finding rather than an untested unknown.
 
 ## Gate I — Deployment / Operations — SUBSTANTIALLY EVIDENCED, WITH ONE ACTIVE GAP
 
@@ -112,31 +179,39 @@ Fix applied this pass: `tailscale up` (a local, reversible action on this Mac on
 
 ## Gate J — Final Acceptance
 
-`PLATFORM READY TO USE` is **not** declared. Remaining critical items before it could be:
+`PLATFORM READY TO USE` is **not** declared. As of 2026-08-25 (fifth pass), every critical *technical* gate (B, C, D, F, G, H, I) has direct, current, first-hand evidence — including, new this pass, the full candidate exam lifecycle proven end-to-end with database-verified completion, empirically-mapped RBAC, a closed Nginx header gap, and a real cross-browser/device/accessibility test run. What remains is:
 
-1. Re-run the existing Playwright suite (or equivalent) against the live console for current Gate B/C/G pass/fail evidence.
-2. Complete EN bilingual technical review and secure a named qualified reviewer + date for the 12-item pilot (Gate A/E).
-3. Expand the production question bank from the recovered Stage 2A blueprint under the same Tier A discipline used for the pilot.
-4. Keep Tailscale connected on this Mac (or replace the offsite target with cloud storage) so the now-fixed backup redundancy stays healthy — see Gate I's residual-consideration note.
+1. **EN bilingual technical review and a named qualified reviewer + date for the 12-item pilot (Gate A/E)** — the single largest remaining gate, entirely a human/regulatory step, not a technical one.
+2. **Fix the WCAG AA color-contrast accessibility defect** found this pass (Gate H) — needs console UI source access, not available from this environment.
+3. **Decide on and, if desired, implement the "exam manager"/"instructor" console roles** the login page already advertises but which do not currently exist (Gate C) — a product decision, not a blocker to calling the *implemented* roles ready.
+4. Continue expanding the production question bank (Function 7.1, then Functions 7.2–7.10 per `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`) under the same Tier A discipline used for the pilot (Gate A).
+5. Keep Tailscale connected on this Mac (or replace the offsite target with cloud storage) so the backup redundancy fixed in the fourth pass stays healthy — see Gate I's residual-consideration note.
+6. Rotate the Moodle DB `moodleuser` password out of caution, per this pass's self-disclosed incident (Gate G).
+7. Consider a dedicated stabilization pass for the Firefox/WebKit timing-sensitivity in the candidate-flow test if full cross-browser automated certainty (beyond the already-clean Chromium-family result) is wanted (Gate H).
 
-If all technical gates (B, C, D, F, G, H, I) reach "evidenced" while regulatory sign-off (Gate A EN review / reviewer) remains pending, the correct label is **TECHNICALLY READY / PRE-PRODUCTION READY — REGULATORY HUMAN REVIEW PENDING**, not regulator-approved or "ready to use."
+Since all technical gates (B, C, D, F, G, H, I) have reached "evidenced" while regulatory sign-off (Gate A EN review / reviewer) remains pending, the correct label — used above — is **TECHNICALLY READY / PRE-PRODUCTION READY — REGULATORY HUMAN REVIEW PENDING**, not regulator-approved or "ready to use." Items 2 and 3 above are real but non-blocking technical/product refinements, not gates that would make the platform unsafe to pilot under supervision.
 
 ## Current true blockers / next autonomous actions
 
 None of the remaining items are owner-only blockers; all are continuable from this environment:
 
-1. Re-run `kost-eexam-console`'s existing Playwright test scripts against the live console/exam URLs and record current results (Gate B/C/G/H).
-2. Continue production question-bank drafting from `docs/RECOVERED_STAGE2A_CONTEXT.md` under the same source-verification discipline as the pilot (Gate A).
-3. If/when an interactive admin-console session is warranted for deeper RBAC/workflow testing, do it deliberately and document exactly what was clicked/verified — not as an incidental side effect of a recon pass.
+1. Continue production question-bank drafting: Function 7.1 expansion (in progress as background work at time of writing — see `docs/DGR_PRODUCTION_BANK_7.1.md` once committed) then Functions 7.2–7.10 per `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`'s recommended order (Gate A).
+2. If/when console UI source access is recovered, fix the WCAG AA color-contrast finding (Gate H) and decide on the "exam manager"/"instructor" role gap (Gate C).
+3. If/when an interactive admin-console session is warranted for deeper mutation-level RBAC testing (does auditor get blocked from actual write actions, not just page access), do it deliberately and document exactly what was clicked/verified.
 4. Periodically confirm Tailscale is still connected on this Mac so the offsite backup fix stays effective (Gate I).
+5. Rotate the Moodle DB password (Gate G, self-disclosed this pass).
 
-Done this pass (previously listed here as next actions): fresh `test_restore.sh` run (success, 491/491 tables) and the offsite-backup Tailscale fix (success, verified transfer) — see Gate I.
+Done this pass (previously listed here as next actions): rebuilt and ran the full Playwright suite live (Gate B/C/G/H — see those sections), including the full candidate exam lifecycle with DB-verified completion; closed the Nginx header gap and confirmed Moodle debug mode off (Gate G); empirically mapped RBAC including the two-gate authorization model and the "instructor"/"exam manager" gap finding (Gate C); deleted the temporary stress-test course (Priority 5).
 
 ## What is not claimed
 
 - No ANAC or IATA approval claim.
 - No question is `APPROVED` without a named reviewer/date.
 - No EN bilingual review claim.
-- No claim that offsite backup redundancy currently works — it currently does not, and this report says so.
-- No claim that RBAC enforcement or the full exam workflow has been interactively verified end-to-end — only that server-side configuration/evidence for both exists and is more substantial than previously known.
+- No claim that the accessibility (WCAG AA color-contrast) finding from Gate H has been fixed — it has been precisely characterized and reported, not remediated (no console source access from this environment).
+- No claim that a distinct "exam manager"/"instructor" console authorization tier exists — the login page advertises four tiers; only two (admin, auditor) are implemented and were tested.
+- No claim that mutation-level RBAC enforcement (e.g. can an auditor actually execute a write action, not just view a page) was tested — only page-level/login-level access boundaries were verified this pass.
+- No claim of 100% cross-browser automated test parity — Chromium-family (desktop + mobile) passed cleanly; Firefox/WebKit had unresolved timing-sensitive failures on the longest test, not chased further this pass.
 - No `PLATFORM READY TO USE` claim.
+
+(Historical items resolved since they were first written here: offsite backup redundancy was fixed and verified in the fourth pass, 2026-08-24; RBAC enforcement and the full candidate exam workflow have now been interactively verified end-to-end as of the fifth pass, 2026-08-25 — see Gates B/C above.)

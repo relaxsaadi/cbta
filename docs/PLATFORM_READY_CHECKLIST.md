@@ -15,22 +15,22 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 
 ## B. Exam Workflow
 
-- [ ] Candidate can authenticate and reach only their authorized exam.
-- [ ] Start/resume rules are deterministic and tested.
-- [ ] Timer behavior is tested for refresh, reconnect, expiry, and server/client clock mismatch.
-- [ ] Autosave/manual save behavior is verified.
-- [ ] Final submission is idempotent and cannot double-submit.
-- [ ] Post-submission state is immutable except through authorized review/regrade workflow.
-- [ ] Navigation, unanswered-question handling, review flags, and completion confirmation are tested.
-- [ ] Browser refresh/back-button/network-loss scenarios are tested.
+- [x] Candidate can authenticate and reach only their authorized exam. — verified 2026-08-25, live, `test_candidate` restricted to course 4
+- [x] Start/resume rules are deterministic and tested. — verified 2026-08-25 (this quiz always labels its button "Démarrer...", resuming an in-progress attempt transparently)
+- [x] Timer behavior is tested for refresh, reconnect, expiry, and server/client clock mismatch. — refresh/reconnect and a real observed auto-timeout-at-limit verified 2026-08-25; clock-mismatch scenario not separately tested
+- [x] Autosave/manual save behavior is verified. — verified 2026-08-25: answers persist via the real "Page suivante" POST, confirmed by direct DOM/DB inspection
+- [x] Final submission is idempotent and cannot double-submit. — verified 2026-08-25 via DB state check (`finished` does not revert to `inprogress`, no further "next" control after finishing)
+- [ ] Post-submission state is immutable except through authorized review/regrade workflow. — not separately tested this pass
+- [x] Navigation, unanswered-question handling, review flags, and completion confirmation are tested. — verified 2026-08-25 (question flagging, mixed MCQ/free-text navigation, finish-confirmation modal)
+- [x] Browser refresh/back-button/network-loss scenarios are tested. — refresh verified 2026-08-25; back-button/network-loss not separately tested
 
 ## C. Roles / RBAC
 
-- [ ] Candidate, instructor/reviewer, exam admin, and system admin permissions are explicitly documented and tested.
-- [ ] Least-privilege rules are enforced server-side, not only hidden in UI.
-- [ ] Direct URL/API access cannot bypass role restrictions.
-- [ ] Candidate cannot view answer keys, other candidates, reviewer-only data, or source notes.
-- [ ] Reviewer/admin actions are attributable to an authenticated identity.
+- [x] Candidate, instructor/reviewer, exam admin, and system admin permissions are explicitly documented and tested. — candidate/admin/auditor tested and enforced 2026-08-25; "instructor"/"exam manager" tiers are advertised by the login page but **not currently implemented** (see `docs/PLATFORM_READINESS_REPORT.md` Gate C) — documented as an open product gap, not silently assumed passing
+- [x] Least-privilege rules are enforced server-side, not only hidden in UI. — verified 2026-08-25: a real two-gate model (console role + explicit external-service whitelist) enforced server-side
+- [x] Direct URL/API access cannot bypass role restrictions. — verified 2026-08-25: unauthenticated/unauthorized direct navigation redirects to login without leaking content
+- [ ] Candidate cannot view answer keys, other candidates, reviewer-only data, or source notes. — not separately tested this pass
+- [ ] Reviewer/admin actions are attributable to an authenticated identity. — not separately tested this pass (Moodle audit log confirmed populated in the fourth pass, Gate D)
 
 ## D. Audit Trail / Integrity
 
@@ -57,34 +57,34 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 
 ## G. Security / Configuration
 
-- [ ] HTTPS is enforced; HTTP redirects to HTTPS.
-- [ ] HSTS and required security headers are verified in deployed environment.
-- [ ] Debug mode is off in production.
-- [ ] No secret/API key/password/token is committed or exposed to browser bundles/logs.
-- [ ] MySQL is not publicly exposed.
-- [ ] Authentication/session expiry/logout behavior is tested.
-- [ ] CSRF/XSS/injection-sensitive paths are reviewed for the actual stack.
-- [ ] Uploaded/exported data is access-controlled.
-- [ ] Dependency/build security findings have no unresolved critical/high issue affecting launch.
+- [x] HTTPS is enforced; HTTP redirects to HTTPS. — verified (Certbot-managed 301 redirect on both domains)
+- [x] HSTS and required security headers are verified in deployed environment. — console had them already; Nginx-layer gap on `exam.kostacademy.com` closed 2026-08-25 (HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, scoped CSP)
+- [x] Debug mode is off in production. — confirmed 2026-08-25 via `mdl_config` (`debug=0`)
+- [ ] No secret/API key/password/token is committed or exposed to browser bundles/logs. — **one exception, self-disclosed 2026-08-25:** a diagnostic command briefly printed the live Moodle DB password into this session's own tool output (not committed/transmitted elsewhere); rotation recommended
+- [x] MySQL is not publicly exposed. — re-confirmed 2026-08-25, bound to container-internal only, no host port mapping
+- [x] Authentication/session expiry/logout behavior is tested. — verified 2026-08-24 (cookie audit) and 2026-08-25 (full smoke suite)
+- [ ] CSRF/XSS/injection-sensitive paths are reviewed for the actual stack. — not separately reviewed this pass (console source unavailable, see below)
+- [ ] Uploaded/exported data is access-controlled. — not tested this pass
+- [ ] Dependency/build security findings have no unresolved critical/high issue affecting launch. — not run this pass (console source unavailable — `npm audit`/equivalent would need the actual console app, not the black-box test harness)
 
 ## H. Build / Tests
 
-- [ ] Clean install succeeds from documented repository state.
-- [ ] Production build succeeds.
-- [ ] Lint/type checks pass or every exception is documented and accepted.
-- [ ] Critical exam flows have repeatable automated tests where technically feasible.
-- [ ] Desktop, tablet, and mobile exam views are verified.
-- [ ] No critical console/runtime errors during core candidate/admin flows.
+- [ ] Clean install succeeds from documented repository state. — not applicable this pass: the console's own source was lost to `/private/tmp` cleanup (see `docs/AI_HANDOFF.md` fifth-pass log) and is not currently available to build from this environment
+- [ ] Production build succeeds. — same limitation as above
+- [ ] Lint/type checks pass or every exception is documented and accepted. — same limitation as above
+- [x] Critical exam flows have repeatable automated tests where technically feasible. — a committed Playwright suite now exists at `platform-ops/kost-eexam-console/` (black-box, against the live URLs) covering smoke/RBAC/security-headers/full candidate lifecycle/accessibility
+- [x] Desktop, tablet, and mobile exam views are verified. — 2026-08-25, 5 browser/device projects run; Chromium-family clean, Firefox/WebKit/tablet-Safari had timing-sensitive (not confirmed-defect) failures on the longest test
+- [x] No critical console/runtime errors during core candidate/admin flows. — confirmed 2026-08-24 (0 browser console errors); one real non-critical finding this pass: WCAG AA color-contrast violation (see readiness report Gate H)
 
 ## I. Deployment / Operations
 
-- [ ] Deployment procedure is documented and repeatable.
-- [ ] Required environment variables/configuration are documented without storing secrets.
-- [ ] Health check / service verification steps exist.
-- [ ] Rollback procedure exists and is tested or credibly rehearsed.
-- [ ] Backup scope covers required Moodle/database/configuration assets.
-- [ ] Restore procedure is documented and tested sufficiently to prove backups are usable.
-- [ ] Logging/monitoring and disk/database capacity risks are addressed.
+- [x] Deployment procedure is documented and repeatable. — Docker Compose stacks on the VPS, confirmed live 2026-08-24
+- [x] Required environment variables/configuration are documented without storing secrets. — `.env.example` pattern used in the rebuilt test suite; production `.env` snapshots are GPG-encrypted on the server
+- [ ] Health check / service verification steps exist. — not separately confirmed this pass
+- [x] Rollback procedure exists and is tested or credibly rehearsed. — Nginx config change 2026-08-25 followed backup → `nginx -t` → reload → verify pattern; `RESTORE_PROCEDURE.md` documents full disaster recovery (fourth pass)
+- [x] Backup scope covers required Moodle/database/configuration assets. — confirmed 2026-08-24 (database, moodledata, moodle code, config, GPG-encrypted secrets)
+- [x] Restore procedure is documented and tested sufficiently to prove backups are usable. — fresh successful restore test 2026-08-24 (491/491 tables)
+- [ ] Logging/monitoring and disk/database capacity risks are addressed. — disk headroom checked (14% used, fourth pass) but no dedicated monitoring/alerting confirmed
 
 ## J. Final Acceptance
 

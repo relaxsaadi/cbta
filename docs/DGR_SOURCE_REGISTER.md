@@ -417,6 +417,47 @@ Program totals after Topic 5 (completing priority topics 1–5): 218 FROZEN
 (was 216), 33 PARTIAL (was 30), 7 STALE (was 5), 182 NOTATTEMPTED (was
 189); GAP (13) unchanged.
 
+### 2026-08-25 (second Tier A phase) — Priority item 7: the original 4 STALE CITATION items, expanded negative-search findings
+
+Per the navigation plan's priority order (item 7, after the 5 topics),
+re-examined the 4 original STALE CITATION items from the first Tier A
+sweep: `Q-7.2-021`, `Q-7.2-022`, `Q-7.2-045`, `Q-7.3-039`. All four remain
+non-FROZEN, but each now carries a confirmed, exhaustively-searched
+negative finding rather than an open "citation likely stale" note:
+
+- **§9.5.1.2, read in full this session** (during Topic 2 NOTOC
+  navigation): "L'exploitant doit s'assurer... que les renseignements
+  appropriés sont immédiatement disponibles en tout temps afin d'être
+  utilisés en cas d'intervention d'urgence... Ces renseignements doivent
+  être à la disposition du commandant de bord et peuvent être fournis au
+  moyen: des éléments indicatifs sur les interventions d'urgence... (Doc
+  9481–AN/928 de l'OACI); ou de tout autre document..." — confirms
+  §9.5.1.2 is specifically about **pilot-in-command access to ICAO Doc
+  9481 emergency-response guidance**, not a general damaged-package
+  first-action procedure (`Q-7.2-021`/`Q-7.2-045`) or a general
+  "employer must inform all employees, available wherever DG handled,
+  airport authorities must establish a procedure" claim
+  (`Q-7.2-022`/`Q-7.3-039`).
+- **§9.3.6 "Colis de marchandises dangereuses endommagés," read in full
+  this session** as the most likely alternative source for `Q-7.2-021`/
+  `Q-7.2-045`'s content: covers the operator's PRE-LOADING inspection duty
+  (inspect for damage/leakage before loading; remove damaged/leaking
+  packages; ensure the rest of the consignment is undamaged) — a
+  loading-supervisor's duty, not a front-line employee's personal
+  "aviser votre supérieur" / body-contact first-response procedure.
+- A direct in-book search for the procedure's own wording ("aviser votre
+  supérieur" combined with "colis endommagé") returned **zero matches**
+  anywhere in the current text.
+
+**Conclusion:** the KOST 5-step general emergency procedure
+(`Q-7.2-021`/`Q-7.2-045`) and the "employer must inform all employees"
+claim (`Q-7.2-022`/`Q-7.3-039`) are not located anywhere in current DGR
+67e AM1 after a reasonably exhaustive search. This content likely derives
+from ICAO Doc 9481 (which the DGR references but does not reproduce) or
+company-level procedure, not the DGR text itself. All 4 items remain
+`DRAFT` with an explicit, confirmed `SOURCE GAP` note — not fabricated,
+not silently left as an open stale-citation flag.
+
 ## Pending source targets
 
 _Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see

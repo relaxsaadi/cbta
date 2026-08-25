@@ -22,12 +22,25 @@ entries:
   claim conflicts with current DGR's real 5th category, "Produits
   d'hygiène," §2.5.1.4).
 
-Current totals: **218 FROZEN, 13 GAP, 33 PARTIAL, 7 STALE, 182
-NOTATTEMPTED** (453 total). Remaining phase work per the navigation plan:
-priority items 6 (all PARTIAL items), 7 (all STALE items), 8 (remaining
-NOTATTEMPTED items). The tables below are left as the original baseline
-snapshot for audit purposes; do not re-derive counts from them without
-applying this note.
+The 4 original STALE items (`Q-7.2-021`, `Q-7.2-022`, `Q-7.2-045`,
+`Q-7.3-039`, priority item 7) were also re-examined: §9.5.1.2 was read in
+full and confirmed to cover only pilot-in-command access to ICAO Doc 9481,
+and a further search of §9.3.6 plus a direct phrase search both failed to
+locate the tested content anywhere in current DGR. All 4 reclassified from
+STALE to **GAP** (a confirmed, exhaustively-searched absence, not merely a
+wrong citation) — see `docs/DGR_SOURCE_REGISTER.md`'s "Priority item 7"
+entry.
+
+Current totals: **218 FROZEN, 17 GAP, 33 PARTIAL, 3 STALE, 182
+NOTATTEMPTED** (453 total). All 4 original STALE items are now GAP; the 3
+STALE items still open (`Q-7.3-025`, `Q-7.4-028`, `Q-7.5-026`) were newly
+found during Topics 4–5 this session and remain accurately labeled STALE
+(a specific wrong citation/claim, not an exhaustively-confirmed absence).
+Remaining phase work per the navigation plan: priority item 6 (33 PARTIAL
+items), priority item 7 (the 3 still-open STALE items), priority item 8
+(remaining NOTATTEMPTED items). The tables below are left as the original
+baseline snapshot for audit purposes; do not re-derive counts from them
+without applying this note.
 
 Counting method: each function's own batch summary table is the canonical
 row set. For 7.1 the 19-row table in `DGR_STAGE_2B_STATUS.md` is used (its

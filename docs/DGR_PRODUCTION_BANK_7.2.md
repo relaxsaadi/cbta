@@ -1363,19 +1363,23 @@ dégage une odeur forte lors du traitement — citez deux actions
 prioritaires à effectuer"), which tests the same emergency-response
 section from an open-ended angle, confirming real exam relevance without
 duplicating this item's specific "first action" fact.
-**FR status:** DRAFT — Tier A search performed 2026-08-25: current §9.5.1.2
-("Renseignements concernant les interventions d'urgence") addresses a
-**different topic** than what this item and its KOST citation describe —
-it covers the operator's duty to keep ICAO Doc 9481 emergency-response
-guidance available to the pilot-in-command, not a general
-damaged-package/first-responder procedure. The citation "DGR 9.5.1.2" is
-therefore stale/mismatched against the current edition's structure (same
-pattern as `Q-7.1-019`'s Part 6→7 finding). The general damaged-package
-first-action content this item actually tests was not independently
-located elsewhere in Part 9 this pass — retained Tier B pending a further,
-more exhaustive search (e.g. §9.3.6 "Colis de marchandises dangereuses
-endommagés," read only in part this session, may be the actual current
-source).
+**FR status:** FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25): the
+"§9.5.1.2" citation is confirmed stale (that section covers ICAO Doc 9481
+availability to the pilot-in-command, not this content). §9.3.6 "Colis de
+marchandises dangereuses endommagés" was read in full this session as the
+most likely alternative current source — it covers the operator's
+PRE-LOADING inspection duty (inspect for leakage/damage before loading;
+remove damaged/leaking packages) and the operator's post-discovery duty to
+ensure the rest of the consignment is undamaged, but does **not** state
+this item's specific "aviser immédiatement votre supérieur" first-action
+procedure for a front-line employee who discovers a damaged package. A
+direct in-book search for the procedure's own wording ("aviser votre
+supérieur" combined with "colis endommagé") returned zero matches
+anywhere in the current text. This 5-step procedure appears to be KOST's
+own paraphrase of general/company-level emergency-response practice
+(possibly derived from ICAO Doc 9481, which the DGR references but does
+not reproduce), not directly quotable current DGR text. Genuine SOURCE GAP
+— retained Tier B, not fabricated.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1415,11 +1419,15 @@ slide's own employer-responsibility sentence) — no duplication. No direct
 exam/practice-book hit, consistent with Stage 1's own finding. Note: this
 is sub-task 0.6.2's only allowed item — blueprint ceiling is 1 (generic-
 awareness only) — no second item should be drafted against it.
-**FR status:** DRAFT — same stale-citation finding as `Q-7.2-021`: current
-§9.5.1.2 covers a different topic (ICAO Doc 9481 availability to the
-pilot-in-command), not general employer/employee emergency-procedure
-awareness. Retained Tier B pending a further search of Part 9's other
-subsections for the actual current source, if one exists.
+**FR status:** FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25):
+§9.5.1.2 read in full this session confirms it covers only the operator's
+duty to
+keep ICAO Doc 9481 (or equivalent) emergency-response guidance available
+to the pilot-in-command — it does not state a general "inform all
+employees" / "available wherever DG is handled" / "airport authorities
+must also establish a procedure" obligation as this item claims. That
+specific claim was not located elsewhere in current Part 9 this session.
+Genuine SOURCE GAP — retained Tier B, not fabricated.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1752,8 +1760,8 @@ with `Q-7.2-024`); treat as the same provision rather than a separate DGR
 | Q-7.2-018 | 0.4.2 Groupes d'emballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-019 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-021 | 0.6.1 Première action d'urgence | DRAFT — citation stale (current §9.5.1.2 covers a different topic) | MCQ | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-022 | 0.6.2 Info employés exploitant | DRAFT — citation stale, same finding as Q-7.2-021 | True/False | Not located this pass — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-021 | 0.6.1 Première action d'urgence | FR SOURCE GAP CONFIRMED (expanded search: citation stale AND 5-step content not located anywhere in current DGR, incl. §9.3.6) | MCQ | Not located in current DGR — Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-022 | 0.6.2 Info employés exploitant | FR SOURCE GAP CONFIRMED (§9.5.1.2 confirmed to cover a different topic — pilot-in-command access to ICAO Doc 9481; this claim not located elsewhere) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-023 | 3.4.1 Demande SDS | DRAFT — mechanism + "Not Restricted" term Tier A-confirmed, SDS example itself Tier B | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-024 | 3.4.2 Avertissement consommateur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-025 | 7.1+7.2 Qui/à qui | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -3136,7 +3144,7 @@ exam/practice-book hit for the GHS-pictogram fact specifically.
 | Q-7.2-042 | 0.5.2 UN 3245 Cat B | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 83 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-043 | 0.5.3 DGD obligatoire | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | True/False | DGR 67e §8.0.1.1-2 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-044 | 0.5.3 Conservation 3 mois | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.8.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-045 | 0.6.1 Contact corporel | DRAFT — likely shares Q-7.2-021/022's stale-citation issue, not independently confirmed | MCQ | KOST F7.2 course slide 89 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-045 | 0.6.1 Contact corporel | FR SOURCE GAP CONFIRMED (same 5-step-procedure content as Q-7.2-021, not located anywhere in current DGR) | MCQ | Not located in current DGR — Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-046 | 3.4.1 En cas de doute / registre | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 98, Practice Q20 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-047 | 3.4.1 Vérif. vs classes (2.2.4) | DRAFT — general duty Tier A-confirmed, itemization unconfirmed | MCQ | DGR 67e §9.1.1.2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-048 | 3.4.2 Caractéristiques emballage suspect | DRAFT — Tier A not attempted | MCQ | KOST F7.2 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

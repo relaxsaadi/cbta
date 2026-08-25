@@ -477,6 +477,23 @@ topic-priority order: `docs/DGR_TIER_A_INVENTORY.md`.
 - **Program totals after Topic 5 (all 5 priority topics complete):** 218
   FROZEN (up from 216), 33 PARTIAL (up from 30), 7 STALE (up from 5), 182
   NOTATTEMPTED (down from 189); GAP (13) unchanged.
-- **Next phase work (priority items 6–8):** all 33 PARTIAL items, all 7
-  STALE items, and the remaining ~182 NOTATTEMPTED items with genuine Tier
-  A source paths — see `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan.
+- **Priority item 7 (partial) — the 4 original STALE CITATION items
+  re-examined and reclassified to GAP.** `Q-7.2-021`, `Q-7.2-022`,
+  `Q-7.2-045`, `Q-7.3-039`: §9.5.1.2 read in full this session, confirmed
+  to cover only pilot-in-command access to ICAO Doc 9481 emergency-
+  response guidance, not KOST's cited general damaged-package first-action
+  procedure or the "employer must inform all employees" claim. §9.3.6
+  "Colis de marchandises dangereuses endommagés" was also read in full as
+  the most likely alternative source — it covers the operator's
+  pre-loading inspection duty, not this content. A direct phrase search
+  found zero matches. Reclassified from STALE to **GAP** (a confirmed,
+  exhaustively-searched absence, likely ICAO Doc 9481/company-procedure
+  content not reproduced in the DGR itself), not fabricated either way.
+- **Program totals after priority item 7 (partial):** 218 FROZEN
+  (unchanged), 17 GAP (up from 13), 33 PARTIAL (unchanged), 3 STALE (down
+  from 7 — the 3 remaining are newly-found Topic 4/5 items: `Q-7.3-025`,
+  `Q-7.4-028`, `Q-7.5-026`), 182 NOTATTEMPTED (unchanged).
+- **Remaining phase work:** priority item 6 (33 PARTIAL items), the 3
+  still-open STALE items, and priority item 8 (remaining ~182 NOTATTEMPTED
+  items with genuine Tier A source paths) — see
+  `docs/DGR_TIER_A_INVENTORY.md`'s navigation plan.

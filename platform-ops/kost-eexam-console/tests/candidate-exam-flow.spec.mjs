@@ -53,10 +53,28 @@ const PRACTICE_QUIZ_CMID = 9;
 
 async function loginCandidate(page) {
   await page.goto('https://exam.kostacademy.com/login/index.php');
+  // Observed this pass (WebKit/tablet-safari, once on Firefox): submitting
+  // the login form immediately after goto() occasionally bounces back to
+  // login with Moodle's own `?loginredirect=1` marker — consistent with a
+  // logintoken/session-cookie race (the CSRF token embedded in the just-
+  // loaded form is tied to a session cookie that hasn't fully round-tripped
+  // yet in some engines). A brief settle delay before submitting is standard
+  // mitigation for this class of race and matches how a real user's fill
+  // time naturally avoids it; retried automatically below if it still slips
+  // through.
+  await page.waitForTimeout(400);
   await page.fill('#username', CANDIDATE.user);
   await page.fill('#password', CANDIDATE.pass);
   await page.click('#loginbtn');
   await page.waitForLoadState('load');
+  if (page.url().includes('loginredirect=1') || (await page.locator('#username').count())) {
+    // Retry once with a longer settle delay before concluding it's a real failure.
+    await page.waitForTimeout(1000);
+    await page.fill('#username', CANDIDATE.user);
+    await page.fill('#password', CANDIDATE.pass);
+    await page.click('#loginbtn');
+    await page.waitForLoadState('load');
+  }
 }
 
 async function startAttempt(page) {

@@ -295,3 +295,27 @@ is now substantially addressed — the program sits at roughly half its
 combined blueprint ceiling on average — but genuine further headroom does
 remain per-function for a possible Batch 4, honestly documented rather than
 exhausted everywhere. Track B remains **NOT complete**.
+
+## 2026-08-25 (still later same day) — fourth milestone: all 453 items now have an EN translation draft
+
+Per the owner's explicit priority order (Tier A when reachable → EN
+packages for Batch 3 → human review prep → reviewer sign-off workflow →
+only then further drafting), Batch 3's 149 items were translated into
+each function's existing EN review package (append-only, Batches 1–2's
+content untouched), dispatched as three waves of parallel background
+agents. **Every one of the 453 currently-drafted items across all ten
+functions now has an EN translation draft**, reusing established
+terminology-table candidates across functions wherever the same DGR
+concept recurred (e.g. "dérogation"→"Exemption" now appears consistently
+in Functions 7.3, 7.7, 7.8, 7.9, 7.10's tables, still flagged unverified
+in every one pending Tier A confirmation). This is a **drafting-currency
+milestone only** — it means every item has *a* translation ready for
+review, not that any translation has been reviewed. No item's FR or EN
+status changed beyond `DRAFT`/`BILINGUAL TECHNICAL REVIEW REQUIRED`; no
+reviewer name or date was fabricated anywhere.
+
+Tier A verification was rechecked once more before this batch and found
+unchanged (`chrome-devtools` still returns "the selected page has been
+closed", no `list_pages` tool available) — the Tier A track remains
+stopped, per standing instruction, until the connection is fixed on the
+owner's end.

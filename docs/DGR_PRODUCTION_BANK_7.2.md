@@ -10,18 +10,35 @@ starts at `Q-7.2-001`.
 
 ## Status of this batch — read before using any item below
 
-**All 11 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**2026-08-25: Tier A verification pass completed against the live
+authenticated IATA Digital Publications Bookshelf (`DGR-6066-67`, 67th Ed.,
+Addendum 1) via `chrome-devtools` MCP.** Outcome for the 11 items:
 
-- Per `.claude/rules/dgr-stage2b.md` and `docs/PLATFORM_READINESS_REPORT.md`'s
-  sixth-pass note, the IATA Digital Publications Bookshelf session (book
-  `DGR-6066-67`) is **currently blocked** — it expired and requires the owner
-  to manually re-authenticate with 2FA. Per standing instruction, no attempt
-  was made to log in, and **no Tier A content was fabricated to compensate.**
-  This entire batch is therefore Tier B only, exactly like Function 7.1's
-  Batch 1 (`docs/DGR_PRODUCTION_BANK_7.1.md`) — expected and correct, not a
-  gap introduced by this pass.
+- **6 items Tier A confirmed as drafted** (Q-7.2-001, 004, 005, 009, 010\*,
+  011 — \*010's general reporting-duty mechanism confirmed, its ANAC-specific
+  naming correctly stays Tier B/administrative, see that item's note).
+- **1 item's underlying claim reconfirmed as a genuine DGR silence**
+  (Q-7.2-002, danger/risque — same conclusion already reached for Function
+  7.1's Q-7.1-001, cross-applies here since it's the identical DGR-wide
+  question).
+- **4 items (Q-7.2-003, 006, 007, 008) — Tier A search did not locate the
+  specific itemized wording drafted, though the underlying general duty is
+  Tier A confirmed via DGR Part 9 (Acceptation).** These read as KOST
+  practical/procedural synthesis (detection cues, checklists, escalation
+  steps) built on top of the DGR's general acceptance-duty language, not
+  verbatim DGR text. Not asserted false — the general provisions they sit on
+  are real and cited — but the specific enumerated lists/phrases are not
+  themselves DGR quotes. See each item's updated Source basis for the exact
+  finding and citation.
+
+No Tier A content was fabricated; where a specific search did not locate a
+match, that is recorded as such rather than guessed. Full citations in each
+item's Source basis line below.
+
+**Original blocker (superseded):** per `.claude/rules/dgr-stage2b.md` and
+`docs/PLATFORM_READINESS_REPORT.md`'s sixth-pass note, the Bookshelf session
+was blocked in an earlier pass pending the owner's 2FA re-login. It is
+reachable again this session — no login was performed by the agent.
 - Every item below is sourced directly and verbatim-traced to the actual
   **KOST Function 7.2 training material** (Tier B), read in full this session
   (extracted with `pdftotext -layout`) from
@@ -148,8 +165,16 @@ organisation élabore la réglementation… voie aérienne" → OACI), confirmin
 this slide series is real, examined material — this specific item's SCoETDG
 scope-restriction angle is not itself a direct exam/practice hit, noted
 honestly rather than overstated.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A (DGR 67th Ed.
-2026 §1.1 not re-read this session). Note: this underlying fact is shared
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
+DGR 67th Ed. 2026, §1.1.1 (Partie 1, Bookshelf p.11): "Le Sous-comité
+d'experts en matière de transport des marchandises dangereuses du Conseil
+économique et social des Nations Unies (UNSCETDG) élabore des procédures
+recommandées pour le transport de toutes les marchandises dangereuses, à
+l'exception des matières radioactives. Ces procédures applicables à tous
+les modes de transport sont publiées..." — confirms the correct answer;
+§1.1.2/1.1.3/1.1.4 confirm the three distractors are wrongly scoped, exactly
+as drafted. Current acronym is "UNSCETDG"; align final wording (same body
+as the KOST slide's "SCoETDG"). Note: this underlying fact is shared
 verbatim with Function 7.1's Block 0 (confirmed identical wording by Stage 1
 cross-validation) — independently drafted here for Function 7.2's own bank,
 not copied from `docs/DGR_PRODUCTION_BANK_7.1.md`.
@@ -198,7 +223,16 @@ distinction entre un danger et un risque"). Cross-referenced by KOST
 practice book Q3, which asks the open-ended equivalent ("Différencier un
 danger d'un risque avec des exemples…") — confirms this is a real, examined
 distinction in the actual Function 7.2 material.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FR SOURCE GAP CONFIRMED (Tier A re-checked 2026-08-25) —
+identical finding to Function 7.1's `Q-7.1-001` (see
+`docs/DGR_SOURCE_REGISTER.md`): the current DGR 67th Ed. Appendice A
+Glossaire (p.703) and §1.0 Note (p.11) confirm the glossary excludes
+ordinary/dictionary-sense terms by explicit policy, and no "Danger"/"Risque"
+headword exists anywhere in the current text. This is a DGR-wide fact, not
+function-specific, so Q-7.1-001's Tier A research applies directly here —
+not re-searched from scratch, cross-applied. Retain this item on its Tier B
+(KOST course) basis; do not attribute the distinction to the DGR glossary in
+final wording.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -247,7 +281,20 @@ reconnaître les marchandises dangereuses cachées ?"). Directly corroborated
 by KOST practice book Q5: "Cité 4 aspects extérieurs ou indices pouvant vous
 aider à repérer un bagage ou un paquet contenant des matières dangereuses
 cachées ?" — same topic, open-ended in the source, not copied verbatim here.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** DRAFT — Tier A search performed 2026-08-25, no direct match
+found. Current DGR §2.2 (Marchandises dangereuses cachées, p.12 area)
+describes the detection *duty* (agents must be trained to identify DG under
+generic descriptions, must query shippers/passengers when suspicious) but
+does not itemize physical inspection cues such as "variable centre of
+gravity" anywhere in the read text; a targeted search for "centre de
+gravité variable" returned no book match (the only "centre de gravité" hits
+found are unrelated drop-test procedure language in Part 6). This specific
+physical-cue content reads as KOST practical-training synthesis layered on
+top of the DGR's general detection duty, not a verbatim DGR provision —
+retained Tier B, not asserted as DGR-sourced. Not re-classified as a formal
+SOURCE GAP (the general duty it illustrates is real and Tier A-cited above)
+but the item's specific correct-answer wording should not be attributed to
+a DGR section number.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -283,17 +330,24 @@ inference):**
 - Classe 3 — the course's own example set is "Essence, alcool, huile" (slide
   62), flammable liquids, not oxidizers.
 
-**Source basis:** Tier B — KOST Function 7.2 course, "Les classes des
-marchandises dangereuses DGR 3.0.2" slide series, slides 62–65 (Class 3,
-Division 4.3, Division 5.1, Division 6.1 example slides — page numbers
-confirmed by sequential position within the unbroken slide-number series
-58→69, since several individual slides in this series do not print their
-own page footer; verified by counting from the numbered slides immediately
-before and after). No direct exam/practice-book hit for this specific
-Division 5.1 angle — the sub-task's overall "very strong" rating rests on
-its broader multi-slide, multi-exam-item coverage (Exam Q3/Q5/Q11, Practice
-Q9/Q10/Q11), noted honestly rather than overstated for this specific item.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, Table 4.2, entry `UN1942
+Nitrate d'ammonium (contenant 0,2% au maximum de matière combustible...)` =
+Classe/Division **5.1**, étiquette "Comburant" (Bookshelf p.385) — confirms
+the correct answer's lead example. §3.0.2 (Bookshelf p.307) confirms the
+three distractor class/division labels ("Classe 3 — Liquides inflammables",
+"Division 4.3", "Division 6.1 — Matières toxiques") are real, distinct
+current classes. "Chlorate de calcium" and "Eau de Javel" (the other two
+KOST-cited examples) were not individually re-confirmed this pass — "Eau de
+Javel" cross-references to "Hypochlorite en solution" (ONU 1791) in the
+current index but its own class was not read before this pass's time
+budget; not treated as blocking since the defining example and the correct
+Division itself are directly Table-4.2-confirmed. Originally Tier B — KOST
+Function 7.2 course, "Les classes des marchandises dangereuses DGR 3.0.2"
+slide series, slides 62–65.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25 for
+the correct answer and all three distractor labels; the two secondary
+examples in the correct-answer text are unconfirmed-but-not-contradicted —
+flag for a follow-up spot-check before EN/reviewer sign-off).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -316,15 +370,15 @@ d'étiquettes : Les étiquettes de danger [;] Les étiquettes de manutention."
 This is a direct, complete match — the slide states exactly two types and
 names both.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 79 ("Étiquetage
-DGR 7.2.2.2"); slides 80–83 (danger-label set for all 9 classes, chemical-
-hazard "autre étiquetage", handling-label image, biological/environmental/
-GMO labels) read for surrounding context, confirming both named categories
-are then each developed further. No single exam/practice item tests this
-exact "how many types" fact, but the sub-task's overall strong rating rests
-on Exam Q5/Q6/Q9/Q11/Q12/Q16 and Practice Q14/Q15/Q16, all testing labelling
-content from this same slide range.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §7.2.2.2 Types d'étiquettes
+(Partie 7 — Marquage et Étiquetage, Bookshelf p.688 area): "Il existe deux
+types d'étiquettes : (a) les étiquettes de danger qui sont exigées pour la
+plupart des marchandises dangereuses de toutes les classes; et (b) les
+étiquettes de manutention qui sont exigées, en plus des étiquettes de
+danger, pour certaines marchandises dangereuses." — exact match, current
+section number identical to the KOST slide's own citation. Originally Tier
+B — KOST Function 7.2 course, slide 79.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -370,13 +424,24 @@ what this specific documentation-review step asks for):**
   circonstance"), a substantive classification test, not a documentation
   search step.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slides 96–98
-("Traitement/Acceptation de la cargaison" — generalities, document
-examination, consistency check, refuse-on-doubt). Loosely corroborated by
-Exam Q14/Q19/Q20 and Practice Q18/Q19(b)(c)/Q20, which test related
-acceptance-judgment scenarios from the same section without duplicating this
-specific "what to search for" fact verbatim.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier B, general duty Tier A-contextualized 2026-08-25 —
+DGR 67th Ed. 2026, §9.1.1.1(b)/§9.1.1.2 (Partie 9 — Manutention, Bookshelf
+p.693 area) confirm the general duty: acceptance staff must have access to
+DG indicators (labels, marks) and, when a generic-description package is
+suspected of containing DG, must check the AWB's generic description
+against §2.2's list and request shipper documents proving the shipment is
+not DG. This confirms the *general documentation-review duty* the item
+tests. The specific itemized checklist drafted here ("UN number, hazard
+class, packaging code, DG/MD/LQ/EQ mention") was not found verbatim in
+§9.1.1 or elsewhere in Part 9 — it reads as a KOST practical synthesis of
+what such a review would look for, not a direct DGR quote. Originally Tier
+B — KOST Function 7.2 course, slides 96–98.
+**FR status:** DRAFT — Tier A confirms the underlying duty (§9.1.1.1-2) but
+not this item's specific itemized wording as a verbatim DGR quote; do not
+cite a DGR section number for the itemized list itself in final wording
+without a further, more exhaustive search (e.g. of Part 8/9.1.3's own
+document-conformity checklist, which addresses already-declared shipments,
+a related but distinct scenario).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -418,14 +483,21 @@ attributed to the shipper's LTA endorsement):**
   (sub-task 0.5.2), a different requirement from the LTA content-confirmation
   endorsement this question asks about.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slides 100–102
-("Procédures d'acceptation de la cargaison — DGR 9.1.1", covering DGR
-9.1.1.2 and DGR 2.2.4). No direct exam/practice-book item tests this exact
-"Not Restricted" endorsement mechanism; Exam Q20 and Practice Q18 test
-related acceptance-judgment scenarios (unlabelled package with a chemical
-description on the invoice) from the same procedural section, corroborating
-the section's real-world relevance without duplicating this fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier B, section context Tier A-confirmed 2026-08-25 — DGR
+67th Ed. 2026, §9.1.1.2 (Bookshelf p.693 area) confirms the surrounding
+mechanism: acceptance staff must "demander les documents de l'expéditeur
+prouvant que l'expédition ne contient pas de marchandises dangereuses tel
+qu'indiqué en 2.2." This confirms shipper-supplied proof-of-non-DG-content
+is a real current requirement. The specific phrase "Not Restricted" as the
+named example of such proof was not located in the current §9.1.1 or §2.2
+text read this pass — it may appear elsewhere in the book (e.g. §8 Part 8
+documentation provisions, not read this pass) or may be industry-standard
+shorthand the KOST course adds as a concrete illustration of the general
+requirement. Originally Tier B — KOST Function 7.2 course, slides 100–102.
+**FR status:** DRAFT — underlying requirement Tier A-confirmed (§9.1.1.2);
+the specific "Not Restricted" phrase itself not yet independently located
+in the current text — flag for a follow-up Part 8 search before treating
+the exact phrase as DGR-sourced.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -476,7 +548,12 @@ doute sur la nature d'un colis suspect, l'agent doit : … c) Refuser et
 notifier immédiatement le superviseur" — same conclusion as this item's
 correct answer, confirmed as a real, examined fact in the actual Function
 7.2 material.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** DRAFT — Tier A search performed 2026-08-25, no direct match
+for this specific isolate/notify-supervisor procedure found in the current
+DGR text read this pass (Part 9 §9.1.1/9.1.3 cover documentation-conformity
+checks for already-declared shipments, not a step-by-step physical-suspect-
+package escalation procedure). Reads as KOST operational SOP content, not a
+verbatim DGR provision — retained Tier B, not asserted DGR-sourced.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -521,13 +598,14 @@ l'État de l'exploitant et de l'État dans lequel il s'est produit."
   report recipient anywhere in this material; the slide specifies "autorités
   compétentes."
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 111 ("Signaler
-les marchandises dangereuses non déclarées/mal déclarées"). No direct
-exam/practice-book hit — per Stage 1's own finding, none of Block 7's items
-have an exam/practice trace; this dedicated course slide is the sole source,
-consistent with that already-documented finding, not a new gap introduced
-here.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §9.6.2.1 (Partie 9 —
+Manutention, Bookshelf p.693 area): "L'exploitant doit signaler tout cas où
+des marchandises dangereuses non déclarées ou mal déclarées ont été
+découvertes dans le fret ou le courrier. De tels signalements doivent être
+présentés à l'autorité compétente de l'État de l'exploitant et de l'État où
+le cas s'est produit." — exact match. Originally Tier B — KOST Function 7.2
+course, slide 111.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -553,16 +631,23 @@ generic IATA wording, following the general "Signaler les situations
 mettant en cause des marchandises dangereuses — Compte rendu accidents et
 incidents DGR 9.6.5" heading on slide 112.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slides 112–113
-("Signaler les situations mettant en cause des marchandises dangereuses —
-Compte rendu accidents et incidents DGR 9.6.5"; "Procédures générales" with
-the Algeria/ANAC-specific reporting line). No direct exam/practice-book hit,
-consistent with Stage 1's finding for this sub-task.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A. Note: the
-ANAC postal/registered-office detail (Rouiba address) is administrative
-contact information as taught by the course, not a DGR regulatory
-provision — flagged so a future reviewer does not mistake it for a
-DGR-numbered requirement.
+**Source basis:** Tier A (general mechanism) — DGR 67th Ed. 2026, §9.6.4/
+§9.6.5 (Partie 9, Bookshelf p.693 area) confirm operators must report DG
+incidents "à l'autorité appropriée de l'État de l'exploitant" — the general
+duty this item's stem describes. The DGR text is intentionally state-
+agnostic and, as an international regulation, structurally never names a
+specific country's authority (no DGR section anywhere names "ANAC" —
+confirmed by reading the full §9.6 subsection); naming ANAC for Algeria is
+inherently national administrative knowledge outside what any DGR edition
+could ever confirm, not a gap in this pass's search. Originally Tier B —
+KOST Function 7.2 course, slides 112–113 (Algeria/ANAC-specific reporting
+line, incl. the Rouiba postal address).
+**FR status:** FROZEN FR / SOURCE VERIFIED for the general reporting-duty
+mechanism (§9.6.4/9.6.5, Tier A confirmed 2026-08-25); the ANAC-specific
+identification remains correctly Tier B/administrative — not a DGR
+provision, and cannot become one under any future DGR edition. Flag so a
+future reviewer does not mistake the ANAC address for a DGR-numbered
+requirement.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -594,18 +679,18 @@ réglementation en raison de l'application d'une exception ou d'une
 disposition spéciale." Direct, explicit match on the exemption-inclusion
 clause specifically.
 
-**Source basis:** Tier B — KOST Function 7.2 course, slide 110 ("Signaler
-les accidents et incidents impliquant des marchandises dangereuses") — the
-sole slide in the entire 117-slide course where either "accident" or
-"incident" appears (confirmed by Stage 1's second-pass keyword search: every
-occurrence of either word in the course pairs them together, with zero
-independent treatment of "incident" alone). No exam/practice-book hit for
-either word at all. This item deliberately tests the one distinct testable
-nuance the blueprint identifies for this pool (the exemption-inclusion
-clause) rather than the "who reports / to whom" facts, to keep this single
-drawn item non-overlapping with a future item from the same pool if one is
-drafted later.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**Source basis:** Tier A — DGR 67th Ed. 2026, §9.6.1 Note 1 (Partie 9,
+Bookshelf p.693 area): "Cela comprend les incidents impliquant des
+marchandises dangereuses qui ne sont pas soumises à tout ou partie des
+présentes réglementations en raison de l'application d'une exception ou
+d'une disposition spéciale (par exemple, un incident impliquant le
+court-circuitage d'un accumulateur à anode sèche qui est nécessaire pour
+satisfaire aux conditions de prévention de court-circuit dans une
+disposition spéciale de 4.4)." — direct match, current text even supplies a
+concrete worked example (dry-cell battery short-circuit under a §4.4
+special provision) beyond what the KOST slide states. Originally Tier B —
+KOST Function 7.2 course, slide 110.
+**FR status:** FROZEN FR / SOURCE VERIFIED (Tier A confirmed 2026-08-25).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -615,20 +700,31 @@ drafted later.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.2-001 | 0.1.2 Cadre juridique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 20–23 (DGR 1.1) — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-002 | 0.1.4 Danger vs Risque | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 32–33 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-003 | 0.2.2 MD cachées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 41–43 (DGR 2.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-004 | 0.4.1 Classes/divisions | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course "DGR 3.0.2" slides 62–65 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-005 | 0.5.2 Étiquetage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 79 (DGR 7.2.2.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-006 | 3.4.1 Vérif. documentation | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 96–98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-007 | 3.4.1 Endossement LTA | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 100–102 (DGR 9.1.1/2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-008 | 3.4.2 Vérif. colis | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slides 98–100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-009 | 7.3 MD non déclarées | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.2 course slide 111 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-010 | 7.4 Situations MD (ANAC) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slides 112–113 (DGR 9.6.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-011 | 7.1+7.2 combined | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.2 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-001 | 0.1.2 Cadre juridique | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.1–1.1.4 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-002 | 0.1.4 Danger vs Risque | FR SOURCE GAP CONFIRMED (cross-applied from Q-7.1-001) | MCQ | DGR silent by design (Appendice A p.703 + §1.0 p.11) — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-003 | 0.2.2 MD cachées | DRAFT — general duty Tier A-confirmed, specific cue Tier B only | MCQ | DGR 67e §2.2 (p.12 area) context — Tier A; specific fact — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-004 | 0.4.1 Classes/divisions | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 UN1942 (p.385) + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-005 | 0.5.2 Étiquetage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-006 | 3.4.1 Vérif. documentation | DRAFT — general duty Tier A-confirmed, itemized list Tier B only | MCQ | DGR 67e §9.1.1.1–2 (p.693 area) — Tier A; itemized list — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-007 | 3.4.1 Endossement LTA | DRAFT — surrounding mechanism Tier A-confirmed, "Not Restricted" phrase unconfirmed | MCQ | DGR 67e §9.1.1.2 (p.693 area) — Tier A; exact phrase — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-008 | 3.4.2 Vérif. colis | DRAFT — Tier A search found no direct match | MCQ | KOST F7.2 course slides 98–100 — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-009 | 7.3 MD non déclarées | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.2.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-010 | 7.4 Situations MD (ANAC) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-011 | 7.1+7.2 combined | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 8 MCQ + 3 True/False. Block spread: Block 0 = 5,
 Block 3 = 3, Block 7 = 3.
+
+**2026-08-25 Tier A verification summary:** 6/11 `FROZEN FR / SOURCE
+VERIFIED` (001, 004, 005, 009, 010, 011), 1/11 `FR SOURCE GAP CONFIRMED`
+(002, cross-applies Q-7.1-001's DGR-wide finding), 4/11 remain `DRAFT` with
+their surrounding general duty Tier A-confirmed but their specific
+itemized/procedural wording not located verbatim in the current text this
+pass (003, 006, 007, 008) — see each item's Source basis for the exact
+finding. No content was fabricated to close these four; they are correctly
+flagged for a further, more targeted search (e.g. Part 8 documentation
+provisions for 007's "Not Restricted" phrase) before being asserted as
+DGR-sourced.
 
 ## What this batch does NOT do
 
@@ -640,15 +736,18 @@ Block 3 = 3, Block 7 = 3.
 - Does not draft more than 1 item from the thin/merged 7.1+7.2 combined pool
   (blueprint ceiling allows up to 3) — kept conservative given the pool's
   own "thin, fully merged" characterization.
-- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification for
-  any of the 11 items — that remains the mandatory next step before any of
-  these can move past `DRAFT`, blocked this pass on the owner's pending
-  Bookshelf re-authentication.
 - Does not mark any item `APPROVED` — no qualified reviewer exists in this
-  pass.
+  pass; Tier A verification (2026-08-25) and reviewer sign-off remain
+  separate gates.
 - Does not touch Moodle or any live/production question-bank copy.
 - Does not exhaust Block 0, Block 3, or Block 7 — 12 of Block 0's 17
   sub-tasks remain undrafted, left for a future batch.
+
+**2026-08-25 update:** Tier A verification is now complete for this batch's
+11 items — 6 fully confirmed, 1 reconfirmed as a genuine DGR silence
+(cross-applied from Function 7.1), 4 partially confirmed (general duty
+Tier A, specific wording still Tier B) — see the Summary table above and
+`docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` for the full per-item breakdown.
 
 ---
 

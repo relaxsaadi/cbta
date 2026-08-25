@@ -543,6 +543,15 @@ file's fuller sourcing notes.
 | Emballage à spécifications | Specification packaging | Standard | Q-7.5-021 |
 | Explosifs / gaz inflammable / gaz toxique / gaz corrosif | Explosives / Flammable gas / Toxic gas / Corrosive gas | Standard | Q-7.5-010 |
 | Disposition spéciale (generic sense) | Special provision (lowercase, generic sense) | Kept lowercase/generic here to avoid conflating with the fixed DGR "Special Provision (SP)" numbered-code term used in Function 7.3's package | Q-7.5-029 |
+| Article / Substance | Article / Substance | Standard DGR-glossary term pair, kept unchanged in both languages | Q-7.5-031 |
+| Document « terrain » | 'Field' document | **Flagged — literal, unverified candidate translation of the course's own quoted term** | Q-7.5-032 |
+| Marchandise dangereuse cachée (MD cachée) | Hidden dangerous good | Standard, consistent with "DG cachées"/"hidden DG" used generically elsewhere in this bank | Q-7.5-034, Q-7.5-035 |
+| Renseignement (en cas d'urgence) | Providing information (in the event of an emergency) | **Flagged — candidate aligned with the DGR 1.4 "Provision of Information" responsibility concept, unverified this session** | Q-7.5-038 |
+| Formation initiale / Actualisation des connaissances / Épreuve obligatoire | Initial training / Refresher of knowledge / Mandatory test | Standard | Q-7.5-037 |
+| Marquage à spécification | Specification marking | Standard, sibling term to "Emballage à spécifications"→"Specification packaging" above | Q-7.5-040 |
+| Étiquette de danger chimique / « autres étiquettes » | Chemical hazard label / 'other labels' | Standard, sibling pair to "Étiquette de danger / étiquette de manutention" above | Q-7.5-041 |
+| Fiche de Données de Sécurité (FDS) | Safety Data Sheet (SDS) | Standard — the course's own bilingual pairing | Q-7.5-042 |
+| Batteries au lithium-ion (UN 3480/3481) / Batteries au lithium métal (UN 3090/3091) | Lithium-ion batteries (UN 3480/3481) / Lithium metal batteries (UN 3090/3091) | Standard candidate terms distinguishing the two chemistries by UN number | Q-7.5-044 |
 
 **Reading this table:** "Standard" means the term is well-established IATA/UN dangerous-goods English usage with low translation risk, but — consistent with `.claude/rules/dgr-stage2b.md` rule 2 — none of these EN renderings were checked this session against a supplied official English 67th Edition text; they were used as ordinary professional DG English terminology, not fabricated as citations. "Flagged" rows are genuine open questions for the reviewer, not settled translations, and the reviewer's resolution of any flagged term should be applied consistently to every item listed in its "Appears in" column — and, where the same term also appears in Functions 7.1/7.3's EN review packages, the resolution should ideally be applied consistently across the whole EN review program rather than function-by-function.
 
@@ -613,5 +622,295 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
   devices) and the generic-vs-technical-sense distinction for "disposition
   spéciale" in Q-7.5-029.
 - No item in this package is marked `BILINGUAL TECHNICAL REVIEW COMPLETE`
+  or `APPROVED`. No qualified bilingual reviewer has been named. No review
+  date has been recorded.
+
+
+---
+
+## Batch 3
+
+Appended as bilingual (FR→EN) draft translation material for the 15
+newly-drafted Function 7.5 Batch 3 items (`docs/DGR_PRODUCTION_BANK_7.5.md`,
+Batch 3: `Q-7.5-030`–`044`). Same status discipline as Batches 1/2 above
+applies unchanged: **no item below may be marked `BILINGUAL TECHNICAL
+REVIEW COMPLETE` or `APPROVED`**; every item carries EN status
+`BILINGUAL TECHNICAL REVIEW REQUIRED` and approval
+`PENDING REVIEWER + DATE`; no item's FR status changes — all 15 remain
+`DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as recorded in
+`docs/DGR_PRODUCTION_BANK_7.5.md`. Per `.claude/rules/dgr-stage2b.md`
+rule 5, FR source verification and EN bilingual technical review remain
+separate gates — this batch closes neither. This section does not modify
+Batch 1/2's items, tables, or "Summary" content above; it is a pure
+append, consistent with `docs/DGR_PRODUCTION_BANK_7.5.md` Batch 3's own
+"pure append" discipline.
+
+The FR text quoted below is copied verbatim (stem + options, or statement
+for True/False items) from `docs/DGR_PRODUCTION_BANK_7.5.md`'s Batch 3
+section; if any doubt arises about exact wording, that file — not this
+package — is the authoritative FR source of record.
+
+### Batch 3 items (Q-7.5-030 – Q-7.5-044)
+
+### Q-7.5-030 — Définition officielle d'une marchandise dangereuse (DGR 1.0)
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text (verbatim from production bank):**
+  - Stem: *"Selon le cours (Généralités, DGR 1.0), quelle est la définition d'une marchandise dangereuse ?"*
+  - Options: **(Correct)** *"Des produits, articles ou substances susceptibles de présenter un danger pour la santé, la sécurité, la propriété ou l'environnement, et qui figurent dans la liste des marchandises dangereuses du règlement ou qui sont classées conformément à celui-ci."* / *"Uniquement les produits, articles ou substances explicitement nommés dans la liste des marchandises dangereuses du règlement — la classification indépendante de la liste n'entre pas en compte."* / *"Des produits susceptibles d'exploser ou de réagir dangereusement, de produire une flamme ou un dégagement dangereux de chaleur, un gaz ou une vapeur toxique, ou un gaz inflammable ou corrosif dans des conditions normales de transport."* / *"Un objet dans sa forme complète (par exemple une voiture), par opposition à une substance qui peut être solide, liquide ou gazeuse."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General provisions, DGR 1.0), what is the definition of a dangerous good?"*
+  - Options: **(Correct)** *"Products, articles, or substances liable to pose a hazard to health, safety, property, or the environment, and that are listed in the Regulations' list of dangerous goods or that are classified in accordance with the Regulations."* / *"Only products, articles, or substances explicitly named in the Regulations' list of dangerous goods — independent classification apart from the list does not come into play."* / *"Products liable to explode or react dangerously, to produce a flame or a dangerous evolution of heat, a toxic gas or vapour, or a flammable or corrosive gas under normal conditions of transport."* / *"An object in its complete form (for example, a car), as opposed to a substance, which may be solid, liquid, or gaseous."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-031 — Distinction entre Article et Substance
+
+- **Sub-task:** 0.1.1 Comprendre la définition
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Généralités), laquelle des affirmations suivantes illustre correctement la distinction entre un « Article » et une « Substance » ?"*
+  - Options: **(Correct)** *"Un article est un objet dans sa forme complète (par exemple, une voiture) ; une substance, qui peut être solide, liquide ou gazeuse, peut se trouver à l'intérieur d'un article (par exemple, le carburant ou le liquide des freins d'une voiture)."* / *"Un article peut être solide, liquide ou gazeuse (par exemple, le carburant) ; une substance est un objet dans sa forme complète (par exemple, une voiture)."* / *"Un article désigne le danger que présente un objet ; une substance désigne le risque associé à son transport aérien."* / *"Un article est toujours classé comme marchandise dangereuse ; une substance ne l'est jamais."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General provisions), which of the following statements correctly illustrates the distinction between an 'Article' and a 'Substance'?"*
+  - Options: **(Correct)** *"An article is an object in its complete form (for example, a car); a substance, which may be solid, liquid, or gaseous, may be found inside an article (for example, the fuel or brake fluid of a car)."* / *"An article may be solid, liquid, or gaseous (for example, fuel); a substance is an object in its complete form (for example, a car)."* / *"An article denotes the hazard that an object presents; a substance denotes the risk associated with its air transport."* / *"An article is always classified as a dangerous good; a substance never is."*
+- **Terminology decision — NEW:** "Article" / "Substance" kept as the same capitalized DGR-glossary term pair in both languages (standard IATA usage); added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-032 — Statut du manuel DGR de l'IATA
+
+- **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Base Réglementaire), quel est le statut du manuel DGR de l'IATA (« Réglementation pour le transport des marchandises dangereuses ») ?"*
+  - Options: **(Correct)** *"Il est considéré comme le document « terrain » et reconnu comme tel par l'OACI."* / *"Il constitue un simple résumé non officiel des Instructions techniques de l'OACI, sans reconnaissance particulière de la part de celle-ci."* / *"Il est le document fondateur à partir duquel le SCoETDG élabore ses propres recommandations, applicables à tous les modes de transport."* / *"Il ne fait l'objet d'aucune édition ni mise à jour périodique."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Regulatory Framework), what is the status of the IATA DGR manual ('Dangerous Goods Regulations')?"*
+  - Options: **(Correct)** *"It is considered the 'field' document and is recognized as such by ICAO."* / *"It constitutes a mere unofficial summary of ICAO's Technical Instructions, without any particular recognition from ICAO."* / *"It is the founding document from which the UNCETDG develops its own recommendations, applicable to all modes of transport."* / *"It is not subject to any periodic edition or update."*
+- **Terminology decision — FLAGGED, NEW:** "document « terrain »" rendered as **"'field' document"**, a literal, not-independently-verified candidate translation of the course's own quoted term; not checked against a supplied English 67th Edition text this session. Added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-033 — Catégorie des « dangers chimiques »
+
+- **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque), laquelle des définitions suivantes correspond à la catégorie des « dangers chimiques » ?"*
+  - Options: **(Correct)** *"Toute forme de liquide, de vapeur, de poussière, de fumées ou de gaz qui pourrait se déverser, fuir ou être mal utilisé."* / *"Rayons X, rayons gamma, ultraviolets et micro-ondes."* / *"Virus, bactéries et champignons, se transmettant par des morsures, des coupures ou par contamination au contact d'une personne infectée."* / *"Toute substance dont le transport est rigoureusement interdit en toute circonstance selon la DGR 2.1."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Distinguishing between a hazard and a risk), which of the following definitions corresponds to the 'chemical hazards' category?"*
+  - Options: **(Correct)** *"Any form of liquid, vapour, dust, fumes, or gas that could spill, leak, or be misused."* / *"X-rays, gamma rays, ultraviolet rays, and microwaves."* / *"Viruses, bacteria, and fungi, transmitted through bites, cuts, or contamination through contact with an infected person."* / *"Any substance whose transport is strictly forbidden under all circumstances per DGR 2.1."*
+- **Terminology decision:** "Danger" / "Risque" → "Hazard" / "Risk" (same terminology-table entries already established by Q-7.5-018, kept consistent).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-034 — Définition d'une « marchandise dangereuse cachée » (DGR 2.2)
+
+- **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses cachées
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Reconnaissance des Marchandises dangereuses non déclarées, DGR 2.2), comment le cours définit-il une « marchandise dangereuse cachée » ?"*
+  - Options: **(Correct)** *"Un produit ou une substance classé comme dangereux selon les réglementations internationales (OACI ou IATA), mais transporté par un passager sous forme dissimulée, non déclarée ou mal déclarée — volontairement ou par négligence — dans les bagages à main ou en soute."* / *"Un produit ou une substance qui n'est classé comme dangereux par aucune réglementation internationale, mais que le passager croit à tort être dangereux."* / *"Une marchandise dangereuse dissimulée uniquement de façon volontaire, jamais par négligence."* / *"Une marchandise dangereuse dissimulée exclusivement dans le fret commercial, jamais dans les bagages des passagers."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Recognition of undeclared dangerous goods, DGR 2.2), how does the course define a 'hidden dangerous good'?"*
+  - Options: **(Correct)** *"A product or substance classified as dangerous under international regulations (ICAO or IATA), but carried by a passenger in concealed, undeclared, or misdeclared form — whether intentionally or through negligence — in carry-on or checked baggage."* / *"A product or substance that is not classified as dangerous under any international regulation, but that the passenger mistakenly believes to be dangerous."* / *"A dangerous good concealed only intentionally, never through negligence."* / *"A dangerous good concealed exclusively in commercial cargo, never in passenger baggage."*
+- **Terminology decision — NEW:** "marchandise dangereuse cachée (MD cachée)" → **"hidden dangerous good"**, standard, consistent with "DG cachées"/"hidden DG" already used generically in Q-7.5-003/004/023's stems; added as its own terminology-table row since this is the first item to test the term's own definition.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-035 — Recommandations pour éviter les scénarios de MD cachées
+
+- **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses cachées
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Reconnaissance des Marchandises dangereuses non déclarées), pour éviter les scénarios de marchandises dangereuses cachées, le cours recommande notamment de respecter la réglementation DGR, de former le personnel, d'appliquer les affiches et le questionnaire verbal avec les passagers, d'effectuer des inspections des bagages pendant le chargement, et de demander la fiche de données de sécurité (SDS)."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Recognition of undeclared dangerous goods), to avoid hidden-dangerous-goods scenarios, the course recommends in particular complying with the DGR Regulations, training personnel, applying the posters and the verbal questionnaire with passengers, carrying out baggage inspections during loading, and requesting the safety data sheet (SDS)."*
+  - Correct answer: **TRUE**
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-036 — Limitation du tableau 2.3.A par les divergences (DGR 2.3.A)
+
+- **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (DGR 2.3.A), les dispositions de 2.3 et le tableau 2.3.A peuvent être limitées par les divergences des États ou des exploitants, et les voyageurs devraient vérifier auprès du transporteur les dispositions en vigueur."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (DGR 2.3.A), the provisions of 2.3 and Table 2.3.A may be limited by State or Operator variations, and travellers should check with the carrier for the provisions in force."*
+  - Correct answer: **TRUE**
+- **Terminology decision:** "divergences des États ou des exploitants" → "State or Operator variations" (same flagged candidates as Q-7.5-009/012/025, kept consistent).
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-037 — Formation DGR 1.5 : les trois composantes du programme
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Rôle et responsabilité, Formation DGR 1.5), quels sont les trois éléments que doit comporter le programme de formation sur les marchandises dangereuses établi par tout exploitant ?"*
+  - Options: **(Correct)** *"Une formation initiale, une actualisation des connaissances tous les 2 ans, et une épreuve obligatoire pour chaque formation."* / *"Une formation initiale uniquement, sans obligation d'actualisation ultérieure."* / *"Une actualisation annuelle des connaissances, sans épreuve obligatoire."* / *"Un programme de formation réservé aux seuls exploitants agréés pour transporter des marchandises dangereuses en tant que fret ; les autres en sont dispensés."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Roles and responsibilities, Training, DGR 1.5), what are the three elements that every operator's dangerous goods training programme must include?"*
+  - Options: **(Correct)** *"Initial training, a refresher of knowledge every 2 years, and a mandatory test for each training session."* / *"Initial training only, with no subsequent refresher obligation."* / *"An annual refresher of knowledge, with no mandatory test."* / *"A training programme reserved only for operators approved to carry dangerous goods as cargo; other operators are exempt from it."*
+- **Terminology decision — NEW:** "Formation initiale" / "Actualisation des connaissances" / "Épreuve obligatoire" → "Initial training" / "Refresher of knowledge" / "Mandatory test" — standard training terms, added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-038 — Responsabilité du renseignement en cas d'urgence (DGR 1.4)
+
+- **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Rôle et responsabilité, Responsabilités Exploitant DGR 1.4), laquelle des tâches suivantes fait partie des huit responsabilités attribuées par le cours à l'exploitant, et non à l'expéditeur ?"*
+  - Options: **(Correct)** *"Le renseignement en cas d'urgence."* / *"L'étiquetage du colis de marchandises dangereuses."* / *"La classification du colis de marchandises dangereuses."* / *"Le marquage du colis de marchandises dangereuses."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Roles and responsibilities, Operator responsibilities, DGR 1.4), which of the following tasks is one of the eight responsibilities the course assigns to the operator, and not to the shipper?"*
+  - Options: **(Correct)** *"Providing information in the event of an emergency."* / *"Labelling the dangerous goods package."* / *"Classifying the dangerous goods package."* / *"Marking the dangerous goods package."*
+- **Terminology decision — FLAGGED, NEW:** "renseignement (en cas d'urgence)" rendered as **"providing information (in the event of an emergency)"**, a candidate translation aligned with the DGR 1.4 "Provision of Information" responsibility concept; not independently verified against a supplied English 67th Edition text this session. Added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-039 — Classe des liquides inflammables (étiquettes de danger)
+
+- **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (les classes des marchandises dangereuses, étiquettes de danger), à quelle classe de marchandises dangereuses le cours associe-t-il les « Liquides inflammables » ?"*
+  - Options: **(Correct)** *"Classe 3."* / *"Classe 2."* / *"Classe 4."* / *"Classe 5."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Dangerous goods classes, hazard labels), which class of dangerous goods does the course associate with 'Flammable liquids'?"*
+  - Options: **(Correct)** *"Class 3."* / *"Class 2."* / *"Class 4."* / *"Class 5."*
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-040 — Critères de marquage des emballages (marquage à spécification)
+
+- **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+- **Type:** True/False
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Statement: *"Vrai ou Faux : selon le cours (Marquage à spécification des emballages), tout colis de marchandises dangereuses doit être marqué, et les marquages doivent être visibles, lisibles, durables, et pouvoir être exposés aux intempéries."*
+  - Correct answer: **Vrai**
+- **EN draft translation:**
+  - Statement: *"True or False: per the course (Specification marking of packagings), every dangerous goods package must be marked, and the markings must be visible, legible, durable, and able to withstand exposure to the elements."*
+  - Correct answer: **TRUE**
+- **Terminology decision — NEW:** "Marquage à spécification" → "Specification marking," a sibling term to the existing "Emballage à spécifications"→"Specification packaging" row; added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-041 — Étiquettes de danger chimique (« autres étiquettes »)
+
+- **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Étiquetage — « Autres étiquettes »), lorsqu'un colis porte une étiquette de danger chimique, quelle est la conduite à tenir par l'agent d'escale avant l'acceptation ?"*
+  - Options: **(Correct)** *"Demander des clarifications à l'expéditeur, car le contenu ne répond pas forcément à la classification des marchandises dangereuses conformément à la réglementation."* / *"Refuser systématiquement tout colis portant une étiquette de danger chimique, sans possibilité de clarification."* / *"Accepter automatiquement le colis : une étiquette de danger chimique garantit que le contenu répond à la classification des marchandises dangereuses."* / *"Ignorer l'étiquette de danger chimique, celle-ci n'ayant aucune valeur informative selon le règlement."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Labelling — 'Other labels'), when a package bears a chemical hazard label, what course of action must the ground handling agent take before acceptance?"*
+  - Options: **(Correct)** *"Ask the shipper for clarification, because the contents do not necessarily meet the classification of dangerous goods under the Regulations."* / *"Systematically refuse any package bearing a chemical hazard label, with no possibility of clarification."* / *"Automatically accept the package: a chemical hazard label guarantees that the contents meet the classification of dangerous goods."* / *"Disregard the chemical hazard label, since it has no informational value under the Regulations."*
+- **Terminology decision — NEW:** "étiquette de danger chimique" / « autres étiquettes » → "chemical hazard label" / "'other labels'," a sibling pair to the existing "Étiquette de danger / étiquette de manutention"→"Hazard label / Handling label" row; added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-042 — La Fiche de Données de Sécurité (FDS/SDS)
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours, que fournit la Fiche de Données de Sécurité (FDS / Safety Data Sheet, SDS) ?"*
+  - Options: **(Correct)** *"Des informations détaillées sur les dangers, la manipulation sûre, la protection individuelle et les mesures d'urgence."* / *"Uniquement le nom commercial et le prix du produit, à l'exclusion de toute information de sécurité."* / *"La procédure à suivre par l'exploitant en cas de contamination d'un bagage ou de fret non déclaré."* / *"La liste des marchandises dangereuses dont le transport aérien est rigoureusement interdit en toute circonstance selon la DGR 2.1."*
+- **EN draft translation:**
+  - Stem: *"Per the course, what does the Safety Data Sheet (SDS / Fiche de Données de Sécurité, FDS) provide?"*
+  - Options: **(Correct)** *"Detailed information on the hazards, safe handling, personal protection, and emergency measures."* / *"Only the product's trade name and price, to the exclusion of any safety information."* / *"The procedure the operator must follow in the event of contamination of undeclared baggage or cargo."* / *"The list of dangerous goods whose air transport is strictly forbidden under all circumstances per DGR 2.1."*
+- **Terminology decision — NEW:** "Fiche de Données de Sécurité (FDS)" → "Safety Data Sheet (SDS)," the course's own bilingual pairing, kept as-is (standard, low translation risk); added to the terminology table below.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-043 — Les quatre étapes initiales des procédures générales
+
+- **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+- **Type:** MCQ, single-answer ("laquelle NE figure PAS")
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Procédures générales), laquelle des actions suivantes ne figure PAS parmi les étapes initiales recommandées par le cours face à un colis de marchandises dangereuses suspect ou endommagé ?"*
+  - Options: **(Correct)** *"Évacuer immédiatement la zone et alerter les autorités compétentes."* / *"Aviser immédiatement son supérieur."* / *"Si possible, identifier la marchandise dangereuse."* / *"Si possible, isoler le colis endommagé en retirant les marchandises avoisinantes."*
+- **EN draft translation:**
+  - Stem: *"Per the course (General procedures), which of the following actions is NOT among the initial steps recommended by the course when facing a suspect or damaged dangerous goods package?"*
+  - Options: **(Correct)** *"Immediately evacuate the area and alert the competent authorities."* / *"Immediately notify one's supervisor."* / *"If possible, identify the dangerous good."* / *"If possible, isolate the damaged package by removing nearby goods."*
+- **Note carried into EN:** per `docs/DGR_PRODUCTION_BANK_7.5.md`, the correct ("not listed") option is sourced honestly from a practice-book phrase genuinely absent from the course's own 4-step list, the same distractor-sourcing method already used in Q-7.5-003/023 — this item does not assert that the practice-book phrase is itself wrong, only that it is not one of the course's own four listed steps. The EN draft preserves this same bounded scope.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+### Q-7.5-044 — Batteries au lithium métal et lithium-ion : distinction et numéros ONU
+
+- **Sub-task:** 5.2.2 Vérifier les prescriptions concernant les bagages des passagers
+- **Type:** MCQ, single-answer
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR text:**
+  - Stem: *"Selon le cours (Batteries lithium-ion et métal), à quelle catégorie de batterie appartiennent les piles et batteries identifiées par le cours sous les numéros ONU 3480 (batterie seule) et 3481 (batterie dans un équipement ou emballée avec un équipement), avec pour exemples d'application les téléphones mobiles, les ordinateurs portables, les tablettes, les outils portables et les vélos électriques ?"*
+  - Options: **(Correct)** *"Piles et batteries au lithium-ion (secondaires, rechargeables)."* / *"Piles et batteries au lithium métal (primaires, non rechargeables), numéros ONU 3090/3091, avec pour exemples les montres, calculatrices, caméras, porte-clés de voiture et défibrillateurs."* / *"Les batteries au lithium installées et non amovibles excédant 0,3 g de lithium métal ou 2,7 Wh, dont le transport est interdit selon la DGR 2.3.A."* / *"Une catégorie de marchandises dangereuses de l'exploitant, exemptée de la Réglementation selon la DGR 2.5."*
+- **EN draft translation:**
+  - Stem: *"Per the course (Lithium-ion and lithium metal batteries), which battery category do the cells and batteries identified by the course under UN numbers 3480 (battery alone) and 3481 (battery contained in equipment or packed with equipment) belong to, with application examples including mobile phones, laptops, tablets, portable tools, and electric bicycles?"*
+  - Options: **(Correct)** *"Lithium-ion cells and batteries (secondary, rechargeable)."* / *"Lithium metal cells and batteries (primary, non-rechargeable), UN numbers 3090/3091, with examples including watches, calculators, cameras, car key fobs, and defibrillators."* / *"Installed, non-removable lithium batteries exceeding 0.3 g of lithium metal or 2.7 Wh, whose carriage is forbidden per DGR 2.3.A."* / *"A category of the operator's own dangerous goods, exempted from the Regulations per DGR 2.5."*
+- **Terminology decision — NEW:** "Batteries au lithium-ion (UN 3480/3481)" / "Batteries au lithium métal (UN 3090/3091)" → "Lithium-ion batteries (UN 3480/3481)" / "Lithium metal batteries (UN 3090/3091)," standard candidate terms distinguishing the two chemistries by their UN numbers; added to the terminology table below. Distractor 3 reuses the existing "Batterie au lithium (installée / amovible)" terminology-table entry.
+- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
+- **Approval:** `PENDING REVIEWER + DATE`
+
+---
+
+### Batch 3 summary
+
+- 15/15 Function 7.5 Batch 3 items (`Q-7.5-030`–`044`) translated to EN
+  draft status. Combined with Batches 1+2 above, **44/44 of the Function
+  7.5 items currently in `docs/DGR_PRODUCTION_BANK_7.5.md` now have an EN
+  draft translation** (still 0/44 reviewed).
+- No FR "working gloss" reconstruction was needed for this batch either —
+  every FR stem, option set, and statement above is copied verbatim from
+  `docs/DGR_PRODUCTION_BANK_7.5.md`'s Batch 3 section, itself sourced
+  verbatim (with printed slide citations) from the actual KOST Function
+  7.5 course PDF.
+- All 15 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED
+  for Tier A`, unchanged by this package, per `.claude/rules/
+  dgr-stage2b.md` rule 5 (FR source verification and EN bilingual review
+  are separate gates).
+- Terminology continuity was maintained with Batches 1/2 above and with
+  Functions 7.1/7.3's packages wherever the same DGR concept recurs
+  ("divergence d'État/d'exploitant"→"State/Operator Variation," "Danger/
+  Risque"→"Hazard/Risk"). Ten new terminology-table rows are introduced by
+  this batch, all flagged where the candidate rendering is not
+  independently verified: "Article"/"Substance" (standard DGR term pair);
+  "document « terrain »"→"'field' document" (flagged); "marchandise
+  dangereuse cachée"→"hidden dangerous good" (standard, first explicit
+  definitional item); "renseignement (en cas d'urgence)"→"providing
+  information (in the event of an emergency)" (flagged); "Formation
+  initiale"/"Actualisation des connaissances"/"Épreuve obligatoire"→
+  "Initial training"/"Refresher of knowledge"/"Mandatory test" (standard);
+  "Marquage à spécification"→"Specification marking" (standard, sibling to
+  "Specification packaging"); "étiquette de danger chimique"/« autres
+  étiquettes »→"chemical hazard label"/"'other labels'" (standard, sibling
+  to "Hazard label/Handling label"); "Fiche de Données de Sécurité (FDS)"→
+  "Safety Data Sheet (SDS)" (standard, course's own bilingual pairing);
+  "Batteries au lithium-ion (UN 3480/3481)"/"Batteries au lithium métal
+  (UN 3090/3091)"→"Lithium-ion batteries (UN 3480/3481)"/"Lithium metal
+  batteries (UN 3090/3091)" (standard, new UN-number distinction).
+- No item in this batch is marked `BILINGUAL TECHNICAL REVIEW COMPLETE`
   or `APPROVED`. No qualified bilingual reviewer has been named. No review
   date has been recorded.

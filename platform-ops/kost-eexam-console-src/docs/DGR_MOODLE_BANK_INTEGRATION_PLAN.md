@@ -440,6 +440,49 @@ Everything created tonight is additionally scoped to question ids 93–171,
 qbe ids 93–171, course ids 22–30, quiz ids 13–21 — a surgical rollback
 (delete only those ranges) remains possible without a full restore.
 
+## 5quater. Documentation reconciliation — 2026-08-25 (no Moodle change)
+
+Follow-up request: reconcile the parallel Tier-A project's own tracking
+docs (on branch `ai/dgr-stage2b-handoff`, not merged here) against the
+strict per-item counts established above, since `DGR_TIER_A_INVENTORY.md`,
+`DGR_FUNCTIONS_PROGRAM_STATUS.md`, and `DGR_SOURCE_REGISTER.md` all state
+an aggregate **"218 FROZEN"** that doesn't match what's actually stamped
+per-item (97).
+
+Read-only, no Moodle write. Found the exact root cause with a checkable
+example: `Q-7.2-036` is listed in `DGR_TIER_A_INVENTORY.md` as a
+topic-analysis "PARTIALLY CONFIRMED" finding, but its own file
+(`DGR_PRODUCTION_BANK_7.2.md`) still stamps `**FR status:** DRAFT — Tier B
+only. SOURCE REQUIRED for Tier A.` — the analysis conclusion was never
+written back to the item. Confirmed exact full breakdown from the same
+parser used for import (453 total): **97 FROZEN, 5 GAP, 2 STALE, 0
+PARTIAL at the stamped-field level, 349 DRAFT** (undifferentiated
+Tier-B-only / not-attempted / inconclusive-search at the file level).
+
+Edited (via an isolated git worktree, so as not to disturb that branch's
+own in-progress uncommitted work) and pushed to `ai/dgr-stage2b-handoff`
+as commit `759da21`:
+- `DGR_TIER_A_INVENTORY.md` — added a full reconciliation section at the
+  top (the table above, the Q-7.2-036 example, and the same audit-facing
+  summary statement below), leaving the rest of the file as historical
+  record.
+- `DGR_FUNCTIONS_PROGRAM_STATUS.md` / `DGR_SOURCE_REGISTER.md` — short
+  pointer notes at the top, referencing the fuller note above.
+
+No item's status was changed anywhere. Nothing was re-verified against
+the Bookshelf for this pass (not needed — this is pure arithmetic
+reconciliation of what's already on file).
+
+**Audit-facing operational statement (final):** 453 questions exist in
+the working program. 97 currently carry individually-stamped FROZEN FR /
+SOURCE VERIFIED status. 92 of those are integrated in Moodle across
+Functions 7.1–7.10. 5 Function 7.1 items remain excluded because their
+exact full question wording is not safely recoverable. No DRAFT/PARTIAL/
+STALE item was imported.
+
+Final console re-verification (read-only, same method as §5ter) reran
+clean: identical numbers, zero drift, zero code changes needed.
+
 ## 6. Unrelated finding surfaced during inspection (flagging, not fixing)
 
 `platform-ops/kost-eexam-console-src/smoke-test-prod.mjs` (tracked in git,

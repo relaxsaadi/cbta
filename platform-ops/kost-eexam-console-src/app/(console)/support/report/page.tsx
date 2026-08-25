@@ -8,14 +8,14 @@ export default function ReportIncidentPage() {
     <div className="mx-auto flex max-w-[720px] flex-col gap-6">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Report Technical Issue
+          Signaler un incident technique
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Logged in the KOST E-EXAM console's own incident tracker — never written to Moodle.
+          Journalisé dans le suivi d&apos;incidents propre à la console KOST E-EXAM — jamais écrit dans Moodle.
         </p>
       </div>
       <Card>
-        <CardHeader title="Incident details" />
+        <CardHeader title="Détails de l'incident" />
         <IncidentForm />
       </Card>
     </div>

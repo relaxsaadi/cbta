@@ -10,8 +10,15 @@ import { VerificationForm } from "./VerificationForm";
 export const dynamic = "force-dynamic";
 
 function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
+
+const ROLE_LABEL: Record<string, string> = {
+  administrator: "Administrateur",
+  exam_manager: "Responsable d'examen",
+  instructor: "Instructeur",
+  auditor: "Auditeur",
+};
 
 export default async function IdentityVerificationPage() {
   const [session, verifications, demoMode] = await Promise.all([
@@ -28,25 +35,26 @@ export default async function IdentityVerificationPage() {
     <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Candidate Identity Verification
+          Vérification d&apos;identité des candidats
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Real, minimal record of the actual verification procedure used before an exam — official
-          ID + supervised check, no biometrics, no document copies stored.
+          Enregistrement réel et minimal de la procédure de vérification effectivement utilisée avant un
+          examen — pièce d&apos;identité officielle + contrôle supervisé, aucune biométrie, aucune copie de
+          document conservée.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[380px_1fr]">
         {canRecord ? (
           <Card>
-            <CardHeader title="Record a verification" description="Only visible to Administrator / Exam Manager / Instructor roles." />
+            <CardHeader title="Enregistrer une vérification" description="Visible uniquement pour les rôles Administrateur / Responsable d'examen / Instructeur." />
             <VerificationForm />
           </Card>
         ) : (
           <Card>
-            <CardHeader title="Record a verification" />
+            <CardHeader title="Enregistrer une vérification" />
             <p className="text-[12.5px] text-text-tertiary">
-              Your role ({session.role ?? "unknown"}) is not authorized to record identity verifications.
+              Votre rôle ({ROLE_LABEL[session.role ?? ""] ?? "inconnu"}) n&apos;est pas autorisé à enregistrer des vérifications d&apos;identité.
             </p>
           </Card>
         )}
@@ -56,8 +64,8 @@ export default async function IdentityVerificationPage() {
             <Card>
               <EmptyState
                 icon={ShieldCheck}
-                title="No verification recorded yet"
-                description="Once a supervisor records a real check before a session, it appears here — permanently, since this table has no update or delete access."
+                title="Aucune vérification enregistrée"
+                description="Dès qu'un superviseur enregistre un vrai contrôle avant une session, il apparaît ici — de façon permanente, cette table n'ayant aucun accès de modification ou de suppression."
               />
             </Card>
           ) : (
@@ -66,7 +74,7 @@ export default async function IdentityVerificationPage() {
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-border-subtle bg-surface-sunken/50">
-                      {["Candidate", "Exam", "Session", "Verified by", "Method", "Timestamp"].map((h) => (
+                      {["Candidat", "Examen", "Session", "Vérifié par", "Méthode", "Horodatage"].map((h) => (
                         <th key={h} className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary whitespace-nowrap">
                           {h}
                         </th>
@@ -80,7 +88,7 @@ export default async function IdentityVerificationPage() {
                         <td className="px-4 py-2.5 text-[12px] text-text-secondary max-w-[200px] truncate">{v.examName}</td>
                         <td className="px-4 py-2.5 text-[12px] text-text-tertiary">{v.sessionReference ?? "—"}</td>
                         <td className="px-4 py-2.5 text-[12px] text-text-secondary whitespace-nowrap">{v.verifiedByFullName}</td>
-                        <td className="px-4 py-2.5 text-[11.5px] text-text-tertiary">Official ID + supervised</td>
+                        <td className="px-4 py-2.5 text-[11.5px] text-text-tertiary">Pièce d&apos;identité officielle + supervisée</td>
                         <td className="px-4 py-2.5 text-[11.5px] text-text-tertiary tabular-nums whitespace-nowrap">{fmtDate(v.verificationTimestamp)}</td>
                       </tr>
                     ))}

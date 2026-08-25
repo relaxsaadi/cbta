@@ -18,11 +18,11 @@ export function FeedbackTabs({
     <div className="flex flex-col gap-5">
       <div className="flex gap-1 border-b border-border-subtle">
         <TabButton active={tab === "give"} onClick={() => setTab("give")}>
-          Give Feedback
+          Donner un retour
         </TabButton>
         {canReview && (
           <TabButton active={tab === "review"} onClick={() => setTab("review")}>
-            Feedback Review
+            Revue des retours
           </TabButton>
         )}
       </div>

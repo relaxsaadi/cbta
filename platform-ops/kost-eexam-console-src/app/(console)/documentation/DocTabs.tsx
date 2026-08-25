@@ -9,10 +9,10 @@ export function DocTabs({ candidate, instructor }: { candidate: ReactNode; instr
     <div className="flex flex-col gap-5">
       <div className="flex gap-1 border-b border-border-subtle">
         <TabButton active={tab === "candidate"} onClick={() => setTab("candidate")}>
-          Candidate Guide
+          Guide candidat
         </TabButton>
         <TabButton active={tab === "instructor"} onClick={() => setTab("instructor")}>
-          Instructor &amp; Exam Manager Guide
+          Guide instructeur &amp; responsable d&apos;examen
         </TabButton>
       </div>
       {tab === "candidate" ? candidate : instructor}

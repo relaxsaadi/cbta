@@ -23,11 +23,12 @@ export default async function AuditLogsPage() {
   return (
     <div className="mx-auto flex max-w-[1280px] flex-col gap-6">
       <div>
-        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Audit Logs</h1>
+        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Journaux d&apos;audit</h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Read-only view of Moodle&apos;s native activity log — {totalCount.toLocaleString()} events recorded in total,
-          showing the {logs.length} most recent. Logs are never modified from this console.
-          {demoMode && " Names and IPs are redacted (Audit Presentation Mode)."}
+          Vue en lecture seule du journal d&apos;activité natif de Moodle — {totalCount.toLocaleString("fr-FR")} événements
+          enregistrés au total, affichant les {logs.length} plus récents. Les journaux ne sont jamais
+          modifiés depuis cette console.
+          {demoMode && " Noms et IP sont masqués (Mode présentation)."}
         </p>
       </div>
 

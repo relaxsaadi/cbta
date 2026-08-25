@@ -25,18 +25,18 @@ export default async function IncidentsPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-            Technical Incidents
+            Incidents techniques
           </h1>
           <p className="mt-1 text-[13px] text-text-tertiary">
-            {incidents.length} incident{incidents.length !== 1 ? "s" : ""} logged — {open} open, {inProgress} in progress.
-            Stored in the console's own table (kost_console_incidents), never in Moodle.
+            {incidents.length} incident{incidents.length !== 1 ? "s" : ""} journalisé{incidents.length !== 1 ? "s" : ""} — {open} ouvert{open !== 1 ? "s" : ""}, {inProgress} en cours.
+            Stocké dans la table propre à la console (kost_console_incidents), jamais dans Moodle.
           </p>
         </div>
         <Link
           href="/support/report"
           className="shrink-0 rounded-md border border-border-default bg-surface-raised px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong transition-colors"
         >
-          Report an issue
+          Signaler un problème
         </Link>
       </div>
 
@@ -44,8 +44,8 @@ export default async function IncidentsPage() {
         <Card>
           <EmptyState
             icon={AlertTriangle}
-            title="No incidents reported yet"
-            description="Once a technical issue is reported, it appears here in real time — with full status history."
+            title="Aucun incident signalé"
+            description="Dès qu'un problème technique est signalé, il apparaît ici en temps réel — avec un historique complet des statuts."
           />
         </Card>
       ) : (

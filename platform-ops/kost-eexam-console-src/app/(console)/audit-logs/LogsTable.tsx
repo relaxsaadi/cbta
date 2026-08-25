@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import type { LogEntry } from "@/lib/audit-logs-data";
 
 function fmtDateTime(iso: string): string {
-  return new Date(iso).toLocaleString("en-GB", {
+  return new Date(iso).toLocaleString("fr-FR", {
     day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit",
   });
 }
@@ -36,7 +36,7 @@ export function LogsTable({ logs }: { logs: LogEntry[] }) {
       <div className="flex flex-wrap items-center gap-2.5">
         <input
           type="text"
-          placeholder="Search by user, event, action, IP…"
+          placeholder="Rechercher par utilisateur, événement, action, IP…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 min-w-[220px] rounded-md border border-border-default bg-surface-raised px-3 py-1.5 text-[12.5px] text-text-primary outline-none focus:border-accent-9 focus:ring-2 focus:ring-accent-soft-bg"
@@ -46,12 +46,12 @@ export function LogsTable({ logs }: { logs: LogEntry[] }) {
           onChange={(e) => setComponent(e.target.value)}
           className="rounded-md border border-border-default bg-surface-raised px-2.5 py-1.5 text-[12.5px] text-text-secondary outline-none focus:border-accent-9"
         >
-          <option value="all">All components</option>
+          <option value="all">Tous les composants</option>
           {components.map((c) => (
             <option key={c} value={c}>{c}</option>
           ))}
         </select>
-        <span className="text-[11.5px] text-text-tertiary ml-auto">{filtered.length} of {logs.length} events</span>
+        <span className="text-[11.5px] text-text-tertiary ml-auto">{filtered.length} sur {logs.length} événements</span>
       </div>
 
       <div className="rounded-lg border border-border-subtle bg-surface-raised shadow-sm ring-1 ring-black/[0.02] overflow-hidden">
@@ -59,11 +59,11 @@ export function LogsTable({ logs }: { logs: LogEntry[] }) {
           <table className="w-full text-left">
             <thead className="sticky top-0 bg-surface-raised">
               <tr className="border-b border-border-subtle bg-surface-sunken/50">
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary whitespace-nowrap">Date / Time</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">User</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary whitespace-nowrap">Date / heure</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Utilisateur</th>
                 <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Action</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Component</th>
-                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Event</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Composant</th>
+                <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">Événement</th>
                 <th className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary">IP</th>
               </tr>
             </thead>
@@ -81,7 +81,7 @@ export function LogsTable({ logs }: { logs: LogEntry[] }) {
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-4 py-8 text-center text-[12.5px] text-text-tertiary">
-                    No events match this filter.
+                    Aucun événement ne correspond à ce filtre.
                   </td>
                 </tr>
               )}

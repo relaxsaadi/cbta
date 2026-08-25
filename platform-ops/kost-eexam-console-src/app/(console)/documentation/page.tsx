@@ -9,46 +9,46 @@ function VersionBar() {
   return (
     <div className="flex flex-wrap gap-x-6 gap-y-1 rounded-md border border-border-subtle bg-surface-sunken/50 px-3.5 py-2.5 text-[11.5px] text-text-tertiary">
       <span>Version <strong className="text-text-secondary">{DOC_META.version}</strong></span>
-      <span>Last updated <strong className="text-text-secondary">{DOC_META.lastUpdated}</strong></span>
-      <span>Owner <strong className="text-text-secondary">{DOC_META.owner}</strong></span>
+      <span>Dernière mise à jour <strong className="text-text-secondary">{DOC_META.lastUpdated}</strong></span>
+      <span>Propriétaire <strong className="text-text-secondary">{DOC_META.owner}</strong></span>
     </div>
   );
 }
 
 const CANDIDATE_SECTIONS = [
-  { title: "1. Accessing KOST E-EXAM", body: "Exams are taken on Moodle at exam.kostacademy.com, served over HTTPS. You do not use the staff console (console.kostacademy.com) — that is a separate, administrator-only tool." },
-  { title: "2. Login", body: "Log in with the Moodle account created for you (username + password). There is no separate KOST E-EXAM account — identity is managed entirely by Moodle." },
-  { title: "3. Before examination", body: "Arrive at your session on time. An instructor will confirm your session and exam before you are granted access." },
-  { title: "4. Identity verification procedure", body: "A supervisor verifies your identity against an official ID document and your Moodle account before you start. This check is logged (candidate, exam, verifier, timestamp) — no copy of your ID is kept." },
-  { title: "5. Technical requirements", body: "A current browser (Chrome, Firefox, Edge, or Safari) and a stable internet connection for the full exam duration." },
-  { title: "6. Starting the examination", body: "Open the exam from your Moodle dashboard and select \"Effectuer le test\" / \"Attempt quiz now\". A confirmation dialog reminds you of the time limit before you start." },
-  { title: "7. Navigation", body: "Questions are shown one per page. Use \"Page précédente\" / \"Page suivante\" (Previous page / Next page) to move between them." },
-  { title: "8. Answering questions", body: "Select your answer by clicking the radio button next to it (multiple-choice) or True/False. Your selection is saved as you move between pages." },
-  { title: "9. Flagging questions", body: "Use \"Marquer la question\" (Flag question) to mark a question for review before final submission." },
-  { title: "10. Timer", body: "A countdown ( \"Temps restant\" ) is visible throughout the attempt. It cannot be paused once started." },
-  { title: "11. Automatic submission", body: "If the timer reaches zero, your attempt is submitted automatically — you do not lose your answers." },
-  { title: "12. Manual submission", body: "When finished, select \"Terminer le test...\" to review your answer summary, then \"Tout envoyer et terminer\" (Submit all and finish) to confirm." },
-  { title: "13. Technical incident reporting", body: "If something goes wrong, notify your instructor immediately — they can log it in the console's incident tracker on your behalf." },
-  { title: "14. Finishing the examination", body: "Once submitted, your attempt is final. Your official result is recorded directly in Moodle's grade book." },
-  { title: "15. Support", body: "For general questions outside an active exam session, instructors can direct you to the console's Help & Support page (email / WhatsApp)." },
+  { title: "1. Accéder à KOST E-EXAM", body: "Les examens se passent sur Moodle, à exam.kostacademy.com, servi en HTTPS. Vous n'utilisez pas la console du personnel (console.kostacademy.com) — c'est un outil séparé, réservé aux administrateurs." },
+  { title: "2. Connexion", body: "Connectez-vous avec le compte Moodle créé pour vous (identifiant + mot de passe). Il n'y a pas de compte KOST E-EXAM séparé — l'identité est entièrement gérée par Moodle." },
+  { title: "3. Avant l'examen", body: "Présentez-vous à votre session à l'heure. Un instructeur confirmera votre session et votre examen avant de vous donner accès." },
+  { title: "4. Procédure de vérification d'identité", body: "Un superviseur vérifie votre identité par rapport à une pièce d'identité officielle et à votre compte Moodle avant que vous ne commenciez. Cette vérification est journalisée (candidat, examen, vérificateur, horodatage) — aucune copie de votre pièce d'identité n'est conservée." },
+  { title: "5. Prérequis techniques", body: "Un navigateur récent (Chrome, Firefox, Edge ou Safari) et une connexion Internet stable pendant toute la durée de l'examen." },
+  { title: "6. Démarrer l'examen", body: "Ouvrez l'examen depuis votre tableau de bord Moodle et sélectionnez « Effectuer le test ». Une boîte de dialogue de confirmation vous rappelle la limite de temps avant de commencer." },
+  { title: "7. Navigation", body: "Les questions sont affichées une par page. Utilisez « Page précédente » / « Page suivante » pour vous déplacer entre elles." },
+  { title: "8. Répondre aux questions", body: "Sélectionnez votre réponse en cliquant sur le bouton radio correspondant (choix multiple) ou Vrai/Faux. Votre sélection est enregistrée au fil de votre navigation entre les pages." },
+  { title: "9. Signaler une question", body: "Utilisez « Marquer la question » pour repérer une question à revoir avant l'envoi final." },
+  { title: "10. Chronomètre", body: "Un compte à rebours (« Temps restant ») est visible pendant toute la tentative. Il ne peut pas être mis en pause une fois démarré." },
+  { title: "11. Envoi automatique", body: "Si le chronomètre atteint zéro, votre tentative est envoyée automatiquement — vous ne perdez pas vos réponses." },
+  { title: "12. Envoi manuel", body: "Une fois terminé, sélectionnez « Terminer le test... » pour revoir le résumé de vos réponses, puis « Tout envoyer et terminer » pour confirmer." },
+  { title: "13. Signalement d'incident technique", body: "En cas de problème, prévenez immédiatement votre instructeur — il peut le journaliser dans le suivi d'incidents de la console en votre nom." },
+  { title: "14. Fin de l'examen", body: "Une fois envoyée, votre tentative est définitive. Votre résultat officiel est enregistré directement dans le carnet de notes Moodle." },
+  { title: "15. Support", body: "Pour toute question générale en dehors d'une session d'examen active, les instructeurs peuvent vous orienter vers la page Aide & support de la console (e-mail / WhatsApp)." },
 ];
 
 const INSTRUCTOR_SECTIONS = [
-  { title: "1. Preparing an exam", body: "Exams are configured as Moodle Quiz activities. Confirm the quiz exists and its settings are correct before a session — the Exams page in the console mirrors the live Moodle configuration." },
-  { title: "2. Candidate enrolment", body: "Candidates are enrolled in the relevant Moodle course (manual enrolment, Student role) ahead of their session." },
-  { title: "3. Exam settings", body: "Duration, number of questions, and attempts allowed are all configured on the Quiz in Moodle and displayed read-only on the Exams page." },
-  { title: "4. Timer", body: "Verify the configured time limit and overdue handling (auto-submit) on the Exams page before the session starts." },
-  { title: "5. Passing grade", body: "The passing threshold is set on the Quiz's grade item in Moodle and shown on both the Exams and Results pages — never edited from the console." },
-  { title: "6. Randomization", body: "Answer shuffling (shuffleanswers) is a real Moodle Quiz setting, visible on the Exams page for each exam." },
-  { title: "7. Opening / closing windows", body: "The exam's open/close window (or lack of one) is shown on the Exams and Sessions pages, sourced live from Moodle." },
-  { title: "8. Preparing an exam session", body: "Use the Sessions page to confirm the exam's window is open and monitor live attempt counts before candidates begin." },
-  { title: "9. Candidate identity verification", body: "Record each candidate's identity check on the Identity Verification page before authorizing exam access." },
-  { title: "10. Monitoring attempts", body: "The Sessions page shows real, live counts: started, in progress, completed — sourced from Moodle quiz attempts." },
-  { title: "11. Technical incidents", body: "Log any technical issue on Report Technical Issue; review and update status on the Technical Incidents page." },
-  { title: "12. Results", body: "Official results (score, grade, pass/fail, timing) are available on the Results page immediately after a candidate submits." },
-  { title: "13. Audit logs", body: "All system activity is available read-only on the Audit Logs page, sourced from Moodle's native log store." },
-  { title: "14. Feedback review", body: "Review and action candidate/staff feedback on the Feedback → Feedback Review tab (Administrator / Exam Manager only)." },
-  { title: "15. Escalation procedure", body: "For a security incident or suspected breach, follow the Security Incident Response Procedure and notify the Platform Administrator immediately." },
+  { title: "1. Préparer un examen", body: "Les examens sont configurés comme des activités Quiz Moodle. Confirmez que le quiz existe et que ses réglages sont corrects avant une session — la page Examens de la console reflète la configuration Moodle en direct." },
+  { title: "2. Inscription des candidats", body: "Les candidats sont inscrits dans le cours Moodle concerné (inscription manuelle, rôle Étudiant) avant leur session." },
+  { title: "3. Réglages de l'examen", body: "Durée, nombre de questions et tentatives autorisées sont tous configurés sur le Quiz dans Moodle et affichés en lecture seule sur la page Examens." },
+  { title: "4. Chronomètre", body: "Vérifiez la durée configurée et le mode de dépassement de délai (envoi automatique) sur la page Examens avant le début de la session." },
+  { title: "5. Seuil de réussite", body: "Le seuil de réussite est défini sur l'élément de note du Quiz dans Moodle et affiché sur les pages Examens et Résultats — jamais modifié depuis la console." },
+  { title: "6. Randomisation", body: "Le mélange des réponses (shuffleanswers) est un vrai réglage Moodle Quiz, visible sur la page Examens pour chaque examen." },
+  { title: "7. Fenêtres d'ouverture / fermeture", body: "La fenêtre d'ouverture/fermeture de l'examen (ou son absence) est affichée sur les pages Examens et Sessions, en direct depuis Moodle." },
+  { title: "8. Préparer une session d'examen", body: "Utilisez la page Sessions pour confirmer que la fenêtre de l'examen est ouverte et suivre les compteurs de tentatives en direct avant que les candidats ne commencent." },
+  { title: "9. Vérification d'identité des candidats", body: "Enregistrez la vérification d'identité de chaque candidat sur la page Vérification d'identité avant d'autoriser l'accès à l'examen." },
+  { title: "10. Suivi des tentatives", body: "La page Sessions affiche des compteurs réels et en direct : commencées, en cours, terminées — issus des tentatives Moodle Quiz." },
+  { title: "11. Incidents techniques", body: "Journalisez tout problème technique via Signaler un incident technique ; suivez et mettez à jour le statut sur la page Incidents techniques." },
+  { title: "12. Résultats", body: "Les résultats officiels (note, résultat, réussite/échec, durée) sont disponibles sur la page Résultats immédiatement après l'envoi d'un candidat." },
+  { title: "13. Journaux d'audit", body: "Toute l'activité du système est disponible en lecture seule sur la page Journaux d'audit, issue du journal natif de Moodle." },
+  { title: "14. Revue des retours", body: "Consultez et traitez les retours candidats/personnel dans l'onglet Retours → Revue des retours (Administrateur / Responsable d'examen uniquement)." },
+  { title: "15. Procédure d'escalade", body: "En cas d'incident de sécurité ou de violation suspectée, suivez la Procédure de réponse aux incidents de sécurité et prévenez immédiatement l'Administrateur de la plateforme." },
 ];
 
 export default function DocumentationPage() {
@@ -57,7 +57,7 @@ export default function DocumentationPage() {
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Documentation</h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Versioned guides describing exactly what this platform does today — nothing hypothetical.
+          Guides versionnés décrivant exactement ce que fait cette plateforme aujourd&apos;hui — rien d&apos;hypothétique.
         </p>
       </div>
 

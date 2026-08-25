@@ -16,9 +16,9 @@ export function FeedbackForm() {
     return (
       <div className="flex flex-col items-center gap-3 rounded-lg border border-status-verified-border bg-status-verified-bg px-6 py-10 text-center">
         <CheckCircle2 size={28} className="text-status-verified-text" />
-        <p className="font-display text-[14.5px] font-semibold text-status-verified-text">Feedback recorded</p>
+        <p className="font-display text-[14.5px] font-semibold text-status-verified-text">Retour enregistré</p>
         <p className="text-[12.5px] text-text-secondary max-w-[380px]">
-          It's now visible to administrators on the Feedback Review tab with status "New".
+          Il est maintenant visible par les administrateurs dans l&apos;onglet Revue des retours avec le statut « Nouveau ».
         </p>
       </div>
     );
@@ -33,7 +33,7 @@ export function FeedbackForm() {
       )}
 
       <div>
-        <span className="text-[12px] font-medium text-text-secondary">Rating *</span>
+        <span className="text-[12px] font-medium text-text-secondary">Note *</span>
         <div className="mt-1.5 flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
@@ -41,7 +41,7 @@ export function FeedbackForm() {
               type="button"
               onClick={() => setRating(n)}
               className="p-0.5"
-              aria-label={`${n} star${n > 1 ? "s" : ""}`}
+              aria-label={`${n} étoile${n > 1 ? "s" : ""}`}
             >
               <Star
                 size={22}
@@ -53,7 +53,7 @@ export function FeedbackForm() {
         </div>
       </div>
 
-      <Field label="Category" required>
+      <Field label="Catégorie" required>
         <select name="category" required className={inputClass}>
           {FEEDBACK_CATEGORIES.map((c) => (
             <option key={c.value} value={c.value}>
@@ -63,12 +63,12 @@ export function FeedbackForm() {
         </select>
       </Field>
 
-      <Field label="Exam / Session (optional)">
-        <input name="relatedExam" maxLength={200} className={inputClass} placeholder="e.g. DGR Function 7.3 — Sample Exam" />
+      <Field label="Examen / session (optionnel)">
+        <input name="relatedExam" maxLength={200} className={inputClass} placeholder="ex. DGR Function 7.3 — Sample Exam" />
       </Field>
 
-      <Field label="Comment (optional)">
-        <textarea name="comment" rows={4} className={inputClass} placeholder="What went well, or what could be improved?" />
+      <Field label="Commentaire (optionnel)">
+        <textarea name="comment" rows={4} className={inputClass} placeholder="Qu'est-ce qui a bien fonctionné, ou que pourrait-on améliorer ?" />
       </Field>
 
       <button
@@ -76,7 +76,7 @@ export function FeedbackForm() {
         disabled={isPending || rating === 0}
         className="self-start rounded-md bg-accent-9 px-4 py-2 text-[13px] font-medium text-white hover:bg-accent-10 transition-colors disabled:opacity-60"
       >
-        {isPending ? "Submitting…" : "Submit feedback"}
+        {isPending ? "Envoi…" : "Envoyer le retour"}
       </button>
     </form>
   );

@@ -17,15 +17,15 @@ const STATUS_BADGE: Record<FeedbackStatus, BadgeStatus> = {
 };
 
 const STATUS_LABEL: Record<FeedbackStatus, string> = {
-  new: "New",
-  reviewed: "Reviewed",
-  action_required: "Action Required",
-  actioned: "Actioned",
-  closed: "Closed",
+  new: "Nouveau",
+  reviewed: "Consulté",
+  action_required: "Action requise",
+  actioned: "Traité",
+  closed: "Clos",
 };
 
 function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 export function FeedbackReviewTable({ entries, canEdit }: { entries: FeedbackEntry[]; canEdit: boolean }) {
@@ -35,7 +35,7 @@ export function FeedbackReviewTable({ entries, canEdit }: { entries: FeedbackEnt
         <table className="w-full text-left">
           <thead>
             <tr className="border-b border-border-subtle bg-surface-sunken/50">
-              {["Rating", "Category", "Comment", "Reporter", "Date", "Status", canEdit ? "Update" : ""].map((h) => (
+              {["Note", "Catégorie", "Commentaire", "Signalé par", "Date", "Statut", canEdit ? "Mettre à jour" : ""].map((h) => (
                 <th key={h} className="px-4 py-2.5 text-[10.5px] font-semibold uppercase tracking-wide text-text-tertiary whitespace-nowrap">
                   {h}
                 </th>
@@ -49,7 +49,7 @@ export function FeedbackReviewTable({ entries, canEdit }: { entries: FeedbackEnt
             {entries.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-4 py-8 text-center text-[12.5px] text-text-tertiary">
-                  No feedback recorded yet.
+                  Aucun retour enregistré.
                 </td>
               </tr>
             )}

@@ -15,11 +15,11 @@ export type IncidentPriority = "low" | "medium" | "high" | "critical";
 export type IncidentStatus = "open" | "in_progress" | "resolved" | "closed";
 
 export const INCIDENT_CATEGORIES: { value: IncidentCategory; label: string }[] = [
-  { value: "login", label: "Login" },
-  { value: "exam_access", label: "Exam access" },
-  { value: "technical_failure", label: "Technical failure" },
-  { value: "question_display", label: "Question display" },
-  { value: "timer", label: "Timer" },
-  { value: "submission", label: "Submission" },
-  { value: "other", label: "Other" },
+  { value: "login", label: "Connexion" },
+  { value: "exam_access", label: "Accès à l'examen" },
+  { value: "technical_failure", label: "Panne technique" },
+  { value: "question_display", label: "Affichage des questions" },
+  { value: "timer", label: "Chronomètre" },
+  { value: "submission", label: "Envoi" },
+  { value: "other", label: "Autre" },
 ];

@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 export async function changeIncidentStatusAction(incidentId: number, newStatus: IncidentStatus) {
   const session = await getSession();
   if (!session.isLoggedIn || !session.username) {
-    throw new Error("Session expired.");
+    throw new Error("Session expirée.");
   }
   await updateIncidentStatus(incidentId, newStatus, session.username);
   revalidatePath("/incidents");

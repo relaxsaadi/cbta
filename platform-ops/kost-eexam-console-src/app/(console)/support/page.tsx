@@ -9,10 +9,10 @@ export default function SupportPage() {
     <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Help &amp; Support
+          Aide &amp; support
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Guides, technical requirements, and real contact channels for KOST E-EXAM.
+          Guides, prérequis techniques et vrais canaux de contact pour KOST E-EXAM.
         </p>
       </div>
 
@@ -20,57 +20,57 @@ export default function SupportPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader
-            title="User Guide"
-            description="General orientation for anyone using the KOST E-EXAM console."
+            title="Guide utilisateur"
+            description="Orientation générale pour toute personne utilisant la console KOST E-EXAM."
           />
           <ul className="flex flex-col gap-2 text-[13px] text-text-secondary">
-            <li>• Logging in with your Moodle console account</li>
-            <li>• Understanding your assigned role (Administrator, Exam Manager, Instructor, Auditor)</li>
-            <li>• Navigating Exams, Sessions, Question Bank and Audit Logs</li>
-            <li>• Where data comes from — everything shown is read live from Moodle, nothing is simulated</li>
+            <li>• Se connecter avec votre compte console Moodle</li>
+            <li>• Comprendre votre rôle assigné (Administrateur, Responsable d&apos;examen, Instructeur, Auditeur)</li>
+            <li>• Naviguer entre Examens, Sessions, Banque de questions et Journaux d&apos;audit</li>
+            <li>• D&apos;où viennent les données — tout ce qui est affiché est lu en direct depuis Moodle, rien n&apos;est simulé</li>
           </ul>
         </Card>
 
         <Card>
           <CardHeader
-            title="Candidate Guide"
-            description="What candidates need to know before sitting a real DGR exam."
+            title="Guide candidat"
+            description="Ce que les candidats doivent savoir avant de passer un vrai examen DGR."
           />
           <ul className="flex flex-col gap-2 text-[13px] text-text-secondary">
-            <li>• Identity verification at the session (ID check, supervised login)</li>
-            <li>• How the timer and auto-submission work</li>
-            <li>• Navigating questions with the Previous / Next controls</li>
-            <li>• See the <Link href="/exam-preparation" className="text-accent-9 underline underline-offset-2">Exam Preparation</Link> page for the full walkthrough</li>
+            <li>• Vérification d&apos;identité à la session (contrôle de pièce d&apos;identité, connexion supervisée)</li>
+            <li>• Comment fonctionnent le chronomètre et l&apos;envoi automatique</li>
+            <li>• Naviguer entre les questions avec les commandes Précédent / Suivant</li>
+            <li>• Voir la page <Link href="/exam-preparation" className="text-accent-9 underline underline-offset-2">Préparation des examens</Link> pour le déroulé complet</li>
           </ul>
         </Card>
 
         <Card>
           <CardHeader
-            title="Instructor Guide"
-            description="Responsibilities for staff supervising an exam session."
+            title="Guide instructeur"
+            description="Responsabilités du personnel qui supervise une session d'examen."
           />
           <ul className="flex flex-col gap-2 text-[13px] text-text-secondary">
-            <li>• Preparing the session: verifying the exam window is open in Moodle Quiz</li>
-            <li>• Candidate identity verification before granting access</li>
-            <li>• Monitoring live attempts on the <Link href="/sessions" className="text-accent-9 underline underline-offset-2">Sessions</Link> page</li>
-            <li>• Logging any incident via <Link href="/support/report" className="text-accent-9 underline underline-offset-2">Report Technical Issue</Link></li>
+            <li>• Préparer la session : vérifier que la fenêtre de l&apos;examen est ouverte dans Moodle Quiz</li>
+            <li>• Vérification d&apos;identité du candidat avant d&apos;autoriser l&apos;accès</li>
+            <li>• Suivre les tentatives en direct sur la page <Link href="/sessions" className="text-accent-9 underline underline-offset-2">Sessions</Link></li>
+            <li>• Journaliser tout incident via <Link href="/support/report" className="text-accent-9 underline underline-offset-2">Signaler un incident technique</Link></li>
           </ul>
         </Card>
 
         <Card>
-          <CardHeader title="FAQ" description="Common questions about the platform." />
+          <CardHeader title="Questions fréquentes" description="Questions courantes sur la plateforme." />
           <div className="flex flex-col gap-3 text-[13px]">
             <div>
-              <p className="font-medium text-text-primary">Is exam content stored in this console?</p>
-              <p className="text-text-tertiary mt-0.5">No. The console reads exam and question data directly from Moodle, read-only. It never duplicates or stores regulatory content separately.</p>
+              <p className="font-medium text-text-primary">Le contenu des examens est-il stocké dans cette console ?</p>
+              <p className="text-text-tertiary mt-0.5">Non. La console lit les données d&apos;examens et de questions directement depuis Moodle, en lecture seule. Elle ne duplique ni ne stocke jamais de contenu réglementaire séparément.</p>
             </div>
             <div>
-              <p className="font-medium text-text-primary">What happens if the timer runs out?</p>
-              <p className="text-text-tertiary mt-0.5">The attempt is submitted automatically (Moodle's autosubmit behaviour) — see <Link href="/exam-preparation" className="text-accent-9 underline underline-offset-2">Exam Preparation</Link>.</p>
+              <p className="font-medium text-text-primary">Que se passe-t-il si le temps est écoulé ?</p>
+              <p className="text-text-tertiary mt-0.5">La tentative est envoyée automatiquement (comportement natif « autosubmit » de Moodle) — voir <Link href="/exam-preparation" className="text-accent-9 underline underline-offset-2">Préparation des examens</Link>.</p>
             </div>
             <div>
-              <p className="font-medium text-text-primary">Who can access the console?</p>
-              <p className="text-text-tertiary mt-0.5">Only Moodle accounts holding a recognized console role. Regular candidate accounts are rejected — enforced server-side.</p>
+              <p className="font-medium text-text-primary">Qui peut accéder à la console ?</p>
+              <p className="text-text-tertiary mt-0.5">Seuls les comptes Moodle disposant d&apos;un rôle console reconnu. Les comptes candidats classiques sont rejetés — appliqué côté serveur.</p>
             </div>
           </div>
         </Card>
@@ -78,39 +78,39 @@ export default function SupportPage() {
 
       {/* Technical requirements */}
       <Card>
-        <CardHeader title="Technical Requirements" description="What's needed to run KOST E-EXAM reliably." />
+        <CardHeader title="Prérequis techniques" description="Ce qu'il faut pour faire fonctionner KOST E-EXAM de manière fiable." />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Field label="Browser" value="Current Chrome, Firefox, Edge, or Safari" />
-          <Field label="Connection" value="Stable internet connection required for the full exam duration" />
-          <Field label="Domains" value="exam.kostacademy.com (exam engine) and console.kostacademy.com (staff console) — both served over HTTPS" />
+          <Field label="Navigateur" value="Chrome, Firefox, Edge ou Safari récent" />
+          <Field label="Connexion" value="Connexion Internet stable requise pendant toute la durée de l'examen" />
+          <Field label="Domaines" value="exam.kostacademy.com (moteur d'examen) et console.kostacademy.com (console du personnel) — tous deux servis en HTTPS" />
         </div>
       </Card>
 
       {/* Contact + report */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card>
-          <CardHeader title="Contact Technical Support" description="Real, currently configured contact channels — nothing else is published here." />
+          <CardHeader title="Contacter le support technique" description="Canaux de contact réels et actuellement configurés — rien d'autre n'est publié ici." />
           <div className="flex flex-col gap-3">
-            <ContactRow icon={Mail} label="Email" value="cbta@kostacademy.com" href="mailto:cbta@kostacademy.com" />
+            <ContactRow icon={Mail} label="E-mail" value="cbta@kostacademy.com" href="mailto:cbta@kostacademy.com" />
             <ContactRow icon={MessageCircle} label="WhatsApp" value="+213 542 30 53 83" href="https://wa.me/213542305383" />
           </div>
         </Card>
 
         <Card>
           <CardHeader
-            title="Report Technical Issue"
-            description="Log a real incident — stored in the console's own incident tracker, never in Moodle."
+            title="Signaler un incident technique"
+            description="Journaliser un vrai incident — stocké dans le suivi d'incidents propre à la console, jamais dans Moodle."
           />
           <Link
             href="/support/report"
             className="inline-flex items-center gap-2 rounded-md bg-accent-9 px-3.5 py-2 text-[13px] font-medium text-white hover:bg-accent-10 transition-colors"
           >
             <AlertTriangle size={14} />
-            Open the incident form
+            Ouvrir le formulaire d&apos;incident
           </Link>
           <p className="mt-3 text-[12px] text-text-tertiary">
-            Administrators and exam managers can review all reported incidents on the{" "}
-            <Link href="/incidents" className="text-accent-9 underline underline-offset-2">Technical Incidents</Link> page.
+            Les administrateurs et responsables d&apos;examen peuvent consulter tous les incidents signalés sur la
+            page <Link href="/incidents" className="text-accent-9 underline underline-offset-2">Incidents techniques</Link>.
           </p>
         </Card>
       </div>

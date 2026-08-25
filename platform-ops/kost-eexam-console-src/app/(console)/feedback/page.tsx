@@ -19,9 +19,9 @@ export default async function FeedbackPage() {
   return (
     <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
       <div>
-        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Feedback</h1>
+        <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">Retours</h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Real feedback entries, stored in the console's own table — reviewable and status-tracked.
+          Vrais retours, stockés dans la table propre à la console — consultables et suivis par statut.
         </p>
       </div>
 
@@ -29,22 +29,22 @@ export default async function FeedbackPage() {
         canReview={canReview}
         giveFeedback={
           <Card className="max-w-[640px]">
-            <CardHeader title="Give Feedback" description="About the platform, an exam, or a session." />
+            <CardHeader title="Donner un retour" description="Sur la plateforme, un examen ou une session." />
             <FeedbackForm />
           </Card>
         }
         review={
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border-subtle bg-surface-raised px-5 py-3.5 shadow-sm">
-              <span className="text-[12.5px] font-medium text-text-secondary mr-1">{summary.total} entries</span>
-              <StatusBadge status="critical">{summary.new} New</StatusBadge>
-              <StatusBadge status="warning">{summary.reviewed} Reviewed</StatusBadge>
-              <StatusBadge status="warning">{summary.actionRequired} Action Required</StatusBadge>
-              <StatusBadge status="verified">{summary.actioned} Actioned</StatusBadge>
-              <StatusBadge status="neutral">{summary.closed} Closed</StatusBadge>
+              <span className="text-[12.5px] font-medium text-text-secondary mr-1">{summary.total} entrées</span>
+              <StatusBadge status="critical">{summary.new} Nouveau</StatusBadge>
+              <StatusBadge status="warning">{summary.reviewed} Consulté</StatusBadge>
+              <StatusBadge status="warning">{summary.actionRequired} Action requise</StatusBadge>
+              <StatusBadge status="verified">{summary.actioned} Traité</StatusBadge>
+              <StatusBadge status="neutral">{summary.closed} Clos</StatusBadge>
               {summary.avgRating !== null && (
                 <span className="ml-auto text-[12px] text-text-tertiary">
-                  Average rating: {summary.avgRating.toFixed(1)} / 5
+                  Note moyenne : {summary.avgRating.toFixed(1)} / 5
                 </span>
               )}
             </div>

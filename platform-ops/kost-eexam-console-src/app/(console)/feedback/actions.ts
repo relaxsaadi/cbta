@@ -15,7 +15,7 @@ export async function submitFeedbackAction(
 ): Promise<FeedbackFormResult> {
   const session = await getSession();
   if (!session.isLoggedIn || !session.username) {
-    return { error: "Session expired. Please log in again." };
+    return { error: "Session expirée. Veuillez vous reconnecter." };
   }
 
   const rating = Number(formData.get("rating") ?? 0);
@@ -24,7 +24,7 @@ export async function submitFeedbackAction(
   const relatedExam = String(formData.get("relatedExam") ?? "").trim() || null;
 
   if (!rating || rating < 1 || rating > 5 || !category) {
-    return { error: "A rating (1-5) and category are required." };
+    return { error: "Une note (1 à 5) et une catégorie sont obligatoires." };
   }
 
   await createFeedback({
@@ -42,7 +42,7 @@ export async function submitFeedbackAction(
 
 export async function changeFeedbackStatusAction(feedbackId: number, status: FeedbackStatus) {
   const session = await getSession();
-  if (!session.isLoggedIn) throw new Error("Session expired.");
+  if (!session.isLoggedIn) throw new Error("Session expirée.");
   await updateFeedbackStatus(feedbackId, status);
   revalidatePath("/feedback");
 }

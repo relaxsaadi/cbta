@@ -8,26 +8,26 @@ export default function SecurityProcedurePage() {
     <div className="mx-auto flex max-w-[820px] flex-col gap-6">
       <div>
         <h1 className="font-display text-[22px] font-semibold tracking-tight text-text-primary">
-          Security Incident Response Procedure
+          Procédure de réponse aux incidents de sécurité
         </h1>
         <p className="mt-1 text-[13px] text-text-tertiary">
-          Real, internal procedure — versioned in the project repository at
+          Procédure réelle et interne — versionnée dans le dépôt du projet à
           <code className="mx-1 rounded bg-surface-sunken px-1.5 py-0.5 font-mono text-[11.5px]">
             docs/SECURITY_INCIDENT_RESPONSE_PROCEDURE.md
           </code>
-          and accessible to relevant console roles.
+          et accessible aux rôles console concernés.
         </p>
       </div>
 
       <div className="flex flex-wrap gap-x-6 gap-y-1 rounded-md border border-border-subtle bg-surface-sunken/50 px-3.5 py-2.5 text-[11.5px] text-text-tertiary">
         <span>Version <strong className="text-text-secondary">{SECURITY_PROCEDURE_META.version}</strong></span>
-        <span>Effective date <strong className="text-text-secondary">{SECURITY_PROCEDURE_META.effectiveDate}</strong></span>
-        <span>Owner <strong className="text-text-secondary">{SECURITY_PROCEDURE_META.owner}</strong></span>
+        <span>Date d&apos;entrée en vigueur <strong className="text-text-secondary">{SECURITY_PROCEDURE_META.effectiveDate}</strong></span>
+        <span>Propriétaire <strong className="text-text-secondary">{SECURITY_PROCEDURE_META.owner}</strong></span>
       </div>
 
       <div className="rounded-md border border-status-warning-border bg-status-warning-bg px-3.5 py-2.5 text-[12px] text-status-warning-text">
-        The existence of this procedure does not certify the platform is free of vulnerabilities —
-        it defines the response process for when one is found or exploited.
+        L&apos;existence de cette procédure ne certifie pas que la plateforme est exempte de vulnérabilités —
+        elle définit le processus de réponse pour le jour où l&apos;une d&apos;elles est découverte ou exploitée.
       </div>
 
       <div className="flex flex-col gap-3">

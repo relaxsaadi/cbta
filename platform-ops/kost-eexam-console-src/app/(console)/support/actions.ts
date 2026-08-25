@@ -15,7 +15,7 @@ export async function reportIncidentAction(
 ): Promise<IncidentFormResult> {
   const session = await getSession();
   if (!session.isLoggedIn || !session.username) {
-    return { error: "Session expired. Please log in again." };
+    return { error: "Session expirée. Veuillez vous reconnecter." };
   }
 
   const category = String(formData.get("category") ?? "") as IncidentCategory;
@@ -27,7 +27,7 @@ export async function reportIncidentAction(
   const attachmentNote = String(formData.get("attachmentNote") ?? "").trim() || null;
 
   if (!category || !subject || !description) {
-    return { error: "Category, subject, and description are required." };
+    return { error: "La catégorie, le sujet et la description sont obligatoires." };
   }
 
   await createIncident({

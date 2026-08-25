@@ -15,10 +15,10 @@ export async function recordVerificationAction(
 ): Promise<VerificationFormResult> {
   const session = await getSession();
   if (!session.isLoggedIn || !session.username) {
-    return { error: "Session expired. Please log in again." };
+    return { error: "Session expirée. Veuillez vous reconnecter." };
   }
   if (!["administrator", "exam_manager", "instructor"].includes(session.role ?? "")) {
-    return { error: "Your role is not authorized to record identity verifications." };
+    return { error: "Votre rôle n'est pas autorisé à enregistrer des vérifications d'identité." };
   }
 
   const candidateUsername = String(formData.get("candidateUsername") ?? "").trim();
@@ -27,7 +27,7 @@ export async function recordVerificationAction(
   const sessionReference = String(formData.get("sessionReference") ?? "").trim() || null;
 
   if (!candidateUsername || !candidateFullName || !examName) {
-    return { error: "Candidate username, candidate name, and exam are required." };
+    return { error: "Identifiant du candidat, nom du candidat et examen sont obligatoires." };
   }
 
   await recordIdentityVerification({

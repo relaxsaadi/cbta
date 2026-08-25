@@ -15,14 +15,14 @@ export function IncidentForm() {
       <div className="flex flex-col items-center gap-3 rounded-lg border border-status-verified-border bg-status-verified-bg px-6 py-10 text-center">
         <CheckCircle2 size={28} className="text-status-verified-text" />
         <p className="font-display text-[14.5px] font-semibold text-status-verified-text">
-          Incident reported
+          Incident signalé
         </p>
         <p className="text-[12.5px] text-text-secondary max-w-[380px]">
-          It has been logged in the console's incident tracker and is now visible on the Technical
-          Incidents page with status "Open".
+          Il a été journalisé dans le suivi d&apos;incidents de la console et est maintenant visible sur la
+          page Incidents techniques avec le statut « Ouvert ».
         </p>
         <a href="/incidents" className="mt-1 text-[12.5px] font-medium text-accent-9 underline underline-offset-2">
-          View Technical Incidents →
+          Voir les incidents techniques →
         </a>
       </div>
     );
@@ -37,7 +37,7 @@ export function IncidentForm() {
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Field label="Category" required>
+        <Field label="Catégorie" required>
           <select name="category" required className={selectClass}>
             {INCIDENT_CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>
@@ -46,18 +46,18 @@ export function IncidentForm() {
             ))}
           </select>
         </Field>
-        <Field label="Priority" required>
+        <Field label="Priorité" required>
           <select name="priority" required defaultValue="medium" className={selectClass}>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="critical">Critical</option>
+            <option value="low">Basse</option>
+            <option value="medium">Moyenne</option>
+            <option value="high">Élevée</option>
+            <option value="critical">Critique</option>
           </select>
         </Field>
       </div>
 
-      <Field label="Subject" required>
-        <input name="subject" required maxLength={200} className={inputClass} placeholder="Short summary of the issue" />
+      <Field label="Sujet" required>
+        <input name="subject" required maxLength={200} className={inputClass} placeholder="Résumé court du problème" />
       </Field>
 
       <Field label="Description" required>
@@ -66,33 +66,34 @@ export function IncidentForm() {
           required
           rows={5}
           className={inputClass}
-          placeholder="What happened, when, and on which page or exam?"
+          placeholder="Que s'est-il passé, quand, et sur quelle page ou quel examen ?"
         />
       </Field>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Field label="Related exam (optional)">
-          <input name="relatedExam" maxLength={200} className={inputClass} placeholder="e.g. DGR Function 7.3 — Sample Exam" />
+        <Field label="Examen concerné (optionnel)">
+          <input name="relatedExam" maxLength={200} className={inputClass} placeholder="ex. DGR Function 7.3 — Sample Exam" />
         </Field>
-        <Field label="Related session (optional)">
-          <input name="relatedSession" maxLength={200} className={inputClass} placeholder="e.g. session date / group" />
+        <Field label="Session concernée (optionnel)">
+          <input name="relatedSession" maxLength={200} className={inputClass} placeholder="ex. date / groupe" />
         </Field>
       </div>
 
-      <Field label="Attachment note (optional)">
+      <Field label="Note de pièce jointe (optionnel)">
         <input
           name="attachmentNote"
           maxLength={300}
           className={inputClass}
-          placeholder="Describe a screenshot or file you can send by email if needed"
+          placeholder="Décrivez une capture d'écran ou un fichier que vous pouvez envoyer par e-mail si besoin"
         />
       </Field>
       <p className="-mt-2 text-[11.5px] text-text-tertiary">
-        File attachments are not yet uploaded directly — reference them here and send by email to{" "}
+        Les pièces jointes ne sont pas encore envoyées directement — référencez-les ici et envoyez-les par
+        e-mail à{" "}
         <a href="mailto:cbta@kostacademy.com" className="text-accent-9 underline underline-offset-2">
           cbta@kostacademy.com
         </a>{" "}
-        if needed.
+        si besoin.
       </p>
 
       <button
@@ -100,7 +101,7 @@ export function IncidentForm() {
         disabled={isPending}
         className="self-start rounded-md bg-accent-9 px-4 py-2 text-[13px] font-medium text-white hover:bg-accent-10 transition-colors disabled:opacity-60"
       >
-        {isPending ? "Submitting…" : "Submit incident report"}
+        {isPending ? "Envoi…" : "Envoyer le signalement"}
       </button>
     </form>
   );

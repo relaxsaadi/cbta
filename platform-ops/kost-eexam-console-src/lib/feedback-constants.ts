@@ -10,9 +10,9 @@ export type FeedbackCategory =
 export type FeedbackStatus = "new" | "reviewed" | "action_required" | "actioned" | "closed";
 
 export const FEEDBACK_CATEGORIES: { value: FeedbackCategory; label: string }[] = [
-  { value: "platform_usability", label: "Platform usability" },
-  { value: "exam_experience", label: "Exam experience" },
-  { value: "technical_issue", label: "Technical issue" },
+  { value: "platform_usability", label: "Ergonomie de la plateforme" },
+  { value: "exam_experience", label: "Expérience d'examen" },
+  { value: "technical_issue", label: "Problème technique" },
   { value: "instructions", label: "Instructions" },
-  { value: "other", label: "Other" },
+  { value: "other", label: "Autre" },
 ];

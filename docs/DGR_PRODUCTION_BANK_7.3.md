@@ -1862,3 +1862,796 @@ least one drafted item after Batch 2: 12 of Block 0's 17 (0.1.1–0.1.4,
   Block 7 **6** (46+33+6 = 85 = 117 − 32, consistent with the 32 items now
   drafted), all deliberately left for future batches rather than pushed
   toward the 117-question ceiling in one pass.
+# Batch 3
+
+Third production-drafting pass against
+`docs/DGR_STAGE2A_FUNCTION_7.3_BLUEPRINT.md` (PROVISIONAL/CEILING, 117-question
+maximum across 33 sub-tasks). Batch 1 + Batch 2 drafted 32 items
+(`Q-7.3-001`–`032`); this batch continues the same question-ID sequence from
+`Q-7.3-033`.
+
+## Status of this batch — read before using any item below
+
+**All 13 items in this batch are `DRAFT`, Tier B basis only. None has been
+Tier A-verified against the current IATA DGR 67th Edition (2026, French,
+Addendum 1) text.**
+
+- Per the task's binding instruction, **Tier A verification was not
+  attempted this session.** The Bookshelf blocker is unchanged from Batch
+  2's own finding, and per `docs/AI_HANDOFF.md`'s "2026-08-25 (still later
+  same day) — Tier A retry #2" entry, the blocker is now confirmed to be a
+  different, more specific `chrome-devtools` MCP technical failure (every
+  tool call returning `"The selected page has been closed. Call list_pages
+  to see open pages."`), not a content or credential issue. This batch does
+  not re-attempt that retry — it proceeds Tier B only, exactly as Batch 1
+  and Batch 2 did.
+- Every item below is sourced directly and verbatim-traced to the same
+  **KOST Function 7.3 training material** (Tier B) already used for Batches
+  1–2, re-extracted this session with `pdftotext -layout`, page-split so
+  every quote is tied to an exact printed slide number, from
+  `/Users/mac/Documents/Fichiers/Algerie/CBTA final/yasmine cbta/wetransfer_supports-pedagogiques-dgr-cbta-kost-academy_2025-10-12_1842/COURS DGR-CBTA-IATA/DGR-FONCTION 7.3/`:
+  - `03_KOST_DGR_CBTA_Course_Function_7.3_FR_2025.pdf` — course, 348 slides.
+    Primary source, cited below by printed slide number. This batch reads
+    the slide ranges Batches 1–2 had **not yet cited**: p.143–186 (marking,
+    labelling, general emergency procedures) and previously-uncited slides
+    within p.224–268 (the parts of Block 3's evidence range Batches 1–2 had
+    not yet drawn from).
+  - `01_KOST_DGR_CBTA_Exam_Function_7.3_FR_Rev00_2025.pdf` — corroborating
+    cross-reference only, re-read in full this session (all 30 questions),
+    never copied as a question stem.
+  - **The misfiled Function 7.1 practice book was again NOT used** as a
+    source or cross-reference for any item below — the same confirmed
+    `SOURCE GAP` from Batches 1–2 still applies unchanged.
+  - **Not read this session:** the radioactive-specific repeat slides
+    (p.299–336) and the Section 10 Type A/B/C radioactive package
+    classification material (p.280–293). Where a leaf's remaining blueprint
+    headroom depends specifically on that unread material, this batch says
+    so explicitly in "What this batch does NOT do" below rather than
+    treating that headroom as exhausted.
+- Every "DGR x.y.z" section number cited below is **as displayed on the
+  KOST slide itself** — Tier B, not independently re-verified against the
+  current 67th Edition/Addendum 1 text in this pass. The course baseline
+  remains the 66th Edition, unchanged from Batches 1–2's finding.
+- Per `.claude/rules/dgr-stage2b.md` rule 4, **no item in this batch may be
+  marked `APPROVED`.** Status is `DRAFT` only.
+
+## Honest framing — diminishing yield, not padding
+
+By Batch 3, the richest, most self-contained evidence (single dedicated
+slides with a clean stand-alone fact) has largely already been drawn. This
+batch is **13 items**, smaller than Batch 1 (14) and Batch 2 (18), which is
+the expected and correct shape of a third pass, not a shortfall. Two
+different situations are distinguished throughout this batch:
+
+1. **Genuinely untouched leaves** (0.5.1, 0.5.2, 0.6.1, 0.6.2, 7.1, 7.2) —
+   these had real, rich, previously-uncited course material (slides
+   143–185, 265) that Batches 1–2 simply had not reached yet. Drafting here
+   is straightforward first-pass mining, not diminished yield.
+2. **Leaves Batches 1–2 already touched** (3.2.1, 3.2.2, 3.3.1, 3.3.2) —
+   here this batch mined the *specific remaining slide(s)* within each
+   leaf's own evidence range that Batches 1–2 had not yet cited (verified
+   against every prior item's Source basis line before drafting). Several
+   *adjacent* leaves in this same touched category (3.1.1's remaining
+   checklist-example slides, 3.1.2, 3.1.3, 3.1.4, 3.2.4, 3.2.5, 3.3.3) were
+   examined this session and found to have **no further distinct,
+   text-extractable fact** in the primary slide deck beyond what Batches
+   1–2 already used — this is reported honestly below as exhausted, not
+   silently skipped.
+
+## Sub-task selection and ceiling compliance
+
+| Sub-task | Title | Ceiling | Drawn B1+B2 | Drawn B3 | New total | Remaining headroom | New item(s) |
+|---|---|---|---|---|---|---|---|
+| 0.5.1 | Reconnaître les prescriptions de base concernant le marquage | 4 | 0 | 2 | 2 | 2 | Q-7.3-033, Q-7.3-034 |
+| 0.5.2 | Reconnaître les prescriptions de base concernant l'étiquetage | 5 | 0 | 2 | 2 | 3 | Q-7.3-035, Q-7.3-036 |
+| 0.6.1 | Créer une sensibilisation aux procédures d'urgence générales | 3 | 0 | 2 | 2 | 1 | Q-7.3-037, Q-7.3-038 |
+| 0.6.2 | Comprendre les exigences d'intervention d'urgence de l'employeur | 1 | 0 | 1 | 1 | 0 | Q-7.3-039 |
+| 7.1 | Signaler les accidents de marchandises dangereuses | 1 | 0 | 1 | 1 | 0 | Q-7.3-040 |
+| 7.2 | Signaler les incidents de marchandises dangereuses | 1 | 0 | 1 | 1 | 0 | Q-7.3-041 |
+| 3.2.1 | Vérifier les marques | 4 | 1 | 1 | 2 | 2 | Q-7.3-042 |
+| 3.2.2 | Vérifier les étiquettes | 4 | 1 | 1 | 2 | 2 | Q-7.3-043 |
+| 3.3.1 | Remplir la liste de contrôle pour l'acceptation | 8 | 2 | 1 | 3 | 5 | Q-7.3-044 |
+| 3.3.2 | Fournir les renseignements sur l'expédition pour la planification du chargement | 6 | 2 | 1 | 3 | 3 | Q-7.3-045 |
+| **Total new items this batch** | | | | | | | **13** |
+
+**Block spread this batch:** Block 0 = 7 items (0.5.1×2, 0.5.2×2, 0.6.1×2,
+0.6.2×1 — **closes out all 17 of Block 0's leaves**, every leaf now has ≥1
+item). Block 7 = 2 items (7.1×1, 7.2×1 — **closes out all 4 of Block 7's
+leaves**). Block 3 = 4 items (one additional, non-duplicate item each on
+3.2.1, 3.2.2, 3.3.1, 3.3.2 — all 12 of Block 3's leaves were already touched
+after Batch 2, so this batch adds depth rather than first coverage).
+
+**No per-sub-task ceiling is exceeded.** See the table above — 0.6.2, 7.1,
+and 7.2 are now drawn at their full ceiling of 1 (each a genuinely
+single-fact/thin pool per binding caveats 2 and 3); every other leaf drawn
+this batch still has real remaining headroom.
+
+**No item below duplicates a Batch 1 or Batch 2 item's underlying fact.**
+Every new item's citation was checked against all 32 prior items' Source
+basis lines before drafting; where a leaf was touched a second time (3.2.1,
+3.2.2, 3.3.1, 3.3.2), the new item draws from a different slide than any
+prior item in that leaf (Q-7.3-042 from slide 248 vs Q-7.3-009's slide 249;
+Q-7.3-043 from slide 250 vs Q-7.3-010's slide 251; Q-7.3-044 from slide 258
+vs Q-7.3-011's slide 256 and Q-7.3-030's slide 257; Q-7.3-045 from slide 262
+vs Q-7.3-012's slide 261 and Q-7.3-031's slides 260/263 — slide 262 had only
+been mentioned in passing inside Q-7.3-012's own distractor rationale, never
+itself the tested fact until now).
+
+## Method notes on distractor sourcing (rule 6 compliance)
+
+Same discipline as Batches 1–2: every distractor is grounded in something
+actually read this session — either a different, correctly-stated fact from
+elsewhere in the same KOST Function 7.3 course repurposed as a wrong answer
+to *this* question ("swapped-fact"/"wrong-checkpoint" distractor), or a
+direct contradiction of a specific clause in the same source passage the
+correct answer comes from ("parsing" distractor). No distractor asserts an
+invented regulatory fact or invented numeric threshold. Block 3 items again
+carry the extra scrutiny weight required by the blueprint's binding caveat
+1 (missing third-source practice-book cross-check).
+
+---
+
+## Q-7.3-033 — Portée du marquage de spécification ONU (DGR 6.0.4.0.1)
+
+**Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Marquage des emballages de
+spécification ONU — DGR 6.0.4.0.1), les marques de spécification ONU
+apposées sur un emballage confirment que cet emballage peut être utilisé
+pour transporter n'importe quelle marchandise dangereuse déterminée.
+
+**Correct answer:** Faux.
+
+**Rationale:** Slide 144: "Les marques indiquent que l'emballage qui en
+porte correspond au modèle d'un type qui a subi avec succès les épreuves de
+résistance et qu'il est conforme aux dispositions énoncées en 6.2 et 6.3,
+qui traitent de la fabrication mais non de l'utilisation de l'emballage.
+Par conséquent, les marques en elles-mêmes ne confirment pas nécessairement
+que l'emballage peut être utilisé pour une matière déterminée." Direct,
+complete match — the marks certify that the design type passed the
+manufacture-stage performance tests, not that the packaging is fit for any
+particular substance.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 144 (DGR
+6.0.4.0.1/6.0.4.2.1(a)), opening slide of the "Marquage et Étiquetage"
+sequence (slides 143–173), not cited by any prior batch item. No direct
+exam hit for this exact scope-of-marks nuance; the exercise slides 176–177
+(density-figure omission, drop-height-for-PG-II questions) test adjacent
+UN-packaging-spec knowledge, not this specific fact — noted as topic-level
+corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-034 — Format de la marque des piles/batteries au lithium (DGR 7.1.5.5)
+
+**Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Piles au lithium — DGR 7.1.5.5), quelle est
+la taille de la marque illustrée à la figure 7.1.C, apposée sur un colis de
+piles ou batteries au lithium préparé conformément à la Section II des PI
+966, 967, 969 et 970, ou à la Section IB des PI 965 et 968 ?
+
+**Options:**
+- **(Correct)** 100 mm x 100 mm.
+- 12 mm x 12 mm.
+- 120 mm x 120 mm.
+- Aucune taille minimale n'est spécifiée ; seule la présence du numéro ONU
+  est requise.
+
+**Correct answer rationale:** Slide 162: "Les colis contenant des piles ou
+batteries au lithium préparées conformément à la Section II des PI 966,
+967, 969 et 970 et à la Section IB des PI 965 et 968 doivent être marqués
+comme indiqué à la figure 7.1.C. Les marques doivent indiquer : Le numéro
+ONU précédé des lettres «ONU». Le numéro ONU indiqué sur la marque doit
+avoir une hauteur d'au moins 12 mm. **Taille 100mm X 100 mm.** La marque
+illustrée à la figure 7.1.C de la 63e édition du présent Règlement peut
+continuer à être utilisée jusqu'au 31 décembre 2026."
+
+**Distractor rationale (source-grounded):**
+- "12 mm x 12 mm" — the same slide's own "12 mm" figure is real, but it is
+  the minimum **height of the UN number text** printed inside the mark, not
+  the mark's own outer dimensions — a same-passage figure applied to the
+  wrong quantity.
+- "120 mm x 120 mm" — confuses the mark's size with an unrelated figure
+  from a different marking context on a nearby slide: the "120°" interval
+  at which dry-ice/refrigerated-gas orientation-arrow marks must be placed
+  around a package (slide 159) — a different rule entirely, sharing only
+  the digits "120".
+- "Aucune taille minimale... seule la présence du numéro ONU" — contradicts
+  the source's own explicit "Taille 100mm X 100 mm" specification.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 162 (DGR
+7.1.5.5), cross-checked slide 159 (dry-ice/gas orientation-mark angle, for
+distractor sourcing only). Non-duplicate of Batch 1's Q-7.3-012 (slides
+261–263, DGR 9.3.2.1.3 lithium-battery **loading-segregation** rule) — this
+item tests the **marking-format** requirement for the same PI 965/968
+Section IB battery packages, a genuinely distinct fact. No direct exam hit
+for the marking-size fact specifically; Exam Q27 (PI selection for 20 Wh
+lithium-ion cells) corroborates that PI 965/968 Section IA/IB is real,
+examined material, but tests packing-instruction selection, not this
+marking dimension — noted as topic-adjacent corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-035 — Règles d'apposition des étiquettes (DGR 7.2.6)
+
+**Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Apposition des étiquettes — DGR 7.2.6),
+laquelle des règles suivantes ne fait **PAS** partie des exigences relatives
+à l'apposition d'une étiquette sur un colis de marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** Elle doit être apposée sur une face du colis différente de
+  celle portant la marque de désignation officielle de transport (PSN),
+  afin d'éviter toute confusion visuelle.
+- Elle doit être visible et lisible, et ne pas être masquée par une autre
+  marque ou étiquette.
+- Elle ne doit pas être pliée de façon à ce que des parties apparaissent
+  sur différentes faces de l'emballage.
+- Les risques principaux, subsidiaires ou multiples doivent être apposés de
+  manière adjacente sur la même surface du colis.
+
+**Correct answer rationale:** Slide 170 lists, among the DGR 7.2.6 rules:
+"Doit être visible et lisible et ne pas être masqué par une autre marque ou
+étiquette[;] Ne doit pas être pliée de façon à ce que des parties
+apparaissent sur différentes faces de l'emballage[;] **Doit être située sur
+la même surface à proximité de la marque PSN**[;] Doit être apposée à côté
+de l'adresse de l'expéditeur ou du destinataire figurant sur le colis[;]
+Les risques principaux et subsidiaires ou multiples doivent être apposés de
+manière adjacente sur la même surface du colis." The correct "NOT a rule"
+option directly inverts the source's own "même surface à proximité de la
+marque PSN" requirement — the label must be on the *same* surface as the
+PSN mark, not a *different* one.
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is one of the source's own rules, verbatim):**
+- "Visible et lisible, non masquée" — slide 170's first listed rule.
+- "Ne doit pas être pliée..." — slide 170's second listed rule.
+- "Risques principaux, subsidiaires ou multiples... adjacente" — slide
+  170's fifth listed rule.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 170 ("Apposition
+des étiquettes — DGR 7.2.6"), not cited by any prior batch item. No direct
+exam hit for this exact affixing-rules list; Exam Q16 ("Quelle est la forme
+de l'étiquette DGR ? Losange") and Q18 (marking/labelling rationale)
+corroborate this general topic area is examined, but neither tests this
+specific rule set — noted as topic-level corroboration only.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-036 — Étiquettes de danger chimique non réglementaires ("Autre étiquetage")
+
+**Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Autre étiquetage), la
+présence d'une étiquette de danger chimique sur un colis signifie
+automatiquement que son contenu répond à la classification des
+marchandises dangereuses selon la Réglementation ; aucune clarification
+supplémentaire auprès de l'expéditeur n'est nécessaire avant l'acceptation.
+
+**Correct answer:** Faux.
+
+**Rationale:** Slide 171: "Certains colis portent des étiquettes de danger
+chimique. Les articles qui y sont contenus ne répondent pas forcement à la
+classification des DG conformément à la réglementation. Cependant avant
+acceptation, pensez à demander des clarifications à l'expéditeur." Direct
+contradiction of the stem — a chemical-hazard label does not by itself
+confirm DG classification, and the course explicitly instructs seeking
+clarification, not accepting the label at face value.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 171 ("Autre
+étiquetage"), cross-checked slide 172 (named examples: UN 3245 biological
+material Category B, environmentally-hazardous-materials label, GMO
+symbol). Not cited by any prior batch item. No direct exam hit for this
+specific caution.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-037 — Conduite face à un colis endommagé (Procédures d'urgence générales)
+
+**Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Procédures d'urgence générales), si un colis
+de marchandises dangereuses est endommagé et que cela peut se faire sans
+danger, laquelle des actions suivantes n'est **PAS** recommandée par le
+cours ?
+
+**Options:**
+- **(Correct)** Nettoyer immédiatement la matière déversée à l'aide de
+  l'équipement disponible sur place, avant l'arrivée de tout spécialiste.
+- Identifier la marchandise dangereuse en se référant au DGD ou aux marques
+  et étiquettes des emballages.
+- Si possible, isoler le colis endommagé en retirant les marchandises
+  avoisinantes.
+- Isoler la zone et prévenir les services d'urgence conformément aux
+  procédures locales.
+
+**Correct answer rationale:** Slide 183: "Aviser immédiatement votre
+supérieur[.] Si cela peut se faire sans danger : Identifier la marchandise
+dangereuse (en vous référant au DGD ou aux marques et étiquettes des
+emballages). Si possible, isoler le colis endommagé en retirant les
+marchandises avoisinantes. Eviter tout contact avec le contenu du colis.
+**Ne pas nettoyer ou éliminer la MD sauf sous la supervision d'un
+spécialiste.** Isolez la zone et prévenez les services d'urgence
+conformément aux procédures locales." Cleaning up the spill immediately,
+without specialist supervision, is exactly what the course instructs
+against — a direct clause-level inversion.
+
+**Distractor rationale (source-grounded — each of the three wrong-to-select
+options is one of the source's own listed steps, verbatim):**
+- "Identifier la marchandise dangereuse..." — the source's own second step.
+- "Isoler le colis endommagé..." — the source's own third step.
+- "Isoler la zone et prévenir les services d'urgence..." — the source's own
+  final step.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 183 ("Procédures
+d'urgence générales"), cross-checked slide 184 (the companion
+body/clothing-contact procedure — not this item's tested fact). Not cited
+by any prior batch item. Corroborated by Exam Q14 ("Que doit-on faire en
+cas d'incident ou d'accident relatif aux matières dangereuses ? [...] c)
+Prévenir son supérieur et suivre les recommandations du Red book de
+l'OACI.") — a direct topic match for the "notify supervisor" step, though
+the exam's own correct answer centers on the Red Book/ICAO-guidance
+follow-up rather than this item's "do not clean up without specialist
+supervision" clause; noted honestly as partial, not full, corroboration.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-038 — Support documentaire du NOTOC (DGR 9.5.1.1)
+
+**Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Notification au commandant de
+bord — DGR 9.5.1.1), les renseignements sur les marchandises dangereuses
+transportées comme fret doivent être fournis au commandant de bord sur la
+lettre de transport aérien (LTA) ou sur la déclaration de l'expéditeur
+elle-même, et non sur un document distinct.
+
+**Correct answer:** Faux.
+
+**Rationale:** Slide 179: "Ces informations à fournir au commandant de bord
+doivent être présentés sur un document approprié **autre que** la lettre de
+transport aérien (LTA), la déclaration de l'expéditeur de marchandises
+dangereuses ou des factures etc. Généralement les informations au
+commandant de bord sont fournies sur une «NOTOC = Notification to Captain»
+[...] conformément aux dispositions de la section 9.5.1.1.3." Direct
+contradiction — the course explicitly requires a document *other than* the
+LTA/DGD/invoices, not either of those documents themselves.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 179 (DGR
+9.5.1.1/9.5.1.1.3), cross-checked slide 180 (worked NOTOC example, image
+only, no further extractable text). Not cited by any prior batch item. No
+direct exam hit for this specific document-independence fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-039 — Responsabilité de l'exploitant pour l'information des employés (DGR 9.5.1.2)
+
+**Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Information sur
+l'intervention d'urgence — DGR 9.5.1.2), il incombe à l'exploitant
+d'informer tous ses employés des procédures d'intervention d'urgence,
+lesquelles doivent être disponibles partout où des marchandises
+dangereuses sont manipulées.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 182: "Procédures d'intervention d'urgence[.] Doit être
+disponible partout où des MD sont manipulées. Responsabilité de
+l'exploitant pour l'information de tous les employés. Doit également être
+établi par les autorités aéroportuaires pour faire face aux urgences
+impliquant des MD." Direct match. **Binding caveat 2 compliance:** this
+item deliberately tests only that the obligation exists (an
+employer/operator procedure must exist, must be available everywhere DG
+are handled, and all employees must be informed) — it does not describe or
+invent any specific employer's actual procedure content, consistent with
+the blueprint's restriction on this sub-task.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 182 (DGR
+9.5.1.2), same slide range as Q-7.3-037/038 (0.6.1) but testing the
+distinct employer-obligation clause rather than the general 5-step
+procedure content (0.6.1) or NOTOC (0.6.1). Not cited by any prior batch
+item. No direct exam hit at this generic-awareness level, consistent with
+the blueprint's own framing of this sub-task as thin/minimal.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-040 — Destinataires du signalement d'un accident (DGR 9.6.5)
+
+**Sub-task:** 7.1 Signaler les accidents de marchandises dangereuses
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Signaler les accidents et incidents
+impliquant des marchandises dangereuses), à qui l'exploitant doit-il
+signaler un accident de marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** Aux autorités compétentes de l'État de l'exploitant ainsi
+  qu'à celles de l'État dans lequel l'accident s'est produit.
+- Uniquement aux autorités compétentes de l'État dans lequel l'accident
+  s'est produit, et non à celles de l'État de l'exploitant.
+- Uniquement à l'expéditeur d'origine des marchandises dangereuses
+  impliquées dans l'accident.
+- Uniquement à l'Agence Nationale de l'Aviation Civile (ANAC), quel que
+  soit l'État où l'accident s'est produit.
+
+**Correct answer rationale:** Slide 265: "L'exploitant doit signaler les
+accidents et incidents de marchandises dangereuses aux autorités
+compétentes de l'Etat de l'exploitant ainsi qu'aux ceux de celui dans
+lequel l'accident ou l'incident s'est produit."
+
+**Distractor rationale (source-grounded):**
+- "Uniquement... État où l'accident s'est produit" — drops the source's own
+  "État de l'exploitant" half of the requirement; the rule is explicitly
+  dual, not either/or.
+- "Uniquement... expéditeur d'origine" — wrong recipient category entirely;
+  the source names "autorités compétentes", never "l'expéditeur".
+- "Uniquement... ANAC" — Algeria's own ANAC reporting line is real course
+  content (slide 339, tested in Batch 1's Q-7.3-014 for the parallel 7.4
+  sub-task), but it is Algeria's *national* recipient for that separate
+  situations-reporting duty, not a substitute for this slide's own
+  dual-state ("État de l'exploitant" + "État de l'accident") requirement.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 265 ("Signaler
+les accidents et incidents impliquant des marchandises dangereuses"), the
+dedicated slide this sub-task and 7.2 share (see binding caveat 3). This
+item deliberately tests the generic dual-state reporting obligation (per
+caveat 3's instruction), not an invented accident/incident conceptual
+distinction. **Parallel-but-distinct fact from Q-7.3-013** (7.3
+sub-task, slide 266's undeclared/misdeclared-DG reporting duty): both share
+the same dual-state recipient structure, but each is independently sourced
+from its own slide and its own official sub-task — not a restatement of
+the same underlying claim. Corroborated by Exam Q14 ("Que doit-on faire en
+cas d'incident ou d'accident... Prévenir son supérieur et suivre les
+recommandations du Red book de l'OACI") at a topic level only — the exam
+item tests the immediate-response step, not this item's who/whom reporting
+fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-041 — Portée du signalement d'un incident : marchandises exemptées
+
+**Sub-task:** 7.2 Signaler les incidents de marchandises dangereuses
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Signaler les accidents et
+incidents impliquant des marchandises dangereuses), l'obligation de
+signalement des incidents s'étend également aux marchandises dangereuses
+qui ne sont pas soumises à tout ou partie de la Réglementation en raison de
+l'application d'une exception ou d'une disposition spéciale.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 265: "Cela comprend les incidents impliquant des
+marchandises dangereuses qui ne sont pas soumises à tout ou partie de la
+réglementation en raison de l'application d'une exception ou d'une
+disposition spéciale." Direct match.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 265, same
+shared slide as Q-7.3-040 (7.1) but testing the distinct **scope-extension**
+clause rather than the who/whom recipient clause — the two items draw on
+different sentences of the same slide, per binding caveat 3's instruction
+to test "the generic reporting obligation... within what framework" without
+restating the same fact twice. No direct exam hit for this specific
+exception/special-provision scope extension.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-042 — Correspondance des marques avec la déclaration de l'expéditeur
+
+**Sub-task:** 3.2.1 Vérifier les marques
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (Vérifier les marques),
+l'exploitant doit vérifier que les marques figurant sur le ou les colis, le
+ou les suremballages ou le ou les conteneurs de fret correspondent aux
+détails indiqués sur la déclaration de l'expéditeur qui les accompagne, et
+sont clairement visibles.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 248, direct verbatim match: "L'exploitant doit
+vérifier que : Les marques sur le(s) colis (s), le(s) suremballage(s) ou
+le(s) conteneur(s) de fret correspondent aux détails indiqués sur la
+déclaration de l'expéditeur qui les accompagne et sont clairement
+visibles."
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 248, opening
+slide of the "Vérifier les marques" sequence — distinct from slide 249
+(Élément 35, net-quantity exemption) already used in Batch 1's Q-7.3-009.
+This item tests the general marks-verification duty; Q-7.3-009 tests a
+specific checklist exemption within the same leaf — different facts, no
+overlap. No direct exam hit for this specific general-conformity fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-043 — Base réglementaire de la conformité de l'étiquetage (10.7.2 vs 7.2)
+
+**Sub-task:** 3.2.2 Vérifier les étiquettes
+**Type:** MCQ, single-answer
+
+**Stem (FR):** Selon le cours (Vérifier les étiquettes), à quelles
+dispositions l'étiquetage du ou des colis, suremballages ou conteneurs de
+fret doit-il être conforme, respectivement pour les matières radioactives
+et pour les autres marchandises dangereuses ?
+
+**Options:**
+- **(Correct)** DGR 10.7.2 pour les matières radioactives, et DGR 7.2 pour
+  les autres marchandises dangereuses.
+- DGR 9.1.3 pour les matières radioactives, et DGR 8.1.3 pour les autres
+  marchandises dangereuses.
+- DGR 7.2 pour les matières radioactives, et DGR 10.7.2 pour les autres
+  marchandises dangereuses.
+- DGR 6.0.4 dans les deux cas, sans distinction entre matières radioactives
+  et autres marchandises dangereuses.
+
+**Correct answer rationale:** Slide 250: "L'étiquetage du ou des colis, du
+ou des sur emballages ou du ou des conteneurs de fret conforme aux
+exigences du **10.7.2** pour les matières radioactives et du **7.2** pour
+les autres marchandises dangereuses."
+
+**Distractor rationale (source-grounded — each names a real DGR section
+number from elsewhere in the course, misapplied to this specific
+radioactive/other-DG labelling distinction):**
+- "DGR 9.1.3... DGR 8.1.3" — both real, correctly-cited course references
+  (9.1.3 = acceptance-checklist obligation, tested at Q-7.3-011/030/044;
+  8.1.3 = PSN-description rules on the DGD, tested at Q-7.3-007), but
+  neither is the labelling-conformity reference this question asks about.
+- "DGR 7.2... DGR 10.7.2" — the same two correct section numbers, swapped
+  between the two categories.
+- "DGR 6.0.4 dans les deux cas" — a real course reference (UN-packaging
+  specification marking, slide 144, tested at Q-7.3-033), but it concerns
+  packaging *marks*, not label conformity, and denies the real
+  radioactive/other-DG distinction the source explicitly draws.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 250, opening
+slide of the "Vérifier les étiquettes" sequence — distinct from slide 251
+(Éléments 45/48, This Way Up labels and obliteration duty) already used in
+Batch 1's Q-7.3-010. No direct exam hit for this specific
+section-number-attribution fact.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-044 — Articles exemptés de la procédure d'acceptation complète (DGR 9.1.3.3)
+
+**Sub-task:** 3.3.1 Remplir la liste de contrôle pour l'acceptation
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (DGR 9.1.3.3), tous les
+articles de marchandises dangereuses, sans exception, doivent suivre les
+procédures d'acceptation complètes énumérées au 9.1.3.1.
+
+**Correct answer:** Faux.
+
+**Rationale:** Slide 258: "9.1.3.3 Certains articles de marchandises
+dangereuses **ne sont pas tenus** de suivre les procédures d'acceptation
+complètes énumérées au 9.1.3.1. Le Tableau 9.1.A sert de guide au personnel
+des compagnies aériennes pour savoir quelles dispositions s'appliquent à
+certains articles de marchandises dangereuses." Direct contradiction of the
+stem's "sans exception" framing.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 258 (DGR
+9.1.3.2 identification-fields requirement + 9.1.3.3 Table 9.1.A guide) —
+distinct from slide 256 (DGR 9.1.3.1's own "mandatory before first
+acceptance" rule, tested at Batch 1's Q-7.3-011) and slide 257 (9.1.3.1
+Notes' ULD-exemption rule, tested at Batch 2's Q-7.3-030). This item draws
+on a third, previously-uncited slide within the same leaf's evidence range.
+No direct exam hit for this specific Table 9.1.A-scope fact; Exam Q21/Q29/
+Q30 corroborate this sub-task broadly, as already recorded for
+Q-7.3-011/030 — not this specific rule, noted as topic-level.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Q-7.3-045 — Maintien de la séparation tout au long de l'acceptation et du chargement
+
+**Sub-task:** 3.3.2 Fournir les renseignements sur l'expédition pour la planification du chargement
+**Type:** True/False
+
+**Stem (FR):** Vrai ou Faux : selon le cours (DGR 9.3.2.1), la séparation
+entre marchandises dangereuses, une fois établie sur la base des étiquettes
+de danger de l'emballage, doit être maintenue tout au long de
+l'acceptation, de la manutention et du chargement.
+
+**Correct answer:** Vrai.
+
+**Rationale:** Slide 262: "Base de la séparation des marchandises
+dangereuses : Séparation pour toutes les étiquettes de danger de
+l'emballage (risque primaire ou subsidiaire). Séparation maintenue tout au
+long de l'acceptation, la manutention et du chargement." Direct match.
+
+**Source basis:** Tier B — KOST Function 7.3 course, slide 262 (DGR
+9.3.2.1) — this slide was cited only in passing inside Batch 1's Q-7.3-012
+distractor rationale ("the course's broader segregation logic (slide 262:
+'Séparation pour toutes les étiquettes de danger de l'emballage')"), never
+itself the tested fact until now. Distinct from Q-7.3-012 (slide 261's
+PI 965/968 lithium-battery-specific co-loading prohibition) and Q-7.3-031
+(slides 260/263's warehouse-notification package list) — this item tests
+the general separation-basis-and-persistence principle. No direct exam hit
+for this specific persistence clause; Exam Q24 (co-loading Yes/No scenarios)
+corroborates the general separation topic, not this exact rule.
+**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
+**Approval:** PENDING REVIEWER + DATE.
+
+---
+
+## Batch 3 summary table
+
+| ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
+|---|---|---|---|---|---|---|
+| Q-7.3-033 | 0.5.1 Portée du marquage ONU | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 144 (DGR 6.0.4.0.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 162 (DGR 7.1.5.5) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 171 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 179 (DGR 9.5.1.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 182 (DGR 9.5.1.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-040 | 7.1 Destinataires signalement accident | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 265 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-041 | 7.2 Portée signalement incident (exemptions) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 265 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-042 | 3.2.1 Marques conformes à la DGD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 248 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-043 | 3.2.2 Base réglementaire étiquetage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.3 course slide 250 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-044 | 3.3.1 Exemption procédure complète (9.1.3.3) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 258 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-045 | 3.3.2 Maintien de la séparation | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.3 course slide 262 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+
+**Batch 3 composition:** 5 MCQ + 8 True/False. Block spread: Block 0 = 7
+(across 4 previously-undrafted leaves: 0.5.1×2, 0.5.2×2, 0.6.1×2, 0.6.2×1),
+Block 7 = 2 (across 2 previously-undrafted leaves: 7.1×1, 7.2×1), Block 3 =
+4 (one additional item each on 4 already-touched leaves: 3.2.1, 3.2.2,
+3.3.1, 3.3.2).
+
+**Combined Batch 1 + Batch 2 + Batch 3 total: 45 items** (`Q-7.3-001`
+through `Q-7.3-045`), against the 117-question provisional ceiling. **All
+33 of Function 7.3's leaf sub-tasks now have at least one drafted item**
+(Block 0: 17/17, Block 3: 12/12, Block 7: 4/4) — this is the first batch to
+achieve full leaf coverage for this function.
+
+## What this batch does NOT do
+
+- Does not exceed any per-sub-task ceiling in
+  `docs/DGR_STAGE2A_FUNCTION_7.3_BLUEPRINT.md` — see the headroom table
+  above. 0.6.2, 7.1, and 7.2 are now drawn at their full ceiling of 1 (each
+  a deliberately thin/single-fact pool per binding caveats 2 and 3); every
+  other leaf drawn this batch keeps real headroom.
+- Does not duplicate any Batch 1 or Batch 2 item's underlying fact — every
+  new item was checked against all 32 prior items' Source basis citations
+  before drafting (see the "No item below duplicates..." note above the
+  item list).
+- Does not use the misfiled Function 7.1 practice book as a source or
+  cross-reference for any item — the confirmed `SOURCE GAP` from Batches
+  1–2 still applies unchanged.
+- Does not perform Tier A (current DGR 67th Ed./Addendum 1) verification
+  for any of the 45 items now in this file — blocked this session by the
+  `chrome-devtools` MCP technical failure documented in
+  `docs/AI_HANDOFF.md`'s "Tier A retry #2" entry, not re-attempted per the
+  task's own instruction.
+- Does not mark any item `APPROVED` — no qualified reviewer exists in this
+  pass.
+- Does not touch Moodle or any live/production question-bank copy.
+- **Does not force items onto leaves genuinely found exhausted of further
+  distinct, text-extractable evidence in the primary course deck this
+  session** — reported honestly rather than silently left for "a future
+  batch":
+  - **3.1.2** (Vérifier les autres documents de transport) — slides
+    242–244 fully consumed; the only remaining primary slide (244) is a
+    checklist-screenshot example with no further body text beyond its
+    caption. Ceiling headroom of 3 remains on paper, but depends entirely
+    on the not-yet-read radioactive-specific repeat (slides 317–319).
+  - **3.1.3** (Vérifier les autres documents — dérogations/approbations) —
+    slides 245–246's four named approval/dérogation categories are already
+    fully consumed across Batch 2's Q-7.3-024 (used as correct answer +
+    three distractors). One single-line bullet remains ("Approbation...
+    pour le transport par 5.0.6.7", slide 245) but carries no further
+    elaboration in the primary deck; drafting a standalone item on it would
+    only recycle Q-7.3-024's own option set with a different correct
+    answer, so it was deliberately not drafted this batch.
+  - **3.1.4** (Vérifier les divergences — étape documentaire) — slide 247's
+    both reference-point clauses (State divergences at 2.8.1.3/2.8.2,
+    operator divergences at 2.8.3.4/2.8.4) are already fully consumed by
+    Batch 2's Q-7.3-025. Ceiling headroom of 1 remains on paper, dependent
+    on the not-yet-read radioactive-specific repeat (slides 321–322).
+  - **3.2.4** (Vérifier l'état du colis) — slide 254 is a genuinely
+    single-bullet, single-fact slide, already fully consumed by Batch 2's
+    Q-7.3-028 (a finding Batch 2 itself already flagged). The
+    radioactive-specific repeat (slide 328) very likely restates the
+    identical leak/integrity-check fact rather than adding a new one.
+  - **3.2.5** (Vérifier les divergences — étape colis) — slide 255's three
+    named facts (Pakistan PKG-02, Colombia Lanco L7-06, "sauf exception
+    permise") are already fully consumed by Batch 2's Q-7.3-029 (used as
+    correct answer + two distractors). Ceiling headroom of 1 remains on
+    paper, dependent on the not-yet-read radioactive-specific named
+    examples (Condor Flugdienst DE-07 at slide 322, Air Niugini PX-04 at
+    slide 330 — mentioned in Q-7.3-029's own source-basis note but never
+    quoted or verified this session).
+  - **3.3.3** (Conserver les documents) — slide 264 is fully consumed by
+    Batch 2's Q-7.3-032. The radioactive-specific repeat (slide 336) is
+    already noted in Q-7.3-032 as "same content" — very likely a
+    near-duplicate restatement, not a new fact.
+  - **3.1.1's remaining primary-deck slides (231–241)** — checklist-example
+    screenshots for checklist Points 15–24 (NEQ, APIO/Overpack, lithium
+    batteries, Division 5.2, feux d'artifice, Nom/date/signature) carry
+    essentially no extractable body text beyond their captions (confirmed
+    by this session's `pdftotext -layout` extraction). The leaf's real
+    remaining ceiling headroom (7) depends on either the not-yet-read
+    radioactive-specific slides (303–316) or a genuine image-based review
+    of the checklist screenshots themselves — out of scope for this
+    text-extraction-based drafting pass.
+- **Leaves with genuine, real remaining headroom for a hypothetical Batch
+  4**, distinct from the exhausted list above:
+  - **0.5.1** (2 of 4 drawn) — slide 148's UN-packaging-code letter
+    breakdown and slides 164–165's overpack-marking rules (DGR 7.1.7) are
+    real, unused, distinct facts.
+  - **0.5.2** (2 of 5 drawn) — slide 166's "two label types" fact, slide
+    169's Limited Quantity marking/labelling cross-reference, and slides
+    172–173's handling-label examples remain unused.
+  - **0.6.1** (2 of 3 drawn) — slide 181's ERG-code/Red Book fact and slide
+    184's body/clothing-contact emergency steps remain unused.
+  - **3.2.1** (2 of 4 drawn) — Élément 33's minor-punctuation tolerance
+    clause (slide 249) remains, though it is the same tolerance principle
+    already tested at the DGD-form stage in Q-7.3-007 and cited there as a
+    cross-check — thin remaining headroom, not a clean new fact.
+  - **3.2.2** (2 of 4 drawn) — Élément 45's This-Way-Up labelling
+    requirement (slide 251) remains, though already used as distractor
+    material in Q-7.3-010 — thin remaining headroom.
+  - **3.2.3** (2 of 4 drawn, untouched this batch) — its full remaining
+    headroom (2) is explicitly allocated by the blueprint to the Section
+    10 Type A/B/C radioactive package-classification material (p.280–293),
+    not yet read this session.
+  - **3.3.1** (3 of 8 drawn) — slide 259's dry-ice checklist-variant fact
+    and the radioactive-specific slides (331–333, not read this session)
+    remain.
+  - **3.3.2** (3 of 6 drawn) — the radioactive-specific slides (334–335,
+    not read this session) remain.
+  - All 12 Block 0 leaves already touched before this batch (0.1.1–0.4.3,
+    excluding 0.5.x/0.6.x) remain untouched by this batch and still carry
+    their own real ceiling headroom (e.g. 0.4.1 at 1 of 8, 0.2.3 at 1 of
+    6) — simply not this batch's focus.
+- Does not exhaust any block's remaining headroom — after this batch: Block
+  0 has **39** questions of ceiling headroom left (59 − 20 drawn), Block 3
+  has **29** (50 − 21 drawn), Block 7 has **4** (8 − 4 drawn) — 39+29+4 = 72
+  = 117 − 45, consistent with the 45 items now drafted across all three
+  batches.

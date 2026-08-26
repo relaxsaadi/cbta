@@ -1,0 +1,19 @@
+# Brouillon — à installer sur le serveur (crontab de l'utilisateur de
+# déploiement, PAS root). Chemins à adapter à l'emplacement réel du
+# conteneur/du volume monté.
+#
+# Sauvegarde complète chaque nuit à 2h — RPO 24h (voir docs/
+# KOST_EEXAM_V2_ARCHITECTURE.md §13).
+0 2 * * * docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/backup.ts >> /var/log/kost-eexam-v2-backup.log 2>&1
+
+# Test de restauration réel chaque dimanche à 3h — jamais seulement
+# documenté (§21 de la mission). Restaure dans un répertoire isolé DANS le
+# conteneur (tmpdir), ne touche jamais le fichier de production.
+0 3 * * 0 docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/restore-test.ts >> /var/log/kost-eexam-v2-restore-test.log 2>&1
+
+# Balayage des tentatives expirées — filet de sécurité pour les candidats
+# qui ferment l'onglet sans jamais revenir (§8 : l'auto-soumission ne doit
+# pas dépendre uniquement d'un candidat qui revoit la page). Le code
+# applicatif la déclenche déjà à l'affichage de /mes-examens et /results ;
+# ce cron couvre le cas où personne ne consulte ces pages pendant un moment.
+*/5 * * * * curl -fsS -X POST http://127.0.0.1:3200/api/attempts/sweep -H "Authorization: Bearer ${KOST_EEXAM_V2_SWEEP_TOKEN}" >> /var/log/kost-eexam-v2-sweep.log 2>&1

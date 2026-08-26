@@ -1,0 +1,28 @@
+# deps
+/node_modules
+
+# next
+/.next/
+/out/
+next-env.d.ts
+
+# production data — jamais commité
+/data/*.db
+/data/*.db-shm
+/data/*.db-wal
+/data/backups/
+/data/backup-log.jsonl
+
+# env
+.env
+.env.local
+.env*.local
+
+# tests
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# misc
+.DS_Store
+*.tsbuildinfo

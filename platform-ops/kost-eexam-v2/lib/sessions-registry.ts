@@ -1,0 +1,102 @@
+// Registre serveur des sessions (table `sessions`) — la source de vérité
+// pour la révocation (§20 de la mission). Le cookie iron-session ne porte
+// qu'un `dbSessionId` ; CHAQUE requête authentifiée doit revérifier ici que
+// la session n'a pas été révoquée, sans quoi "déconnecter toutes les
+// sessions de cet utilisateur" ne ferait rien tant que le cookie chiffré
+// n'a pas expiré naturellement (jusqu'à 8h).
+import { createHash, randomBytes } from "node:crypto";
+import { getDb, nowIso } from "./db";
+
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
+
+function hashToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+export function createDbSession(params: {
+  userId: number;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+}): { dbSessionId: number; token: string } {
+  const db = getDb();
+  const token = randomBytes(32).toString("hex");
+  const tokenHash = hashToken(token);
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + SESSION_MAX_AGE_SECONDS * 1000).toISOString();
+  const result = db
+    .prepare(
+      `INSERT INTO sessions (user_id, session_token_hash, created_at, last_seen_at, expires_at, ip_address, user_agent)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(params.userId, tokenHash, now.toISOString(), now.toISOString(), expiresAt, params.ipAddress ?? null, params.userAgent ?? null);
+  return { dbSessionId: Number(result.lastInsertRowid), token };
+}
+
+export interface SessionRow {
+  id: number;
+  user_id: number;
+  created_at: string;
+  last_seen_at: string;
+  expires_at: string;
+  revoked_at: string | null;
+  revoked_by: number | null;
+  ip_address: string | null;
+  user_agent: string | null;
+}
+
+/** Revalidée à chaque requête (middleware). Renvoie false si expirée ou
+ * révoquée — le cookie doit alors être détruit même s'il reste valide
+ * cryptographiquement. */
+export function isDbSessionValid(dbSessionId: number): boolean {
+  const db = getDb();
+  const row = db.prepare(`SELECT expires_at, revoked_at FROM sessions WHERE id = ?`).get(dbSessionId) as
+    | { expires_at: string; revoked_at: string | null }
+    | undefined;
+  if (!row) return false;
+  if (row.revoked_at) return false;
+  if (new Date(row.expires_at).getTime() < Date.now()) return false;
+  return true;
+}
+
+export function touchDbSession(dbSessionId: number): void {
+  getDb().prepare(`UPDATE sessions SET last_seen_at = ? WHERE id = ?`).run(nowIso(), dbSessionId);
+}
+
+export function revokeDbSession(dbSessionId: number, revokedBy: number): void {
+  getDb()
+    .prepare(`UPDATE sessions SET revoked_at = ?, revoked_by = ? WHERE id = ? AND revoked_at IS NULL`)
+    .run(nowIso(), revokedBy, dbSessionId);
+}
+
+/** "Déconnecter toutes les sessions de cet utilisateur" (§20). `exceptId`
+ * permet "…sauf la mienne" quand l'admin se révoque lui-même. */
+export function revokeAllSessionsForUser(userId: number, revokedBy: number, exceptId?: number): number {
+  const db = getDb();
+  const rows = db
+    .prepare(`SELECT id FROM sessions WHERE user_id = ? AND revoked_at IS NULL${exceptId ? " AND id != ?" : ""}`)
+    .all(...(exceptId ? [userId, exceptId] : [userId])) as { id: number }[];
+  const stmt = db.prepare(`UPDATE sessions SET revoked_at = ?, revoked_by = ? WHERE id = ?`);
+  const ts = nowIso();
+  for (const r of rows) stmt.run(ts, revokedBy, r.id);
+  return rows.length;
+}
+
+export function listActiveSessions(): (SessionRow & { username: string; full_name: string; role: string | null })[] {
+  const db = getDb();
+  return db
+    .prepare(
+      `SELECT s.*, u.username, u.full_name,
+              (SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id LIMIT 1) AS role
+       FROM sessions s
+       JOIN users u ON u.id = s.user_id
+       WHERE s.revoked_at IS NULL AND s.expires_at > ?
+       ORDER BY s.last_seen_at DESC`
+    )
+    .all(nowIso()) as unknown as (SessionRow & { username: string; full_name: string; role: string | null })[];
+}
+
+export function listSessionsForUser(userId: number): SessionRow[] {
+  return getDb()
+    .prepare(`SELECT * FROM sessions WHERE user_id = ? ORDER BY created_at DESC`)
+    .all(userId) as unknown as SessionRow[];
+}

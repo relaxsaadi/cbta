@@ -306,3 +306,103 @@ Ordre P0 → P1 → P2 tel que défini au §36 de la mission, détaillé dans le
 ---
 
 **Prochaine étape :** scaffolding de `platform-ops/kost-eexam-v2/`, schéma SQL, puis implémentation P0 dans l'ordre du todo-list de session.
+
+---
+
+## 17. État réel après implémentation P0 (mise à jour du 26/08/2026)
+
+Section ajoutée après coup, en plus (pas à la place) du §15 — pour ne
+jamais prétendre un état non vérifié, voici ce qui a été **réellement
+construit et prouvé qui marche**, et les bugs réels trouvés en cours de
+route (utile pour la suite du projet, pas seulement pour cette session).
+
+### 17.1 Ce qui est construit et testé
+
+- Schéma SQLite complet (`lib/schema.sql`), migration idempotente
+  (`scripts/migrate.ts`).
+- Auth/RBAC natifs (`lib/auth.ts`, `lib/rbac.ts`, `lib/sessions-registry.ts`)
+  — 4 rôles, session native + registre serveur pour révocation réelle.
+- Shell UI porté et adapté par rôle (candidat vs staff).
+- Client → Groupe → Candidats (`lib/companies.ts`, `lib/groups.ts` + pages).
+- Banque de questions avec statuts source et versions append-only
+  (`lib/questions.ts`).
+- Assistant de création d'évaluation (12 étapes, §5) + publication avec
+  snapshot figé (`lib/assessments.ts`).
+- Moteur candidat complet : démarrage protégé par contrainte DB unique,
+  timer serveur, sauvegarde de réponse, marquage, soumission, auto-
+  soumission (`lib/attempts.ts`, `ExamRunner.tsx`).
+- Moteur de notation à source unique (`lib/grading.ts`).
+- Résultats + drill-down question par question (`lib/results.ts` + pages).
+- Export CSV résultats + réponses détaillées (routes API).
+- Incidents avec actions réelles (suspendre/réactiver compte, révoquer
+  sessions, suspendre/réouvrir examen) tracées en double (incident_actions
+  + audit_logs).
+- Sessions actives + révocation individuelle/globale.
+- Journal d'audit insert-only.
+- Sauvegarde + test de restauration isolé — **exécutés réellement** en
+  session (`pnpm backup` puis `pnpm restore-test`, succès, intégrité
+  vérifiée, tables comptées).
+- Guides des 4 rôles.
+- **6 tests unitaires** (`node --test`) : notation (2), garantie anti-
+  double-tentative (2), application serveur du timer (2) — tous verts.
+- **8 scénarios Playwright E2E** (sur build de production, DB de test
+  dédiée, jetée à chaque run) : création+publication d'examen (B), parcours
+  candidat complet avec rafraîchissement en cours de tentative (C), deux
+  onglets → une seule tentative, vérifié en base (E), drill-down admin (F),
+  export CSV (G), auditeur lecture seule — UI **et** refus serveur (H×2),
+  incident → suspension → connexion bloquée → réactivation → connexion
+  restaurée → trace d'audit (I) — tous verts.
+- `pnpm build` propre (28 routes), `pnpm typecheck` propre.
+
+### 17.2 Bugs réels trouvés et corrigés pendant la construction
+
+Ces trois-là ne sont pas des détails cosmétiques — sans le premier, le
+bouton « Commencer l'examen » ne fonctionnait tout simplement pas :
+
+1. **`node:sqlite` renvoie des lignes à prototype nul**
+   (`Object.create(null)`, vérifié directement), pas de vrais littéraux
+   `{}`. Next.js refuse de sérialiser un objet à prototype nul à travers
+   la frontière Server→Client (composants client, closures de Server
+   Actions capturées pour la progressive enhancement) : *"Classes or null
+   prototypes are not supported."* Corrigé une seule fois à la source
+   (`lib/db.ts`, patch de `StatementSync.prototype.get/all`) plutôt que
+   sur chaque site d'appel.
+2. **Next.js 16 a renommé `middleware.ts` en `proxy.ts`** (même
+   comportement, runtime Node.js par défaut) — `middleware.ts` est
+   déprécié, pas supprimé, mais corrigé quand même (`proxy.ts`), après
+   consultation de `node_modules/next/dist/docs/` comme demandé par
+   `AGENTS.md` de ce projet.
+3. **Les erreurs de rendu Server Component sont volontairement redactées
+   en production** (sécurité React/Next — jamais de message/stack exposé
+   au client) : un `throw new Error(...)` générique pour un refus de rôle
+   au niveau PAGE n'affiche donc pas un message lisible en prod. Corrigé
+   en distinguant deux cas d'usage : `requireRole()`/`requireWriteRole()`
+   (throw — correct pour les Server Actions, dont les erreurs sont
+   attrapées et renvoyées via `useActionState`) restent inchangées ;
+   `guardPage()` (nouvelle fonction, `lib/rbac.ts`) fait un `redirect()`
+   vers `/acces-refuse` pour les Server Components de page — toujours un
+   refus serveur réel, exprimé via l'API que Next.js attend pour ce cas.
+
+Deux ajustements d'infrastructure de test (sans impact production) :
+`allowedDevOrigins` dans `next.config.ts` (Next 16 bloque par défaut les
+assets de dev cross-origin entre `127.0.0.1` et `localhost`) et
+`COOKIE_SECURE` (nouvelle variable d'environnement, `lib/session.ts`) pour
+permettre de tester un build de production sur HTTP local sans désactiver
+la protection `secure` en déploiement réel.
+
+### 17.3 Ce qui reste (P1/P2, non fait cette session)
+
+- MFA administrateur (prévu compatible, non implémenté).
+- Import contrôlé CSV de résultats historiques (§16 de la mission).
+- Rapports PDF (P2 — CSV livré, suffisant pour ne pas bloquer le MVP par
+  instruction explicite du §15).
+- Copie de sauvegarde chiffrée hors site (le mécanisme local + test de
+  restauration sont prouvés ; la réplication hors site dépend du choix
+  d'hébergement final, non tranché cette session).
+- Déploiement réel sur le serveur dédié — `Dockerfile` et brouillons
+  (`deploy/`) prêts, aucune action serveur exécutée (accès SSH sortant non
+  exercé cette session, action de production nécessitant confirmation).
+- Migration contrôlée des 97 questions FROZEN existantes depuis Moodle
+  (§31/§14 de l'architecture — l'importeur reste à construire ; ne
+  concerne pas le moteur lui-même, déjà fonctionnel avec un contenu de
+  démonstration explicitement fictif).

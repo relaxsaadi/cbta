@@ -1,0 +1,22 @@
+# Brouillon — bloc de service à ajouter au docker-compose existant du
+# serveur (celui qui fait déjà tourner `moodle`, `db`, `console` pour V1).
+# Ne remplace ni ne modifie aucun service V1 existant.
+
+services:
+  kost-eexam-v2:
+    build:
+      context: ./kost-eexam-v2 # chemin réel à confirmer sur le serveur
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3200:3000" # écoute locale uniquement — nginx fait le reverse proxy public
+    environment:
+      NODE_ENV: production
+      SESSION_SECRET: ${KOST_EEXAM_V2_SESSION_SECRET} # défini dans le .env du serveur, jamais committé
+      DB_PATH: /app/data/kost-eexam-v2.db
+      BACKUP_DIR: /app/data/backups
+    volumes:
+      - kost-eexam-v2-data:/app/data # persistant, jamais recréé au redéploiement
+
+volumes:
+  kost-eexam-v2-data:

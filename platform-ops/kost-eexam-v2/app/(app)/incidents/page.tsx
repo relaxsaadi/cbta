@@ -1,0 +1,56 @@
+import Link from "next/link";
+import { guardPage } from "@/lib/rbac";
+import { listIncidents } from "@/lib/incidents";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { StatusBadge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { AlertTriangle } from "lucide-react";
+import { DeclareIncidentForm } from "./DeclareIncidentForm";
+
+const STATUS_BADGE: Record<string, "verified" | "warning" | "critical" | "neutral"> = {
+  open: "critical", investigating: "warning", resolved: "verified", closed: "neutral",
+};
+const SEVERITY_BADGE: Record<string, "verified" | "warning" | "critical" | "neutral"> = {
+  low: "neutral", medium: "warning", high: "critical", critical: "critical",
+};
+
+export default async function IncidentsPage() {
+  const session = await guardPage("pedagogical_manager", "administrator", "auditor");
+  const incidents = listIncidents();
+  const canWrite = session.role !== "auditor";
+
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="font-display text-[20px] font-semibold text-text-primary">Sécurité — Incidents</h1>
+
+      {canWrite && (
+        <Card>
+          <CardHeader title="Déclarer un incident" />
+          <DeclareIncidentForm />
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader title={`${incidents.length} incident(s)`} />
+        {incidents.length === 0 ? (
+          <EmptyState icon={AlertTriangle} title="Aucun incident" description="Aucun incident déclaré pour l'instant." />
+        ) : (
+          <div className="flex flex-col gap-2">
+            {incidents.map((i) => (
+              <Link key={i.id} href={`/incidents/${i.id}`} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2.5 hover:border-border-strong transition-colors">
+                <div>
+                  <p className="text-[13.5px] font-medium text-text-primary">{i.type} — {i.description.slice(0, 80)}</p>
+                  <p className="text-[12px] text-text-tertiary">{new Date(i.created_at).toLocaleString("fr-FR")}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={SEVERITY_BADGE[i.severity] ?? "neutral"}>{i.severity}</StatusBadge>
+                  <StatusBadge status={STATUS_BADGE[i.status] ?? "neutral"}>{i.status}</StatusBadge>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}

@@ -1,0 +1,43 @@
+# Brouillon — À ADAPTER avant application (nom de domaine réel non confirmé).
+# Reprend le pattern de moodle-scripts/nginx-moodle-vhost.conf (V1) : TLS
+# géré par Certbot, reverse proxy simple vers le conteneur applicatif.
+#
+# Correctif appliqué directement ici (pas seulement dans next.config.ts) :
+# en-têtes de sécurité en double couche (§1.5 de l'architecture — l'écart
+# V1 était qu'ils n'existaient QUE côté serveur, non versionnés).
+
+server {
+    server_name v2.kostacademy.com; # TODO: confirmer le sous-domaine réel
+
+    client_max_body_size 10M;
+
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    location / {
+        proxy_pass http://127.0.0.1:3200; # port hôte mappé au conteneur kost-eexam-v2:3000
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    listen 443 ssl; # géré par Certbot
+    ssl_certificate /etc/letsencrypt/live/v2.kostacademy.com/fullchain.pem; # géré par Certbot
+    ssl_certificate_key /etc/letsencrypt/live/v2.kostacademy.com/privkey.pem; # géré par Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
+    if ($host = v2.kostacademy.com) {
+        return 301 https://$host$request_uri;
+    }
+    listen 80;
+    server_name v2.kostacademy.com;
+    return 404;
+}

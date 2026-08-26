@@ -4,6 +4,7 @@ import { findUserByUsername, getRoleForUser, touchLastLogin } from "./users";
 import { verifyPassword } from "./passwords";
 import { createDbSession, revokeDbSession } from "./sessions-registry";
 import { audit } from "./audit";
+import { checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
 
 export interface LoginResult {
   ok: boolean;
@@ -15,8 +16,17 @@ export interface LoginResult {
  * registre `sessions` (nécessaire pour la révocation server-side, §20),
  * puis le cookie iron-session ne porte que la référence à cette ligne. */
 export async function login(username: string, password: string, meta: { ip?: string; userAgent?: string }): Promise<LoginResult> {
+  const rateLimitKey = `${meta.ip ?? "unknown"}:${username}`;
+  const rateLimit = checkLoginRateLimit(rateLimitKey);
+  if (!rateLimit.allowed) {
+    audit({ actorUserId: null, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { username, reason: "rate_limited" } });
+    const minutes = Math.ceil(rateLimit.retryAfterSeconds / 60);
+    return { ok: false, error: `Trop de tentatives échouées pour ce compte. Réessayez dans ${minutes} minute${minutes > 1 ? "s" : ""}.` };
+  }
+
   const user = findUserByUsername(username);
   if (!user || !verifyPassword(password, user.password_hash)) {
+    recordLoginFailure(rateLimitKey);
     audit({ actorUserId: user?.id ?? null, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { username } });
     return { ok: false, error: "Identifiant ou mot de passe incorrect." };
   }
@@ -30,6 +40,7 @@ export async function login(username: string, password: string, meta: { ip?: str
     return { ok: false, error: "Aucun rôle n'est associé à ce compte." };
   }
 
+  resetLoginRateLimit(rateLimitKey);
   const { dbSessionId } = createDbSession({ userId: user.id, ipAddress: meta.ip, userAgent: meta.userAgent });
   touchLastLogin(user.id);
 

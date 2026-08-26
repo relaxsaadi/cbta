@@ -12,7 +12,11 @@ test("éditer une question après publication ne modifie jamais la tentative dé
   await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
 
   await page.goto("/question-bank");
-  const row = page.locator("div.border-border-subtle").filter({ hasText: "Q-7.1-013" });
+  // Le sélecteur générique "div.border-border-subtle" matche à la fois la
+  // carte englobante (Fonction 7.1) et chaque ligne de question — on cible
+  // précisément la ligne (le plus petit conteneur, celui qui a le lien
+  // "Modifier") via .last() sur le résultat filtré.
+  const row = page.locator("div.border-border-subtle").filter({ hasText: "Q-7.1-013" }).last();
   await expect(row).toBeVisible();
   await row.getByRole("link", { name: /modifier/i }).click();
 

@@ -22,7 +22,7 @@ test("l'auditeur consulte le pilote réel en lecture seule uniquement", async ({
   await expect(page.getByText(/marchandise dangereuse/i).first()).toBeVisible();
 
   await page.goto("/audit-logs");
-  await expect(page.getByText(/journal d'audit/i)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /journal d'audit/i })).toBeVisible();
 
   await page.goto("/incidents");
   await expect(page.getByRole("button", { name: /déclarer un incident/i })).toHaveCount(0);

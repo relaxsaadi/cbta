@@ -1,0 +1,11 @@
+{
+  "name": "DGR Fonction 7.1 — Examen démonstration",
+  "type": "examen",
+  "function": "7.1",
+  "requested_count": 13,
+  "duration_min": 30,
+  "passthreshold": 80,
+  "group_name": "Groupe Démo ANAC — Fonction 7.1",
+  "open_time": 0,
+  "close_time": 0
+}

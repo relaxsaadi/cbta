@@ -1,5 +1,147 @@
 # DGR Moodle Bank Integration — Inspection Report & Proposed Plan (2026-08-25)
 
+## -1. Dynamic assessment-creation workflow — 2026-08-26 (auditor request)
+
+Implements the EXERCICE / TEST / EXAMEN workflow requested for the admin
+to create assessments from the question bank on demand. Script:
+`moodle-scripts/assessment-workflow/create_assessment.php` (+
+`candidate_detail_report.php`). **What's real vs. what's spec — stated
+plainly:**
+
+- **The mechanism itself is real, working Moodle backend code**, tested
+  end-to-end (below) — not a mockup. It runs today via SSH/CLI as
+  `kostadmin`'s equivalent (`get_admin()`), taking a JSON config.
+- **The "Console KOST E-EXAM → Préparation des examens → Créer une
+  évaluation" guided UI form ("si possible" in the request) was
+  NOT built tonight.** Building and safely deploying a new page + API
+  route in the live console app (a separate running container,
+  `kost-console-stack_console_1`, untouched all session) is real
+  engineering work I didn't judge safe to rush hours before an audit
+  without proper testing. §-1bis below gives the exact spec so it can be
+  built as a normal follow-up; the backend it would call already exists
+  and is proven.
+
+### How isolation is guaranteed (stronger than the fixed-slot quizzes built earlier)
+
+Uses Moodle's own **random question slot** mechanism
+(`mod_quiz\structure::add_random_questions()`), with a filter combining
+**both** the category (`Fonction 7.X`) **and** the
+`status-frozen-fr-verified` tag — not category alone. This means even if
+a non-FROZEN item is ever added to a Fonction 7.X category in the future,
+it still cannot be drawn into a production EXAMEN/TEST unless explicitly
+tagged. Verified directly (not assumed): all 13 random slots' stored
+`filtercondition` resolve to category 18 + tag 8
+(`status-frozen-fr-verified`); the actual questions drawn in the real
+attempt were independently confirmed to all sit in category 18.
+
+### Type presets implemented
+
+| | Exercice | Test | Examen |
+|---|---|---|---|
+| Tentatives | illimitées | configurable (défaut illimité) | **1 par défaut** |
+| Feedback | immédiat possible | configurable | non affiché (traçé dans Moodle, pas révélé) |
+| Mélange réponses | oui | oui | oui |
+| Certificatif | non | non | oui (formel) |
+
+Presets are **KOST configuration choices**, not IATA universal rules — as
+instructed, none of this is presented as a regulatory requirement.
+
+### Pass threshold via Moodle's own grade API — not a parallel calculation
+
+`grade_item->gradepass` is set directly via Moodle's `grade_item` class
+(after `quiz_grade_item_update()` creates the item) — the console/
+gradebook reads the exact same field Moodle grades against. No separate
+scoring logic exists anywhere in this workflow.
+
+### Demo executed and verified (§11 of the request)
+
+**"DGR Fonction 7.1 — Examen démonstration"** — created via
+`create_assessment.php` with:
+
+```json
+{"name":"DGR Fonction 7.1 — Examen démonstration","type":"examen","function":"7.1",
+ "requested_count":13,"duration_min":30,"passthreshold":80,
+ "group_name":"Groupe Démo ANAC — Fonction 7.1"}
+```
+
+`requested_count` is **13, not 15** — real-time count showed only 13
+admissible (FROZEN-tagged) Function 7.1 questions exist right now (10
+reused + 3 new from the pilot), and the instruction is explicit: use the
+real available count rather than invent content when fewer than 15
+exist. This is exactly what the mechanism's own live count produced —
+not a manual override.
+
+Full evidence in `docs/DGR_ASSESSMENT_DEMO_7.1_EVIDENCE.json`. Summary:
+
+| Check | Result |
+|---|---|
+| Cohort "Groupe Démo ANAC — Fonction 7.1" created, test_candidate added | done |
+| Course 31 / quiz 22 created, 13 random slots (category+tag filtered) | done |
+| Grade threshold set: 80/100 via `grade_item` | done |
+| Candidate attempt (test_candidate, real Moodle attempt id 73) | 13/13, **100/100, 100%, RÉUSSI** |
+| Isolation: slots filtered to cat.18+tag | 13/13 PASS |
+| Isolation: questions actually drawn, all in category 18 | 13/13 PASS |
+| Detailed per-candidate report (question, réponse candidat, réponse correcte, résultat) | generated, see evidence file |
+| Console sync (exam appears, correct function tag, production scope) | PASS, no code change |
+
+**Known minor untidiness, not a correctness issue:** the script's
+course-reuse lookup didn't match Function 7.1's course because that one
+was named `KOST-DGR-7.1-PILOT` (a dot) while 7.2–7.10 use dashes
+(`KOST-DGR-7-2-PRODUCTION` etc.) from an earlier naming inconsistency on
+my part — so this demo's course/quiz landed in a **new** course (id 31)
+rather than reusing course 21. Both courses are correctly isolated and
+functioning; this is a cosmetic consolidation to do later, not a defect
+in the mechanism.
+
+**Backup:** full `mysqldump` taken immediately before this workflow ran
+(`local-data/moodle-backups/moodle_pre_assessment_workflow_20260826.sql.gz`).
+
+**Screenshots — not provided, and why:** I don't have `kostadmin`'s
+password (told explicitly not to reveal/reset it), so I cannot drive an
+actual browser session as the real site admin to capture UI screenshots.
+Everything above is the equivalent real evidence (Moodle's own database
+state, read back independently after each step) rather than a screen
+capture — happy to walk through it live/on a screen-share, or take
+screenshots once you're logged in yourself.
+
+## -1bis. Console UI spec (ready to build, not yet built)
+
+Route: `/exam-preparation/create` (extends the existing `exam-
+preparation` section). Guided single-page form, French labels:
+
+1. **Type d'évaluation** — radio: Exercice / Test / Examen (presets
+   above pre-fill steps 5–8, all overridable).
+2. **Fonction DGR** — select Fonction 7.1–7.10. On change, call a new
+   read-only API route (e.g. `GET /api/question-bank/admissible-count?
+   function=7.1`) that runs exactly the same query
+   `create_assessment.php` uses (category + `status-frozen-fr-verified`
+   tag count) and display "Questions admissibles disponibles : XX".
+3. **Nombre de questions** — number input, client-validated `<= XX` from
+   step 2 (server re-validates identically — never trust the client).
+4. **Durée** — minutes.
+5. **Barème / seuil** — fixed /100 display + editable seuil %.
+6. **Groupe/candidats** — select or create a cohort.
+7. **Autres paramètres** — attempts, shuffle answers, open/close
+   datetime, feedback visibility (from the type preset, overridable).
+8. **Publier** — calls a new API route (e.g. `POST /api/exams/create`)
+   that server-side shells out to (or reimplements in TypeScript calling
+   Moodle's REST web services for) exactly the `create_assessment.php`
+   logic — **same validation, same random-slot + tag mechanism, same
+   grade_item threshold call** — never a second scoring/selection
+   implementation.
+
+Audit trail fields to persist per assessment (creation event) and per
+attempt (result event) are exactly the two lists in the original
+request's §10 — the attempt-level ones already exist natively in Moodle
+(`quiz_attempts` + `grade_grades`, read via the same join the console's
+`results-data.ts` already uses); the assessment-level ones (creator,
+type, source category, counts) aren't natively one Moodle table, so
+they'd need either the quiz's own tags/intro (as done here) or one small
+new table in the console's own `kost_console_*` schema (the 3-table,
+write-scoped area already described in `lib/db-readwrite.ts` — adding a
+4th table there, `kost_console_assessment_log`, would fit the existing
+security model without touching Moodle's schema).
+
 ## 0. INCIDENT — cache lock failure, found + fixed 2026-08-26 (pre-audit)
 
 **Symptom:** site admin (`kostadmin`) got "Impossible d'enclencher un

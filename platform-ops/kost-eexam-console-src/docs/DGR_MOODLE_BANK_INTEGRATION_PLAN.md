@@ -1,5 +1,89 @@
 # DGR Moodle Bank Integration — Inspection Report & Proposed Plan (2026-08-25)
 
+## 0. INCIDENT — cache lock failure, found + fixed 2026-08-26 (pre-audit)
+
+**Symptom:** site admin (`kostadmin`) got "Impossible d'enclencher un
+verrouillage pour le cache." opening/editing courses.
+
+**Root cause:** every PHP CLI script this session ran via plain `docker
+exec moodle-stack_moodle_1 php ...` — i.e. **as root**, since `docker
+exec` defaults to the container's root user. Apache/PHP actually runs as
+`daemon` (uid 1). `cachestore_file`'s own internal file-locking directory
+(`<moodledata>/cache/cachestore_file/default_application/filelocks/`,
+plus assorted `core_coursehiddengroups`/`core_questiondata`/etc. cache
+entries) got created **owned by root** by those scripts. When the real
+site admin's browser session (running as `daemon`) later tried to
+`fopen()` those same lock files to acquire the lock Moodle requires
+before rebuilding `core/coursemodinfo` (`requirelockingbeforewrite`),
+`fopen()` failed with permission denied → Moodle's cache layer reports
+this generically as "unable to acquire a lock". Confirmed by direct
+reproduction: `get_fast_modinfo()` failed 100% of the time, only for the
+courses/questions this session's root-run scripts had touched (all
+Functions 7.1–7.10 courses); pre-existing courses (2, 3, 19, 20) were
+unaffected. A first purge attempt (`cache_helper::purge_all()`) made it
+*worse* — because I ran that purge as root too, so the freshly
+regenerated lock files were **also** root-owned, extending the problem
+from one course to ten.
+
+Note: this is a plain Unix file-ownership issue, **not** related to the
+"cachelock_file_default → mysql_lock_factory" resolution documented
+elsewhere in Moodle's `\core\lock` subsystem (that subsystem is for
+cron/session locks; `cachestore_file` has its own separate, private
+file-locking implementation that this incident actually involves).
+
+**Fix applied (no Moodle core file touched):**
+1. Backup: full `mysqldump` before any change
+   (`local-data/moodle-backups/moodle_pre_cachefix_20260826.sql.gz`).
+2. `chown -R daemon:daemon /bitnami/moodledata` on the container (143
+   root-owned files/dirs fixed to match the ownership of everything else
+   in that tree — metadata-only, no data touched).
+3. `cache_helper::purge_all()` re-run correctly this time, as `daemon`
+   (`docker exec -u daemon ...`), so regenerated caches are owned right.
+4. **Going forward: every Moodle CLI script on this server must be run as
+   `docker exec -u daemon moodle-stack_moodle_1 php ...`, never as plain
+   root**, to prevent recreating this exact issue. Noting this prominently
+   since it applies to any future session touching this Moodle instance.
+
+**Verification (read-only, as `daemon` — matches the real admin
+workflow):**
+
+| Check | Result |
+|---|---|
+| `/admin/search.php` (capability + `admin_get_root()`) | PASS |
+| Course list loads (12 KOST-DGR-% courses) | PASS |
+| Function 7.1 course opens | PASS |
+| Function 7.2 course opens | PASS |
+| All 10 Function courses (`get_fast_modinfo`, fresh process each) | PASS |
+| Question Bank — system-context `KOST DGR — PRODUCTION` tree (11 cats: parent + 10 Fonction 7.X) | PASS |
+| Individual question opens (`Q-7.2-001` via `question_bank::load_question()`) | PASS |
+| Exam/attempt review path (existing Function 7.1 pilot attempt, read-only) | PASS |
+| Candidate exam flow intact (`test_candidate`, 35 pre-existing finished attempts, none touched) | PASS |
+| Console sync (92 function-tagged production questions, unchanged) | PASS |
+
+Nothing in `mdl_question`, `mdl_quiz_attempts`, `mdl_grade_grades`, course
+content, or candidate results was read-write touched by this fix — only
+filesystem ownership metadata and derived (safely-regenerable) cache
+content.
+
+**Visible navigation for tomorrow (unchanged by this fix, confirmed
+live-readable):**
+
+```
+Site Administration → (Question bank is per-course in the Moodle UI, but
+this bank lives at SYSTEM context, so the fastest reliable path is via
+any course's own Question bank screen, which can browse "the entire
+question bank" the admin has access to)
+  → open any course (e.g. one of the Function 7.X courses, or Site home)
+  → Question bank → Categories → find "KOST DGR — PRODUCTION"
+      → expand → "Fonction 7.1" … "Fonction 7.10"
+  → click a category → question list appears → click a question name to open it
+```
+
+Each Function's own course (`KOST DGR — Fonction 7.X`) also has its own
+quiz ("DGR — Fonction 7.X — Production…") which is the fastest way to
+show one function's exam specifically without navigating the full
+system-context tree.
+
 Scope: make banks 7.1→7.10 usable in Moodle as ten independent
 per-function exams, per the mission brief. This file is the Step-1
 documentation the brief requires before any write action, plus the

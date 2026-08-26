@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listFunctions } from "@/lib/functions";
 import { listQuestionsByFunction, countAdmissibleQuestions } from "@/lib/questions";
@@ -55,7 +56,14 @@ export default async function QuestionBankPage() {
                         {q.stem}
                       </p>
                     </div>
-                    <StatusBadge status={STATUS_BADGE[q.source_status] ?? "neutral"}>{q.source_status}</StatusBadge>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <StatusBadge status={STATUS_BADGE[q.source_status] ?? "neutral"}>{q.source_status}</StatusBadge>
+                      {canWrite && (
+                        <Link href={`/question-bank/${q.id}/edit`} className="text-[12px] font-medium text-accent-9 hover:underline">
+                          Modifier
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

@@ -148,6 +148,36 @@ export function createQuestion(params: {
   return questionId;
 }
 
+/** Nouvelle version d'une question EXISTANTE — jamais un UPDATE sur une
+ * version déjà créée (§4 de la mission : append-only). Un examen déjà
+ * publié référence des `assessment_question_snapshots` figés au moment de
+ * sa publication ; ils pointent vers l'ancien `version_id` et ne sont
+ * jamais réécrits ici — c'est précisément ce qui garantit qu'éditer une
+ * question après publication d'un examen ne modifie jamais rétroactivement
+ * ce que le candidat a réellement reçu. */
+export function addQuestionVersion(
+  questionId: number,
+  params: { stem: string; choices: Choice[]; correctAnswer: string[]; explanation?: string },
+  editedBy: number
+): number {
+  const db = getDb();
+  const current = db.prepare(`SELECT MAX(version_no) AS maxVersion FROM question_versions WHERE question_id = ?`).get(questionId) as { maxVersion: number | null };
+  const nextVersion = (current.maxVersion ?? 0) + 1;
+  const result = db
+    .prepare(
+      `INSERT INTO question_versions (question_id, version_no, stem, choices_json, correct_answer, explanation, created_by)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(questionId, nextVersion, params.stem, JSON.stringify(params.choices), JSON.stringify(params.correctAnswer), params.explanation ?? null, editedBy);
+  const versionId = Number(result.lastInsertRowid);
+  db.prepare(`UPDATE questions SET current_version_id = ?, updated_at = ? WHERE id = ?`).run(versionId, nowIso(), questionId);
+  return versionId;
+}
+
+export function getQuestionById(id: number): QuestionRow | undefined {
+  return getDb().prepare(`SELECT * FROM questions WHERE id = ?`).get(id) as QuestionRow | undefined;
+}
+
 export function functionLabel(code: string): string {
   const row = getDb().prepare(`SELECT label FROM functions WHERE code = ?`).get(code) as { label: string } | undefined;
   return row?.label ?? code;

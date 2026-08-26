@@ -48,6 +48,16 @@ export function ExamRunner({
   const [submitting, startSubmit] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const autoSubmitFired = useRef(false);
+  // La sauvegarde d'une réponse est déclenchée en "fire-and-forget" depuis
+  // toggleChoice() (réactivité perçue — l'UI se met à jour instantanément,
+  // sans attendre l'aller-retour serveur). Sans ce suivi, un clic sur
+  // "Terminer" juste après avoir coché la dernière réponse pouvait
+  // atteindre le serveur AVANT que cette réponse n'ait fini d'être
+  // enregistrée — la soumission comptait alors cette question comme "non
+  // répondue". On garde ici la promesse de chaque sauvegarde en cours pour
+  // les attendre TOUTES avant de soumettre, sans jamais ralentir la
+  // navigation "Suivante"/"Précédente" (qui n'a pas besoin d'attendre).
+  const pendingSaves = useRef<Promise<unknown>[]>([]);
 
   const current = questions[index]!;
 
@@ -55,6 +65,7 @@ export function ExamRunner({
     if (autoSubmitFired.current) return;
     autoSubmitFired.current = true;
     startSubmit(async () => {
+      await Promise.allSettled(pendingSaves.current);
       const res = await submitAttemptAction(attemptId);
       if (!res.ok && res.error) setError(res.error);
       router.push(`/mes-resultats?justSubmitted=${assessmentId}`);
@@ -94,12 +105,13 @@ export function ExamRunner({
         updated = [key];
       }
       next[index] = { ...q, answer: updated };
-      saveAnswerAction(attemptId, q.attempt_question_id, updated).then((res) => {
+      const save = saveAnswerAction(attemptId, q.attempt_question_id, updated).then((res) => {
         if (!res.ok && res.error) {
           setError(res.error);
           if (res.expired) router.push(`/mes-resultats?justSubmitted=${assessmentId}`);
         }
       });
+      pendingSaves.current.push(save);
       return next;
     });
   }

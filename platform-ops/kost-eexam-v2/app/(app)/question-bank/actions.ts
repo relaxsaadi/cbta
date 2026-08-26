@@ -1,8 +1,9 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createQuestion, type SourceStatus, type QType } from "@/lib/questions";
+import { createQuestion, addQuestionVersion, type SourceStatus, type QType } from "@/lib/questions";
 
 export interface CreateQuestionResult {
   error?: string;
@@ -53,4 +54,33 @@ export async function createQuestionAction(_prev: CreateQuestionResult, formData
 
   revalidatePath("/question-bank");
   return { success: `Question ${kostQuestionId} créée.` };
+}
+
+export interface EditQuestionResult {
+  error?: string;
+}
+
+/** Crée une NOUVELLE version (jamais un UPDATE de l'ancienne, §4) — un
+ * examen déjà publié référence le snapshot pris à sa publication, qui
+ * pointe vers l'ancien version_id et reste donc inchangé après cet appel.
+ * Réservé à l'administrateur (pas le responsable pédagogique) : modifier
+ * une question déjà en banque est plus sensible que la simple saisie
+ * initiale contrôlée. */
+export async function editQuestionAction(questionId: number, _prev: EditQuestionResult, formData: FormData): Promise<EditQuestionResult> {
+  const session = await requireWriteRole("administrator");
+
+  const stem = String(formData.get("stem") ?? "").trim();
+  const explanation = String(formData.get("explanation") ?? "").trim() || undefined;
+  const choiceTexts = formData.getAll("choiceText").map(String);
+  const correctIndexes = formData.getAll("correct").map(String);
+
+  if (!stem) return { error: "Le texte de la question est obligatoire." };
+  const choices = choiceTexts.filter((t) => t.trim().length > 0).map((text, i) => ({ key: String.fromCharCode(65 + i), text: text.trim() }));
+  if (choices.length < 2) return { error: "Au moins 2 choix de réponse sont requis." };
+  const correctKeys = correctIndexes.map((i) => String.fromCharCode(65 + Number(i)));
+  if (correctKeys.length === 0) return { error: "Sélectionnez au moins une bonne réponse." };
+
+  addQuestionVersion(questionId, { stem, choices, correctAnswer: correctKeys, explanation }, session.userId);
+  revalidatePath("/question-bank");
+  redirect("/question-bank");
 }

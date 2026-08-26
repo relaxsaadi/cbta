@@ -45,8 +45,13 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+# Le dossier lib/ complet (pas seulement schema.sql) : les scripts CLI
+# (migrate/seed-demo/backup/restore-test) importent lib/*.ts directement à
+# l'exécution via tsx — l'app Next.js elle-même n'en a pas besoin (déjà
+# bundlé dans .next/), mais les scripts, si.
 COPY --from=builder /app/scripts ./scripts
-COPY --from=builder /app/lib/schema.sql ./lib/schema.sql
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 # Volume monté en production pour le fichier SQLite + les sauvegardes —
 # jamais dans l'image elle-même (données candidats hors du conteneur

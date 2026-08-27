@@ -81,8 +81,15 @@ export function revokeAllSessionsForUser(userId: number, revokedBy: number, exce
   return rows.length;
 }
 
-export function listActiveSessions(): (SessionRow & { username: string; full_name: string; role: string | null })[] {
+/** Frontière multi-client (lib/tenant-scope.ts) — `restrictToUserIdsOrNull`
+ * vient de scopedUserIdsForSessionsOrNull(session), jamais d'un paramètre
+ * client. null = pas de restriction (administrator/auditor). */
+export function listActiveSessions(
+  restrictToUserIdsOrNull: number[] | null = null
+): (SessionRow & { username: string; full_name: string; role: string | null })[] {
   const db = getDb();
+  if (restrictToUserIdsOrNull !== null && restrictToUserIdsOrNull.length === 0) return [];
+  const scopeClause = restrictToUserIdsOrNull !== null ? `AND s.user_id IN (${restrictToUserIdsOrNull.map(() => "?").join(",")})` : "";
   return db
     .prepare(
       `SELECT s.*, u.username, u.full_name,
@@ -90,9 +97,10 @@ export function listActiveSessions(): (SessionRow & { username: string; full_nam
        FROM sessions s
        JOIN users u ON u.id = s.user_id
        WHERE s.revoked_at IS NULL AND s.expires_at > ?
+       ${scopeClause}
        ORDER BY s.last_seen_at DESC`
     )
-    .all(nowIso()) as unknown as (SessionRow & { username: string; full_name: string; role: string | null })[];
+    .all(nowIso(), ...(restrictToUserIdsOrNull ?? [])) as unknown as (SessionRow & { username: string; full_name: string; role: string | null })[];
 }
 
 export function listSessionsForUser(userId: number): SessionRow[] {

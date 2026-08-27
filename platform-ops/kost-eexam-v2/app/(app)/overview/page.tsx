@@ -1,8 +1,9 @@
 import { guardPage } from "@/lib/rbac";
-import { listCompanies } from "@/lib/companies";
-import { listGroups } from "@/lib/groups";
-import { listAssessments } from "@/lib/assessments";
+import { listCompanies, listCompaniesForManager } from "@/lib/companies";
+import { listGroups, listGroupsForManager } from "@/lib/groups";
+import { listAssessments, listAssessmentsForManager } from "@/lib/assessments";
 import { listIncidents } from "@/lib/incidents";
+import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { Building2, Users2, BookOpenCheck, AlertTriangle, CheckCircle2 } from "lucide-react";
@@ -26,11 +27,16 @@ function Kpi({ label, value, icon: Icon }: { label: string; value: string | numb
 export default async function OverviewPage() {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
 
-  const companies = listCompanies();
-  const groups = listGroups();
-  const assessments = listAssessments();
+  // Frontière multi-client (lib/tenant-scope.ts) : chaque KPI et chaque
+  // liste de ce tableau de bord doit refléter le périmètre réel du
+  // responsable connecté, jamais des compteurs globaux qui révéleraient
+  // l'existence/l'échelle d'un autre client.
+  const isManager = session.role === "pedagogical_manager";
+  const companies = isManager ? listCompaniesForManager(session.userId) : listCompanies();
+  const groups = isManager ? listGroupsForManager(session.userId) : listGroups();
+  const assessments = isManager ? listAssessmentsForManager(session.userId) : listAssessments();
   const openAssessments = assessments.filter((a) => a.status === "published" || a.status === "open");
-  const incidents = listIncidents().filter((i) => i.status !== "closed" && i.status !== "resolved");
+  const incidents = listIncidents(scopedGroupIdsOrNull(session)).filter((i) => i.status !== "closed" && i.status !== "resolved");
 
   return (
     <div className="flex flex-col gap-6">

@@ -110,6 +110,43 @@ export function hasAttemptAccess(session: ScopeSession, attemptId: number): bool
     .get(attemptId, session.userId);
 }
 
+/** Un incident SANS group_id est un incident PLATEFORME (panne, cyberattaque
+ * globale…) — visible de tous les rôles habilités, jamais restreint. Un
+ * incident AVEC group_id est propre à un client, visible seulement du
+ * responsable qui gère ce groupe (ou administrator/auditor). */
+export function hasIncidentAccess(session: ScopeSession, incidentId: number): boolean {
+  if (session.role !== "pedagogical_manager") return true;
+  const row = getDb().prepare(`SELECT group_id FROM incidents WHERE id = ?`).get(incidentId) as { group_id: number | null } | undefined;
+  if (!row) return false;
+  if (row.group_id === null) return true; // incident plateforme
+  return hasGroupAccess(session, row.group_id);
+}
+
+/** Candidats membres d'au moins un groupe géré par ce responsable — base
+ * du périmètre pour les sessions actives (lib/sessions-registry.ts). */
+export function getManagedCandidateUserIds(userId: number): number[] {
+  return (
+    getDb()
+      .prepare(
+        `SELECT DISTINCT gm.candidate_user_id AS id
+         FROM group_members gm
+         JOIN groups g ON g.id = gm.group_id
+         WHERE g.pedagogical_manager_id = ?`
+      )
+      .all(userId) as { id: number }[]
+  ).map((r) => r.id);
+}
+
+/** null = aucune restriction (administrator/auditor) ; sinon la liste des
+ * user_id visibles pour ce responsable sur une liste de type "sessions
+ * actives" — lui-même PLUS les candidats de ses groupes. Jamais les
+ * autres responsables/administrateurs/auditeurs (leur simple présence en
+ * ligne est elle-même une information à ne pas exposer hors périmètre). */
+export function scopedUserIdsForSessionsOrNull(session: ScopeSession): number[] | null {
+  if (session.role !== "pedagogical_manager") return null;
+  return [session.userId, ...getManagedCandidateUserIds(session.userId)];
+}
+
 /** Pour les Server Actions (mutations) — lève plutôt que de retourner un
  * booléen, cohérent avec requireWriteRole(). */
 export function assertAccess(ok: boolean, message?: string): void {

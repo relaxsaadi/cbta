@@ -18,11 +18,35 @@ const FUNCTIONS: Array<{ code: string; label: string }> = Array.from({ length: 1
   label: `Fonction 7.${i + 1}`,
 }));
 
+// `CREATE TABLE IF NOT EXISTS` (lib/schema.sql) n'ajoute jamais une
+// colonne à une table DÉJÀ existante — nécessaire sur staging/production
+// où la table `incidents` porte déjà des lignes réelles. `ALTER TABLE ...
+// ADD COLUMN` n'a pas de variante idempotente native en SQLite ; on
+// vérifie donc via PRAGMA table_info avant d'exécuter, pour que ce script
+// reste rejouable sans erreur sur une base déjà migrée (même garantie
+// d'idempotence que le reste de ce fichier — §28, aucune migration
+// destructive).
+const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = [
+  { table: "incidents", column: "group_id", ddl: "ALTER TABLE incidents ADD COLUMN group_id INTEGER REFERENCES groups(id)" },
+];
+
+function applyAdditiveColumns(db: ReturnType<typeof getDb>) {
+  for (const { table, column, ddl } of ADDITIVE_COLUMNS) {
+    const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
+    if (cols.some((c) => c.name === column)) continue;
+    db.exec(ddl);
+    console.log(`Colonne ajoutée : ${table}.${column}`);
+  }
+}
+
 function main() {
   const db = getDb();
   const schema = readFileSync(resolve(import.meta.dirname, "../lib/schema.sql"), "utf-8");
   db.exec(schema);
   console.log("Schéma appliqué.");
+
+  applyAdditiveColumns(db);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_incidents_group ON incidents(group_id)`);
 
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"

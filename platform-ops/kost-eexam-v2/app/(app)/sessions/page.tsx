@@ -1,5 +1,6 @@
 import { guardPage } from "@/lib/rbac";
 import { listActiveSessions } from "@/lib/sessions-registry";
+import { scopedUserIdsForSessionsOrNull } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KeySquare } from "lucide-react";
@@ -7,7 +8,11 @@ import { revokeSessionAction, revokeAllForUserAction } from "./actions";
 
 export default async function SessionsPage() {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
-  const sessions = listActiveSessions();
+  // Frontière multi-client (lib/tenant-scope.ts) : un responsable ne voit
+  // que sa propre session et celles des candidats de ses groupes — jamais
+  // celles d'un autre responsable/administrateur/auditeur, ni celles des
+  // candidats d'un autre client.
+  const sessions = listActiveSessions(scopedUserIdsForSessionsOrNull(session));
   const canWrite = session.role === "administrator";
 
   return (

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listIncidents } from "@/lib/incidents";
+import { listGroups, listGroupsForManager } from "@/lib/groups";
+import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -16,7 +18,12 @@ const SEVERITY_BADGE: Record<string, "verified" | "warning" | "critical" | "neut
 
 export default async function IncidentsPage() {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
-  const incidents = listIncidents();
+  // Frontière multi-client (lib/tenant-scope.ts) : un responsable ne voit
+  // que les incidents plateforme (group_id NULL) et ceux de ses propres
+  // groupes — jamais ceux d'un autre client.
+  const isManager = session.role === "pedagogical_manager";
+  const incidents = listIncidents(scopedGroupIdsOrNull(session));
+  const groupsForForm = isManager ? listGroupsForManager(session.userId) : listGroups();
   const canWrite = session.role !== "auditor";
 
   return (
@@ -26,7 +33,7 @@ export default async function IncidentsPage() {
       {canWrite && (
         <Card>
           <CardHeader title="Déclarer un incident" />
-          <DeclareIncidentForm />
+          <DeclareIncidentForm groups={groupsForForm} groupRequired={isManager} />
         </Card>
       )}
 

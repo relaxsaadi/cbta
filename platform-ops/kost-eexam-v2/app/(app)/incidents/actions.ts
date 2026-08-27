@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
+import { hasGroupAccess } from "@/lib/tenant-scope";
 import {
   declareIncident,
   actionSuspendAccount,
@@ -29,10 +30,22 @@ export async function declareIncidentAction(_prev: DeclareIncidentResult, formDa
   const description = String(formData.get("description") ?? "").trim();
   const systemConcerned = String(formData.get("systemConcerned") ?? "").trim() || undefined;
   const peopleConcerned = String(formData.get("peopleConcerned") ?? "").trim() || undefined;
+  const groupIdRaw = String(formData.get("groupId") ?? "").trim();
+  const groupId = groupIdRaw ? Number(groupIdRaw) : undefined;
 
   if (!type || !description) return { error: "Type et description sont obligatoires." };
+  // Frontière multi-client (lib/tenant-scope.ts) — un responsable ne peut
+  // déclarer un incident QUE pour un de ses propres groupes, jamais un
+  // incident "plateforme" (classification réservée à administrator) ni le
+  // groupe d'un autre client (même en forgeant l'id dans la requête).
+  if (session.role === "pedagogical_manager") {
+    if (!groupId) return { error: "Le client/groupe concerné est obligatoire pour un responsable pédagogique." };
+    if (!hasGroupAccess(session, groupId)) return { error: "Ce groupe n'est pas dans votre périmètre." };
+  } else if (groupId && !hasGroupAccess(session, groupId)) {
+    return { error: "Groupe introuvable." };
+  }
 
-  const id = declareIncident({ type, severity, description, systemConcerned, peopleConcerned, createdBy: session.userId, createdByRole: session.role });
+  const id = declareIncident({ type, severity, description, systemConcerned, peopleConcerned, groupId, createdBy: session.userId, createdByRole: session.role });
   revalidatePath("/incidents");
   redirect(`/incidents/${id}`);
 }

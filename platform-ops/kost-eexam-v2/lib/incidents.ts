@@ -28,13 +28,28 @@ export interface IncidentRow {
   system_concerned: string | null;
   people_concerned: string | null;
   responsible_user_id: number | null;
+  group_id: number | null;
   status: IncidentStatus;
   created_by: number | null;
   created_at: string;
 }
 
-export function listIncidents(): IncidentRow[] {
-  return getDb().prepare(`SELECT * FROM incidents ORDER BY created_at DESC`).all() as unknown as IncidentRow[];
+/** Frontière multi-client (lib/tenant-scope.ts) — `restrictToGroupIdsOrNull`
+ * vient de la session serveur, jamais d'un paramètre client. `null` = pas
+ * de restriction (administrator/auditor). Un tableau (même vide) filtre
+ * aux incidents PLATEFORME (group_id NULL, visibles de tous) UNIS aux
+ * incidents des groupes listés — jamais les incidents d'un autre client. */
+export function listIncidents(restrictToGroupIdsOrNull: number[] | null = null): IncidentRow[] {
+  if (restrictToGroupIdsOrNull === null) {
+    return getDb().prepare(`SELECT * FROM incidents ORDER BY created_at DESC`).all() as unknown as IncidentRow[];
+  }
+  if (restrictToGroupIdsOrNull.length === 0) {
+    return getDb().prepare(`SELECT * FROM incidents WHERE group_id IS NULL ORDER BY created_at DESC`).all() as unknown as IncidentRow[];
+  }
+  const placeholders = restrictToGroupIdsOrNull.map(() => "?").join(",");
+  return getDb()
+    .prepare(`SELECT * FROM incidents WHERE group_id IS NULL OR group_id IN (${placeholders}) ORDER BY created_at DESC`)
+    .all(...restrictToGroupIdsOrNull) as unknown as IncidentRow[];
 }
 
 export function getIncident(id: number): IncidentRow | undefined {
@@ -48,17 +63,27 @@ export function declareIncident(params: {
   systemConcerned?: string;
   peopleConcerned?: string;
   responsibleUserId?: number;
+  groupId?: number;
   createdBy: number;
   createdByRole: ConsoleRole;
 }): number {
   const result = getDb()
     .prepare(
-      `INSERT INTO incidents (type, severity, description, system_concerned, people_concerned, responsible_user_id, created_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO incidents (type, severity, description, system_concerned, people_concerned, responsible_user_id, group_id, created_by)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
-    .run(params.type, params.severity, params.description, params.systemConcerned ?? null, params.peopleConcerned ?? null, params.responsibleUserId ?? null, params.createdBy);
+    .run(
+      params.type,
+      params.severity,
+      params.description,
+      params.systemConcerned ?? null,
+      params.peopleConcerned ?? null,
+      params.responsibleUserId ?? null,
+      params.groupId ?? null,
+      params.createdBy
+    );
   const incidentId = Number(result.lastInsertRowid);
-  audit({ actorUserId: params.createdBy, actorRole: params.createdByRole, action: "incident_declare", targetType: "incident", targetId: incidentId, metadata: { type: params.type, severity: params.severity } });
+  audit({ actorUserId: params.createdBy, actorRole: params.createdByRole, action: "incident_declare", targetType: "incident", targetId: incidentId, metadata: { type: params.type, severity: params.severity, groupId: params.groupId ?? null } });
   return incidentId;
 }
 

@@ -254,6 +254,16 @@ CREATE TABLE IF NOT EXISTS incidents (
   system_concerned TEXT,
   people_concerned TEXT,
   responsible_user_id INTEGER REFERENCES users(id),
+  -- NULL = incident plateforme (ex. panne serveur, cyberattaque globale) —
+  -- visible de tous les rôles habilités aux incidents. Non-NULL = incident
+  -- propre à un client/groupe — voir lib/tenant-scope.ts hasIncidentAccess().
+  -- Pas d'index CREATE ici (contrairement aux autres tables de ce fichier) :
+  -- sur une base DÉJÀ existante (staging/production), ce fichier s'exécute
+  -- AVANT que scripts/migrate.ts n'ajoute réellement la colonne group_id
+  -- (ALTER TABLE, une table CREATE TABLE IF NOT EXISTS existante n'est
+  -- jamais modifiée) — indexer une colonne pas encore créée échouerait.
+  -- L'index est créé par migrate.ts, après coup, une fois la colonne garantie.
+  group_id INTEGER REFERENCES groups(id),
   status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open','investigating','resolved','closed')),
   created_by INTEGER REFERENCES users(id),
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))

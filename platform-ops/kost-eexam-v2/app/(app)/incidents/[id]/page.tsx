@@ -3,6 +3,7 @@ import { guardPage } from "@/lib/rbac";
 import { getIncident, listIncidentActions } from "@/lib/incidents";
 import { listUsersByRole } from "@/lib/users";
 import { listAssessments } from "@/lib/assessments";
+import { hasIncidentAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import {
@@ -25,7 +26,9 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
   const { id } = await params;
   const incidentId = Number(id);
   const incident = getIncident(incidentId);
-  if (!incident) notFound();
+  // Voir lib/tenant-scope.ts : introuvable, pas "refusé", pour un incident
+  // hors périmètre (incident plateforme, group_id NULL, reste visible).
+  if (!incident || !hasIncidentAccess(session, incidentId)) notFound();
   const actions = listIncidentActions(incidentId) as { id: number; action_type: string; target_type: string | null; target_id: number | null; detail: string | null; created_at: string; actor_user_id: number }[];
   const isAdmin = session.role === "administrator";
 

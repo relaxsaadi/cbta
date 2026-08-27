@@ -92,6 +92,13 @@ test.describe("Attributs du cookie de session — défense CSRF/XSS de base", ()
     expect(sessionCookie, "le cookie de session doit exister après connexion").toBeTruthy();
     expect(sessionCookie!.httpOnly).toBe(true);
     expect(sessionCookie!.sameSite).toBe("Strict");
+    // `secure: true` — vérifie que COOKIE_SECURE (contournement temporaire
+    // documenté, utilisé UNIQUEMENT tant que staging tournait en HTTP nu
+    // avant l'émission du certificat réel) a bien été retiré côté serveur
+    // maintenant que le TLS réel est en place. Sans ce retrait, le cookie
+    // de session serait transmissible en clair — une régression réelle,
+    // pas cosmétique.
+    expect(sessionCookie!.secure).toBe(true);
   });
 });
 

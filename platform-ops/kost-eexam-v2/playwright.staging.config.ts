@@ -1,12 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// Suite dirigée contre le VRAI serveur de staging (déployé sur
-// 102.206.40.221, vhost nginx `staging.kostacademy.com`) — pas un serveur
-// local. `--host-resolver-rules` force Chromium à résoudre ce nom vers
-// l'IP du serveur SANS dépendre de la propagation DNS publique (en cours) :
-// le navigateur envoie exactement le même en-tête Host qu'un vrai
-// visiteur une fois le DNS propagé — ce n'est pas un contournement de
-// l'application, seulement de la résolution de nom pour ce test.
+// Suite dirigée contre le VRAI serveur de staging (102.206.40.221, vhost
+// nginx `staging.kostacademy.com`) — pas un serveur local. Le DNS public
+// résout désormais réellement ce nom (certificat Let's Encrypt réel émis,
+// COOKIE_SECURE=false retiré — les cookies redeviennent Secure par défaut,
+// donc HTTPS est requis pour que la session fonctionne). `--host-resolver-
+// rules` reste présent par robustesse (aucun risque de retomber sur une
+// résolution DNS différente entre deux exécutions) mais n'est plus la seule
+// voie de résolution comme au moment de la propagation initiale.
 export default defineConfig({
   testDir: "./tests/staging",
   timeout: 60_000,
@@ -16,7 +17,7 @@ export default defineConfig({
   retries: 0,
   reporter: [["list"]],
   use: {
-    baseURL: "http://staging.kostacademy.com",
+    baseURL: "https://staging.kostacademy.com",
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
     launchOptions: {

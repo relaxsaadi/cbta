@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listResults } from "@/lib/results";
-import { listCompanies } from "@/lib/companies";
+import { listCompanies, listCompaniesForManager } from "@/lib/companies";
 import { listFunctions } from "@/lib/functions";
+import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -13,15 +14,21 @@ export default async function ResultsPage({
 }: {
   searchParams: Promise<{ functionCode?: string; passed?: string; companyId?: string }>;
 }) {
-  await guardPage("pedagogical_manager", "administrator", "auditor");
+  const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const sp = await searchParams;
-  const companies = listCompanies();
+  // Frontière multi-client (lib/tenant-scope.ts) : le sélecteur de client
+  // n'affiche que ceux du responsable, ET restrictToGroupIds (calculé
+  // côté serveur depuis la session, jamais depuis sp.companyId) s'applique
+  // en ET avec le filtre companyId choisi par l'utilisateur — un
+  // ?companyId=<autre client> forgé dans l'URL ne peut donc rien élargir.
+  const companies = session.role === "pedagogical_manager" ? listCompaniesForManager(session.userId) : listCompanies();
   const functions = listFunctions();
 
   const results = listResults({
     functionCode: sp.functionCode || undefined,
     passed: sp.passed === "true" ? true : sp.passed === "false" ? false : undefined,
     companyId: sp.companyId ? Number(sp.companyId) : undefined,
+    restrictToGroupIds: scopedGroupIdsOrNull(session) ?? undefined,
   });
 
   const qs = new URLSearchParams();

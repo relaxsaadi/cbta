@@ -3,6 +3,7 @@ import { listResults } from "@/lib/results";
 import { toCsv, RESULTS_CSV_COLUMNS } from "@/lib/csv";
 import { getDb, nowIso } from "@/lib/db";
 import { audit } from "@/lib/audit";
+import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 
 // Export CSV des résultats (§14 de la mission, obligatoire) — colonnes
 // minimum exactement celles listées dans la mission.
@@ -10,12 +11,16 @@ export async function GET(request: Request) {
   const session = await requireRole("pedagogical_manager", "administrator", "auditor");
   const { searchParams } = new URL(request.url);
 
+  // Frontière multi-client (lib/tenant-scope.ts) — voir le même
+  // commentaire dans export-answers/route.ts : restrictToGroupIds vient de
+  // la session, jamais de la query string.
   const results = listResults({
     companyId: searchParams.get("companyId") ? Number(searchParams.get("companyId")) : undefined,
     groupId: searchParams.get("groupId") ? Number(searchParams.get("groupId")) : undefined,
     functionCode: searchParams.get("functionCode") || undefined,
     assessmentId: searchParams.get("assessmentId") ? Number(searchParams.get("assessmentId")) : undefined,
     passed: searchParams.get("passed") === "true" ? true : searchParams.get("passed") === "false" ? false : undefined,
+    restrictToGroupIds: scopedGroupIdsOrNull(session) ?? undefined,
   });
 
   const rows = results.map((r) => ({

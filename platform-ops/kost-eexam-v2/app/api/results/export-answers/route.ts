@@ -3,6 +3,7 @@ import { listResults, getAttemptDetail } from "@/lib/results";
 import { toCsv, ANSWERS_CSV_COLUMNS } from "@/lib/csv";
 import { getDb, nowIso } from "@/lib/db";
 import { audit } from "@/lib/audit";
+import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 
 // Export CSV détaillé des réponses (§14 — une ligne par candidat → examen
 // → question → réponse candidat → réponse correcte → résultat → points).
@@ -10,11 +11,17 @@ export async function GET(request: Request) {
   const session = await requireRole("pedagogical_manager", "administrator", "auditor");
   const { searchParams } = new URL(request.url);
 
+  // Frontière multi-client (lib/tenant-scope.ts) — restrictToGroupIds est
+  // calculé côté serveur depuis la session, jamais depuis companyId/
+  // groupId (paramètres de la requête, donc manipulables) : un responsable
+  // qui forge ?companyId=<autre client> sur cet endpoint n'obtient rien de
+  // plus que son propre périmètre, les deux clauses s'appliquent en ET.
   const results = listResults({
     companyId: searchParams.get("companyId") ? Number(searchParams.get("companyId")) : undefined,
     groupId: searchParams.get("groupId") ? Number(searchParams.get("groupId")) : undefined,
     functionCode: searchParams.get("functionCode") || undefined,
     assessmentId: searchParams.get("assessmentId") ? Number(searchParams.get("assessmentId")) : undefined,
+    restrictToGroupIds: scopedGroupIdsOrNull(session) ?? undefined,
   });
 
   const rows: Record<string, unknown>[] = [];

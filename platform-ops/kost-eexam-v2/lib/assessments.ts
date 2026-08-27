@@ -66,6 +66,21 @@ export function getAssessment(id: number): AssessmentRow | undefined {
   return getDb().prepare(`SELECT * FROM assessments WHERE id = ?`).get(id) as AssessmentRow | undefined;
 }
 
+/** Frontière multi-client (voir lib/tenant-scope.ts) — uniquement les
+ * évaluations dont le groupe est géré par ce responsable. */
+export function listAssessmentsForManager(userId: number): (AssessmentRow & { group_name: string; company_name: string })[] {
+  return getDb()
+    .prepare(
+      `SELECT a.*, g.name AS group_name, c.name AS company_name
+       FROM assessments a
+       JOIN groups g ON g.id = a.group_id
+       JOIN companies c ON c.id = g.company_id
+       WHERE g.pedagogical_manager_id = ?
+       ORDER BY a.created_at DESC`
+    )
+    .all(userId) as unknown as (AssessmentRow & { group_name: string; company_name: string })[];
+}
+
 export function isAssessmentOpenNow(a: AssessmentRow): boolean {
   if (a.status !== "published" && a.status !== "open") return false;
   const now = Date.now();

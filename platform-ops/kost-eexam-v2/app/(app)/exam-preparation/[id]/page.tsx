@@ -5,6 +5,7 @@ import { guardPage, requireWriteRole } from "@/lib/rbac";
 import { getAssessment, trackingForAssessment, publishAssessment, suspendAssessment, reopenAssessment, closeAssessment } from "@/lib/assessments";
 import { functionLabel } from "@/lib/questions";
 import { getGroup } from "@/lib/groups";
+import { hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 
@@ -21,7 +22,9 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
   const { id } = await params;
   const assessmentId = Number(id);
   const assessment = getAssessment(assessmentId);
-  if (!assessment) notFound();
+  // Voir lib/tenant-scope.ts : introuvable, pas "refusé", pour une
+  // évaluation hors périmètre.
+  if (!assessment || !hasAssessmentAccess(session, assessmentId)) notFound();
   const group = getGroup(assessment.group_id);
   const canWrite = session.role !== "auditor";
   const tracking = trackingForAssessment(assessmentId) as {
@@ -37,24 +40,28 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
   async function doPublish() {
     "use server";
     const s = await requireWriteRole("pedagogical_manager", "administrator");
+    assertAccess(hasAssessmentAccess(s, assessmentId));
     publishAssessment(assessmentId, s.userId);
     revalidatePath(`/exam-preparation/${assessmentId}`);
   }
   async function doSuspend() {
     "use server";
     const s = await requireWriteRole("pedagogical_manager", "administrator");
+    assertAccess(hasAssessmentAccess(s, assessmentId));
     suspendAssessment(assessmentId, s.userId, "Suspension manuelle depuis la fiche évaluation");
     revalidatePath(`/exam-preparation/${assessmentId}`);
   }
   async function doReopen() {
     "use server";
     const s = await requireWriteRole("pedagogical_manager", "administrator");
+    assertAccess(hasAssessmentAccess(s, assessmentId));
     reopenAssessment(assessmentId, s.userId);
     revalidatePath(`/exam-preparation/${assessmentId}`);
   }
   async function doClose() {
     "use server";
     const s = await requireWriteRole("pedagogical_manager", "administrator");
+    assertAccess(hasAssessmentAccess(s, assessmentId));
     closeAssessment(assessmentId, s.userId);
     revalidatePath(`/exam-preparation/${assessmentId}`);
   }

@@ -9,6 +9,14 @@ export interface ResultsFilter {
   candidateUserId?: number;
   passed?: boolean;
   scopes?: Scope[];
+  /** Frontière multi-client (lib/tenant-scope.ts) — calculée côté serveur
+   * à partir de la session, JAMAIS depuis un paramètre fourni par le
+   * client (contrairement à companyId/groupId ci-dessus, qui restent des
+   * filtres d'AFFICHAGE). Un responsable pédagogique qui passe
+   * ?companyId=<autre client> dans l'URL ou l'appel API ne doit voir
+   * rien de plus que sa propre restriction — les deux clauses
+   * s'appliquent en ET, pas en OU. */
+  restrictToGroupIds?: number[];
 }
 
 export interface ResultsRow {
@@ -52,9 +60,20 @@ const BASE_QUERY = `
 `;
 
 export function listResults(filter: ResultsFilter = {}): ResultsRow[] {
+  // Court-circuit explicite : un responsable qui ne gère AUCUN groupe ne
+  // doit déclencher aucune requête "sans restriction" — un tableau vide
+  // dans `IN (...)` est un piège SQL classique (syntaxe invalide, ou pire,
+  // parfois silencieusement interprété comme "tout" selon le moteur). On
+  // renvoie [] immédiatement plutôt que de laisser la clause se construire.
+  if (filter.restrictToGroupIds && filter.restrictToGroupIds.length === 0) return [];
+
   const clauses: string[] = [];
   const params: (string | number)[] = [];
 
+  if (filter.restrictToGroupIds && filter.restrictToGroupIds.length > 0) {
+    clauses.push(`g.id IN (${filter.restrictToGroupIds.map(() => "?").join(",")})`);
+    params.push(...filter.restrictToGroupIds);
+  }
   if (filter.companyId) {
     clauses.push("c.id = ?");
     params.push(filter.companyId);

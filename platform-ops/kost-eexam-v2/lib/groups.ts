@@ -35,6 +35,20 @@ export function getGroup(id: number): (GroupRow & { company_name: string }) | un
     .get(id) as (GroupRow & { company_name: string }) | undefined;
 }
 
+/** Frontière multi-client (voir lib/tenant-scope.ts) — uniquement les
+ * groupes que ce responsable gère (pedagogical_manager_id = son id). */
+export function listGroupsForManager(userId: number): (GroupRow & { company_name: string; member_count: number })[] {
+  return getDb()
+    .prepare(
+      `SELECT g.*, c.name AS company_name,
+              (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) AS member_count
+       FROM groups g JOIN companies c ON c.id = g.company_id
+       WHERE g.pedagogical_manager_id = ?
+       ORDER BY g.created_at DESC`
+    )
+    .all(userId) as unknown as (GroupRow & { company_name: string; member_count: number })[];
+}
+
 export function createGroup(params: {
   companyId: number;
   name: string;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
-import { listCompanies, companyGroupCount } from "@/lib/companies";
+import { listCompanies, listCompaniesForManager, companyGroupCount } from "@/lib/companies";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -10,7 +10,10 @@ import { CreateCompanyForm } from "./CreateCompanyForm";
 
 export default async function CompaniesPage() {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
-  const companies = listCompanies();
+  // Frontière multi-client (lib/tenant-scope.ts) : un responsable
+  // pédagogique ne voit que les clients qu'il gère, jamais la liste
+  // globale — administrateur et auditeur gardent la vue complète.
+  const companies = session.role === "pedagogical_manager" ? listCompaniesForManager(session.userId) : listCompanies();
   const canWrite = session.role !== "auditor";
 
   return (

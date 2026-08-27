@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
 import { createAssessmentDraft, publishAssessment, suspendAssessment, reopenAssessment, closeAssessment, type AssessmentType, type FeedbackMode } from "@/lib/assessments";
+import { hasGroupAccess, hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
 import type { Scope } from "@/lib/scope";
 
 export interface CreateAssessmentResult {
@@ -33,6 +34,10 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
   if (!name || !functionCode || !groupId || !questionCount || !durationMinutes) {
     return { error: "Merci de compléter tous les champs obligatoires." };
   }
+  // Frontière multi-client (lib/tenant-scope.ts) — sans ce contrôle, un
+  // responsable pourrait créer une évaluation pour le groupe d'un autre
+  // client en forgeant groupId dans la requête.
+  if (!hasGroupAccess(session, groupId)) return { error: "Ce groupe n'est pas dans votre périmètre." };
 
   let assessmentId: number;
   try {
@@ -66,6 +71,7 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
 
 export async function publishAssessmentAction(assessmentId: number) {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
   try {
     publishAssessment(assessmentId, session.userId);
   } catch (err) {
@@ -77,18 +83,21 @@ export async function publishAssessmentAction(assessmentId: number) {
 
 export async function suspendAssessmentAction(assessmentId: number, reason: string) {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
   suspendAssessment(assessmentId, session.userId, reason);
   revalidatePath(`/exam-preparation/${assessmentId}`);
 }
 
 export async function reopenAssessmentAction(assessmentId: number) {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
   reopenAssessment(assessmentId, session.userId);
   revalidatePath(`/exam-preparation/${assessmentId}`);
 }
 
 export async function closeAssessmentAction(assessmentId: number) {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
   closeAssessment(assessmentId, session.userId);
   revalidatePath(`/exam-preparation/${assessmentId}`);
 }

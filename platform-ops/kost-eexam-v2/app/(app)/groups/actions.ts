@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
 import { createGroup, addCandidateToGroup, removeCandidateFromGroup } from "@/lib/groups";
 import { createUser, findUserByUsername } from "@/lib/users";
+import { hasCompanyAccess, hasGroupAccess } from "@/lib/tenant-scope";
 import type { Scope } from "@/lib/scope";
 
 export interface CreateGroupResult {
@@ -21,6 +22,11 @@ export async function createGroupAction(_prev: CreateGroupResult, formData: Form
   const dateEnd = String(formData.get("dateEnd") ?? "") || undefined;
 
   if (!companyId || !name) return { error: "Client et nom du groupe sont obligatoires." };
+  // Frontière multi-client (lib/tenant-scope.ts) — sans ce contrôle, un
+  // responsable pourrait rattacher un nouveau groupe (donc lui-même comme
+  // gestionnaire) à N'IMPORTE QUEL client existant en forgeant companyId
+  // dans la requête, y compris un client d'un autre responsable.
+  if (!hasCompanyAccess(session, companyId)) return { error: "Ce client n'est pas dans votre périmètre." };
 
   const groupId = createGroup({
     companyId,
@@ -47,6 +53,7 @@ export interface AddCandidateResult {
  * séparée de gestion globale des comptes candidats (hors périmètre MVP). */
 export async function addCandidateAction(groupId: number, _prev: AddCandidateResult, formData: FormData): Promise<AddCandidateResult> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
+  if (!hasGroupAccess(session, groupId)) return { error: "Ce groupe n'est pas dans votre périmètre." };
   const fullName = String(formData.get("fullName") ?? "").trim();
   const username = String(formData.get("username") ?? "").trim();
   const password = String(formData.get("password") ?? "");
@@ -64,7 +71,8 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
 }
 
 export async function removeCandidateAction(groupId: number, candidateUserId: number) {
-  await requireWriteRole("pedagogical_manager", "administrator");
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  if (!hasGroupAccess(session, groupId)) return;
   removeCandidateFromGroup(groupId, candidateUserId);
   revalidatePath(`/groups/${groupId}`);
 }

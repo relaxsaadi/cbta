@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
 import { getGroup, listGroupMembers, removeCandidateFromGroup } from "@/lib/groups";
 import { listAssessments } from "@/lib/assessments";
+import { hasGroupAccess, assertAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -14,7 +15,9 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { id } = await params;
   const group = getGroup(Number(id));
-  if (!group) notFound();
+  // Voir lib/tenant-scope.ts : introuvable, pas "refusé", pour un groupe
+  // hors périmètre.
+  if (!group || !hasGroupAccess(session, group.id)) notFound();
   const canWrite = session.role !== "auditor";
 
   const members = listGroupMembers(group.id);
@@ -22,7 +25,8 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
 
   async function removeCandidate(formData: FormData) {
     "use server";
-    await guardPage("pedagogical_manager", "administrator");
+    const s = await guardPage("pedagogical_manager", "administrator");
+    assertAccess(hasGroupAccess(s, group!.id));
     removeCandidateFromGroup(group!.id, Number(formData.get("candidateUserId")));
     revalidatePath(`/groups/${group!.id}`);
   }

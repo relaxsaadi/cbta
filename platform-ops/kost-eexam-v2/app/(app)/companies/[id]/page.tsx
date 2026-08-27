@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
 import { getCompany } from "@/lib/companies";
 import { listGroups } from "@/lib/groups";
+import { hasCompanyAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -10,10 +11,14 @@ import { SCOPE_LABELS, SCOPE_BADGE } from "@/lib/scope";
 import { Users2 } from "lucide-react";
 
 export default async function CompanyDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  await guardPage("pedagogical_manager", "administrator", "auditor");
+  const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { id } = await params;
   const company = getCompany(Number(id));
-  if (!company) notFound();
+  // Traité comme INTROUVABLE (pas "accès refusé") si ce client est hors du
+  // périmètre de ce responsable — voir la justification dans
+  // lib/tenant-scope.ts (ne pas confirmer l'existence d'un identifiant
+  // deviné appartenant à un autre client).
+  if (!company || !hasCompanyAccess(session, company.id)) notFound();
 
   const groups = listGroups().filter((g) => g.company_id === company.id);
 

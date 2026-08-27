@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
-import { listGroups } from "@/lib/groups";
-import { listCompanies } from "@/lib/companies";
+import { listGroups, listGroupsForManager } from "@/lib/groups";
+import { listCompanies, listCompaniesForManager } from "@/lib/companies";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -11,8 +11,13 @@ import { CreateGroupForm } from "./CreateGroupForm";
 export default async function GroupsPage({ searchParams }: { searchParams: Promise<{ companyId?: string }> }) {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { companyId } = await searchParams;
-  const groups = listGroups();
-  const companies = listCompanies();
+  // Frontière multi-client (lib/tenant-scope.ts) : liste ET le sélecteur de
+  // client du formulaire de création sont restreints pour un responsable
+  // pédagogique — il ne doit même pas voir le nom d'un client qui n'est pas
+  // le sien dans le menu déroulant.
+  const isManager = session.role === "pedagogical_manager";
+  const groups = isManager ? listGroupsForManager(session.userId) : listGroups();
+  const companies = isManager ? listCompaniesForManager(session.userId) : listCompanies();
   const canWrite = session.role !== "auditor";
 
   return (

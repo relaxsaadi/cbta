@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listFunctions } from "@/lib/functions";
-import { listGroups } from "@/lib/groups";
-import { listAssessments } from "@/lib/assessments";
+import { listGroups, listGroupsForManager } from "@/lib/groups";
+import { listAssessments, listAssessmentsForManager } from "@/lib/assessments";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -22,8 +22,14 @@ export default async function ExamPreparationPage({ searchParams }: { searchPara
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { groupId } = await searchParams;
   const functions = listFunctions();
-  const groups = listGroups().map((g) => ({ id: g.id, name: g.name, company_name: g.company_name }));
-  const assessments = listAssessments();
+  // Frontière multi-client (lib/tenant-scope.ts) : la liste d'évaluations
+  // ET le sélecteur de groupe du formulaire de création sont restreints —
+  // un responsable ne doit pas pouvoir choisir le groupe d'un autre client
+  // dans le menu déroulant, même s'il n'y voit qu'un identifiant.
+  const isManager = session.role === "pedagogical_manager";
+  const rawGroups = isManager ? listGroupsForManager(session.userId) : listGroups();
+  const groups = rawGroups.map((g) => ({ id: g.id, name: g.name, company_name: g.company_name }));
+  const assessments = isManager ? listAssessmentsForManager(session.userId) : listAssessments();
   const canWrite = session.role !== "auditor";
 
   return (

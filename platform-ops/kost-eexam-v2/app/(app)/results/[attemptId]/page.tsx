@@ -1,14 +1,19 @@
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
 import { getAttemptDetail } from "@/lib/results";
+import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export default async function AttemptDetailPage({ params }: { params: Promise<{ attemptId: string }> }) {
-  await guardPage("pedagogical_manager", "administrator", "auditor");
+  const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { attemptId } = await params;
-  const detail = getAttemptDetail(Number(attemptId));
+  const attemptIdNum = Number(attemptId);
+  // Voir lib/tenant-scope.ts : introuvable, pas "refusé", pour une
+  // tentative hors périmètre (question par question incluse — même objet).
+  if (!hasAttemptAccess(session, attemptIdNum)) notFound();
+  const detail = getAttemptDetail(attemptIdNum);
   if (!detail) notFound();
 
   return (

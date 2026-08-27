@@ -37,7 +37,8 @@ export default async function SessionReportPage({ params }: { params: Promise<{ 
   function formatDuration(startedAt: string | null, submittedAt: string | null): string {
     if (!startedAt || !submittedAt) return "—";
     const ms = new Date(submittedAt).getTime() - new Date(startedAt).getTime();
-    return `${Math.round(ms / 60000)} min`;
+    const minutes = Math.round(ms / 60000);
+    return minutes < 1 ? "< 1 min" : `${minutes} min`;
   }
 
   return (

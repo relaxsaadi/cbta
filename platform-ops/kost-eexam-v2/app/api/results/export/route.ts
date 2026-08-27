@@ -5,6 +5,16 @@ import { getDb, nowIso } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 
+// Auditor re-review fix : une tentative sous la minute affichait "0 min"
+// (arrondi trompeur) plutôt que "< 1 min" — même règle que les écrans et
+// PDF (app/(app)/results/[attemptId]/page.tsx, rapport-global,
+// lib/pdf/SessionReportDocument.tsx, lib/pdf/IndividualReportDocument.tsx).
+function formatDurationLabel(startedAt: string | null, submittedAt: string | null): string {
+  if (!startedAt || !submittedAt) return "";
+  const minutes = Math.round((new Date(submittedAt).getTime() - new Date(startedAt).getTime()) / 60000);
+  return minutes < 1 ? "< 1 min" : `${minutes} min`;
+}
+
 // Export CSV des résultats (§14 de la mission, obligatoire) — colonnes
 // minimum exactement celles listées dans la mission.
 export async function GET(request: Request) {
@@ -35,8 +45,7 @@ export async function GET(request: Request) {
     exam: r.assessment_name,
     started_at: r.started_at,
     submitted_at: r.submitted_at ?? "",
-    duration:
-      r.submitted_at && r.started_at ? `${Math.round((new Date(r.submitted_at).getTime() - new Date(r.started_at).getTime()) / 60000)} min` : "",
+    duration: formatDurationLabel(r.started_at, r.submitted_at),
     question_count: r.question_count,
     correct_count: r.correct_count,
     incorrect_count: r.incorrect_count,

@@ -11,7 +11,8 @@ function fmtTime(iso: string | null): string {
 }
 function fmtDuration(start: string | null, end: string | null): string {
   if (!start || !end) return "—";
-  return `${Math.round((new Date(end).getTime() - new Date(start).getTime()) / 60000)} min`;
+  const minutes = Math.round((new Date(end).getTime() - new Date(start).getTime()) / 60000);
+  return minutes < 1 ? "< 1 min" : `${minutes} min`;
 }
 const STATUS_LABEL: Record<string, string> = { in_progress: "En cours", submitted: "Terminé", auto_submitted: "Terminé (auto)", abandoned: "Abandonné" };
 

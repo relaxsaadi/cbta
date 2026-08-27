@@ -47,7 +47,7 @@ export function IndividualReportDocument({
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Heure fin</Text><Text style={pdfStyles.fieldValue}>{submittedAt ? submittedAt.toLocaleTimeString("fr-FR") : "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Tentative n°</Text><Text style={pdfStyles.fieldValue}>{detail.attempt_number}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Durée autorisée</Text><Text style={pdfStyles.fieldValue}>{detail.duration_minutes_allowed} min</Text></View>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Durée réelle</Text><Text style={pdfStyles.fieldValue}>{durationMin !== null ? `${durationMin} min` : "—"}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Durée réelle</Text><Text style={pdfStyles.fieldValue}>{durationMin === null ? "—" : durationMin < 1 ? "< 1 min" : `${durationMin} min`}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Nombre de questions</Text><Text style={pdfStyles.fieldValue}>{detail.question_count}</Text></View>
           </View>
         </View>

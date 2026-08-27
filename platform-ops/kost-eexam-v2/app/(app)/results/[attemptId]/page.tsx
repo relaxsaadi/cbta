@@ -11,7 +11,7 @@ function formatDuration(startedAt: string, submittedAt: string | null): string {
   if (!submittedAt) return "—";
   const ms = new Date(submittedAt).getTime() - new Date(startedAt).getTime();
   const minutes = Math.round(ms / 60000);
-  return `${minutes} min`;
+  return minutes < 1 ? "< 1 min" : `${minutes} min`;
 }
 
 export default async function AttemptDetailPage({ params }: { params: Promise<{ attemptId: string }> }) {

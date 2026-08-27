@@ -65,6 +65,12 @@ function ResultCard({ result }: { result: ResultsRow }) {
                 <span className="flex items-center gap-1"><XCircle size={12} /> Échoué</span>
               )}
             </StatusBadge>
+            <a
+              href={`/api/reports/individual/${result.attempt_id}?level=${showCorrection ? "detailed" : "simple"}`}
+              className="rounded-md border border-border-default px-2.5 py-1 text-[11.5px] font-medium text-text-secondary hover:border-border-strong"
+            >
+              PDF
+            </a>
           </div>
         )}
       </div>

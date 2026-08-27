@@ -26,9 +26,25 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-display text-[20px] font-semibold text-text-primary">Rapport individuel — Détail de la tentative</h1>
-        <p className="mt-1 text-[13px] text-text-tertiary">{detail.candidate_name} — {detail.group_name} — {detail.assessment_name}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="font-display text-[20px] font-semibold text-text-primary">Rapport individuel — Détail de la tentative</h1>
+          <p className="mt-1 text-[13px] text-text-tertiary">{detail.candidate_name} — {detail.group_name} — {detail.assessment_name}</p>
+        </div>
+        <div className="flex shrink-0 gap-2">
+          <a
+            href={`/api/reports/individual/${attemptIdNum}?level=simple`}
+            className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+          >
+            PDF simple
+          </a>
+          <a
+            href={`/api/reports/individual/${attemptIdNum}?level=detailed`}
+            className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
+          >
+            PDF détaillé
+          </a>
+        </div>
       </div>
 
       {/* IDENTITÉ — addendum §3 */}

@@ -49,15 +49,27 @@ export default async function SessionReportPage({ params }: { params: Promise<{ 
             {group?.company_name} — {group?.name} — {functionLabel(assessment.function_code)} — {assessment.name}
           </p>
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex shrink-0 flex-wrap justify-end gap-2">
           <Link href={`/exam-preparation/${assessmentId}`} className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
             Retour à l&apos;évaluation
           </Link>
           <a
+            href={`/api/results/export?assessmentId=${assessmentId}`}
+            className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+          >
+            Liste officielle CSV
+          </a>
+          <a
+            href={`/api/reports/results-list/${assessmentId}`}
+            className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+          >
+            Liste officielle PDF
+          </a>
+          <a
             href={`/api/reports/session/${assessmentId}`}
             className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
           >
-            Télécharger PDF
+            Rapport global PDF
           </a>
         </div>
       </div>

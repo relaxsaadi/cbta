@@ -5,6 +5,7 @@ import { verifyPassword } from "./passwords";
 import { createDbSession, revokeDbSession } from "./sessions-registry";
 import { audit } from "./audit";
 import { checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
+import { isNewLoginsBlocked } from "./platform-settings";
 
 export interface LoginResult {
   ok: boolean;
@@ -38,6 +39,14 @@ export async function login(username: string, password: string, meta: { ip?: str
   if (!role) {
     audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "no_role" } });
     return { ok: false, error: "Aucun rôle n'est associé à ce compte." };
+  }
+  // Addendum §9-11 — action immédiate d'incident : mode maintenance ou
+  // blocage dédié des nouvelles connexions. administrator TOUJOURS
+  // exempté (doit pouvoir se connecter pour lever le blocage) — voir
+  // lib/platform-settings.ts.
+  if (role !== "administrator" && isNewLoginsBlocked()) {
+    audit({ actorUserId: user.id, actorRole: role, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "platform_logins_blocked" } });
+    return { ok: false, error: "Connexions temporairement suspendues (maintenance en cours). Réessayez plus tard ou contactez un administrateur." };
   }
 
   resetLoginRateLimit(rateLimitKey);

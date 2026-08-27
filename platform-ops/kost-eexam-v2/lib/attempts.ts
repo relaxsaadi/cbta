@@ -2,6 +2,7 @@ import { getDb, transaction, nowIso } from "./db";
 import { audit } from "./audit";
 import { getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
 import { gradeAttempt } from "./grading";
+import { isNewAttemptsBlocked } from "./platform-settings";
 
 export type AttemptStatus = "in_progress" | "submitted" | "auto_submitted" | "abandoned";
 
@@ -81,6 +82,14 @@ export function startAttempt(
 ): AttemptRow {
   const existing = getActiveAttempt(assessmentId, candidateUserId);
   if (existing) return existing;
+
+  // Addendum §9-11 — continuité d'examen : une tentative DÉJÀ en cours
+  // (retour anticipé ci-dessus) n'est JAMAIS bloquée par cette
+  // vérification, qui ne s'applique qu'au démarrage d'une NOUVELLE
+  // tentative — voir lib/platform-settings.ts.
+  if (isNewAttemptsBlocked()) {
+    throw new AttemptError("Le démarrage de nouvelles tentatives est temporairement suspendu (maintenance en cours). Les tentatives déjà commencées ne sont pas affectées.");
+  }
 
   const assessment = getAssessment(assessmentId);
   if (!assessment) throw new AttemptError("Évaluation introuvable.");

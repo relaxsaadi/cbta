@@ -44,6 +44,50 @@ function applyAdditiveColumns(db: ReturnType<typeof getDb>) {
   }
 }
 
+// Contrairement à ADDITIVE_COLUMNS (ajout de colonne), le CHECK sur
+// incident_actions.action_type (addendum §9-11 : 6 nouvelles valeurs pour
+// le mode maintenance / blocage connexions / blocage nouvelles tentatives)
+// est figé dans la DDL de création — SQLite n'a pas d'ALTER TABLE pour
+// modifier un CHECK. Reconstruction de table (procédure officielle
+// SQLite), gardée par une lecture de sqlite_master.sql pour rester
+// idempotente et rejouable sans erreur sur une base déjà migrée.
+function migrateIncidentActionsCheckConstraint(db: ReturnType<typeof getDb>) {
+  const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'incident_actions'`).get() as { sql: string } | undefined;
+  if (!row || row.sql.includes("enable_maintenance_mode")) return; // déjà à jour (ou table pas encore créée — schema.sql vient de la créer avec le nouveau CHECK)
+
+  db.exec("PRAGMA foreign_keys = OFF");
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.exec(`
+      CREATE TABLE incident_actions_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        incident_id INTEGER NOT NULL REFERENCES incidents(id) ON DELETE CASCADE,
+        action_type TEXT NOT NULL CHECK (action_type IN
+          ('suspend_account','reactivate_account','force_logout','revoke_sessions',
+           'suspend_assessment','reopen_assessment','attach_evidence','note','corrective_measure','close',
+           'enable_maintenance_mode','disable_maintenance_mode',
+           'block_new_logins','unblock_new_logins',
+           'block_new_attempts','unblock_new_attempts')),
+        target_type TEXT,
+        target_id INTEGER,
+        actor_user_id INTEGER REFERENCES users(id),
+        detail TEXT,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+      );
+    `);
+    db.exec(`INSERT INTO incident_actions_new SELECT * FROM incident_actions;`);
+    db.exec(`DROP TABLE incident_actions;`);
+    db.exec(`ALTER TABLE incident_actions_new RENAME TO incident_actions;`);
+    db.exec("COMMIT");
+    console.log("Contrainte incident_actions.action_type élargie (mode maintenance / blocages).");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
 function main() {
   const db = getDb();
   const schema = readFileSync(resolve(import.meta.dirname, "../lib/schema.sql"), "utf-8");
@@ -52,6 +96,7 @@ function main() {
 
   applyAdditiveColumns(db);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_incidents_group ON incidents(group_id)`);
+  migrateIncidentActionsCheckConstraint(db);
 
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"

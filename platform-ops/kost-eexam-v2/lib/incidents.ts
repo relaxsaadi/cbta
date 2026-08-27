@@ -3,6 +3,7 @@ import { audit } from "./audit";
 import { setUserStatus } from "./users";
 import { revokeAllSessionsForUser } from "./sessions-registry";
 import { suspendAssessment, reopenAssessment } from "./assessments";
+import { setPlatformSetting } from "./platform-settings";
 import type { ConsoleRole } from "./session";
 
 export type IncidentSeverity = "low" | "medium" | "high" | "critical";
@@ -17,7 +18,13 @@ export type IncidentActionType =
   | "attach_evidence"
   | "note"
   | "corrective_measure"
-  | "close";
+  | "close"
+  | "enable_maintenance_mode"
+  | "disable_maintenance_mode"
+  | "block_new_logins"
+  | "unblock_new_logins"
+  | "block_new_attempts"
+  | "unblock_new_attempts";
 
 export interface IncidentRow {
   id: number;
@@ -137,6 +144,40 @@ export function actionAddNote(incidentId: number, note: string, actor: { id: num
 
 export function actionCorrectiveMeasure(incidentId: number, measure: string, actor: { id: number; role: ConsoleRole }) {
   recordAction(incidentId, "corrective_measure", actor.id, actor.role, undefined, undefined, measure);
+}
+
+// Actions plateforme (addendum §9-11 — actions immédiates) : mode
+// maintenance, blocage des connexions, blocage des nouvelles tentatives.
+// Chacune fait deux choses comme les actions ci-dessus : l'effet réel
+// (lib/platform-settings.ts, appliqué immédiatement à la prochaine requête
+// de connexion/démarrage de tentative — voir lib/auth.ts et
+// lib/attempts.ts) ET la trace (incident_actions + audit_logs).
+export function actionEnableMaintenanceMode(incidentId: number, actor: { id: number; role: ConsoleRole }) {
+  setPlatformSetting("maintenance_mode", true, actor);
+  recordAction(incidentId, "enable_maintenance_mode", actor.id, actor.role, undefined, undefined, "Nouvelles connexions et nouvelles tentatives bloquées ; tentatives en cours préservées.");
+}
+export function actionDisableMaintenanceMode(incidentId: number, actor: { id: number; role: ConsoleRole }) {
+  setPlatformSetting("maintenance_mode", false, actor);
+  recordAction(incidentId, "disable_maintenance_mode", actor.id, actor.role);
+}
+export function actionBlockNewLogins(incidentId: number, actor: { id: number; role: ConsoleRole }) {
+  setPlatformSetting("block_new_logins", true, actor);
+  recordAction(incidentId, "block_new_logins", actor.id, actor.role, undefined, undefined, "Administrateur toujours exempté (nécessaire pour lever le blocage).");
+}
+export function actionUnblockNewLogins(incidentId: number, actor: { id: number; role: ConsoleRole }) {
+  setPlatformSetting("block_new_logins", false, actor);
+  recordAction(incidentId, "unblock_new_logins", actor.id, actor.role);
+}
+export function actionBlockNewAttempts(incidentId: number, actor: { id: number; role: ConsoleRole }) {
+  setPlatformSetting("block_new_attempts", true, actor);
+  recordAction(incidentId, "block_new_attempts", actor.id, actor.role, undefined, undefined, "Tentatives déjà en cours préservées, jamais interrompues.");
+}
+export function actionUnblockNewAttempts(incidentId: number, actor: { id: number; role: ConsoleRole }) {
+  setPlatformSetting("block_new_attempts", false, actor);
+  recordAction(incidentId, "unblock_new_attempts", actor.id, actor.role);
+}
+export function actionAttachEvidence(incidentId: number, description: string, actor: { id: number; role: ConsoleRole }) {
+  recordAction(incidentId, "attach_evidence", actor.id, actor.role, undefined, undefined, description);
 }
 
 export function closeIncident(incidentId: number, actor: { id: number; role: ConsoleRole }) {

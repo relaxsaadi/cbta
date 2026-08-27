@@ -28,7 +28,12 @@ export default async function IncidentsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-[20px] font-semibold text-text-primary">Sécurité — Incidents</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-[20px] font-semibold text-text-primary">Sécurité — Incidents</h1>
+        <Link href="/api/reports/incident-procedure" className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
+          Procédure incident (PDF)
+        </Link>
+      </div>
 
       {canWrite && (
         <Card>

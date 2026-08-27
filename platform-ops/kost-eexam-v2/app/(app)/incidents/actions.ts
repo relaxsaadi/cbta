@@ -13,6 +13,13 @@ import {
   actionReopenExam,
   actionAddNote,
   actionCorrectiveMeasure,
+  actionEnableMaintenanceMode,
+  actionDisableMaintenanceMode,
+  actionBlockNewLogins,
+  actionUnblockNewLogins,
+  actionBlockNewAttempts,
+  actionUnblockNewAttempts,
+  actionAttachEvidence,
   closeIncident,
   setIncidentStatus,
   type IncidentSeverity,
@@ -101,6 +108,40 @@ export async function addCorrectiveMeasureAction(incidentId: number, formData: F
   actionCorrectiveMeasure(incidentId, measure, await actor());
   revalidatePath(`/incidents/${incidentId}`);
 }
+// Actions plateforme (addendum §9-11). Sans FormData (boutons simples,
+// pas de champ de saisie) — même signature `.bind(null, incidentId)` que
+// closeIncidentAction ci-dessous.
+export async function enableMaintenanceModeAction(incidentId: number) {
+  actionEnableMaintenanceMode(incidentId, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+export async function disableMaintenanceModeAction(incidentId: number) {
+  actionDisableMaintenanceMode(incidentId, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+export async function blockNewLoginsAction(incidentId: number) {
+  actionBlockNewLogins(incidentId, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+export async function unblockNewLoginsAction(incidentId: number) {
+  actionUnblockNewLogins(incidentId, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+export async function blockNewAttemptsAction(incidentId: number) {
+  actionBlockNewAttempts(incidentId, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+export async function unblockNewAttemptsAction(incidentId: number) {
+  actionUnblockNewAttempts(incidentId, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+export async function attachEvidenceAction(incidentId: number, formData: FormData) {
+  const description = String(formData.get("evidence") ?? "").trim();
+  if (!description) return;
+  actionAttachEvidence(incidentId, description, await actor());
+  revalidatePath(`/incidents/${incidentId}`);
+}
+
 export async function closeIncidentAction(incidentId: number) {
   closeIncident(incidentId, await actor());
   revalidatePath(`/incidents/${incidentId}`);

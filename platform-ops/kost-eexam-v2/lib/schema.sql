@@ -277,17 +277,36 @@ CREATE TABLE IF NOT EXISTS incidents (
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );
 
+-- action_type ci-dessous inclut les 6 actions plateforme ajoutées pour
+-- l'addendum auditeur §9-11 (mode maintenance, blocage connexions/nouvelles
+-- tentatives) — sur une base DÉJÀ existante, ce CHECK figé à la création
+-- ne se met jamais à jour tout seul (CREATE TABLE IF NOT EXISTS n'altère
+-- jamais une table déjà là) : scripts/migrate.ts reconstruit la table avec
+-- la nouvelle contrainte, de façon idempotente et sans perte de données.
 CREATE TABLE IF NOT EXISTS incident_actions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   incident_id INTEGER NOT NULL REFERENCES incidents(id) ON DELETE CASCADE,
   action_type TEXT NOT NULL CHECK (action_type IN
     ('suspend_account','reactivate_account','force_logout','revoke_sessions',
-     'suspend_assessment','reopen_assessment','attach_evidence','note','corrective_measure','close')),
+     'suspend_assessment','reopen_assessment','attach_evidence','note','corrective_measure','close',
+     'enable_maintenance_mode','disable_maintenance_mode',
+     'block_new_logins','unblock_new_logins',
+     'block_new_attempts','unblock_new_attempts')),
   target_type TEXT,
   target_id INTEGER,
   actor_user_id INTEGER REFERENCES users(id),
   detail TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- Interrupteurs plateforme (addendum §9-11) — table à une ligne par clé,
+-- lue par lib/platform-settings.ts. Nouvelle table (pas de migration de
+-- colonne nécessaire).
+CREATE TABLE IF NOT EXISTS platform_settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_by INTEGER REFERENCES users(id)
 );
 
 -- Insert-only. Le rôle DB applicatif de production ne doit pas avoir les

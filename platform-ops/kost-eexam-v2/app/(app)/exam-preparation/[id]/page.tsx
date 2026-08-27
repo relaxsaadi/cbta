@@ -2,12 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { guardPage, requireWriteRole } from "@/lib/rbac";
-import { getAssessment, trackingForAssessment, publishAssessment, suspendAssessment, reopenAssessment, closeAssessment } from "@/lib/assessments";
+import { getAssessment, trackingForAssessment, suspendAssessment, reopenAssessment, closeAssessment, listAssignedCandidateIds } from "@/lib/assessments";
 import { functionLabel } from "@/lib/questions";
-import { getGroup } from "@/lib/groups";
+import { getGroup, listGroupMembers } from "@/lib/groups";
 import { hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
+import { PublishAssessmentForm } from "./PublishAssessmentForm";
+import { AssignMoreCandidatesForm } from "./AssignMoreCandidatesForm";
+import { unassignCandidateAction } from "../actions";
 
 const STATUS_BADGE: Record<string, "verified" | "warning" | "critical" | "neutral"> = {
   draft: "neutral", published: "verified", open: "verified", closed: "neutral", suspended: "critical", archived: "neutral",
@@ -37,13 +40,10 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
   const inProgress = tracking.filter((t) => t.attempt_status === "in_progress").length;
   const finished = tracking.filter((t) => t.attempt_status && t.attempt_status !== "in_progress").length;
 
-  async function doPublish() {
-    "use server";
-    const s = await requireWriteRole("pedagogical_manager", "administrator");
-    assertAccess(hasAssessmentAccess(s, assessmentId));
-    publishAssessment(assessmentId, s.userId);
-    revalidatePath(`/exam-preparation/${assessmentId}`);
-  }
+  const groupMembers = listGroupMembers(assessment.group_id);
+  const assignedIds = new Set(listAssignedCandidateIds(assessmentId));
+  const unassignedMembers = groupMembers.filter((m) => !assignedIds.has(m.candidate_user_id));
+
   async function doSuspend() {
     "use server";
     const s = await requireWriteRole("pedagogical_manager", "administrator");
@@ -64,6 +64,10 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
     assertAccess(hasAssessmentAccess(s, assessmentId));
     closeAssessment(assessmentId, s.userId);
     revalidatePath(`/exam-preparation/${assessmentId}`);
+  }
+  async function doUnassign(formData: FormData) {
+    "use server";
+    await unassignCandidateAction(assessmentId, Number(formData.get("candidateUserId")));
   }
 
   return (
@@ -87,13 +91,14 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
           <div><dt className="text-text-tertiary">Tentatives</dt><dd className="font-medium text-text-primary">{assessment.attempts_allowed === 0 ? "Illimité" : assessment.attempts_allowed}</dd></div>
         </dl>
 
-        {canWrite && (
+        {canWrite && assessment.status === "draft" && (
+          <div className="mt-4 border-t border-border-subtle pt-4">
+            <PublishAssessmentForm assessmentId={assessmentId} members={groupMembers} />
+          </div>
+        )}
+
+        {canWrite && assessment.status !== "draft" && (
           <div className="mt-4 flex flex-wrap gap-2 border-t border-border-subtle pt-4">
-            {assessment.status === "draft" && (
-              <form action={doPublish}>
-                <button type="submit" className="rounded-md bg-accent-9 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-accent-10">Publier</button>
-              </form>
-            )}
             {(assessment.status === "published" || assessment.status === "open") && (
               <form action={doSuspend}>
                 <button type="submit" className="rounded-md border border-status-critical-border bg-status-critical-bg px-3 py-1.5 text-[13px] font-medium text-status-critical-text">Suspendre</button>
@@ -112,6 +117,13 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
           </div>
         )}
       </Card>
+
+      {canWrite && assessment.status !== "draft" && unassignedMembers.length > 0 && (
+        <Card>
+          <CardHeader title="Affecter d'autres candidats" description="Candidats du groupe pas encore affectés à cette évaluation (addendum §1 — réaffectation)" />
+          <AssignMoreCandidatesForm assessmentId={assessmentId} members={unassignedMembers} />
+        </Card>
+      )}
 
       {assessment.status !== "draft" && (
         <Card>
@@ -137,11 +149,21 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
                       {t.passed === null ? "—" : <StatusBadge status={t.passed ? "verified" : "critical"}>{t.passed ? "Réussi" : "Échoué"}</StatusBadge>}
                     </td>
                     <td className="py-2 text-right">
-                      {t.attempt_id && (
-                        <Link href={`/results/${t.attempt_id}`} className="text-[12.5px] font-medium text-accent-9 hover:underline">
-                          Détail
-                        </Link>
-                      )}
+                      <div className="flex items-center justify-end gap-2">
+                        {t.attempt_id && (
+                          <Link href={`/results/${t.attempt_id}`} className="text-[12.5px] font-medium text-accent-9 hover:underline">
+                            Détail
+                          </Link>
+                        )}
+                        {canWrite && !t.attempt_status && (
+                          <form action={doUnassign}>
+                            <input type="hidden" name="candidateUserId" value={t.candidate_user_id} />
+                            <button type="submit" className="text-[12px] text-text-tertiary hover:text-status-critical-text" title="Retirer ce candidat">
+                              Retirer
+                            </button>
+                          </form>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

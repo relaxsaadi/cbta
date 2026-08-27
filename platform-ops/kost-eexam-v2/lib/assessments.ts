@@ -194,13 +194,26 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
+export type AssignmentMode = "group" | "selected_candidates" | "individual";
+
 /** Publication — prend le SNAPSHOT figé (§4, critique pour l'audit) et
- * affecte le groupe. Après cet appel, modifier la question source
+ * affecte les candidats. Après cet appel, modifier la question source
  * n'affecte plus jamais cet examen. Revalide encore une fois la
  * disponibilité (défense en profondeur : le pool peut avoir changé entre
  * la création du brouillon et la publication si une question a été
- * désactivée entre-temps). */
-export function publishAssessment(assessmentId: number, actorUserId: number): void {
+ * désactivée entre-temps).
+ *
+ * Affectation (addendum auditeur — deux modes) : `candidateUserIds` omis
+ * ou absent = TOUT LE GROUPE (comportement historique, inchangé) ;
+ * fourni = affectation ciblée (« certains candidats » si plusieurs,
+ * « individuel » si un seul) — chaque id est revérifié membre du groupe
+ * de cette évaluation avant affectation, jamais fait confiance
+ * aveuglément à ce que le formulaire envoie. */
+export function publishAssessment(
+  assessmentId: number,
+  actorUserId: number,
+  opts: { candidateUserIds?: number[] } = {}
+): void {
   transaction((db) => {
     const a = db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(assessmentId) as AssessmentRow | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
@@ -233,16 +246,96 @@ export function publishAssessment(assessmentId: number, actorUserId: number): vo
       insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer);
     });
 
-    // Affectation automatique de tous les membres du groupe (§5 — le
-    // responsable choisit le groupe, pas candidat par candidat).
     const members = listGroupMembers(a.group_id);
+    let targetIds: number[];
+    let assignmentMode: AssignmentMode;
+    if (opts.candidateUserIds && opts.candidateUserIds.length > 0) {
+      const memberIds = new Set(members.map((m) => m.candidate_user_id));
+      targetIds = opts.candidateUserIds.filter((id) => memberIds.has(id));
+      if (targetIds.length === 0) throw new Error("Aucun des candidats sélectionnés n'appartient à ce groupe.");
+      assignmentMode = targetIds.length === 1 ? "individual" : "selected_candidates";
+    } else {
+      targetIds = members.map((m) => m.candidate_user_id);
+      assignmentMode = "group";
+    }
+    if (targetIds.length === 0) throw new Error("Ce groupe n'a aucun candidat à affecter.");
+
     const insertAssign = db.prepare(`INSERT OR IGNORE INTO assessment_assignments (assessment_id, candidate_user_id, assigned_by) VALUES (?, ?, ?)`);
-    for (const m of members) insertAssign.run(assessmentId, m.candidate_user_id, actorUserId);
+    for (const cid of targetIds) insertAssign.run(assessmentId, cid, actorUserId);
 
     db.prepare(`UPDATE assessments SET status = 'published', published_at = ? WHERE id = ?`).run(nowIso(), assessmentId);
 
-    audit({ actorUserId, actorRole: null, action: "assessment_publish", targetType: "assessment", targetId: assessmentId, metadata: { questionCount: selected.length, candidateCount: members.length } });
+    // Trace d'affectation complète (addendum §1 : qui / quoi / à qui /
+    // quand / fonction / examen / groupe) — au-delà de l'audit générique
+    // "assessment_publish", une entrée dédiée nommant explicitement le
+    // mode et les candidats visés.
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_assign",
+      targetType: "assessment",
+      targetId: assessmentId,
+      metadata: { mode: assignmentMode, candidateUserIds: targetIds, functionCode: a.function_code, groupId: a.group_id },
+    });
+    audit({ actorUserId, actorRole: null, action: "assessment_publish", targetType: "assessment", targetId: assessmentId, metadata: { questionCount: selected.length, candidateCount: targetIds.length, assignmentMode } });
   });
+}
+
+export function listAssignedCandidateIds(assessmentId: number): number[] {
+  return (
+    getDb().prepare(`SELECT candidate_user_id FROM assessment_assignments WHERE assessment_id = ?`).all(assessmentId) as {
+      candidate_user_id: number;
+    }[]
+  ).map((r) => r.candidate_user_id);
+}
+
+/** Affecter/réaffecter — addendum §1 : ajouter des candidats à une
+ * évaluation DÉJÀ publiée (ex. un candidat rejoint le groupe après coup),
+ * au-delà de l'affectation initiale faite à la publication. Chaque id est
+ * revérifié membre du groupe. Idempotent (INSERT OR IGNORE) : réaffecter
+ * un candidat déjà affecté ne fait rien de plus. */
+export function assignCandidatesToAssessment(assessmentId: number, candidateUserIds: number[], actorUserId: number): number {
+  const db = getDb();
+  const a = db.prepare(`SELECT group_id, function_code FROM assessments WHERE id = ?`).get(assessmentId) as
+    | { group_id: number; function_code: string }
+    | undefined;
+  if (!a) throw new Error("Évaluation introuvable.");
+  const members = new Set(listGroupMembers(a.group_id).map((m) => m.candidate_user_id));
+  const valid = candidateUserIds.filter((id) => members.has(id));
+  if (valid.length === 0) throw new Error("Aucun des candidats sélectionnés n'appartient à ce groupe.");
+
+  const insertAssign = db.prepare(`INSERT OR IGNORE INTO assessment_assignments (assessment_id, candidate_user_id, assigned_by) VALUES (?, ?, ?)`);
+  let count = 0;
+  for (const cid of valid) {
+    const result = insertAssign.run(assessmentId, cid, actorUserId);
+    if (Number(result.changes) > 0) count++;
+  }
+  if (count > 0) {
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_assign",
+      targetType: "assessment",
+      targetId: assessmentId,
+      metadata: { mode: valid.length === 1 ? "individual" : "selected_candidates", candidateUserIds: valid, functionCode: a.function_code, groupId: a.group_id, reassignment: true },
+    });
+  }
+  return count;
+}
+
+/** Retirer un candidat d'une évaluation — addendum §1. Bloqué s'il a déjà
+ * une tentative (retirer une affectation dont l'usage a déjà commencé
+ * romprait la traçabilité de la tentative, sans la supprimer pour
+ * autant) ; l'admin/responsable doit alors passer par la gestion
+ * d'incident (suspendre l'examen) plutôt que par un simple retrait. */
+export function unassignCandidateFromAssessment(assessmentId: number, candidateUserId: number, actorUserId: number): void {
+  const db = getDb();
+  const hasAttempt = db.prepare(`SELECT 1 FROM attempts WHERE assessment_id = ? AND candidate_user_id = ?`).get(assessmentId, candidateUserId);
+  if (hasAttempt) throw new Error("Ce candidat a déjà une tentative sur cette évaluation — retrait impossible (voir la gestion d'incident si nécessaire).");
+  const result = db.prepare(`DELETE FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?`).run(assessmentId, candidateUserId);
+  if (Number(result.changes) > 0) {
+    audit({ actorUserId, actorRole: null, action: "assessment_unassign", targetType: "assessment", targetId: assessmentId, metadata: { candidateUserId } });
+  }
 }
 
 export function suspendAssessment(assessmentId: number, actorUserId: number, reason?: string): void {

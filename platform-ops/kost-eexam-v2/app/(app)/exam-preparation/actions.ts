@@ -3,7 +3,17 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createAssessmentDraft, publishAssessment, suspendAssessment, reopenAssessment, closeAssessment, type AssessmentType, type FeedbackMode } from "@/lib/assessments";
+import {
+  createAssessmentDraft,
+  publishAssessment,
+  suspendAssessment,
+  reopenAssessment,
+  closeAssessment,
+  assignCandidatesToAssessment,
+  unassignCandidateFromAssessment,
+  type AssessmentType,
+  type FeedbackMode,
+} from "@/lib/assessments";
 import { hasGroupAccess, hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
 import type { Scope } from "@/lib/scope";
 
@@ -69,11 +79,28 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
   redirect(`/exam-preparation/${assessmentId}`);
 }
 
-export async function publishAssessmentAction(assessmentId: number) {
+export interface PublishAssessmentResult {
+  error?: string;
+}
+
+export async function publishAssessmentAction(
+  assessmentId: number,
+  _prev: PublishAssessmentResult,
+  formData: FormData
+): Promise<PublishAssessmentResult> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
   assertAccess(hasAssessmentAccess(session, assessmentId));
+  // Deux modes d'affectation (addendum auditeur) — "group" (défaut,
+  // comportement historique) ou une sélection explicite de candidats
+  // ("selected_candidates" / "individual", distingués côté lib/assessments.ts
+  // uniquement par le nombre d'ids reçus).
+  const mode = String(formData.get("mode") ?? "group");
+  const candidateUserIds = formData.getAll("candidateUserIds").map(Number).filter((n) => Number.isFinite(n) && n > 0);
+  if (mode !== "group" && candidateUserIds.length === 0) {
+    return { error: "Sélectionnez au moins un candidat pour ce mode d'affectation." };
+  }
   try {
-    publishAssessment(assessmentId, session.userId);
+    publishAssessment(assessmentId, session.userId, mode === "group" ? {} : { candidateUserIds });
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Erreur inconnue." };
   }
@@ -99,5 +126,33 @@ export async function closeAssessmentAction(assessmentId: number) {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
   assertAccess(hasAssessmentAccess(session, assessmentId));
   closeAssessment(assessmentId, session.userId);
+  revalidatePath(`/exam-preparation/${assessmentId}`);
+}
+
+// Addendum §1 : « retirer/réaffecter un candidat » — sur une évaluation
+// DÉJÀ publiée (au-delà de l'affectation initiale faite à la publication).
+export interface AssignMoreResult {
+  error?: string;
+  success?: string;
+}
+
+export async function assignMoreCandidatesAction(assessmentId: number, _prev: AssignMoreResult, formData: FormData): Promise<AssignMoreResult> {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
+  const candidateUserIds = formData.getAll("candidateUserIds").map(Number).filter((n) => Number.isFinite(n) && n > 0);
+  if (candidateUserIds.length === 0) return { error: "Sélectionnez au moins un candidat." };
+  try {
+    const count = assignCandidatesToAssessment(assessmentId, candidateUserIds, session.userId);
+    revalidatePath(`/exam-preparation/${assessmentId}`);
+    return { success: count > 0 ? `${count} candidat(s) affecté(s).` : "Déjà affecté(s) — aucun changement." };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Erreur inconnue." };
+  }
+}
+
+export async function unassignCandidateAction(assessmentId: number, candidateUserId: number) {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
+  unassignCandidateFromAssessment(assessmentId, candidateUserId, session.userId);
   revalidatePath(`/exam-preparation/${assessmentId}`);
 }

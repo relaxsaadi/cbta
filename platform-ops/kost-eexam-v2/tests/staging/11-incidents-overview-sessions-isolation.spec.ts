@@ -64,7 +64,12 @@ test.describe("Isolation — Vue d'ensemble (overview)", () => {
   test("le tableau de bord de chaque responsable ne montre jamais l'autre client", async ({ page, context }) => {
     await loginAs(page, env("STAGING_MANAGER_USER"), env("STAGING_MANAGER_PASS"));
     await page.goto("/overview");
-    await expect(page.getByText(EXAM_A_NAME)).toBeVisible();
+    // .first() : les exécutions répétées de 01-responsable-creates-exam
+    // (non idempotent) peuvent laisser plusieurs examens Company A du
+    // même nom — simple vérification de présence, pas d'identité. Sans
+    // impact sur EXAM_B_NAME (jamais dupliqué), qui reste une vraie
+    // preuve d'absence totale.
+    await expect(page.getByText(EXAM_A_NAME).first()).toBeVisible();
     await expect(page.getByText(EXAM_B_NAME)).toHaveCount(0);
     await expect(page.getByText(COMPANY_B_NAME)).toHaveCount(0);
 
@@ -79,7 +84,7 @@ test.describe("Isolation — Vue d'ensemble (overview)", () => {
   test("administrateur voit les deux clients sur le tableau de bord", async ({ page }) => {
     await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
     await page.goto("/overview");
-    await expect(page.getByText(EXAM_A_NAME)).toBeVisible();
+    await expect(page.getByText(EXAM_A_NAME).first()).toBeVisible();
     await expect(page.getByText(EXAM_B_NAME)).toBeVisible();
   });
 });

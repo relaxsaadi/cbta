@@ -58,7 +58,11 @@ async function answerCurrentQuestion(page: Page, wantCorrect: boolean, stemText:
 
 async function takeExam(page: Page, username: string, password: string, correctIndexes: Set<number>) {
   await loginAs(page, username, password);
-  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toBeVisible();
+  // .first() : les exécutions répétées de 01-responsable-creates-exam
+  // (non idempotent, crée un nouvel examen à chaque run) peuvent laisser
+  // plusieurs examens partageant le même nom — simple vérification de
+  // présence ici, pas d'identité, donc .first() reste correct.
+  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging").first()).toBeVisible();
   await page.getByRole("link", { name: /commencer/i }).first().click();
 
   await page.waitForURL(/\/exam\/\d+\/instructions/);
@@ -104,16 +108,32 @@ async function takeExam(page: Page, username: string, password: string, correctI
   await page.waitForURL(/\/mes-resultats/);
 }
 
+// Garde d'idempotence (même raison que 01-responsable-creates-exam.spec.ts) :
+// tentativesAllowed=1 sur l'examen pilote — un candidat qui a déjà soumis
+// n'a plus de lien "Commencer" à cliquer. Rejouer cette spec sans garde
+// ferait échouer takeExam() (lien introuvable) au lieu de retomber
+// silencieusement sur une tentative dupliquée.
+async function alreadyAttempted(page: Page): Promise<boolean> {
+  await page.goto("/mes-resultats");
+  return (await page.getByText("DGR Fonction 7.1 — Examen pilote staging").count()) > 0;
+}
+
 test("candidat pilote 1 répond correctement à toutes les questions — RÉUSSI attendu", async ({ page }) => {
+  await loginAs(page, env("STAGING_CANDIDATE1_USER"), env("STAGING_CANDIDATE1_PASS"));
+  test.skip(await alreadyAttempted(page), "Candidat1 a déjà une tentative sur l'examen pilote — déjà prouvé (idempotence).");
   await takeExam(page, env("STAGING_CANDIDATE1_USER"), env("STAGING_CANDIDATE1_PASS"), new Set([0, 1, 2, 3, 4, 5, 6]));
-  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toBeVisible();
-  await expect(page.getByText("100/100")).toBeVisible();
-  await expect(page.getByText("Réussi")).toBeVisible();
+  // .first() : plusieurs tentatives passées (runs précédents) peuvent
+  // partager le même libellé d'examen/score.
+  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging").first()).toBeVisible();
+  await expect(page.getByText("100/100").first()).toBeVisible();
+  await expect(page.getByText("Réussi").first()).toBeVisible();
 });
 
 test("candidat pilote 2 répond correctement à 3/7 questions — ÉCHOUÉ attendu (sous le seuil 80%)", async ({ page }) => {
+  await loginAs(page, env("STAGING_CANDIDATE2_USER"), env("STAGING_CANDIDATE2_PASS"));
+  test.skip(await alreadyAttempted(page), "Candidat2 a déjà une tentative sur l'examen pilote — déjà prouvé (idempotence).");
   await takeExam(page, env("STAGING_CANDIDATE2_USER"), env("STAGING_CANDIDATE2_PASS"), new Set([0, 1, 2]));
-  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toBeVisible();
-  await expect(page.getByText("42.86/100")).toBeVisible();
-  await expect(page.getByText("Échoué")).toBeVisible();
+  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging").first()).toBeVisible();
+  await expect(page.getByText("42.86/100").first()).toBeVisible();
+  await expect(page.getByText("Échoué").first()).toBeVisible();
 });

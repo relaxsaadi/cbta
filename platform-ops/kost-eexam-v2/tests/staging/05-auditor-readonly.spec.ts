@@ -12,7 +12,10 @@ test("l'auditeur consulte le pilote réel en lecture seule uniquement", async ({
   await expect(page.getByText("Air Algérie — DGR Démonstration")).toBeVisible();
 
   await page.goto("/exam-preparation");
-  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toBeVisible();
+  // .first() : les exécutions répétées de 01-responsable-creates-exam
+  // (non idempotent) peuvent laisser plusieurs examens du même nom —
+  // simple vérification de présence, pas d'identité.
+  await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging").first()).toBeVisible();
   await expect(page.getByRole("button", { name: /créer le brouillon/i })).toHaveCount(0);
 
   await page.goto("/results");

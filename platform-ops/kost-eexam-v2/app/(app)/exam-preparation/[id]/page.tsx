@@ -79,7 +79,14 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
             {assessment.type} — {functionLabel(assessment.function_code)} — {group?.company_name} / {group?.name}
           </p>
         </div>
-        <StatusBadge status={STATUS_BADGE[assessment.status] ?? "neutral"}>{assessment.status}</StatusBadge>
+        <div className="flex shrink-0 items-center gap-2">
+          {assessment.status !== "draft" && (
+            <Link href={`/exam-preparation/${assessmentId}/rapport-global`} className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
+              Rapport global
+            </Link>
+          )}
+          <StatusBadge status={STATUS_BADGE[assessment.status] ?? "neutral"}>{assessment.status}</StatusBadge>
+        </div>
       </div>
 
       <Card>

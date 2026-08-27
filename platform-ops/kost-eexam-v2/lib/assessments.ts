@@ -454,3 +454,86 @@ export function trackingForAssessment(assessmentId: number) {
     )
     .all(assessmentId);
 }
+
+export interface SessionReportRow {
+  candidate_user_id: number;
+  full_name: string;
+  username: string;
+  attempt_id: number | null;
+  attempt_status: string | null;
+  started_at: string | null;
+  submitted_at: string | null;
+  correct_count: number;
+  incorrect_count: number;
+  score_100: number | null;
+  percentage: number | null;
+  passed: number | null;
+}
+
+export interface SessionReportStats {
+  convened: number;
+  notStarted: number;
+  inProgress: number;
+  finished: number;
+  passedCount: number;
+  failedCount: number;
+  passRatePct: number | null;
+  average: number | null;
+  best: number | null;
+  worst: number | null;
+  /** Addendum §6 : « ne pas créer de statistiques trompeuses avec trop peu
+   * de candidats » — vrai quand moins de 5 tentatives sont terminées ;
+   * l'écran/PDF doit alors afficher un avertissement plutôt que présenter
+   * moyenne/taux comme représentatifs. */
+  smallSample: boolean;
+}
+
+const SMALL_SAMPLE_THRESHOLD = 5;
+
+/** Rapport global de session/examen (addendum §5-6) — même source que
+ * trackingForAssessment(), enrichie du compte bonnes/mauvaises réponses
+ * par tentative, plus les statistiques agrégées calculées ici même
+ * (jamais une valeur ressaisie manuellement). */
+export function getSessionReport(assessmentId: number): { rows: SessionReportRow[]; stats: SessionReportStats } {
+  const db = getDb();
+  const rows = db
+    .prepare(
+      `SELECT u.id AS candidate_user_id, u.full_name, u.username,
+              at.id AS attempt_id, at.status AS attempt_status, at.started_at, at.submitted_at,
+              (SELECT COUNT(*) FROM attempt_answers aa2 JOIN attempt_questions aq ON aq.id = aa2.attempt_question_id WHERE aq.attempt_id = at.id AND aa2.is_correct = 1) AS correct_count,
+              (SELECT COUNT(*) FROM attempt_answers aa2 JOIN attempt_questions aq ON aq.id = aa2.attempt_question_id WHERE aq.attempt_id = at.id AND aa2.is_correct = 0) AS incorrect_count,
+              r.score_100, r.percentage, r.passed
+       FROM assessment_assignments aa
+       JOIN users u ON u.id = aa.candidate_user_id
+       LEFT JOIN attempts at ON at.assessment_id = aa.assessment_id AND at.candidate_user_id = aa.candidate_user_id
+         AND at.id = (SELECT MAX(id) FROM attempts WHERE assessment_id = aa.assessment_id AND candidate_user_id = aa.candidate_user_id)
+       LEFT JOIN results r ON r.attempt_id = at.id
+       WHERE aa.assessment_id = ?
+       ORDER BY u.full_name`
+    )
+    .all(assessmentId) as unknown as SessionReportRow[];
+
+  const notStarted = rows.filter((r) => !r.attempt_status).length;
+  const inProgress = rows.filter((r) => r.attempt_status === "in_progress").length;
+  const finishedRows = rows.filter((r) => r.attempt_status && r.attempt_status !== "in_progress");
+  const scored = finishedRows.filter((r) => r.score_100 !== null);
+  const passedCount = finishedRows.filter((r) => r.passed === 1).length;
+  const failedCount = finishedRows.filter((r) => r.passed === 0).length;
+  const scores = scored.map((r) => r.score_100 as number);
+
+  const stats: SessionReportStats = {
+    convened: rows.length,
+    notStarted,
+    inProgress,
+    finished: finishedRows.length,
+    passedCount,
+    failedCount,
+    passRatePct: finishedRows.length > 0 ? Math.round(((passedCount / finishedRows.length) * 100 + Number.EPSILON) * 100) / 100 : null,
+    average: scores.length > 0 ? Math.round(((scores.reduce((a, b) => a + b, 0) / scores.length) + Number.EPSILON) * 100) / 100 : null,
+    best: scores.length > 0 ? Math.max(...scores) : null,
+    worst: scores.length > 0 ? Math.min(...scores) : null,
+    smallSample: finishedRows.length < SMALL_SAMPLE_THRESHOLD,
+  };
+
+  return { rows, stats };
+}

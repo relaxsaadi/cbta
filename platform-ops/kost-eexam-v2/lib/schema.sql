@@ -171,6 +171,14 @@ CREATE TABLE IF NOT EXISTS assessment_question_snapshots (
   stem_snapshot TEXT NOT NULL,
   choices_snapshot_json TEXT NOT NULL,
   correct_answer_snapshot TEXT NOT NULL,
+  -- Addendum auditeur §3 : « explication/correction si autorisée » sur le
+  -- rapport individuel — snapshotée comme le reste (jamais relue depuis
+  -- question_versions au moment de l'affichage, même principe que le
+  -- stem/choix/réponse : ce qui a été montré au candidat ne doit jamais
+  -- changer rétroactivement si la question source est modifiée après
+  -- publication). Pas d'index sur cette table (voir la note sur
+  -- incidents.group_id) : ajoutée après coup par migrate.ts sur staging.
+  explanation_snapshot TEXT,
   points REAL NOT NULL DEFAULT 1,
   UNIQUE(assessment_id, position)
 );

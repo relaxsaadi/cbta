@@ -147,7 +147,10 @@ test.describe("Périmètres élargis attendus — administrateur global, auditeu
     expect(attemptA?.status()).toBe(200);
     const attemptB = await page.goto(`/results/${ATTEMPT_B_ID}`);
     expect(attemptB?.status()).toBe(200);
-    await expect(page.getByText(CANDIDATE_B_NAME)).toBeVisible();
+    // .first() : le rapport individuel enrichi (addendum §3) répète
+    // maintenant le nom du candidat dans la carte "Identité" en plus de
+    // l'en-tête — deux correspondances légitimes, pas une ambiguïté.
+    await expect(page.getByText(CANDIDATE_B_NAME).first()).toBeVisible();
   });
 
   test("auditeur lit les deux clients (périmètre d'audit global prévu) mais ne peut rien écrire", async ({ page }) => {

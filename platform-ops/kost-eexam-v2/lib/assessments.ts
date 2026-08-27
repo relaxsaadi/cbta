@@ -237,13 +237,13 @@ export function publishAssessment(
 
     const insertSnap = db.prepare(
       `INSERT INTO assessment_question_snapshots
-         (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, points)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 1)`
+         (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, explanation_snapshot, points)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`
     );
     selected.forEach((questionId, idx) => {
       const version = getCurrentVersion(questionId);
       if (!version) throw new Error(`Question ${questionId} n'a aucune version — donnée corrompue, publication annulée.`);
-      insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer);
+      insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, version.explanation ?? null);
     });
 
     const members = listGroupMembers(a.group_id);

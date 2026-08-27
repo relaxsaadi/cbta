@@ -28,6 +28,11 @@ const FUNCTIONS: Array<{ code: string; label: string }> = Array.from({ length: 1
 // destructive).
 const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = [
   { table: "incidents", column: "group_id", ddl: "ALTER TABLE incidents ADD COLUMN group_id INTEGER REFERENCES groups(id)" },
+  {
+    table: "assessment_question_snapshots",
+    column: "explanation_snapshot",
+    ddl: "ALTER TABLE assessment_question_snapshots ADD COLUMN explanation_snapshot TEXT",
+  },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {

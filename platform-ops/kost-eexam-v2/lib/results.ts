@@ -118,17 +118,30 @@ export interface AttemptDetailQuestion {
   isCorrect: boolean | null;
   pointsAwarded: number | null;
   points: number;
+  /** Snapshotée à la publication (jamais relue depuis la question source
+   * après coup) — addendum §3 « explication/correction si autorisée » ;
+   * n'afficher que si showCorrectAnswers est vrai (même politique que la
+   * réponse correcte elle-même). */
+  explanation: string | null;
 }
 
 export interface AttemptDetail {
   attempt_id: number;
   candidate_name: string;
+  candidate_username: string;
+  company_name: string;
   group_name: string;
   function_code: string;
   assessment_name: string;
+  assessment_type: string;
+  attempt_number: number;
+  duration_minutes_allowed: number;
   started_at: string;
   submitted_at: string | null;
   status: string;
+  question_count: number;
+  correct_count: number;
+  incorrect_count: number;
   score_100: number | null;
   percentage: number | null;
   pass_threshold_pct: number | null;
@@ -137,19 +150,27 @@ export interface AttemptDetail {
   questions: AttemptDetailQuestion[];
 }
 
-/** §13 de la mission — le drill-down complet, question par question,
+/** §13 de la mission (et addendum auditeur §3, champ par champ : identité,
+ * tentative, résultat, question par question) — le drill-down complet,
  * montrant la version EXACTE reçue par ce candidat (via le snapshot figé). */
 export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
   const db = getDb();
   const header = db
     .prepare(
-      `SELECT at.id AS attempt_id, u.full_name AS candidate_name, g.name AS group_name, a.function_code,
-              a.name AS assessment_name, at.started_at, at.submitted_at, at.status,
+      `SELECT at.id AS attempt_id, u.full_name AS candidate_name, u.username AS candidate_username,
+              c.name AS company_name, g.name AS group_name, a.function_code,
+              a.name AS assessment_name, a.type AS assessment_type, at.attempt_number,
+              a.duration_minutes AS duration_minutes_allowed,
+              at.started_at, at.submitted_at, at.status,
+              (SELECT COUNT(*) FROM attempt_questions WHERE attempt_id = at.id) AS question_count,
+              (SELECT COUNT(*) FROM attempt_answers aa JOIN attempt_questions aq ON aq.id = aa.attempt_question_id WHERE aq.attempt_id = at.id AND aa.is_correct = 1) AS correct_count,
+              (SELECT COUNT(*) FROM attempt_answers aa JOIN attempt_questions aq ON aq.id = aa.attempt_question_id WHERE aq.attempt_id = at.id AND aa.is_correct = 0) AS incorrect_count,
               r.score_100, r.percentage, r.pass_threshold_pct, r.passed, a.show_correct_answers
        FROM attempts at
        JOIN users u ON u.id = at.candidate_user_id
        JOIN assessments a ON a.id = at.assessment_id
        JOIN groups g ON g.id = a.group_id
+       JOIN companies c ON c.id = g.company_id
        LEFT JOIN results r ON r.attempt_id = at.id
        WHERE at.id = ?`
     )
@@ -160,7 +181,7 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
 
   const rows = db
     .prepare(
-      `SELECT aq.position, s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot, s.points,
+      `SELECT aq.position, s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot, s.explanation_snapshot, s.points,
               aa.answer_json, aa.is_correct, aa.points_awarded
        FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
@@ -173,15 +194,17 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
     stem_snapshot: string;
     choices_snapshot_json: string;
     correct_answer_snapshot: string;
+    explanation_snapshot: string | null;
     points: number;
     answer_json: string | null;
     is_correct: number | null;
     points_awarded: number | null;
   }[];
 
+  const showCorrectAnswers = header.show_correct_answers === 1;
   return {
     ...header,
-    showCorrectAnswers: header.show_correct_answers === 1,
+    showCorrectAnswers,
     questions: rows.map((r) => ({
       position: r.position,
       stem: r.stem_snapshot,
@@ -191,6 +214,7 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
       isCorrect: r.is_correct === null ? null : r.is_correct === 1,
       pointsAwarded: r.points_awarded,
       points: r.points,
+      explanation: showCorrectAnswers ? r.explanation_snapshot : null,
     })),
   };
 }

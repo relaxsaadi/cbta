@@ -16,7 +16,11 @@ test("l'administrateur voit le détail complet des tentatives réelles", async (
   await page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first().click();
   await page.waitForURL(/\/results\/\d+/);
   await expect(page.getByText("100/100")).toBeVisible();
-  await expect(page.getByText("Réussi")).toBeVisible();
+  // "ADMIS"/"ÉCHEC" — mention exacte demandée par l'addendum auditeur §3
+  // pour le rapport individuel (distincte de "Réussi"/"Échoué" utilisé
+  // ailleurs, ex. la liste /results — changement intentionnel, propre à
+  // cette page).
+  await expect(page.getByText("ADMIS")).toBeVisible();
   await expect(page.getByText(/^Q1\./)).toBeVisible();
   // Le texte réel de la première question doit apparaître (pas un
   // placeholder) — preuve que le contenu affiché est le vrai contenu DGR.
@@ -28,7 +32,7 @@ test("l'administrateur voit le détail complet des tentatives réelles", async (
   await page.getByRole("link", { name: "Riad Boumediene (pilote)" }).first().click();
   await page.waitForURL(/\/results\/\d+/);
   await expect(page.getByText("42.86/100")).toBeVisible();
-  await expect(page.getByText("Échoué")).toBeVisible();
+  await expect(page.getByText("ÉCHEC")).toBeVisible();
   // Au moins une réponse incorrecte doit apparaître (4/7 volontairement
   // fausses).
   await expect(page.getByText("Incorrect").first()).toBeVisible();

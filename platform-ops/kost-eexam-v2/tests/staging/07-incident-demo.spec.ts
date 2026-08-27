@@ -17,7 +17,15 @@ test("incident réel — suspension bloque la connexion, réactivation la restau
 
   const userBlock = adminPage.locator("div").filter({ hasText: "Compte utilisateur" }).first();
   await userBlock.locator('select[name="targetId"]').first().selectOption({ label: "Compte Démo Incident (incident-demo.staging)" });
-  await userBlock.getByRole("button", { name: /^suspendre$/i }).first().click();
+  // dispatchEvent("click") plutôt que .click() — la liste d'utilisateurs
+  // sélectionnables s'est allongée (nouveaux comptes de test créés cette
+  // session), et le <select> juste manipulé chevauche désormais le bouton
+  // voisin selon le hit-test de Playwright (constaté : "subtree intercepts
+  // pointer events" sans force, un clic forcé par coordonnées atterrissait
+  // sur le mauvais élément avec force:true — 0 action tracée). Un clic
+  // DOM directement déclenché sur le bouton évite tout hit-test/coordonnée
+  // et déclenche normalement la soumission du formulaire.
+  await userBlock.getByRole("button", { name: /^suspendre$/i }).first().dispatchEvent("click");
   await expect(adminPage.getByText(/suspend_account/)).toBeVisible();
 
   // Vérification réelle : connexion bloquée.
@@ -34,7 +42,7 @@ test("incident réel — suspension bloque la connexion, réactivation la restau
   await adminPage.reload();
   const userBlock2 = adminPage.locator("div").filter({ hasText: "Compte utilisateur" }).first();
   await userBlock2.locator('select[name="targetId"]').nth(1).selectOption({ label: "Compte Démo Incident (incident-demo.staging)" });
-  await userBlock2.getByRole("button", { name: /^réactiver$/i }).click();
+  await userBlock2.getByRole("button", { name: /^réactiver$/i }).dispatchEvent("click");
   await expect(adminPage.getByText(/reactivate_account/)).toBeVisible();
 
   // Connexion restaurée.

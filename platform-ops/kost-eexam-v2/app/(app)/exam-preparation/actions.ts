@@ -15,6 +15,7 @@ import {
   type FeedbackMode,
 } from "@/lib/assessments";
 import { hasGroupAccess, hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
+import { audit } from "@/lib/audit";
 import type { Scope } from "@/lib/scope";
 
 export interface CreateAssessmentResult {
@@ -47,7 +48,10 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
   // Frontière multi-client (lib/tenant-scope.ts) — sans ce contrôle, un
   // responsable pourrait créer une évaluation pour le groupe d'un autre
   // client en forgeant groupId dans la requête.
-  if (!hasGroupAccess(session, groupId)) return { error: "Ce groupe n'est pas dans votre périmètre." };
+  if (!hasGroupAccess(session, groupId)) {
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "assessment_create_denied", targetType: "group", targetId: groupId, result: "failure", metadata: { name, functionCode } });
+    return { error: "Ce groupe n'est pas dans votre périmètre." };
+  }
 
   let assessmentId: number;
   try {

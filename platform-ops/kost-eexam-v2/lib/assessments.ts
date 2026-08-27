@@ -196,6 +196,12 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 export type AssignmentMode = "group" | "selected_candidates" | "individual";
 
+// Message exact requis par la correction d'audit (§ "SMALL AUDIT
+// CORRECTION") — identique partout où une affectation est refusée pour
+// cause de candidat hors périmètre.
+const CANDIDATE_OUT_OF_SCOPE_MESSAGE =
+  "Ce candidat n'appartient pas au groupe sélectionné ou n'est pas autorisé dans votre périmètre.";
+
 /** Publication — prend le SNAPSHOT figé (§4, critique pour l'audit) et
  * affecte les candidats. Après cet appel, modifier la question source
  * n'affecte plus jamais cet examen. Revalide encore une fois la
@@ -206,14 +212,42 @@ export type AssignmentMode = "group" | "selected_candidates" | "individual";
  * Affectation (addendum auditeur — deux modes) : `candidateUserIds` omis
  * ou absent = TOUT LE GROUPE (comportement historique, inchangé) ;
  * fourni = affectation ciblée (« certains candidats » si plusieurs,
- * « individuel » si un seul) — chaque id est revérifié membre du groupe
- * de cette évaluation avant affectation, jamais fait confiance
- * aveuglément à ce que le formulaire envoie. */
+ * « individuel » si un seul).
+ *
+ * Correction d'audit : un id candidat qui n'appartient PAS au groupe
+ * n'est plus silencieusement filtré — toute la publication est refusée
+ * (aucune évaluation publiée, aucune affectation créée), un message clair
+ * est renvoyé, et le refus est tracé dans le journal d'audit. Cette
+ * validation se fait délibérément AVANT la transaction ci-dessous : toute
+ * écriture (y compris une entrée d'audit) à l'intérieur d'une transaction
+ * qui se termine par un throw est annulée avec elle — enregistrer un
+ * refus puis l'annuler serait pire qu'aucune trace du tout. */
 export function publishAssessment(
   assessmentId: number,
   actorUserId: number,
   opts: { candidateUserIds?: number[] } = {}
 ): void {
+  if (opts.candidateUserIds && opts.candidateUserIds.length > 0) {
+    const pre = getDb().prepare(`SELECT group_id, function_code FROM assessments WHERE id = ?`).get(assessmentId) as
+      | { group_id: number; function_code: string }
+      | undefined;
+    if (!pre) throw new Error("Évaluation introuvable.");
+    const memberIds = new Set(listGroupMembers(pre.group_id).map((m) => m.candidate_user_id));
+    const invalidIds = opts.candidateUserIds.filter((id) => !memberIds.has(id));
+    if (invalidIds.length > 0) {
+      audit({
+        actorUserId,
+        actorRole: null,
+        action: "assessment_assign_denied",
+        targetType: "assessment",
+        targetId: assessmentId,
+        result: "failure",
+        metadata: { requestedCandidateUserIds: opts.candidateUserIds, invalidCandidateUserIds: invalidIds, groupId: pre.group_id, functionCode: pre.function_code },
+      });
+      throw new Error(CANDIDATE_OUT_OF_SCOPE_MESSAGE);
+    }
+  }
+
   transaction((db) => {
     const a = db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(assessmentId) as AssessmentRow | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
@@ -246,13 +280,16 @@ export function publishAssessment(
       insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, version.explanation ?? null);
     });
 
+    // Les candidatUserIds fournis ont déjà été intégralement validés
+    // ci-dessus (avant la transaction) — aucun filtrage silencieux ici,
+    // par construction : soit tous appartiennent au groupe et on continue
+    // avec exactement cette liste (dédupliquée), soit on n'est jamais
+    // arrivé jusqu'ici.
     const members = listGroupMembers(a.group_id);
     let targetIds: number[];
     let assignmentMode: AssignmentMode;
     if (opts.candidateUserIds && opts.candidateUserIds.length > 0) {
-      const memberIds = new Set(members.map((m) => m.candidate_user_id));
-      targetIds = opts.candidateUserIds.filter((id) => memberIds.has(id));
-      if (targetIds.length === 0) throw new Error("Aucun des candidats sélectionnés n'appartient à ce groupe.");
+      targetIds = Array.from(new Set(opts.candidateUserIds));
       assignmentMode = targetIds.length === 1 ? "individual" : "selected_candidates";
     } else {
       targetIds = members.map((m) => m.candidate_user_id);
@@ -301,8 +338,24 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
     | undefined;
   if (!a) throw new Error("Évaluation introuvable.");
   const members = new Set(listGroupMembers(a.group_id).map((m) => m.candidate_user_id));
-  const valid = candidateUserIds.filter((id) => members.has(id));
-  if (valid.length === 0) throw new Error("Aucun des candidats sélectionnés n'appartient à ce groupe.");
+  // Correction d'audit : un id hors groupe rejette TOUTE la demande (rien
+  // n'est affecté, même les ids par ailleurs valides de la même requête),
+  // avec une trace d'audit du refus — jamais un filtrage silencieux. Voir
+  // le même principe et le même message dans publishAssessment() ci-dessus.
+  const invalidIds = candidateUserIds.filter((id) => !members.has(id));
+  if (invalidIds.length > 0) {
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_assign_denied",
+      targetType: "assessment",
+      targetId: assessmentId,
+      result: "failure",
+      metadata: { requestedCandidateUserIds: candidateUserIds, invalidCandidateUserIds: invalidIds, groupId: a.group_id, functionCode: a.function_code, reassignment: true },
+    });
+    throw new Error(CANDIDATE_OUT_OF_SCOPE_MESSAGE);
+  }
+  const valid = Array.from(new Set(candidateUserIds));
 
   const insertAssign = db.prepare(`INSERT OR IGNORE INTO assessment_assignments (assessment_id, candidate_user_id, assigned_by) VALUES (?, ?, ?)`);
   let count = 0;

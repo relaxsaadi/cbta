@@ -5,6 +5,7 @@ import { requireWriteRole } from "@/lib/rbac";
 import { createGroup, addCandidateToGroup, removeCandidateFromGroup } from "@/lib/groups";
 import { createUser, findUserByUsername } from "@/lib/users";
 import { hasCompanyAccess, hasGroupAccess } from "@/lib/tenant-scope";
+import { audit } from "@/lib/audit";
 import type { Scope } from "@/lib/scope";
 
 export interface CreateGroupResult {
@@ -26,7 +27,10 @@ export async function createGroupAction(_prev: CreateGroupResult, formData: Form
   // responsable pourrait rattacher un nouveau groupe (donc lui-même comme
   // gestionnaire) à N'IMPORTE QUEL client existant en forgeant companyId
   // dans la requête, y compris un client d'un autre responsable.
-  if (!hasCompanyAccess(session, companyId)) return { error: "Ce client n'est pas dans votre périmètre." };
+  if (!hasCompanyAccess(session, companyId)) {
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "group_create_denied", targetType: "company", targetId: companyId, result: "failure", metadata: { name } });
+    return { error: "Ce client n'est pas dans votre périmètre." };
+  }
 
   const groupId = createGroup({
     companyId,
@@ -53,7 +57,10 @@ export interface AddCandidateResult {
  * séparée de gestion globale des comptes candidats (hors périmètre MVP). */
 export async function addCandidateAction(groupId: number, _prev: AddCandidateResult, formData: FormData): Promise<AddCandidateResult> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
-  if (!hasGroupAccess(session, groupId)) return { error: "Ce groupe n'est pas dans votre périmètre." };
+  if (!hasGroupAccess(session, groupId)) {
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_add_denied", targetType: "group", targetId: groupId, result: "failure" });
+    return { error: "Ce groupe n'est pas dans votre périmètre." };
+  }
   const fullName = String(formData.get("fullName") ?? "").trim();
   const username = String(formData.get("username") ?? "").trim();
   const password = String(formData.get("password") ?? "");

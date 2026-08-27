@@ -63,15 +63,51 @@ describe("Affectation d'examen — modes groupe / sélection / individuel", () =
     assert.deepEqual(listAssignedCandidateIds(assessmentId), [c2]);
   });
 
-  test("un id candidat qui n'appartient PAS au groupe est ignoré, jamais affecté en confiance aveugle", async () => {
+  // Correction d'audit : un id candidat hors groupe ne doit plus être
+  // silencieusement filtré — TOUTE la publication est refusée (aucune
+  // évaluation publiée, aucune affectation créée, même pour les
+  // candidats par ailleurs valides de la même requête), avec un message
+  // clair et une trace d'audit du refus.
+  test("un id candidat hors groupe rejette TOUTE la publication (rien n'est affecté, rien n'est publié)", async () => {
     const { adminId, groupId, c1, createAssessmentDraft, publishAssessment, listAssignedCandidateIds } = await setupFixture();
     const { createUser } = await import("../../lib/users");
+    const { getAssessment } = await import("../../lib/assessments");
+    const { listAuditLogs } = await import("../../lib/audit");
     const outsiderId = createUser({ username: `outsider.${Date.now()}`, password: "x".repeat(10), fullName: "Hors groupe", role: "candidate" });
     const assessmentId = createAssessmentDraft({ type: "examen", name: "Ex Outsider", functionCode: "7.1", groupId, questionSource: "random", questionCount: 1, durationMinutes: 30, passThresholdPct: 80, scope: "test", createdBy: adminId });
-    publishAssessment(assessmentId, adminId, { candidateUserIds: [c1, outsiderId] });
-    const assigned = listAssignedCandidateIds(assessmentId);
-    assert.deepEqual(assigned, [c1]);
-    assert.ok(!assigned.includes(outsiderId), "un candidat hors groupe ne doit jamais être affecté, même explicitement demandé");
+
+    assert.throws(
+      () => publishAssessment(assessmentId, adminId, { candidateUserIds: [c1, outsiderId] }),
+      /n'appartient pas au groupe sélectionné ou n'est pas autorisé dans votre périmètre/
+    );
+
+    // Rien de publié, rien d'affecté — pas même c1, pourtant valide.
+    assert.equal(getAssessment(assessmentId)!.status, "draft");
+    assert.deepEqual(listAssignedCandidateIds(assessmentId), []);
+
+    // Le refus est audité (pas silencieux).
+    const denials = listAuditLogs(500).filter((d) => d.action === "assessment_assign_denied");
+    const thisOne = denials.find((d) => d.target_id === assessmentId);
+    assert.ok(thisOne, "le refus doit être tracé dans le journal d'audit");
+    assert.equal(thisOne!.result, "failure");
+    const meta = JSON.parse(thisOne!.metadata_json ?? "{}");
+    assert.deepEqual(meta.invalidCandidateUserIds, [outsiderId]);
+  });
+
+  test("assignCandidatesToAssessment (réaffectation post-publication) rejette aussi TOUT si un id est hors groupe", async () => {
+    const { adminId, groupId, c1, c2, createAssessmentDraft, publishAssessment, listAssignedCandidateIds } = await setupFixture();
+    const { assignCandidatesToAssessment } = await import("../../lib/assessments");
+    const { createUser } = await import("../../lib/users");
+    const outsiderId = createUser({ username: `outsider2.${Date.now()}`, password: "x".repeat(10), fullName: "Hors groupe 2", role: "candidate" });
+    const assessmentId = createAssessmentDraft({ type: "examen", name: "Ex Reassign Outsider", functionCode: "7.1", groupId, questionSource: "random", questionCount: 1, durationMinutes: 30, passThresholdPct: 80, scope: "test", createdBy: adminId });
+    publishAssessment(assessmentId, adminId, { candidateUserIds: [c1] });
+
+    assert.throws(
+      () => assignCandidatesToAssessment(assessmentId, [c2, outsiderId], adminId),
+      /n'appartient pas au groupe sélectionné ou n'est pas autorisé dans votre périmètre/
+    );
+    // c2 (valide) ne doit PAS non plus avoir été affecté — refus total.
+    assert.deepEqual(listAssignedCandidateIds(assessmentId), [c1]);
   });
 
   test("assignCandidatesToAssessment ajoute des candidats après publication (réaffectation)", async () => {

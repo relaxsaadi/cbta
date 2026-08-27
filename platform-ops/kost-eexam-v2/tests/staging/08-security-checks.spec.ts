@@ -102,38 +102,13 @@ test.describe("Attributs du cookie de session — défense CSRF/XSS de base", ()
   });
 });
 
-// Compte dédié, réservé à ce test — jamais utilisé par le pilote d'examen
-// (candidat1/2/3 assignés à l'EXAMEN réel) ni par la démo d'incident. Reste
-// verrouillé ~15 min après ce test (fenêtre du limiteur) — sans impact sur
-// le reste du pilote.
-test.describe("Anti-force-brute sur la connexion — vérifié sur le vrai chemin HTTP, pas seulement en unité", () => {
-  test("6 tentatives avec un mauvais mot de passe bloquent la 6e, même avec le bon mot de passe ensuite", async ({ page }) => {
-    await page.goto("/login");
-    // Le formulaire utilise useActionState (transition CÔTÉ CLIENT, sans
-    // navigation complète) — un .click() n'attend pas nativement la fin de
-    // l'action serveur sous-jacente. Sans attendre explicitement la réponse
-    // POST, deux itérations rapprochées peuvent se chevaucher et certaines
-    // ne déclenchent jamais de VRAIE requête serveur distincte (constaté en
-    // pratique : seules 3 des 5 tentatives voulues atteignaient le
-    // serveur). On attend donc explicitement la réponse de chaque
-    // soumission avant de continuer — un essai par itération, garanti.
-    for (let i = 0; i < 5; i++) {
-      await page.getByLabel("Nom d'utilisateur").fill(env("STAGING_CANDIDATE3_USER"));
-      await page.getByLabel("Mot de passe").fill("mot-de-passe-volontairement-faux");
-      const responsePromise = page.waitForResponse((r) => r.request().method() === "POST" && r.url() === page.url());
-      await page.getByRole("button", { name: /se connecter/i }).click();
-      await responsePromise;
-      await expect(page.getByText(/identifiant ou mot de passe incorrect/i)).toBeVisible();
-    }
-    // 6e tentative — avec le VRAI mot de passe cette fois : doit tout de
-    // même être bloquée par le limiteur (preuve qu'il agit AVANT la
-    // vérification du mot de passe, pas seulement sur les échecs).
-    await page.getByLabel("Nom d'utilisateur").fill(env("STAGING_CANDIDATE3_USER"));
-    await page.getByLabel("Mot de passe").fill(env("STAGING_CANDIDATE3_PASS"));
-    const finalResponsePromise = page.waitForResponse((r) => r.request().method() === "POST" && r.url() === page.url());
-    await page.getByRole("button", { name: /se connecter/i }).click();
-    await finalResponsePromise;
-    await expect(page.getByText(/trop de tentatives/i)).toBeVisible();
-    await expect(page).toHaveURL(/\/login/);
-  });
-});
+// L'anti-force-brute sur la connexion a sa propre preuve dédiée et
+// déterministe dans tests/staging/10-rate-limit-clean-proof.spec.ts, qui
+// utilise des comptes de test créés fraîchement pour CE seul usage
+// (scripts/seed-ratelimit-test-accounts.ts) — l'ancienne version ici
+// réutilisait candidat3.staging, un compte du pilote d'examen partagé
+// avec d'autres tests, ce qui la rendait non déterministe (verrouillée
+// ~15 min à chaque exécution précédente, faisant parfois échouer une
+// exécution ultérieure sans rapport avec une régression réelle). Retirée
+// au profit de la version canonique, plus complète (5 comportements
+// prouvés, pas seulement le blocage au seuil).

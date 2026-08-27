@@ -9,8 +9,12 @@ test("l'administrateur voit le détail complet des tentatives réelles", async (
   await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
 
   await page.goto("/results");
-  await expect(page.getByText("Yasmine Kaced (pilote)")).toBeVisible();
-  await expect(page.getByText("Riad Boumediene (pilote)")).toBeVisible();
+  // getByRole('link', ...) plutôt que getByText : le panneau de filtres
+  // (addendum §7) inclut désormais un <select> "Candidat" dont chaque
+  // <option> contient le même nom en sous-chaîne — un getByText nu
+  // matcherait aussi l'option masquée du select fermé (ambiguïté).
+  await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Riad Boumediene (pilote)" })).toBeVisible();
 
   // Tentative réussie (candidat 1).
   await page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first().click();

@@ -157,8 +157,11 @@ test.describe("Périmètres élargis attendus — administrateur global, auditeu
     await loginAs(page, env("STAGING_AUDITOR_USER"), env("STAGING_AUDITOR_PASS"));
 
     await page.goto("/results");
-    await expect(page.getByText("Yasmine Kaced")).toBeVisible();
-    await expect(page.getByText(CANDIDATE_B_NAME)).toBeVisible();
+    // getByRole('link', ...) : le <select> "Candidat" (addendum §7) sur
+    // /results contient les mêmes noms en sous-chaîne dans ses <option> —
+    // un getByText nu matcherait aussi l'option masquée (ambiguïté).
+    await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
+    await expect(page.getByRole("link", { name: CANDIDATE_B_NAME })).toBeVisible();
 
     const attemptB = await page.goto(`/results/${ATTEMPT_B_ID}`);
     expect(attemptB?.status()).toBe(200);

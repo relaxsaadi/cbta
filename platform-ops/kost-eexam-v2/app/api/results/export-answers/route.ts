@@ -21,6 +21,10 @@ export async function GET(request: Request) {
     groupId: searchParams.get("groupId") ? Number(searchParams.get("groupId")) : undefined,
     functionCode: searchParams.get("functionCode") || undefined,
     assessmentId: searchParams.get("assessmentId") ? Number(searchParams.get("assessmentId")) : undefined,
+    candidateUserId: searchParams.get("candidateUserId") ? Number(searchParams.get("candidateUserId")) : undefined,
+    passed: searchParams.get("passed") === "true" ? true : searchParams.get("passed") === "false" ? false : undefined,
+    dateFrom: searchParams.get("dateFrom") || undefined,
+    dateTo: searchParams.get("dateTo") || undefined,
     restrictToGroupIds: scopedGroupIdsOrNull(session) ?? undefined,
   });
 

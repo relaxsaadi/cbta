@@ -8,6 +8,10 @@ export interface ResultsFilter {
   assessmentId?: number;
   candidateUserId?: number;
   passed?: boolean;
+  /** Addendum §7 — filtre par date (jour de début de tentative,
+   * format "YYYY-MM-DD", bornes inclusives). */
+  dateFrom?: string;
+  dateTo?: string;
   scopes?: Scope[];
   /** Frontière multi-client (lib/tenant-scope.ts) — calculée côté serveur
    * à partir de la session, JAMAIS depuis un paramètre fourni par le
@@ -98,6 +102,14 @@ export function listResults(filter: ResultsFilter = {}): ResultsRow[] {
     clauses.push("r.passed = ?");
     params.push(filter.passed ? 1 : 0);
   }
+  if (filter.dateFrom) {
+    clauses.push("at.started_at >= ?");
+    params.push(`${filter.dateFrom}T00:00:00.000Z`);
+  }
+  if (filter.dateTo) {
+    clauses.push("at.started_at <= ?");
+    params.push(`${filter.dateTo}T23:59:59.999Z`);
+  }
   if (filter.scopes && filter.scopes.length) {
     clauses.push(`a.scope IN (${filter.scopes.map(() => "?").join(",")})`);
     params.push(...filter.scopes);
@@ -107,6 +119,39 @@ export function listResults(filter: ResultsFilter = {}): ResultsRow[] {
   return getDb()
     .prepare(`${BASE_QUERY} ${where} ORDER BY at.started_at DESC`)
     .all(...params) as unknown as ResultsRow[];
+}
+
+export interface CandidateOption {
+  id: number;
+  full_name: string;
+  company_name: string;
+  group_name: string;
+}
+
+/** Addendum §7 — options du filtre "candidat" sur l'écran/export
+ * résultats, scopées au même périmètre que le reste (restrictToGroupIdsOrNull
+ * null = illimité, [] = aucun groupe géré, sinon la liste des groupes
+ * autorisés — voir lib/tenant-scope.ts scopedGroupIdsOrNull). */
+export function listCandidateOptions(restrictToGroupIdsOrNull: number[] | null = null): CandidateOption[] {
+  if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
+  const clauses: string[] = [];
+  const params: number[] = [];
+  if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
+    clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
+    params.push(...restrictToGroupIdsOrNull);
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  return getDb()
+    .prepare(
+      `SELECT DISTINCT u.id, u.full_name, c.name AS company_name, g.name AS group_name
+       FROM group_members gm
+       JOIN users u ON u.id = gm.candidate_user_id
+       JOIN groups g ON g.id = gm.group_id
+       JOIN companies c ON c.id = g.company_id
+       ${where}
+       ORDER BY u.full_name`
+    )
+    .all(...params) as unknown as CandidateOption[];
 }
 
 export interface AttemptDetailQuestion {

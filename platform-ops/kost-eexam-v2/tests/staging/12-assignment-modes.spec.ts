@@ -7,11 +7,23 @@ import { loginAs, env } from "./helpers";
 // réel Air Algérie — DGR Démonstration, publié en mode INDIVIDUEL vers
 // candidat3.staging exclusivement — jamais candidat1/candidat2 (déjà
 // utilisés par le pilote principal).
+// Garde d'idempotence (même raison que 01-responsable-creates-exam.spec.ts) :
+// un nom fixe (au lieu du suffixe Date.now() d'origine) évite d'accumuler
+// une nouvelle évaluation de test à chaque exécution de la suite complète
+// — constaté en pratique : l'accumulation finit par repousser les VRAIS
+// examens pilotes hors du top-8 tronqué de /overview, cassant
+// 11-incidents-overview-sessions-isolation.spec.ts par effet de bord.
+const TEST_ASSESSMENT_NAME = "Test affectation individuelle staging";
+
 test("publication en mode individuel : seul le candidat ciblé voit l'examen, jamais les autres membres du groupe", async ({ page, context }) => {
   await loginAs(page, env("STAGING_MANAGER_USER"), env("STAGING_MANAGER_PASS"));
 
   await page.goto("/exam-preparation");
-  const name = `Test affectation individuelle ${Date.now()}`;
+  test.skip(
+    (await page.getByText(TEST_ASSESSMENT_NAME).count()) > 0,
+    "L'évaluation de test existe déjà sur ce staging — création déjà prouvée, pas de recréation (idempotence)."
+  );
+  const name = TEST_ASSESSMENT_NAME;
   await page.locator('input[name="name"]').fill(name);
   // Type = exercice (sr-only, comme le radio "examen" déjà rencontré dans
   // ce même wizard — cible l'input directement avec check({force:true})).

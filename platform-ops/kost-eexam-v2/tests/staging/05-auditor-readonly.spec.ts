@@ -19,7 +19,10 @@ test("l'auditeur consulte le pilote réel en lecture seule uniquement", async ({
   await expect(page.getByRole("button", { name: /créer le brouillon/i })).toHaveCount(0);
 
   await page.goto("/results");
-  await expect(page.getByText("Yasmine Kaced (pilote)")).toBeVisible();
+  // getByRole('link', ...) : le <select> "Candidat" (addendum §7) contient
+  // le même nom en sous-chaîne dans son <option> — ambiguïté avec un
+  // getByText nu (même raison qu'ailleurs dans la suite).
+  await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
   await page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first().click();
   await page.waitForURL(/\/results\/\d+/);
   await expect(page.getByText(/marchandise dangereuse/i).first()).toBeVisible();

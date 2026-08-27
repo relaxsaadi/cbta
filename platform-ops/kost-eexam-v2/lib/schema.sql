@@ -362,3 +362,32 @@ CREATE TABLE IF NOT EXISTS backup_records (
   detail TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );
+
+-- Module de familiarisation (addendum §18-21) — sessions de
+-- familiarisation à la plateforme AVANT l'examen réel, distinctes des
+-- évaluations elles-mêmes. Une session porte sur un groupe et une
+-- fonction DGR ; chaque candidat du groupe y a une ligne de présence
+-- (feuille de présence PDF avec zone de signature par candidat — voir
+-- lib/pdf/AttendanceSheetDocument.tsx).
+CREATE TABLE IF NOT EXISTS familiarization_sessions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  group_id INTEGER NOT NULL REFERENCES groups(id),
+  function_code TEXT NOT NULL REFERENCES functions(code),
+  held_at TEXT NOT NULL,
+  location TEXT,
+  notes TEXT,
+  organized_by INTEGER REFERENCES users(id),
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+CREATE TABLE IF NOT EXISTS familiarization_attendance (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id INTEGER NOT NULL REFERENCES familiarization_sessions(id) ON DELETE CASCADE,
+  candidate_user_id INTEGER NOT NULL REFERENCES users(id),
+  present INTEGER NOT NULL DEFAULT 0 CHECK (present IN (0,1)),
+  marked_at TEXT,
+  marked_by INTEGER REFERENCES users(id),
+  UNIQUE (session_id, candidate_user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_familiarization_sessions_group ON familiarization_sessions(group_id);
+CREATE INDEX IF NOT EXISTS idx_familiarization_attendance_candidate ON familiarization_attendance(candidate_user_id);

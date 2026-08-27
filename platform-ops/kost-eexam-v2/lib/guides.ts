@@ -106,6 +106,13 @@ export const GUIDES: Record<string, Guide> = {
         ],
       },
       {
+        heading: "Familiarisation (§18-21)",
+        paragraphs: [
+          "Avant l'examen réel, une session de familiarisation peut être déclarée sur « Familiarisation » : elle crée automatiquement une ligne de présence pour chaque candidat actuellement dans le groupe. La présence se coche individuellement sur la fiche de la session, qui affiche aussi l'historique de familiarisation déjà connu pour chaque candidat (nombre de sessions précédentes, date et statut de la dernière).",
+          "La feuille de présence (PDF) liste nominativement chaque candidat avec sa propre zone de signature — document distinct de la liste officielle des résultats, à faire signer le jour de la familiarisation.",
+        ],
+      },
+      {
         heading: "Sécurité et incidents",
         paragraphs: [
           "Vous pouvez déclarer un incident pour l'un de vos groupes (jamais un incident « plateforme », réservé à l'administrateur). Voir le « Guide de session » pour la conduite à tenir en cas d'incident pendant une session en cours, et la procédure incident (PDF) pour le détail complet des actions disponibles.",
@@ -126,6 +133,7 @@ export const GUIDES: Record<string, Guide> = {
           "« Utilisateurs » — créer des comptes, attribuer un rôle, suspendre/réactiver.",
           "« Banque de questions » — ajouter des questions vérifiées, consulter le statut source de chaque fonction.",
           "« Examens » — créer, publier, suspendre, réouvrir, clôturer n'importe quelle évaluation, tous clients confondus.",
+          "« Familiarisation » — déclarer des sessions et suivre la présence, tous clients confondus.",
           "« Résultats » — mêmes filtres et exports qu'un responsable, sans restriction de périmètre.",
           "« Journal d'audit » — consultation seule, en écriture seule par conception (aucune entrée n'est jamais modifiée ni supprimée).",
           "« Sauvegarde & restauration » — état des dernières sauvegardes et tests de restauration.",
@@ -159,6 +167,7 @@ export const GUIDES: Record<string, Guide> = {
         steps: [
           "Clients, Groupes — vue globale, tous clients confondus.",
           "Examens et paramètres — vue globale.",
+          "Familiarisation — sessions et présence, feuille de présence PDF.",
           "Résultats et réponses — mêmes filtres et exports CSV qu'un responsable/administrateur.",
           "Rapport global de session, liste officielle des résultats, rapports individuels — tous téléchargeables en PDF.",
           "Incidents — historique complet, y compris la procédure incident (PDF).",

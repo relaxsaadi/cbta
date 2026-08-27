@@ -18,6 +18,7 @@ import {
   DatabaseBackup,
   HelpCircle,
   FileClock,
+  GraduationCap,
   type LucideIcon,
 } from "lucide-react";
 import type { ConsoleRole } from "./session";
@@ -34,6 +35,7 @@ const STAFF_SHARED: NavGroup[] = [
       { label: "Groupes", href: "/groups", icon: Users2 },
       { label: "Banque de questions", href: "/question-bank", icon: Library },
       { label: "Préparation des examens", href: "/exam-preparation", icon: BookOpenCheck },
+      { label: "Familiarisation", href: "/familiarisation", icon: GraduationCap },
       { label: "Résultats", href: "/results", icon: ListChecks },
     ],
   },

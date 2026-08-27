@@ -98,6 +98,17 @@ export function hasAssessmentAccess(session: ScopeSession, assessmentId: number)
     .get(assessmentId, session.userId);
 }
 
+/** Addendum §18-21 — module de familiarisation : une session porte sur un
+ * groupe, même frontière qu'un examen (hasAssessmentAccess ci-dessus). */
+export function hasFamiliarizationSessionAccess(session: ScopeSession, familiarizationSessionId: number): boolean {
+  if (session.role !== "pedagogical_manager") return true;
+  return !!getDb()
+    .prepare(
+      `SELECT 1 FROM familiarization_sessions fs JOIN groups g ON g.id = fs.group_id WHERE fs.id = ? AND g.pedagogical_manager_id = ?`
+    )
+    .get(familiarizationSessionId, session.userId);
+}
+
 export function hasAttemptAccess(session: ScopeSession, attemptId: number): boolean {
   if (session.role !== "pedagogical_manager") return true;
   return !!getDb()

@@ -1,0 +1,53 @@
+"use client";
+
+import { useActionState } from "react";
+import { createFamiliarizationSessionAction, type CreateSessionResult } from "./actions";
+
+export function CreateSessionForm({
+  groups,
+  functions,
+}: {
+  groups: { id: number; name: string; company_name: string }[];
+  functions: { code: string; label: string }[];
+}) {
+  const [state, formAction, pending] = useActionState<CreateSessionResult, FormData>(createFamiliarizationSessionAction, {});
+
+  return (
+    <form action={formAction} className="flex flex-col gap-3">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label htmlFor="groupId" className="mb-1 block text-[12px] font-medium text-text-secondary">Groupe / session</label>
+          <select id="groupId" name="groupId" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <option value="">Sélectionner…</option>
+            {groups.map((g) => (<option key={g.id} value={g.id}>{g.company_name} — {g.name}</option>))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="functionCode" className="mb-1 block text-[12px] font-medium text-text-secondary">Fonction DGR</label>
+          <select id="functionCode" name="functionCode" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <option value="">Sélectionner…</option>
+            {functions.map((f) => (<option key={f.code} value={f.code}>{f.label}</option>))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="heldAt" className="mb-1 block text-[12px] font-medium text-text-secondary">Date / heure</label>
+          <input id="heldAt" name="heldAt" type="datetime-local" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+        </div>
+        <div>
+          <label htmlFor="location" className="mb-1 block text-[12px] font-medium text-text-secondary">Lieu</label>
+          <input id="location" name="location" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+        </div>
+      </div>
+      <div>
+        <label htmlFor="notes" className="mb-1 block text-[12px] font-medium text-text-secondary">Notes</label>
+        <textarea id="notes" name="notes" rows={2} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+      </div>
+      <div>
+        <button disabled={pending} type="submit" className="rounded-md bg-accent-9 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-accent-10 disabled:opacity-60">
+          {pending ? "Création…" : "Créer la session de familiarisation"}
+        </button>
+        {state.error && <p className="mt-2 text-[12.5px] text-status-critical-text">{state.error}</p>}
+      </div>
+    </form>
+  );
+}

@@ -101,7 +101,7 @@ chaque étape :
 | Parcours candidat complet | DONE |
 | Timer serveur (`expires_at`, indépendant du navigateur) | DONE, testé refresh + expiry (timer.test.ts unit + E2E) |
 | Autosave | DONE — sauvegarde à chaque réponse |
-| Reconnect (fermeture/réouverture navigateur) | PARTIAL — prouvé par refresh unique (02-candidate-takes-exam), **pas testé** fermeture complète du navigateur / perte réseau réelle simulée |
+| Reconnect / crash / perte réseau / expiry (§8) | **DONE** — refresh mid-tentative prouvé en E2E réel (`scenario-c-candidate-flow.spec.ts`, réponse conservée, chronomètre non redémarré) ; le cas "le candidat ne revient JAMAIS" (fermeture complète, crash, perte réseau) est couvert au niveau serveur, pas au niveau navigateur — c'est structurellement correct : `sweepExpiredAttempts()` (`lib/attempts.ts`) auto-soumet et note toute tentative expirée sans dépendre d'aucune action client, prouvé par `timer.test.ts` (2/2). Filet indépendant de toute page consultée : cron `*/5 * * * * sweep.sh` **installé et vérifié réellement sur staging** cette session (`crontab -l` confirmé). Bug réel trouvé et corrigé en l'installant : `proxy.ts` redirigeait cette route vers `/login` pour toute requête sans cookie de session, rendant le cron structurellement inappelable malgré son authentification par jeton dédiée — exempté, revérifié par 2 tests E2E dédiés (`08-security-checks.spec.ts`). |
 | Concurrency (double-clic, 2 onglets) | DONE — contrainte DB + transaction, `attempt-concurrency.test.ts`, prouvé aussi en E2E (deux onglets, scénario E historique) |
 | Grading — source unique | DONE — `lib/grading.ts`, seul point d'écriture `results` |
 
@@ -143,6 +143,7 @@ DONE (addendum §12-21) — 5 guides écran+PDF, module de familiarisation compl
 - Logs conteneur : aucun mot de passe/secret/token trouvé dans 200 lignes récentes.
 - **Fuite réelle #1 (corrigée) :** `.env.staging.local` (identifiants de TEST staging — candidats/responsables/admin de démonstration, jamais des secrets de production) s'était retrouvé copié sur le serveur via `rsync` (répertoire `app/`, jamais dans l'image Docker grâce à `.dockerignore`, mais présent en clair sur le système de fichiers du serveur). Supprimé du serveur ; ce fichier n'a aucune utilité côté serveur (seul le lanceur de tests Playwright local en a besoin).
 - **Fuite réelle #2 (corrigée) :** un script d'extraction Moodle ponctuel (`/tmp/extract_moodle_questions.py`, jamais commis dans le dépôt) contenait le mot de passe root de la base MySQL Moodle en dur, nécessaire pour l'extraction lecture-seule de la banque de questions (§6-10 ci-dessus). Supprimé du serveur et de la machine locale après usage.
+- **Faille d'accès réelle #3 (corrigée) :** `proxy.ts` (garde de session globale) redirigeait `/api/attempts/sweep` vers `/login` pour toute requête sans cookie — pas une fuite de données, mais un défaut de disponibilité du filet de sécurité chronomètre (§6 ci-dessus) qui rendait la route inappelable par le cron alors que sa propre authentification par jeton (`SWEEP_TOKEN`) fonctionnait correctement. Trouvé en installant le cron, corrigé (exemption ciblée, jeton toujours vérifié côté route), revérifié par 2 tests E2E dédiés.
 
 ## 12. Accessibilité / Device / Performance / Charge / Monitoring / Logging
 
@@ -151,7 +152,7 @@ Toutes **MISSING** — jamais exécutées pour V2 :
 - Device/viewport : seule la config Chromium desktop existe (`playwright.config.ts`), aucun projet tablette/mobile/WebKit.
 - Performance avec données synthétiques (100/500 candidats) : jamais testé.
 - Charge concurrente (20/50/100 candidats simultanés) : jamais testé.
-- Monitoring production (santé, DB, disque, CPU/RAM, taux d'erreur, échec sauvegarde, alertes incident) : rien construit — `/system` existe (page) mais pas d'alerting actif.
+- Monitoring production (santé, DB, disque, CPU/RAM, taux d'erreur, échec sauvegarde, alertes incident) : rien construit — `/system` existe (page) mais pas d'alerting actif. Un seul filet périodique réel existe à ce jour : le cron de balayage du chronomètre (§6/§8, `*/5 * * * * sweep.sh`, installé et vérifié cette session) — pas une alerte, mais une action corrective automatique réelle.
 - Logging structuré + rotation/rétention : logs actuels = stdout Docker par défaut, pas de politique de rotation/rétention définie, pas de scrub explicite de PII au-delà de l'audit_logs (déjà insert-only, déjà sans mot de passe).
 
 ## 13. Scope Démo/Test/Production
@@ -160,15 +161,16 @@ DONE au niveau schéma (colonne `scope` explicite sur `companies`/`groups`/`asse
 
 ## 14. MFA — évaluation (mission §25)
 
-**MISSING**, colonne prête. Implémentation TOTP nécessite : génération de secret, QR code d'enrôlement, vérification au login, codes de récupération. Faisable nativement (aucune dépendance externe obligatoire — `otplib` ou équivalent, pas de service tiers requis pour TOTP standard). Pas de blocage humain identifié pour l'implémenter — sera traité comme un gate technique normal, pas une interruption.
+**DONE** — TOTP natif (RFC 6238/4226, `node:crypto` HMAC-SHA1, zéro dépendance npm nouvelle), validé contre les 5 vecteurs de test officiels RFC 6238 Annexe B (14/14 tests unitaires). Enrôlement en libre-service (`/mon-compte`, administrateur + responsable pédagogique), codes de secours à usage unique (hachés scrypt, affichés une seule fois), connexion à deux facteurs (`/login/verifier-mfa`, même limiteur anti-force-brute que le mot de passe), désactivation en libre-service (mot de passe requis), voie de récupération administrateur pour compte verrouillé (`/users`, action auditée séparément). Déployé et vérifié réellement sur staging (2 tests E2E dédiés, cycle complet + usage unique des codes de secours). MFA **fonctionnel et disponible dès maintenant**, mais **pas rendu obligatoire de force** sur les comptes administrateur existants cette session — décision de politique explicite (voir `lib/mfa.ts`), pas une omission : forcer maintenant risquerait de verrouiller le seul compte administrateur sans qu'un parcours de récupération complet ait été validé par son propriétaire. Rendre MFA obligatoire pour tout compte administrateur avant la bascule production reste une recommandation forte, actionnable en quelques minutes le moment venu.
 
 ---
 
 ## Résumé exécutif — priorisation
 
 1. ~~**Contenu réel DGR**~~ — **FAIT cette session** (§3bis) : 92/97 questions FROZEN réellement récupérables migrées sur les 10 fonctions, importeur contrôlé construit et prouvé idempotent, vérifié via l'API réelle de l'application. 5 items restent un blocage humain/réglementaire permanent (texte introuvable).
-2. **MFA** — technique, non bloqué, à construire.
-3. **Accessibilité / Performance / Charge / Monitoring** — jamais faites, à exécuter méthodiquement.
-4. **Candidate management (edit/bulk CSV/export/search roster)** — gaps ponctuels, rapides à combler.
-5. **Secret scan** — à exécuter formellement (aucune fuite connue à ce jour, mais pas encore vérifié pour cette phase).
-6. Tout le reste (auth/RBAC/tenant/exam engine/timer/grading/results/PDF/CSV/incidents/audit/backup/guides/familiarisation) est **DONE et testé** — ne pas reconstruire.
+2. ~~**MFA**~~ — **FAIT cette session** (§14) : TOTP natif + codes de secours, enrôlement/désactivation en libre-service, connexion à 2 facteurs, voie de récupération admin. Déployé, vérifié en E2E réel sur staging.
+3. ~~**Filet de sécurité chronomètre (crash/perte réseau)**~~ — **FAIT cette session** (§6/§8) : cron réel installé sur staging, un bug d'accès réel trouvé et corrigé en l'installant (`proxy.ts` bloquait la route malgré son authentification par jeton dédiée).
+4. **Accessibilité / Performance / Charge / Monitoring** — jamais faites, à exécuter méthodiquement.
+5. ~~**Candidate management (edit/bulk CSV/export/search roster)**~~ — **FAIT** (session précédente).
+6. ~~**Secret scan**~~ — **FAIT** (session précédente) : 2 fuites réelles trouvées et corrigées, aucune n'était un secret de production. +1 faille d'accès réelle trouvée et corrigée cette session (voir §11).
+7. Tout le reste (auth/RBAC/tenant/exam engine/timer/grading/results/PDF/CSV/incidents/audit/backup/guides/familiarisation) est **DONE et testé** — ne pas reconstruire.

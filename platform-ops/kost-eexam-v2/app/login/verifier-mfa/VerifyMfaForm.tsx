@@ -10,7 +10,7 @@ export function VerifyMfaForm() {
   const [state, formAction, pending] = useActionState(verifyMfaAction, initialState);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-base px-6 py-12">
+    <main className="flex min-h-screen items-center justify-center bg-surface-base px-6 py-12">
       <div className="w-full max-w-[380px]">
         <div className="mb-6 flex flex-col items-center text-center">
           <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent-9 text-white">
@@ -63,6 +63,6 @@ export function VerifyMfaForm() {
           </button>
         </form>
       </div>
-    </div>
+    </main>
   );
 }

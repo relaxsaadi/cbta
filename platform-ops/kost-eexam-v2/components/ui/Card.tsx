@@ -37,7 +37,10 @@ export function CardHeader({
   return (
     <div className="flex items-start justify-between gap-4 mb-4">
       <div>
-        <h3 className="font-display text-[13.5px] font-semibold text-text-primary tracking-tight">{title}</h3>
+        {/* h2 — toujours utilisé directement sous le h1 de page (accessibilité,
+            heading-order axe-core), jamais h3 : aucune page de ce projet
+            n'imbrique Card dans Card à un niveau nécessitant un h3 réel. */}
+        <h2 className="font-display text-[13.5px] font-semibold text-text-primary tracking-tight">{title}</h2>
         {description && <p className="mt-0.5 text-[12.5px] text-text-tertiary">{description}</p>}
       </div>
       {action}

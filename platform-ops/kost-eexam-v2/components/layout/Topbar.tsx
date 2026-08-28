@@ -24,7 +24,7 @@ export function Topbar({ role, onMenuClick }: { role: ConsoleRole; onMenuClick: 
         >
           <Menu size={18} />
         </button>
-        <nav className="flex items-center gap-2 text-[13px] min-w-0">
+        <nav aria-label="Fil d'Ariane" className="flex items-center gap-2 text-[13px] min-w-0">
           {crumbs.map((crumb, i) => (
             <span key={i} className="flex items-center gap-2 min-w-0">
               {i > 0 && <span className="text-text-tertiary/60">/</span>}

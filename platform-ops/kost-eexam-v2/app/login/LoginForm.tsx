@@ -10,7 +10,7 @@ export function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
 
   return (
-    <div className="flex min-h-screen">
+    <main className="flex min-h-screen">
       <div className="relative hidden w-[46%] flex-col justify-between overflow-hidden bg-navy-950 px-12 py-12 lg:flex">
         <div
           className="pointer-events-none absolute inset-0 opacity-70"
@@ -113,7 +113,7 @@ export function LoginForm() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

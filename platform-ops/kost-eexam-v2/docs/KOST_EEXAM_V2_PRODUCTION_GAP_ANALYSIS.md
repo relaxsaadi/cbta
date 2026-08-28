@@ -12,9 +12,9 @@ Classification par item : **DONE** / **PARTIAL** / **MISSING** / **BLOCKED** / *
 |---|---|---|
 | Auth native (login, sessions serveur, cookie) | DONE | `lib/auth.ts`, `lib/session.ts`, `lib/sessions-registry.ts` — testé E2E (08-security-checks) |
 | RBAC 4 rôles, appliqué serveur | DONE | `lib/rbac.ts` — `requireRole`/`requireWriteRole`/`guardPage`, testé sur chaque route mutante |
-| Tenant isolation (module central) | DONE | `lib/tenant-scope.ts` — 3 gaps fermés et re-testés cette session (incidents/overview/sessions), 09/11-isolation E2E verts |
+| Tenant isolation (module central) | DONE | `lib/tenant-scope.ts` — 3 gaps fermés et re-testés en session précédente (incidents/overview/sessions), 09/11-isolation E2E verts. **Repasse complète cette session** (mission §17-18) : audit exhaustif des 59 fichiers `page.tsx`/`actions.ts`/`route.ts` de l'app — **zéro gap confirmé**, `lib/tenant-scope.ts` réellement utilisé comme source unique à CHAQUE lookup par ID, `requireWriteRole` (ou liste de rôles excluant manuellement `auditor`) sur CHAQUE action mutante, y compris les 5 fichiers ajoutés cette session (MFA, export candidats, edit/bulk-import). Un seul point de compromis de design identifié et déjà documenté comme tel dans le code (pas un bug) : `addCandidateAction`/`bulkImportCandidatesAction` peuvent rattacher un candidat existant (identifiant global, pas scopé par société) au groupe d'un AUTRE responsable si celui-ci connaît/devine l'identifiant exact — n'expose AUCUNE donnée historique cross-tenant (résultats/tentatives restent scopés par groupe), simplification MVP assumée explicitement en commentaire de code. |
 | Rate limiting login | PARTIAL | `lib/rate-limit.ts` — **en mémoire, mono-processus** (documenté explicitement dans le code). Acceptable pour le déploiement actuel (1 instance Node), **bloquant si scaling horizontal futur** — nécessiterait un magasin partagé (Redis) |
-| MFA | MISSING | Colonne `mfa_enabled` existe dans `users` (prévue), **aucune logique TOTP implémentée** — ni enrôlement, ni vérification au login |
+| MFA | **DONE** | Native TOTP + codes de secours (§14 ci-dessous) — enrôlement, vérification au login, désactivation, voie de récupération admin, déployé et testé sur staging |
 | Session security (HttpOnly/Secure/SameSite/CSRF) | DONE | Vérifié live sur cookie réel (08-security-checks), Server Actions = protection CSRF native Next.js |
 
 ## 2. Companies / Groups / Candidates
@@ -121,9 +121,9 @@ DONE (addendum §12-21) — 5 guides écran+PDF, module de familiarisation compl
 
 | Item | Statut |
 |---|---|
-| Backup automatique | DONE — `scripts/backup.ts`, format `backup-log.jsonl` compatible V1 |
-| Test de restauration isolé | DONE — exécuté réellement (`scripts/restore-test.ts`), intégrité vérifiée |
-| RPO/RTO documentés | PARTIAL — cible 24h/30min documentée dans l'architecture, **pas formellement re-confirmée pour ce nouveau plan de production** |
+| Backup automatique | DONE — `scripts/backup.ts`, format `backup-log.jsonl` compatible V1. **Gap trouvé et corrigé cette session** : le cron réel n'était jamais installé (seul `deploy/crontab.example` existait, jamais appliqué) — `docker exec kost-eexam-v2 ... scripts/backup.ts` tournait uniquement quand lancé manuellement en session précédente. Cron `0 2 * * *` installé et vérifié sur staging cette session. |
+| Test de restauration isolé | DONE — **rejoué réellement cette session APRÈS la migration de contenu DGR et les colonnes MFA** (pas seulement re-documenté) : `PRAGMA integrity_check` OK, `questions=92` (confirme la migration), `users=24`, `audit_logs=5711`. Cron hebdomadaire `0 3 * * 0` (dimanche) installé et vérifié — auparavant non plus jamais appliqué (même gap que le backup ci-dessus). |
+| RPO/RTO documentés | PARTIAL — cible 24h/30min documentée dans l'architecture, **pas formellement re-confirmée pour ce nouveau plan de production**. RPO réel maintenant tenu par le cron 2h du matin ci-dessus (24h de marge). |
 | Contraintes FK/UNIQUE/CHECK | DONE — `lib/schema.sql`, `PRAGMA foreign_keys = ON` actif, vérifié cette session (le nettoyage de données de test a été bloqué correctement par une FK, preuve que la contrainte fonctionne réellement) |
 | Copie chiffrée hors site | MISSING — dépend du choix d'hébergement final, non tranché |
 
@@ -131,8 +131,8 @@ DONE (addendum §12-21) — 5 guides écran+PDF, module de familiarisation compl
 
 | Item | Statut |
 |---|---|
-| HTTPS + TLS staging | DONE — vérifié live |
-| Security headers (HSTS, CSP, X-Frame-Options, etc.) | DONE — `next.config.ts` `headers()`, en code (pas seulement nginx) |
+| HTTPS + TLS staging | DONE — vérifié live cette session en direct via `openssl s_client` : certificat réel Let's Encrypt (`CN=staging.kostacademy.com`, émis 2026-08-27, valide jusqu'au 2026-11-25), **renouvellement automatique confirmé actif** (`certbot.timer` systemd, prochaine exécution vue en direct). `http://` redirige en 301 vers `https://` (vérifié en direct). |
+| Security headers (HSTS, CSP, X-Frame-Options, etc.) | DONE — `next.config.ts` `headers()`, en code (pas seulement nginx). Vérifiés en direct sur la réponse HTTPS réelle cette session : HSTS (`max-age=63072000; includeSubDomains; preload`), CSP, X-Content-Type-Options, X-Frame-Options tous présents. |
 | Secret scan (git/branche/image/staging/scripts/logs) | **DONE** — exécuté cette session, 2 fuites réelles trouvées et corrigées (voir ci-dessous), aucune n'était un secret de production |
 | Dependency security | **DONE** — `pnpm audit` exécuté cette session : **0 vulnérabilité** (info/low/moderate/high/critical), 526 dépendances |
 
@@ -147,8 +147,7 @@ DONE (addendum §12-21) — 5 guides écran+PDF, module de familiarisation compl
 
 ## 12. Accessibilité / Device / Performance / Charge / Monitoring / Logging
 
-Toutes **MISSING** — jamais exécutées pour V2 :
-- Accessibilité (axe-core) : outil non installé, aucun audit fait.
+- Accessibilité (axe-core) : **DONE** — `@axe-core/playwright` installé, `tests/staging/26-accessibility.spec.ts`, 22 pages réelles couvrant les 4 rôles (public/login, administrateur, responsable pédagogique, candidat — le public réel de l'examen). Premier passage : 0 violation serious/critical, 2 défauts mineurs/modérés réels trouvés (`landmark-one-main`/`region` sur `/login` — pas de balise `<main>` ; `heading-order` — `CardHeader` utilisait `<h3>` directement sous le `<h1>` de page, sautant `<h2>` ; `landmark-unique` — deux `<nav>` sans nom accessible distinct, sidebar vs fil d'Ariane). **Les 4 corrigés** (ajout `<main>` sur `/login` et `/login/verifier-mfa`, `CardHeader` → `<h2>`, `aria-label` sur les deux `<nav>`) — reverifié après déploiement : **0 violation, y compris mineure**, sur les 22 pages testées.
 - Device/viewport : seule la config Chromium desktop existe (`playwright.config.ts`), aucun projet tablette/mobile/WebKit.
 - Performance avec données synthétiques (100/500 candidats) : jamais testé.
 - Charge concurrente (20/50/100 candidats simultanés) : jamais testé.
@@ -184,8 +183,12 @@ DONE au niveau schéma (colonne `scope` explicite sur `companies`/`groups`/`asse
 1. ~~**Contenu réel DGR**~~ — **FAIT cette session** (§3bis) : 92/97 questions FROZEN réellement récupérables migrées sur les 10 fonctions, importeur contrôlé construit et prouvé idempotent, vérifié via l'API réelle de l'application. 5 items restent un blocage humain/réglementaire permanent (texte introuvable).
 2. ~~**MFA**~~ — **FAIT cette session** (§14) : TOTP natif + codes de secours, enrôlement/désactivation en libre-service, connexion à 2 facteurs, voie de récupération admin. Déployé, vérifié en E2E réel sur staging.
 3. ~~**Filet de sécurité chronomètre (crash/perte réseau)**~~ — **FAIT cette session** (§6/§8) : cron réel installé sur staging, un bug d'accès réel trouvé et corrigé en l'installant (`proxy.ts` bloquait la route malgré son authentification par jeton dédiée).
-4. **Accessibilité / Performance / Charge / Monitoring** — jamais faites, à exécuter méthodiquement.
+4. ~~**Accessibilité (axe-core)**~~ — **FAIT cette session** (§12) : 22 pages réelles / 4 rôles testées, 4 défauts réels trouvés et corrigés, **0 violation (y compris mineure) au dernier passage**.
 5. ~~**Candidate management (edit/bulk CSV/export/search roster)**~~ — **FAIT** (session précédente).
 6. ~~**Secret scan**~~ — **FAIT** (session précédente) : 2 fuites réelles trouvées et corrigées, aucune n'était un secret de production. +1 faille d'accès réelle trouvée et corrigée cette session (voir §11).
 7. ~~**Session/auth security pass (cookies, CSRF, rate-limit)**~~ — **FAIT cette session** (§15) : rien à construire, tout confirmé DONE (cookie HttpOnly/SameSite=Strict/Secure vérifié réel, CSRF natif Next.js sur les Server Actions, aucune route API mutante exposée sans protection équivalente, limite architecturale du rate-limit documentée et assumée).
-8. Tout le reste (auth/RBAC/tenant/exam engine/timer/grading/results/PDF/CSV/incidents/audit/backup/guides/familiarisation) est **DONE et testé** — ne pas reconstruire.
+8. ~~**Tenant isolation / auditor mutation denial — repasse finale**~~ — **FAIT cette session** (§1) : audit exhaustif des 59 fichiers page/action/route de l'app, **zéro gap confirmé**, y compris sur les 5 fichiers ajoutés cette session.
+9. ~~**Backup/restore — rejoué après migration**~~ — **FAIT cette session** (§10) : cron quotidien backup + cron hebdomadaire test de restauration **installés pour la première fois** (jamais appliqués avant, seulement documentés) ; restauration rejouée réellement après la migration DGR — intégrité OK, `questions=92` confirmé.
+10. ~~**TLS/en-têtes de sécurité**~~ — **FAIT cette session** (§11bis) : certificat Let's Encrypt réel, renouvellement automatique (`certbot.timer` systemd actif), redirection HTTP→HTTPS 301, HSTS/CSP/X-Frame-Options confirmés en direct.
+11. **Performance / Charge / Monitoring / Logging / Device-viewport** — jamais faites, à exécuter méthodiquement.
+12. Tout le reste (auth/RBAC/tenant/exam engine/timer/grading/results/PDF/CSV/incidents/audit/guides/familiarisation) est **DONE et testé** — ne pas reconstruire.

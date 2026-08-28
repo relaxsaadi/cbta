@@ -19,7 +19,7 @@ import { getSessionOptions, type AppSession } from "@/lib/session";
 // l'installation du cron, jamais silencieusement contourné : le jeton
 // reste une vraie vérification côté route, pas un contournement de
 // sécurité côté proxy).
-const PUBLIC_PATHS = ["/login", "/api/auth", "/api/attempts/sweep"];
+const PUBLIC_PATHS = ["/login", "/api/auth", "/api/attempts/sweep", "/api/health"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

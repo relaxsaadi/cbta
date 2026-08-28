@@ -29,6 +29,12 @@ autorisation explicite).
 - **Rotation des logs cron** (`/var/log/kost-eexam-v2-*.log`) :
   `logrotate-kost-eexam-v2`, installé à `/etc/logrotate.d/` cette
   session.
+- **Supervision active** : `/api/health` (public, DB + fraîcheur backup/
+  restore-test) interrogé toutes les 10 min par `monitor.sh` (cron
+  réellement installé cette session), journal structuré dans
+  `/var/log/kost-eexam-v2-alerts.log`. Pas de notification push
+  (e-mail/SMS/Slack) — canal à choisir par le propriétaire de la
+  plateforme, voir `monitor.sh` pour la justification.
 - **TLS** : certificat Let's Encrypt réel, renouvellement automatique
   (`certbot.timer` systemd, déjà en place côté serveur).
 

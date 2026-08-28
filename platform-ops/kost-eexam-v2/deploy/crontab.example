@@ -28,3 +28,12 @@
 # sweep.sh) plutôt qu'une substitution de variable d'environnement crontab
 # (crontab n'a pas accès aux variables du shell de connexion) :
 */5 * * * * /root/kost-eexam-v2-stack/sweep.sh >> /var/log/kost-eexam-v2-sweep.log 2>&1
+
+# Supervision active minimale toutes les 10 minutes — /api/health (DB,
+# fraîcheur backup/restore-test) + espace disque, écrit un événement
+# structuré à CHAQUE exécution dans /var/log/kost-eexam-v2-alerts.log (pas
+# seulement en cas d'anomalie). Ne pousse PAS de notification (e-mail/SMS/
+# Slack) — voir deploy/monitor.sh pour la justification : le canal
+# d'alerte en temps réel est un choix d'outil/service à trancher par le
+# propriétaire de la plateforme, jamais fabriqué sans un canal réel.
+*/10 * * * * /root/kost-eexam-v2-stack/monitor.sh >> /var/log/kost-eexam-v2-monitor.log 2>&1

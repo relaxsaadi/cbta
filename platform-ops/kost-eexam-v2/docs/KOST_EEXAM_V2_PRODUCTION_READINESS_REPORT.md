@@ -2,8 +2,10 @@
 
 **Date :** 2026-08-28
 **Branche :** `feature/kost-eexam-v2-native`
+**Tag :** `kost-eexam-v2-production-rc1`
 **Environnement vérifié :** staging réel — https://staging.kostacademy.com
 **Production :** **NON DÉPLOYÉE** — V1 (Moodle, `exam.kostacademy.com` / `console.kostacademy.com`) reste le système en production, inchangé, jamais touché pendant cette mission.
+**Suite de tests :** 43/43 tests unitaires ; régression E2E complète (93 tests) : **86 réussis / 5 ignorés (gel connu) / 2 échecs**, les deux confirmés comme non-régressions après nouvelle vérification isolée — un timeout réseau réel contre le serveur distant (rejoué, passe), et un compte de test dédié au limiteur anti-force-brute encore dans sa vraie fenêtre de verrouillage de 15 min suite aux exécutions répétées de cette session (le verrouillage lui-même étant la preuve que le mécanisme testé fonctionne).
 
 Ce rapport ne constitue **ni une approbation ANAC, ni une déclaration que la plateforme est prête pour la production** au sens réglementaire. Il documente, sans arrondir, ce qui est réellement construit, testé, et déployé sur staging à cette date — et ce qui ne l'est pas.
 

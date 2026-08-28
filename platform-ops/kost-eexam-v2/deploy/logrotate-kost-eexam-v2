@@ -1,0 +1,16 @@
+# Installé réellement sur staging cette session à
+# /etc/logrotate.d/kost-eexam-v2 (mission §12 — rotation/rétention des
+# logs, jamais faite avant : /var/log/kost-eexam-v2-sweep.log,
+# -backup.log, -restore-test.log (voir crontab.example) grossissaient sans
+# aucune limite). S'appuie sur le logrotate système déjà en place pour
+# tout le reste du serveur (cron quotidien standard Ubuntu), pas un
+# mécanisme séparé à surveiller.
+/var/log/kost-eexam-v2-*.log {
+    weekly
+    rotate 8
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 644 root root
+}

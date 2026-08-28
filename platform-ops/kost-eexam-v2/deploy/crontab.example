@@ -1,19 +1,30 @@
-# Brouillon — à installer sur le serveur (crontab de l'utilisateur de
-# déploiement, PAS root). Chemins à adapter à l'emplacement réel du
-# conteneur/du volume monté.
+# RÉELLEMENT INSTALLÉ sur staging cette session (crontab de root — pas un
+# utilisateur de déploiement dédié sur ce serveur, cohérent avec le reste
+# des crons déjà en place, voir `crontab -l`). Ce fichier documente
+# l'installation réelle, pas un brouillon en attente.
 #
 # Sauvegarde complète chaque nuit à 2h — RPO 24h (voir docs/
-# KOST_EEXAM_V2_ARCHITECTURE.md §13).
+# KOST_EEXAM_V2_ARCHITECTURE.md §13). Gap trouvé cette session : jamais
+# installé avant (seul ce fichier existait), donc jamais réellement
+# exécuté automatiquement — corrigé.
 0 2 * * * docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/backup.ts >> /var/log/kost-eexam-v2-backup.log 2>&1
 
 # Test de restauration réel chaque dimanche à 3h — jamais seulement
 # documenté (§21 de la mission). Restaure dans un répertoire isolé DANS le
-# conteneur (tmpdir), ne touche jamais le fichier de production.
+# conteneur (tmpdir), ne touche jamais le fichier de production. Même gap
+# que ci-dessus (jamais installé avant), corrigé.
 0 3 * * 0 docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/restore-test.ts >> /var/log/kost-eexam-v2-restore-test.log 2>&1
 
 # Balayage des tentatives expirées — filet de sécurité pour les candidats
 # qui ferment l'onglet sans jamais revenir (§8 : l'auto-soumission ne doit
 # pas dépendre uniquement d'un candidat qui revoit la page). Le code
-# applicatif la déclenche déjà à l'affichage de /mes-examens et /results ;
-# ce cron couvre le cas où personne ne consulte ces pages pendant un moment.
-*/5 * * * * curl -fsS -X POST http://127.0.0.1:3200/api/attempts/sweep -H "Authorization: Bearer ${KOST_EEXAM_V2_SWEEP_TOKEN}" >> /var/log/kost-eexam-v2-sweep.log 2>&1
+# applicatif la déclenche déjà à l'affichage de /mes-examens ; ce cron
+# couvre le cas où personne ne consulte cette page pendant un moment.
+# Bug réel trouvé et corrigé en l'installant cette session : proxy.ts
+# redirigeait cette route vers /login pour toute requête sans cookie de
+# session, la rendant structurellement inappelable — voir proxy.ts et
+# tests/staging/08-security-checks.spec.ts. Sur le serveur réel, le jeton
+# est lu depuis .env par un petit script wrapper (/root/kost-eexam-v2-stack/
+# sweep.sh) plutôt qu'une substitution de variable d'environnement crontab
+# (crontab n'a pas accès aux variables du shell de connexion) :
+*/5 * * * * /root/kost-eexam-v2-stack/sweep.sh >> /var/log/kost-eexam-v2-sweep.log 2>&1

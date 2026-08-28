@@ -24,5 +24,22 @@ export default defineConfig({
       args: ["--host-resolver-rules=MAP staging.kostacademy.com 102.206.40.221"],
     },
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  // Mission "PRODUCTION READINESS" §12 — device/viewport (jamais testé
+  // avant cette session). "chromium" reste le projet par défaut qui
+  // exécute la suite COMPLÈTE (toute la logique métier, déjà prouvée en
+  // profondeur) — les 3 projets suivants n'exécutent QUE
+  // tests/staging/27-responsive-smoke.spec.ts (via `testMatch`), qui
+  // vérifie l'utilisabilité de la mise en page (pas de redite de la
+  // logique métier). Mapping desktop/tablette/mobile/WebKit demandé par
+  // la mission : desktop = chromium (par défaut) ; WebKit = Safari
+  // desktop (moteur WebKit, viewport large) ; tablette = iPad ; mobile =
+  // iPhone (les deux derniers sur moteur WebKit aussi — cohérent avec de
+  // vrais iPad/iPhone, la plateforme mobile la plus probable pour un
+  // candidat DGR hors salle d'examen dédiée).
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "desktop-webkit", testMatch: /27-responsive-smoke\.spec\.ts/, use: { ...devices["Desktop Safari"] } },
+    { name: "tablet", testMatch: /27-responsive-smoke\.spec\.ts/, use: { ...devices["iPad (gen 7)"] } },
+    { name: "mobile-safari", testMatch: /27-responsive-smoke\.spec\.ts/, use: { ...devices["iPhone 14"] } },
+  ],
 });

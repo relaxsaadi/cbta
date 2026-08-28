@@ -64,6 +64,12 @@ PROSPECT-ANALYSIS*.pdf
 SALES-REPORT*.md
 SALES-REPORT*.pdf
 
+# Dossier local de PDF pour l'audit ANAC — jamais commité, GitHub reste l'espace interne uniquement
+AUDIT_ANAC_2026-08-26/
+
+# Identifiants staging KOST E-EXAM V2 — jamais commités, local uniquement
+KOST_EEXAM_V2_STAGING_CREDENTIALS.txt
+
 # Filet de sécurité : ne jamais exposer de docs commerciaux via public/ (servi tel quel en prod)
 public/proposition-*.html
 public/prospects-*.csv

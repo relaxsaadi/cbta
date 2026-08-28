@@ -38,9 +38,36 @@ Classification par item : **DONE** / **PARTIAL** / **MISSING** / **BLOCKED** / *
 |---|---|
 | Modèle natif Fonction (table `functions`, 10 lignes 7.1–7.10) | DONE |
 | Question bank + versioning append-only | DONE — `lib/questions.ts`, immutabilité prouvée (06-versioning) |
-| **Contenu réel en base V2** | **PARTIAL — 7 questions sur 97 admissibles réellement existantes** (voir matrice §8 ci-dessous) |
-| Importeur contrôlé (CSV/JSON) | **MISSING** — à construire (mission §9) |
+| **Contenu réel en base V2** | **DONE — 92 des 97 questions FROZEN réellement récupérables sont maintenant en base, sur les 10 fonctions** (voir §3bis ci-dessous ; les 5 dernières restent un blocage humain/régulatoire permanent, pas une tâche technique) |
+| Importeur contrôlé (Moodle → V2, lecture seule) | **DONE** — `scripts/import-dgr-from-moodle.ts`, exécuté fonction par fonction, rapport complet à chaque exécution, idempotent (testé : ré-exécution = 0 doublon créé) |
 | Snapshot figé à publication | DONE, testé |
+
+## 3bis. Migration réelle exécutée cette session — résultat définitif
+
+Exécutée fonction par fonction (mission §10), sur staging réel, vérifiée à
+chaque étape :
+
+| Fonction | Avant | Après | Importées cette session |
+|---|---:|---:|---:|
+| 7.1 | 7 | 13 | 6 |
+| 7.2 | 0 | 21 | 21 |
+| 7.3 | 0 | 7 | 7 |
+| 7.4 | 0 | 7 | 7 |
+| 7.5 | 0 | 7 | 7 |
+| 7.6 | 0 | 8 | 8 |
+| 7.7 | 0 | 7 | 7 |
+| 7.8 | 0 | 10 | 10 |
+| 7.9 | 0 | 5 | 5 |
+| 7.10 | 0 | 7 | 7 |
+| **Total** | **7** | **92** | **85** |
+
+- **0 erreur, 0 texte manquant, 0 réponse invalide** sur les 92 items traités.
+- **100% `source_status = FROZEN_SOURCE_VERIFIED`**, **100% `reviewer_status = PENDING`** (jamais `APPROVED` — vérifié en base après import).
+- Vérifié via l'API réelle de l'application (`/api/question-bank/admissible-count`), pas seulement en base : les 10 fonctions renvoient exactement les comptes ci-dessus à l'assistant de création d'examen.
+- Traçabilité : chaque exécution insère une ligne dans la table `imports` (10 lignes au total, une par fonction).
+- Deux sources croisées, jamais une seule : structure (énoncé/choix/bonne réponse) depuis Moodle (lecture seule, jamais écrit), métadonnée réglementaire (sous-tâche, référence DGR, date de vérification, explication) depuis le markdown source de la branche `ai/dgr-stage2b-handoff` — jamais depuis la CSV de traçabilité, dont au moins un champ (`Q-7.2-001.dgr_reference`) s'est révélé structurellement tronqué par un bug de guillemets imbriqués dans la CSV source elle-même (confirmé par lecture des octets bruts, pas une erreur de ce parseur).
+- **5 questions Fonction 7.1 restent définitivement exclues** (Q-7.1-005/007/008/010/012) — texte intégral introuvable dans aucune source accessible à cet environnement, blocage humain/réglementaire documenté depuis la phase précédente, pas une omission de cette migration.
+- **Limitation connue signalée honnêtement** : le champ `explanation` des 85 questions nouvellement importées mélange framing anglais et citations françaises (ex. « Course slide 20: "Le SCoETDG élabore..." ») — factuellement exact, jamais fabriqué, mais pas encore une explication 100% française prête pour affichage large candidat. Une passe éditoriale FR reste recommandée avant que ce champ soit considéré publication-grade (n'affecte ni l'énoncé, ni les choix, ni la bonne réponse — tous corrects et complets).
 
 **Fait central établi cette session** (source : `docs/KOST_EEXAM_V2_ARCHITECTURE.md` §1.2 et `platform-ops/kost-eexam-console-src/docs/DGR_MOODLE_BANK_INTEGRATION_PLAN.md`, tous deux déjà présents dans ce dépôt, lus intégralement) :
 
@@ -131,7 +158,7 @@ DONE au niveau schéma (colonne `scope` explicite sur `companies`/`groups`/`asse
 
 ## Résumé exécutif — priorisation
 
-1. **Contenu réel DGR (§3 ci-dessus)** — le plus gros écart, déjà entièrement cartographié cette session, aucune ambiguïté restante sur la source. Prochaine étape immédiate : construire l'importeur, migrer fonction par fonction.
+1. ~~**Contenu réel DGR**~~ — **FAIT cette session** (§3bis) : 92/97 questions FROZEN réellement récupérables migrées sur les 10 fonctions, importeur contrôlé construit et prouvé idempotent, vérifié via l'API réelle de l'application. 5 items restent un blocage humain/réglementaire permanent (texte introuvable).
 2. **MFA** — technique, non bloqué, à construire.
 3. **Accessibilité / Performance / Charge / Monitoring** — jamais faites, à exécuter méthodiquement.
 4. **Candidate management (edit/bulk CSV/export/search roster)** — gaps ponctuels, rapides à combler.

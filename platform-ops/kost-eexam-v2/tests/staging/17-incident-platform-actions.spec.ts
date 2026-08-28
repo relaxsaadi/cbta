@@ -7,6 +7,35 @@ import { loginAs, env } from "./helpers";
 // interrompue). Chaque test lève systématiquement le blocage à la fin
 // (try/finally) pour ne jamais laisser la plateforme bloquée pour les
 // specs suivantes de la suite.
+//
+// FILET DE SÉCURITÉ SUPPLÉMENTAIRE (constaté en pratique — un try/finally
+// par test ne suffit pas toujours : un test peut heurter son propre délai
+// de 60s PENDANT son propre bloc finally, l'interrompant avant la fin du
+// nettoyage, laissant la plateforme bloquée pour TOUTE la suite restante,
+// observé deux fois cette session malgré la correction précédente).
+// `afterEach` s'exécute TOUJOURS, avec son PROPRE budget de temps distinct
+// du test — même si le test précédent a expiré en plein nettoyage, ce hook
+// a une nouvelle fenêtre complète pour terminer le travail. Un test E2E
+// staging n'a aucun accès direct à la base distante (uniquement HTTP) —
+// la remise à zéro passe donc par la même UI admin que les tests eux-mêmes,
+// jamais par une connexion DB locale (qui pointerait vers un fichier local
+// sans rapport avec la base réelle du serveur).
+test.afterEach(async ({ page, context }) => {
+  await context.clearCookies();
+  await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS")).catch(() => {});
+  await declareDedicatedIncident(page).catch(() => {});
+  for (const label of ["Désactiver le mode maintenance", "Débloquer les nouvelles connexions", "Débloquer les nouvelles tentatives"]) {
+    await page.getByRole("button", { name: label }).click({ timeout: 3000 }).catch(() => {});
+  }
+  const examCard = page.locator("div.rounded-md.border-border-subtle").filter({ hasText: "Évaluation" });
+  const reopenForm = examCard.locator("form").nth(1);
+  const select = reopenForm.locator('select[name="targetId"]');
+  const value = await select.locator("option", { hasText: "DGR Fonction 7.1 — Examen pilote staging" }).getAttribute("value").catch(() => null);
+  if (value) {
+    await select.selectOption(value).catch(() => {});
+    await reopenForm.evaluate((el) => (el as HTMLFormElement).requestSubmit()).catch(() => {});
+  }
+});
 
 async function fetchPdf(page: import("@playwright/test").Page, path: string) {
   return page.evaluate(async (p) => {

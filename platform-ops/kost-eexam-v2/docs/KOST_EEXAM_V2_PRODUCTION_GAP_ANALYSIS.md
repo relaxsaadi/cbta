@@ -133,8 +133,16 @@ DONE (addendum §12-21) — 5 guides écran+PDF, module de familiarisation compl
 |---|---|
 | HTTPS + TLS staging | DONE — vérifié live |
 | Security headers (HSTS, CSP, X-Frame-Options, etc.) | DONE — `next.config.ts` `headers()`, en code (pas seulement nginx) |
-| Secret scan (git/branche/image/staging/scripts/logs) | **PARTIAL — à exécuter cette phase** (pas encore fait pour la mission production) |
+| Secret scan (git/branche/image/staging/scripts/logs) | **DONE** — exécuté cette session, 2 fuites réelles trouvées et corrigées (voir ci-dessous), aucune n'était un secret de production |
 | Dependency security | **DONE** — `pnpm audit` exécuté cette session : **0 vulnérabilité** (info/low/moderate/high/critical), 526 dépendances |
+
+**Détail du scan de secrets :**
+- Git (branche courante + historique complet, tous commits) : aucune clé AWS/clé privée/clé API/token GitHub, aucun `.env` réel jamais commité (seul `.env.example`, un gabarit vide). `.gitignore` couvre correctement `.env`/`.env.local`/`.env*.local`.
+- Code source applicatif : aucun mot de passe/secret en dur (seules des références de nom de champ de formulaire).
+- Image Docker : `.dockerignore` exclut correctement `.env`/`.env.local`/`.env*.local` — le vrai `.env` de production (`SESSION_SECRET`, `SWEEP_TOKEN`) vit **hors** du répertoire de build (`/root/kost-eexam-v2-stack/.env`, permissions `600 root:root`), jamais copié dans le contexte Docker ni dans le conteneur en dehors de l'injection `--env-file` au runtime.
+- Logs conteneur : aucun mot de passe/secret/token trouvé dans 200 lignes récentes.
+- **Fuite réelle #1 (corrigée) :** `.env.staging.local` (identifiants de TEST staging — candidats/responsables/admin de démonstration, jamais des secrets de production) s'était retrouvé copié sur le serveur via `rsync` (répertoire `app/`, jamais dans l'image Docker grâce à `.dockerignore`, mais présent en clair sur le système de fichiers du serveur). Supprimé du serveur ; ce fichier n'a aucune utilité côté serveur (seul le lanceur de tests Playwright local en a besoin).
+- **Fuite réelle #2 (corrigée) :** un script d'extraction Moodle ponctuel (`/tmp/extract_moodle_questions.py`, jamais commis dans le dépôt) contenait le mot de passe root de la base MySQL Moodle en dur, nécessaire pour l'extraction lecture-seule de la banque de questions (§6-10 ci-dessus). Supprimé du serveur et de la machine locale après usage.
 
 ## 12. Accessibilité / Device / Performance / Charge / Monitoring / Logging
 

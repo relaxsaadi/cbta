@@ -18,23 +18,30 @@ test("parcours d'acceptance complet : déclarer une session → marquer présenc
   const sessionUrl = page.url();
   const sessionId = sessionUrl.match(/\/familiarisation\/(\d+)/)![1];
 
-  // ÉTAPE 2 — la ligne de présence est créée automatiquement pour les 3
-  // candidats réels du groupe, tous "Absent" par défaut (pas de présomption
-  // de présence).
+  // ÉTAPE 2 — la ligne de présence est créée automatiquement pour tous
+  // les candidats réels du groupe, tous "Absent" par défaut (pas de
+  // présomption de présence). Le total N est lu dynamiquement (pas
+  // hardcodé à 3) : le groupe pilote partagé peut légitimement accumuler
+  // d'autres membres réels au fil du temps — seule la PROGRESSION du
+  // compteur (0 → 1 → 2) est vérifiée, robuste à la taille réelle.
   await expect(page.getByText("Yasmine Kaced (pilote)")).toBeVisible();
   await expect(page.getByText("Riad Boumediene (pilote)")).toBeVisible();
   await expect(page.getByText("Amel Ferhati (pilote)")).toBeVisible();
-  await expect(page.getByText("0 / 3 présent")).toBeVisible();
+  // Titre réel de la carte : "Présence — {n} / {total} présent(s)" — regex
+  // NON ancrée pour matcher en sous-chaîne (voir 19-familiarization.spec.ts).
+  const counterText = await page.getByText(/\d+ \/ \d+ présent/).first().textContent();
+  const total = Number(counterText!.match(/\/ (\d+) présent/)![1]);
+  await expect(page.getByText(`0 / ${total} présent`)).toBeVisible();
 
   // ÉTAPE 3 — marquer 2 candidats présents, 1 absent (variation réelle,
   // pas un cas uniforme).
   const rowYasmine = page.locator("div.rounded-md.border-border-subtle").filter({ hasText: "Yasmine Kaced (pilote)" }).first();
   await rowYasmine.getByRole("button", { name: /marquer présent/i }).click();
-  await expect(page.getByText("1 / 3 présent")).toBeVisible();
+  await expect(page.getByText(`1 / ${total} présent`)).toBeVisible();
 
   const rowRiad = page.locator("div.rounded-md.border-border-subtle").filter({ hasText: "Riad Boumediene (pilote)" }).first();
   await rowRiad.getByRole("button", { name: /marquer présent/i }).click();
-  await expect(page.getByText("2 / 3 présent")).toBeVisible();
+  await expect(page.getByText(`2 / ${total} présent`)).toBeVisible();
 
   // Amel reste absente — vérifie explicitement qu'elle est toujours listée
   // "Absent" (pas de présomption ni de disparition de la ligne).

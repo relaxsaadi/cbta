@@ -53,10 +53,17 @@ test.describe("Actions plateforme — blocage des nouvelles connexions", () => {
     await declareDedicatedIncident(page);
     const incidentUrl = page.url();
 
-    await page.getByRole("button", { name: "Bloquer les nouvelles connexions" }).click();
-    await expect(page.getByRole("button", { name: "Débloquer les nouvelles connexions" })).toBeVisible();
-
+    // try/finally démarre AVANT le clic qui active le blocage (pas
+    // seulement après) : si l'assertion de bascule elle-même échoue (ex.
+    // aléa réseau/rendu), le blocage reste quand même levé en finally —
+    // sinon la plateforme reste bloquée pour tout le reste de la suite
+    // (constaté en pratique : un échec exactement ici a laissé
+    // block_new_attempts=1 en base, cassant en cascade toute tentative
+    // d'examen dans les specs suivantes).
     try {
+      await page.getByRole("button", { name: "Bloquer les nouvelles connexions" }).click();
+      await expect(page.getByRole("button", { name: "Débloquer les nouvelles connexions" })).toBeVisible();
+
       await context.clearCookies();
       // Soumission directe (pas via loginAs — dont le waitForURL suppose
       // une connexion réussie et attendrait inutilement le délai complet
@@ -88,10 +95,12 @@ test.describe("Actions plateforme — continuité d'examen", () => {
     await declareDedicatedIncident(page);
     const incidentUrl = page.url();
 
-    await page.getByRole("button", { name: "Bloquer les nouvelles tentatives" }).click();
-    await expect(page.getByRole("button", { name: "Débloquer les nouvelles tentatives" })).toBeVisible();
-
+    // Même correction que ci-dessus : le clic qui active le blocage est
+    // maintenant DANS le try/finally, pas avant.
     try {
+      await page.getByRole("button", { name: "Bloquer les nouvelles tentatives" }).click();
+      await expect(page.getByRole("button", { name: "Débloquer les nouvelles tentatives" })).toBeVisible();
+
       // Bannière visible pour un rôle non-admin déjà connecté.
       await context.clearCookies();
       await loginAs(page, env("STAGING_MANAGER_USER"), env("STAGING_MANAGER_PASS"));

@@ -27,19 +27,31 @@ test.describe("Familiarisation — cycle complet", () => {
     await page.waitForURL(/\/familiarisation\/\d+/);
     const sessionUrl = page.url();
 
-    // Les 3 candidats pilotes du groupe apparaissent avec une ligne de
-    // présence "Absent" par défaut.
+    // Les 3 candidats pilotes du groupe apparaissent, chacun avec une
+    // ligne de présence "Absent" par défaut. Le total N n'est PAS
+    // hardcodé à 3 : le groupe pilote partagé peut légitimement accumuler
+    // d'autres membres au fil du temps (candidats réels ajoutés hors de
+    // cette suite) — on lit le total réel affiché, puis on vérifie
+    // seulement sa PROGRESSION (0 → 1 après une présence), robuste à la
+    // taille réelle du groupe au moment de l'exécution.
     await expect(page.getByText("Yasmine Kaced (pilote)")).toBeVisible();
     await expect(page.getByText("Riad Boumediene (pilote)")).toBeVisible();
     await expect(page.getByText("Amel Ferhati (pilote)")).toBeVisible();
-    await expect(page.getByText("0 / 3 présent")).toBeVisible();
+    // Titre réel de la carte : "Présence — {n} / {total} présent(s)" — pas
+    // de format isolé "{n} / {total} présent" tout seul (voir
+    // app/(app)/familiarisation/[id]/page.tsx CardHeader). Regex NON
+    // ancrée pour matcher en sous-chaîne, comme les assertions
+    // getByText(string) plus bas (substring par défaut chez Playwright).
+    const counterText = await page.getByText(/\d+ \/ \d+ présent/).first().textContent();
+    const total = Number(counterText!.match(/\/ (\d+) présent/)![1]);
+    await expect(page.getByText(`0 / ${total} présent`)).toBeVisible();
 
     // Marquer Yasmine présente — cible la ligne de présence précise (pas
     // un div ancêtre plus large, qui contiendrait aussi les 2 autres
     // boutons "Marquer présent").
     const row = page.locator("div.rounded-md.border-border-subtle").filter({ hasText: "Yasmine Kaced (pilote)" }).first();
     await row.getByRole("button", { name: /marquer présent/i }).click();
-    await expect(page.getByText("1 / 3 présent")).toBeVisible();
+    await expect(page.getByText(`1 / ${total} présent`)).toBeVisible();
 
     // Feuille de présence PDF réelle.
     const pdf = await fetchPdf(page, sessionUrl.replace("/familiarisation/", "/api/reports/attendance-sheet/"));

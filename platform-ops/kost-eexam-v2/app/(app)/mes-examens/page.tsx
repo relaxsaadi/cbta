@@ -8,6 +8,25 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/Badge";
 import { BookOpenCheck } from "lucide-react";
 
+// Revue UX (mission "PRODUCTION READINESS" §22) — un examen affecté mais
+// pas encore ouvert affichait auparavant le même badge "Fermé" opaque
+// qu'un examen clôturé ou jamais publié, sans jamais montrer la date
+// d'ouverture pourtant déjà configurée par le responsable (`open_at`) —
+// un candidat n'avait aucun moyen de savoir s'il devait revenir plus tard
+// ou si l'examen était simplement indisponible. Corrigé : distinction
+// explicite des 3 cas (pas encore ouvert / clôturé / suspendu), date
+// affichée en clair quand elle existe.
+function statusLabel(a: { status: string; open_at: string | null; close_at: string | null }, openNow: boolean): string {
+  if (a.status === "suspended") return "Suspendu";
+  if (openNow) return "Ouvert";
+  if (a.status === "closed") return "Clôturé";
+  if (a.open_at && new Date(a.open_at).getTime() > Date.now()) {
+    return `Ouvre le ${new Date(a.open_at).toLocaleString("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}`;
+  }
+  if (a.close_at && new Date(a.close_at).getTime() < Date.now()) return "Fenêtre fermée";
+  return "Pas encore disponible";
+}
+
 export default async function MesExamensPage() {
   const session = await guardPage("candidate");
   // Balayage opportuniste (§8) — auto-soumet toute tentative de CE
@@ -40,7 +59,7 @@ export default async function MesExamensPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <StatusBadge status={a.status === "suspended" ? "critical" : isAssessmentOpenNow(a) ? "verified" : "neutral"}>
-                      {a.status === "suspended" ? "Suspendu" : isAssessmentOpenNow(a) ? "Ouvert" : a.status === "closed" ? "Clôturé" : "Fermé"}
+                      {statusLabel(a, isAssessmentOpenNow(a))}
                     </StatusBadge>
                     {active ? (
                       <Link href={`/exam/${a.id}/attempt`} className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10">

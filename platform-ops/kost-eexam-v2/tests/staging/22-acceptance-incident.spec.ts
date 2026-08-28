@@ -6,11 +6,18 @@ import { loginAs, env } from "./helpers";
 // <select name="targetId"> — jamais partagé. On cible par position
 // (ordre connu et stable, voir app/(app)/incidents/[id]/page.tsx) plutôt
 // que par filtre sur le libellé du bouton, plus fiable ici.
-async function selectTargetAndSubmit(page: Page, formIndex: number, optionTextContains: string) {
+async function selectTargetAndSubmit(page: Page, formIndex: number, username: string) {
   const card = page.locator("div.rounded-md.border-border-subtle").filter({ hasText: "Compte utilisateur" });
   const form = card.locator("form").nth(formIndex);
   const select = form.locator('select[name="targetId"]');
-  const value = await select.locator("option", { hasText: optionTextContains }).getAttribute("value");
+  // Option ancrée en fin de texte "Nom complet (identifiant)" — un simple
+  // sous-texte (ex. "candidat3.staging") peut désormais matcher PLUSIEURS
+  // comptes dont l'identifiant le contient comme suffixe (ex.
+  // "sim.candidat3.staging", ajouté par un autre scénario cette session),
+  // provoquant une violation de mode strict Playwright. Regex ancrée sur
+  // "(identifiant)$" pour ne jamais matcher un identifiant qui se termine
+  // différemment.
+  const value = await select.locator("option", { hasText: new RegExp(`\\(${username}\\)$`) }).getAttribute("value");
   await select.selectOption(value!);
   // form.requestSubmit() plutôt qu'un clic pointeur : les 3 <form> empilés
   // de cette carte déclenchent un chevauchement de survol/validation natif

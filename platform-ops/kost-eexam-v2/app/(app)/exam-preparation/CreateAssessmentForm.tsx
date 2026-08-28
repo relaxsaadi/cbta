@@ -74,19 +74,19 @@ export function CreateAssessmentForm({
       </div>
 
       <div>
-        <label htmlFor="name" className="mb-1 block text-[12px] font-medium text-text-secondary">Nom de l&apos;évaluation</label>
+        <label htmlFor="name" className="mb-1 block text-[12px] font-medium text-text-secondary">4. Nom de l&apos;évaluation</label>
         <input id="name" name="name" required placeholder="Ex. DGR Fonction 7.1 — Examen Septembre 2026" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
       </div>
 
-      {/* Étape 4 — Banque */}
+      {/* Étape 5 — Banque (information, pas un champ à remplir) */}
       <div className="rounded-md border border-accent-soft-border bg-accent-soft-bg px-3 py-2 text-[13px] text-accent-11">
-        4. Questions admissibles disponibles : <strong>{admissible === null ? "…" : admissible}</strong>
+        5. Questions admissibles disponibles : <strong>{admissible === null ? "…" : admissible}</strong>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        {/* Étape 5 */}
+        {/* Étape 6 */}
         <div>
-          <label htmlFor="questionCount" className="mb-1 block text-[12px] font-medium text-text-secondary">5. Nombre à tirer</label>
+          <label htmlFor="questionCount" className="mb-1 block text-[12px] font-medium text-text-secondary">6. Nombre à tirer</label>
           <input id="questionCount" type="number" name="questionCount" required min={1} max={admissible ?? undefined} defaultValue={Math.min(15, admissible ?? 15)} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         {/* Étape 7 */}
@@ -108,13 +108,16 @@ export function CreateAssessmentForm({
           <label htmlFor="attemptsAllowed" className="mb-1 block text-[12px] font-medium text-text-secondary">9. Tentatives autorisées (0 = illimité)</label>
           <input id="attemptsAllowed" type="number" name="attemptsAllowed" min={0} defaultValue={preset.attemptsAllowed} key={`attempts-${type}`} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
-        {/* Étape 10 */}
+        {/* Étape 10 — ouverture ET fermeture (une seule "étape" : la même
+            fenêtre de disponibilité, jamais affichée nulle part ensuite —
+            voir aussi le Récapitulatif de app/(app)/exam-preparation/[id]/
+            page.tsx, corrigé pour la reprendre) */}
         <div>
           <label htmlFor="openAt" className="mb-1 block text-[12px] font-medium text-text-secondary">10. Ouverture</label>
           <input id="openAt" type="datetime-local" name="openAt" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         <div>
-          <label htmlFor="closeAt" className="mb-1 block text-[12px] font-medium text-text-secondary">Fermeture</label>
+          <label htmlFor="closeAt" className="mb-1 block text-[12px] font-medium text-text-secondary">10. Fermeture</label>
           <input id="closeAt" type="datetime-local" name="closeAt" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
       </div>
@@ -147,7 +150,7 @@ export function CreateAssessmentForm({
       </div>
 
       <div>
-        <label htmlFor="scope" className="mb-1 block text-[12px] font-medium text-text-secondary">Périmètre</label>
+        <label htmlFor="scope" className="mb-1 block text-[12px] font-medium text-text-secondary">12. Périmètre</label>
         <select id="scope" name="scope" className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
           <option value="production">Production</option>
           <option value="demo">Démo</option>

@@ -96,6 +96,24 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
           <div><dt className="text-text-tertiary">Durée</dt><dd className="font-medium text-text-primary">{assessment.duration_minutes} min</dd></div>
           <div><dt className="text-text-tertiary">Seuil</dt><dd className="font-medium text-text-primary">{assessment.pass_threshold_pct}%</dd></div>
           <div><dt className="text-text-tertiary">Tentatives</dt><dd className="font-medium text-text-primary">{assessment.attempts_allowed === 0 ? "Illimité" : assessment.attempts_allowed}</dd></div>
+          {/* Revue UX §22 — la fenêtre d'ouverture/fermeture configurée à
+              l'étape 10 du formulaire n'était jamais réaffichée nulle part
+              ensuite (ni ici, ni côté candidat sur /mes-examens) : un
+              responsable n'avait aucun moyen de reconsulter ce qu'il avait
+              programmé. Corrigé — seulement affiché si au moins l'une des
+              deux dates a été fixée (sinon "Toujours ouvert" serait un
+              placeholder inutile pour l'écrasante majorité des examens qui
+              n'utilisent pas cette option). */}
+          {(assessment.open_at || assessment.close_at) && (
+            <div className="col-span-2">
+              <dt className="text-text-tertiary">Fenêtre de disponibilité</dt>
+              <dd className="font-medium text-text-primary">
+                {assessment.open_at ? new Date(assessment.open_at).toLocaleString("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "dès maintenant"}
+                {" → "}
+                {assessment.close_at ? new Date(assessment.close_at).toLocaleString("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "sans limite"}
+              </dd>
+            </div>
+          )}
         </dl>
 
         {canWrite && assessment.status === "draft" && (

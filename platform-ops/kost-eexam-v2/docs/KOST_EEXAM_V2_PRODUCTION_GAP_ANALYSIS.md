@@ -163,6 +163,20 @@ DONE au niveau schéma (colonne `scope` explicite sur `companies`/`groups`/`asse
 
 **DONE** — TOTP natif (RFC 6238/4226, `node:crypto` HMAC-SHA1, zéro dépendance npm nouvelle), validé contre les 5 vecteurs de test officiels RFC 6238 Annexe B (14/14 tests unitaires). Enrôlement en libre-service (`/mon-compte`, administrateur + responsable pédagogique), codes de secours à usage unique (hachés scrypt, affichés une seule fois), connexion à deux facteurs (`/login/verifier-mfa`, même limiteur anti-force-brute que le mot de passe), désactivation en libre-service (mot de passe requis), voie de récupération administrateur pour compte verrouillé (`/users`, action auditée séparément). Déployé et vérifié réellement sur staging (2 tests E2E dédiés, cycle complet + usage unique des codes de secours). MFA **fonctionnel et disponible dès maintenant**, mais **pas rendu obligatoire de force** sur les comptes administrateur existants cette session — décision de politique explicite (voir `lib/mfa.ts`), pas une omission : forcer maintenant risquerait de verrouiller le seul compte administrateur sans qu'un parcours de récupération complet ait été validé par son propriétaire. Rendre MFA obligatoire pour tout compte administrateur avant la bascule production reste une recommandation forte, actionnable en quelques minutes le moment venu.
 
+## 15. Session / Auth security pass (mission §16-19-20)
+
+**DONE** — repasse complète, rien de nouveau à construire, confirmé par relecture de code + preuve E2E existante :
+
+| Item | Statut |
+|---|---|
+| Cookie de session (`kost_eexam_v2_session`) | DONE — `HttpOnly`, `SameSite=Strict`, `Secure` (vérifiés comme attributs RÉELS du cookie navigateur, pas seulement la config source — `08-security-checks.spec.ts`), expiration 8h |
+| CSRF — Server Actions (l'écrasante majorité des mutations de l'app) | DONE — protection **native Next.js** : chaque appel de Server Action compare l'origine de la requête au host, refusée si différente (`allowedOrigins` non configuré dans `next.config.ts` → same-origin strict uniquement, confirmé dans `node_modules/next/dist/docs/.../serverActions.md`). Défense en profondeur avec `SameSite=Strict` (double couche indépendante). |
+| CSRF — Route Handlers mutants (`app/api/**/route.ts`) | DONE — seulement 2 existent en écriture (`POST`) : `auth/logout` (protégé par `SameSite=Strict`, et une déconnexion forcée n'est pas un impact de sécurité réel) et `attempts/sweep` (jamais de cookie ambiant à exploiter — authentification par jeton `Authorization: Bearer` explicite, qu'une page tierce ne peut pas fournir sans déjà connaître le secret — voir §6/§11 ci-dessus). Aucune autre route API mutante n'existe. |
+| Révocation de session server-side | DONE — table `sessions` dédiée (§20), revérifiée à `requireRole()`/`requireWriteRole()` sur CHAQUE action mutante et au rendu de `app/(app)/layout.tsx`, pas seulement à la connexion |
+| Anti-force-brute (mot de passe + MFA) | DONE — `lib/rate-limit.ts`, 5 échecs/15min, clé `IP+utilisateur` (pas IP seule — n'affecte pas tout un bureau/NAT partagé), même limiteur réutilisé pour la vérification MFA (§25) |
+| Limite architecturale connue du rate-limit | **Documentée, assumée, pas un blocage** — stockage en mémoire de PROCESSUS (`Map`), adapté au déploiement actuel (une seule instance Node, pas de scaling horizontal). Une évolution multi-instance nécessiterait un magasin partagé (Redis ou équivalent) — hors périmètre de ce pilote, à traiter avant toute mise à l'échelle horizontale. Documenté en tête de `lib/rate-limit.ts`. |
+| En-têtes de sécurité (HSTS, CSP, X-Frame-Options, etc.) | DONE — voir §11, en code (`next.config.ts`), pas seulement nginx |
+
 ---
 
 ## Résumé exécutif — priorisation
@@ -173,4 +187,5 @@ DONE au niveau schéma (colonne `scope` explicite sur `companies`/`groups`/`asse
 4. **Accessibilité / Performance / Charge / Monitoring** — jamais faites, à exécuter méthodiquement.
 5. ~~**Candidate management (edit/bulk CSV/export/search roster)**~~ — **FAIT** (session précédente).
 6. ~~**Secret scan**~~ — **FAIT** (session précédente) : 2 fuites réelles trouvées et corrigées, aucune n'était un secret de production. +1 faille d'accès réelle trouvée et corrigée cette session (voir §11).
-7. Tout le reste (auth/RBAC/tenant/exam engine/timer/grading/results/PDF/CSV/incidents/audit/backup/guides/familiarisation) est **DONE et testé** — ne pas reconstruire.
+7. ~~**Session/auth security pass (cookies, CSRF, rate-limit)**~~ — **FAIT cette session** (§15) : rien à construire, tout confirmé DONE (cookie HttpOnly/SameSite=Strict/Secure vérifié réel, CSRF natif Next.js sur les Server Actions, aucune route API mutante exposée sans protection équivalente, limite architecturale du rate-limit documentée et assumée).
+8. Tout le reste (auth/RBAC/tenant/exam engine/timer/grading/results/PDF/CSV/incidents/audit/backup/guides/familiarisation) est **DONE et testé** — ne pas reconstruire.

@@ -53,6 +53,18 @@ export function setUserStatus(userId: number, status: "active" | "suspended"): v
   getDb().prepare(`UPDATE users SET status = ? WHERE id = ?`).run(status, userId);
 }
 
+/** Mission "PRODUCTION READINESS" §3 — édition de fiche candidat. Le
+ * `username` (identifiant de connexion, référencé partout — audit_logs,
+ * sessions, attempts) reste volontairement IMMUABLE ici : un changement
+ * casserait la continuité de traçabilité sans bénéfice réel (le nom
+ * affiché, lui, est éditable). Pas de UPDATE sur password_hash — la
+ * réinitialisation de mot de passe reste une action dédiée séparée. */
+export function updateUserProfile(userId: number, params: { fullName: string; email?: string; phone?: string }): void {
+  getDb()
+    .prepare(`UPDATE users SET full_name = ?, email = ?, phone = ? WHERE id = ?`)
+    .run(params.fullName, params.email ?? null, params.phone ?? null, userId);
+}
+
 export function touchLastLogin(userId: number): void {
   getDb().prepare(`UPDATE users SET last_login_at = ? WHERE id = ?`).run(nowIso(), userId);
 }

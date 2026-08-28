@@ -9,18 +9,26 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/Badge";
 import { Users2, X } from "lucide-react";
 import { AddCandidateForm } from "./AddCandidateForm";
+import { EditCandidateForm } from "./EditCandidateForm";
+import { BulkImportCandidatesForm } from "./BulkImportCandidatesForm";
 import { revalidatePath } from "next/cache";
 
-export default async function GroupDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function GroupDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ q?: string }> }) {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { id } = await params;
+  const { q } = await searchParams;
   const group = getGroup(Number(id));
   // Voir lib/tenant-scope.ts : introuvable, pas "refusé", pour un groupe
   // hors périmètre.
   if (!group || !hasGroupAccess(session, group.id)) notFound();
   const canWrite = session.role !== "auditor";
 
-  const members = listGroupMembers(group.id);
+  const allMembers = listGroupMembers(group.id);
+  // Recherche/filtre côté serveur (mission "PRODUCTION READINESS" §3) —
+  // cohérent avec le reste de l'app (server components, pas de JS client
+  // pour un filtre simple sur un roster typiquement petit).
+  const search = (q ?? "").trim().toLowerCase();
+  const members = search ? allMembers.filter((m) => m.full_name.toLowerCase().includes(search) || m.username.toLowerCase().includes(search)) : allMembers;
   const assessments = listAssessments().filter((a) => a.group_id === group.id);
 
   async function removeCandidate(formData: FormData) {
@@ -48,30 +56,57 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
       {canWrite && (
         <Card>
           <CardHeader title="Ajouter un candidat" description="Crée le compte s'il n'existe pas encore, puis l'ajoute au groupe" />
-          <AddCandidateForm groupId={group.id} />
+          <div className="flex flex-col gap-3">
+            <AddCandidateForm groupId={group.id} />
+            <BulkImportCandidatesForm groupId={group.id} />
+          </div>
         </Card>
       )}
 
       <Card>
-        <CardHeader title={`${members.length} candidat(s)`} />
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <CardHeader title={`${allMembers.length} candidat(s)${search ? ` — ${members.length} correspondant(s) à « ${q} »` : ""}`} />
+          <div className="flex shrink-0 items-center gap-2 pb-3">
+            <form method="get" className="flex items-center gap-1">
+              <input
+                type="search"
+                name="q"
+                defaultValue={q ?? ""}
+                placeholder="Rechercher nom ou identifiant…"
+                className="w-56 rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[12.5px]"
+              />
+            </form>
+            <a
+              href={`/api/groups/${group.id}/candidates-export`}
+              className="rounded-md border border-border-default px-2.5 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+            >
+              Exporter (CSV)
+            </a>
+          </div>
+        </div>
         {members.length === 0 ? (
-          <EmptyState icon={Users2} title="Aucun candidat" description="Ajoutez des candidats ci-dessus." />
+          <EmptyState icon={Users2} title={search ? "Aucun résultat" : "Aucun candidat"} description={search ? "Aucun candidat ne correspond à cette recherche." : "Ajoutez des candidats ci-dessus."} />
         ) : (
           <div className="flex flex-col gap-1.5">
             {members.map((m) => (
-              <div key={m.candidate_user_id} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2">
-                <div>
-                  <p className="text-[13px] font-medium text-text-primary">{m.full_name}</p>
-                  <p className="text-[11.5px] text-text-tertiary">{m.username}</p>
+              <div key={m.candidate_user_id} className="flex flex-col gap-1.5 rounded-md border border-border-subtle px-3 py-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[13px] font-medium text-text-primary">{m.full_name}</p>
+                    <p className="text-[11.5px] text-text-tertiary">{m.username}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {canWrite && <EditCandidateForm groupId={group.id} candidateUserId={m.candidate_user_id} fullName={m.full_name} />}
+                    {canWrite && (
+                      <form action={removeCandidate}>
+                        <input type="hidden" name="candidateUserId" value={m.candidate_user_id} />
+                        <button type="submit" className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-surface-sunken" aria-label="Retirer du groupe">
+                          <X size={14} />
+                        </button>
+                      </form>
+                    )}
+                  </div>
                 </div>
-                {canWrite && (
-                  <form action={removeCandidate}>
-                    <input type="hidden" name="candidateUserId" value={m.candidate_user_id} />
-                    <button type="submit" className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-surface-sunken" aria-label="Retirer du groupe">
-                      <X size={14} />
-                    </button>
-                  </form>
-                )}
               </div>
             ))}
           </div>

@@ -7,7 +7,19 @@ import { getSessionOptions, type AppSession } from "@/lib/session";
 // .../proxy.md, consulté avant d'écrire ce fichier suite à l'avertissement
 // de dépréciation ; AGENTS.md de ce projet demande explicitement de
 // vérifier cette doc avant du code touchant aux conventions Next).
-const PUBLIC_PATHS = ["/login", "/api/auth"];
+// Mission "PRODUCTION READINESS" §8/§16 — /api/attempts/sweep est le
+// FILET DE SÉCURITÉ appelé par un cron externe toutes les 5 minutes
+// (aucun cookie de session, jamais un navigateur — voir deploy/
+// crontab.example) : il porte SA PROPRE authentification par jeton
+// partagé (Authorization: Bearer SWEEP_TOKEN, vérifiée dans
+// app/api/attempts/sweep/route.ts). Sans cette exemption, ce proxy
+// redirigeait TOUTE requête sans session vers /login avant même que la
+// route ait pu vérifier son jeton — rendant le cron structurellement
+// incapable de fonctionner (bug réel trouvé et corrigé lors de
+// l'installation du cron, jamais silencieusement contourné : le jeton
+// reste une vraie vérification côté route, pas un contournement de
+// sécurité côté proxy).
+const PUBLIC_PATHS = ["/login", "/api/auth", "/api/attempts/sweep"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

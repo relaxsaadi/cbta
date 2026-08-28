@@ -102,6 +102,56 @@ test.describe("Attributs du cookie de session — défense CSRF/XSS de base", ()
   });
 });
 
+test.describe("Filet de sécurité chronomètre — /api/attempts/sweep (cron, jamais un cookie de session)", () => {
+  // Mission §8/§16 — bug réel trouvé et corrigé cette session : proxy.ts
+  // redirigeait TOUTE requête sans cookie de session vers /login, y
+  // compris CETTE route, dont l'authentification est un jeton partagé
+  // (Authorization: Bearer), jamais une session — la rendant
+  // structurellement inappelable par le cron externe qui n'a et ne doit
+  // jamais avoir de cookie. Exemptée dans proxy.ts ; l'authentification
+  // réelle reste entièrement dans la route elle-même (vérifiée ici : un
+  // jeton absent/faux est un VRAI refus applicatif, pas un simple
+  // contournement du proxy).
+  test("jeton absent ou invalide → 401 applicatif (jamais une redirection /login, jamais un 200)", async ({ browser }) => {
+    const context = await browser.newContext(); // aucun cookie de session
+    const page = await context.newPage();
+    await page.goto("/login");
+
+    const noToken = await page.evaluate(async () => {
+      const r = await fetch("/api/attempts/sweep", { method: "POST", redirect: "manual" });
+      return { status: r.status, type: r.type };
+    });
+    expect(noToken.type).not.toBe("opaqueredirect"); // jamais redirigé vers /login — refus applicatif direct
+    expect(noToken.status).toBe(401);
+
+    const wrongToken = await page.evaluate(async () => {
+      const r = await fetch("/api/attempts/sweep", { method: "POST", redirect: "manual", headers: { Authorization: "Bearer ceci-nest-pas-le-bon-jeton" } });
+      return { status: r.status, type: r.type };
+    });
+    expect(wrongToken.type).not.toBe("opaqueredirect");
+    expect(wrongToken.status).toBe(401);
+    await context.close();
+  });
+
+  test("jeton correct → 200, aucune session requise (c'est exactement l'appel que fait le cron)", async ({ browser }) => {
+    const context = await browser.newContext(); // toujours aucun cookie — reproduit fidèlement l'appel cron
+    const page = await context.newPage();
+    await page.goto("/login");
+
+    const token = env("STAGING_SWEEP_TOKEN");
+    const result = await page.evaluate(
+      async (t) => {
+        const r = await fetch("/api/attempts/sweep", { method: "POST", redirect: "manual", headers: { Authorization: `Bearer ${t}` } });
+        return { status: r.status, body: await r.json() };
+      },
+      token
+    );
+    expect(result.status).toBe(200);
+    expect(typeof result.body.swept).toBe("number");
+    await context.close();
+  });
+});
+
 // L'anti-force-brute sur la connexion a sa propre preuve dédiée et
 // déterministe dans tests/staging/10-rate-limit-clean-proof.spec.ts, qui
 // utilise des comptes de test créés fraîchement pour CE seul usage

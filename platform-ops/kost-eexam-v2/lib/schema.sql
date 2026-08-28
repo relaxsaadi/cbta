@@ -20,6 +20,15 @@ CREATE TABLE IF NOT EXISTS users (
   phone TEXT,
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','suspended')),
   mfa_enabled INTEGER NOT NULL DEFAULT 0,
+  -- MFA (mission "PRODUCTION READINESS" §25) — TOTP natif (RFC 6238),
+  -- aucune dépendance externe. mfa_secret : base32, posé uniquement à
+  -- l'activation confirmée (jamais avant qu'un code valide ait été
+  -- vérifié). mfa_recovery_codes_json : codes de secours à usage unique,
+  -- hachés (jamais en clair), consommés un par un. Colonnes ajoutées après
+  -- coup sur une base déjà déployée — voir scripts/migrate.ts
+  -- ADDITIVE_COLUMNS, même discipline que le reste de ce schéma.
+  mfa_secret TEXT,
+  mfa_recovery_codes_json TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   last_login_at TEXT
 );

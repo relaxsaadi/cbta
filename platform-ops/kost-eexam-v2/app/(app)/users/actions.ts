@@ -5,6 +5,7 @@ import { requireWriteRole } from "@/lib/rbac";
 import { createUser, setUserStatus } from "@/lib/users";
 import { revokeAllSessionsForUser } from "@/lib/sessions-registry";
 import { audit } from "@/lib/audit";
+import { getDb } from "@/lib/db";
 import type { ConsoleRole } from "@/lib/session";
 
 export interface CreateUserResult {
@@ -47,5 +48,20 @@ export async function quickReactivateAction(userId: number) {
   const session = await requireWriteRole("administrator");
   setUserStatus(userId, "active");
   audit({ actorUserId: session.userId, actorRole: session.role, action: "user_reactivate", targetType: "user", targetId: userId });
+  revalidatePath("/users");
+}
+
+/** Voie de récupération pour un compte verrouillé hors de son propre MFA
+ * (téléphone perdu ET codes de secours épuisés/perdus — mission §25).
+ * Réservée à l'administrateur, jamais en libre-service : désactive MFA sur
+ * le compte CIBLE (jamais le sien propre via ce chemin — voir
+ * app/(app)/mon-compte/actions.ts pour l'auto-désactivation, qui exige le
+ * mot de passe plutôt qu'un rôle). Trace d'audit dédiée et distincte de
+ * `mfa_disabled` (self-service) pour que l'origine de la désactivation
+ * reste toujours reconstituable. */
+export async function adminResetMfaAction(userId: number) {
+  const session = await requireWriteRole("administrator");
+  getDb().prepare(`UPDATE users SET mfa_enabled = 0, mfa_secret = NULL, mfa_recovery_codes_json = NULL WHERE id = ?`).run(userId);
+  audit({ actorUserId: session.userId, actorRole: session.role, action: "mfa_admin_reset", targetType: "user", targetId: userId, result: "success" });
   revalidatePath("/users");
 }

@@ -24,6 +24,12 @@ export async function loginAction(_prev: LoginResult, formData: FormData): Promi
   });
 
   if (!result.ok) {
+    // Mission §25 — mot de passe correct mais MFA activé sur ce compte :
+    // jamais de session pleinement connectée tant que le second facteur
+    // n'est pas vérifié (voir lib/auth.ts login()/completeMfaLogin()).
+    if (result.mfaRequired) {
+      redirect("/login/verifier-mfa");
+    }
     return { error: result.error };
   }
 

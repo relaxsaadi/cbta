@@ -18,6 +18,20 @@ export interface AppSession {
   fullName?: string;
   role?: ConsoleRole;
   dbSessionId?: number;
+  // MFA (mission "PRODUCTION READINESS" §25) — état intermédiaire "mot de
+  // passe déjà vérifié, code TOTP en attente" : jamais `isLoggedIn`, donc
+  // structurellement invisible à guardPage()/requireRole() (qui ne
+  // vérifient que `isLoggedIn`) — un attaquant en possession de ce cookie
+  // seul ne peut accéder à AUCUNE route protégée avant de fournir un code
+  // valide.
+  pendingMfaUserId?: number;
+  // Secret TOTP généré mais PAS ENCORE activé — le temps que l'utilisateur
+  // prouve qu'il l'a correctement enregistré dans son application
+  // d'authentification (en soumettant un code valide). Jamais écrit en
+  // base tant que cette preuve n'est pas apportée (§25 : éviter qu'un
+  // administrateur se verrouille lui-même hors de son compte avec un
+  // secret mal scanné). Portée : session courante uniquement.
+  pendingMfaEnrollmentSecret?: string;
 }
 
 export function getSessionOptions(): SessionOptions {

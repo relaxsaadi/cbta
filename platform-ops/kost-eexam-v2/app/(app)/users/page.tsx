@@ -4,7 +4,7 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { ROLE_LABELS, type ConsoleRole } from "@/lib/session";
 import { CreateUserForm } from "./CreateUserForm";
-import { quickSuspendAction, quickReactivateAction } from "./actions";
+import { quickSuspendAction, quickReactivateAction, adminResetMfaAction } from "./actions";
 
 const ROLES: ConsoleRole[] = ["administrator", "pedagogical_manager", "auditor", "candidate"];
 
@@ -30,12 +30,29 @@ export default async function UsersPage() {
             ) : (
               <div className="flex flex-col gap-1.5">
                 {users.map((u) => (
-                  <div key={u.id} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2">
+                  <div key={u.id} data-testid={`user-row-${u.username}`} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2">
                     <div>
                       <p className="text-[13px] font-medium text-text-primary">{u.full_name}</p>
                       <p className="text-[11.5px] text-text-tertiary">{u.username}</p>
                     </div>
                     <div className="flex items-center gap-2">
+                      {u.mfa_enabled === 1 && (
+                        <>
+                          <StatusBadge status="verified">MFA actif</StatusBadge>
+                          {/* Mission §25 — voie de récupération : compte verrouillé
+                              (téléphone perdu ET codes de secours épuisés). Réservée à
+                              l'administrateur, jamais en libre-service pour la cible. */}
+                          <form action={adminResetMfaAction.bind(null, u.id)}>
+                            <button
+                              type="submit"
+                              title="Réinitialiser MFA (perte de téléphone / codes de secours épuisés)"
+                              className="rounded-md border border-border-default px-2.5 py-1 text-[11.5px] font-medium text-text-secondary hover:bg-surface-base"
+                            >
+                              Réinitialiser MFA
+                            </button>
+                          </form>
+                        </>
+                      )}
                       <StatusBadge status={u.status === "active" ? "verified" : "critical"}>{u.status === "active" ? "Actif" : "Suspendu"}</StatusBadge>
                       {u.status === "active" ? (
                         <form action={quickSuspendAction.bind(null, u.id)}>

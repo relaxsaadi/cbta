@@ -19,6 +19,7 @@ import {
   HelpCircle,
   FileClock,
   GraduationCap,
+  Fingerprint,
   type LucideIcon,
 } from "lucide-react";
 import type { ConsoleRole } from "./session";
@@ -70,6 +71,14 @@ const HELP: NavGroup = {
   items: [{ label: "Guide", href: "/guide", icon: HelpCircle }],
 };
 
+// Mission §25 — MFA en libre-service, seulement pour les deux rôles
+// cibles (voir app/(app)/mon-compte/page.tsx, qui revérifie ce rôle
+// côté serveur — ce lien de navigation n'est qu'un raccourci UI).
+const MON_COMPTE: NavGroup = {
+  title: "Compte",
+  items: [{ label: "Mon compte", href: "/mon-compte", icon: Fingerprint }],
+};
+
 const CANDIDATE_NAV: NavGroup[] = [
   {
     title: "Mon espace",
@@ -86,9 +95,9 @@ export function navForRole(role: ConsoleRole): NavGroup[] {
     case "candidate":
       return CANDIDATE_NAV;
     case "pedagogical_manager":
-      return [...STAFF_SHARED, HELP];
+      return [...STAFF_SHARED, MON_COMPTE, HELP];
     case "administrator":
-      return [...STAFF_SHARED, ...ADMIN_ONLY, HELP];
+      return [...STAFF_SHARED, ...ADMIN_ONLY, MON_COMPTE, HELP];
     case "auditor":
       return [...STAFF_SHARED, ...AUDITOR_ONLY, HELP];
   }

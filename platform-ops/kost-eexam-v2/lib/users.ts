@@ -11,6 +11,8 @@ export interface UserRow {
   phone: string | null;
   status: "active" | "suspended";
   mfa_enabled: number;
+  mfa_secret: string | null;
+  mfa_recovery_codes_json: string | null;
   created_at: string;
   last_login_at: string | null;
 }

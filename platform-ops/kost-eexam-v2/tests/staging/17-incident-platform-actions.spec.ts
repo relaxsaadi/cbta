@@ -117,6 +117,105 @@ test.describe("Actions plateforme — continuité d'examen", () => {
   });
 });
 
+test.describe("Actions plateforme — mode maintenance", () => {
+  test("activer le mode maintenance bloque À LA FOIS les connexions ET les nouvelles tentatives, en un seul geste", async ({ page, context }) => {
+    await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
+    await declareDedicatedIncident(page);
+    const incidentUrl = page.url();
+
+    try {
+      await page.getByRole("button", { name: "Activer le mode maintenance" }).click();
+      await expect(page.getByRole("button", { name: "Désactiver le mode maintenance" })).toBeVisible();
+      await expect(page.getByText(/mode maintenance actif sur toute la plateforme/i)).toBeVisible();
+
+      // Les 2 blocages dédiés sont bien INCLUS (pas seulement affichés
+      // séparément à côté) — leur bouton devient un texte non actionnable
+      // "(inclus dans le mode maintenance)" tant que la maintenance est
+      // active (ToggleAction disabled=true, voir le composant). Vérifie
+      // qu'un SEUL geste couvre bien les deux, sans dépendre d'une
+      // connexion manager fraîche — structurellement impossible ici :
+      // le blocage de connexion empêcherait justement cette connexion
+      // même, donc pas une preuve indépendante du blocage tentatives.
+      await expect(page.getByText("Débloquer les nouvelles connexions (inclus dans le mode maintenance)")).toBeVisible();
+      await expect(page.getByText("Débloquer les nouvelles tentatives (inclus dans le mode maintenance)")).toBeVisible();
+
+      // Connexions bloquées pour un rôle non-admin — même effet que le
+      // blocage dédié, mais déclenché par le SEUL bouton maintenance.
+      await context.clearCookies();
+      await page.goto("/login");
+      await page.getByLabel("Nom d'utilisateur").fill(env("STAGING_MANAGER_USER"));
+      await page.getByLabel("Mot de passe").fill(env("STAGING_MANAGER_PASS"));
+      await page.getByRole("button", { name: /se connecter/i }).click();
+      await expect(page.getByText(/connexions temporairement suspendues/i)).toBeVisible();
+
+      // ...mais jamais l'administrateur.
+      await page.goto("/login");
+      await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
+      await expect(page).toHaveURL(/\/overview/);
+    } finally {
+      await context.clearCookies();
+      await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
+      await page.goto(incidentUrl);
+      const stillOn = await page.getByRole("button", { name: "Désactiver le mode maintenance" }).count();
+      if (stillOn > 0) {
+        await page.getByRole("button", { name: "Désactiver le mode maintenance" }).click();
+      }
+    }
+  });
+});
+
+test.describe("Actions plateforme — suspendre un examen ciblé", () => {
+  // La carte "Évaluation" empile 2 <form> indépendants (Suspendre
+  // l'examen, Réouvrir), chacun avec son PROPRE <select name="targetId">
+  // — même structure que la carte "Compte utilisateur", ciblée par
+  // position (voir 22-acceptance-incident.spec.ts selectTargetAndSubmit).
+  async function selectExamAndSubmit(page: import("@playwright/test").Page, formIndex: number) {
+    const card = page.locator("div.rounded-md.border-border-subtle").filter({ hasText: "Évaluation" });
+    const form = card.locator("form").nth(formIndex);
+    const select = form.locator('select[name="targetId"]');
+    const value = await select.locator("option", { hasText: "DGR Fonction 7.1 — Examen pilote staging" }).getAttribute("value");
+    await select.selectOption(value!);
+    await form.evaluate((el) => (el as HTMLFormElement).requestSubmit());
+    await page.waitForLoadState("networkidle");
+  }
+
+  test("suspendre l'examen pilote via l'incident empêche un nouveau démarrage, réouvrir le restaure", async ({ page, context }) => {
+    await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
+    await declareDedicatedIncident(page);
+    const incidentUrl = page.url();
+
+    try {
+      await selectExamAndSubmit(page, 0); // 0 = Suspendre l'examen
+      await expect(page.getByText("suspend_assessment")).toBeVisible();
+
+      // Effet réel : candidat3 (jamais commencé cet examen) ne peut plus
+      // le démarrer tant qu'il est suspendu — listAssignedAssessmentsFor
+      // Candidate() (lib/assessments.ts) filtre WHERE status IN
+      // ('published','open','closed'), donc un examen suspendu disparaît
+      // ENTIÈREMENT de la liste (pas seulement grisé avec un badge) : la
+      // preuve correcte est son ABSENCE, pas un badge "Suspendu".
+      await context.clearCookies();
+      await loginAs(page, env("STAGING_CANDIDATE3_USER"), env("STAGING_CANDIDATE3_PASS"));
+      await page.goto("/mes-examens");
+      await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toHaveCount(0);
+    } finally {
+      await context.clearCookies();
+      await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
+      await page.goto(incidentUrl);
+      await selectExamAndSubmit(page, 1).catch(() => {}); // 1 = Réouvrir
+    }
+
+    // Preuve de la reprise, HORS du finally (doit être un résultat
+    // observable du test, pas seulement un nettoyage best-effort) :
+    // l'examen réapparaît dans la liste du candidat.
+    await expect(page.getByText("reopen_assessment")).toBeVisible();
+    await context.clearCookies();
+    await loginAs(page, env("STAGING_CANDIDATE3_USER"), env("STAGING_CANDIDATE3_PASS"));
+    await page.goto("/mes-examens");
+    await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toBeVisible();
+  });
+});
+
 test.describe("Actions plateforme — rattacher une preuve", () => {
   test("rattacher une preuve crée une trace visible dans l'historique de l'incident", async ({ page }) => {
     await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));

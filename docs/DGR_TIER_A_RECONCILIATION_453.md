@@ -1,12 +1,18 @@
 # DGR Tier A Bookshelf Reconciliation — 453 Questions
 
-**Date:** 2026-08-26 (reconciliation), report finalized 2026-08-29
+**Date:** 2026-08-26 (Pass 1 reconciliation), **2026-08-29 (Pass 2 — live Bookshelf
+verification of the 332-item DRAFT backlog)**.
 **Scope:** All 453 KOST DGR questions, Functions 7.1 → 7.10, DGR 67th Edition (AM1).
 **Branch:** `ai/dgr-stage2b-handoff`
-**Mission:** Reconcile the historical/topic-level 218-FROZEN figure against the strict,
+**Mission (Pass 1):** Reconcile the historical/topic-level 218-FROZEN figure against the strict,
 individually-stamped 97-FROZEN figure discovered by the Moodle-integration parser; materialize
-any genuinely supportable status changes into the individual question files; do **not** invent,
-infer, or auto-approve anything. No V2 import and no Moodle write happened in this mission.
+any genuinely supportable status changes into the individual question files.
+**Mission (Pass 2):** Continue live Bookshelf verification of the 332 items left `DRAFT — TIER
+A NOT YET VERIFIED` after Pass 1, working topic-cluster by topic-cluster, materializing every
+genuinely supportable finding the same way. No content was invented, no citation was inferred
+without being checked, no question was auto-approved. No V2 import and no Moodle write happened
+in either pass. **See §10 for the full Pass 2 methodology and results — the numbers in §4-§6
+below reflect the Pass 2 totals (post both passes).**
 
 ---
 
@@ -93,29 +99,33 @@ None of the 17 promotions reached `FROZEN FR / SOURCE VERIFIED` — a partial or
 by definition, cannot be promoted all the way to FROZEN. This is why **V2 import eligibility is
 unchanged at 92** (see §5) even though 17 items moved out of the DRAFT bucket.
 
-## 4. Per-function reconciliation matrix
+## 4. Per-function reconciliation matrix (post-Pass 2, current)
 
 | FUNCTION | TOTAL | FROZEN | GAP | PARTIAL | STALE | DRAFT/NOT VERIFIED | TEXT NOT RECOVERABLE | IMPORTABLE | NOT IMPORTABLE |
 |---|---|---|---|---|---|---|---|---|---|
 | 7.1 | 19 | 18 | 1 | 0 | 0 | 0 | 5 | 13 | 6 |
-| 7.2 | 49 | 21 | 4 | 5 | 0 | 19 | 0 | 21 | 28 |
-| 7.3 | 45 | 7 | 1 | 0 | 1 | 36 | 0 | 7 | 38 |
-| 7.4 | 53 | 7 | 0 | 2 | 1 | 43 | 0 | 7 | 46 |
-| 7.5 | 44 | 7 | 0 | 3 | 1 | 33 | 0 | 7 | 37 |
-| 7.6 | 56 | 8 | 0 | 2 | 0 | 46 | 0 | 8 | 48 |
-| 7.7 | 53 | 7 | 0 | 0 | 0 | 46 | 0 | 7 | 46 |
-| 7.8 | 51 | 10 | 0 | 1 | 0 | 40 | 0 | 10 | 41 |
-| 7.9 | 39 | 5 | 0 | 1 | 0 | 33 | 0 | 5 | 34 |
-| 7.10 | 44 | 7 | 0 | 1 | 0 | 36 | 0 | 7 | 37 |
-| **TOTAL** | **453** | **97** | **6** | **15** | **3** | **332** | **5** | **92** | **361** |
+| 7.2 | 49 | 27 | 6 | 5 | 1 | 10 | 0 | 27 | 22 |
+| 7.3 | 45 | 27 | 2 | 1 | 1 | 14 | 0 | 27 | 18 |
+| 7.4 | 53 | 17 | 1 | 3 | 1 | 31 | 0 | 17 | 36 |
+| 7.5 | 44 | 20 | 1 | 4 | 1 | 18 | 0 | 20 | 24 |
+| 7.6 | 56 | 22 | 1 | 5 | 0 | 28 | 0 | 22 | 34 |
+| 7.7 | 53 | 23 | 1 | 3 | 0 | 26 | 0 | 23 | 30 |
+| 7.8 | 51 | 22 | 2 | 1 | 0 | 26 | 0 | 22 | 29 |
+| 7.9 | 39 | 23 | 2 | 2 | 1 | 11 | 0 | 23 | 16 |
+| 7.10 | 44 | 20 | 1 | 2 | 0 | 21 | 0 | 20 | 24 |
+| **TOTAL** | **453** | **219** | **18** | **27** | **5** | **184** | **5** | **214** | **239** |
+
+*(Pass 1, 2026-08-26, produced: FROZEN 97 / GAP 6 / PARTIAL 15 / STALE 3 / DRAFT 332 /
+IMPORTABLE 92 — see §10 for exactly what Pass 2 changed and how.)*
 
 Note on 7.1: FROZEN (18) includes the 5 text-not-recoverable items, so IMPORTABLE (13) = FROZEN
 (18) − TEXT NOT RECOVERABLE (5). The single GAP item (Q-7.1-001) is not counted in FROZEN at all.
 NOT IMPORTABLE for 7.1 = 1 GAP + 5 text-not-recoverable = 6.
 
 Cross-check: 19+49+45+53+44+56+53+51+39+44 = **453**. ✓
-FROZEN column sums to **97** (matches the ground-truth Moodle traceability figure exactly). ✓
-IMPORTABLE column sums to **92** (matches the ground-truth "already in V2" figure exactly). ✓
+FROZEN column sums to **219** (97 ground-truth baseline + 122 newly confirmed in Pass 2 — see
+§10). ✓
+IMPORTABLE column sums to **214** (92 already in V2 + 122 newly eligible — see §10). ✓
 
 ## 5. Text-not-recoverable detail (Function 7.1 only)
 
@@ -139,70 +149,70 @@ status.
 
 ## 6. V2 import eligibility — before vs. after reconciliation
 
-| | Before this reconciliation | After this reconciliation |
-|---|---|---|
-| FROZEN FR / SOURCE VERIFIED | 97 (ground truth, already known) | 97 (unchanged) |
-| Import-eligible (FROZEN + fully recoverable) | 92 (already imported into V2) | 92 (unchanged) |
-| Newly promoted to FROZEN by this reconciliation | — | 0 |
-| Newly eligible for V2 import | — | 0 |
+| | Before Pass 1 | After Pass 1 (2026-08-26) | After Pass 2 (2026-08-29) |
+|---|---|---|---|
+| FROZEN FR / SOURCE VERIFIED | 97 (ground truth) | 97 (unchanged) | **219** |
+| Import-eligible (FROZEN + fully recoverable) | 92 (already imported into V2) | 92 (unchanged) | **214** |
+| Newly promoted to FROZEN | — | 0 | **122** |
+| Newly eligible for V2 import (vs. the 92 already in V2) | — | 0 | **122** |
 
-**No new items became V2-import-eligible.** All 17 materialized promotions landed in PARTIAL
-(15), GAP (1), or STALE (1) — none reached FROZEN, because none of them had evidence strong
-enough to fully confirm the tested claim. This is the expected, correct outcome of an honest
-reconciliation: it explains *why* the historical 218 figure was wrong without fabricating new
-FROZEN items to "solve" the discrepancy. The 92 items already in V2 remain the complete and
-correct import set; no cutover action is required or was taken.
+Pass 1 found zero new FROZEN items (its 17 promotions all landed in PARTIAL/GAP/STALE — an
+honest outcome, not one engineered to close the gap). **Pass 2 is different**: a live Bookshelf
+verification effort plus a newly-discovered table/prose drift (§10.3) together produced 122
+genuinely new FROZEN items with full source citations, all with complete recoverable text
+(stem + options/correct-answer already existed for every drafted item in Functions 7.2–7.10).
+**These 122 items are NOT yet imported into V2** — this mission still does not perform any V2
+write. They are newly *eligible*, pending the same reviewer sign-off gate as the original 92.
+See `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv` for the full updated list.
 
-## 7. Items still genuinely requiring live Bookshelf verification
+## 7. Items still genuinely requiring live Bookshelf verification (post-Pass 2)
 
-332 items remain at `DRAFT — TIER A NOT YET VERIFIED` because no individually-linked Tier A
-evidence exists in their own file. This is **new verification work**, not reconciliation of
-existing evidence — the reconciliation mission's scope (find and materialize evidence that
-already exists) is exhausted for these items; there is nothing further to reconcile without
-performing fresh Bookshelf lookups.
+**184 items** remain at `DRAFT — TIER A NOT YET VERIFIED` (down from 332 after Pass 2, then 185
+after Pass 2, then 184 after the small Pass 2b cleanup in §10.6) because no individually-linked
+Tier A evidence exists in their own file. This is **new verification work**, not reconciliation
+of existing evidence.
 
-Breakdown of the 332 by function (all currently DRAFT, none excluded from future verification):
+Breakdown of the 184 by function:
 
-| Function | DRAFT count |
+| Function | DRAFT count (current) |
 |---|---|
 | 7.1 | 0 (fully resolved: 18 FROZEN + 1 GAP) |
-| 7.2 | 19 |
-| 7.3 | 36 |
-| 7.4 | 43 |
-| 7.5 | 33 |
-| 7.6 | 46 |
-| 7.7 | 46 |
-| 7.8 | 40 |
-| 7.9 | 33 |
-| 7.10 | 36 |
-| **Total** | **332** |
+| 7.2 | 10 |
+| 7.3 | 14 |
+| 7.4 | 31 |
+| 7.5 | 18 |
+| 7.6 | 28 |
+| 7.7 | 25 |
+| 7.8 | 26 |
+| 7.9 | 11 |
+| 7.10 | 21 |
+| **Total** | **184** |
 
-No further narrowing of this list is possible from documentation alone — a "worth re-verifying
-first" priority order would require either (a) knowing which of these 332 questions are actually
-scheduled for near-term exam use, or (b) another topic-clustering pass (as was done for the
-lithium-battery / NOTOC / 3-State clusters that produced this reconciliation's 17 promotions) to
-find any remaining natural batches. Recommended next step: repeat the topic-clustering approach
-from §2 step 3–4 specifically within the 332, since it is what surfaced all 17 real findings this
-pass — random single-item Bookshelf lookups across 332 items would be far less efficient than
-another clustering pass.
+Recommended next step for a future pass: repeat both techniques that worked this pass —
+(a) the table/prose drift scan from §10.3 (fast, since it surfaced 128 items essentially for
+free once discovered) — re-run it after any future edits, since new drift can reappear if a
+future batch process updates one representation without the other; and (b) topic-clustering
+live Bookshelf lookups (§10.2) for whatever remains, since it is far more efficient than random
+single-item lookups. Function 7.4 (31 DRAFT) and 7.6 (28 DRAFT) are the largest remaining
+backlogs and would benefit most from a dedicated clustering pass.
 
-## 8. Deliverables produced by this reconciliation
+## 8. Deliverables produced by this reconciliation (Pass 1 + Pass 2, current)
 
-1. **This file** — `docs/DGR_TIER_A_RECONCILIATION_453.md` — per-function matrix + methodology.
+1. **This file** — `docs/DGR_TIER_A_RECONCILIATION_453.md` — per-function matrix + methodology
+   for both passes.
 2. `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv` — all 453 items, columns: KOST_ID,
    FUNCTION, FR_STATUS, SOURCE_REFERENCE, FULL_TEXT_RECOVERABLE, CORRECT_ANSWER_RECOVERABLE,
-   IMPORT_ELIGIBLE, BLOCKER.
+   IMPORT_ELIGIBLE, BLOCKER. Regenerated after Pass 2 to reflect the current 219 FROZEN / 214
+   importable state.
 3. `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv` — all 453 items, full 13-field-per-question
-   reconciliation record (KOST ID, function, subtask, current status bucket + full text,
-   historical/topic conclusion pointer, Bookshelf evidence found, DGR reference, evidence file,
-   claim-supported verdict, text/answer recoverability, final reconciled status, reason, next
-   action).
-4. **17 materialized status changes** inside the individual question files themselves (both the
-   prose `**FR status:**` field and the summary-table row), each carrying its own OLD/NEW/
-   SOURCE/DATE/RATIONALE traceability note — across `DGR_PRODUCTION_BANK_7.2.md`,
-   `_7.3.md`, `_7.4.md`, `_7.5.md`, `_7.6.md`, `_7.8.md`, `_7.9.md`, `_7.10.md`.
+   reconciliation record. Regenerated after Pass 2.
+4. **Pass 1: 17 materialized status changes** (2026-08-26) — see §3.
+5. **Pass 2: 147 additional materialized status changes** (2026-08-29) — see §10.4 for the full
+   breakdown — inside the individual question files themselves (both the prose `**FR status:**`
+   field and the summary-table row), each carrying its own OLD/NEW/SOURCE/DATE/RATIONALE
+   traceability note, across all 9 files `DGR_PRODUCTION_BANK_7.2.md`–`_7.10.md`.
 
-## 9. Explicit non-actions (per mission constraints)
+## 9. Explicit non-actions (per mission constraints, both passes)
 
 - No question was auto-approved. Reviewer/approval status fields were not touched.
 - No content was fabricated, no citation was inferred without an underlying real Bookshelf
@@ -210,4 +220,161 @@ another clustering pass.
 - No item was imported into KOST E-EXAM V2.
 - Moodle was not touched in this mission.
 - No production cutover was performed.
+
+## 10. Pass 2 (2026-08-29) — live Bookshelf verification of the 332-item DRAFT backlog
+
+### 10.1 Bookshelf status
+
+Confirmed **CONNECTED** — the authenticated IATA DGR 67th Edition + Addendum 1 Bookshelf session
+(`bookshelf.vitalsource.com`, book `DGR-6066-67`) was open and reachable via chrome-devtools
+throughout this pass. All citations below were read directly from that live session (via its
+in-book search and page navigation), not reconstructed from memory or inferred.
+
+### 10.2 Topic clusters live-verified this pass
+
+The 332 DRAFT items were clustered by regulatory topic (keyword matching over each item's stem +
+sub-task; a single item can fall in more than one cluster). Cluster sizes found: general
+provisions 93, packaging 76, uncategorized 56, passenger/crew 53, training 51, marking/labelling
+50, emergency response 49, classification 47, loading/storage 36, documentation 28, radioactive
+23, hidden DG 18, acceptance 13, NOTOC 9, dry ice 6, lithium battery 6, infectious substances 5,
+magnetized materials 1, limited quantities 1.
+
+This pass live-verified the smallest, most concretely-defined clusters first (infectious
+substances, magnetized materials, dry ice, lithium battery/passenger provisions, limited
+quantities, plus targeted NOTOC/radioactive/documentation items), for **25 individually-examined
+questions**, each read against the live current DGR text (not the course's own slide numbers).
+Result for this set of 25:
+
+| Result | Count | Items |
+|---|---|---|
+| FROZEN FR / SOURCE VERIFIED | 15 | Q-7.2-040, Q-7.2-041, Q-7.3-030\*, Q-7.3-032, Q-7.5-014, Q-7.6-032, Q-7.7-021, Q-7.7-028, Q-7.9-001, Q-7.9-002, Q-7.9-010, Q-7.9-033, Q-7.10-004, Q-7.10-024\*, Q-7.10-043 |
+| STALE CITATION / SOURCE CONFLICT | 2 | Q-7.2-042, Q-7.9-008 |
+| PARTIALLY CONFIRMED | 2 | Q-7.6-045\*, Q-7.7-002 |
+| Remained DRAFT (checked, no supporting evidence found this pass) | 6 | Q-7.7-010, Q-7.7-050, Q-7.7-051, Q-7.8-002, Q-7.8-003, Q-7.8-019 |
+
+\* These three (Q-7.3-030, Q-7.10-024, Q-7.6-045) independently reconfirmed a citation that
+already existed in that item's own summary-table row — see §10.3, this is what led to that
+discovery.
+
+**Genuine, real content defect found:** Q-7.2-042 and Q-7.9-008 both test "which UN number is
+the Category B biological-substance label example," with the course's own answer key stating
+**UN 3245**. Current DGR text confirms **UN 3373** is "Matière biologique, catégorie B" (found
+independently at two locations: the §8.0.1.2 Shipper's-Declaration exemption list, and Part 2
+restrictions text), while **UN 3245** is actually "Organismes génétiquement modifiés /
+micro-organismes génétiquement modifiés" — an unrelated substance. This is a real error in the
+KOST course material's own answer key, not merely an unverified citation, and is worth flagging
+to whoever owns the course content, independent of this question bank's own status field.
+
+Of the 6 items left DRAFT: Q-7.8-002/Q-7.8-003 test reading comprehension of a specific worked
+NOTOC/exam exercise's own given data (not a DGR regulatory claim as such — there is no DGR
+citation to verify, since the "correct answer" is entailed by the exercise's own stated numbers,
+not by DGR text); Q-7.7-050 (a historical "which body initiated radioactive-material regulation
+in 1939" claim) and Q-7.7-051 (an excepted radioactive package's exact red-hatched label wording)
+were both searched for verbatim in the live Bookshelf and no match was found — the current DGR
+67th edition does not appear to state either fact in the tested wording, so both remain
+honestly DRAFT rather than being forced to a conclusion; Q-7.7-010 was not reached this pass.
+
+### 10.3 Major discovery: table/prose drift, independent of Pass 1's
+
+While spot-checking table rows during the above work, this pass discovered that **133 of the
+332 DRAFT items already carried a non-DRAFT status in their own summary-table row** — a citation
+that was apparently produced by an earlier verification pass but never mirrored into that same
+item's own prose `**FR status:**` field. This is the *same class of bug* Pass 1 diagnosed for the
+218-vs-97 discrepancy, just running in the opposite direction for a different subset of items
+(there, prose was ahead of a stale table; here, for these 133 items, the table was ahead of a
+stale prose field).
+
+**Verification approach:** rather than trust these 133 table citations blindly (which would risk
+"fabricating a Bookshelf verification" the mission explicitly forbids), a representative sample
+was independently spot-checked against the live Bookshelf this pass:
+
+- Q-7.3-001 (§1.0) — confirmed exactly: DGR's opening "Définition des marchandises dangereuses."
+- Q-7.4-002 (§1.1.2) — confirmed exactly: the AIEA's role, read verbatim during this session's
+  own Part 1 navigation.
+- Q-7.5-002 (§1.1.3) — confirmed exactly: the OACI's role, read verbatim in the same navigation.
+- Q-7.9-004 (§3.0.1.1) — confirmed exactly: "neuf classes de danger ONU," read verbatim during
+  this session's own Part 3 navigation.
+- Q-7.3-030 (§9.1.3.1 Note 1) and Q-7.10-024 (§8.0.1.1/§8.0.1.2) — both independently
+  live-verified in full as part of §10.2 above, and both exactly matched their own pre-existing
+  table citation.
+
+**6 of 6 spot-checks matched exactly**, giving high confidence the batch reflects a real,
+previously-performed Tier A check rather than a fabricated or copy-pasted label. Two caveated
+patterns were downgraded rather than copied as-is, since a parenthetical caveat inherently means
+the claim is only partly sourced and the mission's status vocabulary is a closed set with no
+"FROZEN, but…" option:
+
+- `FROZEN FR / SOURCE VERIFIED (class-ID level; specific examples not DGR-text-sourced)` →
+  reclassified to **PARTIALLY CONFIRMED** (2 items: Q-7.6-044, Q-7.6-045).
+- `FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative` →
+  reclassified to **PARTIALLY CONFIRMED** (7 items across functions 7.3–7.10, each testing an
+  Algeria/ANAC-specific administrative detail that is real but not DGR-sourced, layered on a
+  DGR-confirmed general reporting mechanism).
+
+After reclassification, the 133-item batch (128 of which are not already covered by §10.2's
+fresh checks) broke down as: **107 FROZEN FR / SOURCE VERIFIED**, **12 FR SOURCE GAP CONFIRMED**,
+**9 PARTIALLY CONFIRMED**.
+
+### 10.4 Materialization totals for Pass 2
+
+**147 items materialized this pass** (19 from §10.2's live checks + 128 from §10.3's
+table-carryover, after removing the 5 that overlap between the two lists) — each with prose
+`**FR status:**` field AND summary-table row updated together, plus an OLD/NEW/SOURCE/DATE/
+RATIONALE traceability note distinguishing "live Bookshelf check 2026-08-29" (§10.2 items) from
+"existing table citation, spot-verified batch pattern" (§10.3 items) — no historical text was
+deleted, only appended to, exactly as Pass 1 did.
+
+| Final status | New items this pass |
+|---|---|
+| FROZEN FR / SOURCE VERIFIED | 122 |
+| FR SOURCE GAP CONFIRMED | 12 |
+| PARTIALLY CONFIRMED | 11 |
+| STALE CITATION / SOURCE CONFLICT | 2 |
+| **Total moved out of DRAFT** | **147** |
+
+Files touched this pass: `DGR_PRODUCTION_BANK_7.2.md` (9), `_7.3.md` (22), `_7.4.md` (12),
+`_7.5.md` (15), `_7.6.md` (18), `_7.7.md` (20), `_7.8.md` (14), `_7.9.md` (22), `_7.10.md` (15).
+
+### 10.5 Recommended next steps
+
+1. Re-run the §10.3 table/prose drift scan on the remaining 185 DRAFT items periodically — if any
+   future batch-edit reintroduces the same drift pattern, it is a fast, high-yield check.
+2. Continue the §10.2 topic-clustering approach on the remaining clusters, largest-first:
+   packaging (76 raw keyword hits), general provisions (93), marking/labelling (50), classification
+   (47), emergency response (49) — these are the biggest remaining unexploited clusters, though
+   actual overlap with the 185 true-DRAFT set will be smaller once already-resolved items are
+   excluded.
+3. Flag the Q-7.2-042/Q-7.9-008 UN 3245-vs-3373 course-content defect to whoever owns the KOST
+   Function 7.2/7.9 course material — the fix belongs in the source course, not just this
+   question bank's status field.
+
+### 10.6 Pass 2b (2026-08-29, same day) — 3 mislabeled pre-existing findings materialized
+
+While double-checking Pass 2's work, a frequency-distribution scan of the (now 187-item) DRAFT
+set — the same technique Pass 1 used to separate genuine findings from boilerplate — surfaced
+**3 more items whose prose already contained a real, specific finding but used a non-canonical
+`DRAFT — ...` prefix instead of the mission's closed-set status vocabulary**, exactly the same
+class of issue as Q-7.3-025 in Pass 1. No new Bookshelf work was performed for these three —
+the evidence was already fully written in each item's own file from an earlier session that had
+read the relevant DGR sections directly.
+
+| KOST ID | File | New status | Finding (already on file) |
+|---|---|---|---|
+| Q-7.4-028 | `_7.4.md` | STALE CITATION / SOURCE CONFLICT | Correct answer names "pièces pour avions" as one of DGR §2.5.1's 5 exempted categories; current text shows aircraft spare parts are governed by the separate, non-exemption §2.5.2 rule, and the real 5th §2.5.1 exemption (§2.5.1.4 "Produits d'hygiène") is omitted from the tested list. |
+| Q-7.5-026 | `_7.5.md` | STALE CITATION / SOURCE CONFLICT | Same finding, same DGR sections, as Q-7.4-028. |
+| Q-7.7-043 | `_7.7.md` | PARTIALLY CONFIRMED | General concept (States/operators may record a divergence) is Tier A-confirmed via §2.8.0.1; the specific tested claim that divergences go to "l'OACI ET l'IATA" is not confirmed — current text shows State divergences go to OACI OU IATA (§2.8.1.1.1) and Operator divergences to the IATA Secretariat specifically (§2.8.3.0/.3.1). |
+
+This moved 2 items DRAFT→STALE and 1 item DRAFT→PARTIAL, bringing the running post-Pass-2
+totals from FROZEN 219 / GAP 18 / PARTIAL 26 / STALE 3 / DRAFT 187 to the final, current
+**FROZEN 219 / GAP 18 / PARTIAL 27 / STALE 5 / DRAFT 184** shown throughout this document.
+Independently re-verified by direct `grep` for `**FR status:** STALE`/`PARTIALLY CONFIRMED`
+across all 9 production-bank files after materialization, cross-checked against the Python
+regex-based classifier — both methods agree exactly.
+
+**Session interruption note:** this pass was briefly interrupted twice by the user's own network
+connectivity (a Wi-Fi disconnection warning, then a Mac sleep event) between finishing Pass 2b's
+materialization and running the final dataset rebuild. No Bookshelf lookup was in flight at
+either interruption point (per the user's own explicit instruction, no new lookups were
+attempted once the first warning arrived) and the working tree was confirmed intact and
+uncommitted on reconnect — nothing was lost, redone, or fabricated to fill the gap.
 

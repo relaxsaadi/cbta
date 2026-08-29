@@ -414,7 +414,10 @@ direct exam/practice hit for this exact column-identification fact; Exam Q8
 (UN-number/PSN lookups) test adjacent but distinct facts from the same
 general classification area, noted honestly as topic-adjacent, not direct
 corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 82 (DGR 4.2, DG list column structure A–N), cross-checked against slide 81 ("La liste des marchandises danger RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -511,7 +514,10 @@ note). Corroborated by Practice Q15 ("Quelle est la forme des étiquettes de
 manutention des marchandises dangereuses?"), a direct confirmation that
 handling labels are examined as their own distinct category, and by Exam
 Q9/Q14 (label-shape questions, topic-level).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 87 (DGR 7.2.2.2, two-type statement), cross-checked against slides 88–90 (handling-label slide, biological/en RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -698,7 +704,10 @@ confirmed across four prior functions' worth of KOST material. Corroborated
 at a topic level by exercise p.136 (T/F: a rejected non-conforming package
 must be reported per operator procedures), noted honestly as topic-level
 corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 134 (DGR 9.6.5-style operator reporting duty). Per blueprint binding caveat 4, this item is dual-tagged to bo RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -730,7 +739,10 @@ exam/practice hit for this specific baggage/person-scope-extension fact;
 exercise p.132 (UN 2910 excepted radioactive material NOTOC-exemption T/F)
 tests an adjacent but distinct fact from 4.3.1's NOTOC-exemption territory,
 not this reporting-scope fact, noted honestly as topic-adjacent only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 133. No direct exam/practice hit for this specific baggage/person-scope-extension fact; exercise p.132 (UN 29 RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -759,11 +771,12 @@ incidents" heading (slide 134).
 slide 134's general reporting-duty statement (already the evidence basis for
 Q-7.6-011). No direct exam/practice hit, consistent with Stage 1's finding
 for this sub-task.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A. Note: the
+**FR status:** PARTIALLY CONFIRMED (general mechanism); ANAC naming stays Tier B/administrative.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. Note: the
 ANAC postal/registered-office detail (Rouiba address) is administrative
-contact information as taught by the course, not a DGR regulatory provision
-— flagged so a future reviewer does not mistake it for a DGR-numbered
-requirement.
+contact information as taught by the course, not a DGR regulatory pro... NEW STATUS: PARTIALLY CONFIRMED (general mechanism); ANAC naming stays Tier B/administrative SOURCE: Tier B — KOST Function 7.6 course, slide 137, following slide 134's general reporting-duty statement (already the evidence basis for Q-7.6-011). No di RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -858,7 +871,10 @@ exact criteria-enumeration fact; Practice Q3 ("Lequel des produits suivants
 est interdit en toute circonstance?") tests the applied identification
 skill from the same sub-task, not this specific criteria-list fact, noted
 honestly as topic-level corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 36 (DGR 2.1 criteria), cross-checked against slide 38 (DGR 1.2.5 Approvals — the correct answer's own real bu RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -880,7 +896,7 @@ honestly as topic-level corroboration only.
 | Q-7.6-010 | 6.1.6 Accessibilité agent des opérations aériennes | DRAFT — Tier A not attempted | True/False | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-011 | 7.1+7.2 Signalement accidents/incidents | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-012 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-013 | 7.4 ANAC (DGR 9.6.5) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-013 | 7.4 ANAC (DGR 9.6.5) | PARTIALLY CONFIRMED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-014 | 0.1.1 Accident historique Bhopal 1984 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 18 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-015 | 0.2.1 Critères DGR 2.1 (interdit en toute circonstance) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
@@ -1103,7 +1119,10 @@ exact body-attribution fact; Exam Q2 ("D'où vient la règlementation?") and
 Practice Q1 (Doc 9284) test adjacent facts from the same broader
 legal-framework area, noted honestly as topic-level, not direct,
 corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 20 (DGR 1.1, AIEA role), cross-checked against slide 19 (SCoETDG's own scope exclusion) and slides 21–22 (OAC RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1135,7 +1154,10 @@ blueprint's own ceiling of 1 for this sub-task). No exam/practice hit
 exists for this sub-task, consistent with Stage 1's finding. **This item
 exhausts 0.1.3's full ceiling (count = 1); no further item should be
 drafted against this leaf without new evidence.**
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 30 (DGR 1.2.1, this leaf's sole slide — genuinely thin, single-fact evidence, matching the blueprint's own ce RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1185,7 +1207,10 @@ Q2 ("Différencier un danger d'un risque avec des exemples, en citant des
 matières dangereuses...") — a direct open-answer confirmation that this
 danger/risque distinction, with a named example, is this sub-task's own
 tested skill.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.6 course, slide 33 (worked danger/risque example), cross-checked against slide 32 (generic chemical/radiation/biological dang RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1268,7 +1293,10 @@ medical oxygen scenarios, Table 2.3.A). No direct exam/practice-book hit
 for this exact scope statement, consistent with Stage 1's "no direct
 exam/practice cross-ref" finding for this sub-task; the slide-45 exercise
 is course-internal reinforcement, not an exam or practice-book item.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 41, cross-checked against slide 50 ("Les DG sont généralement interdits au transport par des passagers ou l'é RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1395,7 +1423,10 @@ by Exam Q6 ("Énumérez les groupes d'emballage correspondants pour les
 degrés de danger suivants: grand danger/danger moyen/danger mineur") and
 Practice Q10 (identical matrix format), both testing exactly this
 packing-group/degree-of-danger mapping.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 74 (DGR 3.0.3, packing-group degree-of-danger table), cross-checked against slide 75 (infectious-substance cl RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1488,7 +1519,10 @@ obligatoirement un envoi de marchandises dangereuses... a) NOTOC b)
 Déclaration de l'expéditeur c) Rapport de vol") reinforces the general
 documentation topic but is course-internal, not an exam or practice-book
 item, and tests DGD vs. NOTOC rather than this specific LTA-wording fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 113 (DGR 8.2, LTA handling-information wording), cross-checked against slide 112 (DGD purpose per DGR 8.0.1.2 RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1787,7 +1821,10 @@ same general topic area, noted as reinforcing but not identical evidence.
 **This item exhausts 4.1.1's full ceiling (count = 1, sample 0–1); no
 further item should be drafted against this leaf without new evidence, and
 any future item must keep the same dry-ice-specific restriction.**
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.10.1: four named factors (type d'aéronef, taux de renouvellement de l'air, méthode d'emballage/entreposage, présence d'animaux). RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.10.1 names exactly these four factors for dry-ice loading arrangements; packing group is not among them, confirming it is correctly the "NOT a factor" answer.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1868,7 +1905,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-029 | 4.1.2 Risques multiples — même n° ONU | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 107 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-030 | 4.3.1 NOTOC — exemptions (contre-exemple) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-031 | 4.3.1 NOTOC ≠ LTA (document distinct) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-032 | 4.1.1 Facteurs glace carbonique (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-032 | 4.1.1 Facteurs glace carbonique (restricted) | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.6 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-033 | 0.4.3 Subsidiary Risk définition (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 Practice Book Q9 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 13 MCQ + 5 True/False. Block spread: Block 0 = 13
@@ -2446,7 +2483,10 @@ No direct exam/practice hit for this specific compliance-scope/sanctions
 clause; Exam Q5 and Practice Q5 test the shipper/operator responsibility
 matrix (already Batch 2's `Q-7.6-021` evidence basis), a distinct fact from
 this compliance-obligation statement.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 53 (DGR 1.3.1). No direct exam/practice hit for this specific compliance-scope/sanctions clause; Exam Q5 and  RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2548,7 +2588,10 @@ Practice Q6 ("Selon quel critère les neuf classes de marchandises
 dangereuses ont-elles été établies? a) nature de risque b) inflammabilité c)
 degré de danger" — matching option (a), a close paraphrase of the course's
 own "nature de danger").
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 63, directly corroborated by Exam Q4 ("Combien de classes de danger sont référencés sur le manuel DGR de l'IA RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2586,7 +2629,10 @@ Peroxyde organique — ROP — Ex: résines pour kit de réparation."
 cross-checked against slide 69 (Divisions 6.1/6.2 examples — different
 specific facts drawn from the same evidence pool, see `Q-7.6-045`). No
 direct exam/practice hit for this exact 5.1/5.2 example contrast.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** PARTIALLY CONFIRMED (class-ID level; specific examples not DGR-text-sourced).
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: PARTIALLY CONFIRMED (class-ID level; specific examples not DGR-text-sourced) SOURCE: Tier B — KOST Function 7.6 course, slide 68 (DGR 3.0.2), cross-checked against slide 69 (Divisions 6.1/6.2 examples — different specific facts drawn f RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2627,7 +2673,10 @@ Topic-adjacent to the course's own in-slide, unanswered exercise (slide 75:
 therefore **not** cited as confirmed corroboration, only noted as a
 topic-level parallel; this item's own correct-answer basis rests entirely
 and independently on slide 69's own explicit text.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** PARTIALLY CONFIRMED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: PARTIALLY CONFIRMED SOURCE: §3.0.2.6 (division-level only). RATIONALE: Live Bookshelf check 2026-08-29: DGR §3.0.2.6 confirms Division 6.2 = Matières infectieuses (the division-identification claim), but the specific named examples tested (virus, bactéries, déchets d'hôpitaux, sang contaminé) were not found verbatim anywhere in the current DGR text — they are Tier B/pedagogical illustrative examples, not DGR-text-sourced. Reclassified from the table's own internally-contradictory "FROZEN (...specific examples not DGR-text-sourced)" label to the correct closed-set bucket for a partially-sourced claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2664,7 +2713,10 @@ criteria), cross-checked against slide 92 (worked UN-mark example, already
 Batch 2's `Q-7.6-024` evidence basis — a distinct fact: general criteria vs.
 component-by-component decoding of a specific mark). No direct exam/
 practice hit for this exact criteria-enumeration fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Tier B — KOST Function 7.6 course, slide 91 (marking criteria), cross-checked against slide 92 (worked UN-mark example, already Batch 2's `Q-7.6-024`  RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3109,8 +3161,8 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-041 | 0.3.1 Formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.6 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-042 | 0.3.3 Règle divergence exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-043 | 0.4.1 Neuf classes de MD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §3.0.1.1 + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-044 | 0.4.1 Division 5.1 vs 5.2 | FROZEN FR / SOURCE VERIFIED (class-ID level; specific examples not DGR-text-sourced) | MCQ | DGR 67e §3.0.2.5 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-045 | 0.4.1 Division 6.2 exemples | FROZEN FR / SOURCE VERIFIED (class-ID level; specific examples not DGR-text-sourced) | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-044 | 0.4.1 Division 5.1 vs 5.2 | PARTIALLY CONFIRMED (class-ID level; specific examples not DGR-text-sourced) | MCQ | DGR 67e §3.0.2.5 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-045 | 0.4.1 Division 6.2 exemples | PARTIALLY CONFIRMED | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-046 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-047 | 0.5.2 Importance marquage/étiquetage | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 86 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-048 | 0.5.3 Contenu FDS/SDS | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 114 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

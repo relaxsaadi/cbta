@@ -99,33 +99,36 @@ None of the 17 promotions reached `FROZEN FR / SOURCE VERIFIED` — a partial or
 by definition, cannot be promoted all the way to FROZEN. This is why **V2 import eligibility is
 unchanged at 92** (see §5) even though 17 items moved out of the DRAFT bucket.
 
-## 4. Per-function reconciliation matrix (post-Pass 2, current)
+## 4. Per-function reconciliation matrix (post-Pass 3, current)
 
 | FUNCTION | TOTAL | FROZEN | GAP | PARTIAL | STALE | DRAFT/NOT VERIFIED | TEXT NOT RECOVERABLE | IMPORTABLE | NOT IMPORTABLE |
 |---|---|---|---|---|---|---|---|---|---|
 | 7.1 | 19 | 18 | 1 | 0 | 0 | 0 | 5 | 13 | 6 |
 | 7.2 | 49 | 27 | 6 | 5 | 1 | 10 | 0 | 27 | 22 |
-| 7.3 | 45 | 27 | 2 | 1 | 1 | 14 | 0 | 27 | 18 |
-| 7.4 | 53 | 17 | 1 | 3 | 1 | 31 | 0 | 17 | 36 |
-| 7.5 | 44 | 20 | 1 | 4 | 1 | 18 | 0 | 20 | 24 |
-| 7.6 | 56 | 22 | 1 | 5 | 0 | 28 | 0 | 22 | 34 |
-| 7.7 | 53 | 23 | 1 | 3 | 0 | 26 | 0 | 23 | 30 |
-| 7.8 | 51 | 22 | 2 | 1 | 0 | 26 | 0 | 22 | 29 |
+| 7.3 | 45 | 30 | 2 | 2 | 1 | 10 | 0 | 30 | 15 |
+| 7.4 | 53 | 23 | 1 | 3 | 1 | 25 | 0 | 23 | 30 |
+| 7.5 | 44 | 21 | 1 | 4 | 1 | 17 | 0 | 21 | 23 |
+| 7.6 | 56 | 24 | 1 | 5 | 0 | 26 | 0 | 24 | 32 |
+| 7.7 | 53 | 24 | 1 | 4 | 0 | 24 | 0 | 24 | 29 |
+| 7.8 | 51 | 26 | 2 | 2 | 0 | 21 | 0 | 26 | 25 |
 | 7.9 | 39 | 23 | 2 | 2 | 1 | 11 | 0 | 23 | 16 |
-| 7.10 | 44 | 20 | 1 | 2 | 0 | 21 | 0 | 20 | 24 |
-| **TOTAL** | **453** | **219** | **18** | **27** | **5** | **184** | **5** | **214** | **239** |
+| 7.10 | 44 | 21 | 1 | 2 | 1 | 19 | 0 | 21 | 23 |
+| **TOTAL** | **453** | **237** | **18** | **29** | **6** | **163** | **5** | **232** | **221** |
 
-*(Pass 1, 2026-08-26, produced: FROZEN 97 / GAP 6 / PARTIAL 15 / STALE 3 / DRAFT 332 /
-IMPORTABLE 92 — see §10 for exactly what Pass 2 changed and how.)*
+*(Pass 1, 2026-08-26: FROZEN 97 / GAP 6 / PARTIAL 15 / STALE 3 / DRAFT 332 / IMPORTABLE 92.
+Pass 2, 2026-08-29: FROZEN 219 / GAP 18 / PARTIAL 27 / STALE 5 / DRAFT 184 / IMPORTABLE 214.
+Pass 3, 2026-08-29 same day, continuing live verification — packaging and marking/labelling
+topic clusters: the current totals above. See §10 for Pass 2, §11 for Pass 3.)*
 
 Note on 7.1: FROZEN (18) includes the 5 text-not-recoverable items, so IMPORTABLE (13) = FROZEN
 (18) − TEXT NOT RECOVERABLE (5). The single GAP item (Q-7.1-001) is not counted in FROZEN at all.
 NOT IMPORTABLE for 7.1 = 1 GAP + 5 text-not-recoverable = 6.
 
 Cross-check: 19+49+45+53+44+56+53+51+39+44 = **453**. ✓
-FROZEN column sums to **219** (97 ground-truth baseline + 122 newly confirmed in Pass 2 — see
-§10). ✓
-IMPORTABLE column sums to **214** (92 already in V2 + 122 newly eligible — see §10). ✓
+FROZEN column sums to **237** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
+in Pass 3 — see §10 and §11). ✓
+IMPORTABLE column sums to **232** (92 already in V2 + 140 newly eligible across Pass 2/3 — see
+§10 and §11). ✓
 
 ## 5. Text-not-recoverable detail (Function 7.1 only)
 
@@ -377,4 +380,74 @@ materialization and running the final dataset rebuild. No Bookshelf lookup was i
 either interruption point (per the user's own explicit instruction, no new lookups were
 attempted once the first warning arrived) and the working tree was confirmed intact and
 uncommitted on reconnect — nothing was lost, redone, or fabricated to fill the gap.
+
+## 11. Pass 3 (2026-08-29, same session, network restored) — packaging + marking/labelling clusters
+
+After network stability was confirmed and the Bookshelf session re-verified as still
+authenticated and connected, live verification continued directly from the 184-item DRAFT
+backlog, re-clustering by topic per the priority order requested (packaging → marking/labelling
+→ classification → …), with functions 7.4/7.6/7.8/7.7 prioritized as the largest backlogs.
+
+### 11.1 Packaging cluster (5 items examined)
+
+| KOST ID | Result | Citation |
+|---|---|---|
+| Q-7.4-010 | FROZEN | §9.3.13.2 — live-animal/Category II-Yellow/III-Yellow separation distances (0.5 m ≤24h, 1 m >24h), exact match |
+| Q-7.4-021 | FROZEN | §9.3.6.1 — pre-load inspection for visible leak/damage, exact word-for-word match |
+| Q-7.3-045 | FROZEN | §9.3.2.1.1 + Note — separation basis (all hazard labels, primary/subsidiary) + persistence through acceptance/handling/loading |
+| Q-7.3-010 | remained DRAFT | no verbatim match found for the specific "remove/obliterate irrelevant prior labelling" claim at the exact checklist "Element 48" framing |
+| Q-7.2-048 | remained DRAFT | no verbatim match found for "suspicious packaging" physical-characteristics list — likely airline/IATA operational awareness material, not DGR regulatory text |
+
+One item (Q-7.8-019, from an earlier session in this same pass, topic: forbidden goods/DGR 4.2)
+was also resolved via Table 4.2's "Acétylène (liquide)" entry showing "Interdit" across all three
+applicability columns (passenger+cargo, passenger+cargo alt., cargo-only) — FROZEN.
+
+### 11.2 Marking/labelling cluster (27 items examined, 1 already resolved in §11.1)
+
+A single DGR section, **§9.1.7 "Avertissement au consommateur"**, resolved 6 items at once — all
+testing the identical underlying fact (a consumer/chemical hazard label does not by itself
+confirm DG classification; shipper clarification should be sought before acceptance): **Q-7.6-008,
+Q-7.8-010, Q-7.7-006, Q-7.10-008, Q-7.5-041, Q-7.3-036 — all FROZEN**, citing §9.1.7 verbatim.
+
+Two further DGR sections resolved most of the rest:
+
+| Section | Confirms | Items resolved |
+|---|---|---|
+| §9.3.8.1/.2(b)/.2(c)/.3/.5 | ULD identification label: exterior placement, hazard class/division shown, min. 148×210mm, removed immediately after unloading, CAO-specific note | Q-7.4-037, Q-7.4-038, Q-7.4-039 (all FROZEN) |
+| §9.3.1.1 | CAO-labelled goods must not be carried on passenger aircraft | Q-7.6-052 (FROZEN) |
+| §9.3.2.1.1 | Separation applies to all hazard labels, primary or subsidiary | Q-7.4-034 (FROZEN — same underlying fact as Q-7.3-045) |
+| §7.1.4.1(a)(b) | Package marking must show PSN+UN/ID number AND full shipper/consignee name+address | Q-7.8-045 (FROZEN) |
+| §7.2.2.3.2(a) | Hazard labels must be diamond/losange-shaped | Q-7.8-028 (FROZEN) |
+| §7.2.6.1(a)(c) + §7.2.6.2.1 + §7.2.6.2.3 | Label placement rules: same surface as PSN (not a different face), visible/unobscured, not folded across faces, primary+subsidiary labels adjacent | Q-7.3-035 (FROZEN — the tested "different face" option is confirmed false, i.e. correctly the "NOT a rule" answer) |
+| §7.1.1(b) | Shipper must erase/render invisible irrelevant prior markings | Q-7.3-010 (**PARTIALLY CONFIRMED** — closely analogous but addresses markings, not hazard labels specifically) |
+| §9.3.1.1 + Table 4.2 columns | CAO label used for cargo-only-restricted goods | Q-7.8-046 (**PARTIALLY CONFIRMED** — inference across two provisions, no single direct citation) |
+
+**Second UN 3245-vs-3373 course-content defect confirmed:** Q-7.10-032 tests the same wrong
+answer key as Q-7.2-042/Q-7.9-008 (claims UN 3245 = "matières biologiques Catégorie B"; current
+DGR confirms UN 3373 is Category B, UN 3245 is genetically modified organisms) —
+**STALE CITATION / SOURCE CONFLICT**, third occurrence of this specific course-content error.
+
+Remaining DRAFT in this cluster (no supporting evidence found or not reached this pass):
+Q-7.4-049 (This Way Up closure-orientation specifics), Q-7.6-047/Q-7.7-047 (marking/labelling
+"purpose" list — appears to be Tier B pedagogical framing, not literal DGR text), Q-7.8-044
+(same "purpose" framing), Q-7.10-009 (hidden-DG invoice-inspection scenario), Q-7.3-009 (net
+quantity marking exemption — Tier B "Element 35" checklist framing), Q-7.3-024 (DP A2 approval
+document reference — not reached this pass).
+
+### 11.3 Materialization totals for Pass 3
+
+**18 items materialized this pass** (1 from the tail of the small-cluster work + 4 from
+packaging + 14 from marking/labelling, minus Q-7.3-045 counted once): 14 FROZEN, 2 PARTIALLY
+CONFIRMED, 1 STALE CITATION/SOURCE CONFLICT, plus the earlier Q-7.8-019 FROZEN = **18 net new
+non-DRAFT items**, each independently re-verified in the file and via a fresh dataset rebuild.
+
+Running totals after Pass 3: **FROZEN 237 / GAP 18 / PARTIAL 29 / STALE 6 / DRAFT 163 /
+V2 IMPORT ELIGIBLE 232** (140 newly eligible beyond the original 92 across Pass 2 + Pass 3
+combined).
+
+### 11.4 Recommended next steps
+
+163 DRAFT items remain. Largest backlogs: 7.4 (25), 7.6 (26), 7.7 (24), 7.8 (21), 7.10 (19).
+Next priority clusters per the requested order: classification, emergency response, general
+provisions, acceptance, loading/storage, documentation, passenger/crew, remaining uncategorized.
 

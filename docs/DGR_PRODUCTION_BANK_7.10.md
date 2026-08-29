@@ -627,7 +627,10 @@ examples). No direct exam/practice hit for this exact "seek clarification
 from shipper" nuance; consistent with this sub-task's broader multi-slide,
 multi-exam-item coverage resting on the two-type structure fact
 (Q-7.10-007) rather than this specific clause.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.1.7 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.1.7 "Avertissement au consommateur" states verbatim "Un article ou un colis peut être porteur d'une étiquette ou d'un symbole de danger adressé au consommateur du produit. Cela ne signifie pas nécessairement que l'article ou la matière contenus dans le colis correspondent aux critères de classification indiqués dans la partie 3. Dans un tel cas et avant d'accepter le colis comme «marchandise non réglementée», des assurances devraient être obtenues de l'expéditeur" — directly confirms the tested claim that a chemical/consumer hazard label does not by itself confirm DG classification and that shipper clarification should be sought.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1068,7 +1071,7 @@ for a DGR-numbered requirement.
 | Q-7.10-005 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-006 | 0.4.1 UN3481 — batterie lithium-ion en équipement | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-008 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-008 | 0.5.2 Étiquette chimique — clarification expéditeur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-009 | 3.4.1 Vérification documentaire — facture hypochlorite | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 58 + Practice Q19 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-010 | 3.4.2 Indices physiques — laquelle N'EST PAS un indice | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 62–64 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-011 | 5.1.1 Décision de contrôle — hors exceptions 2.3.2–2.3.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2129,7 +2132,10 @@ indique un produit radioactif?") tests the same slide's broader
 label-identification skill for a different label (distractor 3's own real
 but different source here), noted honestly as topic-level, not direct,
 corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** STALE CITATION / SOURCE CONFLICT.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: STALE CITATION / SOURCE CONFLICT SOURCE: §8.0.1.2 exemption list: "ONU 3373, Matière biologique, catégorie B" vs. "ONU 3245, Organismes génétiquement modifiés" RATIONALE: Live Bookshelf check 2026-08-29: same conflict as Q-7.2-042/Q-7.9-008 — current DGR confirms UN 3373 (not UN 3245) is Category B biological substance; UN 3245 is genetically modified organisms/micro-organisms, an unrelated substance. The course's own answer key is factually wrong per current DGR 67e AM1.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2155,7 +2161,7 @@ corroboration.
 | Q-7.10-029 | 0.2.3 Tableau 2.3.A identification | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 56 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-030 | 0.4.1 9 classes de MD (DGR 3.0.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.1.1 + §3.0.2 intro (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-031 | 0.4.1 UN3090 — batterie lithium métal seule | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-032 | 0.5.2 UN3245 — matières biologiques Catégorie B | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-032 | 0.5.2 UN3245 — matières biologiques Catégorie B | STALE CITATION / SOURCE CONFLICT | MCQ | KOST F7.10 course slide 90 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 12 MCQ + 5 True/False. All 17 items are Block 0,
 touching 15 leaves: 0.1.1×1, 0.1.2×1, 0.1.3×1, 0.1.4×1, 0.2.1×1, 0.2.2×1,

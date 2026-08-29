@@ -699,7 +699,10 @@ and 48, checklist points 42–48), cross-checked against slide 257 (DGR
 interpretation) corroborates this general topic is examined, but tests a
 different fact (label-shape/meaning recognition, not the obliteration
 requirement) — noted honestly as topic-level corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** PARTIALLY CONFIRMED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: PARTIALLY CONFIRMED SOURCE: §7.1.1(b) RATIONALE: Live Bookshelf check 2026-08-29: DGR §7.1.1(b) requires the shipper to "effacer ou rendre invisible toute marque non pertinente figurant déjà sur le colis" — a closely analogous, Tier A-confirmed provision, but it addresses MARKINGS (marquage, §7.1) specifically, not hazard LABELS (étiquetage, §7.2) as the stem's "étiquetage non pertinent" framing tests; no equivalent labelling-specific clause was found in §7.2.6's own placement/fixation rules this pass.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -912,7 +915,7 @@ contact information as taught by the course, not a DGR regulatory pro... NEW STA
 | Q-7.3-007 | 3.1.1 Tolérance PSN (Point 9) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 230 (DGR 8.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-008 | 3.1.2 Mentions LTA | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-009 | 3.2.1 Exemption quantité nette | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 249 (Élément 35) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-010 | 3.2.2 Étiquetage non pertinent | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 251 (Élément 48) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-010 | 3.2.2 Étiquetage non pertinent | PARTIALLY CONFIRMED | MCQ | KOST F7.3 course slide 251 (Élément 48) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-011 | 3.3.1 Obligation liste de contrôle | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-012 | 3.3.2 Séparation batteries lithium | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.3.2.1.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-013 | 7.3 MD non déclarées | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.2.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2250,7 +2253,10 @@ exam hit for this exact affixing-rules list; Exam Q16 ("Quelle est la forme
 de l'étiquette DGR ? Losange") and Q18 (marking/labelling rationale)
 corroborate this general topic area is examined, but neither tests this
 specific rule set — noted as topic-level corroboration only.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §7.2.6.1(a)(c) + §7.2.6.2.1 + §7.2.6.2.3 RATIONALE: Live Bookshelf check 2026-08-29: DGR §7.2.6.2.1 states labels must be affixed on the SAME surface as the PSN marking ("apposées sur la même surface du colis, près de la marque indiquant la désignation exacte d'expédition") — the opposite of the tested "different face" claim, confirming it as the correct "NOT a real rule" answer. The three distractor rules were each independently confirmed as real: visible/not obscured (§7.2.6.1(a)), not folded across faces (§7.2.6.1(c)), and primary/subsidiary hazard labels placed adjacent on the same surface (§7.2.6.2.3).
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2282,7 +2288,10 @@ clarification, not accepting the label at face value.
 material Category B, environmentally-hazardous-materials label, GMO
 symbol). Not cited by any prior batch item. No direct exam hit for this
 specific caution.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.1.7 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.1.7 "Avertissement au consommateur" states verbatim "Un article ou un colis peut être porteur d'une étiquette ou d'un symbole de danger adressé au consommateur du produit. Cela ne signifie pas nécessairement que l'article ou la matière contenus dans le colis correspondent aux critères de classification indiqués dans la partie 3. Dans un tel cas et avant d'accepter le colis comme «marchandise non réglementée», des assurances devraient être obtenues de l'expéditeur" — directly confirms the tested claim that a chemical/consumer hazard label does not by itself confirm DG classification and that shipper clarification should be sought.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2664,7 +2673,10 @@ PI 965/968 lithium-battery-specific co-loading prohibition) and Q-7.3-031
 the general separation-basis-and-persistence principle. No direct exam hit
 for this specific persistence clause; Exam Q24 (co-loading Yes/No scenarios)
 corroborates the general separation topic, not this exact rule.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.2.1.1 + its Note RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.2.1.1 confirms separation requirements apply based on all hazard labels on a package, whether primary or subsidiary risk ("dangers primaires ou subsidiaires"), and its own Note states packages containing incompatible dangerous goods should be separated during acceptance, handling, and loading ("devraient être séparés durant l'acceptation, la manutention et le chargement") — directly supporting the tested claim's persistence-of-separation framing.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2676,8 +2688,8 @@ corroborates the general separation topic, not this exact rule.
 |---|---|---|---|---|---|---|
 | Q-7.3-033 | 0.5.1 Portée du marquage ONU | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §6.0.4.0.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-034 | 0.5.1 Marque piles lithium (Fig. 7.1.C) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §7.1.5.5.2(b), §7.1.5.5.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-035 | 0.5.2 Règles d'apposition des étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.3 course slide 170 (DGR 7.2.6) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | FR SOURCE GAP CONFIRMED (same finding as Q-7.2-022 — §9.5.1.2 covers a different topic, this claim not located elsewhere) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2686,7 +2698,7 @@ corroborates the general separation topic, not this exact rule.
 | Q-7.3-042 | 3.2.1 Marques conformes à la DGD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(c) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-043 | 3.2.2 Base réglementaire étiquetage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1(f) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-044 | 3.3.1 Exemption procédure complète (9.1.3.3) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.3 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-045 | 3.3.2 Maintien de la séparation | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 262 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-045 | 3.3.2 Maintien de la séparation | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.3 course slide 262 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 3 composition:** 5 MCQ + 8 True/False. Block spread: Block 0 = 7
 (across 4 previously-undrafted leaves: 0.5.1×2, 0.5.2×2, 0.6.1×2, 0.6.2×1),

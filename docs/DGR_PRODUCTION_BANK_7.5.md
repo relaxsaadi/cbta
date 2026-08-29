@@ -2762,7 +2762,10 @@ non-duplicate use). No direct exam/practice hit for this specific
 "ask-for-clarification" rule; noted honestly as an uncorroborated but
 directly source-traced item, explicitly identified as remaining headroom by
 Batch 2's own "Deliberately not drafted" note.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.1.7 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.1.7 "Avertissement au consommateur" states verbatim "Un article ou un colis peut être porteur d'une étiquette ou d'un symbole de danger adressé au consommateur du produit. Cela ne signifie pas nécessairement que l'article ou la matière contenus dans le colis correspondent aux critères de classification indiqués dans la partie 3. Dans un tel cas et avant d'accepter le colis comme «marchandise non réglementée», des assurances devraient être obtenues de l'expéditeur" — directly confirms the tested claim that a chemical/consumer hazard label does not by itself confirm DG classification and that shipper clarification should be sought.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2949,7 +2952,7 @@ A), 2026-08-25.
 | Q-7.5-038 | 0.3.1 Renseignement en cas d'urgence (Exploitant) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-039 | 0.4.1 Classe 3 = Liquides inflammables | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-040 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-041 | 0.5.2 Autres étiquettes (danger chimique) | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | MCQ | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-041 | 0.5.2 Autres étiquettes (danger chimique) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-042 | 0.6.1 Définition SDS/FDS | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.5 course slide 93 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-043 | 0.6.1 Quatre étapes initiales | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.5 course slide 95 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-044 | 5.2.2 Lithium métal vs lithium-ion (UN 3480/3481) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

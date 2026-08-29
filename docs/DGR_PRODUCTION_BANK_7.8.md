@@ -735,7 +735,10 @@ sans clarification" framing.
 against slide 81 (the base two-type danger/handling structure) and slide 83
 (worked chemical/environmental/biological label examples). No direct exam/
 practice hit for this exact "seek clarification from shipper" nuance.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.1.7 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.1.7 "Avertissement au consommateur" states verbatim "Un article ou un colis peut être porteur d'une étiquette ou d'un symbole de danger adressé au consommateur du produit. Cela ne signifie pas nécessairement que l'article ou la matière contenus dans le colis correspondent aux critères de classification indiqués dans la partie 3. Dans un tel cas et avant d'accepter le colis comme «marchandise non réglementée», des assurances devraient être obtenues de l'expéditeur" — directly confirms the tested claim that a chemical/consumer hazard label does not by itself confirm DG classification and that shipper clarification should be sought.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1004,7 +1007,7 @@ equipment).
 | Q-7.8-007 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-008 | 0.4.1 Classe subdivisée en divisions (DGR 3.0.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2 intro + §3.0.2.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-009 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-010 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-010 | 0.5.2 Étiquette chimique — clarification expéditeur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-011 | 0.2.3 Interdiction générale passagers/équipage (DGR 2.3) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §2.3.0.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-012 | 0.2.3 Exemption DGR 2.5 — glace carbonique | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.5.1.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-013 | 0.3.1 Responsabilité agent des opérations (practice Q10) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Practice Q10 (F-KOST 09); course slide 5 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1473,7 +1476,10 @@ but carries no marked key and none of its five options matches either of
 slide 37's own two worked examples exactly — not used as this item's
 evidentiary basis to avoid inferring an unconfirmed answer, noted honestly
 as a related-but-unused instrument.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: Table 4.2 (Liste des marchandises dangereuses), entrée « Acétylène (liquide) » RATIONALE: Live Bookshelf check 2026-08-29: DGR Table 4.2's "Acétylène (liquide)" entry shows "Interdit" across all three applicability columns (Aéronef de passagers et aéronef cargo Instr. G/H, Aéronef de passagers et aéronef cargo Instr. I/J, Aéronef cargo seulement Instr. K/L) — i.e. forbidden regardless of route, exactly matching the tested claim. The related "Acétylène dissous" (UN 1001) and "Acétylène sans solvant" (UN 3374) entries were also read directly and confirmed as separate, permitted-with-restrictions substances, not forbidden — ruling out confusion between entries.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1892,7 +1898,10 @@ inspection of the supplied KOST label reference sheet this session (Tier
 B — a KOST/IATA-supplied course document, not the current 67th Edition
 Bookshelf text). Cross-checked against course slide 81 (the two-type
 danger/handling-label structure already tested in Q-7.8-009).
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §7.2.2.3.2(a) RATIONALE: Live Bookshelf check 2026-08-29: DGR §7.2.2.3.2(a) states verbatim "L'étiquette doit avoir la forme d'un carré posé sur un sommet (en losange)" — confirming the diamond/losange shape as the correct answer.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2099,7 +2108,7 @@ entire p.106–111 pool, as already noted for 0.6.1/6.2.3 in Stage 1).
 | Q-7.8-016 | 0.1.2 Organisme SCoETDG (cadre juridique) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-017 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-018 | 0.1.4 Définition du Risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-019 | 0.2.1 Exemple interdit en toute circonstance | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 37 (DGR 4.2 table) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-019 | 0.2.1 Exemple interdit en toute circonstance | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.8 course slide 37 (DGR 4.2 table) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-020 | 0.3.3 Exemple de divergence d'État (ITG) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.1.3 (ITG), §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-021 | 0.4.2 Groupe d'emballage I = très dangereuses | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-022 | 0.5.1 Lettre « Y » = groupe d'emballage II | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2108,7 +2117,7 @@ entire p.106–111 pool, as already noted for 0.6.1/6.2.3 in Stage 1).
 | Q-7.8-025 | 6.2.2 Qui fournit la NOTOC au commandant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-026 | 0.2.3 Allumettes/briquet — sur la personne | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Exam Q9; Table 2.3.A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-027 | 0.4.1 Symbole « * » = noms techniques requis | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 73 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-028 | 0.5.2 Forme des étiquettes de danger — losange | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Exam Q15/practice Q20; label reference sheet | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-028 | 0.5.2 Forme des étiquettes de danger — losange | FROZEN FR / SOURCE VERIFIED | MCQ | Exam Q15/practice Q20; label reference sheet | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-029 | 0.3.1 Responsabilité de l'identification | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Exam Q4; course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-030 | 6.2.1 Lever le doute avant chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.8 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-031 | 6.2.3 Premier geste — contact corps/vêtements | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 109 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -3053,7 +3062,10 @@ This item's correct-answer reasoning rests on a worked example showing both
 elements together, not an explicit "the answer is (c)" statement, recorded
 honestly per the same disclosure practice already used for other
 cross-reference-resolved items in this program.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §7.1.4.1(a)(b) RATIONALE: Live Bookshelf check 2026-08-29: DGR §7.1.4.1 requires both (a) the proper shipping name plus UN/ID number and (b) "les NOM ET ADRESSE COMPLETS de l'expéditeur et du destinataire" on every package containing dangerous goods — confirming the tested "all of the below" answer combining both marking elements.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3118,7 +3130,10 @@ items (Q-7.8-044/045/046) plus Batches 1–2's three (Q-7.8-009/010/028) —
 label pairing per practice Q28, requiring an actual DGR label-lookup
 reference not supplied, and handling-label shape per practice Q24, requiring
 a further image render), left for a future batch.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** PARTIALLY CONFIRMED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: PARTIALLY CONFIRMED SOURCE: §9.3.1.1 + Table 4.2 column structure RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.1.1 confirms goods bearing the CAO label must not be carried on passenger aircraft, and Table 4.2's own column structure splits DG entries into passenger+cargo-permitted vs cargo-only categories — together these support the general principle tested, but no single DGR clause was found stating verbatim that the CAO label is used "only" for goods forbidden on passenger but allowed on cargo aircraft; this remains an inference across two provisions rather than a single direct citation.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3394,8 +3409,8 @@ entire p.106–111 pool).
 | Q-7.8-042 | 0.4.1 Colonne N — Code Urgences (DGR 4.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-043 | 0.5.1 Caractéristiques des marquages | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-044 | 0.5.2 Raison du marquage/étiquetage (exam Q18/practice Q21) | DRAFT — Tier A not attempted | MCQ | Exam Q18; practice Q21; course slide 80 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-045 | 0.5.2 Éléments du marquage extérieur (exam Q19) | DRAFT — Tier A not attempted | MCQ | Exam Q19; course slide 87 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-046 | 0.5.2 Apposition CAO (practice Q23) | DRAFT — Tier A not attempted | MCQ | Practice Q23; course slides 72, 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-045 | 0.5.2 Éléments du marquage extérieur (exam Q19) | FROZEN FR / SOURCE VERIFIED | MCQ | Exam Q19; course slide 87 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-046 | 0.5.2 Apposition CAO (practice Q23) | PARTIALLY CONFIRMED | MCQ | Practice Q23; course slides 72, 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-047 | 0.5.3 Mention LTA — envoi classique (DGR 8.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-048 | 0.6.2 Disponibilité des informations d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.8 course slide 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-049 | 6.2.2 Langue anglaise exigée pour la NOTOC | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.10 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

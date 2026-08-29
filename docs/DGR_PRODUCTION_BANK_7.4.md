@@ -687,7 +687,10 @@ moins) ou d'au moins 1 m (voyages de plus de 24 heures)."
 live-animal separation from cryogenic liquids/dry ice). No direct exam/
 practice hit found for this specific numeric fact — noted honestly as an
 uncorroborated but directly source-traced item.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.13.2 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.13.2 states verbatim "Les colis, suremballages ou conteneurs de fret des catégories II-Jaune et III-Jaune doivent être séparés des animaux vivants d'une distance d'au moins 0,5 m pour les voyages de moins de 24 heures et d'au moins 1 m pour les voyages de plus de 24 heures" — exact match to the tested claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -986,7 +989,7 @@ contact information as taught by the course, not a DGR regulatory pro... NEW STA
 | Q-7.4-007 | 4.1.1 Entreposage DGR 9.2.1 | DRAFT — Tier A not attempted | True/False | KOST F7.4 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-008 | 4.1.2 Tableau 9.3.A — classes absentes | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 108 (DGR 9.3.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-009 | 4.1.2 Limitation de chargement DGR 9.3.1 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 109 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-010 | 4.2.3 Séparation animaux vivants DGR 9.3.13 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-010 | 4.2.3 Séparation animaux vivants DGR 9.3.13 | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-011 | 6.1.4 IT Catégorie I-Blanche | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-012 | 6.1.5 Champs obligatoires NOTOC | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.3(a)-(j) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-013 | 6.1.5 Correspondance exacte NOTOC | PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | True/False | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1410,7 +1413,10 @@ One distractor additionally grounded in KOST Function 7.4 Practice Book
 Q17 (F-KOST 09), read in full this session — see Stage 1's own SOURCE GAP
 note 7 for the honest disclosure that this specific fact has no dedicated
 course slide.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.6.1 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.6.1 states verbatim "Immédiatement avant qu'un colis ou suremballage ne soit chargé à bord d'un aéronef ou placé dans une unité de chargement, les exploitants doivent s'assurer que le colis ou le suremballage a été inspecté et qu'on n'y a trouvé aucune trace visible de fuite ou de dommage" — exact, word-for-word match to the tested claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2030,7 +2036,10 @@ item for this sub-task's 0–1 sample this batch.
 (DGR 9.3.2.1), the same two passing mentions of "risques primaires ou
 subsidiaires" already identified in Stage 1 and carried into the blueprint's
 binding caveat 3. No exam/practice hit for this specific fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.2.1.1 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.2.1.1 states verbatim "Les prescriptions relatives à la séparation s'appliquent en fonction de toutes les étiquettes de danger appliquées sur l'emballage, qu'il s'agisse de dangers primaires ou subsidiaires" — exact match (identical underlying fact to Q-7.3-045, independently confirmed).
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2123,7 +2132,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-018 | 0.2.1 Mesures de prévention | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-019 | 4.2.1 AOG — checkpoint entrepôt | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 50 (DGR 2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-020 | 6.1.2 Inspection pendant le chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 51 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-021 | 4.2.2 Inspection colis avant chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 101 ¶1 + Practice Q17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-021 | 4.2.2 Inspection colis avant chargement | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slide 101 ¶1 + Practice Q17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-022 | 6.1.3 Inspection UC avant placement avion | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 101 ¶2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-023 | 6.3.3 Inspection dès déchargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 102 ¶1 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-024 | 6.3.3 Fuite/dommage constaté — réponse | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 103 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2136,7 +2145,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-031 | 0.4.2 Groupe d'emballage I | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-032 | 0.5.1 Code "Y" du marquage UN | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-033 | 0.6.1 Première action d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 145 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-034 | 0.4.3 Séparation — risque primaire/subsidiaire (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slides 106, 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-034 | 0.4.3 Séparation — risque primaire/subsidiaire (restricted) | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.4 course slides 106, 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-035 | 6.1.6 Notification du commandant de bord (restricted) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 17 MCQ + 2 True/False. Block spread: Block 0 = 9
@@ -2427,7 +2436,10 @@ third. No direct exam/practice hit for this specific requirement-list fact —
 noted honestly as an uncorroborated but directly source-traced item, the
 same pattern already used for several Batch 1–2 items with no exam/practice
 cross-reference.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.8.1 + §9.3.8.2(c) + §9.3.8.5 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.8.1 requires an identification label on the ULD's exterior walls; §9.3.8.2(c) requires the hazard class/division numbers to be visibly shown on that label; §9.3.8.5 requires the ULD's identification label to specify cargo-aircraft-only restriction when the ULD contains a CAO-labelled package — together confirming all three tested elements exactly.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2464,7 +2476,10 @@ red-hatched-border label dimension), cross-checked against slide 112 (the
 same ULD-identification section) and slide 113 (an image-only slide showing
 the label itself, no additional text). No exam/practice cross-reference
 found.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.8.2(b) RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.8.2(b) states the ULD identification label must "mesurer au moins 148 mm × 210 mm" — exact match to the tested minimum dimension.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2489,7 +2504,10 @@ match.
 third and last item drawn from 4.2.4's ceiling (3); 4.2.4 is now fully drawn
 and should receive no further items without new source material. No
 exam/practice cross-reference found for this specific fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.8.3 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.8.3 states verbatim "L'étiquette d'identification doit être enlevée de l'unité de chargement immédiatement après que les marchandises ont été déchargées" — confirming removal occurs in all cases after unloading, exactly as tested.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3184,9 +3202,9 @@ is sourced from a different function's course material.
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
 | Q-7.4-036 | 0.2.1 COMAT — contenu dissimulé possible | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 49 (DGR 2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-037 | 4.2.4 Identification extérieure d'une ULD | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-038 | 4.2.4 Dimension étiquette bordure rouge DGR 9.3.8.2 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 114 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-039 | 4.2.4 Retrait des étiquettes après déchargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-037 | 4.2.4 Identification extérieure d'une ULD | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-038 | 4.2.4 Dimension étiquette bordure rouge DGR 9.3.8.2 | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slide 114 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-039 | 4.2.4 Retrait des étiquettes après déchargement | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.4 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-040 | 0.1.1 Définition complète DGR 1.0 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-041 | 0.1.2 Code IMP « ICE » | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 28 (DGR B.2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-042 | 0.3.1 Obligations de formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.4 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

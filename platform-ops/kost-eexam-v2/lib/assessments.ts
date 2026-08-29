@@ -489,13 +489,20 @@ export function getSnapshots(assessmentId: number): SnapshotRow[] {
 }
 
 export function listAssignedAssessmentsForCandidate(candidateUserId: number): (AssessmentRow & { group_name: string })[] {
+  // 'suspended' inclus depuis la mission "COMPLETE CANDIDATE EXAM
+  // LIFECYCLE" (2026-08-29) — bug réel trouvé : un examen suspendu par un
+  // responsable (ex. suite à un incident) disparaissait purement et
+  // simplement du tableau de bord candidat, sans aucune explication
+  // (§2/§5 exigent un statut "SUSPENDU" explicite, jamais une disparition
+  // silencieuse). 'draft'/'archived' restent exclus — un candidat ne doit
+  // jamais voir un examen jamais publié ou définitivement archivé.
   return getDb()
     .prepare(
       `SELECT a.*, g.name AS group_name
        FROM assessments a
        JOIN assessment_assignments aa ON aa.assessment_id = a.id AND aa.candidate_user_id = ?
        JOIN groups g ON g.id = a.group_id
-       WHERE a.status IN ('published','open','closed')
+       WHERE a.status IN ('published','open','closed','suspended')
        ORDER BY a.created_at DESC`
     )
     .all(candidateUserId) as unknown as (AssessmentRow & { group_name: string })[];
@@ -507,7 +514,7 @@ export function trackingForAssessment(assessmentId: number) {
     .prepare(
       `SELECT u.id AS candidate_user_id, u.full_name, u.username,
               at.id AS attempt_id, at.status AS attempt_status, at.started_at, at.submitted_at,
-              r.score_100, r.percentage, r.passed
+              r.score_100, r.percentage, r.passed, r.grading_state
        FROM assessment_assignments aa
        JOIN users u ON u.id = aa.candidate_user_id
        LEFT JOIN attempts at ON at.assessment_id = aa.assessment_id AND at.candidate_user_id = aa.candidate_user_id

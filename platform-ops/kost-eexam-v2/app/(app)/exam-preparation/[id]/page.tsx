@@ -41,11 +41,13 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
     candidate_user_id: number; full_name: string; username: string; attempt_id: number | null;
     attempt_status: string | null; started_at: string | null; submitted_at: string | null;
     score_100: number | null; percentage: number | null; passed: number | null;
+    grading_state: "COMPLETE" | "AWAITING_MANUAL_REVIEW" | null;
   }[];
 
   const notStarted = tracking.filter((t) => !t.attempt_status).length;
   const inProgress = tracking.filter((t) => t.attempt_status === "in_progress").length;
-  const finished = tracking.filter((t) => t.attempt_status && t.attempt_status !== "in_progress").length;
+  const awaitingReview = tracking.filter((t) => t.grading_state === "AWAITING_MANUAL_REVIEW").length;
+  const finished = tracking.filter((t) => t.attempt_status && t.attempt_status !== "in_progress" && t.grading_state !== "AWAITING_MANUAL_REVIEW").length;
 
   const groupMembers = listGroupMembers(assessment.group_id);
   const assignedIds = new Set(listAssignedCandidateIds(assessmentId));
@@ -169,7 +171,10 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
 
       {assessment.status !== "draft" && (
         <Card>
-          <CardHeader title="Suivi des candidats" description={`${notStarted} non commencé(s) · ${inProgress} en cours · ${finished} terminé(s)`} />
+          <CardHeader
+            title="Suivi des candidats"
+            description={`${notStarted} non commencé(s) · ${inProgress} en cours · ${finished} terminé(s)${awaitingReview > 0 ? ` · ${awaitingReview} à corriger` : ""}`}
+          />
           <div className="overflow-x-auto">
             <table className="w-full text-[13px]">
               <thead>
@@ -185,10 +190,22 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
                 {tracking.map((t) => (
                   <tr key={t.candidate_user_id} className="border-b border-border-subtle last:border-0">
                     <td className="py-2 text-text-primary">{t.full_name}</td>
-                    <td className="py-2 text-text-secondary">{t.attempt_status ? ATTEMPT_STATUS_LABEL[t.attempt_status] : "Non commencé"}</td>
-                    <td className="py-2 text-text-secondary">{t.score_100 !== null ? `${t.score_100}/100` : "—"}</td>
+                    <td className="py-2 text-text-secondary">
+                      {!t.attempt_status
+                        ? "Non commencé"
+                        : t.attempt_status === "in_progress"
+                          ? "En cours"
+                          : t.grading_state === "AWAITING_MANUAL_REVIEW"
+                            ? "À corriger"
+                            : t.grading_state === "COMPLETE"
+                              ? "Résultat disponible"
+                              : ATTEMPT_STATUS_LABEL[t.attempt_status]}
+                    </td>
+                    {/* §30 — jamais un score provisoire présenté comme final tant que la
+                        correction manuelle n'est pas terminée. */}
+                    <td className="py-2 text-text-secondary">{t.grading_state === "COMPLETE" && t.score_100 !== null ? `${t.score_100}/100` : "—"}</td>
                     <td className="py-2">
-                      {t.passed === null ? "—" : <StatusBadge status={t.passed ? "verified" : "critical"}>{t.passed ? "Réussi" : "Échoué"}</StatusBadge>}
+                      {t.grading_state !== "COMPLETE" || t.passed === null ? "—" : <StatusBadge status={t.passed ? "verified" : "critical"}>{t.passed ? "Réussi" : "Échoué"}</StatusBadge>}
                     </td>
                     <td className="py-2 text-right">
                       <div className="flex items-center justify-end gap-2">

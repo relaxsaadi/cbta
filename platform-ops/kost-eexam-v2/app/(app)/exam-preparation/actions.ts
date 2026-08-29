@@ -93,6 +93,12 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
 
 export interface PublishAssessmentResult {
   error?: string;
+  /** §7 de la mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) —
+   * confirme au responsable QUAND l'examen sera réellement disponible pour
+   * les candidats, évite d'affecter un examen en pensant qu'il est
+   * immédiatement disponible alors qu'une fenêtre d'ouverture future est
+   * configurée. */
+  success?: string;
 }
 
 export async function publishAssessmentAction(
@@ -120,7 +126,17 @@ export async function publishAssessmentAction(
   await notifyExamAssignedToCandidates(assessmentId, listAssignedCandidateIds(assessmentId), session.userId, session.role as "pedagogical_manager" | "administrator");
 
   revalidatePath(`/exam-preparation/${assessmentId}`);
-  return {};
+
+  const published = getAssessment(assessmentId)!;
+  const availability = !published.open_at
+    ? "Maintenant"
+    : new Date(published.open_at).getTime() > Date.now()
+      ? `Ouverture : ${new Date(published.open_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
+      : "Maintenant";
+  const closure = published.close_at
+    ? ` — Clôture : ${new Date(published.close_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
+    : "";
+  return { success: `Examen affecté avec succès. Disponible : ${availability}${closure}` };
 }
 
 /** EXAM_ASSIGNED (mission email §17) — factorisé pour être appelé à la

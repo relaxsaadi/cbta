@@ -139,7 +139,16 @@ CREATE TABLE IF NOT EXISTS questions (
   kost_question_id TEXT NOT NULL UNIQUE,
   function_code TEXT NOT NULL REFERENCES functions(code),
   subtask TEXT,
-  qtype TEXT NOT NULL DEFAULT 'mcq_single' CHECK (qtype IN ('mcq_single','mcq_multi','true_false')),
+  -- Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-50 —
+  -- 'numeric' (réponse numérique, tolérance configurée à l'auteurage,
+  -- toujours auto-notée) et 'short_answer' (réponse courte — soit une
+  -- liste explicite de réponses acceptées auto-notée par correspondance
+  -- exacte normalisée, soit correction manuelle obligatoire ; jamais de
+  -- correction par IA générative/floue, voir lib/grading.ts). matching/
+  -- ordering/scenario NE SONT PAS ajoutés cette passe (portée assumée et
+  -- documentée dans le rapport final — architecture déjà extensible pour
+  -- les ajouter plus tard sans réécrire ce CHECK une seconde fois par type).
+  qtype TEXT NOT NULL DEFAULT 'mcq_single' CHECK (qtype IN ('mcq_single','mcq_multi','true_false','numeric','short_answer')),
   language TEXT NOT NULL DEFAULT 'fr',
   source_status TEXT NOT NULL DEFAULT 'NOT_ATTEMPTED' CHECK (source_status IN
     ('FROZEN_SOURCE_VERIFIED','DRAFT','PARTIAL','STALE','SOURCE_GAP','SOURCE_CONFLICT','NOT_ATTEMPTED')),
@@ -282,8 +291,20 @@ CREATE TABLE IF NOT EXISTS attempt_answers (
   attempt_question_id INTEGER NOT NULL REFERENCES attempt_questions(id) ON DELETE CASCADE,
   answer_json TEXT,
   answered_at TEXT,
+  -- is_correct reste NULL pour une question à correction manuelle
+  -- ('short_answer' en mode manuel) tant qu'aucun correcteur autorisé n'a
+  -- statué — distinct de 0 (noté, faux) : NULL = pas encore noté du tout
+  -- (mission §26/§55-56). graded_by/grader_comment (mission "COMPLETE
+  -- CANDIDATE EXAM LIFECYCLE" 2026-08-29) ne sont posées QUE par une
+  -- correction manuelle humaine — jamais par gradeAttempt(). Déclarées ici
+  -- ET dans ADDITIVE_COLUMNS (scripts/migrate.ts) : ici pour toute
+  -- installation neuve (dont les bases de test), migrate.ts pour ajouter
+  -- la colonne à une base déjà existante (même convention que
+  -- mfa_secret/candidate_type/archived_at sur `users` plus haut).
   is_correct INTEGER,
   points_awarded REAL,
+  graded_by INTEGER REFERENCES users(id),
+  grader_comment TEXT,
   UNIQUE(attempt_question_id)
 );
 
@@ -298,7 +319,19 @@ CREATE TABLE IF NOT EXISTS results (
   score_100 REAL NOT NULL,
   percentage REAL NOT NULL,
   pass_threshold_pct INTEGER NOT NULL,
-  passed INTEGER NOT NULL,
+  -- Nullable depuis la mission "COMPLETE CANDIDATE EXAM LIFECYCLE"
+  -- (2026-08-29) — NULL tant que grading_state = 'AWAITING_MANUAL_REVIEW'
+  -- (résultat réellement inconnu, jamais un booléen fabriqué en attendant
+  -- une correction manuelle, §26-29). Redevient un vrai 0/1 dès que
+  -- finalizeManualGradingIfComplete() clôt la notation.
+  passed INTEGER,
+  -- 'COMPLETE' = notation entièrement automatique OU correction manuelle
+  -- déjà terminée — raw_score/score_100/percentage/passed sont finaux.
+  -- 'AWAITING_MANUAL_REVIEW' = au moins une question à correction manuelle
+  -- pas encore statuée — les valeurs ci-dessus restent PROVISOIRES
+  -- (portent uniquement la partie auto-notée) et ne doivent JAMAIS être
+  -- présentées comme un résultat final candidat/admin (§26-30).
+  grading_state TEXT NOT NULL DEFAULT 'COMPLETE' CHECK (grading_state IN ('COMPLETE','AWAITING_MANUAL_REVIEW')),
   graded_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   locked INTEGER NOT NULL DEFAULT 0
 );

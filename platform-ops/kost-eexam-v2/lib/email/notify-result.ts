@@ -20,6 +20,7 @@ interface ResultRow {
   percentage: number;
   pass_threshold_pct: number;
   passed: number;
+  grading_state: "COMPLETE" | "AWAITING_MANUAL_REVIEW";
 }
 
 export async function notifyResultAvailableForAttempt(attemptId: number): Promise<void> {
@@ -29,8 +30,14 @@ export async function notifyResultAvailableForAttempt(attemptId: number): Promis
     | undefined;
   if (!attempt) return;
 
-  const result = db.prepare(`SELECT score_100, percentage, pass_threshold_pct, passed FROM results WHERE attempt_id = ?`).get(attemptId) as ResultRow | undefined;
+  const result = db.prepare(`SELECT score_100, percentage, pass_threshold_pct, passed, grading_state FROM results WHERE attempt_id = ?`).get(attemptId) as ResultRow | undefined;
   if (!result) return; // notation pas encore écrite (ne devrait pas arriver — appelé après gradeAttempt) — silencieux, rien à notifier
+  // Défense en profondeur (mission "COMPLETE CANDIDATE EXAM LIFECYCLE"
+  // §26-30) — chaque appelant est déjà censé ne JAMAIS appeler cette
+  // fonction tant qu'une correction manuelle est en attente, mais cette
+  // garde interne empêche structurellement un futur appelant d'envoyer un
+  // "résultat disponible" prématuré même s'il oublie cette vérification.
+  if (result.grading_state === "AWAITING_MANUAL_REVIEW") return;
 
   const assessment = db.prepare(`SELECT name, function_code, group_id FROM assessments WHERE id = ?`).get(attempt.assessment_id) as
     | { name: string; function_code: string; group_id: number }

@@ -5,6 +5,7 @@ import { publishAssessmentAction } from "../actions";
 
 export interface PublishResult {
   error?: string;
+  success?: string;
 }
 
 // Deux modes d'affectation (addendum auditeur) — le libellé et les trois
@@ -79,6 +80,7 @@ export function PublishAssessmentForm({
         {pending ? "Publication…" : "Publier"}
       </button>
       {state.error && <p className="text-[12.5px] text-status-critical-text">{state.error}</p>}
+      {state.success && <p className="text-[12.5px] text-status-verified-text">{state.success}</p>}
     </form>
   );
 }

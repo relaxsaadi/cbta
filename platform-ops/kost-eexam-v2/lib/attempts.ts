@@ -149,7 +149,12 @@ export interface AttemptQuestionView {
   attempt_question_id: number;
   position: number;
   stem: string;
+  qtype: string;
   choices: { key: string; text: string }[];
+  /** Uniquement pour 'numeric' — la seule partie du barème envoyée au
+   * candidat (voir lib/questions.ts::NumericAnswerSpec) ; value/tolerance
+   * ne quittent jamais le serveur avant notation. */
+  unit: string | null;
   marked_for_review: number;
   answer: string[] | null;
   multiSelect: boolean;
@@ -183,11 +188,14 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
     const allChoices: { key: string; text: string }[] = JSON.parse(r.choices_snapshot_json);
     const order: string[] = r.choices_order_json ? JSON.parse(r.choices_order_json) : allChoices.map((c) => c.key);
     const byKey = new Map(allChoices.map((c) => [c.key, c]));
+    const isMcqLike = r.qtype === "mcq_single" || r.qtype === "mcq_multi" || r.qtype === "true_false";
     return {
       attempt_question_id: r.attempt_question_id,
       position: r.position,
       stem: r.stem_snapshot,
-      choices: order.map((k) => byKey.get(k)!).filter(Boolean),
+      qtype: r.qtype,
+      choices: isMcqLike ? order.map((k) => byKey.get(k)!).filter(Boolean) : [],
+      unit: r.qtype === "numeric" ? (allChoices.find((c) => c.key === "unit")?.text ?? null) : null,
       marked_for_review: r.marked_for_review,
       answer: r.answer_json ? JSON.parse(r.answer_json) : null,
       multiSelect: r.qtype === "mcq_multi",
@@ -231,6 +239,17 @@ export function toggleMark(attemptId: number, candidateUserId: number, attemptQu
 }
 
 export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
+  // Bug réel trouvé en concevant la correction manuelle (mission "COMPLETE
+  // CANDIDATE EXAM LIFECYCLE", 2026-08-29) : gradeAttempt() était appelée
+  // SANS CONDITION après la transaction ci-dessous, y compris quand la
+  // transition "déjà soumise -> no-op" avait eu lieu (double-clic, retry
+  // réseau retardé) — inoffensif avant la correction manuelle (renotage
+  // idempotent), mais dangereux depuis : un ré-appel tardif écraserait une
+  // correction manuelle déjà écrite. `transitioned` ne devient vrai QUE la
+  // toute première fois — gradeAttempt() n'est donc plus jamais appelée
+  // sur un no-op (défense en profondeur, doublée par la garde interne à
+  // gradeAttempt() elle-même).
+  let transitioned = false;
   transaction((db) => {
     const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
     if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
@@ -238,6 +257,7 @@ export function submitAttempt(attemptId: number, candidateUserId: number, opts: 
 
     const status: AttemptStatus = opts.auto ? "auto_submitted" : "submitted";
     db.prepare(`UPDATE attempts SET status = ?, submitted_at = ? WHERE id = ?`).run(status, nowIso(), attemptId);
+    transitioned = true;
 
     audit({
       actorUserId: candidateUserId,
@@ -247,6 +267,8 @@ export function submitAttempt(attemptId: number, candidateUserId: number, opts: 
       targetId: attemptId,
     });
   });
+
+  if (!transitioned) return;
 
   // Notation hors de la transaction d'écriture ci-dessus (gradeAttempt gère
   // sa propre cohérence) — évite d'imbriquer deux BEGIN IMMEDIATE (SQLite

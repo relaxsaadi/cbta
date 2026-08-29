@@ -1,31 +1,34 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
-import { listAssignedAssessmentsForCandidate, isAssessmentOpenNow } from "@/lib/assessments";
+import { listAssignedAssessmentsForCandidate } from "@/lib/assessments";
 import { getActiveAttempt, countFinishedAttempts, sweepExpiredAttempts } from "@/lib/attempts";
+import { computeCandidateExamState, getLatestAttemptInfo, type CandidateExamStateKind } from "@/lib/candidate-exam-state";
 import { functionLabel } from "@/lib/questions";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { StatusBadge } from "@/components/ui/Badge";
+import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
 import { BookOpenCheck } from "lucide-react";
 
-// Revue UX (mission "PRODUCTION READINESS" §22) — un examen affecté mais
-// pas encore ouvert affichait auparavant le même badge "Fermé" opaque
-// qu'un examen clôturé ou jamais publié, sans jamais montrer la date
-// d'ouverture pourtant déjà configurée par le responsable (`open_at`) —
-// un candidat n'avait aucun moyen de savoir s'il devait revenir plus tard
-// ou si l'examen était simplement indisponible. Corrigé : distinction
-// explicite des 3 cas (pas encore ouvert / clôturé / suspendu), date
-// affichée en clair quand elle existe.
-function statusLabel(a: { status: string; open_at: string | null; close_at: string | null }, openNow: boolean): string {
-  if (a.status === "suspended") return "Suspendu";
-  if (openNow) return "Ouvert";
-  if (a.status === "closed") return "Clôturé";
-  if (a.open_at && new Date(a.open_at).getTime() > Date.now()) {
-    return `Ouvre le ${new Date(a.open_at).toLocaleString("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}`;
-  }
-  if (a.close_at && new Date(a.close_at).getTime() < Date.now()) return "Fenêtre fermée";
-  return "Pas encore disponible";
-}
+// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §2 — bug réel
+// diagnostiqué (root cause avant tout changement de code, voir le rapport
+// final) : un examen affecté pouvait s'afficher sans AUCUNE action
+// utilisable ni explication, notamment un examen suspendu qui disparaissait
+// purement et simplement du tableau de bord (voir le correctif jumeau dans
+// lib/assessments.ts::listAssignedAssessmentsForCandidate). Chaque carte
+// affiche maintenant un état explicite (lib/candidate-exam-state.ts,
+// fonction pure et testée) — jamais un texte générique "Indisponible" sans
+// raison.
+const BADGE_VARIANT: Record<CandidateExamStateKind, BadgeStatus> = {
+  suspended: "critical",
+  not_published: "neutral",
+  in_progress: "warning",
+  awaiting_review: "warning",
+  result_available: "verified",
+  finished: "neutral",
+  not_yet_open: "neutral",
+  window_closed: "neutral",
+  available: "verified",
+};
 
 export default async function MesExamensPage() {
   const session = await guardPage("candidate");
@@ -46,9 +49,9 @@ export default async function MesExamensPage() {
         ) : (
           <div className="flex flex-col gap-2">
             {assessments.map((a) => {
-              const active = getActiveAttempt(a.id, session.userId);
               const finished = countFinishedAttempts(a.id, session.userId);
-              const canStart = isAssessmentOpenNow(a) && (a.attempts_allowed === 0 || finished < a.attempts_allowed);
+              const latest = getLatestAttemptInfo(a.id, session.userId);
+              const state = computeCandidateExamState(a, latest, finished);
               return (
                 <div key={a.id} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-3">
                   <div>
@@ -56,23 +59,24 @@ export default async function MesExamensPage() {
                     <p className="text-[12px] text-text-tertiary capitalize">
                       {a.type} — {functionLabel(a.function_code)} — {a.question_count} questions, {a.duration_minutes} min
                     </p>
+                    {state.reason && <p className="mt-1 text-[12px] text-text-secondary">{state.reason}</p>}
                   </div>
                   <div className="flex items-center gap-3">
-                    <StatusBadge status={a.status === "suspended" ? "critical" : isAssessmentOpenNow(a) ? "verified" : "neutral"}>
-                      {statusLabel(a, isAssessmentOpenNow(a))}
-                    </StatusBadge>
-                    {active ? (
+                    <StatusBadge status={BADGE_VARIANT[state.kind]}>{state.label}</StatusBadge>
+                    {state.cta?.kind === "resume" && (
                       <Link href={`/exam/${a.id}/attempt`} className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10">
-                        Reprendre
+                        {state.cta.label}
                       </Link>
-                    ) : canStart ? (
+                    )}
+                    {state.cta?.kind === "start" && (
                       <Link href={`/exam/${a.id}/instructions`} className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10">
-                        Commencer
+                        {state.cta.label}
                       </Link>
-                    ) : (
-                      <span className="text-[12px] text-text-tertiary">
-                        {finished > 0 && a.attempts_allowed !== 0 && finished >= a.attempts_allowed ? "Tentatives épuisées" : "Indisponible"}
-                      </span>
+                    )}
+                    {state.cta?.kind === "view_result" && (
+                      <Link href="/mes-resultats" className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
+                        {state.cta.label}
+                      </Link>
                     )}
                   </div>
                 </div>

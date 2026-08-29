@@ -11,6 +11,16 @@ import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ListChecks, Download } from "lucide-react";
 
+// §38 de la mission "COMPLETE CANDIDATE EXAM LIFECYCLE" — libellés
+// explicites pour le suivi admin (EN COURS/TERMINÉ/À CORRIGER/RÉSULTAT
+// DISPONIBLE), jamais le code brut de statut de tentative seul.
+function statusLabel(status: string, gradingState: string | null): string {
+  if (status === "in_progress") return "En cours";
+  if (gradingState === "AWAITING_MANUAL_REVIEW") return "À corriger";
+  if (gradingState === "COMPLETE") return "Résultat disponible";
+  return status === "abandoned" ? "Abandonné" : "Terminé";
+}
+
 interface ResultsSearchParams {
   functionCode?: string;
   passed?: string;
@@ -167,11 +177,22 @@ export default async function ResultsPage({
                     <td className="py-2 pr-3 text-text-secondary">{r.company_name} / {r.group_name}</td>
                     <td className="py-2 pr-3 text-text-secondary">{r.function_code}</td>
                     <td className="py-2 pr-3 text-text-secondary">{r.assessment_name}</td>
-                    <td className="py-2 pr-3 text-text-secondary">{r.score_100 !== null ? `${r.score_100}/100` : "—"}</td>
-                    <td className="py-2 pr-3">
-                      {r.passed === null ? <span className="text-text-tertiary">—</span> : <StatusBadge status={r.passed ? "verified" : "critical"}>{r.passed ? "Réussi" : "Échoué"}</StatusBadge>}
+                    {/* §30 de la mission "COMPLETE CANDIDATE EXAM LIFECYCLE" — score/
+                        mention UNIQUEMENT une fois réellement finalisés
+                        (grading_state='COMPLETE'), jamais une note
+                        provisoire (portion auto-notée en attente de
+                        correction manuelle) présentée comme définitive. */}
+                    <td className="py-2 pr-3 text-text-secondary">
+                      {r.grading_state === "COMPLETE" && r.score_100 !== null ? `${r.score_100}/100` : "—"}
                     </td>
-                    <td className="py-2 text-text-secondary">{r.status}</td>
+                    <td className="py-2 pr-3">
+                      {r.grading_state !== "COMPLETE" || r.passed === null ? (
+                        <span className="text-text-tertiary">—</span>
+                      ) : (
+                        <StatusBadge status={r.passed ? "verified" : "critical"}>{r.passed ? "Réussi" : "Échoué"}</StatusBadge>
+                      )}
+                    </td>
+                    <td className="py-2 text-text-secondary">{statusLabel(r.status, r.grading_state)}</td>
                   </tr>
                 ))}
               </tbody>

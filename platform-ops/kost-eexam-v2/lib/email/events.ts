@@ -11,7 +11,7 @@ import { render } from "@react-email/components";
 import { createElement } from "react";
 import { queueAndSendEmail } from "./send";
 import { shouldSendToUser } from "./preferences";
-import { getAppBaseUrl, getSenderExam, getSenderNotifications, getSenderSecurity } from "./config";
+import { getAppBaseUrl, getSenderExam, getSenderNotifications, getSenderSecurity, getAdminAlertRecipient } from "./config";
 import { formatCandidateDateTime } from "./format";
 import type { EmailTenantContext, ResultEmailPolicy } from "./types";
 
@@ -48,6 +48,12 @@ import ExamDeadlineReminderEmail, {
   TEMPLATE_VERSION as EXAM_DEADLINE_REMINDER_V,
 } from "./templates/exam-deadline-reminder";
 import ExamRescheduledEmail, { examRescheduledSubject, TEMPLATE_ID as EXAM_RESCHEDULED_ID, TEMPLATE_VERSION as EXAM_RESCHEDULED_V } from "./templates/exam-rescheduled";
+import ExamSubmittedEmail, { examSubmittedSubject, TEMPLATE_ID as EXAM_SUBMITTED_ID, TEMPLATE_VERSION as EXAM_SUBMITTED_V } from "./templates/exam-submitted";
+import ExamSubmittedAdminEmail, {
+  examSubmittedAdminSubject,
+  TEMPLATE_ID as EXAM_SUBMITTED_ADMIN_ID,
+  TEMPLATE_VERSION as EXAM_SUBMITTED_ADMIN_V,
+} from "./templates/exam-submitted-admin";
 import ResultAvailableEmail, { resultAvailableSubject, TEMPLATE_ID as RESULT_AVAILABLE_ID, TEMPLATE_VERSION as RESULT_AVAILABLE_V } from "./templates/result-available";
 import IncidentDeclaredEmail, { incidentDeclaredSubject, TEMPLATE_ID as INCIDENT_DECLARED_ID, TEMPLATE_VERSION as INCIDENT_DECLARED_V } from "./templates/incident-declared";
 import IncidentResolvedEmail, { incidentResolvedSubject, TEMPLATE_ID as INCIDENT_RESOLVED_ID, TEMPLATE_VERSION as INCIDENT_RESOLVED_V } from "./templates/incident-resolved";
@@ -547,6 +553,104 @@ export async function notifyExamRescheduled(params: {
       sender: getSenderExam(),
       rendered: { subject: examRescheduledSubject(), html, text, templateId: EXAM_RESCHEDULED_ID, templateVersion: EXAM_RESCHEDULED_V },
       metadata: { assessmentId: params.assessmentId },
+    });
+  });
+}
+
+// ---------------------------------------------------------------------
+// EXAM_SUBMITTED (mission "COMPLETE CANDIDATE EXAM LIFECYCLE",
+// 2026-08-29, §31) — confirmation candidat après envoi réel (manuel ou
+// auto-soumission par expiration du chronomètre). Idempotence horodatée
+// (submittedAt) — une resoumission déjà idempotente côté métier
+// (submitAttempt no-op) ne doit de toute façon jamais redéclencher cet
+// appel (voir app/(app)/exam/[assessmentId]/attempt/actions.ts, qui
+// n'appelle ce notify* que sur la VRAIE première transition).
+// ---------------------------------------------------------------------
+export async function notifyExamSubmitted(params: {
+  userId: number;
+  email: string;
+  firstName: string;
+  username: string;
+  examName: string;
+  functionLabel: string;
+  submittedAt: string;
+  statusLabel: string;
+  companyId: number;
+  companyName: string;
+}): Promise<void> {
+  return safe("EXAM_SUBMITTED", async () => {
+    const examUrl = `${getAppBaseUrl()}/mes-resultats`;
+    const { html, text } = await renderBoth(
+      createElement(ExamSubmittedEmail, {
+        firstName: params.firstName,
+        username: params.username,
+        examName: params.examName,
+        functionLabel: params.functionLabel,
+        submittedAtFormatted: formatCandidateDateTime(params.submittedAt),
+        statusLabel: params.statusLabel,
+        examUrl,
+      })
+    );
+    await queueAndSendEmail({
+      eventType: "EXAM_SUBMITTED",
+      idempotencyKey: `exam-submitted/${params.userId}/${params.submittedAt}`,
+      recipientEmail: params.email,
+      userId: params.userId,
+      tenant: { companyId: params.companyId, companyName: params.companyName },
+      sender: getSenderExam(),
+      rendered: { subject: examSubmittedSubject(), html, text, templateId: EXAM_SUBMITTED_ID, templateVersion: EXAM_SUBMITTED_V },
+    });
+  });
+}
+
+// ---------------------------------------------------------------------
+// EXAM_SUBMITTED_ADMIN (mission "COMPLETE CANDIDATE EXAM LIFECYCLE",
+// 2026-08-29, §34-36) — notifie le staff responsable. Destinataires
+// résolus par l'APPELANT (jamais deviné ici, §34 dernière ligne : "Do not
+// hardcode one personal admin email") — voir
+// app/(app)/exam/[assessmentId]/attempt/actions.ts pour la résolution
+// réelle (responsable pédagogique du groupe + ADMIN_ALERT_RECIPIENT
+// configuré, dédupliqués). Cette fonction envoie à UN destinataire ; c'est
+// l'appelant qui boucle sur la liste résolue.
+// ---------------------------------------------------------------------
+export async function notifyExamSubmittedAdmin(params: {
+  recipientUserId: number | null;
+  recipientEmail: string;
+  attemptId: number;
+  candidateName: string;
+  candidateUsername: string;
+  companyId: number;
+  companyName: string;
+  groupName: string;
+  examName: string;
+  functionLabel: string;
+  submittedAt: string;
+  statusLabel: string;
+}): Promise<void> {
+  return safe("EXAM_SUBMITTED_ADMIN", async () => {
+    const attemptUrl = `${getAppBaseUrl()}/results/${params.attemptId}`;
+    const { html, text } = await renderBoth(
+      createElement(ExamSubmittedAdminEmail, {
+        candidateName: params.candidateName,
+        candidateUsername: params.candidateUsername,
+        companyName: params.companyName,
+        groupName: params.groupName,
+        examName: params.examName,
+        functionLabel: params.functionLabel,
+        submittedAtFormatted: formatCandidateDateTime(params.submittedAt),
+        statusLabel: params.statusLabel,
+        attemptUrl,
+      })
+    );
+    await queueAndSendEmail({
+      eventType: "EXAM_SUBMITTED_ADMIN",
+      idempotencyKey: `exam-submitted-admin/${params.attemptId}/${params.recipientEmail}`,
+      recipientEmail: params.recipientEmail,
+      userId: params.recipientUserId,
+      tenant: { companyId: params.companyId, companyName: params.companyName },
+      sender: getSenderNotifications(),
+      rendered: { subject: examSubmittedAdminSubject(params.candidateName), html, text, templateId: EXAM_SUBMITTED_ADMIN_ID, templateVersion: EXAM_SUBMITTED_ADMIN_V },
+      metadata: { attemptId: params.attemptId },
     });
   });
 }

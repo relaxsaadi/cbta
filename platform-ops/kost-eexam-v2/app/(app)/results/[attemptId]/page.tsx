@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
 import { getAttemptDetail } from "@/lib/results";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
-import { functionLabel } from "@/lib/questions";
+import { functionLabel, formatCorrectAnswerForDisplay, QTYPE_LABELS, type QType } from "@/lib/questions";
 import { Card, CardHeader } from "@/components/ui/Card";
-import { StatusBadge } from "@/components/ui/Badge";
+import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 function formatDuration(startedAt: string, submittedAt: string | null): string {
@@ -12,6 +12,28 @@ function formatDuration(startedAt: string, submittedAt: string | null): string {
   const ms = new Date(submittedAt).getTime() - new Date(startedAt).getTime();
   const minutes = Math.round(ms / 60000);
   return minutes < 1 ? "< 1 min" : `${minutes} min`;
+}
+
+// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §20-25 — bug réel
+// trouvé sur staging (/results/52 pendant que la tentative de Brahimi
+// était encore IN_PROGRESS) : cette page montrait "Bonnes réponses : 0",
+// "Mauvaises réponses : 0", "Score : —/100" comme si c'était un résultat
+// mesuré, alors qu'aucune notation n'avait encore eu lieu. Le statut réel
+// de la tentative est maintenant TOUJOURS affiché en premier, et la carte
+// "Résultat" ne s'affiche QUE quand grading_state === 'COMPLETE' — jamais
+// un zéro fabriqué à la place d'un "pas encore noté".
+const STATUS_LABELS: Record<string, string> = {
+  in_progress: "EN COURS",
+  submitted: "SOUMIS",
+  auto_submitted: "AUTO-SOUMIS",
+  abandoned: "ABANDONNÉ",
+};
+
+function attemptStatusBadge(status: string, gradingState: string | null): { label: string; variant: BadgeStatus } {
+  if (status === "in_progress") return { label: "EN COURS", variant: "warning" };
+  if (gradingState === "AWAITING_MANUAL_REVIEW") return { label: "EN ATTENTE DE CORRECTION", variant: "warning" };
+  if (gradingState === "COMPLETE") return { label: "RÉSULTAT DISPONIBLE", variant: "verified" };
+  return { label: STATUS_LABELS[status] ?? status.toUpperCase(), variant: "neutral" };
 }
 
 export default async function AttemptDetailPage({ params }: { params: Promise<{ attemptId: string }> }) {
@@ -24,27 +46,42 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
   const detail = getAttemptDetail(attemptIdNum);
   if (!detail) notFound();
 
+  const inProgress = detail.status === "in_progress";
+  const awaitingReview = detail.grading_state === "AWAITING_MANUAL_REVIEW";
+  const finalResultAvailable = detail.grading_state === "COMPLETE";
+  const badge = attemptStatusBadge(detail.status, detail.grading_state);
+  const answeredCount = detail.questions.filter((q) => q.candidateAnswer.length > 0).length;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-[20px] font-semibold text-text-primary">Rapport individuel — Détail de la tentative</h1>
-          <p className="mt-1 text-[13px] text-text-tertiary">{detail.candidate_name} — {detail.group_name} — {detail.assessment_name}</p>
+          {/* §21 — le titre lui-même change selon l'état réel, jamais
+              "Résultat final" pour une tentative encore en cours (§22). */}
+          <h1 className="font-display text-[20px] font-semibold text-text-primary">
+            {inProgress ? "Tentative en cours — Détail" : "Rapport individuel — Détail de la tentative"}
+          </h1>
+          <p className="mt-1 flex items-center gap-2 text-[13px] text-text-tertiary">
+            {detail.candidate_name} — {detail.group_name} — {detail.assessment_name}
+            <StatusBadge status={badge.variant}>{badge.label}</StatusBadge>
+          </p>
         </div>
-        <div className="flex shrink-0 gap-2">
-          <a
-            href={`/api/reports/individual/${attemptIdNum}?level=simple`}
-            className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
-          >
-            PDF simple
-          </a>
-          <a
-            href={`/api/reports/individual/${attemptIdNum}?level=detailed`}
-            className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
-          >
-            PDF détaillé
-          </a>
-        </div>
+        {finalResultAvailable && (
+          <div className="flex shrink-0 gap-2">
+            <a
+              href={`/api/reports/individual/${attemptIdNum}?level=simple`}
+              className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+            >
+              PDF simple
+            </a>
+            <a
+              href={`/api/reports/individual/${attemptIdNum}?level=detailed`}
+              className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
+            >
+              PDF détaillé
+            </a>
+          </div>
+        )}
       </div>
 
       {/* IDENTITÉ — addendum §3 */}
@@ -70,67 +107,109 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
           <div><dt className="text-text-tertiary">Durée autorisée</dt><dd className="font-medium text-text-primary">{detail.duration_minutes_allowed} min</dd></div>
           <div><dt className="text-text-tertiary">Durée réelle</dt><dd className="font-medium text-text-primary">{formatDuration(detail.started_at, detail.submitted_at)}</dd></div>
           <div><dt className="text-text-tertiary">Nombre de questions</dt><dd className="font-medium text-text-primary">{detail.question_count}</dd></div>
+          <div><dt className="text-text-tertiary">Questions répondues</dt><dd className="font-medium text-text-primary">{answeredCount} / {detail.question_count}</dd></div>
         </dl>
       </Card>
 
-      {/* RÉSULTAT — addendum §3 */}
-      <Card>
-        <CardHeader title="Résultat" />
-        <dl className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-4">
-          <div><dt className="text-text-tertiary">Bonnes réponses</dt><dd className="font-medium text-status-verified-text">{detail.correct_count}</dd></div>
-          <div><dt className="text-text-tertiary">Mauvaises réponses</dt><dd className="font-medium text-status-critical-text">{detail.incorrect_count}</dd></div>
-          <div><dt className="text-text-tertiary">Score</dt><dd className="font-medium text-text-primary">{detail.score_100 ?? "—"}/100</dd></div>
-          <div><dt className="text-text-tertiary">Pourcentage</dt><dd className="font-medium text-text-primary">{detail.percentage !== null ? `${detail.percentage}%` : "—"}</dd></div>
-          <div><dt className="text-text-tertiary">Seuil</dt><dd className="font-medium text-text-primary">{detail.pass_threshold_pct ?? "—"}%</dd></div>
-          <div>
-            <dt className="text-text-tertiary">Mention</dt>
-            <dd>{detail.passed === null ? "—" : <StatusBadge status={detail.passed ? "verified" : "critical"}>{detail.passed ? "ADMIS" : "ÉCHEC"}</StatusBadge>}</dd>
-          </div>
-        </dl>
-      </Card>
+      {/* RÉSULTAT — uniquement si réellement disponible (§21-23/§30). Pour
+          IN_PROGRESS/AWAITING_MANUAL_REVIEW, un message explicite remplace
+          la carte — jamais un score/des comptes fabriqués. */}
+      {finalResultAvailable ? (
+        <Card>
+          <CardHeader title="Résultat" />
+          <dl className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-4">
+            <div><dt className="text-text-tertiary">Bonnes réponses</dt><dd className="font-medium text-status-verified-text">{detail.correct_count}</dd></div>
+            <div><dt className="text-text-tertiary">Mauvaises réponses</dt><dd className="font-medium text-status-critical-text">{detail.incorrect_count}</dd></div>
+            <div><dt className="text-text-tertiary">Score</dt><dd className="font-medium text-text-primary">{detail.score_100}/100</dd></div>
+            <div><dt className="text-text-tertiary">Pourcentage</dt><dd className="font-medium text-text-primary">{detail.percentage}%</dd></div>
+            <div><dt className="text-text-tertiary">Seuil</dt><dd className="font-medium text-text-primary">{detail.pass_threshold_pct}%</dd></div>
+            <div>
+              <dt className="text-text-tertiary">Mention</dt>
+              <dd><StatusBadge status={detail.passed ? "verified" : "critical"}>{detail.passed ? "ADMIS" : "ÉCHEC"}</StatusBadge></dd>
+            </div>
+          </dl>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader title="Résultat" />
+          <p className="text-[13px] text-text-secondary">
+            {inProgress
+              ? "Résultat non disponible — l'examen n'a pas encore été envoyé."
+              : awaitingReview
+                ? "Examen envoyé — en attente de correction manuelle avant publication du résultat."
+                : "Résultat non disponible."}
+          </p>
+        </Card>
+      )}
 
       <Card>
         <CardHeader title="Questions et réponses" description="Version exacte reçue par le candidat lors de cette tentative" />
         <div className="flex flex-col gap-4">
-          {detail.questions.map((q) => (
-            <div key={q.position} className="rounded-md border border-border-subtle p-3.5">
-              <div className="mb-2 flex items-start justify-between gap-3">
-                <p className="text-[13.5px] font-medium text-text-primary">
-                  <span className="text-text-tertiary mr-1.5">Q{q.position}.</span>{q.stem}
-                </p>
-                {q.isCorrect === null ? (
-                  <span className="text-[11.5px] text-text-tertiary">Non noté</span>
-                ) : q.isCorrect ? (
-                  <span className="flex items-center gap-1 text-[11.5px] font-medium text-status-verified-text"><CheckCircle2 size={13} /> Correct</span>
-                ) : (
-                  <span className="flex items-center gap-1 text-[11.5px] font-medium text-status-critical-text"><XCircle size={13} /> Incorrect</span>
+          {detail.questions.map((q) => {
+            const qtype = q.qtype as QType;
+            return (
+              <div key={q.position} className="rounded-md border border-border-subtle p-3.5">
+                <div className="mb-2 flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[13.5px] font-medium text-text-primary">
+                      <span className="text-text-tertiary mr-1.5">Q{q.position}.</span>{q.stem}
+                    </p>
+                    <p className="text-[11px] text-text-tertiary">{QTYPE_LABELS[qtype] ?? qtype}</p>
+                  </div>
+                  {q.isCorrect === null ? (
+                    <span className="text-[11.5px] text-text-tertiary">{qtype === "short_answer" ? "En attente de correction" : "Non noté"}</span>
+                  ) : q.isCorrect ? (
+                    <span className="flex items-center gap-1 text-[11.5px] font-medium text-status-verified-text"><CheckCircle2 size={13} /> Correct</span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-[11.5px] font-medium text-status-critical-text"><XCircle size={13} /> Incorrect</span>
+                  )}
+                </div>
+
+                {(qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false") && (
+                  <ul className="flex flex-col gap-1">
+                    {q.choices.map((c) => {
+                      const chosen = q.candidateAnswer.includes(c.key);
+                      const correctKeys = Array.isArray(q.correctAnswer) ? (q.correctAnswer as string[]) : [];
+                      const isCorrectChoice = correctKeys.includes(c.key);
+                      return (
+                        <li
+                          key={c.key}
+                          className={`rounded px-2.5 py-1.5 text-[12.5px] ${
+                            isCorrectChoice ? "bg-status-verified-bg text-status-verified-text" : chosen ? "bg-status-critical-bg text-status-critical-text" : "text-text-secondary"
+                          }`}
+                        >
+                          <span className="font-mono mr-1.5">{c.key}.</span>{c.text}
+                          {chosen && <span className="ml-2 text-[11px] opacity-75">(réponse du candidat)</span>}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+
+                {qtype === "numeric" && (
+                  <div className="text-[12.5px] text-text-secondary">
+                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{q.candidateAnswer[0] ?? "—"}</span></p>
+                    <p>Réponse correcte : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(qtype, q.correctAnswer)}</span></p>
+                  </div>
+                )}
+
+                {qtype === "short_answer" && (
+                  <div className="text-[12.5px] text-text-secondary">
+                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{q.candidateAnswer[0] || "—"}</span></p>
+                    <p>Réponses acceptées : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(qtype, q.correctAnswer)}</span></p>
+                    {q.graderComment && <p className="mt-1 text-text-tertiary">Commentaire du correcteur : {q.graderComment}</p>}
+                  </div>
+                )}
+
+                <p className="mt-1.5 text-[11.5px] text-text-tertiary">Points : {q.pointsAwarded ?? "—"} / {q.points}</p>
+                {q.explanation && (
+                  <p className="mt-1.5 rounded-md bg-surface-sunken px-2.5 py-1.5 text-[12px] text-text-secondary">
+                    <span className="font-medium text-text-tertiary">Explication : </span>{q.explanation}
+                  </p>
                 )}
               </div>
-              <ul className="flex flex-col gap-1">
-                {q.choices.map((c) => {
-                  const chosen = q.candidateAnswer.includes(c.key);
-                  const isCorrectChoice = q.correctAnswer.includes(c.key);
-                  return (
-                    <li
-                      key={c.key}
-                      className={`rounded px-2.5 py-1.5 text-[12.5px] ${
-                        isCorrectChoice ? "bg-status-verified-bg text-status-verified-text" : chosen ? "bg-status-critical-bg text-status-critical-text" : "text-text-secondary"
-                      }`}
-                    >
-                      <span className="font-mono mr-1.5">{c.key}.</span>{c.text}
-                      {chosen && <span className="ml-2 text-[11px] opacity-75">(réponse du candidat)</span>}
-                    </li>
-                  );
-                })}
-              </ul>
-              <p className="mt-1.5 text-[11.5px] text-text-tertiary">Points : {q.pointsAwarded ?? "—"} / {q.points}</p>
-              {q.explanation && (
-                <p className="mt-1.5 rounded-md bg-surface-sunken px-2.5 py-1.5 text-[12px] text-text-secondary">
-                  <span className="font-medium text-text-tertiary">Explication : </span>{q.explanation}
-                </p>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Card>
     </div>

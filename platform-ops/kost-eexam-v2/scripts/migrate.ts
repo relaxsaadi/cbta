@@ -38,6 +38,11 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
   // Mission "COMPLETE USER MANAGEMENT" (2026-08-29).
   { table: "users", column: "candidate_type", ddl: "ALTER TABLE users ADD COLUMN candidate_type TEXT" },
   { table: "users", column: "archived_at", ddl: "ALTER TABLE users ADD COLUMN archived_at TEXT" },
+  // Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §56 — traçabilité
+  // de la correction manuelle (qui, quel commentaire) ; jamais posées par
+  // gradeAttempt() (notation automatique), uniquement par submitManualGrade().
+  { table: "attempt_answers", column: "graded_by", ddl: "ALTER TABLE attempt_answers ADD COLUMN graded_by INTEGER REFERENCES users(id)" },
+  { table: "attempt_answers", column: "grader_comment", ddl: "ALTER TABLE attempt_answers ADD COLUMN grader_comment TEXT" },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {
@@ -225,6 +230,105 @@ function migrateUsersArchivedStatus(db: ReturnType<typeof getDb>) {
   }
 }
 
+// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-50 — élargit
+// questions.qtype pour accepter 'numeric'/'short_answer'. Garde sur la
+// valeur d'énumération EXACTE entre guillemets (même discipline que
+// migrateUsersArchivedStatus ci-dessus, après le faux positif réel trouvé
+// sur "archived"/"archived_at" cette même session).
+function migrateQuestionsQtypeCheckConstraint(db: ReturnType<typeof getDb>) {
+  const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'questions'`).get() as { sql: string } | undefined;
+  if (!row || row.sql.includes("'numeric'")) return;
+
+  db.exec("PRAGMA foreign_keys = OFF");
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.exec(`
+      CREATE TABLE questions_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        kost_question_id TEXT NOT NULL UNIQUE,
+        function_code TEXT NOT NULL REFERENCES functions(code),
+        subtask TEXT,
+        qtype TEXT NOT NULL DEFAULT 'mcq_single' CHECK (qtype IN ('mcq_single','mcq_multi','true_false','numeric','short_answer')),
+        language TEXT NOT NULL DEFAULT 'fr',
+        source_status TEXT NOT NULL DEFAULT 'NOT_ATTEMPTED' CHECK (source_status IN
+          ('FROZEN_SOURCE_VERIFIED','DRAFT','PARTIAL','STALE','SOURCE_GAP','SOURCE_CONFLICT','NOT_ATTEMPTED')),
+        regulatory_reference TEXT,
+        reviewer_status TEXT NOT NULL DEFAULT 'PENDING' CHECK (reviewer_status IN ('PENDING','APPROVED','REJECTED')),
+        review_date TEXT,
+        verification_date TEXT,
+        current_version_id INTEGER,
+        active INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+        created_by INTEGER REFERENCES users(id),
+        updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+      );
+    `);
+    // Colonnes explicites des deux côtés — jamais SELECT * (voir l'incident
+    // réel documenté au-dessus de migrateUsersStatusCheckConstraint).
+    db.exec(`
+      INSERT INTO questions_new (id, kost_question_id, function_code, subtask, qtype, language, source_status, regulatory_reference, reviewer_status, review_date, verification_date, current_version_id, active, created_at, created_by, updated_at)
+      SELECT id, kost_question_id, function_code, subtask, qtype, language, source_status, regulatory_reference, reviewer_status, review_date, verification_date, current_version_id, active, created_at, created_by, updated_at FROM questions;
+    `);
+    db.exec(`DROP TABLE questions;`);
+    db.exec(`ALTER TABLE questions_new RENAME TO questions;`);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_questions_function ON questions(function_code);`);
+    db.exec("COMMIT");
+    console.log("Contrainte questions.qtype élargie (numeric, short_answer) — les 244 questions existantes sont réinsérées à l'identique, aucune valeur modifiée.");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
+// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §26-30/§55-57 —
+// results.passed devient NULLABLE (résultat réellement inconnu tant qu'une
+// correction manuelle est en attente, jamais un booléen fabriqué) +
+// nouvelle colonne grading_state. SQLite n'a pas d'ALTER TABLE pour
+// assouplir une contrainte NOT NULL — même procédure de reconstruction.
+function migrateResultsGradingState(db: ReturnType<typeof getDb>) {
+  const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'results'`).get() as { sql: string } | undefined;
+  if (!row || row.sql.includes("grading_state")) return;
+
+  db.exec("PRAGMA foreign_keys = OFF");
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.exec(`
+      CREATE TABLE results_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        attempt_id INTEGER NOT NULL UNIQUE REFERENCES attempts(id) ON DELETE CASCADE,
+        raw_score REAL NOT NULL,
+        max_raw_score REAL NOT NULL,
+        score_100 REAL NOT NULL,
+        percentage REAL NOT NULL,
+        pass_threshold_pct INTEGER NOT NULL,
+        passed INTEGER,
+        grading_state TEXT NOT NULL DEFAULT 'COMPLETE' CHECK (grading_state IN ('COMPLETE','AWAITING_MANUAL_REVIEW')),
+        graded_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+        locked INTEGER NOT NULL DEFAULT 0
+      );
+    `);
+    // Toutes les lignes existantes ont forcément été notées entièrement
+    // automatiquement (aucune question à correction manuelle n'existait
+    // avant cette mission) — grading_state='COMPLETE' (défaut) et passed
+    // conserve sa vraie valeur 0/1 existante, jamais réécrite.
+    db.exec(`
+      INSERT INTO results_new (id, attempt_id, raw_score, max_raw_score, score_100, percentage, pass_threshold_pct, passed, grading_state, graded_at, locked)
+      SELECT id, attempt_id, raw_score, max_raw_score, score_100, percentage, pass_threshold_pct, passed, 'COMPLETE', graded_at, locked FROM results;
+    `);
+    db.exec(`DROP TABLE results;`);
+    db.exec(`ALTER TABLE results_new RENAME TO results;`);
+    db.exec("COMMIT");
+    console.log("Table results reconstruite (passed nullable + grading_state) — résultats existants préservés à l'identique.");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
 function main() {
   const db = getDb();
   const schema = readFileSync(resolve(import.meta.dirname, "../lib/schema.sql"), "utf-8");
@@ -236,6 +340,8 @@ function main() {
   migrateIncidentActionsCheckConstraint(db);
   migrateUsersStatusCheckConstraint(db);
   migrateUsersArchivedStatus(db); // doit tourner APRÈS applyAdditiveColumns (candidate_type/archived_at)
+  migrateQuestionsQtypeCheckConstraint(db);
+  migrateResultsGradingState(db);
 
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"

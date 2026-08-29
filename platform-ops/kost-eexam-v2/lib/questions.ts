@@ -32,11 +32,126 @@ export const SOURCE_STATUS_LABELS: Record<SourceStatus, string> = {
   NOT_ATTEMPTED: "Non traité",
 };
 
-export type QType = "mcq_single" | "mcq_multi" | "true_false";
+// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-50 — types
+// de question extensibles. matching/ordering/scenario ne sont PAS ajoutés
+// cette passe (portée assumée, voir le rapport final) : le CHECK de schéma
+// et ce type ne portent que les types réellement livrés, jamais une valeur
+// fantôme qu'aucun code ne saurait noter.
+export type QType = "mcq_single" | "mcq_multi" | "true_false" | "numeric" | "short_answer";
+
+export const QTYPE_LABELS: Record<QType, string> = {
+  mcq_single: "QCM — une seule réponse",
+  mcq_multi: "QCM — plusieurs réponses",
+  true_false: "Vrai / Faux",
+  numeric: "Réponse numérique",
+  short_answer: "Réponse courte",
+};
 
 export interface Choice {
   key: string;
   text: string;
+}
+
+/** Encodage de `correct_answer`/`correct_answer_snapshot` pour 'numeric'
+ * (§47 — jamais de tolérance inventée : 0 = correspondance exacte
+ * explicite, jamais un défaut caché). `unit` est la seule partie
+ * envoyée telle quelle au candidat (voir lib/attempts.ts::
+ * getAttemptQuestions) — value/tolerance ne quittent jamais le serveur
+ * avant notation. */
+export interface NumericAnswerSpec {
+  mode: "numeric";
+  value: number;
+  tolerance: number;
+  unit?: string;
+}
+
+/** Encodage pour 'short_answer' (§48) — deux modes explicites, JAMAIS de
+ * correction par IA générative/floue :
+ *   'exact'  : auto-notée par correspondance exacte normalisée (espaces de
+ *              bord retirés, minuscules, espaces internes réduits à un
+ *              seul) contre au moins une réponse de la liste acceptée.
+ *   'manual' : jamais auto-notée — is_correct reste NULL jusqu'à ce qu'un
+ *              correcteur autorisé statue (voir lib/manual-grading.ts). */
+export type ShortAnswerSpec = { mode: "exact"; acceptedAnswers: string[] } | { mode: "manual" };
+
+export type CorrectAnswerData = string[] | NumericAnswerSpec | ShortAnswerSpec;
+
+/** Construit {choices, correctAnswer} depuis un FormData d'auteurage, selon
+ * le qtype — point d'entrée UNIQUE réutilisé par la création ET l'édition
+ * (mission "COMPLETE CANDIDATE EXAM LIFECYCLE", 2026-08-29, §51-52) : jamais
+ * deux implémentations divergentes du parsing formulaire → modèle de
+ * données. Lève une Error avec un message FR explicite si les champs
+ * requis pour CE type sont absents/invalides — jamais une valeur devinée. */
+export function parseAuthoringFormData(qtype: QType, formData: FormData): { choices: Choice[]; correctAnswer: CorrectAnswerData } {
+  if (qtype === "mcq_single" || qtype === "mcq_multi") {
+    const choiceTexts = formData.getAll("choiceText").map(String);
+    const correctIndexes = formData.getAll("correct").map(String);
+    const choices = choiceTexts.filter((t) => t.trim().length > 0).map((text, i) => ({ key: String.fromCharCode(65 + i), text: text.trim() }));
+    const correctAnswer = correctIndexes.map((i) => String.fromCharCode(65 + Number(i)));
+    return { choices, correctAnswer };
+  }
+  if (qtype === "true_false") {
+    const correct = String(formData.get("trueFalseCorrect") ?? "");
+    return {
+      choices: [
+        { key: "true", text: "Vrai" },
+        { key: "false", text: "Faux" },
+      ],
+      correctAnswer: correct ? [correct] : [],
+    };
+  }
+  if (qtype === "numeric") {
+    const value = Number(formData.get("numericValue"));
+    const tolerance = Number(formData.get("numericTolerance") ?? "0");
+    const unit = String(formData.get("numericUnit") ?? "").trim();
+    return {
+      choices: unit ? [{ key: "unit", text: unit }] : [],
+      correctAnswer: { mode: "numeric", value, tolerance, unit: unit || undefined },
+    };
+  }
+  // short_answer
+  const mode = String(formData.get("shortAnswerMode") ?? "exact");
+  if (mode === "manual") {
+    return { choices: [], correctAnswer: { mode: "manual" } };
+  }
+  const acceptedAnswers = String(formData.get("acceptedAnswers") ?? "")
+    .split(/\r?\n|,/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return { choices: [], correctAnswer: { mode: "exact", acceptedAnswers } };
+}
+
+/** §53 — validations d'auteurage : empêche les états d'auteurage invalides
+ * AVANT écriture, jamais après coup. Une question mal formée ne doit
+ * jamais pouvoir être enregistrée, quel que soit le type. */
+export function validateQuestionAuthoring(qtype: QType, choices: Choice[], correctAnswer: CorrectAnswerData): string | null {
+  if (qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false") {
+    if (!Array.isArray(correctAnswer)) return "Réponse correcte invalide pour ce type de question.";
+    if (qtype !== "true_false" && choices.length < 2) return "Au moins deux choix sont requis.";
+    const keys = new Set(choices.map((c) => c.key));
+    const invalidKeys = correctAnswer.filter((k) => !keys.has(k));
+    if (invalidKeys.length > 0) return "La réponse correcte référence un choix qui n'existe pas.";
+    if (qtype === "mcq_single" || qtype === "true_false") {
+      if (correctAnswer.length !== 1) return "Ce type de question exige exactement une seule réponse correcte.";
+    } else if (correctAnswer.length < 1) {
+      return "Au moins une réponse correcte est requise.";
+    }
+    return null;
+  }
+  if (qtype === "numeric") {
+    if (Array.isArray(correctAnswer) || correctAnswer.mode !== "numeric") return "Réponse numérique invalide.";
+    if (!Number.isFinite(correctAnswer.value)) return "La valeur numérique correcte est obligatoire.";
+    if (!Number.isFinite(correctAnswer.tolerance) || correctAnswer.tolerance < 0) return "La tolérance doit être un nombre positif ou nul (0 = correspondance exacte).";
+    return null;
+  }
+  if (qtype === "short_answer") {
+    if (Array.isArray(correctAnswer) || (correctAnswer.mode !== "exact" && correctAnswer.mode !== "manual")) return "Configuration de réponse courte invalide.";
+    if (correctAnswer.mode === "exact" && (!correctAnswer.acceptedAnswers || correctAnswer.acceptedAnswers.filter((a) => a.trim()).length === 0)) {
+      return "Au moins une réponse acceptée est requise en mode correspondance exacte (ou choisissez le mode correction manuelle).";
+    }
+    return null;
+  }
+  return "Type de question inconnu.";
 }
 
 export interface QuestionRow {
@@ -130,10 +245,13 @@ export function createQuestion(params: {
   regulatoryReference?: string;
   stem: string;
   choices: Choice[];
-  correctAnswer: string[];
+  correctAnswer: CorrectAnswerData;
   explanation?: string;
   createdBy: number;
 }): number {
+  const validationError = validateQuestionAuthoring(params.qtype, params.choices, params.correctAnswer);
+  if (validationError) throw new Error(validationError);
+
   const db = getDb();
   const result = db
     .prepare(
@@ -176,9 +294,14 @@ export function createQuestion(params: {
  * ce que le candidat a réellement reçu. */
 export function addQuestionVersion(
   questionId: number,
-  params: { stem: string; choices: Choice[]; correctAnswer: string[]; explanation?: string },
+  params: { stem: string; choices: Choice[]; correctAnswer: CorrectAnswerData; explanation?: string },
   editedBy: number
 ): number {
+  const question = getQuestionById(questionId);
+  if (!question) throw new Error("Question introuvable.");
+  const validationError = validateQuestionAuthoring(question.qtype, params.choices, params.correctAnswer);
+  if (validationError) throw new Error(validationError);
+
   const db = getDb();
   const current = db.prepare(`SELECT MAX(version_no) AS maxVersion FROM question_versions WHERE question_id = ?`).get(questionId) as { maxVersion: number | null };
   const nextVersion = (current.maxVersion ?? 0) + 1;
@@ -200,4 +323,31 @@ export function getQuestionById(id: number): QuestionRow | undefined {
 export function functionLabel(code: string): string {
   const row = getDb().prepare(`SELECT label FROM functions WHERE code = ?`).get(code) as { label: string } | undefined;
   return row?.label ?? code;
+}
+
+/** Formatage lisible d'une réponse correcte (correct_answer/
+ * correct_answer_snapshot déjà JSON.parse) — point d'entrée UNIQUE
+ * réutilisé par la fiche admin, "Mes résultats", l'export CSV détaillé et
+ * le PDF individuel (mission "COMPLETE CANDIDATE EXAM LIFECYCLE",
+ * 2026-08-29) : jamais quatre implémentations divergentes du même
+ * formatage. `choices` optionnel — permet d'afficher le TEXTE des choix
+ * MCQ plutôt que leurs seules clés quand disponible. */
+export function formatCorrectAnswerForDisplay(qtype: string, correctAnswer: unknown, choices?: Choice[]): string {
+  if (qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false") {
+    const keys = Array.isArray(correctAnswer) ? (correctAnswer as string[]) : [];
+    if (!choices) return keys.join(", ");
+    const byKey = new Map(choices.map((c) => [c.key, c.text]));
+    return keys.map((k) => byKey.get(k) ?? k).join(", ");
+  }
+  if (qtype === "numeric") {
+    const spec = correctAnswer as { value?: number; unit?: string } | null;
+    if (!spec || typeof spec.value !== "number") return "—";
+    return spec.unit ? `${spec.value} ${spec.unit}` : String(spec.value);
+  }
+  if (qtype === "short_answer") {
+    const spec = correctAnswer as { mode?: string; acceptedAnswers?: string[] } | null;
+    if (spec?.mode === "manual") return "(correction manuelle)";
+    return (spec?.acceptedAnswers ?? []).join(" / ");
+  }
+  return "";
 }

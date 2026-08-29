@@ -1,18 +1,48 @@
 import { guardPage } from "@/lib/rbac";
 import { listResults, getAttemptDetail, type ResultsRow } from "@/lib/results";
 import { getAssessmentSettingsForAttempt } from "@/lib/attempts";
+import { formatCorrectAnswerForDisplay } from "@/lib/questions";
 import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FileClock, CheckCircle2, XCircle } from "lucide-react";
 
-export default async function MesResultatsPage() {
+export default async function MesResultatsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ justSubmitted?: string; auto?: string }>;
+}) {
   const session = await guardPage("candidate");
-  const results = listResults({ candidateUserId: session.userId });
+  const { justSubmitted, auto } = await searchParams;
+  // §24 de la mission "COMPLETE CANDIDATE EXAM LIFECYCLE" — une tentative
+  // encore IN_PROGRESS n'a JAMAIS sa place ici (elle n'a même pas encore
+  // été envoyée) : /mes-examens montre déjà "Reprendre" pour ce cas, la
+  // lister aussi ici comme "en attente de notation" serait trompeur.
+  const results = listResults({ candidateUserId: session.userId, excludeInProgress: true });
+  // §17 — confirmation de fin de tentative. `justSubmitted` (l'ID de
+  // l'évaluation) était posé par ExamRunner.tsx depuis le tout début de ce
+  // sous-système mais jamais lu nulle part (bug réel trouvé en revisitant
+  // ce flux pour cette mission) : aucune confirmation "Votre examen a bien
+  // été envoyé" ne s'affichait jamais après une soumission, manuelle ou
+  // automatique. On retrouve la tentative la plus récente de cette
+  // évaluation pour afficher Examen/Date d'envoi/Statut (§17).
+  const confirmedRow = justSubmitted ? results.filter((r) => r.submitted_at).sort((a, b) => (b.submitted_at! > a.submitted_at! ? 1 : -1))[0] : undefined;
 
   return (
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-[20px] font-semibold text-text-primary">Mes résultats</h1>
+
+      {justSubmitted && confirmedRow && (
+        <div className="rounded-md border border-status-verified-border bg-status-verified-bg px-4 py-3 text-[13px] text-status-verified-text">
+          <p className="font-medium">
+            {auto === "1" ? "Temps écoulé — votre examen a été envoyé automatiquement." : "Votre examen a bien été envoyé."}
+          </p>
+          <p className="mt-1 text-[12.5px]">
+            {confirmedRow.assessment_name} — envoyé le {new Date(confirmedRow.submitted_at!).toLocaleString("fr-FR")} —{" "}
+            {confirmedRow.grading_state === "AWAITING_MANUAL_REVIEW" ? "en attente de correction" : "résultat disponible ci-dessous"}
+          </p>
+        </div>
+      )}
 
       <Card>
         {results.length === 0 ? (
@@ -33,6 +63,29 @@ function ResultCard({ result }: { result: ResultsRow }) {
   const detail = getAttemptDetail(result.attempt_id);
   const settings = getAssessmentSettingsForAttempt(result.attempt_id);
   if (!detail || !settings) return null;
+
+  // §26-29 de la mission "COMPLETE CANDIDATE EXAM LIFECYCLE" — une
+  // correction manuelle en attente prime sur tout : jamais un score
+  // fabriqué à partir d'une notation partielle, quelle que soit la
+  // politique de diffusion différée ci-dessous.
+  if (detail.grading_state === "AWAITING_MANUAL_REVIEW") {
+    return (
+      <div className="rounded-md border border-border-subtle p-3.5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[13.5px] font-medium text-text-primary">{detail.assessment_name}</p>
+            <p className="text-[12px] text-text-tertiary">
+              {detail.function_code} — {new Date(detail.started_at).toLocaleDateString("fr-FR")}
+            </p>
+          </div>
+          <StatusBadge status="warning">En attente de correction</StatusBadge>
+        </div>
+        <p className="mt-2 text-[12.5px] text-text-secondary">
+          Votre examen a bien été envoyé et nécessite une correction avant la publication du résultat.
+        </p>
+      </div>
+    );
+  }
 
   // Politique A/B/C/D du §11 : selon la config, différer jusqu'à la
   // fermeture, montrer seulement la note, ou la correction complète.
@@ -79,15 +132,18 @@ function ResultCard({ result }: { result: ResultsRow }) {
         <details className="mt-3">
           <summary className="cursor-pointer text-[12.5px] font-medium text-accent-9">Voir la correction complète</summary>
           <div className="mt-2 flex flex-col gap-2">
-            {detail.questions.map((q) => (
-              <div key={q.position} className="rounded border border-border-subtle p-2.5 text-[12.5px]">
-                <p className="font-medium text-text-primary">Q{q.position}. {q.stem}</p>
-                <p className="mt-1 text-text-secondary">
-                  Votre réponse : {q.candidateAnswer.join(", ") || "—"} {q.isCorrect ? "✓" : "✗"}
-                </p>
-                {!q.isCorrect && <p className="text-status-verified-text">Bonne réponse : {q.correctAnswer.join(", ")}</p>}
-              </div>
-            ))}
+            {detail.questions.map((q) => {
+              const correctText = formatCorrectAnswerForDisplay(q.qtype, q.correctAnswer, q.choices);
+              return (
+                <div key={q.position} className="rounded border border-border-subtle p-2.5 text-[12.5px]">
+                  <p className="font-medium text-text-primary">Q{q.position}. {q.stem}</p>
+                  <p className="mt-1 text-text-secondary">
+                    Votre réponse : {q.candidateAnswer.join(", ") || "—"} {q.isCorrect ? "✓" : "✗"}
+                  </p>
+                  {!q.isCorrect && correctText && <p className="text-status-verified-text">Bonne réponse : {correctText}</p>}
+                </div>
+              );
+            })}
           </div>
         </details>
       )}

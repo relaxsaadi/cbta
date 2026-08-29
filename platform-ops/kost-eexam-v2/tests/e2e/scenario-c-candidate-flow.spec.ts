@@ -37,20 +37,42 @@ test("le candidat passe l'examen démo de bout en bout, y compris un rafraîchis
   await expect(page).toHaveURL(attemptUrl);
   await expect(page.locator('input[type="radio"], input[type="checkbox"]').first()).toBeChecked();
 
-  // Répond au reste des questions puis termine.
+  // Répond au reste des questions. Sur la dernière, le bouton n'envoie
+  // plus directement (mission "COMPLETE CANDIDATE EXAM LIFECYCLE",
+  // 2026-08-29, §12-15) — il ouvre l'écran de révision obligatoire.
   const nextButtons = page.getByRole("button", { name: /suivante/i });
   while (await nextButtons.count()) {
     const choice = page.locator('input[type="radio"], input[type="checkbox"]').first();
     if (!(await choice.isChecked())) await choice.check();
-    if ((await page.getByRole("button", { name: /^terminer$/i }).count()) > 0) break;
+    if ((await page.getByRole("button", { name: /vérifier avant d'envoyer/i }).count()) > 0) break;
     await nextButtons.click();
   }
   const lastChoice = page.locator('input[type="radio"], input[type="checkbox"]').first();
   if (!(await lastChoice.isChecked())) await lastChoice.check();
-  await page.getByRole("button", { name: /^terminer$/i }).click();
+  await page.getByRole("button", { name: /vérifier avant d'envoyer/i }).click();
 
-  await page.waitForURL(/\/mes-resultats/);
-  await expect(page.getByText("DGR Fonction 7.1 — Test démo")).toBeVisible();
+  // Écran de révision (§13) — toutes les questions ont été répondues ici,
+  // donc aucun avertissement "sans réponse" attendu.
+  await expect(page.getByText("Résumé de l'examen")).toBeVisible();
+  await expect(page.getByText(/^3 \/ 3$/)).toBeVisible();
+  await expect(page.getByText(/n'ont pas de réponse/)).toHaveCount(0);
+
+  // Confirmation finale (§14) — dialogue navigateur natif avec le libellé
+  // EXACT requis par la mission, jamais un envoi silencieux.
+  page.once("dialog", (dialog) => {
+    expect(dialog.message()).toContain("Voulez-vous vraiment terminer et envoyer votre examen");
+    expect(dialog.message()).toContain("vous ne pourrez plus modifier vos réponses");
+    void dialog.accept();
+  });
+  await page.getByRole("button", { name: /^terminer et envoyer l'examen$/i }).click();
+
+  await page.waitForURL(/\/mes-resultats\?justSubmitted=/);
+  // Confirmation post-envoi (§16) — bandeau explicite, jamais un simple
+  // retour silencieux à la liste.
+  await expect(page.getByText(/votre examen a bien été envoyé/i)).toBeVisible();
+  // .last() — le bandeau de confirmation ci-dessus répète aussi le nom de
+  // l'examen ; on cible ici la carte de résultat elle-même.
+  await expect(page.getByText("DGR Fonction 7.1 — Test démo").last()).toBeVisible();
   // Le TEST démo affiche le résultat directement (feedback_mode différé
   // seulement si close_at est fixé, ce qui n'est pas le cas ici).
   await expect(page.getByText(/\/100/)).toBeVisible();

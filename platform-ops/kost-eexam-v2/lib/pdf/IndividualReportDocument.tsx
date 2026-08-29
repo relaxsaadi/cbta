@@ -8,6 +8,7 @@ import { Document, Page, View, Text } from "@react-pdf/renderer";
 import { pdfStyles } from "./theme";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
 import type { AttemptDetail } from "../results";
+import { formatCorrectAnswerForDisplay } from "../questions";
 
 export function IndividualReportDocument({
   detail,
@@ -55,8 +56,8 @@ export function IndividualReportDocument({
         <Text style={pdfStyles.h2}>Résultat</Text>
         <View style={pdfStyles.card}>
           <View style={pdfStyles.row}>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Bonnes réponses</Text><Text style={[pdfStyles.fieldValue, pdfStyles.badgeOk]}>{detail.correct_count}</Text></View>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Mauvaises réponses</Text><Text style={[pdfStyles.fieldValue, pdfStyles.badgeFail]}>{detail.incorrect_count}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Bonnes réponses</Text><Text style={[pdfStyles.fieldValue, pdfStyles.badgeOk]}>{detail.correct_count ?? "—"}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Mauvaises réponses</Text><Text style={[pdfStyles.fieldValue, pdfStyles.badgeFail]}>{detail.incorrect_count ?? "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Score</Text><Text style={pdfStyles.fieldValue}>{detail.score_100 ?? "—"} / 100</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Pourcentage</Text><Text style={pdfStyles.fieldValue}>{detail.percentage !== null ? `${detail.percentage}%` : "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Seuil</Text><Text style={pdfStyles.fieldValue}>{detail.pass_threshold_pct ?? "—"}%</Text></View>
@@ -78,20 +79,29 @@ export function IndividualReportDocument({
                   Question {q.position} — {q.isCorrect === null ? "Non noté" : q.isCorrect ? "JUSTE" : "FAUX"} ({q.pointsAwarded ?? "—"} / {q.points} pt)
                 </Text>
                 <Text style={{ fontSize: 8, marginTop: 3 }}>{q.stem}</Text>
-                {q.choices.map((c) => {
-                  const chosen = q.candidateAnswer.includes(c.key);
-                  const correct = q.correctAnswer.includes(c.key);
-                  return (
-                    <Text
-                      key={c.key}
-                      style={[pdfStyles.choiceLine, correct ? pdfStyles.choiceCorrect : chosen ? pdfStyles.choiceChosenWrong : undefined]}
-                    >
-                      {c.key}. {c.text}
-                      {chosen ? "  (réponse du candidat)" : ""}
-                      {correct ? "  (réponse correcte)" : ""}
+                {(q.qtype === "mcq_single" || q.qtype === "mcq_multi" || q.qtype === "true_false") &&
+                  q.choices.map((c) => {
+                    const chosen = q.candidateAnswer.includes(c.key);
+                    const correct = (q.correctAnswer as string[]).includes(c.key);
+                    return (
+                      <Text
+                        key={c.key}
+                        style={[pdfStyles.choiceLine, correct ? pdfStyles.choiceCorrect : chosen ? pdfStyles.choiceChosenWrong : undefined]}
+                      >
+                        {c.key}. {c.text}
+                        {chosen ? "  (réponse du candidat)" : ""}
+                        {correct ? "  (réponse correcte)" : ""}
+                      </Text>
+                    );
+                  })}
+                {(q.qtype === "numeric" || q.qtype === "short_answer") && (
+                  <>
+                    <Text style={pdfStyles.choiceLine}>Réponse du candidat : {q.candidateAnswer[0] || "—"}</Text>
+                    <Text style={[pdfStyles.choiceLine, pdfStyles.choiceCorrect]}>
+                      {q.qtype === "numeric" ? "Réponse correcte" : "Réponses acceptées"} : {formatCorrectAnswerForDisplay(q.qtype, q.correctAnswer)}
                     </Text>
-                  );
-                })}
+                  </>
+                )}
                 {q.explanation && <Text style={{ fontSize: 7.5, marginTop: 3, color: "#5a5a5a" }}>Explication : {q.explanation}</Text>}
               </View>
             ))}

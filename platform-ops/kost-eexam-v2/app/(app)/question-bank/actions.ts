@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createQuestion, addQuestionVersion, type SourceStatus, type QType } from "@/lib/questions";
+import { createQuestion, addQuestionVersion, getQuestionById, parseAuthoringFormData, validateQuestionAuthoring, type SourceStatus, type QType } from "@/lib/questions";
 
 export interface CreateQuestionResult {
   error?: string;
@@ -26,14 +26,16 @@ export async function createQuestionAction(_prev: CreateQuestionResult, formData
   const regulatoryReference = String(formData.get("regulatoryReference") ?? "").trim() || undefined;
   const explanation = String(formData.get("explanation") ?? "").trim() || undefined;
 
-  const choiceTexts = formData.getAll("choiceText").map(String);
-  const correctIndexes = formData.getAll("correct").map(String);
-
   if (!kostQuestionId || !functionCode || !stem) return { error: "ID KOST, fonction et texte de la question sont obligatoires." };
-  const choices = choiceTexts.filter((t) => t.trim().length > 0).map((text, i) => ({ key: String.fromCharCode(65 + i), text: text.trim() }));
-  if (choices.length < 2) return { error: "Au moins 2 choix de réponse sont requis." };
-  const correctKeys = correctIndexes.map((i) => String.fromCharCode(65 + Number(i)));
-  if (correctKeys.length === 0) return { error: "Sélectionnez au moins une bonne réponse." };
+
+  // Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-53 —
+  // parsing + validations d'auteurage désormais partagés par TYPE
+  // (lib/questions.ts), jamais une seconde implémentation ici pour les
+  // nouveaux types (numeric/short_answer) alors que mcq_single/mcq_multi
+  // gardaient l'ancien chemin.
+  const { choices, correctAnswer } = parseAuthoringFormData(qtype, formData);
+  const validationError = validateQuestionAuthoring(qtype, choices, correctAnswer);
+  if (validationError) return { error: validationError };
 
   try {
     createQuestion({
@@ -43,7 +45,7 @@ export async function createQuestionAction(_prev: CreateQuestionResult, formData
       sourceStatus,
       stem,
       choices,
-      correctAnswer: correctKeys,
+      correctAnswer,
       regulatoryReference,
       explanation,
       createdBy: session.userId,
@@ -69,18 +71,18 @@ export interface EditQuestionResult {
 export async function editQuestionAction(questionId: number, _prev: EditQuestionResult, formData: FormData): Promise<EditQuestionResult> {
   const session = await requireWriteRole("administrator");
 
+  const question = getQuestionById(questionId);
+  if (!question) return { error: "Question introuvable." };
+
   const stem = String(formData.get("stem") ?? "").trim();
   const explanation = String(formData.get("explanation") ?? "").trim() || undefined;
-  const choiceTexts = formData.getAll("choiceText").map(String);
-  const correctIndexes = formData.getAll("correct").map(String);
-
   if (!stem) return { error: "Le texte de la question est obligatoire." };
-  const choices = choiceTexts.filter((t) => t.trim().length > 0).map((text, i) => ({ key: String.fromCharCode(65 + i), text: text.trim() }));
-  if (choices.length < 2) return { error: "Au moins 2 choix de réponse sont requis." };
-  const correctKeys = correctIndexes.map((i) => String.fromCharCode(65 + Number(i)));
-  if (correctKeys.length === 0) return { error: "Sélectionnez au moins une bonne réponse." };
 
-  addQuestionVersion(questionId, { stem, choices, correctAnswer: correctKeys, explanation }, session.userId);
+  const { choices, correctAnswer } = parseAuthoringFormData(question.qtype, formData);
+  const validationError = validateQuestionAuthoring(question.qtype, choices, correctAnswer);
+  if (validationError) return { error: validationError };
+
+  addQuestionVersion(questionId, { stem, choices, correctAnswer, explanation }, session.userId);
   revalidatePath("/question-bank");
   redirect("/question-bank");
 }

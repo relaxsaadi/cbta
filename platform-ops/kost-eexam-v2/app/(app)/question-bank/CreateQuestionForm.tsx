@@ -13,6 +13,21 @@ const SOURCE_STATUSES = [
   "NOT_ATTEMPTED",
 ];
 
+// Libellé d'affichage — dupliqué depuis lib/questions.ts::SOURCE_STATUS_LABELS
+// (jamais importé ici : ce composant est "use client", et lib/questions.ts
+// tire node:sqlite via lib/db.ts, non-bundlable côté navigateur). La VALEUR
+// soumise au formulaire reste l'enum brut (`value={s}`) — seul le texte visible
+// change. Garder synchronisé avec lib/questions.ts si un statut est ajouté.
+const SOURCE_STATUS_LABELS: Record<string, string> = {
+  FROZEN_SOURCE_VERIFIED: "Confirmé — source DGR vérifiée",
+  DRAFT: "Brouillon",
+  PARTIAL: "Partiel",
+  STALE: "Périmé",
+  SOURCE_GAP: "Écart de source",
+  SOURCE_CONFLICT: "Conflit de source",
+  NOT_ATTEMPTED: "Non traité",
+};
+
 export function CreateQuestionForm({ functions }: { functions: { code: string; label: string }[] }) {
   const [state, formAction, pending] = useActionState<CreateQuestionResult, FormData>(createQuestionAction, {});
 
@@ -35,7 +50,7 @@ export function CreateQuestionForm({ functions }: { functions: { code: string; l
           <label htmlFor="sourceStatus" className="mb-1 block text-[12px] font-medium text-text-secondary">Statut source</label>
           <select id="sourceStatus" name="sourceStatus" required defaultValue="NOT_ATTEMPTED" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
             {SOURCE_STATUSES.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>{SOURCE_STATUS_LABELS[s] ?? s}</option>
             ))}
           </select>
         </div>

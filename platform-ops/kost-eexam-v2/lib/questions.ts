@@ -13,6 +13,25 @@ export type SourceStatus =
   | "SOURCE_CONFLICT"
   | "NOT_ATTEMPTED";
 
+// Libellé humain — mission "244 QUESTIONS DGR CONFIRMÉES" §1 : ne jamais
+// exposer le mot technique "FROZEN" comme libellé principal aux
+// administrateurs/responsables pédagogiques. La valeur DB
+// (FROZEN_SOURCE_VERIFIED) reste inchangée pour compatibilité et
+// traçabilité d'audit — seul ce libellé d'AFFICHAGE change. "CONFIRMÉ —
+// SOURCE DGR VÉRIFIÉE" ne signifie PAS "ANAC APPROUVÉ" et ne signifie pas
+// automatiquement "reviewer APPROVED" (statut reviewer distinct, voir
+// reviewer_status) — seulement : source DGR courante vérifiée, contenu
+// source-vérifié, sûr pour la banque de questions contrôlée.
+export const SOURCE_STATUS_LABELS: Record<SourceStatus, string> = {
+  FROZEN_SOURCE_VERIFIED: "Confirmé — source DGR vérifiée",
+  DRAFT: "Brouillon",
+  PARTIAL: "Partiel",
+  STALE: "Périmé",
+  SOURCE_GAP: "Écart de source",
+  SOURCE_CONFLICT: "Conflit de source",
+  NOT_ATTEMPTED: "Non traité",
+};
+
 export type QType = "mcq_single" | "mcq_multi" | "true_false";
 
 export interface Choice {

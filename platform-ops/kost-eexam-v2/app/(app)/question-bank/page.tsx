@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listFunctions } from "@/lib/functions";
-import { listQuestionsByFunction, countAdmissibleQuestions } from "@/lib/questions";
+import { listQuestionsByFunction, countAdmissibleQuestions, SOURCE_STATUS_LABELS } from "@/lib/questions";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { CreateQuestionForm } from "./CreateQuestionForm";
@@ -29,7 +29,7 @@ export default async function QuestionBankPage() {
         <Card>
           <CardHeader
             title="Ajouter une question"
-            description="Saisie contrôlée uniquement — jamais de contenu inventé. Une question non FROZEN_SOURCE_VERIFIED n'entre jamais automatiquement dans un examen de production."
+            description={`Saisie contrôlée uniquement — jamais de contenu inventé. Une question non « Confirmé — source DGR vérifiée » n'entre jamais automatiquement dans un examen de production.`}
           />
           <CreateQuestionForm functions={functions} />
         </Card>
@@ -57,7 +57,9 @@ export default async function QuestionBankPage() {
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                      <StatusBadge status={STATUS_BADGE[q.source_status] ?? "neutral"}>{q.source_status}</StatusBadge>
+                      <StatusBadge status={STATUS_BADGE[q.source_status] ?? "neutral"}>
+                        {SOURCE_STATUS_LABELS[q.source_status] ?? q.source_status}
+                      </StatusBadge>
                       {canWrite && (
                         <Link href={`/question-bank/${q.id}/edit`} className="text-[12px] font-medium text-accent-9 hover:underline">
                           Modifier

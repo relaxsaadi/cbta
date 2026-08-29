@@ -26,3 +26,17 @@ test("l'auditeur reçoit un refus serveur (pas juste une UI masquée) sur une pa
   // simple absence de lien dans le menu.
   await expect(page.getByText(/accès refusé/i)).toBeVisible();
 });
+
+// Mission "FIX ACCOUNT LIFECYCLE GUARDS" (2026-08-29) — §7 tests G/H : ni
+// l'auditeur (ci-dessus) ni un responsable pédagogique (rôle borné à son
+// propre périmètre client) ne peuvent jamais suspendre/réactiver un
+// compte — /users est administrator-only (guardPage), donc AUCUN rôle
+// non-administrateur, quel que soit son tenant, n'atteint même l'action
+// quickSuspendAction/quickReactivateAction. C'est la forme la plus forte
+// d'isolation inter-client possible pour cette capacité : zéro accès
+// non-admin, pas seulement un accès restreint au bon tenant.
+test("un responsable pédagogique (rôle borné à son tenant) reçoit aussi un refus serveur sur /users — aucune capacité de suspendre/réactiver hors périmètre administrateur", async ({ page }) => {
+  await loginAs(page, "responsable.demo");
+  await page.goto("/users");
+  await expect(page.getByText(/accès refusé/i)).toBeVisible();
+});

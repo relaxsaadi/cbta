@@ -107,9 +107,14 @@ export async function suspendAccountAction(incidentId: number, formData: FormDat
 export async function reactivateAccountAction(incidentId: number, formData: FormData) {
   const userId = Number(formData.get("targetId"));
   if (!userId) return;
-  actionReactivateAccount(incidentId, userId, await actor());
+  // Mission "FIX ACCOUNT LIFECYCLE GUARDS" (2026-08-29) — même correctif
+  // que quickReactivateAction : jamais 'active' sans preuve réelle
+  // d'activation antérieure (voir lib/incidents.ts::actionReactivateAccount).
+  // ACCOUNT_REACTIVATED n'est notifié que si le compte redevient
+  // réellement 'active' — jamais pour un retour à 'pending_activation'.
+  const newStatus = actionReactivateAccount(incidentId, userId, await actor());
   const target = findUserById(userId);
-  if (target?.email) {
+  if (target?.email && newStatus === "active") {
     const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
     await notifyAccountReactivated({ userId, email: target.email, firstName, securityEventId: `incident-${incidentId}` });
   }

@@ -5,7 +5,7 @@
 // l'autorisation, vérifié via lib/activation-tokens.ts (hash SHA-256,
 // usage unique, limité dans le temps).
 import { verifyActivationToken, consumeActivationToken } from "@/lib/activation-tokens";
-import { setPasswordAndActivate, findUserById } from "@/lib/users";
+import { setPasswordAndActivate, findUserById, activationDenialReason } from "@/lib/users";
 import { audit } from "@/lib/audit";
 import { notifyAccountActivated } from "@/lib/email/events";
 import { getDb } from "@/lib/db";
@@ -31,6 +31,24 @@ export async function activateAccountAction(_prev: ActivateResult, formData: For
 
   const user = findUserById(tokenRow.user_id);
   if (!user) return { error: "Compte introuvable." };
+
+  // Mission "FIX ACCOUNT LIFECYCLE GUARDS" (2026-08-29) — bug réel trouvé
+  // lors d'un incident staging : un jeton valide/non consommé sur un
+  // compte devenu 'suspended' entre-temps (une suspension légitime
+  // intervenue APRÈS l'envoi de l'invitation) pouvait auparavant
+  // réactiver le compte silencieusement, contournant la suspension — un
+  // jeton valide ne doit JAMAIS l'emporter sur une décision
+  // administrative explicite. Le jeton n'est PAS consommé sur ce refus
+  // (le compte peut être ré-autorisé plus tard sans qu'un nouveau lien
+  // soit nécessaire). Logique de décision dans lib/users.ts::
+  // activationDenialReason (testable), messages FR exacts ici.
+  const denial = activationDenialReason(user.status);
+  if (denial === "suspended") {
+    return { error: "Ce compte est actuellement suspendu. Contactez l'administrateur." };
+  }
+  if (denial === "already_active") {
+    return { error: "Ce compte est déjà actif. Connectez-vous directement depuis la page de connexion." };
+  }
 
   setPasswordAndActivate(user.id, password);
   consumeActivationToken(tokenRow.id);

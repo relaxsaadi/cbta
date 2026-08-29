@@ -1,6 +1,6 @@
 import { getDb } from "./db";
 import { audit } from "./audit";
-import { setUserStatus } from "./users";
+import { setUserStatus, reactivateUserSafely } from "./users";
 import { revokeAllSessionsForUser } from "./sessions-registry";
 import { suspendAssessment, reopenAssessment } from "./assessments";
 import { setPlatformSetting } from "./platform-settings";
@@ -118,9 +118,16 @@ export function actionSuspendAccount(incidentId: number, targetUserId: number, a
   recordAction(incidentId, "suspend_account", actor.id, actor.role, "user", targetUserId, "Compte suspendu + sessions révoquées");
 }
 
-export function actionReactivateAccount(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }) {
-  setUserStatus(targetUserId, "active");
-  recordAction(incidentId, "reactivate_account", actor.id, actor.role, "user", targetUserId);
+/** Même correctif que quickReactivateAction (app/(app)/users/actions.ts,
+ * mission "FIX ACCOUNT LIFECYCLE GUARDS" 2026-08-29) — jamais 'active'
+ * directement pour un compte jamais réellement activé. Retourne l'état
+ * restauré pour que l'appelant (reactivateAccountAction) sache s'il doit
+ * notifier ACCOUNT_REACTIVATED (uniquement si redevenu 'active'). */
+export function actionReactivateAccount(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }): "active" | "pending_activation" | null {
+  const { changed, newStatus } = reactivateUserSafely(targetUserId);
+  if (!changed) return null;
+  recordAction(incidentId, "reactivate_account", actor.id, actor.role, "user", targetUserId, newStatus === "active" ? undefined : "Compte jamais activé — restauré vers 'en attente d'activation', pas 'actif'.");
+  return newStatus;
 }
 
 export function actionRevokeSessions(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }) {

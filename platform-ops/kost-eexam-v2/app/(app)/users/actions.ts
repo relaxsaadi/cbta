@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createUserPendingActivation, setUserStatus, findUserById } from "@/lib/users";
+import { createUserPendingActivation, setUserStatus, findUserById, reactivateUserSafely } from "@/lib/users";
 import { revokeAllSessionsForUser } from "@/lib/sessions-registry";
 import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
@@ -77,12 +77,30 @@ export async function quickSuspendAction(userId: number) {
   revalidatePath("/users");
 }
 
+/** Mission "FIX ACCOUNT LIFECYCLE GUARDS" (2026-08-29) — bug réel trouvé
+ * lors d'un incident staging (compte candidat jamais activé, basculé
+ * directement 'active' par un simple clic ici, contournant le flux de
+ * création de mot de passe). N'écrase plus jamais un compte vers 'active'
+ * sans preuve réelle d'activation antérieure (reactivateUserSafely) — un
+ * compte jamais activé revient à 'pending_activation', jamais 'active'
+ * directement, jamais avec un mot de passe inventé ici. Sans effet si la
+ * cible n'est pas actuellement 'suspended' (un clic répété ne doit rien
+ * faire de plus). */
 export async function quickReactivateAction(userId: number) {
   const session = await requireWriteRole("administrator");
-  setUserStatus(userId, "active");
-  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_reactivate", targetType: "user", targetId: userId });
+  const { changed, newStatus } = reactivateUserSafely(userId);
+  if (!changed) {
+    revalidatePath("/users");
+    return;
+  }
+  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_reactivate", targetType: "user", targetId: userId, metadata: { restoredStatus: newStatus } });
   const target = findUserById(userId);
-  if (target?.email) {
+  if (target?.email && newStatus === "active") {
+    // ACCOUNT_REACTIVATED (§29) uniquement quand le compte redevient
+    // réellement utilisable tel quel — jamais pour un retour à
+    // 'pending_activation', qui exige encore une action du candidat
+    // (l'admin utilise "Renvoyer l'invitation" séparément s'il souhaite
+    // notifier, plutôt qu'un envoi automatique ici — voir /notifications).
     const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
     await notifyAccountReactivated({ userId, email: target.email, firstName, securityEventId: `quick-${Date.now()}` });
   }

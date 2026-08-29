@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { getDb, nowIso } from "./db";
 import { hashPassword } from "./passwords";
+import { hasCompletedActivation } from "./activation-tokens";
 import type { ConsoleRole } from "./session";
 
 export interface UserRow {
@@ -58,6 +59,43 @@ export function createUser(params: {
 
 export function setUserStatus(userId: number, status: "pending_activation" | "active" | "suspended"): void {
   getDb().prepare(`UPDATE users SET status = ? WHERE id = ?`).run(status, userId);
+}
+
+/** Réactivation SÛRE d'un compte suspendu (mission "FIX ACCOUNT
+ * LIFECYCLE GUARDS", 2026-08-29) — remplace tout appel direct à
+ * `setUserStatus(id, "active")` depuis une action de réactivation. Ne
+ * bascule JAMAIS vers 'active' un compte qui n'a jamais complété le flux
+ * d'activation légitime (voir hasCompletedActivation()) — le restaure
+ * plutôt vers 'pending_activation', l'état sûr qui exige toujours que le
+ * candidat crée lui-même son mot de passe. Retourne l'état restauré pour
+ * que l'appelant sache quelle notification (le cas échéant) envoyer.
+ * N'écrit rien si le compte n'est pas actuellement 'suspended' — une
+ * réactivation n'a de sens que depuis cet état, jamais un no-op déguisé
+ * en changement réel. */
+export function reactivateUserSafely(userId: number): { changed: boolean; newStatus: "active" | "pending_activation" | null } {
+  const user = findUserById(userId);
+  if (!user || user.status !== "suspended") return { changed: false, newStatus: null };
+  const newStatus = hasCompletedActivation(userId) ? "active" : "pending_activation";
+  setUserStatus(userId, newStatus);
+  return { changed: true, newStatus };
+}
+
+export type ActivationDenialReason = "suspended" | "already_active";
+
+/** Détermine si un compte à CE statut peut légitimement compléter le
+ * flux d'activation par jeton (mission "FIX ACCOUNT LIFECYCLE GUARDS",
+ * 2026-08-29 — bug réel : un jeton valide/non consommé l'emportait
+ * jusqu'ici sur une suspension administrative explicite intervenue après
+ * l'envoi de l'invitation). Seul 'pending_activation' est activable —
+ * jamais 'suspended' (une décision administrative explicite ne doit
+ * jamais pouvoir être contournée par un simple lien encore valide), et
+ * jamais 'active' (déjà fait, éviter de retraiter). Fonction pure,
+ * testable indépendamment de app/activer/actions.ts (qui porte les
+ * messages FR exacts affichés au candidat). */
+export function activationDenialReason(status: UserRow["status"]): ActivationDenialReason | null {
+  if (status === "suspended") return "suspended";
+  if (status === "active") return "already_active";
+  return null;
 }
 
 /** Flux sécurisé (mission email §8-9) — CRITIQUE : jamais de mot de passe

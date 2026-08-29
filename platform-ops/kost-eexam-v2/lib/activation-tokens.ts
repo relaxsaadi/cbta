@@ -88,3 +88,27 @@ export function invalidatePendingTokens(userId: number, purpose: ActivationToken
     .run(nowIso(), userId, purpose);
   return result.changes as number;
 }
+
+/** Signal réel d'activation déjà complétée (mission "FIX ACCOUNT
+ * LIFECYCLE GUARDS", 2026-08-29 — trouvé via un incident staging réel :
+ * un compte candidat créé, jamais activé, s'est retrouvé 'active' après
+ * un simple clic sur "Réactiver"). Distingue TROIS cas, pas deux :
+ *   1. Aucun jeton 'account_setup' n'a JAMAIS été émis pour ce compte →
+ *      il n'est jamais passé par le flux d'invitation sécurisé par jeton
+ *      (ex. comptes de démonstration créés directement avec un mot de
+ *      passe réel via createUser(), qui prédatent ce flux) — considéré
+ *      "toujours utilisable", jamais une nouvelle contrainte pour un
+ *      compte qui n'a jamais eu besoin d'activation. Bug réel trouvé en
+ *      E2E (2026-08-29) : traiter ce cas comme "jamais activé" cassait
+ *      la réactivation de tout compte de démo existant.
+ *   2. Au moins un jeton émis, AUCUN jamais consommé → jamais réellement
+ *      activé (le cas Brahimi) → false.
+ *   3. Au moins un jeton consommé → réellement activé au moins une fois
+ *      → true.
+ * Le statut affiché seul n'est JAMAIS la source de vérité (il peut déjà
+ * avoir été corrompu par le bug d'origine). */
+export function hasCompletedActivation(userId: number): boolean {
+  const tokens = getDb().prepare(`SELECT used_at FROM activation_tokens WHERE user_id = ? AND purpose = 'account_setup'`).all(userId) as { used_at: string | null }[];
+  if (tokens.length === 0) return true; // jamais passé par ce flux du tout — hors périmètre de cette contrainte
+  return tokens.some((t) => t.used_at !== null);
+}

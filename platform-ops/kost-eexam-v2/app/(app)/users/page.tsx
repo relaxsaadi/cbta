@@ -53,19 +53,44 @@ export default async function UsersPage() {
                           </form>
                         </>
                       )}
-                      <StatusBadge status={u.status === "active" ? "verified" : "critical"}>{u.status === "active" ? "Actif" : "Suspendu"}</StatusBadge>
-                      {u.status === "active" ? (
-                        <form action={quickSuspendAction.bind(null, u.id)}>
-                          <button type="submit" className="rounded-md border border-status-critical-border bg-status-critical-bg px-2.5 py-1 text-[11.5px] font-medium text-status-critical-text">
-                            Suspendre
-                          </button>
-                        </form>
-                      ) : (
-                        <form action={quickReactivateAction.bind(null, u.id)}>
-                          <button type="submit" className="rounded-md bg-accent-9 px-2.5 py-1 text-[11.5px] font-medium text-white">
-                            Réactiver
-                          </button>
-                        </form>
+                      {/* Mission "FIX ACCOUNT LIFECYCLE GUARDS" (2026-08-29) — bug
+                          réel trouvé lors d'un incident staging : cette page
+                          affichait TOUT compte non-'active' comme "Suspendu" avec
+                          un bouton "Réactiver", y compris un compte tout juste créé
+                          et jamais encore activé (pending_activation) —
+                          indiscernable d'une vraie suspension, ce qui a mené un
+                          administrateur à cliquer "Réactiver" sur un compte qui
+                          n'avait jamais été suspendu. Les 3 états ont maintenant
+                          chacun leur propre libellé/action. */}
+                      {u.status === "active" && (
+                        <>
+                          <StatusBadge status="verified">Actif</StatusBadge>
+                          <form action={quickSuspendAction.bind(null, u.id)}>
+                            <button type="submit" className="rounded-md border border-status-critical-border bg-status-critical-bg px-2.5 py-1 text-[11.5px] font-medium text-status-critical-text">
+                              Suspendre
+                            </button>
+                          </form>
+                        </>
+                      )}
+                      {u.status === "pending_activation" && (
+                        <>
+                          <StatusBadge status="warning">En attente d&apos;activation</StatusBadge>
+                          <form action={quickSuspendAction.bind(null, u.id)}>
+                            <button type="submit" className="rounded-md border border-status-critical-border bg-status-critical-bg px-2.5 py-1 text-[11.5px] font-medium text-status-critical-text">
+                              Suspendre
+                            </button>
+                          </form>
+                        </>
+                      )}
+                      {u.status === "suspended" && (
+                        <>
+                          <StatusBadge status="critical">Suspendu</StatusBadge>
+                          <form action={quickReactivateAction.bind(null, u.id)}>
+                            <button type="submit" className="rounded-md bg-accent-9 px-2.5 py-1 text-[11.5px] font-medium text-white">
+                              Réactiver
+                            </button>
+                          </form>
+                        </>
                       )}
                     </div>
                   </div>

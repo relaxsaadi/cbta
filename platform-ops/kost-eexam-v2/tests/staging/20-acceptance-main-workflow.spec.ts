@@ -48,8 +48,16 @@ test("parcours d'acceptance complet : groupe réel → 3 candidats → examen �
   await expect(page.getByText("ADMIS")).toBeVisible();
   const yasmineAttemptId = yasmineHref!.match(/\/results\/(\d+)/)![1];
 
+  // Spécifiquement l'examen pilote 7.1 (42.86%), pas ".first()" : Riad a
+  // désormais d'autres tentatives réelles (banque Tier A élargie) toutes
+  // réussies à 100% — scoper par ligne <tr> contenant le nom ET l'examen
+  // pilote précis.
   await page.goto("/results");
-  const riadHref = await page.getByRole("link", { name: "Riad Boumediene (pilote)" }).first().getAttribute("href");
+  const riadHref = await page
+    .locator("tr", { hasText: "Riad Boumediene (pilote)" })
+    .filter({ hasText: "DGR Fonction 7.1 — Examen pilote staging" })
+    .getByRole("link", { name: "Riad Boumediene (pilote)" })
+    .getAttribute("href");
   await page.goto(riadHref!);
   await expect(page.getByText("42.86/100")).toBeVisible();
   await expect(page.getByText("ÉCHEC")).toBeVisible();

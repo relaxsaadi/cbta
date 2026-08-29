@@ -35,9 +35,16 @@ test("l'administrateur voit le détail complet des tentatives réelles", async (
   await expect(page.getByText(/marchandise dangereuse/i).first()).toBeVisible();
   await expect(page.getByText(/Points : 1 \/ 1/).first()).toBeVisible();
 
-  // Tentative échouée (candidat 2).
+  // Tentative échouée (candidat 2) — spécifiquement l'examen pilote 7.1
+  // (42.86%), pas ".first()" : Riad a désormais d'autres tentatives
+  // réelles (banque Tier A élargie) toutes réussies à 100%, donc scoper
+  // par ligne <tr> contenant le nom ET l'examen pilote précis.
   await page.goto("/results");
-  await page.getByRole("link", { name: "Riad Boumediene (pilote)" }).first().click();
+  await page
+    .locator("tr", { hasText: "Riad Boumediene (pilote)" })
+    .filter({ hasText: "DGR Fonction 7.1 — Examen pilote staging" })
+    .getByRole("link", { name: "Riad Boumediene (pilote)" })
+    .click();
   await page.waitForURL(/\/results\/\d+/);
   await expect(page.getByText("42.86/100")).toBeVisible();
   await expect(page.getByText("ÉCHEC")).toBeVisible();

@@ -251,10 +251,16 @@ test("candidat pilote 1 termine réellement l'examen Fonction 7.6 (banque élarg
   );
   await row76.getByRole("link", { name: /reprendre|commencer/i }).click();
 
+  // Attendre explicitement la navigation (pas une lecture synchrone de
+  // page.url()) avant de décider s'il faut cliquer "Commencer l'examen"
+  // — voir le commentaire détaillé dans
+  // 32-true-false-fr-normalization.spec.ts (piège de course
+  // hydratation React constaté en pratique).
+  await page.waitForURL(/\/exam\/\d+\/(instructions|attempt)/);
   if (page.url().includes("/instructions")) {
     await page.getByRole("button", { name: /commencer l'examen/i }).click();
+    await page.waitForURL(/\/exam\/\d+\/attempt/);
   }
-  await page.waitForURL(/\/exam\/\d+\/attempt/);
   await expect(page.locator("text=/\\d{2}:\\d{2}/").first()).toBeVisible();
 
   const answerCurrent76 = async () => {

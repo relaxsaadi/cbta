@@ -4,6 +4,30 @@ Mission: "RENDRE KOST E-EXAM V2 OPÉRATIONNEL AVEC LES 244 QUESTIONS DGR
 CONFIRMÉES" (owner decision, 2026-08-29). Import + staging operational
 readiness only — no production cutover.
 
+## Addendum (same day) — True/False → Vrai/Faux content UX cleanup
+
+Owner-authorized follow-up, same 244-question bank, no count change. The
+24 already-migrated true_false questions flagged in this report's
+original "Finding 3" (English `True`/`False` choices) were normalized to
+French `Vrai`/`Faux` via `scripts/sync-tier-a-questions.ts` (a dedicated,
+non-committed candidate JSON — only `text` fields changed per choice
+`key`; `stem`/`explanation`/`correct_answer` keys/`source_status`/
+`reviewer_status` byte-identical, verified programmatically before and
+after). Reason on file: "French UI localization — True/False →
+Vrai/Faux (display-language normalization, not a new regulatory
+decision)". Confirmed: 24/24 now Vrai/Faux, 0 active true_false question
+anywhere in the bank (86 total) still shows English; the one historical
+`assessment_question_snapshots` row referencing an affected question
+(Q-7.3-033, assessment 26) still shows its original `True`/`False`
+text — immutability holds. New regression suite
+`tests/staging/32-true-false-fr-normalization.spec.ts` created and
+fixed a real (own-test) hydration-race bug in the exam-start flow along
+the way (see file header comment) — same fix applied retroactively to
+`31-tier-a-multi-function-acceptance.spec.ts`. The reviewer print pack
+was regenerated fresh from this corrected bank into
+`DGR_REVIEWER_PRINT_PACK_244/` (old `DGR_REVIEWER_PRINT_PACK/` left
+untouched, now superseded/stale).
+
 ## Source
 
 - Branch: `ai/dgr-stage2b-handoff`

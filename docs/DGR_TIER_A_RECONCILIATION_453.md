@@ -99,7 +99,7 @@ None of the 17 promotions reached `FROZEN FR / SOURCE VERIFIED` — a partial or
 by definition, cannot be promoted all the way to FROZEN. This is why **V2 import eligibility is
 unchanged at 92** (see §5) even though 17 items moved out of the DRAFT bucket.
 
-## 4. Per-function reconciliation matrix (post-Pass 5, current)
+## 4. Per-function reconciliation matrix (post-Pass 6, current)
 
 | FUNCTION | TOTAL | FROZEN | GAP | PARTIAL | STALE | DRAFT/NOT VERIFIED | TEXT NOT RECOVERABLE | IMPORTABLE | NOT IMPORTABLE |
 |---|---|---|---|---|---|---|---|---|---|
@@ -108,12 +108,12 @@ unchanged at 92** (see §5) even though 17 items moved out of the DRAFT bucket.
 | 7.3 | 45 | 31 | 2 | 2 | 1 | 9 | 0 | 31 | 14 |
 | 7.4 | 53 | 25 | 1 | 3 | 2 | 22 | 0 | 25 | 28 |
 | 7.5 | 44 | 21 | 1 | 4 | 1 | 17 | 0 | 21 | 23 |
-| 7.6 | 56 | 30 | 1 | 5 | 1 | 19 | 0 | 30 | 26 |
+| 7.6 | 56 | 31 | 1 | 5 | 1 | 18 | 0 | 31 | 25 |
 | 7.7 | 53 | 25 | 1 | 5 | 0 | 22 | 0 | 25 | 28 |
 | 7.8 | 51 | 27 | 2 | 3 | 0 | 19 | 0 | 27 | 24 |
 | 7.9 | 39 | 23 | 2 | 2 | 1 | 11 | 0 | 23 | 16 |
 | 7.10 | 44 | 21 | 1 | 2 | 1 | 19 | 0 | 21 | 23 |
-| **TOTAL** | **453** | **248** | **18** | **31** | **8** | **148** | **5** | **243** | **210** |
+| **TOTAL** | **453** | **249** | **18** | **31** | **8** | **147** | **5** | **244** | **209** |
 
 *(Pass 1, 2026-08-26: FROZEN 97 / GAP 6 / PARTIAL 15 / STALE 3 / DRAFT 332 / IMPORTABLE 92.
 Pass 2, 2026-08-29: FROZEN 219 / GAP 18 / PARTIAL 27 / STALE 5 / DRAFT 184 / IMPORTABLE 214.
@@ -121,18 +121,21 @@ Pass 3, 2026-08-29: FROZEN 237 / GAP 18 / PARTIAL 29 / STALE 6 / DRAFT 163 / IMP
 (packaging + marking/labelling clusters).
 Pass 4, 2026-08-29: FROZEN 243 / GAP 18 / PARTIAL 31 / STALE 8 / DRAFT 153 / IMPORTABLE 238
 (classification cluster).
-Pass 5, 2026-08-29 same day: the current totals above (emergency-response cluster, partial).
-See §10 for Pass 2, §11 for Pass 3, §12 for Pass 4, §13 for Pass 5.)*
+Pass 5, 2026-08-29: FROZEN 248 / GAP 18 / PARTIAL 31 / STALE 8 / DRAFT 148 / IMPORTABLE 243
+(emergency-response cluster, partial).
+Pass 6, 2026-08-29 same day: the current totals above (general-provisions cluster, partial —
+most of this cluster is Tier B historical/pedagogical content, see §14).
+See §10 for Pass 2, §11 for Pass 3, §12 for Pass 4, §13 for Pass 5, §14 for Pass 6.)*
 
 Note on 7.1: FROZEN (18) includes the 5 text-not-recoverable items, so IMPORTABLE (13) = FROZEN
 (18) − TEXT NOT RECOVERABLE (5). The single GAP item (Q-7.1-001) is not counted in FROZEN at all.
 NOT IMPORTABLE for 7.1 = 1 GAP + 5 text-not-recoverable = 6.
 
 Cross-check: 19+49+45+53+44+56+53+51+39+44 = **453**. ✓
-FROZEN column sums to **248** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
-in Pass 3 + 6 confirmed in Pass 4 + 5 confirmed in Pass 5 — see §10, §11, §12, §13). ✓
-IMPORTABLE column sums to **243** (92 already in V2 + 151 newly eligible across Passes 2–5 — see
-§10, §11, §12, §13). ✓
+FROZEN column sums to **249** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
+in Pass 3 + 6 confirmed in Pass 4 + 5 confirmed in Pass 5 + 1 confirmed in Pass 6 — see §10-§14). ✓
+IMPORTABLE column sums to **244** (92 already in V2 + 152 newly eligible across Passes 2–6 — see
+§10-§14). ✓
 
 ## 5. Text-not-recoverable detail (Function 7.1 only)
 
@@ -528,4 +531,68 @@ V2 IMPORT ELIGIBLE 243** (151 newly eligible beyond the original 92, across Pass
 
 148 DRAFT items remain. Next priority clusters: remaining emergency-response items, general
 provisions, acceptance, loading/storage, documentation, passenger/crew, remaining uncategorized.
+
+## 14. Pass 6 (2026-08-29, same session) — general-provisions cluster (partial) + session wrap-up
+
+### 14.1 Findings
+
+Of the ~52-item general-provisions cluster, one item resolved cleanly:
+
+- **Q-7.6-036** (FROZEN, §1.1.3): confirmed Doc 9284 is the ICAO document containing the
+  detailed technical instructions for air transport of dangerous goods — DGR §1.1.3 states this
+  verbatim ("codifiée dans l'annexe 18... et dans les Instructions techniques (IT)... Doc 9284
+  tel qu'amendé").
+
+**A large majority of this cluster (the "0.1.1 Comprendre la définition" sub-cluster, ~13 items
+across functions) is confirmed to be Tier B historical/pedagogical content, not DGR regulatory
+text**: a "Pourquoi Réglementer?" slide narrating five historical accidents (ValuJet 1996, Union
+Carbide Bhopal 1984, Saudi Arabian Airlines Riyadh 1980, Pan Am Boston 1973, UPS Dubai 2010) used
+to motivate the regulation, and an "Article vs. Substance" pedagogical illustration (car vs. fuel/
+brake fluid examples). Two independent searches (a general "fret aérien général" definitional
+phrase, and the accident-history dates/names) found no verbatim matches in the current DGR text
+— DGR is a technical rulebook, not a history document, so this is an expected and appropriate
+result, not a gap in the search. These items are correctly left DRAFT — genuinely not
+DGR-source-verifiable content, though real and accurately transcribed course material.
+
+Two related items (**Q-7.5-019, Q-7.6-021**, "rôle et responsabilité" sub-cluster) were checked
+against DGR §1.3.2 (shipper responsibilities) and found **partially but not exactly** matching:
+§1.3.2 does list "identifiées, classées, emballées, marquées, étiquetées" as real shipper duties
+in prose form, supporting the substance of both items' claims, but the course's own "9-item
+responsibility wheel" (a numbered mnemonic device) is a pedagogical restructuring not present
+verbatim in the DGR's own prose-paragraph structure. Left DRAFT rather than force a PARTIAL
+classification without doing the corresponding §1.4 (operator responsibilities) check needed to
+fully resolve Q-7.6-021's contrast claim — flagged as a good candidate for a future session.
+
+**1 item materialized this pass (Q-7.6-036, FROZEN).**
+
+Running totals after Pass 6: **FROZEN 249 / GAP 18 / PARTIAL 31 / STALE 8 / DRAFT 147 /
+V2 IMPORT ELIGIBLE 244** (152 newly eligible beyond the original 92, across Passes 2–6 combined).
+
+### 14.2 Session-level summary and recommended next steps
+
+This session (Passes 2 through 6) worked through the highest-yield topic clusters in the
+requested priority order and moved the reconciliation from **97 FROZEN / 92 importable** (start
+of session) to **249 FROZEN / 244 importable** — 152 newly eligible items, none yet imported into
+V2. Three genuine course-content defects were found and documented (not merely unverified
+citations): the UN 3245-vs-3373 mixup (3 occurrences: Q-7.2-042, Q-7.9-008, Q-7.10-032) and the
+"division 4.1"-vs-"1.4S" mixup (2 occurrences: Q-7.4-008, Q-7.6-001) in Table 9.3.A's own exempt-
+class note.
+
+**147 DRAFT items remain.** Based on the patterns observed across all six passes, the remaining
+backlog splits into two distinct categories worth treating differently in a future session:
+
+1. **Likely DGR-verifiable** (continue the same live-Bookshelf clustering approach): the
+   remainder of loading/storage, documentation, acceptance, passenger/crew, and the still-unmined
+   parts of packaging/classification — these clusters have consistently yielded exact verbatim
+   DGR matches this session.
+2. **Likely Tier B / not DGR-text-verifiable** (a large share of general-provisions and
+   emergency-response remainders): historical/motivational content, pedagogical mnemonics
+   ("9-item wheels"), and general first-response procedural steps that read as ICAO Doc 9481
+   Emergency Response Guidance material or KOST's own training-course framing rather than DGR
+   regulatory text. These should not be force-classified — remaining honestly DRAFT is the
+   correct, rule-compliant outcome for genuinely non-DGR-sourced course content.
+
+A future pass should prioritize category 1 first (higher yield per Bookshelf lookup), and treat
+category 2 items as likely-permanent DRAFT unless a specific ICAO Doc 9481 or other named source
+becomes available for direct verification.
 

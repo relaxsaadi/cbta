@@ -2347,7 +2347,10 @@ adjacent to "DOC 9284" as a second OACI-related reference. It is
 deliberately **not** used as a distractor here, because the course does not
 present it as a wrong answer — using a real, correctly-cited document as a
 false option would misrepresent the source.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §1.1.3 RATIONALE: Live Bookshelf check 2026-08-29: DGR §1.1.3 states verbatim that ICAO's regulation is "codifiée dans l'annexe 18... et dans les Instructions techniques (IT) pour la sécurité du transport aérien des marchandises dangereuses (Doc 9284 tel qu'amendé)" — confirming Doc 9284 is indeed the ICAO document containing the detailed technical instructions for air transport of dangerous goods, exactly as tested.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3180,7 +3183,7 @@ should be drafted against this leaf without new evidence.**
 |---|---|---|---|---|---|---|
 | Q-7.6-034 | 0.1.1 Article vs Substance | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slides 13–14 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-035 | 0.1.1 Facteurs de danger en vol | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-036 | 0.1.2 Doc 9284 (OACI) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 23 + Practice Q1 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-036 | 0.1.2 Doc 9284 (OACI) | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.6 course slide 23 + Practice Q1 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-037 | 0.2.1 États concernés — Exemptions vs Approbations | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slides 38–39 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-038 | 0.2.1 Catégories exemptées DGR 2.5 | PARTIALLY CONFIRMED — correct answer (pharma) Tier A-confirmed absent from §2.5.1; one distractor ("pièces pour avions") falsely implied as a genuine 5th category — current DGR's real 5th category is "Produits d'hygiène" (§2.5.1.4) | MCQ | DGR 67e AM1 §2.5.1.1-.1.5 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-039 | 0.2.2 Définition MD cachée | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

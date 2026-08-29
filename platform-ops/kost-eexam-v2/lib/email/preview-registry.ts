@@ -148,8 +148,11 @@ export function buildPreviewScenarios(): PreviewScenario[] {
       node: createElement(ExamRescheduledEmail, {
         firstName: F.firstName,
         examName: F.examName,
-        oldDateFormatted: "01/09/2026 à 08:00",
-        newDateFormatted: "08/09/2026 à 08:00",
+        functionLabel: F.functionLabel,
+        oldOpenAtFormatted: "01/09/2026 à 08:00",
+        oldCloseAtFormatted: "15/09/2026 à 18:00",
+        newOpenAtFormatted: "08/09/2026 à 08:00",
+        newCloseAtFormatted: "22/09/2026 à 18:00",
         examUrl: F.examUrl,
       }),
     },

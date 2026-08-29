@@ -27,7 +27,9 @@ export type EmailEventType =
   | "CANDIDATE_ADDED_TO_GROUP"
   | "FUNCTION_ASSIGNED"
   // --- Examen (EXAM_ASSIGNED + les 3 rappels = WIRED via
-  // lib/email/reminders.ts, reste = TEMPLATE_ONLY) ---
+  // lib/email/reminders.ts ; EXAM_RESCHEDULED = WIRED via
+  // lib/assessments.ts::rescheduleAssessment() depuis la mission "COMPLETE
+  // REAL EXAM RESCHEDULING WORKFLOW" (2026-08-29) ; reste = TEMPLATE_ONLY) ---
   | "EXAM_ASSIGNED"
   | "EXAM_OPENS_SOON"
   | "EXAM_NOW_AVAILABLE"
@@ -221,8 +223,11 @@ export interface ExamRescheduledPayload extends EmailEventBase {
   type: "EXAM_RESCHEDULED";
   assessmentId: number;
   examName: string;
+  functionLabel: string;
   oldOpenAt: string | null;
+  oldCloseAt: string | null;
   newOpenAt: string | null;
+  newCloseAt: string | null;
 }
 
 export interface ExamCancelledPayload extends EmailEventBase {

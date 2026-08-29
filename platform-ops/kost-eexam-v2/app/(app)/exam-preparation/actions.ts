@@ -9,6 +9,7 @@ import {
   suspendAssessment,
   reopenAssessment,
   closeAssessment,
+  rescheduleAssessment,
   assignCandidatesToAssessment,
   unassignCandidateFromAssessment,
   getAssessment,
@@ -22,7 +23,7 @@ import type { Scope } from "@/lib/scope";
 import { getGroup } from "@/lib/groups";
 import { findUserById } from "@/lib/users";
 import { functionLabel } from "@/lib/questions";
-import { notifyExamAssigned } from "@/lib/email/events";
+import { notifyExamAssigned, notifyExamRescheduled } from "@/lib/email/events";
 import { auditExamNotificationSent } from "@/lib/email/audit";
 
 export interface CreateAssessmentResult {
@@ -177,6 +178,67 @@ export async function closeAssessmentAction(assessmentId: number) {
   assertAccess(hasAssessmentAccess(session, assessmentId));
   closeAssessment(assessmentId, session.userId);
   revalidatePath(`/exam-preparation/${assessmentId}`);
+}
+
+// Mission "COMPLETE REAL EXAM RESCHEDULING WORKFLOW" (2026-08-29) — RBAC
+// identique aux autres actions de cette page (administrateur + responsable
+// pédagogique DANS son périmètre, jamais auditeur — requireWriteRole
+// l'exclut structurellement au niveau du type ; candidat n'est même pas
+// dans la liste de rôles possible ici) ; hasAssessmentAccess porte la
+// frontière multi-client réelle (§2). Messages d'erreur FR explicites
+// renvoyés tels quels depuis lib/assessments.ts::rescheduleAssessment
+// (validation dates, tentative en cours, statut non reprogrammable).
+export interface RescheduleAssessmentResult {
+  error?: string;
+  success?: string;
+}
+
+export async function rescheduleAssessmentAction(assessmentId: number, _prev: RescheduleAssessmentResult, formData: FormData): Promise<RescheduleAssessmentResult> {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasAssessmentAccess(session, assessmentId));
+
+  const openAtRaw = String(formData.get("openAt") ?? "").trim();
+  const closeAtRaw = String(formData.get("closeAt") ?? "").trim();
+  const newOpenAt = openAtRaw || null;
+  const newCloseAt = closeAtRaw || null;
+
+  let result;
+  try {
+    result = rescheduleAssessment(assessmentId, newOpenAt, newCloseAt, session.userId);
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Erreur inconnue." };
+  }
+
+  // EXAM_RESCHEDULED (§7) — uniquement aux candidats RÉELLEMENT affectés à
+  // CET examen, jamais une diffusion large. Délibérément après l'écriture
+  // réelle (même principe que notifyExamAssignedToCandidates ci-dessus) :
+  // un échec d'envoi ne doit jamais annuler la reprogrammation elle-même.
+  const assessment = getAssessment(assessmentId);
+  const group = assessment ? getGroup(assessment.group_id) : undefined;
+  if (assessment && group) {
+    for (const candidateId of listAssignedCandidateIds(assessmentId)) {
+      const candidate = findUserById(candidateId);
+      if (!candidate?.email) continue;
+      const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
+      await notifyExamRescheduled({
+        userId: candidateId,
+        email: candidate.email,
+        firstName,
+        assessmentId,
+        examName: assessment.name,
+        functionLabel: functionLabel(assessment.function_code),
+        companyId: group.company_id,
+        companyName: group.company_name,
+        oldOpenAt: result.oldOpenAt,
+        oldCloseAt: result.oldCloseAt,
+        newOpenAt: result.newOpenAt,
+        newCloseAt: result.newCloseAt,
+      });
+    }
+  }
+
+  revalidatePath(`/exam-preparation/${assessmentId}`);
+  return { success: "Examen reprogrammé — les candidats affectés ont été notifiés." };
 }
 
 // Addendum §1 : « retirer/réaffecter un candidat » — sur une évaluation

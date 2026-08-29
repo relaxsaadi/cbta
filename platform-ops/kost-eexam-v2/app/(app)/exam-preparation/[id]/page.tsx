@@ -10,7 +10,14 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { PublishAssessmentForm } from "./PublishAssessmentForm";
 import { AssignMoreCandidatesForm } from "./AssignMoreCandidatesForm";
+import { RescheduleAssessmentForm } from "./RescheduleAssessmentForm";
 import { unassignCandidateAction } from "../actions";
+
+// Mission "COMPLETE REAL EXAM RESCHEDULING WORKFLOW" (2026-08-29) — mêmes
+// statuts que RESCHEDULABLE_STATUSES côté lib/assessments.ts (jamais
+// affiché le formulaire pour un statut que le serveur refuserait de toute
+// façon — évite une erreur systématique après un clic).
+const RESCHEDULABLE_STATUSES = new Set(["published", "open", "closed"]);
 
 const STATUS_BADGE: Record<string, "verified" | "warning" | "critical" | "neutral"> = {
   draft: "neutral", published: "verified", open: "verified", closed: "neutral", suspended: "critical", archived: "neutral",
@@ -147,6 +154,16 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
         <Card>
           <CardHeader title="Affecter d'autres candidats" description="Candidats du groupe pas encore affectés à cette évaluation (addendum §1 — réaffectation)" />
           <AssignMoreCandidatesForm assessmentId={assessmentId} members={unassignedMembers} />
+        </Card>
+      )}
+
+      {canWrite && RESCHEDULABLE_STATUSES.has(assessment.status) && (
+        <Card>
+          <CardHeader
+            title="Reprogrammer l'examen"
+            description="Change la fenêtre d'ouverture/fermeture — les candidats affectés sont notifiés. Bloqué si une tentative est en cours."
+          />
+          <RescheduleAssessmentForm assessmentId={assessmentId} currentOpenAt={assessment.open_at} currentCloseAt={assessment.close_at} />
         </Card>
       )}
 

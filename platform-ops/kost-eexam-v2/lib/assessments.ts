@@ -406,6 +406,70 @@ export function closeAssessment(assessmentId: number, actorUserId: number): void
   audit({ actorUserId, actorRole: null, action: "assessment_close", targetType: "assessment", targetId: assessmentId });
 }
 
+/** Statuts depuis lesquels une reprogrammation a un sens — un brouillon
+ * (jamais publié) s'édite normalement via son propre formulaire, pas via
+ * "reprogrammer" ; un examen suspendu (gestion d'incident en cours) ou
+ * archivé ne doit pas être modifié par cette voie. */
+const RESCHEDULABLE_STATUSES: AssessmentStatus[] = ["published", "open", "closed"];
+
+export interface RescheduleResult {
+  oldOpenAt: string | null;
+  oldCloseAt: string | null;
+  newOpenAt: string | null;
+  newCloseAt: string | null;
+}
+
+/** Reprogrammer la fenêtre d'ouverture/fermeture d'un examen déjà planifié
+ * (mission "COMPLETE REAL EXAM RESCHEDULING WORKFLOW", 2026-08-29). Ne
+ * touche JAMAIS attempts/results/assessment_question_snapshots — cette
+ * fonction ne modifie QUE assessments.open_at/close_at, ces tables restent
+ * donc structurellement intactes par construction (§5 de la mission),
+ * jamais par une vérification a posteriori.
+ *
+ * Règle de sécurité §5 — délibérément conservatrice : BLOQUE
+ * entièrement s'il existe une tentative EN COURS sur cet examen, même si
+ * son expires_at (fixé une fois pour toutes au démarrage, voir
+ * lib/attempts.ts::startAttempt) n'est techniquement jamais recalculé à
+ * partir de open_at/close_at. En cas de doute sur la sécurité réelle d'un
+ * cas particulier, la mission demande explicitement de bloquer et
+ * d'expliquer plutôt que de deviner qu'il serait sûr. */
+export function rescheduleAssessment(assessmentId: number, newOpenAt: string | null, newCloseAt: string | null, actorUserId: number): RescheduleResult {
+  const db = getDb();
+  const a = db.prepare(`SELECT status, open_at, close_at FROM assessments WHERE id = ?`).get(assessmentId) as
+    | { status: AssessmentStatus; open_at: string | null; close_at: string | null }
+    | undefined;
+  if (!a) throw new Error("Évaluation introuvable.");
+  if (!RESCHEDULABLE_STATUSES.includes(a.status)) {
+    throw new Error(`Reprogrammation impossible depuis le statut « ${a.status} ».`);
+  }
+
+  if (newOpenAt !== null && Number.isNaN(Date.parse(newOpenAt))) throw new Error("Date d'ouverture invalide.");
+  if (newCloseAt !== null && Number.isNaN(Date.parse(newCloseAt))) throw new Error("Date de fermeture invalide.");
+  if (newOpenAt !== null && newCloseAt !== null && Date.parse(newCloseAt) <= Date.parse(newOpenAt)) {
+    throw new Error("La date de fermeture doit être postérieure à la date d'ouverture.");
+  }
+
+  const inProgress = db.prepare(`SELECT 1 FROM attempts WHERE assessment_id = ? AND status = 'in_progress' LIMIT 1`).get(assessmentId);
+  if (inProgress) {
+    throw new Error(
+      "Impossible de reprogrammer : au moins une tentative est actuellement EN COURS sur cet examen. Attendez qu'elle se termine (ou expire automatiquement) avant de modifier la fenêtre."
+    );
+  }
+
+  return transaction((db2) => {
+    db2.prepare(`UPDATE assessments SET open_at = ?, close_at = ? WHERE id = ?`).run(newOpenAt, newCloseAt, assessmentId);
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_reschedule",
+      targetType: "assessment",
+      targetId: assessmentId,
+      metadata: { oldOpenAt: a.open_at, oldCloseAt: a.close_at, newOpenAt, newCloseAt },
+    });
+    return { oldOpenAt: a.open_at, oldCloseAt: a.close_at, newOpenAt, newCloseAt };
+  });
+}
+
 export interface SnapshotRow {
   id: number;
   assessment_id: number;

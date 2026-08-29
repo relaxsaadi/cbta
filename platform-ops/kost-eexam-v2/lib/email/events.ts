@@ -47,6 +47,7 @@ import ExamDeadlineReminderEmail, {
   TEMPLATE_ID as EXAM_DEADLINE_REMINDER_ID,
   TEMPLATE_VERSION as EXAM_DEADLINE_REMINDER_V,
 } from "./templates/exam-deadline-reminder";
+import ExamRescheduledEmail, { examRescheduledSubject, TEMPLATE_ID as EXAM_RESCHEDULED_ID, TEMPLATE_VERSION as EXAM_RESCHEDULED_V } from "./templates/exam-rescheduled";
 import ResultAvailableEmail, { resultAvailableSubject, TEMPLATE_ID as RESULT_AVAILABLE_ID, TEMPLATE_VERSION as RESULT_AVAILABLE_V } from "./templates/result-available";
 import IncidentDeclaredEmail, { incidentDeclaredSubject, TEMPLATE_ID as INCIDENT_DECLARED_ID, TEMPLATE_VERSION as INCIDENT_DECLARED_V } from "./templates/incident-declared";
 import IncidentResolvedEmail, { incidentResolvedSubject, TEMPLATE_ID as INCIDENT_RESOLVED_ID, TEMPLATE_VERSION as INCIDENT_RESOLVED_V } from "./templates/incident-resolved";
@@ -465,6 +466,65 @@ export async function notifyExamDeadlineReminder(params: {
       tenant: { companyId: params.companyId, companyName: params.companyName },
       sender: getSenderExam(),
       rendered: { subject: examDeadlineReminderSubject(), html, text, templateId: EXAM_DEADLINE_REMINDER_ID, templateVersion: EXAM_DEADLINE_REMINDER_V },
+      metadata: { assessmentId: params.assessmentId },
+    });
+  });
+}
+
+// ---------------------------------------------------------------------
+// EXAM_RESCHEDULED (mission "COMPLETE REAL EXAM RESCHEDULING WORKFLOW",
+// 2026-08-29) — déclenchée par lib/assessments.ts::rescheduleAssessment()
+// via app/(app)/exam-preparation/actions.ts::rescheduleAssessmentAction,
+// jamais un déclencheur email-only fabriqué (§1 de cette mission).
+//
+// Idempotence (§10 de la mission) — DÉLIBÉRÉMENT différente du modèle
+// "forceResendSuffix" de notifyExamAssigned/notifyAccountCreated : ici,
+// la clé inclut directement les NOUVELLES dates plutôt qu'un suffixe
+// arbitraire. Cela donne exactement la propriété demandée sans code
+// supplémentaire : rejouer la MÊME reprogrammation (mêmes nouvelles
+// dates — ex. une requête HTTP retentée automatiquement) retombe sur la
+// même clé et se déduplique naturellement (aucun email en double) ; une
+// reprogrammation ultérieure GENUINEMENT différente (nouvelles dates
+// différentes) produit une clé différente et déclenche donc un nouvel
+// email, comme attendu.
+// ---------------------------------------------------------------------
+export async function notifyExamRescheduled(params: {
+  userId: number;
+  email: string;
+  firstName: string;
+  assessmentId: number;
+  examName: string;
+  functionLabel: string;
+  companyId: number;
+  companyName: string;
+  oldOpenAt: string | null;
+  oldCloseAt: string | null;
+  newOpenAt: string | null;
+  newCloseAt: string | null;
+}): Promise<void> {
+  return safe("EXAM_RESCHEDULED", async () => {
+    const examUrl = `${getAppBaseUrl()}/mes-examens`;
+    const { html, text } = await renderBoth(
+      createElement(ExamRescheduledEmail, {
+        firstName: params.firstName,
+        examName: params.examName,
+        functionLabel: params.functionLabel,
+        oldOpenAtFormatted: params.oldOpenAt ? formatCandidateDateTime(params.oldOpenAt) : null,
+        oldCloseAtFormatted: params.oldCloseAt ? formatCandidateDateTime(params.oldCloseAt) : null,
+        newOpenAtFormatted: params.newOpenAt ? formatCandidateDateTime(params.newOpenAt) : null,
+        newCloseAtFormatted: params.newCloseAt ? formatCandidateDateTime(params.newCloseAt) : null,
+        examUrl,
+      })
+    );
+    const idempotencyKey = `exam-rescheduled/${params.assessmentId}/${params.userId}/${params.newOpenAt ?? "null"}-${params.newCloseAt ?? "null"}`;
+    await queueAndSendEmail({
+      eventType: "EXAM_RESCHEDULED",
+      idempotencyKey,
+      recipientEmail: params.email,
+      userId: params.userId,
+      tenant: { companyId: params.companyId, companyName: params.companyName },
+      sender: getSenderExam(),
+      rendered: { subject: examRescheduledSubject(), html, text, templateId: EXAM_RESCHEDULED_ID, templateVersion: EXAM_RESCHEDULED_V },
       metadata: { assessmentId: params.assessmentId },
     });
   });

@@ -10,7 +10,15 @@ test("l'administrateur voit le détail question par question d'une tentative", a
   await loginAs(page, "admin");
 
   await page.goto("/results");
-  await expect(page.getByText("Karim Belaid (démo)")).toBeVisible();
+  // Root cause investigated (2026-08-29) — jamais un defect produit :
+  // getByText() fait un match par SOUS-CHAINE par défaut, et le
+  // <select id="candidateUserId"> de cette même page a une <option>
+  // "{full_name} ({company_name})" qui CONTIENT "Karim Belaid (démo)"
+  // comme sous-chaîne — deux éléments légitimes correspondent donc à un
+  // getByText() non scopé. Locator robuste : cibler directement le rôle
+  // "link" (le tableau de résultats, jamais le filtre), cohérent avec la
+  // ligne suivante qui fait déjà exactement ça pour le clic.
+  await expect(page.getByRole("link", { name: "Karim Belaid (démo)" }).first()).toBeVisible();
   await page.getByRole("link", { name: "Karim Belaid (démo)" }).first().click();
 
   await page.waitForURL(/\/results\/\d+/);

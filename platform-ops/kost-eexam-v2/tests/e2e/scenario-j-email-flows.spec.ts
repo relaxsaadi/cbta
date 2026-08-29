@@ -54,7 +54,17 @@ test("§62 — affecter un candidat à un examen produit une ligne EXAM_ASSIGNED
   await expect(page.getByText(/Affecter d'autres candidats/)).toBeVisible();
   await page.getByLabel(new RegExp(fixture.activationCandidateFullName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).check();
   await page.getByRole("button", { name: /affecter la sélection/i }).click();
-  await expect(page.getByText(/affecté/i)).toBeVisible();
+  // Vérifie l'ISSUE réelle plutôt que le message transitoire (2026-08-29) —
+  // ce candidat est le DERNIER membre non affecté du groupe : dès que
+  // l'affectation réussit, unassignedMembers devient vide et toute la
+  // carte "Affecter d'autres candidats" (qui porte le message de succès
+  // useActionState) démonte immédiatement — une course avec l'assertion,
+  // pas une régression produit (l'affectation elle-même a bien réussi,
+  // observable ci-dessous dans le tableau de suivi, la source de vérité
+  // stable). La carte "Reprogrammer l'examen" de la mission de
+  // reprogrammation ajoute par ailleurs du texte contenant "affecté" sur
+  // cette même page — une raison de plus de ne pas viser un texte générique.
+  await expect(page.getByRole("row", { name: new RegExp(fixture.activationCandidateFullName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) })).toBeVisible();
 
   await logout(page);
   await loginAs(page, "admin");

@@ -20,6 +20,8 @@ import {
   FileClock,
   GraduationCap,
   Fingerprint,
+  MailWarning,
+  MailSearch,
   type LucideIcon,
 } from "lucide-react";
 import type { ConsoleRole } from "./session";
@@ -38,6 +40,7 @@ const STAFF_SHARED: NavGroup[] = [
       { label: "Préparation des examens", href: "/exam-preparation", icon: BookOpenCheck },
       { label: "Familiarisation", href: "/familiarisation", icon: GraduationCap },
       { label: "Résultats", href: "/results", icon: ListChecks },
+      { label: "Notifications", href: "/notifications", icon: MailWarning },
     ],
   },
 ];
@@ -51,6 +54,7 @@ const ADMIN_ONLY: NavGroup[] = [
       { label: "Sessions actives", href: "/sessions", icon: KeySquare },
       { label: "Journal d'audit", href: "/audit-logs", icon: ScrollText },
       { label: "Sauvegarde & restauration", href: "/system", icon: DatabaseBackup },
+      { label: "Aperçu des emails", href: "/admin/email-preview", icon: MailSearch },
     ],
   },
 ];

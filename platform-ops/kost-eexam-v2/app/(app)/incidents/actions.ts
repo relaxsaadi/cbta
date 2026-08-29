@@ -22,9 +22,12 @@ import {
   actionAttachEvidence,
   closeIncident,
   setIncidentStatus,
+  getIncident,
   type IncidentSeverity,
   type IncidentStatus,
 } from "@/lib/incidents";
+import { findUserById } from "@/lib/users";
+import { notifyIncidentDeclared, notifyIncidentResolved, notifyAccountSuspended, notifyAccountReactivated } from "@/lib/email/events";
 
 export interface DeclareIncidentResult {
   error?: string;
@@ -52,7 +55,31 @@ export async function declareIncidentAction(_prev: DeclareIncidentResult, formDa
     return { error: "Groupe introuvable." };
   }
 
-  const id = declareIncident({ type, severity, description, systemConcerned, peopleConcerned, groupId, createdBy: session.userId, createdByRole: session.role });
+  const responsibleUserIdRaw = String(formData.get("responsibleUserId") ?? "").trim();
+  const responsibleUserId = responsibleUserIdRaw ? Number(responsibleUserIdRaw) : undefined;
+  const id = declareIncident({
+    type,
+    severity,
+    description,
+    systemConcerned,
+    peopleConcerned,
+    responsibleUserId,
+    groupId,
+    createdBy: session.userId,
+    createdByRole: session.role,
+  });
+
+  // INCIDENT_DECLARED (mission email §29) — uniquement si un compte
+  // précis est concerné (responsibleUserId) ; jamais le détail de
+  // l'incident dans l'email (voir le gabarit).
+  if (responsibleUserId) {
+    const target = findUserById(responsibleUserId);
+    if (target?.email) {
+      const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+      await notifyIncidentDeclared({ userId: responsibleUserId, email: target.email, firstName, incidentId: id });
+    }
+  }
+
   revalidatePath("/incidents");
   redirect(`/incidents/${id}`);
 }
@@ -70,12 +97,22 @@ export async function suspendAccountAction(incidentId: number, formData: FormDat
   const userId = Number(formData.get("targetId"));
   if (!userId) return;
   actionSuspendAccount(incidentId, userId, await actor());
+  const target = findUserById(userId);
+  if (target?.email) {
+    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+    await notifyAccountSuspended({ userId, email: target.email, firstName, securityEventId: `incident-${incidentId}` });
+  }
   revalidatePath(`/incidents/${incidentId}`);
 }
 export async function reactivateAccountAction(incidentId: number, formData: FormData) {
   const userId = Number(formData.get("targetId"));
   if (!userId) return;
   actionReactivateAccount(incidentId, userId, await actor());
+  const target = findUserById(userId);
+  if (target?.email) {
+    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+    await notifyAccountReactivated({ userId, email: target.email, firstName, securityEventId: `incident-${incidentId}` });
+  }
   revalidatePath(`/incidents/${incidentId}`);
 }
 export async function revokeSessionsAction(incidentId: number, formData: FormData) {
@@ -149,5 +186,21 @@ export async function closeIncidentAction(incidentId: number) {
 }
 export async function setIncidentStatusAction(incidentId: number, status: IncidentStatus) {
   setIncidentStatus(incidentId, status, await actor());
+
+  // INCIDENT_RESOLVED (mission email §29) — uniquement sur la transition
+  // VERS 'resolved', jamais pour 'investigating'/'closed'/etc. Même
+  // principe que INCIDENT_DECLARED : seulement si un compte précis est
+  // concerné, jamais le détail de l'incident dans l'email.
+  if (status === "resolved") {
+    const incident = getIncident(incidentId);
+    if (incident?.responsible_user_id) {
+      const target = findUserById(incident.responsible_user_id);
+      if (target?.email) {
+        const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+        await notifyIncidentResolved({ userId: incident.responsible_user_id, email: target.email, firstName, incidentId });
+      }
+    }
+  }
+
   revalidatePath(`/incidents/${incidentId}`);
 }

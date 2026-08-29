@@ -258,13 +258,17 @@ export function submitAttempt(attemptId: number, candidateUserId: number, opts: 
  * dépassé même si le candidat n'a pas rouvert la page (§8 : fermeture
  * navigateur / perte réseau ne doivent jamais empêcher l'auto-soumission).
  * Appelé opportunément depuis les pages de suivi + une route dédiée
- * appelable par un cron externe en production. */
-export function sweepExpiredAttempts(): number {
+ * appelable par un cron externe en production. Renvoie la liste (pas
+ * seulement le compte) — mission email §24 : la route cron
+ * (app/api/attempts/sweep/route.ts) en a besoin pour déclencher
+ * RESULT_AVAILABLE sur chaque tentative auto-soumise, hors de cette
+ * fonction elle-même (reste synchrone, aucune dépendance email ici). */
+export function sweepExpiredAttempts(): { attemptId: number; candidateUserId: number }[] {
   const rows = getDb()
     .prepare(`SELECT id, candidate_user_id FROM attempts WHERE status = 'in_progress' AND expires_at < ?`)
     .all(nowIso()) as { id: number; candidate_user_id: number }[];
   for (const r of rows) {
     submitAttempt(r.id, r.candidate_user_id, { auto: true });
   }
-  return rows.length;
+  return rows.map((r) => ({ attemptId: r.id, candidateUserId: r.candidate_user_id }));
 }

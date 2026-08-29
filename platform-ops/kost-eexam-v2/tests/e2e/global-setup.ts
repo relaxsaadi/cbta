@@ -16,4 +16,13 @@ export default async function globalSetup() {
   const env = { ...process.env, DB_PATH: "./data/e2e-test.db" };
   execSync("node --import tsx scripts/migrate.ts", { cwd: root, env, stdio: "inherit" });
   execSync("node --import tsx scripts/seed-demo.ts", { cwd: root, env, stdio: "inherit" });
+  // Fixtures dédiées au sous-système email (mission email §61-69) — voir
+  // scripts/seed-email-demo.ts. Doit tourner APRÈS seed-demo.ts (réutilise
+  // son admin/responsable/groupe démo). APP_BASE_URL requis pour que
+  // notifyAccountCreated() construise un lien réel (même valeur que le
+  // webServer Playwright ci-dessous) — sans, l'appel resterait silencieux
+  // (voir safe() dans lib/email/events.ts) et la fixture n'aurait aucune
+  // ligne notification_log à afficher dans les tests d'isolation.
+  const emailEnv = { ...env, APP_BASE_URL: "http://127.0.0.1:3101", EMAIL_MODE: "log" };
+  execSync("node --import tsx scripts/seed-email-demo.ts", { cwd: root, env: emailEnv, stdio: "inherit" });
 }

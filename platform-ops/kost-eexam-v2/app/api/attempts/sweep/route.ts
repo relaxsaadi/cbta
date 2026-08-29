@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sweepExpiredAttempts } from "@/lib/attempts";
 import { audit } from "@/lib/audit";
+import { notifyResultAvailableForAttempt } from "@/lib/email/notify-result";
 
 // Filet de sécurité pour le chronomètre serveur (§8) : auto-soumet toute
 // tentative expirée même si aucun candidat/membre du staff n'a consulté une
@@ -18,9 +19,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  const count = sweepExpiredAttempts();
-  if (count > 0) {
-    audit({ actorUserId: null, actorRole: null, action: "attempts_sweep_cron", metadata: { count } });
+  const swept = sweepExpiredAttempts();
+  if (swept.length > 0) {
+    audit({ actorUserId: null, actorRole: null, action: "attempts_sweep_cron", metadata: { count: swept.length } });
   }
-  return NextResponse.json({ swept: count });
+  // RESULT_AVAILABLE (mission email §24) — une tentative auto-soumise par
+  // expiration du chronomètre a droit à la même notification qu'une
+  // soumission manuelle.
+  for (const { attemptId } of swept) {
+    await notifyResultAvailableForAttempt(attemptId);
+  }
+  return NextResponse.json({ swept: swept.length });
 }

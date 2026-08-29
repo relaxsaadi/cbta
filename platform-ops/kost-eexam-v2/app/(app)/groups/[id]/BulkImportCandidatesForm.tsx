@@ -29,14 +29,15 @@ export function BulkImportCandidatesForm({ groupId }: { groupId: number }) {
   return (
     <div className="flex flex-col gap-3 rounded-md border border-border-default bg-surface-raised p-3">
       <p className="text-[12px] text-text-tertiary">
-        Format (en-tête obligatoire) : <code className="rounded bg-surface-sunken px-1 py-0.5">full_name,username,password</code> — colonnes optionnelles :{" "}
-        <code className="rounded bg-surface-sunken px-1 py-0.5">email,phone</code>. Un candidat par ligne.
+        Format (en-tête obligatoire) : <code className="rounded bg-surface-sunken px-1 py-0.5">full_name,username,email</code> — colonne optionnelle :{" "}
+        <code className="rounded bg-surface-sunken px-1 py-0.5">phone</code>. Un candidat par ligne. Chaque nouveau candidat reçoit un email pour créer
+        lui-même son mot de passe — aucun mot de passe n&apos;est saisi ici.
       </p>
       <form action={formAction} className="flex flex-col gap-2">
         <textarea
           name="csv"
           rows={6}
-          placeholder={"full_name,username,password\nAmina Belkacem,amina.belkacem,MotDePasse2026!"}
+          placeholder={"full_name,username,email\nAmina Belkacem,amina.belkacem,amina.belkacem@example.com"}
           className="w-full rounded-md border border-border-default bg-surface-base px-3 py-2 font-mono text-[12px]"
         />
         <div className="flex items-center gap-2">

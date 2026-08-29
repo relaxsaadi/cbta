@@ -2,34 +2,62 @@
 
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createUser, setUserStatus } from "@/lib/users";
+import { createUserPendingActivation, setUserStatus, findUserById } from "@/lib/users";
 import { revokeAllSessionsForUser } from "@/lib/sessions-registry";
 import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
 import type { ConsoleRole } from "@/lib/session";
+import { createActivationToken } from "@/lib/activation-tokens";
+import { notifyAccountCreated, notifyAccountSuspended, notifyAccountReactivated, notifyMfaDisabled } from "@/lib/email/events";
+import { auditEmailInvitationSent } from "@/lib/email/audit";
 
 export interface CreateUserResult {
   error?: string;
   success?: string;
 }
 
+/** Mission email §8/§28 CRITIQUE — plus de mot de passe saisi par
+ * l'administrateur, quel que soit le rôle créé (candidat, responsable,
+ * administrateur, auditeur) : même flux d'invitation sécurisée que pour
+ * les candidats (lib/activation-tokens.ts). L'email devient obligatoire
+ * ici (il ne l'était pas avant), nécessaire pour l'envoi de l'invitation. */
 export async function createUserAction(_prev: CreateUserResult, formData: FormData): Promise<CreateUserResult> {
-  await requireWriteRole("administrator");
+  const session = await requireWriteRole("administrator");
   const fullName = String(formData.get("fullName") ?? "").trim();
   const username = String(formData.get("username") ?? "").trim();
-  const password = String(formData.get("password") ?? "");
+  const email = String(formData.get("email") ?? "").trim();
   const role = String(formData.get("role") ?? "") as ConsoleRole;
 
-  if (!fullName || !username || !password || !role) return { error: "Tous les champs sont obligatoires." };
-  if (password.length < 8) return { error: "Le mot de passe doit faire au moins 8 caractères." };
+  if (!fullName || !username || !email || !role) return { error: "Tous les champs sont obligatoires (l'email sert à l'invitation)." };
 
+  let userId: number;
   try {
-    createUser({ username, password, fullName, role });
+    userId = createUserPendingActivation({ username, fullName, role, email });
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Erreur — identifiant probablement déjà utilisé." };
   }
+
+  const firstName = fullName.split(/\s+/)[0] ?? fullName;
+  const { token, expiresAt } = createActivationToken({ userId, purpose: "account_setup", createdBy: session.userId });
+  // Comptes staff (responsable/administrateur/auditeur) : pas de client/
+  // groupe réel à référencer — companyId reste NULL (jamais 0, qui
+  // violerait la FK companies(id) si jamais vérifié) ; le gabarit accepte
+  // "KOST Academy" comme "entreprise" d'affichage pour ce cas précis.
+  await notifyAccountCreated({
+    userId,
+    email,
+    firstName,
+    companyId: null,
+    companyName: "KOST Academy",
+    groupName: "—",
+    usernameOrEmail: email,
+    activationToken: token,
+    expiresAt,
+  });
+  auditEmailInvitationSent(session.userId, session.role, userId);
+
   revalidatePath("/users");
-  return { success: `Compte ${username} créé (${role}).` };
+  return { success: `Compte ${username} créé (${role}) — invitation envoyée à ${email}.` };
 }
 
 /** Suspension/réactivation directe (hors incident) — action admin simple,
@@ -41,6 +69,11 @@ export async function quickSuspendAction(userId: number) {
   setUserStatus(userId, "suspended");
   const n = revokeAllSessionsForUser(userId, session.userId);
   audit({ actorUserId: session.userId, actorRole: session.role, action: "user_suspend", targetType: "user", targetId: userId, metadata: { sessionsRevoked: n } });
+  const target = findUserById(userId);
+  if (target?.email) {
+    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+    await notifyAccountSuspended({ userId, email: target.email, firstName, securityEventId: `quick-${Date.now()}` });
+  }
   revalidatePath("/users");
 }
 
@@ -48,6 +81,11 @@ export async function quickReactivateAction(userId: number) {
   const session = await requireWriteRole("administrator");
   setUserStatus(userId, "active");
   audit({ actorUserId: session.userId, actorRole: session.role, action: "user_reactivate", targetType: "user", targetId: userId });
+  const target = findUserById(userId);
+  if (target?.email) {
+    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+    await notifyAccountReactivated({ userId, email: target.email, firstName, securityEventId: `quick-${Date.now()}` });
+  }
   revalidatePath("/users");
 }
 
@@ -63,5 +101,10 @@ export async function adminResetMfaAction(userId: number) {
   const session = await requireWriteRole("administrator");
   getDb().prepare(`UPDATE users SET mfa_enabled = 0, mfa_secret = NULL, mfa_recovery_codes_json = NULL WHERE id = ?`).run(userId);
   audit({ actorUserId: session.userId, actorRole: session.role, action: "mfa_admin_reset", targetType: "user", targetId: userId, result: "success" });
+  const target = findUserById(userId);
+  if (target?.email) {
+    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+    await notifyMfaDisabled({ userId, email: target.email, firstName, byAdmin: true, securityEventId: `admin-reset-${Date.now()}` });
+  }
   revalidatePath("/users");
 }

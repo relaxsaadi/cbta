@@ -11,12 +11,19 @@ import {
   closeAssessment,
   assignCandidatesToAssessment,
   unassignCandidateFromAssessment,
+  getAssessment,
+  listAssignedCandidateIds,
   type AssessmentType,
   type FeedbackMode,
 } from "@/lib/assessments";
 import { hasGroupAccess, hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
 import type { Scope } from "@/lib/scope";
+import { getGroup } from "@/lib/groups";
+import { findUserById } from "@/lib/users";
+import { functionLabel } from "@/lib/questions";
+import { notifyExamAssigned } from "@/lib/email/events";
+import { auditExamNotificationSent } from "@/lib/email/audit";
 
 export interface CreateAssessmentResult {
   error?: string;
@@ -108,8 +115,47 @@ export async function publishAssessmentAction(
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Erreur inconnue." };
   }
+
+  await notifyExamAssignedToCandidates(assessmentId, listAssignedCandidateIds(assessmentId), session.userId, session.role as "pedagogical_manager" | "administrator");
+
   revalidatePath(`/exam-preparation/${assessmentId}`);
   return {};
+}
+
+/** EXAM_ASSIGNED (mission email §17) — factorisé pour être appelé à la
+ * fois depuis la publication initiale et depuis une affectation
+ * ultérieure (assignMoreCandidatesAction). Délibérément APRÈS l'écriture
+ * réelle (lib/assessments.ts est synchrone, hors de toute transaction
+ * email) : un échec d'envoi ne doit jamais annuler ni retarder
+ * l'affectation elle-même (§35/§39 — outbox). Un candidat sans email au
+ * dossier est silencieusement ignoré (pas d'erreur bloquante — l'email
+ * reste optionnel au niveau du dossier candidat). */
+async function notifyExamAssignedToCandidates(assessmentId: number, candidateIds: number[], actorUserId: number, actorRole: "pedagogical_manager" | "administrator") {
+  const assessment = getAssessment(assessmentId);
+  if (!assessment) return;
+  const group = getGroup(assessment.group_id);
+  if (!group) return;
+  for (const candidateId of candidateIds) {
+    const candidate = findUserById(candidateId);
+    if (!candidate?.email) continue;
+    const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
+    await notifyExamAssigned({
+      userId: candidateId,
+      email: candidate.email,
+      firstName,
+      assessmentId,
+      examName: assessment.name,
+      functionLabel: functionLabel(assessment.function_code),
+      companyId: group.company_id,
+      companyName: group.company_name,
+      groupName: group.name,
+      openAt: assessment.open_at,
+      closeAt: assessment.close_at,
+      durationMinutes: assessment.duration_minutes,
+      attemptsAllowed: assessment.attempts_allowed,
+    });
+    auditExamNotificationSent(actorUserId, actorRole, assessmentId, candidateId);
+  }
 }
 
 export async function suspendAssessmentAction(assessmentId: number, reason: string) {
@@ -147,6 +193,9 @@ export async function assignMoreCandidatesAction(assessmentId: number, _prev: As
   if (candidateUserIds.length === 0) return { error: "Sélectionnez au moins un candidat." };
   try {
     const count = assignCandidatesToAssessment(assessmentId, candidateUserIds, session.userId);
+    if (count > 0) {
+      await notifyExamAssignedToCandidates(assessmentId, candidateUserIds, session.userId, session.role as "pedagogical_manager" | "administrator");
+    }
     revalidatePath(`/exam-preparation/${assessmentId}`);
     return { success: count > 0 ? `${count} candidat(s) affecté(s).` : "Déjà affecté(s) — aucun changement." };
   } catch (err) {

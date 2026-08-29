@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDb, nowIso } from "@/lib/db";
 import { latestOfType, BACKUP_POLICY } from "@/lib/backup";
+import { safeEmailConfigReport } from "@/lib/email/config";
 
 // Mission "PRODUCTION READINESS" §12 — endpoint de santé public (aucune
 // session requise, exempté du proxy — voir proxy.ts, même logique que
@@ -56,6 +57,12 @@ export async function GET() {
         ageHours: restoreTestAgeHours !== null ? Math.round(restoreTestAgeHours * 10) / 10 : null,
         stale: restoreTestStale,
       },
+      // Mission email §56/§74 — présence de configuration UNIQUEMENT
+      // (booléens/compte/enum), jamais une valeur de secret — voir le
+      // commentaire sur safeEmailConfigReport() (lib/email/config.ts).
+      // N'appelle jamais le SDK Resend : lecture de process.env pure,
+      // aucun coût réseau supplémentaire par requête.
+      email: safeEmailConfigReport(),
       uptimeSeconds: Math.round(process.uptime()),
     },
     { status: healthy ? 200 : 503 }

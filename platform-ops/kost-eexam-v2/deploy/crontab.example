@@ -37,3 +37,15 @@
 # d'alerte en temps réel est un choix d'outil/service à trancher par le
 # propriétaire de la plateforme, jamais fabriqué sans un canal réel.
 */10 * * * * /root/kost-eexam-v2-stack/monitor.sh >> /var/log/kost-eexam-v2-monitor.log 2>&1
+
+# Rappels d'examen optionnels — EXAM_OPENS_SOON / EXAM_NOW_AVAILABLE /
+# EXAM_DEADLINE_REMINDER (mission email §22-23). NON ENCORE INSTALLÉ sur
+# staging à la différence des lignes ci-dessus — écrit ici comme
+# préparation documentée (voir docs/KOST_EEXAM_V2_RESEND_OPERATIONS.md
+# pour l'étape d'installation restante : copier deploy/reminders.sh vers
+# /root/kost-eexam-v2-stack/reminders.sh, chmod +x, puis activer cette
+# ligne). Toutes les heures — cohérent avec la fenêtre glissante de
+# EXAM_NOW_AVAILABLE (90 min > fréquence de cron, jamais de trou). Anti-
+# doublon structurel via reminder_dispatch_log, un run manqué/en double
+# ne renvoie donc jamais deux fois le même rappel.
+# 0 * * * * /root/kost-eexam-v2-stack/reminders.sh >> /var/log/kost-eexam-v2-reminders.log 2>&1

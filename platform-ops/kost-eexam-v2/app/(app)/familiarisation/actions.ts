@@ -6,6 +6,10 @@ import { requireWriteRole } from "@/lib/rbac";
 import { hasGroupAccess, hasFamiliarizationSessionAccess, assertAccess } from "@/lib/tenant-scope";
 import { createFamiliarizationSession, markAttendance } from "@/lib/familiarization";
 import { audit } from "@/lib/audit";
+import { listGroupMembers, getGroup } from "@/lib/groups";
+import { findUserById } from "@/lib/users";
+import { functionLabel } from "@/lib/questions";
+import { notifyFamiliarizationInvitation } from "@/lib/email/events";
 
 export interface CreateSessionResult {
   error?: string;
@@ -36,6 +40,31 @@ export async function createFamiliarizationSessionAction(_prev: CreateSessionRes
     organizedBy: session.userId,
     organizerRole: session.role,
   });
+
+  // FAMILIARIZATION_INVITATION (mission email §26) — après coup, jamais
+  // dans la transaction de création elle-même (§35 — outbox). Un candidat
+  // sans email au dossier est silencieusement ignoré.
+  const group = getGroup(groupId);
+  if (group) {
+    const members = listGroupMembers(groupId);
+    const label = functionLabel(functionCode);
+    for (const m of members) {
+      const candidate = findUserById(m.candidate_user_id);
+      if (!candidate?.email) continue;
+      const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
+      await notifyFamiliarizationInvitation({
+        userId: candidate.id,
+        email: candidate.email,
+        firstName,
+        sessionId: id,
+        functionLabel: label,
+        heldAt,
+        location: location ?? null,
+        tenant: { companyId: group.company_id, companyName: group.company_name },
+      });
+    }
+  }
+
   revalidatePath("/familiarisation");
   redirect(`/familiarisation/${id}`);
 }

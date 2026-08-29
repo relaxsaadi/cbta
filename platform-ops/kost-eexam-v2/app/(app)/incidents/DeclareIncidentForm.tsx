@@ -7,6 +7,7 @@ import { INCIDENT_TYPES } from "@/lib/incident-constants";
 export function DeclareIncidentForm({
   groups,
   groupRequired,
+  candidatesByGroup,
 }: {
   groups: { id: number; name: string; company_name: string }[];
   // Un responsable pédagogique déclare TOUJOURS un incident au nom d'un de
@@ -14,6 +15,11 @@ export function DeclareIncidentForm({
   // administrator) — voir lib/tenant-scope.ts pour la frontière que ce
   // choix de groupe fait ensuite respecter en lecture.
   groupRequired: boolean;
+  // Comptes notifiables par email (INCIDENT_DECLARED, mission email §29) —
+  // un <optgroup> par groupe accessible ; "Personnes concernées" ci-dessous
+  // reste un champ libre distinct (texte descriptif), ce select choisit LE
+  // compte précis qui reçoit l'email, jamais le détail de l'incident.
+  candidatesByGroup: { groupId: number; groupLabel: string; members: { candidate_user_id: number; full_name: string }[] }[];
 }) {
   const [state, formAction, pending] = useActionState<DeclareIncidentResult, FormData>(declareIncidentAction, {});
 
@@ -60,6 +66,26 @@ export function DeclareIncidentForm({
       <div>
         <label htmlFor="peopleConcerned" className="mb-1 block text-[12px] font-medium text-text-secondary">Personnes concernées</label>
         <input id="peopleConcerned" name="peopleConcerned" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+      </div>
+      <div>
+        <label htmlFor="responsibleUserId" className="mb-1 block text-[12px] font-medium text-text-secondary">
+          Compte à notifier par email (facultatif)
+        </label>
+        <select id="responsibleUserId" name="responsibleUserId" defaultValue="" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+          <option value="">— Aucun (pas d'email envoyé) —</option>
+          {candidatesByGroup.map((g) =>
+            g.members.length > 0 ? (
+              <optgroup key={g.groupId} label={g.groupLabel}>
+                {g.members.map((m) => (
+                  <option key={m.candidate_user_id} value={m.candidate_user_id}>{m.full_name}</option>
+                ))}
+              </optgroup>
+            ) : null
+          )}
+        </select>
+        <p className="mt-1 text-[11.5px] text-text-tertiary">
+          Envoie une notification (sans détail de l'incident) au compte sélectionné — jamais le contenu de la description.
+        </p>
       </div>
       <div>
         <button disabled={pending} type="submit" className="rounded-md bg-status-critical-text px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90 disabled:opacity-60">

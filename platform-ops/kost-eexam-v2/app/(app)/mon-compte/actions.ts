@@ -12,6 +12,7 @@ import { verifyPassword } from "@/lib/passwords";
 import { generateMfaSecret, buildOtpAuthUri, formatSecretForDisplay, verifyTotpCode, generateRecoveryCodes } from "@/lib/mfa";
 import { getDb } from "@/lib/db";
 import { audit } from "@/lib/audit";
+import { notifyMfaEnabled, notifyMfaDisabled } from "@/lib/email/events";
 
 export interface MfaEnrollStartResult {
   formattedSecret?: string;
@@ -62,6 +63,11 @@ export async function confirmMfaEnrollmentAction(_prev: MfaConfirmResult, formDa
   await session.save();
 
   audit({ actorUserId: session.userId, actorRole: session.role, action: "mfa_enabled", targetType: "user", targetId: session.userId, result: "success" });
+  const enrolledUser = findUserById(session.userId);
+  if (enrolledUser?.email) {
+    const firstName = enrolledUser.full_name.split(/\s+/)[0] ?? enrolledUser.full_name;
+    await notifyMfaEnabled({ userId: session.userId, email: enrolledUser.email, firstName });
+  }
   revalidatePath("/mon-compte");
   return { recoveryCodes: plain };
 }
@@ -85,6 +91,10 @@ export async function disableMfaAction(_prev: MfaDisableResult, formData: FormDa
 
   getDb().prepare(`UPDATE users SET mfa_enabled = 0, mfa_secret = NULL, mfa_recovery_codes_json = NULL WHERE id = ?`).run(session.userId);
   audit({ actorUserId: session.userId, actorRole: session.role, action: "mfa_disabled", targetType: "user", targetId: session.userId, result: "success" });
+  if (user.email) {
+    const firstName = user.full_name.split(/\s+/)[0] ?? user.full_name;
+    await notifyMfaDisabled({ userId: session.userId, email: user.email, firstName, byAdmin: false, securityEventId: `self-${Date.now()}` });
+  }
   revalidatePath("/mon-compte");
   return { success: "MFA désactivé sur ce compte." };
 }

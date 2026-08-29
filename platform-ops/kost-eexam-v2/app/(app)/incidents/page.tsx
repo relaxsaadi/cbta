@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listIncidents } from "@/lib/incidents";
-import { listGroups, listGroupsForManager } from "@/lib/groups";
+import { listGroups, listGroupsForManager, listGroupMembers } from "@/lib/groups";
 import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -25,6 +25,14 @@ export default async function IncidentsPage() {
   const incidents = listIncidents(scopedGroupIdsOrNull(session));
   const groupsForForm = isManager ? listGroupsForManager(session.userId) : listGroups();
   const canWrite = session.role !== "auditor";
+  // Candidats notifiables (INCIDENT_DECLARED, mission email §29) — un par
+  // groupe accessible à l'acteur, jamais au-delà de son périmètre (même
+  // frontière que groupsForForm ci-dessus).
+  const candidatesByGroup = groupsForForm.map((g) => ({
+    groupId: g.id,
+    groupLabel: `${g.company_name} — ${g.name}`,
+    members: listGroupMembers(g.id),
+  }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -38,7 +46,7 @@ export default async function IncidentsPage() {
       {canWrite && (
         <Card>
           <CardHeader title="Déclarer un incident" />
-          <DeclareIncidentForm groups={groupsForForm} groupRequired={isManager} />
+          <DeclareIncidentForm groups={groupsForForm} groupRequired={isManager} candidatesByGroup={candidatesByGroup} />
         </Card>
       )}
 

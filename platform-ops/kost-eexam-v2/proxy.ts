@@ -19,7 +19,18 @@ import { getSessionOptions, type AppSession } from "@/lib/session";
 // l'installation du cron, jamais silencieusement contourné : le jeton
 // reste une vraie vérification côté route, pas un contournement de
 // sécurité côté proxy).
-const PUBLIC_PATHS = ["/login", "/api/auth", "/api/attempts/sweep", "/api/health"];
+// Mission email §8-9/§37 — /activer et /mot-de-passe/* sont le flux
+// d'activation/réinitialisation par JETON (jamais un cookie de session —
+// un candidat qui reçoit une invitation n'est structurellement pas encore
+// connecté). /api/webhooks/resend reçoit des requêtes du fournisseur
+// Resend, jamais un navigateur avec cookie — sa propre vérification de
+// signature (RESEND_WEBHOOK_SECRET) est la vraie authentification, même
+// principe que /api/attempts/sweep ci-dessus. /api/notifications/reminders
+// (mission email §22-23) est le MÊME cas que /api/attempts/sweep — cron
+// externe sans cookie, sa propre vérification par SWEEP_TOKEN partagé
+// (voir app/api/notifications/reminders/route.ts) ; exempté ici dès sa
+// création pour ne PAS reproduire le bug historique découvert sur sweep.
+const PUBLIC_PATHS = ["/login", "/activer", "/mot-de-passe", "/api/auth", "/api/attempts/sweep", "/api/notifications/reminders", "/api/health", "/api/webhooks/resend"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

@@ -2,6 +2,7 @@
 
 import { requireRole } from "@/lib/rbac";
 import { saveAnswer, toggleMark, submitAttempt, AttemptError } from "@/lib/attempts";
+import { notifyResultAvailableForAttempt } from "@/lib/email/notify-result";
 
 export interface ActionResult {
   ok: boolean;
@@ -35,9 +36,12 @@ export async function submitAttemptAction(attemptId: number): Promise<ActionResu
   const session = await requireRole("candidate");
   try {
     submitAttempt(attemptId, session.userId, { auto: false });
-    return { ok: true };
   } catch (err) {
     if (err instanceof AttemptError) return { ok: false, error: err.message };
     throw err;
   }
+  // RESULT_AVAILABLE (mission email §24) — après coup, jamais dans la
+  // transaction de soumission/notation elle-même (§35 — outbox).
+  await notifyResultAvailableForAttempt(attemptId);
+  return { ok: true };
 }

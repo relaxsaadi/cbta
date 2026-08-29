@@ -18,7 +18,14 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   full_name TEXT NOT NULL,
   phone TEXT,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','suspended')),
+  -- 'pending_activation' (mission email §8-9) : compte créé par un
+  -- administrateur/responsable SANS mot de passe communiqué — password_hash
+  -- contient un hachage aléatoire inutilisable (personne ne le connaît),
+  -- la connexion est refusée tant que le statut reste à cette valeur. Le
+  -- candidat passe à 'active' uniquement en complétant lui-même le flux
+  -- sécurisé d'activation (voir activation_tokens) — jamais de mot de
+  -- passe envoyé par email, jamais en clair nulle part.
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending_activation','active','suspended')),
   mfa_enabled INTEGER NOT NULL DEFAULT 0,
   -- MFA (mission "PRODUCTION READINESS" §25) — TOTP natif (RFC 6238),
   -- aucune dépendance externe. mfa_secret : base32, posé uniquement à
@@ -400,3 +407,107 @@ CREATE TABLE IF NOT EXISTS familiarization_attendance (
 );
 CREATE INDEX IF NOT EXISTS idx_familiarization_sessions_group ON familiarization_sessions(group_id);
 CREATE INDEX IF NOT EXISTS idx_familiarization_attendance_candidate ON familiarization_attendance(candidate_user_id);
+
+-- ===========================================================================
+-- Sous-système email transactionnel (mission "RESEND EMAIL EXPERIENCE
+-- PRODUCTION-GRADE") — voir docs/KOST_EEXAM_V2_EMAIL_ARCHITECTURE.md.
+-- ===========================================================================
+
+-- Jetons d'activation de compte / réinitialisation de mot de passe (§8-9 de
+-- la mission) — JAMAIS de mot de passe envoyé par email. Le jeton lui-même
+-- n'est jamais persisté en clair (seul son hash SHA-256 l'est, même
+-- discipline que sessions.session_token_hash) ; à usage unique
+-- (used_at posé à la consommation, plus jamais valide ensuite) ; limité
+-- dans le temps (expires_at, 24h par défaut) ; jamais loggé en clair.
+CREATE TABLE IF NOT EXISTS activation_tokens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL UNIQUE,
+  purpose TEXT NOT NULL CHECK (purpose IN ('account_setup','password_reset')),
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  expires_at TEXT NOT NULL,
+  used_at TEXT,
+  created_by INTEGER REFERENCES users(id),
+  ip_address TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_activation_tokens_user ON activation_tokens(user_id);
+
+-- Journal/outbox des notifications (§32-36 de la mission) — écriture
+-- garantie AVANT toute tentative d'envoi réel (§35, fiabilité "outbox") :
+-- la création du compte/l'affectation d'examen ne doit jamais échouer
+-- parce que Resend est indisponible. idempotency_key porte la garantie
+-- anti-doublon (§34/§66) via la contrainte UNIQUE elle-même, pas
+-- seulement une vérification applicative. Ne contient jamais de secret ni
+-- de réponse candidat détaillée (§32, dernière ligne).
+CREATE TABLE IF NOT EXISTS notification_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tenant_company_id INTEGER REFERENCES companies(id),
+  user_id INTEGER REFERENCES users(id),
+  recipient_email TEXT NOT NULL,
+  event_type TEXT NOT NULL,
+  template_id TEXT NOT NULL,
+  template_version TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  provider TEXT NOT NULL DEFAULT 'resend',
+  provider_message_id TEXT,
+  idempotency_key TEXT NOT NULL UNIQUE,
+  status TEXT NOT NULL DEFAULT 'QUEUED' CHECK (status IN
+    ('QUEUED','SENDING','SENT','DELIVERED','DELAYED','FAILED','BOUNCED','COMPLAINED','SUPPRESSED')),
+  failure_reason_safe TEXT,
+  retry_count INTEGER NOT NULL DEFAULT 0,
+  metadata_json TEXT,
+  -- Corps rendu, conservé pour permettre un VRAI retry (§36) sans
+  -- dépendre de la survie du process qui a fait le premier essai — un
+  -- outbox qui ne peut pas se rejouer après un redémarrage n'en est pas
+  -- un. Ne contient jamais de secret (le corps d'un email déjà jugé sûr
+  -- à envoyer au destinataire lui-même, §47) ; purgé (mis à NULL) une
+  -- fois un état terminal atteint (SENT/DELIVERED/SUPPRESSED/BOUNCED/
+  -- COMPLAINED) pour ne pas alourdir indéfiniment cette table d'audit.
+  rendered_html TEXT,
+  rendered_text TEXT,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  queued_at TEXT,
+  sent_at TEXT,
+  delivered_at TEXT,
+  failed_at TEXT,
+  bounced_at TEXT,
+  complained_at TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_notification_log_user ON notification_log(user_id);
+CREATE INDEX IF NOT EXISTS idx_notification_log_tenant ON notification_log(tenant_company_id);
+CREATE INDEX IF NOT EXISTS idx_notification_log_status ON notification_log(status);
+CREATE INDEX IF NOT EXISTS idx_notification_log_event ON notification_log(event_type);
+
+-- Préférences de notification (§31) — UNIQUEMENT pour les rappels
+-- OPTIONNELS. Les envois de sécurité et transactionnels obligatoires ne
+-- consultent jamais cette table (appliqué au niveau code, voir
+-- lib/email/preferences.ts) — aucun consentement marketing ne peut
+-- désactiver un email de sécurité/examen critique.
+CREATE TABLE IF NOT EXISTS notification_preferences (
+  user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  optional_reminders_enabled INTEGER NOT NULL DEFAULT 1 CHECK (optional_reminders_enabled IN (0,1)),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- Suppression list (§40 — bounce durs / plaintes) : adresse jamais
+-- resollicitée automatiquement une fois ici, tant qu'un admin ne la
+-- retire pas explicitement (jamais fait automatiquement).
+CREATE TABLE IF NOT EXISTS email_suppressions (
+  email TEXT PRIMARY KEY,
+  reason TEXT NOT NULL CHECK (reason IN ('hard_bounce','complaint','manual')),
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  created_by INTEGER REFERENCES users(id)
+);
+
+-- Fenêtres de rappel déjà envoyées (§18/§63 — anti-doublon des rappels
+-- programmés type "EXAM_OPENS_SOON" : le cron peut tourner plusieurs fois
+-- dans la fenêtre de rappel, cette table garantit qu'un même
+-- (assessment, candidat, type de rappel) n'est notifié qu'une fois).
+CREATE TABLE IF NOT EXISTS reminder_dispatch_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
+  candidate_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  reminder_type TEXT NOT NULL CHECK (reminder_type IN ('EXAM_OPENS_SOON','EXAM_NOW_AVAILABLE','EXAM_DEADLINE_REMINDER')),
+  dispatched_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  UNIQUE (assessment_id, candidate_user_id, reminder_type)
+);

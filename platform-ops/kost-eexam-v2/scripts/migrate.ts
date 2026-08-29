@@ -77,11 +77,76 @@ function migrateIncidentActionsCheckConstraint(db: ReturnType<typeof getDb>) {
         created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
       );
     `);
-    db.exec(`INSERT INTO incident_actions_new SELECT * FROM incident_actions;`);
+    // Colonnes EXPLICITES des deux côtés (jamais SELECT * positionnel) —
+    // voir le commentaire au-dessus de migrateUsersStatusCheckConstraint
+    // pour l'incident réel qui a révélé ce piège : ALTER TABLE ADD COLUMN
+    // ajoute toujours en FIN de table, un ordre physique qui peut donc
+    // diverger de l'ordre logique déclaré dans un CREATE TABLE _new, même
+    // quand les deux tables ont exactement les mêmes noms de colonnes.
+    db.exec(`
+      INSERT INTO incident_actions_new (id, incident_id, action_type, target_type, target_id, actor_user_id, detail, created_at)
+      SELECT id, incident_id, action_type, target_type, target_id, actor_user_id, detail, created_at FROM incident_actions;
+    `);
     db.exec(`DROP TABLE incident_actions;`);
     db.exec(`ALTER TABLE incident_actions_new RENAME TO incident_actions;`);
     db.exec("COMMIT");
     console.log("Contrainte incident_actions.action_type élargie (mode maintenance / blocages).");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
+// Même procédure que migrateIncidentActionsCheckConstraint ci-dessus,
+// pour users.status (mission email §8-9 : nouvelle valeur
+// 'pending_activation' — compte créé sans mot de passe communiqué, en
+// attente du flux d'activation sécurisé par jeton).
+function migrateUsersStatusCheckConstraint(db: ReturnType<typeof getDb>) {
+  const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'users'`).get() as { sql: string } | undefined;
+  if (!row || row.sql.includes("pending_activation")) return;
+
+  db.exec("PRAGMA foreign_keys = OFF");
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.exec(`
+      CREATE TABLE users_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        full_name TEXT NOT NULL,
+        phone TEXT,
+        status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending_activation','active','suspended')),
+        mfa_enabled INTEGER NOT NULL DEFAULT 0,
+        mfa_secret TEXT,
+        mfa_recovery_codes_json TEXT,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+        last_login_at TEXT
+      );
+    `);
+    // Colonnes EXPLICITES des deux côtés, JAMAIS "SELECT * FROM users" —
+    // bug réel trouvé en déployant cette migration sur staging (2026-08-29) :
+    // la vraie table users a mfa_secret/mfa_recovery_codes_json ajoutées
+    // via ALTER TABLE ADD COLUMN (donc physiquement APRÈS last_login_at,
+    // ordre historique d'une mission antérieure), alors que users_new
+    // ci-dessus les déclare entre mfa_enabled et created_at (ordre
+    // "logique" identique à lib/schema.sql). Un INSERT positionnel décalait
+    // donc chaque colonne d'un cran à partir de mfa_secret — la valeur
+    // de mfa_secret (souvent NULL, MFA non activée) atterrissait dans
+    // users_new.created_at (NOT NULL) et cassait la contrainte pour tout
+    // utilisateur sans MFA. Rejoué et vérifié après correction : succès
+    // réel sur staging, zéro perte de données (voir docs/
+    // KOST_EEXAM_V2_RESEND_OPERATIONS.md pour le compte-rendu complet).
+    db.exec(`
+      INSERT INTO users_new (id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at)
+      SELECT id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at FROM users;
+    `);
+    db.exec(`DROP TABLE users;`);
+    db.exec(`ALTER TABLE users_new RENAME TO users;`);
+    db.exec("COMMIT");
+    console.log("Contrainte users.status élargie (pending_activation).");
   } catch (e) {
     db.exec("ROLLBACK");
     throw e;
@@ -99,6 +164,7 @@ function main() {
   applyAdditiveColumns(db);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_incidents_group ON incidents(group_id)`);
   migrateIncidentActionsCheckConstraint(db);
+  migrateUsersStatusCheckConstraint(db);
 
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"

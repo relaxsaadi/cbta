@@ -2,12 +2,46 @@
 
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createGroup, addCandidateToGroup, removeCandidateFromGroup } from "@/lib/groups";
-import { createUser, findUserByUsername, updateUserProfile } from "@/lib/users";
+import { createGroup, addCandidateToGroup, removeCandidateFromGroup, getGroup } from "@/lib/groups";
+import { createUserPendingActivation, findUserByUsername, updateUserProfile } from "@/lib/users";
 import { hasCompanyAccess, hasGroupAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
 import type { Scope } from "@/lib/scope";
+import { createActivationToken } from "@/lib/activation-tokens";
+import { notifyAccountCreated } from "@/lib/email/events";
+import { auditEmailInvitationSent } from "@/lib/email/audit";
+
+/** Invitation sécurisée (mission email §8-10) — crée le compte SANS mot de
+ * passe communiqué, un jeton d'activation, et déclenche ACCOUNT_CREATED.
+ * Un échec d'envoi email n'annule jamais la création du compte (§35/§39 —
+ * outbox : queueAndSendEmail écrit toujours l'historique avant de tenter
+ * l'envoi, donc cet appel ne lève jamais pour une raison réseau Resend). */
+async function inviteNewCandidate(params: {
+  userId: number;
+  email: string;
+  fullName: string;
+  companyId: number;
+  companyName: string;
+  groupName: string;
+  actorUserId: number;
+  actorRole: "pedagogical_manager" | "administrator";
+}) {
+  const firstName = params.fullName.trim().split(/\s+/)[0] ?? params.fullName;
+  const { token, expiresAt } = createActivationToken({ userId: params.userId, purpose: "account_setup", createdBy: params.actorUserId });
+  await notifyAccountCreated({
+    userId: params.userId,
+    email: params.email,
+    firstName,
+    companyId: params.companyId,
+    companyName: params.companyName,
+    groupName: params.groupName,
+    usernameOrEmail: params.email,
+    activationToken: token,
+    expiresAt,
+  });
+  auditEmailInvitationSent(params.actorUserId, params.actorRole, params.userId);
+}
 
 export interface CreateGroupResult {
   error?: string;
@@ -55,7 +89,12 @@ export interface AddCandidateResult {
 
 /** Crée le compte candidat s'il n'existe pas encore (identifiant unique),
  * puis l'ajoute au groupe — couvre "ajouter des candidats" (§2) sans page
- * séparée de gestion globale des comptes candidats (hors périmètre MVP). */
+ * séparée de gestion globale des comptes candidats (hors périmètre MVP).
+ * Mission email §8 CRITIQUE : plus de mot de passe temporaire saisi par
+ * l'admin — le compte est créé 'pending_activation' et le candidat reçoit
+ * une invitation par email pour créer lui-même son mot de passe. L'email
+ * devient donc obligatoire ici (il ne l'était pas avant), nécessaire pour
+ * l'envoi de l'invitation. */
 export async function addCandidateAction(groupId: number, _prev: AddCandidateResult, formData: FormData): Promise<AddCandidateResult> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
   if (!hasGroupAccess(session, groupId)) {
@@ -64,18 +103,36 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   }
   const fullName = String(formData.get("fullName") ?? "").trim();
   const username = String(formData.get("username") ?? "").trim();
-  const password = String(formData.get("password") ?? "");
+  const email = String(formData.get("email") ?? "").trim();
 
-  if (!fullName || !username || !password) return { error: "Nom, identifiant et mot de passe temporaire sont obligatoires." };
-  if (password.length < 8) return { error: "Le mot de passe temporaire doit faire au moins 8 caractères." };
+  if (!fullName || !username || !email) return { error: "Nom, identifiant et email sont obligatoires (l'email sert à l'invitation)." };
+
+  const group = getGroup(groupId);
+  if (!group) return { error: "Groupe introuvable." };
 
   let user = findUserByUsername(username);
   if (user && user.status === "suspended") return { error: "Ce compte existe mais est suspendu." };
-  const userId = user ? user.id : createUser({ username, password, fullName, role: "candidate" });
 
+  if (user) {
+    addCandidateToGroup(groupId, user.id, session.userId);
+    revalidatePath(`/groups/${groupId}`);
+    return { success: `${fullName} (compte existant) ajouté au groupe.` };
+  }
+
+  const userId = createUserPendingActivation({ username, fullName, role: "candidate", email });
   addCandidateToGroup(groupId, userId, session.userId);
+  await inviteNewCandidate({
+    userId,
+    email,
+    fullName,
+    companyId: group.company_id,
+    companyName: group.company_name,
+    groupName: group.name,
+    actorUserId: session.userId,
+    actorRole: session.role as "pedagogical_manager" | "administrator",
+  });
   revalidatePath(`/groups/${groupId}`);
-  return { success: user ? `${fullName} (compte existant) ajouté au groupe.` : `${fullName} créé et ajouté au groupe. Identifiant : ${username}` };
+  return { success: `${fullName} créé et invité par email (${email}).` };
 }
 
 export async function removeCandidateAction(groupId: number, candidateUserId: number) {
@@ -122,10 +179,12 @@ export interface BulkImportResult {
 }
 
 /** Mission "PRODUCTION READINESS" §3 — import CSV en masse. Format attendu
- * (en-tête obligatoire) : full_name,username,password[,email,phone] — un
- * candidat par ligne. Jamais de doublon silencieux : chaque ligne produit
- * une entrée de rapport explicite (créé / déjà existant-ajouté /
- * déjà membre de CE groupe / erreur), jamais une réussite supposée. */
+ * (en-tête obligatoire) : full_name,username,email[,phone] — un candidat
+ * par ligne. Mission email §8 CRITIQUE : plus de colonne password — email
+ * devient obligatoire (invitation sécurisée, jamais de mot de passe
+ * communiqué). Jamais de doublon silencieux : chaque ligne produit une
+ * entrée de rapport explicite (créé / déjà existant-ajouté / déjà membre
+ * de CE groupe / erreur), jamais une réussite supposée. */
 export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImportResult, formData: FormData): Promise<BulkImportResult> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
   if (!hasGroupAccess(session, groupId)) {
@@ -133,18 +192,20 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
     return { error: "Ce groupe n'est pas dans votre périmètre." };
   }
   const csvText = String(formData.get("csv") ?? "").trim();
-  if (!csvText) return { error: "Collez le contenu CSV (full_name,username,password)." };
+  if (!csvText) return { error: "Collez le contenu CSV (full_name,username,email)." };
+
+  const group = getGroup(groupId);
+  if (!group) return { error: "Groupe introuvable." };
 
   const lines = csvText.split(/\r?\n/).filter((l) => l.trim().length > 0);
   if (lines.length < 2) return { error: "Au moins une ligne d'en-tête et une ligne de donnée sont requises." };
   const header = lines[0]!.split(",").map((h) => h.trim().toLowerCase());
   const idxFullName = header.indexOf("full_name");
   const idxUsername = header.indexOf("username");
-  const idxPassword = header.indexOf("password");
   const idxEmail = header.indexOf("email");
   const idxPhone = header.indexOf("phone");
-  if (idxFullName === -1 || idxUsername === -1 || idxPassword === -1) {
-    return { error: "En-tête CSV invalide — colonnes minimum requises : full_name,username,password." };
+  if (idxFullName === -1 || idxUsername === -1 || idxEmail === -1) {
+    return { error: "En-tête CSV invalide — colonnes minimum requises : full_name,username,email." };
   }
 
   const report: BulkImportResult["report"] = [];
@@ -156,16 +217,11 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
     const cols = lines[i]!.split(",").map((c) => c.trim());
     const fullName = cols[idxFullName] ?? "";
     const username = cols[idxUsername] ?? "";
-    const password = cols[idxPassword] ?? "";
-    const email = idxEmail >= 0 ? cols[idxEmail] || undefined : undefined;
+    const email = cols[idxEmail] ?? "";
     const phone = idxPhone >= 0 ? cols[idxPhone] || undefined : undefined;
 
-    if (!fullName || !username || !password) {
-      report.push({ line: i + 1, identifier: username || fullName || "?", status: "error", detail: "Champs obligatoires manquants." });
-      continue;
-    }
-    if (password.length < 8) {
-      report.push({ line: i + 1, identifier: username, status: "error", detail: "Mot de passe temporaire trop court (min. 8 caractères)." });
+    if (!fullName || !username || !email) {
+      report.push({ line: i + 1, identifier: username || fullName || "?", status: "error", detail: "Champs obligatoires manquants (full_name, username, email)." });
       continue;
     }
     try {
@@ -175,9 +231,21 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
         continue;
       }
       const isNew = !user;
-      const userId = user ? user.id : createUser({ username, password, fullName, role: "candidate", email, phone });
+      const userId = user ? user.id : createUserPendingActivation({ username, fullName, role: "candidate", email, phone });
       addCandidateToGroup(groupId, userId, session.userId);
       existingMembers.add(userId);
+      if (isNew) {
+        await inviteNewCandidate({
+          userId,
+          email,
+          fullName,
+          companyId: group.company_id,
+          companyName: group.company_name,
+          groupName: group.name,
+          actorUserId: session.userId,
+          actorRole: session.role as "pedagogical_manager" | "administrator",
+        });
+      }
       report.push({ line: i + 1, identifier: username, status: isNew ? "created" : "existing_added" });
     } catch (e) {
       report.push({ line: i + 1, identifier: username, status: "error", detail: (e as Error).message });

@@ -39,7 +39,7 @@ describe("Chronomètre serveur (§8 — indépendant du navigateur)", () => {
       .run(assessmentId, candidateId, startedLongAgo, past);
 
     const swept = sweepExpiredAttempts();
-    assert.equal(swept, 1, "exactement une tentative expirée doit être balayée");
+    assert.equal(swept.length, 1, "exactement une tentative expirée doit être balayée");
 
     const attempt = db.prepare(`SELECT status FROM attempts WHERE assessment_id = ? AND candidate_user_id = ?`).get(assessmentId, candidateId) as { status: string };
     assert.equal(attempt.status, "auto_submitted");

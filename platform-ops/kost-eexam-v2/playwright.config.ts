@@ -40,6 +40,13 @@ export default defineConfig({
       // voir le commentaire dans lib/session.ts. Ne JAMAIS définir cette
       // variable en déploiement réel (HTTPS).
       COOKIE_SECURE: "false",
+      // Mission email §53-54 — APP_BASE_URL doit être configuré pour que
+      // le sous-système email s'exécute réellement en E2E (liens
+      // d'activation/examen valides) ; EMAIL_MODE reste explicitement
+      // "log" (défaut de toute façon) — aucun envoi réel, jamais vers une
+      // vraie adresse, même en test.
+      APP_BASE_URL: "http://127.0.0.1:3101",
+      EMAIL_MODE: "log",
     },
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],

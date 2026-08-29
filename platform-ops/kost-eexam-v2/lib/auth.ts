@@ -56,6 +56,15 @@ export async function login(username: string, password: string, meta: { ip?: str
   }
 
   const user = findUserByUsername(username);
+  // pending_activation (mission email §8-9) : password_hash porte un
+  // hachage aléatoire inconnu de tous — vérifié AVANT verifyPassword pour
+  // renvoyer un message utile ("activez votre compte") plutôt que le
+  // message générique "mot de passe incorrect" qui serait techniquement
+  // toujours vrai ici mais trompeur pour un vrai candidat.
+  if (user?.status === "pending_activation") {
+    audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "pending_activation" } });
+    return { ok: false, error: "Ce compte n'est pas encore activé. Consultez l'email d'invitation reçu pour créer votre mot de passe." };
+  }
   if (!user || !verifyPassword(password, user.password_hash)) {
     recordLoginFailure(rateLimitKey);
     audit({ actorUserId: user?.id ?? null, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { username } });

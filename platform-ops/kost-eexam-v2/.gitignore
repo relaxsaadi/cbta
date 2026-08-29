@@ -22,6 +22,9 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /playwright/.cache/
+# fixture E2E régénérée à chaque run (scripts/seed-email-demo.ts) — contient
+# un jeton d'activation de TEST à usage unique, jamais un secret de prod.
+/tests/e2e/.email-fixtures.json
 
 # misc
 .DS_Store

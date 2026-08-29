@@ -2,6 +2,20 @@
 
 This register stores concise regulatory source locations and validation conclusions. It must not contain large copied passages from licensed publications.
 
+> ✅ **2026-08-29 — V2 import + a source-register-adjacent data bug found:**
+> KOST E-EXAM V2 staging now holds 244 confirmed questions (was 92); see
+> `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`'s 2026-08-29 note and
+> `platform-ops/kost-eexam-v2/docs/KOST_EEXAM_V2_TIER_A_244_MIGRATION_REPORT.md`
+> for full detail. Relevant to this register specifically: 127 rows in
+> the reconciliation CSVs (`DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`
+> `SOURCE_REFERENCE`, `DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`
+> `DGR_Reference`) carry the same wrong value — a "representative sample"
+> citation list mis-copied into each row's own field, never these rows'
+> actual individual citation. **Do not add these 127 rows' citations to
+> this register from that column** until the generator bug is fixed and
+> the column is regenerated; a genuinely per-row `SOURCE:` fragment
+> inside `Final_Reconciled_Status` was usable for only 44 of the 127.
+
 > ⚠️ **2026-08-25 reconciliation note:** this file's "218 FROZEN" program
 > total (below, "Program totals after Topic 5") is a topic-analysis
 > conclusion, not what is currently stamped in each item's own `**FR

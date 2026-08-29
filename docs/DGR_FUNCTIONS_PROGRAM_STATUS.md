@@ -1,5 +1,38 @@
 # DGR/CBTA Question-Bank Program — Functions 7.1 → 7.10 Status
 
+> ✅ **2026-08-29 — KOST E-EXAM V2 operational with 244 confirmed
+> questions (owner decision):** per the reconciliation CSV
+> (`docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`, 244/453
+> `IMPORT_ELIGIBLE=YES`), Claude Code synced the 152 not-yet-imported
+> eligible questions into KOST E-EXAM V2 staging (was 92, now 244; exact
+> per-function counts: 7.1:13, 7.2:27, 7.3:31, 7.4:25, 7.5:21, 7.6:31,
+> 7.7:25, 7.8:27, 7.9:23, 7.10:21). `reviewer_status` stays `PENDING` on
+> all 244 — not a regulatory-approval event. Full report, including a
+> data-quality bug found in the reconciliation CSVs (see next paragraph)
+> and a new reusable incremental-sync architecture, is in
+> `platform-ops/kost-eexam-v2/docs/KOST_EEXAM_V2_TIER_A_244_MIGRATION_REPORT.md`
+> (on branch `feature/kost-eexam-v2-native`, commit `06456db`). This does
+> **not** supersede the "97 stamped FROZEN" reconciliation note below —
+> the 244 count reflects a *later*, larger reconciliation pass (dated
+> 2026-08-29 in the CSVs' own `FR_STATUS`/`Final_Reconciled_Status`
+> fields, presumably run by the other coordinating session) that is not
+> yet narrated in this file's own per-function sections; Tier A
+> verification of the remaining ~209 items continues separately.
+>
+> **CSV data-quality bug found (flag for whoever owns the reconciliation
+> generator):** 127 of the 152 newly-promoted rows carry an identical,
+> clearly-wrong `SOURCE_REFERENCE` (`DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`)
+> / `DGR_Reference` (`DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`) value —
+> `"§1.0, §1.1.2, §1.1.3, §3.0.1.1"` — traced to the generator lifting a
+> "representative sample" citation list (four *other* items' references,
+> quoted for illustration inside each row's own promotion rationale) as
+> if it were that row's own reference. Not used for the V2 import (a
+> genuinely per-row fragment inside `Final_Reconciled_Status`'s own
+> `SOURCE:` text was used instead, only when it names a real `§`
+> section — 44/152 qualified; the rest were left with no reference
+> rather than a guessed one). Please fix the generator so each row's own
+> reference is written, not a copy of the illustrative sample.
+
 > ⚠️ **2026-08-25 reconciliation note:** the "218 FROZEN" running totals
 > logged below (end of this file) are topic-analysis conclusions, not
 > what is currently stamped in each item's own `**FR status:**` field.

@@ -46,6 +46,7 @@ export async function resetPasswordAction(_prev: ResetPasswordResult, formData: 
       userId: user.id,
       email: user.email,
       firstName,
+      username: user.username,
       changedAt,
       tenant: tenantRow ? { companyId: tenantRow.company_id, companyName: tenantRow.company_name } : undefined,
     });

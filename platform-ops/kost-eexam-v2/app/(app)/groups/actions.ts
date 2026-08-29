@@ -19,6 +19,7 @@ import { auditEmailInvitationSent } from "@/lib/email/audit";
  * l'envoi, donc cet appel ne lève jamais pour une raison réseau Resend). */
 async function inviteNewCandidate(params: {
   userId: number;
+  username: string;
   email: string;
   fullName: string;
   companyId: number;
@@ -36,7 +37,11 @@ async function inviteNewCandidate(params: {
     companyId: params.companyId,
     companyName: params.companyName,
     groupName: params.groupName,
-    usernameOrEmail: params.email,
+    // Mission "COMPLETE USER MANAGEMENT" §19 — même correctif que
+    // lib/email/resend-actions.ts::resendInvitation : l'identifiant de
+    // connexion réel est `username`, jamais l'email (voir
+    // app/login/LoginForm.tsx + lib/auth.ts::findUserByUsername).
+    usernameOrEmail: params.username,
     activationToken: token,
     expiresAt,
   });
@@ -123,6 +128,7 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   addCandidateToGroup(groupId, userId, session.userId);
   await inviteNewCandidate({
     userId,
+    username,
     email,
     fullName,
     companyId: group.company_id,
@@ -237,6 +243,7 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
       if (isNew) {
         await inviteNewCandidate({
           userId,
+          username,
           email,
           fullName,
           companyId: group.company_id,

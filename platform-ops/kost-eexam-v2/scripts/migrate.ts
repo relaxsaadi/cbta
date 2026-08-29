@@ -35,6 +35,9 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
   },
   { table: "users", column: "mfa_secret", ddl: "ALTER TABLE users ADD COLUMN mfa_secret TEXT" },
   { table: "users", column: "mfa_recovery_codes_json", ddl: "ALTER TABLE users ADD COLUMN mfa_recovery_codes_json TEXT" },
+  // Mission "COMPLETE USER MANAGEMENT" (2026-08-29).
+  { table: "users", column: "candidate_type", ddl: "ALTER TABLE users ADD COLUMN candidate_type TEXT" },
+  { table: "users", column: "archived_at", ddl: "ALTER TABLE users ADD COLUMN archived_at TEXT" },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {
@@ -105,7 +108,12 @@ function migrateIncidentActionsCheckConstraint(db: ReturnType<typeof getDb>) {
 // attente du flux d'activation sécurisé par jeton).
 function migrateUsersStatusCheckConstraint(db: ReturnType<typeof getDb>) {
   const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'users'`).get() as { sql: string } | undefined;
-  if (!row || row.sql.includes("pending_activation")) return;
+  // Correspondance sur la valeur d'énumération EXACTE avec guillemets —
+  // même discipline défensive que migrateUsersArchivedStatus() ci-dessous,
+  // après le faux positif réel trouvé sur "archived"/"archived_at" (aucune
+  // collision connue ici aujourd'hui, mais le même principe s'applique si
+  // une future colonne contenait "pending_activation" dans son nom).
+  if (!row || row.sql.includes("'pending_activation'")) return;
 
   db.exec("PRAGMA foreign_keys = OFF");
   db.exec("BEGIN IMMEDIATE");
@@ -155,6 +163,68 @@ function migrateUsersStatusCheckConstraint(db: ReturnType<typeof getDb>) {
   }
 }
 
+// Deuxième élargissement de la même contrainte (mission "COMPLETE USER
+// MANAGEMENT", 2026-08-29) — ajoute 'archived'. Fonction SÉPARÉE plutôt
+// que de modifier migrateUsersStatusCheckConstraint ci-dessus : cette
+// dernière est gardée par `row.sql.includes("pending_activation")`, qui
+// est déjà vrai sur staging (déjà migrée) — elle ne se redéclencherait
+// jamais pour ajouter 'archived'. Garde dédiée sur "archived" à la place.
+// Doit tourner APRÈS applyAdditiveColumns() (candidate_type/archived_at
+// doivent déjà exister) — voir l'ordre dans main() plus bas. Colonnes
+// explicites des deux côtés, même discipline que ci-dessus (jamais
+// SELECT *, voir le commentaire long ci-dessus pour l'incident réel qui a
+// établi cette règle).
+function migrateUsersArchivedStatus(db: ReturnType<typeof getDb>) {
+  const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'users'`).get() as { sql: string } | undefined;
+  // Bug réel trouvé en testant CETTE migration localement avant tout
+  // déploiement (2026-08-29) : un simple .includes("archived") remonte un
+  // FAUX POSITIF dès qu'applyAdditiveColumns() a ajouté la colonne
+  // `archived_at` — son NOM contient la sous-chaîne "archived", donc la
+  // garde croyait la contrainte déjà élargie et sautait la reconstruction
+  // entière, silencieusement (confirmé : un INSERT avec status='archived'
+  // échouait ensuite sur l'ANCIENNE contrainte). Correction : chercher la
+  // valeur d'énumération EXACTE telle qu'elle apparaît dans la clause
+  // CHECK ('archived', avec les deux guillemets), qui ne correspond
+  // jamais au nom d'une colonne.
+  if (!row || row.sql.includes("'archived'")) return;
+
+  db.exec("PRAGMA foreign_keys = OFF");
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.exec(`
+      CREATE TABLE users_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        full_name TEXT NOT NULL,
+        phone TEXT,
+        status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending_activation','active','suspended','archived')),
+        mfa_enabled INTEGER NOT NULL DEFAULT 0,
+        mfa_secret TEXT,
+        mfa_recovery_codes_json TEXT,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+        last_login_at TEXT,
+        candidate_type TEXT,
+        archived_at TEXT
+      );
+    `);
+    db.exec(`
+      INSERT INTO users_new (id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at)
+      SELECT id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at FROM users;
+    `);
+    db.exec(`DROP TABLE users;`);
+    db.exec(`ALTER TABLE users_new RENAME TO users;`);
+    db.exec("COMMIT");
+    console.log("Contrainte users.status élargie (archived).");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
 function main() {
   const db = getDb();
   const schema = readFileSync(resolve(import.meta.dirname, "../lib/schema.sql"), "utf-8");
@@ -165,6 +235,7 @@ function main() {
   db.exec(`CREATE INDEX IF NOT EXISTS idx_incidents_group ON incidents(group_id)`);
   migrateIncidentActionsCheckConstraint(db);
   migrateUsersStatusCheckConstraint(db);
+  migrateUsersArchivedStatus(db); // doit tourner APRÈS applyAdditiveColumns (candidate_type/archived_at)
 
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"

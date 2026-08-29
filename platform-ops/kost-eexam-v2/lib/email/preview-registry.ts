@@ -22,6 +22,8 @@ import FamiliarizationInvitationEmail, { familiarizationInvitationSubject } from
 import IncidentDeclaredEmail, { incidentDeclaredSubject } from "./templates/incident-declared";
 import IncidentResolvedEmail, { incidentResolvedSubject } from "./templates/incident-resolved";
 import { MaintenanceStartedEmail, MaintenanceCompletedEmail, maintenanceStartedSubject, maintenanceCompletedSubject } from "./templates/maintenance";
+import UsernameChangedEmail, { usernameChangedSubject } from "./templates/username-changed";
+import AdminMessageEmail, { adminMessageSubject } from "./templates/admin-message";
 
 export interface PreviewScenario {
   key: string;
@@ -48,6 +50,7 @@ const F = {
   expiresAtFormatted: "30/08/2026 à 14:00",
   changedAtFormatted: "29/08/2026 à 09:12",
   heldAtFormatted: "05/09/2026 à 09:00",
+  username: "amel.demo",
 };
 
 export function buildPreviewScenarios(): PreviewScenario[] {
@@ -92,14 +95,21 @@ export function buildPreviewScenarios(): PreviewScenario[] {
       label: "Réinitialisation de mot de passe demandée",
       category: "Sécurité",
       subject: passwordResetRequestedSubject(),
-      node: createElement(PasswordResetRequestedEmail, { firstName: F.firstName, resetUrl: F.resetUrl, expiresAtFormatted: F.expiresAtFormatted }),
+      node: createElement(PasswordResetRequestedEmail, { firstName: F.firstName, username: F.username, resetUrl: F.resetUrl, expiresAtFormatted: F.expiresAtFormatted }),
     },
     {
       key: "password-changed",
       label: "Mot de passe modifié",
       category: "Sécurité",
       subject: passwordChangedSubject(),
-      node: createElement(PasswordChangedEmail, { firstName: F.firstName, changedAtFormatted: F.changedAtFormatted }),
+      node: createElement(PasswordChangedEmail, { firstName: F.firstName, username: F.username, changedAtFormatted: F.changedAtFormatted, loginUrl: F.loginUrl }),
+    },
+    {
+      key: "username-changed",
+      label: "Identifiant modifié",
+      category: "Sécurité",
+      subject: usernameChangedSubject(),
+      node: createElement(UsernameChangedEmail, { firstName: F.firstName, newUsername: F.username, loginUrl: F.loginUrl }),
     },
     {
       key: "mfa-enabled",
@@ -231,6 +241,21 @@ export function buildPreviewScenarios(): PreviewScenario[] {
       category: "Plateforme",
       subject: maintenanceCompletedSubject(),
       node: createElement(MaintenanceCompletedEmail, { firstName: F.firstName }),
+    },
+    {
+      key: "admin-message",
+      label: "Message envoyé par un administrateur/responsable",
+      category: "Communication admin",
+      subject: adminMessageSubject("Information — session de formation reportée"),
+      node: createElement(AdminMessageEmail, {
+        firstName: F.firstName,
+        senderName: "Amine (KOST Academy)",
+        messageTypeLabel: "Session / formation",
+        subject: "Information — session de formation reportée",
+        bodyText: "Bonjour, la session de familiarisation prévue le 05/09 est reportée au 08/09, même horaire. Merci de votre compréhension.",
+        ctaLabel: "Accéder à KOST E-EXAM",
+        ctaUrl: F.loginUrl,
+      }),
     },
   ];
 }

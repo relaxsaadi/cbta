@@ -50,6 +50,7 @@ export async function requestPasswordResetAction(_prev: ForgotPasswordResult, fo
     userId: user.id,
     email: user.email,
     firstName,
+    username: user.username,
     resetToken: token,
     expiresAt,
     tenant: tenantRow ? { companyId: tenantRow.company_id, companyName: tenantRow.company_name } : undefined,

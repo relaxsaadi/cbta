@@ -49,6 +49,9 @@ export async function activateAccountAction(_prev: ActivateResult, formData: For
   if (denial === "already_active") {
     return { error: "Ce compte est déjà actif. Connectez-vous directement depuis la page de connexion." };
   }
+  if (denial === "archived") {
+    return { error: "Ce compte a été archivé. Contactez l'administrateur." };
+  }
 
   setPasswordAndActivate(user.id, password);
   consumeActivationToken(tokenRow.id);

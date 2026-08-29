@@ -65,6 +65,8 @@ import FamiliarizationInvitationEmail, {
   TEMPLATE_ID as FAMILIARIZATION_ID,
   TEMPLATE_VERSION as FAMILIARIZATION_V,
 } from "./templates/familiarization-invitation";
+import UsernameChangedEmail, { usernameChangedSubject, TEMPLATE_ID as USERNAME_CHANGED_ID, TEMPLATE_VERSION as USERNAME_CHANGED_V } from "./templates/username-changed";
+import AdminMessageEmail, { adminMessageSubject, TEMPLATE_ID as ADMIN_MESSAGE_ID, TEMPLATE_VERSION as ADMIN_MESSAGE_V } from "./templates/admin-message";
 
 async function renderBoth(node: React.ReactElement): Promise<{ html: string; text: string }> {
   const [html, text] = await Promise.all([render(node), render(node, { plainText: true })]);
@@ -180,6 +182,10 @@ export async function notifyPasswordResetRequested(params: {
   userId: number;
   email: string;
   firstName: string;
+  /** Mission "COMPLETE USER MANAGEMENT" §19 — identifiant de connexion,
+   * rappelé qu'il s'agisse d'une demande self-service ou déclenchée par un
+   * admin (voir lib/email/resend-actions.ts::sendPasswordResetLink). */
+  username: string;
   resetToken: string;
   expiresAt: string;
   tenant?: EmailTenantContext;
@@ -187,7 +193,12 @@ export async function notifyPasswordResetRequested(params: {
   return safe("PASSWORD_RESET_REQUESTED", async () => {
     const resetUrl = `${getAppBaseUrl()}/mot-de-passe/reinitialiser?token=${params.resetToken}`;
     const { html, text } = await renderBoth(
-      createElement(PasswordResetRequestedEmail, { firstName: params.firstName, resetUrl, expiresAtFormatted: formatCandidateDateTime(params.expiresAt) })
+      createElement(PasswordResetRequestedEmail, {
+        firstName: params.firstName,
+        username: params.username,
+        resetUrl,
+        expiresAtFormatted: formatCandidateDateTime(params.expiresAt),
+      })
     );
     // Clé d'idempotence incluant le jeton lui-même (haché, pas en clair) —
     // une NOUVELLE demande de réinitialisation doit toujours produire un
@@ -208,9 +219,19 @@ export async function notifyPasswordResetRequested(params: {
 // ---------------------------------------------------------------------
 // PASSWORD_CHANGED (sécurité obligatoire)
 // ---------------------------------------------------------------------
-export async function notifyPasswordChanged(params: { userId: number; email: string; firstName: string; changedAt: string; tenant?: EmailTenantContext }): Promise<void> {
+export async function notifyPasswordChanged(params: {
+  userId: number;
+  email: string;
+  firstName: string;
+  username: string;
+  changedAt: string;
+  tenant?: EmailTenantContext;
+}): Promise<void> {
   return safe("PASSWORD_CHANGED", async () => {
-    const { html, text } = await renderBoth(createElement(PasswordChangedEmail, { firstName: params.firstName, changedAtFormatted: formatCandidateDateTime(params.changedAt) }));
+    const loginUrl = `${getAppBaseUrl()}/login`;
+    const { html, text } = await renderBoth(
+      createElement(PasswordChangedEmail, { firstName: params.firstName, username: params.username, changedAtFormatted: formatCandidateDateTime(params.changedAt), loginUrl })
+    );
     await queueAndSendEmail({
       eventType: "PASSWORD_CHANGED",
       idempotencyKey: `password-changed/${params.userId}/${params.changedAt}`,
@@ -676,6 +697,72 @@ export async function notifyFamiliarizationInvitation(params: {
       tenant: params.tenant ?? NO_TENANT,
       sender: getSenderNotifications(),
       rendered: { subject: familiarizationInvitationSubject(), html, text, templateId: FAMILIARIZATION_ID, templateVersion: FAMILIARIZATION_V },
+    });
+  });
+}
+
+// ---------------------------------------------------------------------
+// USERNAME_CHANGED (mission "COMPLETE USER MANAGEMENT", 2026-08-29, §21)
+// ---------------------------------------------------------------------
+export async function notifyUsernameChanged(params: { userId: number; email: string; firstName: string; newUsername: string; changedAt: string; tenant?: EmailTenantContext }): Promise<void> {
+  return safe("USERNAME_CHANGED", async () => {
+    const loginUrl = `${getAppBaseUrl()}/login`;
+    const { html, text } = await renderBoth(createElement(UsernameChangedEmail, { firstName: params.firstName, newUsername: params.newUsername, loginUrl }));
+    await queueAndSendEmail({
+      eventType: "USERNAME_CHANGED",
+      idempotencyKey: `username-changed/${params.userId}/${params.changedAt}`,
+      recipientEmail: params.email,
+      userId: params.userId,
+      tenant: params.tenant ?? NO_TENANT,
+      sender: getSenderSecurity(),
+      rendered: { subject: usernameChangedSubject(), html, text, templateId: USERNAME_CHANGED_ID, templateVersion: USERNAME_CHANGED_V },
+    });
+  });
+}
+
+// ---------------------------------------------------------------------
+// ADMIN_MESSAGE (mission "COMPLETE USER MANAGEMENT", 2026-08-29, §36-40) —
+// communication libre admin → candidat, réutilisant intégralement l'outbox
+// existant. Le destinataire est déjà résolu et verrouillé par l'appelant
+// (app/(app)/users/actions.ts::sendMessageAction — jamais un email
+// arbitraire saisi ici ou dans ce module).
+// ---------------------------------------------------------------------
+export async function notifyAdminMessage(params: {
+  userId: number;
+  email: string;
+  firstName: string;
+  senderName: string;
+  messageTypeLabel: string;
+  subject: string;
+  bodyText: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  sentAt: string;
+  tenant?: EmailTenantContext;
+}): Promise<void> {
+  return safe("ADMIN_MESSAGE", async () => {
+    const { html, text } = await renderBoth(
+      createElement(AdminMessageEmail, {
+        firstName: params.firstName,
+        senderName: params.senderName,
+        messageTypeLabel: params.messageTypeLabel,
+        subject: params.subject,
+        bodyText: params.bodyText,
+        ctaLabel: params.ctaLabel,
+        ctaUrl: params.ctaUrl,
+      })
+    );
+    // Idempotence horodatée (§ mêmes règles que MFA_ENABLED/ACCOUNT_SUSPENDED
+    // — chaque message admin est un événement distinct par nature, jamais à
+    // dédupliquer contre un précédent message même de même sujet).
+    await queueAndSendEmail({
+      eventType: "ADMIN_MESSAGE",
+      idempotencyKey: `admin-message/${params.userId}/${params.sentAt}`,
+      recipientEmail: params.email,
+      userId: params.userId,
+      tenant: params.tenant ?? NO_TENANT,
+      sender: getSenderNotifications(),
+      rendered: { subject: adminMessageSubject(params.subject), html, text, templateId: ADMIN_MESSAGE_ID, templateVersion: ADMIN_MESSAGE_V },
     });
   });
 }

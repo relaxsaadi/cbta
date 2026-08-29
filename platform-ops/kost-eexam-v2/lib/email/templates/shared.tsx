@@ -16,6 +16,7 @@ import {
   Link,
 } from "@react-email/components";
 import type { ReactNode } from "react";
+import { getSupportEmail } from "../config";
 
 export const COLORS = {
   navy: "#0f1f3d",
@@ -31,6 +32,12 @@ export const COLORS = {
 };
 
 export function EmailShell({ preview, children }: { preview: string; children: ReactNode }) {
+  // Adresse de support centralisée (mission "COMPLETE USER MANAGEMENT",
+  // §33-35) — un seul appel, ici, plutôt que répété dans chacun des 18+
+  // gabarits : satisfait "Besoin d'aide ? Contactez-nous : {adresse}" pour
+  // TOUS les emails candidat (superset des templates explicitement cités
+  // par la mission), jamais une adresse recopiée en dur.
+  const supportEmail = getSupportEmail();
   return (
     <Html lang="fr">
       <Head />
@@ -46,9 +53,9 @@ export function EmailShell({ preview, children }: { preview: string; children: R
           <Section style={{ padding: "18px 32px" }}>
             <EmailText style={{ margin: 0, fontSize: "11px", color: COLORS.textMuted, lineHeight: 1.5 }}>
               KOST Academy — Alger, Algérie. Cet email est envoyé automatiquement par KOST E-EXAM, la plateforme
-              d&apos;examen de KOST Academy. Pour toute question, contactez{" "}
-              <Link href="mailto:support@kostacademy.com" style={{ color: COLORS.accent }}>
-                support@kostacademy.com
+              d&apos;examen de KOST Academy. Besoin d&apos;aide ? Contactez-nous :{" "}
+              <Link href={`mailto:${supportEmail}`} style={{ color: COLORS.accent }}>
+                {supportEmail}
               </Link>
               .
             </EmailText>

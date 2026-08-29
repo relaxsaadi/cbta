@@ -10,8 +10,8 @@ import { findUserById } from "../users";
 import { getGroup } from "../groups";
 import { checkLoginRateLimit, recordLoginFailure } from "../rate-limit";
 import { createActivationToken, invalidatePendingTokens } from "../activation-tokens";
-import { notifyAccountCreated } from "./events";
-import { auditEmailInvitationResent, auditExamNotificationResent } from "./audit";
+import { notifyAccountCreated, notifyPasswordResetRequested } from "./events";
+import { auditEmailInvitationResent, auditExamNotificationResent, auditPasswordResetRequested } from "./audit";
 import type { ConsoleRole } from "../session";
 
 export class ResendError extends Error {}
@@ -63,7 +63,14 @@ export async function resendInvitation(targetUserId: number, actor: { id: number
     companyId: tenantRow?.company_id ?? null,
     companyName: tenantRow?.company_name ?? "KOST Academy",
     groupName: tenantRow?.group_name ?? "—",
-    usernameOrEmail: target.email,
+    // Mission "COMPLETE USER MANAGEMENT" §19 — bug réel trouvé en
+    // vérifiant que l'identifiant affiché est bien celui réellement utilisé
+    // pour se connecter (app/login/LoginForm.tsx::name="username" +
+    // lib/auth.ts::findUserByUsername) : l'email n'est JAMAIS l'identifiant
+    // de connexion dans cette plateforme, même s'il ressemble à un email —
+    // ce champ affichait auparavant target.email, potentiellement différent
+    // du vrai username si l'admin les a saisis différemment à la création.
+    usernameOrEmail: target.username,
     activationToken: token,
     expiresAt,
     forceResendSuffix: String(Date.now()),
@@ -71,6 +78,48 @@ export async function resendInvitation(targetUserId: number, actor: { id: number
 
   recordLoginFailure(resendRateLimitKey("invitation", targetUserId)); // consomme un "essai" du limiteur, même en cas de succès (anti-spam, pas anti-erreur)
   auditEmailInvitationResent(actor.id, actor.role, targetUserId);
+}
+
+/** "Envoyer lien réinitialisation" (mission "COMPLETE USER MANAGEMENT",
+ * §17 — action admin) — même token/même template/même flux de consommation
+ * que le self-service "mot de passe oublié" (app/mot-de-passe/oublie/
+ * actions.ts), déclenché ici par un admin pour un compte DÉJÀ actif
+ * (jamais pour un compte pending_activation — utiliser resendInvitation
+ * pour ce cas, qui reste le seul chemin légitime "premier accès"). Jamais
+ * de mot de passe généré/affiché ici — uniquement un lien à usage unique. */
+export async function sendPasswordResetLink(targetUserId: number, actor: { id: number; role: ConsoleRole }): Promise<void> {
+  const rl = checkLoginRateLimit(resendRateLimitKey("password-reset-admin", targetUserId));
+  if (!rl.allowed) throw new ResendError(`Trop de renvois récents pour ce compte. Réessayez dans ${Math.ceil(rl.retryAfterSeconds / 60)} minute(s).`);
+
+  const target = findUserById(targetUserId);
+  if (!target) throw new ResendError("Compte introuvable.");
+  if (target.status !== "active") throw new ResendError("La réinitialisation de mot de passe n'est possible que pour un compte actif.");
+  if (!target.email) throw new ResendError("Ce compte n'a pas d'email au dossier — impossible d'envoyer un lien.");
+
+  invalidatePendingTokens(targetUserId, "password_reset");
+  const { token, expiresAt } = createActivationToken({ userId: targetUserId, purpose: "password_reset", createdBy: actor.id });
+  const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+
+  const tenantRow = getDb()
+    .prepare(
+      `SELECT c.id AS company_id, c.name AS company_name
+       FROM group_members gm JOIN groups g ON g.id = gm.group_id JOIN companies c ON c.id = g.company_id
+       WHERE gm.candidate_user_id = ? LIMIT 1`
+    )
+    .get(targetUserId) as { company_id: number; company_name: string } | undefined;
+
+  await notifyPasswordResetRequested({
+    userId: targetUserId,
+    email: target.email,
+    firstName,
+    username: target.username,
+    resetToken: token,
+    expiresAt,
+    tenant: tenantRow ? { companyId: tenantRow.company_id, companyName: tenantRow.company_name } : undefined,
+  });
+
+  recordLoginFailure(resendRateLimitKey("password-reset-admin", targetUserId));
+  auditPasswordResetRequested(actor.id, actor.role, targetUserId);
 }
 
 /** §41 "Renvoyer la notification d'examen" — relit l'état RÉEL actuel de

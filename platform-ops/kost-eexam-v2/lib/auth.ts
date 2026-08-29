@@ -74,6 +74,17 @@ export async function login(username: string, password: string, meta: { ip?: str
     audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "suspended" } });
     return { ok: false, error: "Ce compte est suspendu. Contactez un administrateur." };
   }
+  // 'archived' (mission "COMPLETE USER MANAGEMENT", 2026-08-29) — bug réel
+  // trouvé en relisant ce garde-fou après l'ajout du statut : archiver un
+  // compte ne modifie jamais password_hash, donc verifyPassword() ci-dessus
+  // continuerait de réussir pour un mot de passe encore valide — sans ce
+  // contrôle explicite, un compte archivé resterait connectable tant que
+  // son mot de passe n'a pas changé, en contradiction directe avec "ARCHIVÉ
+  // ne peut jamais se connecter" (exigence explicite de la mission).
+  if (user.status === "archived") {
+    audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "archived" } });
+    return { ok: false, error: "Ce compte a été archivé. Contactez un administrateur." };
+  }
   const role = getRoleForUser(user.id);
   if (!role) {
     audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "no_role" } });

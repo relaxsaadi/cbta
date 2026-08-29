@@ -23,6 +23,10 @@ export type EmailEventType =
   // --- Statut de compte (WIRED) ---
   | "ACCOUNT_SUSPENDED"
   | "ACCOUNT_REACTIVATED"
+  // --- Identifiant / communication admin (mission "COMPLETE USER
+  // MANAGEMENT", 2026-08-29 — WIRED) ---
+  | "USERNAME_CHANGED"
+  | "ADMIN_MESSAGE"
   // --- Affectation groupe/fonction (TEMPLATE_ONLY) ---
   | "CANDIDATE_ADDED_TO_GROUP"
   | "FUNCTION_ASSIGNED"
@@ -71,6 +75,8 @@ export const EMAIL_EVENT_TYPES: EmailEventType[] = [
   "MFA_RESET_BY_ADMIN",
   "ACCOUNT_SUSPENDED",
   "ACCOUNT_REACTIVATED",
+  "USERNAME_CHANGED",
+  "ADMIN_MESSAGE",
   "CANDIDATE_ADDED_TO_GROUP",
   "FUNCTION_ASSIGNED",
   "EXAM_ASSIGNED",
@@ -109,6 +115,8 @@ export const MANDATORY_EVENT_TYPES: ReadonlySet<EmailEventType> = new Set([
   "MFA_RESET_BY_ADMIN",
   "ACCOUNT_SUSPENDED",
   "ACCOUNT_REACTIVATED",
+  "USERNAME_CHANGED",
+  "ADMIN_MESSAGE",
   "EXAM_ASSIGNED",
   "EXAM_RESCHEDULED",
   "EXAM_CANCELLED",

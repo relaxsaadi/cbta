@@ -115,6 +115,22 @@ export function getReplyTo(): string | undefined {
   return readOptional("EMAIL_REPLY_TO");
 }
 
+/** Adresse de support affichée aux candidats (mission "COMPLETE USER
+ * MANAGEMENT", 2026-08-29, §33-35) — un seul point de vérité, jamais une
+ * adresse recopiée en dur dans chaque gabarit (voir lib/email/templates/
+ * shared.tsx::EmailShell, qui l'affiche une fois pour tous les emails).
+ * Ordre de résolution : EMAIL_SUPPORT_ADDRESS (variable dédiée, si le
+ * propriétaire veut une adresse distincte du Reply-To) → EMAIL_REPLY_TO
+ * (déjà centralisée, déjà utilisée comme en-tête Reply-To réel par
+ * lib/email/send.ts — la même adresse "contactez-nous" affichée doit dans
+ * le cas normal être celle où répondre fonctionne réellement) → repli fixe
+ * cbta@kostacademy.com (adresse externe correcte confirmée par le
+ * propriétaire — jamais support@kostacademy.com, une adresse générique non
+ * confirmée comme surveillée). */
+export function getSupportEmail(): string {
+  return readOptional("EMAIL_SUPPORT_ADDRESS") ?? readOptional("EMAIL_REPLY_TO") ?? "cbta@kostacademy.com";
+}
+
 /** §56 — rapport de configuration sûr (présence uniquement), utilisé par
  * /api/health et le centre d'aperçu admin. Ne JAMAIS étendre cette
  * fonction pour inclure une valeur de secret. */

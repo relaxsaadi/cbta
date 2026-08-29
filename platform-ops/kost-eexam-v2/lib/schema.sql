@@ -25,7 +25,16 @@ CREATE TABLE IF NOT EXISTS users (
   -- candidat passe à 'active' uniquement en complétant lui-même le flux
   -- sécurisé d'activation (voir activation_tokens) — jamais de mot de
   -- passe envoyé par email, jamais en clair nulle part.
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending_activation','active','suspended')),
+  -- 'archived' (mission "COMPLETE USER MANAGEMENT", 2026-08-29) : compte
+  -- désactivé de façon durable (départ, doublon, etc.) — connexion
+  -- structurellement impossible (lib/auth.ts, même garde que
+  -- 'pending_activation'/'suspended'), mais TOUT l'historique (tentatives,
+  -- résultats, affectations, audit) reste intact, jamais supprimé. Distinct
+  -- de 'suspended' : une suspension est une mesure de sécurité réversible
+  -- ponctuelle (souvent liée à un incident) ; un archivage est une décision
+  -- de cycle de vie normale (l'utilisateur ne fait plus partie du
+  -- programme). archived_at (colonne additive plus bas) trace le moment.
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending_activation','active','suspended','archived')),
   mfa_enabled INTEGER NOT NULL DEFAULT 0,
   -- MFA (mission "PRODUCTION READINESS" §25) — TOTP natif (RFC 6238),
   -- aucune dépendance externe. mfa_secret : base32, posé uniquement à
@@ -37,7 +46,16 @@ CREATE TABLE IF NOT EXISTS users (
   mfa_secret TEXT,
   mfa_recovery_codes_json TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-  last_login_at TEXT
+  last_login_at TEXT,
+  -- candidate_type (mission "COMPLETE USER MANAGEMENT", 2026-08-29) —
+  -- 'particulier' | 'entreprise' | NULL (staff, ou candidat créé avant
+  -- cette mission). Volontairement PAS de CHECK constraint ici (colonne
+  -- additive simple, validée côté application — cohérent avec le reste
+  -- des colonnes ajoutées après coup dans ce schéma). Un 'particulier'
+  -- n'a jamais besoin d'entreprise — jamais d'entreprise fictive créée
+  -- pour satisfaire une contrainte de modèle de données.
+  candidate_type TEXT,
+  archived_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -98,6 +116,22 @@ CREATE TABLE IF NOT EXISTS group_members (
 CREATE TABLE IF NOT EXISTS functions (
   code TEXT PRIMARY KEY,
   label TEXT NOT NULL
+);
+
+-- Fonctions DGR affectées à un CANDIDAT (mission "COMPLETE USER
+-- MANAGEMENT", 2026-08-29) — distinct de assessments.function_code
+-- (propriété d'un EXAMEN, jamais modifié après publication, voir §4 —
+-- "critique pour l'audit"). Cette table est purement déclarative côté
+-- dossier candidat ("ce candidat est habilité/en cours d'habilitation
+-- pour telle fonction") — ne touche JAMAIS un examen déjà publié ou ses
+-- snapshots. Plusieurs fonctions par candidat sont explicitement
+-- supportées (PK composite, pas un candidat = une fonction).
+CREATE TABLE IF NOT EXISTS user_functions (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  function_code TEXT NOT NULL REFERENCES functions(code),
+  assigned_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  assigned_by INTEGER REFERENCES users(id),
+  PRIMARY KEY (user_id, function_code)
 );
 
 CREATE TABLE IF NOT EXISTS questions (

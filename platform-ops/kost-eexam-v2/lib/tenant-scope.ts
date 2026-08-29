@@ -158,6 +158,19 @@ export function scopedUserIdsForSessionsOrNull(session: ScopeSession): number[] 
   return [session.userId, ...getManagedCandidateUserIds(session.userId)];
 }
 
+/** Mission "COMPLETE USER MANAGEMENT" (2026-08-29) — frontière pour
+ * /users et sa fiche détaillée : un responsable pédagogique ne doit
+ * jamais voir/agir sur un compte hors de son périmètre — ni un autre
+ * membre du staff, ni un candidat "Particulier" pas encore affecté à l'un
+ * de ses groupes (ce dernier n'a par définition PAS ENCORE de tenant
+ * assignable ; seul un administrator peut le voir avant affectation).
+ * Réutilise getManagedCandidateUserIds() — jamais une requête réimplémentée
+ * localement dans les Server Actions de /users. */
+export function hasUserAccess(session: ScopeSession, targetUserId: number): boolean {
+  if (session.role !== "pedagogical_manager") return true;
+  return getManagedCandidateUserIds(session.userId).includes(targetUserId);
+}
+
 /** Pour les Server Actions (mutations) — lève plutôt que de retourner un
  * booléen, cohérent avec requireWriteRole(). */
 export function assertAccess(ok: boolean, message?: string): void {

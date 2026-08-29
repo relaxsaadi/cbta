@@ -49,6 +49,13 @@ export async function resendInvitation(targetUserId: number, actor: { id: number
     )
     .get(targetUserId) as { company_id: number; company_name: string; group_name: string } | undefined;
 
+  // forceResendSuffix (mission "GO — ADD BRAHIMI..." 2026-08-29) — bug réel
+  // trouvé en testant ce renvoi sur staging : sans lui, l'idempotency_key
+  // restait la même que l'envoi d'origine et queueAndSendEmail()
+  // dédupliquait silencieusement CE renvoi contre la toute première
+  // tentative — "Renvoyer l'invitation" ne renvoyait donc jamais rien en
+  // pratique, quel que soit le statut de la tentative d'origine (voir
+  // lib/email/events.ts::notifyAccountCreated pour le détail).
   await notifyAccountCreated({
     userId: targetUserId,
     email: target.email,
@@ -59,6 +66,7 @@ export async function resendInvitation(targetUserId: number, actor: { id: number
     usernameOrEmail: target.email,
     activationToken: token,
     expiresAt,
+    forceResendSuffix: String(Date.now()),
   });
 
   recordLoginFailure(resendRateLimitKey("invitation", targetUserId)); // consomme un "essai" du limiteur, même en cas de succès (anti-spam, pas anti-erreur)

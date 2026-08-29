@@ -113,6 +113,20 @@ export async function notifyAccountCreated(params: {
   usernameOrEmail: string;
   activationToken: string;
   expiresAt: string;
+  /** §41 "Renvoyer l'invitation" — bug réel trouvé en testant le renvoi
+   * réel sur staging (2026-08-29, compte Brahimi) : sans ce paramètre,
+   * l'idempotency_key restait STABLE (`account-created/{userId}`) pour
+   * tout renvoi — la toute PREMIÈRE tentative (même suffisamment
+   * ancienne, même SUPPRESSED) faisait que queueAndSendEmail()
+   * dédupliquait silencieusement chaque renvoi suivant contre cette
+   * ligne d'origine, sans jamais re-tenter un envoi réel ni créer de
+   * nouvelle ligne d'historique — "Renvoyer l'invitation" ne renvoyait
+   * donc RIEN, silencieusement, depuis la construction initiale du
+   * sous-système email. Même correctif que notifyExamAssigned
+   * (déjà correct depuis le début — cette lacune ne touchait que
+   * notifyAccountCreated). Omis = comportement normal (un seul envoi par
+   * création de compte). */
+  forceResendSuffix?: string;
 }): Promise<void> {
   return safe("ACCOUNT_CREATED", async () => {
     const activationUrl = `${getAppBaseUrl()}/activer?token=${params.activationToken}`;
@@ -126,9 +140,10 @@ export async function notifyAccountCreated(params: {
         expiresAtFormatted: formatCandidateDateTime(params.expiresAt),
       })
     );
+    const idempotencyKey = params.forceResendSuffix ? `account-created-resend/${params.userId}/${params.forceResendSuffix}` : `account-created/${params.userId}`;
     await queueAndSendEmail({
       eventType: "ACCOUNT_CREATED",
-      idempotencyKey: `account-created/${params.userId}`,
+      idempotencyKey,
       recipientEmail: params.email,
       userId: params.userId,
       tenant: { companyId: params.companyId, companyName: params.companyName },

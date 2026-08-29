@@ -21,6 +21,10 @@ describe("Outbox email — idempotence, EMAIL_MODE, préférences", async () => 
     delete process.env.EMAIL_MODE;
     delete process.env.RESEND_API_KEY;
     delete process.env.EMAIL_ALLOWED_RECIPIENTS;
+    // notifyAccountCreated() (utilisée par le test de régression du renvoi
+    // ci-dessous) construit toujours un lien via getAppBaseUrl() — voir
+    // tests/unit/email-reminders.test.ts pour le même besoin.
+    process.env.APP_BASE_URL = "https://test.kostacademy.invalid";
     setupTestDb();
   });
 
@@ -78,6 +82,44 @@ describe("Outbox email — idempotence, EMAIL_MODE, préférences", async () => 
     // FAMILIARIZATION_INVITATION n'est PAS dans MANDATORY_EVENT_TYPES —
     // doit respecter la préférence désactivée.
     assert.equal(shouldSendToUser("FAMILIARIZATION_INVITATION", userId.id), false);
+  });
+
+  // Régression — bug réel trouvé en testant "Renvoyer l'invitation" sur
+  // staging (2026-08-29, compte Brahimi) : notifyAccountCreated() n'avait
+  // pas de forceResendSuffix (contrairement à notifyExamAssigned, déjà
+  // correct) — un renvoi utilisait donc la MÊME idempotency_key que
+  // l'envoi d'origine et se faisait dédupliquer silencieusement,
+  // n'aboutissant JAMAIS à une nouvelle tentative réelle ni à une
+  // nouvelle ligne d'historique observable par l'admin.
+  test("notifyAccountCreated AVEC forceResendSuffix crée bien une nouvelle ligne — jamais dédupliqué contre l'envoi d'origine (bug d'origine)", async () => {
+    const { notifyAccountCreated } = await import("../../lib/email/events");
+    const { createUserPendingActivation } = await import("../../lib/users");
+    const { getDb } = await import("../../lib/db");
+
+    // user_id porte une contrainte FK réelle vers users(id) — un id
+    // inventé serait rejeté par safe() (comportement correct, mais pas ce
+    // que ce test vérifie), d'où un vrai compte de test ici.
+    const userId = createUserPendingActivation({ username: "resend-regression-user", fullName: "Resend Regression", role: "candidate", email: "resend-regression@example.com" });
+
+    const params = {
+      userId,
+      email: "resend-regression@example.com",
+      firstName: "Test",
+      companyId: null,
+      companyName: "Test SARL",
+      groupName: "Groupe Test",
+      usernameOrEmail: "resend-regression@example.com",
+      activationToken: "fake-token-original",
+      expiresAt: new Date().toISOString(),
+    };
+    await notifyAccountCreated(params);
+    await notifyAccountCreated({ ...params, activationToken: "fake-token-resend", forceResendSuffix: String(Date.now()) });
+
+    const rows = getDb().prepare(`SELECT idempotency_key FROM notification_log WHERE user_id = ? AND event_type = 'ACCOUNT_CREATED' ORDER BY id`).all(userId) as {
+      idempotency_key: string;
+    }[];
+    assert.equal(rows.length, 2, "le renvoi doit créer une DEUXIÈME ligne, jamais se faire absorber par la première");
+    assert.notEqual(rows[0]!.idempotency_key, rows[1]!.idempotency_key, "les deux clés d'idempotence doivent être distinctes");
   });
 
   test("une adresse en liste de suppression (bounce dur) n'est jamais renvoyée automatiquement", async () => {

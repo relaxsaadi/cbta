@@ -232,7 +232,10 @@ Tableau 9.3.A and its own scope note), cross-checked against slides 99–100
 (Class 9 dry-ice handling) and 108–111 (Class 7 radioactive handling) and
 slide 105 (CAO rule). No direct exam/practice hit for this specific
 table-scope-exception fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** STALE CITATION / SOURCE CONFLICT.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: STALE CITATION / SOURCE CONFLICT SOURCE: Table 9.3.A, Note 2 RATIONALE: Live Bookshelf check 2026-08-29: DGR Table 9.3.A's own Note 2 states verbatim "Les marchandises de la division 1.4S et des classes 6, 7 et 9 (autres que les batteries au lithium et au sodium ionique, voir 9.3.2.1.3) n'apparaissent pas dans le tableau 9.3.A" — the current DGR text names Division **1.4S** (an explosives sub-division), NOT "Division 4.1" as tested. Classes 6, 7, 9 are correctly named, but the course's own "division 4.1" citation is a genuine transcription error against current DGR 67e AM1 — 4.1 is in fact itself listed as its own row/column in Table 9.3.A with real x/— separation entries, confirming 4.1 does need separation treatment and is not one of the exempted classes.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -458,7 +461,10 @@ Classe 1 divisions and aircraft-type restrictions). No direct exam/practice
 hit for this specific passenger/cargo Class 1 restriction; Exam Q4 tests the
 general "how many hazard classes" fact from the same broader area, noted
 honestly as topic-adjacent, not direct corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.2.2.1 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.2.2.1 states verbatim "Seul le transport des explosifs de la Division 1.4, groupe de compatibilité S, est autorisé sur les aéronefs de passagers" — exact match to the tested claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -887,12 +893,12 @@ honestly as topic-level corroboration only.
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.6-001 | 4.1.2 Tableau 9.3.A — classes absentes | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 104 (DGR 9.3.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-001 | 4.1.2 Tableau 9.3.A — classes absentes | STALE CITATION / SOURCE CONFLICT | MCQ | KOST F7.6 course slide 104 (DGR 9.3.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-002 | 4.1.2 Restriction chargement batteries lithium PI 965/968 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.3.2.1.3 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-003 | 4.3.1 Champs obligatoires NOTOC | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.3(a)-(j) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-004 | 4.3.1 Qui/quand fournit la NOTOC | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-005 | 0.4.1 Colonne D — étiquettes de danger (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 column structure — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-006 | 0.4.1 Classe 1 — Division 1.4S avion passager | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slide 64 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-006 | 0.4.1 Classe 1 — Division 1.4S avion passager | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.6 course slide 64 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-008 | 0.5.2 Étiquette chimique — clarification expéditeur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-009 | 4.3.2 Divergence NOTOC/plan de chargement | PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | MCQ | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1693,7 +1699,10 @@ scope). No direct exam/practice hit for this exact same-UN-number
 exception; Exam Q18 (general stowage principle: prevent leak/movement/
 interaction) tests a related but distinct fact from the same broader 4.1.2
 evidence pool, noted honestly as topic-adjacent, not direct corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.2.1.2 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.2.1.2 states verbatim "Les colis contenant des marchandises dangereuses avec des dangers multiples dont la classe ou la division des dangers primaire et subsidiaire exige une séparation conformément au tableau 9.3.A n'ont pas besoin d'être séparés d'autres colis portant le même numéro ONU" — confirming the stem's opposite claim ("doivent malgré tout être séparés") is false, exactly as tested.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1905,7 +1914,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-026 | 0.6.1 Première mesure d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 128 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-027 | 0.6.2 Disponibilité renseignements urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 126 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-028 | 4.1.2 IT=0 catégorie I-Blanche | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-029 | 4.1.2 Risques multiples — même n° ONU | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 107 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-029 | 4.1.2 Risques multiples — même n° ONU | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.6 course slide 107 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-030 | 4.3.1 NOTOC — exemptions (contre-exemple) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-031 | 4.3.1 NOTOC ≠ LTA (document distinct) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-032 | 4.1.1 Facteurs glace carbonique (restricted) | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.6 course slide 99 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

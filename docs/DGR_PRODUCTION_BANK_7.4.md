@@ -594,7 +594,10 @@ Table 9.3.A and its own scope note), cross-checked against slides 105–106
 for this specific table-scope-exception fact; Exam Q9, Q17, Q19, Q20 test
 the broader radioactive-separation topic area, noted honestly as
 topic-adjacent, not direct corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** STALE CITATION / SOURCE CONFLICT.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: STALE CITATION / SOURCE CONFLICT SOURCE: Table 9.3.A, Note 2 RATIONALE: Live Bookshelf check 2026-08-29: DGR Table 9.3.A's own Note 2 states verbatim "Les marchandises de la division 1.4S et des classes 6, 7 et 9 (autres que les batteries au lithium et au sodium ionique, voir 9.3.2.1.3) n'apparaissent pas dans le tableau 9.3.A" — the current DGR text names Division **1.4S** (an explosives sub-division), NOT "Division 4.1" as tested. Classes 6, 7, 9 are correctly named, but the course's own "division 4.1" citation is a genuine transcription error against current DGR 67e AM1 — 4.1 is in fact itself listed as its own row/column in Table 9.3.A with real x/— separation entries, confirming 4.1 does need separation treatment and is not one of the exempted classes.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -987,7 +990,7 @@ contact information as taught by the course, not a DGR regulatory pro... NEW STA
 | Q-7.4-005 | 0.4.1 Division 2.1 — butane/propane | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 63 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-006 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-007 | 4.1.1 Entreposage DGR 9.2.1 | DRAFT — Tier A not attempted | True/False | KOST F7.4 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-008 | 4.1.2 Tableau 9.3.A — classes absentes | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 108 (DGR 9.3.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-008 | 4.1.2 Tableau 9.3.A — classes absentes | STALE CITATION / SOURCE CONFLICT | MCQ | KOST F7.4 course slide 108 (DGR 9.3.2.1) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-009 | 4.1.2 Limitation de chargement DGR 9.3.1 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 109 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-010 | 4.2.3 Séparation animaux vivants DGR 9.3.13 | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-011 | 6.1.4 IT Catégorie I-Blanche | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2988,7 +2991,10 @@ evidence range, p.117–124, but tests a different fact — live-animal
 separation from cryogenic liquids/dry ice under DGR 9.3.13, slide 119, not
 the package-orientation rule on slides 117–118). No exam/practice
 cross-reference found.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.3 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.3 states verbatim "les colis portant l'étiquette de sens de chargement «This Way Up» doivent être chargés, placés à bord et manutentionnés en tout temps en respectant le sens indiqué par cette étiquette. Les emballages uniques munis de fermetures d'extrémité et contenant des marchandises dangereuses liquides doivent en tout temps être chargés et placés à bord des aéronefs de manière que ces fermetures soient tournées vers le haut, même si ces emballages possèdent des fermetures latérales" — exact, word-for-word match.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3214,7 +3220,7 @@ is sourced from a different function's course material.
 | Q-7.4-046 | 0.5.1 Quatre qualités du marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-047 | 0.6.1 Fret/bagages contaminés — obligation exploitant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 147–148 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-048 | 0.6.2 Disponibilité info intervention d'urgence (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 143 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-049 | 4.2.3 Orientation « This Way Up » | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 117–118 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-049 | 4.2.3 Orientation « This Way Up » | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slides 117–118 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-050 | 6.1.4 Détermination de l'indice de transport | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 127 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-051 | 6.1.4 Distances de séparation = minimums | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-052 | 6.1.5 Document NOTOC distinct de la LTA/déclaration/factures | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

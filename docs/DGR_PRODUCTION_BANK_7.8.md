@@ -1852,7 +1852,10 @@ quantities coding system, the source of the fourth distractor). No direct
 exam/practice hit for this specific symbol-meaning fact; exam Q3/Q5/Q11 and
 practice Q12/Q13/Q18/Q19 test adjacent but distinct facts from the same
 general DGR 4.2 area.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** PARTIALLY CONFIRMED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: PARTIALLY CONFIRMED SOURCE: §4.1.6.2 RATIONALE: Live Bookshelf check 2026-08-29: DGR §4.1.6.2 confirms the tested MEANING exactly ("technical name(s) required, see 4.1.2.1(d)"), and confirms the distractor's meaning too (†  = see Appendix A). However, the current DGR 67th Ed./AM1 text renders this symbol as a star (★), not the asterisk (*) the item's stem and options describe — a glyph-level discrepancy not resolved this pass (possibly a font/PDF-extraction artifact in the original course material rather than a substantive regulatory difference, but not independently confirmed either way).
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2116,7 +2119,7 @@ entire p.106–111 pool, as already noted for 0.6.1/6.2.3 in Stage 1).
 | Q-7.8-024 | 6.2.2 Situation où la NOTOC n'est pas exigée | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-025 | 6.2.2 Qui fournit la NOTOC au commandant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.1(a) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-026 | 0.2.3 Allumettes/briquet — sur la personne | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Exam Q9; Table 2.3.A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-027 | 0.4.1 Symbole « * » = noms techniques requis | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 73 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-027 | 0.4.1 Symbole « * » = noms techniques requis | PARTIALLY CONFIRMED | MCQ | KOST F7.8 course slide 73 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-028 | 0.5.2 Forme des étiquettes de danger — losange | FROZEN FR / SOURCE VERIFIED | MCQ | Exam Q15/practice Q20; label reference sheet | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-029 | 0.3.1 Responsabilité de l'identification | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | Exam Q4; course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-030 | 6.2.1 Lever le doute avant chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.8 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2915,7 +2918,10 @@ fact. Real headroom remains in this leaf's own pool (4 of 8) — e.g. DGR
 typography convention (slide 74), and the "~3,000 entries" scale fact
 (slide 71) were reviewed this session but not drafted as separate items
 this pass, to keep this batch's own per-leaf draw count conservative.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §4.1.6.14 RATIONALE: Live Bookshelf check 2026-08-29: DGR §4.1.6.14 "Colonne N" defines it as "Code ERG — Indicatif de consigne d'intervention d'urgence" (also referred to as "code IDC" in the same paragraph, matching the "Code IDC [N]" column header seen directly in Table 4.2) — confirming Column N is indeed the emergency-response/urgency code column, exactly as tested.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3406,7 +3412,7 @@ entire p.106–111 pool).
 | Q-7.8-039 | 0.3.1 Responsabilité de l'Acceptation | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-040 | 0.3.1 Fréquence de formation (DGR 1.5) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.5.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-041 | 0.3.3 Règle des divergences de l'Exploitant | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-042 | 0.4.1 Colonne N — Code Urgences (DGR 4.2) | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-042 | 0.4.1 Colonne N — Code Urgences (DGR 4.2) | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.8 course slide 72 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-043 | 0.5.1 Caractéristiques des marquages | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-044 | 0.5.2 Raison du marquage/étiquetage (exam Q18/practice Q21) | DRAFT — Tier A not attempted | MCQ | Exam Q18; practice Q21; course slide 80 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-045 | 0.5.2 Éléments du marquage extérieur (exam Q19) | FROZEN FR / SOURCE VERIFIED | MCQ | Exam Q19; course slide 87 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

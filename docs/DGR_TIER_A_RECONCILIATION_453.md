@@ -99,36 +99,38 @@ None of the 17 promotions reached `FROZEN FR / SOURCE VERIFIED` — a partial or
 by definition, cannot be promoted all the way to FROZEN. This is why **V2 import eligibility is
 unchanged at 92** (see §5) even though 17 items moved out of the DRAFT bucket.
 
-## 4. Per-function reconciliation matrix (post-Pass 3, current)
+## 4. Per-function reconciliation matrix (post-Pass 4, current)
 
 | FUNCTION | TOTAL | FROZEN | GAP | PARTIAL | STALE | DRAFT/NOT VERIFIED | TEXT NOT RECOVERABLE | IMPORTABLE | NOT IMPORTABLE |
 |---|---|---|---|---|---|---|---|---|---|
 | 7.1 | 19 | 18 | 1 | 0 | 0 | 0 | 5 | 13 | 6 |
 | 7.2 | 49 | 27 | 6 | 5 | 1 | 10 | 0 | 27 | 22 |
-| 7.3 | 45 | 30 | 2 | 2 | 1 | 10 | 0 | 30 | 15 |
-| 7.4 | 53 | 23 | 1 | 3 | 1 | 25 | 0 | 23 | 30 |
+| 7.3 | 45 | 31 | 2 | 2 | 1 | 9 | 0 | 31 | 14 |
+| 7.4 | 53 | 24 | 1 | 3 | 2 | 23 | 0 | 24 | 29 |
 | 7.5 | 44 | 21 | 1 | 4 | 1 | 17 | 0 | 21 | 23 |
-| 7.6 | 56 | 24 | 1 | 5 | 0 | 26 | 0 | 24 | 32 |
-| 7.7 | 53 | 24 | 1 | 4 | 0 | 24 | 0 | 24 | 29 |
-| 7.8 | 51 | 26 | 2 | 2 | 0 | 21 | 0 | 26 | 25 |
+| 7.6 | 56 | 26 | 1 | 5 | 1 | 23 | 0 | 26 | 30 |
+| 7.7 | 53 | 25 | 1 | 5 | 0 | 22 | 0 | 25 | 28 |
+| 7.8 | 51 | 27 | 2 | 3 | 0 | 19 | 0 | 27 | 24 |
 | 7.9 | 39 | 23 | 2 | 2 | 1 | 11 | 0 | 23 | 16 |
 | 7.10 | 44 | 21 | 1 | 2 | 1 | 19 | 0 | 21 | 23 |
-| **TOTAL** | **453** | **237** | **18** | **29** | **6** | **163** | **5** | **232** | **221** |
+| **TOTAL** | **453** | **243** | **18** | **31** | **8** | **153** | **5** | **238** | **215** |
 
 *(Pass 1, 2026-08-26: FROZEN 97 / GAP 6 / PARTIAL 15 / STALE 3 / DRAFT 332 / IMPORTABLE 92.
 Pass 2, 2026-08-29: FROZEN 219 / GAP 18 / PARTIAL 27 / STALE 5 / DRAFT 184 / IMPORTABLE 214.
-Pass 3, 2026-08-29 same day, continuing live verification — packaging and marking/labelling
-topic clusters: the current totals above. See §10 for Pass 2, §11 for Pass 3.)*
+Pass 3, 2026-08-29: FROZEN 237 / GAP 18 / PARTIAL 29 / STALE 6 / DRAFT 163 / IMPORTABLE 232
+(packaging + marking/labelling clusters).
+Pass 4, 2026-08-29 same day: the current totals above (classification cluster). See §10 for
+Pass 2, §11 for Pass 3, §12 for Pass 4.)*
 
 Note on 7.1: FROZEN (18) includes the 5 text-not-recoverable items, so IMPORTABLE (13) = FROZEN
 (18) − TEXT NOT RECOVERABLE (5). The single GAP item (Q-7.1-001) is not counted in FROZEN at all.
 NOT IMPORTABLE for 7.1 = 1 GAP + 5 text-not-recoverable = 6.
 
 Cross-check: 19+49+45+53+44+56+53+51+39+44 = **453**. ✓
-FROZEN column sums to **237** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
-in Pass 3 — see §10 and §11). ✓
-IMPORTABLE column sums to **232** (92 already in V2 + 140 newly eligible across Pass 2/3 — see
-§10 and §11). ✓
+FROZEN column sums to **243** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
+in Pass 3 + 6 confirmed in Pass 4 — see §10, §11, §12). ✓
+IMPORTABLE column sums to **238** (92 already in V2 + 146 newly eligible across Pass 2/3/4 — see
+§10, §11, §12). ✓
 
 ## 5. Text-not-recoverable detail (Function 7.1 only)
 
@@ -450,4 +452,47 @@ combined).
 163 DRAFT items remain. Largest backlogs: 7.4 (25), 7.6 (26), 7.7 (24), 7.8 (21), 7.10 (19).
 Next priority clusters per the requested order: classification, emergency response, general
 provisions, acceptance, loading/storage, documentation, passenger/crew, remaining uncategorized.
+
+## 12. Pass 4 (2026-08-29, same session) — classification cluster
+
+Continuing the requested priority order, 19 of the classification cluster's 21 items were
+individually examined against the live Bookshelf.
+
+**Second STALE citation class discovered: "division 4.1" vs "division 1.4S".** DGR Table 9.3.A's
+own Note 2 states verbatim that goods of **Division 1.4S** and Classes 6, 7, 9 (with a lithium/
+sodium-ion battery exception, §9.3.2.1.3) do not appear in the table because they need no
+separation. Two items (**Q-7.4-008, Q-7.6-001**) test this exact fact but both cite "**division
+4.1**" instead of the correct "division 1.4S" — a real transcription error in the course material,
+confirmed independently: Division 4.1 is in fact its own row/column in Table 9.3.A with real
+separation entries, so it is one of the classes that *does* require separation, not one of the
+exempted ones. Both items reclassified **STALE CITATION / SOURCE CONFLICT**.
+
+Other confirmations, each a single DGR section resolving one item:
+
+| KOST ID | Result | Citation | Confirms |
+|---|---|---|---|
+| Q-7.4-049 | FROZEN | §9.3.3 | "This Way Up" orientation must be respected at all times; single packagings with end closures loaded closures-up even if they also have side closures |
+| Q-7.6-029 | FROZEN | §9.3.2.1.2 | Multi-risk packages needing Table 9.3.A separation are exempt from separation from other packages sharing the same UN number |
+| Q-7.6-006 | FROZEN | §9.3.2.2.1 | Only Division 1.4, compatibility group S explosives are authorized on passenger aircraft |
+| Q-7.3-004 | FROZEN | §3.10.2(a) | Classes 1, 2, 7 are excluded from Table 3.10.A (multi-hazard priority) because they always retain priority |
+| Q-7.8-042 | FROZEN | §4.1.6.14 | DG list Column N = "Code ERG" / "code IDC" — the emergency-response code column |
+| Q-7.7-030 | FROZEN | §4.0.3 | DGR 4.3's numeric list is ordered by UN/ID number |
+| Q-7.7-029, Q-7.8-027 | PARTIALLY CONFIRMED | §4.1.6.2 | Meaning ("technical name required, see 4.1.2.1(d)") confirmed exactly, but current DGR renders the symbol as ★ (star), not "*" (asterisk) as tested — an unresolved glyph-level discrepancy, not necessarily a substantive error |
+
+Remaining DRAFT in this cluster (no verbatim match found or not reached this pass): Q-7.3-003
+(Class 2 internal division-priority sub-rule), Q-7.3-007 (PSN punctuation-omission tolerance),
+Q-7.4-005 (butane/propane examples for Division 2.1), Q-7.4-045 (organic peroxide examples for
+Division 5.2), Q-7.7-004 (excepted-quantities documentation list, largely but not fully
+cross-confirmed by earlier §2.6.8 findings), Q-7.9-003 (radioactive Category I-White TI/loading
+rule, related to the already-PARTIAL Q-7.7-002), Q-7.9-038 (radioactive materials never loaded in
+a passenger/crew compartment — searched, no verbatim match found this pass).
+
+**Materialization totals for Pass 4: 10 items** (6 FROZEN, 2 STALE, 2 PARTIALLY CONFIRMED).
+
+Running totals after Pass 4: **FROZEN 243 / GAP 18 / PARTIAL 31 / STALE 8 / DRAFT 153 /
+V2 IMPORT ELIGIBLE 238** (146 newly eligible beyond the original 92, across Passes 2–4 combined).
+
+153 DRAFT items remain. Next priority clusters per the requested order: emergency response,
+general provisions, acceptance, loading/storage, documentation, passenger/crew, remaining
+uncategorized.
 

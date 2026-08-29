@@ -400,7 +400,10 @@ direct exam/practice-book hit — Stage 1 records no exam trace for 0.4.3 in
 this function's material; this is nonetheless real, dedicated three-slide
 course coverage, a genuine positive contrast to Function 7.2's confirmed
 `SOURCE GAP` for this identical sub-task.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §3.10.2(a) RATIONALE: Live Bookshelf check 2026-08-29: DGR §3.10.2 lists "Classes 1, 2 et 7" as the first exception excluded from Table 3.10.A because these classes/divisions are always priority — confirming Class 1 (Explosives) is indeed one of the classes excluded from the table's own scope, exactly as tested.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -909,7 +912,7 @@ contact information as taught by the course, not a DGR regulatory pro... NEW STA
 | Q-7.3-001 | 0.1.1 Définition | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-002 | 0.2.3 Batterie lithium en bagage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.4(f) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-003 | 0.4.1 Priorité gaz Classe 2 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 82 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-004 | 0.4.3 Tableau 3.10.A exceptions | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 95–97 (DGR 3.10) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-004 | 0.4.3 Tableau 3.10.A exceptions | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.3 course slides 95–97 (DGR 3.10) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-005 | 0.5.3 Obligation DGD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.0.1.1–8.0.1.2 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-006 | 3.1.1 Séparateurs DGD électronique | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §8.1.6.10 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-007 | 3.1.1 Tolérance PSN (Point 9) | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 230 (DGR 8.1.3) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

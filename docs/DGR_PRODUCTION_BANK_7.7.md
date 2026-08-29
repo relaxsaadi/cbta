@@ -1661,7 +1661,10 @@ symbols), cross-checked against slide 78 (bold/light-face PSN convention)
 and slide 76 (this batch's own Batch 1 Q-7.7-003 evidence, the column-letter
 structure — a related but distinct fact from this item's symbol-meaning
 focus). No direct exam/practice hit for this exact symbol-meaning fact.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** PARTIALLY CONFIRMED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: PARTIALLY CONFIRMED SOURCE: §4.1.6.2 RATIONALE: Live Bookshelf check 2026-08-29: same finding as Q-7.8-027 — the tested meaning is confirmed exactly via §4.1.6.2, but current DGR renders the symbol as ★ (star), not "*" (asterisk) as tested; glyph-level discrepancy not resolved this pass.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1709,7 +1712,10 @@ own Q-7.7-029 (symbols, same slide range). No direct exam/practice hit for
 this exact ordering-criterion fact; the exam/practice book's own UN-number
 exercises (p.80–81) test lookups within these lists, not their own internal
 ordering logic, noted honestly as no direct corroboration.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §4.0.3 RATIONALE: Live Bookshelf check 2026-08-29: DGR §4.0.3 confirms "Le chapitre 4.3 contient une liste par ordre numérique des numéros ONU/ID avec un renvoi à la désignation exacte d'expédition correspondante" — confirming DGR 4.3 is indeed ordered numerically by UN/ID number, exactly as tested.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1831,8 +1837,8 @@ A), 2026-08-25.
 | Q-7.7-026 | 0.5.3 Document obligatoire — DGD | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.0.1.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-027 | 0.6.2 Disponibilité info urgence (employeur) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.7 course slide 117 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-028 | 0.4.1 Quantités limitées DGR 2.7 vs 2.6 | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.7 course slide 74 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-029 | 0.4.1 Symbole « * » — DG List | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 77 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.7-030 | 0.4.1 Critère de tri — Liste numérique DGR 4.3 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.7 course slide 79 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-029 | 0.4.1 Symbole « * » — DG List | PARTIALLY CONFIRMED | MCQ | KOST F7.7 course slide 77 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.7-030 | 0.4.1 Critère de tri — Liste numérique DGR 4.3 | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.7 course slide 79 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-031 | 6.2.2 NOTOC — catégorie non exemptée | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-032 | 6.2.2 NOTOC — aéroport déchargement/dérogations | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.3(i)-(j) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.7-033 | 6.2.2 NOTOC — exigence de langue anglaise | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.10 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { verifyResendWebhookSignature } from "@/lib/email/webhook";
+import { verifyResendWebhookSignature, applyWebhookEvent } from "@/lib/email/webhook";
 import { isResendWebhookSecretConfigured, getResendWebhookSecretOrThrow } from "@/lib/email/config";
-import { getDb, nowIso } from "@/lib/db";
-import { auditNotificationDeliveryFailed, auditNotificationBounced } from "@/lib/email/audit";
 
 // Webhook Resend (mission email §37-38) — reçoit les statuts de livraison
 // réels (sent/delivered/delayed/bounced/complained/failed). JAMAIS de
@@ -50,60 +48,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Champs data.email_id / type manquants." }, { status: 400 });
   }
 
-  const db = getDb();
-  const notification = db
-    .prepare(`SELECT id, event_type FROM notification_log WHERE provider_message_id = ?`)
-    .get(messageId) as { id: number; event_type: string } | undefined;
-  if (!notification) {
-    // Message inconnu de ce système (ex. test envoyé hors application) —
-    // 200 quand même : Resend interprète un non-200 comme "à retenter",
-    // et retenter indéfiniment un message qu'on ne connaîtra jamais serait
-    // du bruit pur.
+  // Logique d'application déportée dans lib/email/webhook.ts::applyWebhookEvent()
+  // — ce handler reste mince et testable (voir la justification en tête
+  // de ce fichier lib).
+  const result = applyWebhookEvent(eventType, messageId);
+  if (!result.applied && result.reason === "unknown_message_id") {
     return NextResponse.json({ ok: true, ignored: true });
   }
-
-  const now = nowIso();
-  switch (eventType) {
-    case "email.sent":
-      db.prepare(`UPDATE notification_log SET status = 'SENT', sent_at = COALESCE(sent_at, ?) WHERE id = ?`).run(now, notification.id);
-      break;
-    case "email.delivered":
-      db.prepare(`UPDATE notification_log SET status = 'DELIVERED', delivered_at = ? WHERE id = ?`).run(now, notification.id);
-      db.prepare(`UPDATE notification_log SET rendered_html = NULL, rendered_text = NULL WHERE id = ?`).run(notification.id);
-      break;
-    case "email.delivery_delayed":
-      db.prepare(`UPDATE notification_log SET status = 'DELAYED' WHERE id = ?`).run(notification.id);
-      break;
-    case "email.bounced":
-      db.prepare(`UPDATE notification_log SET status = 'BOUNCED', bounced_at = ?, rendered_html = NULL, rendered_text = NULL WHERE id = ?`).run(now, notification.id);
-      // §40 — bounce dur : suppression list, plus jamais d'envoi
-      // automatique à cette adresse tant qu'un admin ne l'en retire pas.
-      {
-        const row = db.prepare(`SELECT recipient_email FROM notification_log WHERE id = ?`).get(notification.id) as { recipient_email: string } | undefined;
-        if (row) {
-          db.prepare(`INSERT OR IGNORE INTO email_suppressions (email, reason) VALUES (?, 'hard_bounce')`).run(row.recipient_email.toLowerCase());
-        }
-      }
-      auditNotificationBounced(notification.id, notification.event_type);
-      break;
-    case "email.complained":
-      db.prepare(`UPDATE notification_log SET status = 'COMPLAINED', complained_at = ?, rendered_html = NULL, rendered_text = NULL WHERE id = ?`).run(now, notification.id);
-      {
-        const row = db.prepare(`SELECT recipient_email FROM notification_log WHERE id = ?`).get(notification.id) as { recipient_email: string } | undefined;
-        if (row) {
-          db.prepare(`INSERT OR IGNORE INTO email_suppressions (email, reason) VALUES (?, 'complaint')`).run(row.recipient_email.toLowerCase());
-        }
-      }
-      break;
-    case "email.failed":
-      db.prepare(`UPDATE notification_log SET status = 'FAILED', failed_at = ? WHERE id = ?`).run(now, notification.id);
-      auditNotificationDeliveryFailed(notification.id, notification.event_type);
-      break;
-    default:
-      // Type d'événement reconnu par Resend mais non géré ici — 200 quand
-      // même (pas une erreur, juste rien à faire côté application).
-      break;
-  }
-
   return NextResponse.json({ ok: true });
 }

@@ -83,17 +83,33 @@ export function getAdminAlertRecipient(): string | undefined {
 // §7 — identités d'expéditeur pilotées par l'environnement, jamais codées
 // en dur dans le code métier (chaque événement choisit LAQUELLE de ces 4
 // identités via lib/email/events.ts, jamais une adresse littérale).
+//
+// Bug réel trouvé au premier envoi réel (mission de test de livraison
+// contrôlée, 2026-08-29) : `.env.example` documente EMAIL_FROM_EXAM (et
+// les 3 autres) au format complet `"Nom <email>"`, et c'est exactement ce
+// qui a été déployé sur staging — mais getSenderExam() ne prenait que la
+// valeur brute comme `address` puis send.ts la réenveloppait une seconde
+// fois (`${name} <${address}>`), produisant un `from` invalide à deux
+// niveaux ("KOST E-EXAM <KOST E-EXAM <exam@kostacademy.com>>"), rejeté
+// par Resend (validation_error). extractEmailAddress() ci-dessous accepte
+// les deux formats (adresse nue OU "Nom <email>") — jamais un
+// réenveloppement, quel que soit ce que contient la variable.
+function extractEmailAddress(raw: string): string {
+  const match = raw.match(/<([^>]+)>/);
+  return (match ? match[1]! : raw).trim();
+}
+
 export function getSenderExam(): EmailSenderIdentity {
-  return { name: "KOST E-EXAM", address: readOptional("EMAIL_FROM_EXAM") ?? "exam@kostacademy.com" };
+  return { name: "KOST E-EXAM", address: extractEmailAddress(readOptional("EMAIL_FROM_EXAM") ?? "exam@kostacademy.com") };
 }
 export function getSenderNotifications(): EmailSenderIdentity {
-  return { name: "KOST Academy", address: readOptional("EMAIL_FROM_NOTIFICATIONS") ?? "notifications@kostacademy.com" };
+  return { name: "KOST Academy", address: extractEmailAddress(readOptional("EMAIL_FROM_NOTIFICATIONS") ?? "notifications@kostacademy.com") };
 }
 export function getSenderSecurity(): EmailSenderIdentity {
-  return { name: "KOST Security", address: readOptional("EMAIL_FROM_SECURITY") ?? "security@kostacademy.com" };
+  return { name: "KOST Security", address: extractEmailAddress(readOptional("EMAIL_FROM_SECURITY") ?? "security@kostacademy.com") };
 }
 export function getSenderSupport(): EmailSenderIdentity {
-  return { name: "KOST Support", address: readOptional("EMAIL_FROM_SUPPORT") ?? "support@kostacademy.com" };
+  return { name: "KOST Support", address: extractEmailAddress(readOptional("EMAIL_FROM_SUPPORT") ?? "support@kostacademy.com") };
 }
 export function getReplyTo(): string | undefined {
   return readOptional("EMAIL_REPLY_TO");

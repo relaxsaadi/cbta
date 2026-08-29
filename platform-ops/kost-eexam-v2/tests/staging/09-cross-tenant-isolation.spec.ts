@@ -160,7 +160,10 @@ test.describe("Périmètres élargis attendus — administrateur global, auditeu
     // getByRole('link', ...) : le <select> "Candidat" (addendum §7) sur
     // /results contient les mêmes noms en sous-chaîne dans ses <option> —
     // un getByText nu matcherait aussi l'option masquée (ambiguïté).
-    await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
+    // .first() : Yasmine a désormais plusieurs tentatives réelles (banque
+    // Tier A élargie, plusieurs fonctions) — simple vérification de
+    // présence ici, pas d'identité précise.
+    await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: CANDIDATE_B_NAME })).toBeVisible();
 
     const attemptB = await page.goto(`/results/${ATTEMPT_B_ID}`);

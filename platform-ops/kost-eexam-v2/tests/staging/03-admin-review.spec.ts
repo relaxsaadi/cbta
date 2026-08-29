@@ -13,8 +13,12 @@ test("l'administrateur voit le détail complet des tentatives réelles", async (
   // (addendum §7) inclut désormais un <select> "Candidat" dont chaque
   // <option> contient le même nom en sous-chaîne — un getByText nu
   // matcherait aussi l'option masquée du select fermé (ambiguïté).
-  await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Riad Boumediene (pilote)" })).toBeVisible();
+  // .first() : Yasmine/Riad ont désormais plusieurs tentatives réelles
+  // (banque Tier A élargie, plusieurs fonctions — voir
+  // 31-tier-a-multi-function-acceptance.spec.ts), pas seulement le pilote
+  // 7.1 — simple vérification de présence ici, pas d'identité précise.
+  await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Riad Boumediene (pilote)" }).first()).toBeVisible();
 
   // Tentative réussie (candidat 1).
   await page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first().click();

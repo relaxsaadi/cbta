@@ -33,18 +33,23 @@ test("parcours d'acceptance complet : groupe réel → 3 candidats → examen �
   // échec, pas une valeur figée) : candidat1 admis (100%), candidat2
   // échec (42.86%), candidat3 pas encore commencé — les trois états
   // réels coexistent et sont tous correctement représentés.
+  // .first() : Yasmine/Riad ont désormais plusieurs tentatives réelles
+  // (banque Tier A élargie, plusieurs fonctions — voir
+  // 31-tier-a-multi-function-acceptance.spec.ts) — n'importe laquelle de
+  // Yasmine convient ici (candidat1 répond toujours 100% correctement,
+  // quelle que soit la fonction).
   await page.goto("/results");
-  await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Riad Boumediene (pilote)" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Riad Boumediene (pilote)" }).first()).toBeVisible();
 
-  const yasmineHref = await page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).getAttribute("href");
+  const yasmineHref = await page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first().getAttribute("href");
   await page.goto(yasmineHref!);
   await expect(page.getByText("100/100")).toBeVisible();
   await expect(page.getByText("ADMIS")).toBeVisible();
   const yasmineAttemptId = yasmineHref!.match(/\/results\/(\d+)/)![1];
 
   await page.goto("/results");
-  const riadHref = await page.getByRole("link", { name: "Riad Boumediene (pilote)" }).getAttribute("href");
+  const riadHref = await page.getByRole("link", { name: "Riad Boumediene (pilote)" }).first().getAttribute("href");
   await page.goto(riadHref!);
   await expect(page.getByText("42.86/100")).toBeVisible();
   await expect(page.getByText("ÉCHEC")).toBeVisible();

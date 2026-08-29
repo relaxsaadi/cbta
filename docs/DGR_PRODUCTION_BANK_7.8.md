@@ -3261,8 +3261,10 @@ l'expéditeur") is directly and independently confirmed wrong by §9.5.1.1.6
 (NOTOC is a document distinct from, not a replacement for, the DGD). The
 other two distractors (billing, customs) remain confirmed fabricated, not
 found anywhere in §9.5.1.1's actual text.
-**FR status:** DRAFT — rationale not independently found as a standalone
+**FR status:** PARTIALLY CONFIRMED — rationale not independently found as a standalone
 DGR clause; distractors Tier A-confirmed wrong via §9.5.1.1.6.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the item's own rationale is not independently found as a standalone DGR clause, but its distractors are Tier A-confirmed wrong via §9.5.1.1.6.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3355,7 +3357,7 @@ entire p.106–111 pool).
 | Q-7.8-047 | 0.5.3 Mention LTA — envoi classique (DGR 8.2) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-048 | 0.6.2 Disponibilité des informations d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.8 course slide 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-049 | 6.2.2 Langue anglaise exigée pour la NOTOC | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.10 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-050 | 6.2.2 Principe fondamental de la NOTOC | DRAFT — rationale not independently found as a standalone DGR clause; distractors Tier A-confirmed wrong via §9.5.1.1.6 | MCQ | DGR 67e AM1 §9.5.1.1 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-050 | 6.2.2 Principe fondamental de la NOTOC | PARTIALLY CONFIRMED — rationale not independently found as a standalone DGR clause; distractors Tier A-confirmed wrong via §9.5.1.1.6 | MCQ | DGR 67e AM1 §9.5.1.1 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-051 | 6.2.3 Mesure post-confirmation — fret/bagage contaminé | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.8 course slide 111 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 15 MCQ + 4 True/False. Block spread: Block 0 = 16

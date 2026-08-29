@@ -1553,9 +1553,11 @@ participating operators). The item's correct answer is very close but not
 exact; the underlying operator/État distinction it tests (distractor 1)
 remains valid, since §2.8.1.1.1 confirms State divergences are enumerated
 at §2.8.2, a genuinely different reference from the operator one.
-**FR status:** DRAFT — STALE CITATION: correct answer's own "2.8.3.4 et
+**FR status:** STALE CITATION / SOURCE CONFLICT — STALE CITATION: correct answer's own "2.8.3.4 et
 2.8.4" reference does not match current DGR (§2.8.3.4 is "Calendrier"/
 deadlines, unrelated; actual cross-ref is §2.8.4 alone, per §2.8.3.1).
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: STALE CITATION / SOURCE CONFLICT. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: promoting to the canonical status label; the underlying finding (own citation does not match current DGR structure) was already fully documented.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1872,7 +1874,7 @@ finding.
 | Q-7.3-022 | 0.4.2 Groupe d'emballage II | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-023 | 3.1.1 Point 6 facultatif | DRAFT — Tier A not attempted | True/False | KOST F7.3 course slide 228 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-024 | 3.1.3 DGR 8.3 approbation A2 | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slides 245–246 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-025 | 3.1.4 Divergences (doc) | DRAFT — STALE CITATION: correct answer's own "2.8.3.4 et 2.8.4" reference does not match current DGR (§2.8.3.4 is "Calendrier"/deadlines, unrelated; actual cross-ref is §2.8.4 alone, per §2.8.3.1) | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-025 | 3.1.4 Divergences (doc) | STALE CITATION / SOURCE CONFLICT — correct answer's own "2.8.3.4 et 2.8.4" reference does not match current DGR (§2.8.3.4 is "Calendrier"/deadlines, unrelated; actual cross-ref is §2.8.4 alone, per §2.8.3.1) | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-026 | 3.2.3 Exemption suremballage | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.1.3.1(d) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-027 | 3.2.3 Conformité emballage extérieur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(g) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-028 | 3.2.4 État du colis | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(i) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

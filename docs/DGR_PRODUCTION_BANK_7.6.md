@@ -606,9 +606,11 @@ item's specific "amended NOTOC" remedy or "plan de chargement" framing.
 Retained as Tier B (KOST slide 122 + Exam Q17) for the specific claim
 tested; not contradicted by current DGR text, but not independently
 verified either.
-**FR status:** DRAFT — general NOTOC-accuracy duty Tier A-confirmed
+**FR status:** PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed
 (§9.5.1.1.7); the specific "plan de chargement" divergence-remedy wording
 is Tier B only, not located in current DGR text under that name.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: general NOTOC-accuracy duty Tier A-confirmed via §9.5.1.1.7; the specific "plan de chargement" divergence-remedy wording is not located in current DGR text under that name.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -874,7 +876,7 @@ honestly as topic-level corroboration only.
 | Q-7.6-006 | 0.4.1 Classe 1 — Division 1.4S avion passager | DRAFT — Tier A not attempted | MCQ | KOST F7.6 course slide 64 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-008 | 0.5.2 Étiquette chimique — clarification expéditeur | DRAFT — general duty Tier A-confirmed, exact citation unconfirmed | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-009 | 4.3.2 Divergence NOTOC/plan de chargement | DRAFT — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | MCQ | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-009 | 4.3.2 Divergence NOTOC/plan de chargement | PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | MCQ | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-010 | 6.1.6 Accessibilité agent des opérations aériennes | DRAFT — Tier A not attempted | True/False | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-011 | 7.1+7.2 Signalement accidents/incidents | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-012 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2378,10 +2380,12 @@ the five genuine categories — it is not; the real 5th category is
 governed by the separate, non-exemption §2.5.2. This does not change
 which option is correct (pharma is still the only non-category among the
 four options), but the distractor's own grounding is imprecise.
-**FR status:** DRAFT — correct answer (pharma) Tier A-confirmed absent
+**FR status:** PARTIALLY CONFIRMED — correct answer (pharma) Tier A-confirmed absent
 from §2.5.1; one distractor ("pièces pour avions") falsely implied as a
 genuine 5th category — current DGR's real 5th category is "Produits
 d'hygiène" (§2.5.1.4).
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the correct answer is Tier A-confirmed absent from §2.5.1; one distractor is falsely implied as a genuine category (current DGR's real 5th category is "Produits d'hygiène", §2.5.1.4).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3099,7 +3103,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-035 | 0.1.1 Facteurs de danger en vol | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 17 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-036 | 0.1.2 Doc 9284 (OACI) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 23 + Practice Q1 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-037 | 0.2.1 États concernés — Exemptions vs Approbations | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slides 38–39 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-038 | 0.2.1 Catégories exemptées DGR 2.5 | DRAFT — correct answer (pharma) Tier A-confirmed absent from §2.5.1; one distractor ("pièces pour avions") falsely implied as a genuine 5th category — current DGR's real 5th category is "Produits d'hygiène" (§2.5.1.4) | MCQ | DGR 67e AM1 §2.5.1.1-.1.5 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-038 | 0.2.1 Catégories exemptées DGR 2.5 | PARTIALLY CONFIRMED — correct answer (pharma) Tier A-confirmed absent from §2.5.1; one distractor ("pièces pour avions") falsely implied as a genuine 5th category — current DGR's real 5th category is "Produits d'hygiène" (§2.5.1.4) | MCQ | DGR 67e AM1 §2.5.1.1-.1.5 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-039 | 0.2.2 Définition MD cachée | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 46 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-040 | 0.3.1 Conformité expéditeur DGR 1.3.1 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.3.1.1-2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-041 | 0.3.1 Formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.6 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

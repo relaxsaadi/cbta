@@ -2877,9 +2877,11 @@ not state the simple 3-State list as a general rule (see this topic's
 real current State-divergence entry, but the actual scope rule
 (§2.8.1.1.2-.1.1.3) is territorial/sovereignty-based, not a shipment-
 routing checklist.
-**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+**FR status:** PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed;
 current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
 sovereignty rule instead.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the general divergence concept is Tier A-confirmed, but the specific 3-State scope list does not match current DGR's actual territorial-sovereignty rule (§2.8.1.1.2-.1.1.3).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3032,7 +3034,7 @@ rating for this leaf.
 | Q-7.10-038 | 0.2.1 Exceptions DGR 1.2.7 | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 42 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-039 | 0.2.3 Confort/besoins du passager | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-040 | 0.3.1 Neuf responsabilités de l'expéditeur | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 70 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3, §2.8.1.3 (ITG) (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-041 | 0.3.3 Divergence d'État (ITG/Italie) | PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3, §2.8.1.3 (ITG) (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-042 | 0.5.1 Code de type d'emballage (4=Caisse) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-043 | 0.5.2 Marquage bagage — glace carbonique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.10 course slide 100 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-044 | 0.6.1 Contact corps/habits — 5 mesures | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.10 course slide 106 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

@@ -845,9 +845,11 @@ not independently located as a standalone current-DGR clause or figure —
 it appears to be the course's own pedagogical visualization of the
 combined effect of §1.2, §2.8.1, and §2.8.3, not a verbatim DGR diagram.
 The correct answer's underlying principle is not contradicted.
-**FR status:** DRAFT — most-restrictive-rule-wins principle consistent
+**FR status:** PARTIALLY CONFIRMED — most-restrictive-rule-wins principle consistent
 with §2.8.3.1/§2.8.1.1.2, but the named 4-level hierarchy diagram itself
 not independently located in current DGR text.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the most-restrictive-rule-wins principle is Tier A-confirmed (§2.8.3.1/§2.8.1.1.2), but the named 4-level hierarchy diagram itself is not independently located in current DGR text.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1039,7 +1041,7 @@ equivalent items).
 | Q-7.5-009 | 0.3.3 Divergence d'exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-010 | 5.1.1 Critères DGR 2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-011 | 5.1.2 Seuils d'approbation AEP/batteries | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-012 | 5.2.1 Hiérarchie des divergences appliquée | DRAFT — most-restrictive-rule-wins principle consistent with §2.8.3.1/§2.8.1.1.2, but the named 4-level "OACI→IATA→État→Exploitant" hierarchy diagram itself not independently located in current DGR text | MCQ | DGR 67e AM1 §2.8 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-012 | 5.2.1 Hiérarchie des divergences appliquée | PARTIALLY CONFIRMED — most-restrictive-rule-wins principle consistent with §2.8.3.1/§2.8.1.1.2, but the named 4-level "OACI→IATA→État→Exploitant" hierarchy diagram itself not independently located in current DGR text | MCQ | DGR 67e AM1 §2.8 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-013 | 5.2.2 Seuil batterie installée (cadre WCHC borné) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.4(f) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-014 | 5.2.2 Marquage glace carbonique (2,5 kg) | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-015 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1656,9 +1658,11 @@ not state the simple 3-State list as a general rule (see this topic's
 `Q-7.2-037` for the full analysis). The actual current rule
 (§2.8.1.1.2-.1.1.3) is territorial/sovereignty-based, not a shipment-
 routing checklist.
-**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+**FR status:** PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed;
 current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
 sovereignty rule instead.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the general divergence concept is Tier A-confirmed, but the specific 3-State scope list does not match current DGR's actual territorial-sovereignty rule (§2.8.1.1.2-.1.1.3).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1758,9 +1762,11 @@ plausible §2.5.1.1 "equipment required onboard" instances, but the
 specific worked-examples enumeration is not independently verified
 verbatim. Distractors (spare batteries, jet fuel, declared-value express
 freight) remain confirmed wrong-checkpoint/fabricated.
-**FR status:** DRAFT — general category (§2.5.1.1/.1.2) Tier A-confirmed,
+**FR status:** PARTIALLY CONFIRMED — general category (§2.5.1.1/.1.2) Tier A-confirmed,
 specific worked-example wording not verbatim-located in current DGR
 text.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the general category (§2.5.1.1/.1.2) is Tier A-confirmed; the specific worked-example wording is not verbatim-located in current DGR text.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1867,9 +1873,9 @@ the source does not draw, per binding caveat 6.
 | Q-7.5-022 | 0.5.1 Code de type d'emballage DGR 6.0.3.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-023 | 0.2.2 Catégories associées aux MD cachées (AOG, etc.) | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slide 54 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-024 | 5.1.1 Niveaux d'interdiction — schéma des types | DRAFT — Tier A not attempted | True/False | KOST F7.5 course slide 36 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-025 | 5.2.1 Portée des divergences d'État DGR 2.8.1 | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-025 | 5.2.1 Portée des divergences d'État DGR 2.8.1 | PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-026 | 5.2.2 Catégories générales exemptées DGR 2.5 | DRAFT — SOURCE CONFLICT: tested list includes "pièces pour avions," not one of current DGR §2.5.1's 5 real exceptions (§2.5.1.4 "Produits d'hygiène" is the actual 5th, omitted); §2.5.2 governs aircraft spare parts under a different, non-exemption rule | True/False | DGR 67e AM1 §2.5.1.1-.1.5, §2.5.2 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-027 | 5.2.2 Exemples nommés DGR 2.5 | DRAFT — general category (§2.5.1.1/.1.2) Tier A-confirmed, specific worked-example wording not verbatim-located in current DGR text | MCQ | DGR 67e AM1 §2.5.1.1, §2.5.1.2 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-027 | 5.2.2 Exemples nommés DGR 2.5 | PARTIALLY CONFIRMED — general category (§2.5.1.1/.1.2) Tier A-confirmed, specific worked-example wording not verbatim-located in current DGR text | MCQ | DGR 67e AM1 §2.5.1.1, §2.5.1.2 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-028 | 7.1 Destinataires du compte rendu d'accident | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-029 | 7.2 Portée du signalement — MD exemptées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 

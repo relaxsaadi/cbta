@@ -281,7 +281,7 @@ reconnaître les marchandises dangereuses cachées ?"). Directly corroborated
 by KOST practice book Q5: "Cité 4 aspects extérieurs ou indices pouvant vous
 aider à repérer un bagage ou un paquet contenant des matières dangereuses
 cachées ?" — same topic, open-ended in the source, not copied verbatim here.
-**FR status:** DRAFT — Tier A search performed 2026-08-25, no direct match
+**FR status:** PARTIALLY CONFIRMED — Tier A search performed 2026-08-25, no direct match
 found. Current DGR §2.2 (Marchandises dangereuses cachées, p.12 area)
 describes the detection *duty* (agents must be trained to identify DG under
 generic descriptions, must query shippers/passengers when suspicious) but
@@ -295,6 +295,8 @@ retained Tier B, not asserted as DGR-sourced. Not re-classified as a formal
 SOURCE GAP (the general duty it illustrates is real and Tier A-cited above)
 but the item's specific correct-answer wording should not be attributed to
 a DGR section number.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: general detection duty independently Tier A-confirmed via §2.2; the specific physical cue is Tier B-only, not located in current DGR text.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -436,12 +438,14 @@ class, packaging code, DG/MD/LQ/EQ mention") was not found verbatim in
 §9.1.1 or elsewhere in Part 9 — it reads as a KOST practical synthesis of
 what such a review would look for, not a direct DGR quote. Originally Tier
 B — KOST Function 7.2 course, slides 96–98.
-**FR status:** DRAFT — Tier A confirms the underlying duty (§9.1.1.1-2) but
+**FR status:** PARTIALLY CONFIRMED — Tier A confirms the underlying duty (§9.1.1.1-2) but
 not this item's specific itemized wording as a verbatim DGR quote; do not
 cite a DGR section number for the itemized list itself in final wording
 without a further, more exhaustive search (e.g. of Part 8/9.1.3's own
 document-conformity checklist, which addresses already-declared shipments,
 a related but distinct scenario).
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: underlying duty Tier A-confirmed via §9.1.1.1-2; the item's own itemized wording is not independently verified as verbatim DGR text.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -547,12 +551,14 @@ doute sur la nature d'un colis suspect, l'agent doit : … c) Refuser et
 notifier immédiatement le superviseur" — same conclusion as this item's
 correct answer, confirmed as a real, examined fact in the actual Function
 7.2 material.
-**FR status:** DRAFT — Tier A search performed 2026-08-25, no direct match
+**FR status:** FR SOURCE GAP CONFIRMED — Tier A search performed 2026-08-25, no direct match
 for this specific isolate/notify-supervisor procedure found in the current
 DGR text read this pass (Part 9 §9.1.1/9.1.3 cover documentation-conformity
 checks for already-declared shipments, not a step-by-step physical-suspect-
 package escalation procedure). Reads as KOST operational SOP content, not a
 verbatim DGR provision — retained Tier B, not asserted DGR-sourced.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: FR SOURCE GAP CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: a 2026-08-25 exhaustive Tier A search (Part 9 §9.1.1/§9.1.3) found no current-DGR anchor for any part of this item's claim — it reads as KOST operational SOP content, not a verbatim DGR provision.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -701,12 +707,12 @@ KOST Function 7.2 course, slide 110.
 |---|---|---|---|---|---|---|
 | Q-7.2-001 | 0.1.2 Cadre juridique | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.1–1.1.4 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-002 | 0.1.4 Danger vs Risque | FR SOURCE GAP CONFIRMED (cross-applied from Q-7.1-001) | MCQ | DGR silent by design (Appendice A p.703 + §1.0 p.11) — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-003 | 0.2.2 MD cachées | DRAFT — general duty Tier A-confirmed, specific cue Tier B only | MCQ | DGR 67e §2.2 (p.12 area) context — Tier A; specific fact — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-003 | 0.2.2 MD cachées | PARTIALLY CONFIRMED — general duty Tier A-confirmed, specific cue Tier B only | MCQ | DGR 67e §2.2 (p.12 area) context — Tier A; specific fact — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-004 | 0.4.1 Classes/divisions | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e Table 4.2 UN1942 (p.385) + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-005 | 0.5.2 Étiquetage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-006 | 3.4.1 Vérif. documentation | DRAFT — general duty Tier A-confirmed, itemized list Tier B only | MCQ | DGR 67e §9.1.1.1–2 (p.693 area) — Tier A; itemized list — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-006 | 3.4.1 Vérif. documentation | PARTIALLY CONFIRMED — general duty Tier A-confirmed, itemized list Tier B only | MCQ | DGR 67e §9.1.1.1–2 (p.693 area) — Tier A; itemized list — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-007 | 3.4.1 Endossement LTA | FROZEN FR / SOURCE VERIFIED (upgraded — see Batch 2's §9.1.7 finding) | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-008 | 3.4.2 Vérif. colis | DRAFT — Tier A search found no direct match | MCQ | KOST F7.2 course slides 98–100 — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-008 | 3.4.2 Vérif. colis | FR SOURCE GAP CONFIRMED — Tier A search found no direct match; reads as KOST operational SOP content, not DGR text | MCQ | KOST F7.2 course slides 98–100 — Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-009 | 7.3 MD non déclarées | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.2.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-010 | 7.4 Situations MD (ANAC) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-011 | 7.1+7.2 combined | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1489,9 +1495,11 @@ not independently located in §9.1.1/§9.1.7 this pass — the general document-
 request duty and the "Not Restricted" terminology are Tier A confirmed, the
 SDS example itself remains Tier B. Originally Tier B — KOST Function 7.2
 course, slides 101 and 103.
-**FR status:** DRAFT — underlying mechanism and key terminology Tier A
+**FR status:** PARTIALLY CONFIRMED — underlying mechanism and key terminology Tier A
 confirmed 2026-08-25 (§9.1.1.2, §9.1.7); the SDS example specifically not
 yet located verbatim.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: mechanism and "Not Restricted" terminology Tier A-confirmed via §9.1.1.2/§9.1.7; the SDS worked example itself is not independently located verbatim.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1739,9 +1747,11 @@ acceptance as "marchandise non réglementée" — a real, current, Tier A
 paraphrase of this same duty, not a separate DGR provision — likely the
 same underlying §9.1.7 text, not independently re-confirmed as a distinct
 citation this pass. Originally Tier B — KOST Function 7.2 course, slide 81.
-**FR status:** DRAFT — underlying duty Tier A-confirmed via §9.1.7 (shared
+**FR status:** PARTIALLY CONFIRMED — underlying duty Tier A-confirmed via §9.1.7 (shared
 with `Q-7.2-024`); treat as the same provision rather than a separate DGR
 6.0.4-area citation before finalizing wording.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: underlying duty Tier A-confirmed via §9.1.7 (shared basis with Q-7.2-024); this item's own distinct citation is not independently confirmed.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1762,12 +1772,12 @@ with `Q-7.2-024`); treat as the same provision rather than a separate DGR
 | Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-021 | 0.6.1 Première action d'urgence | FR SOURCE GAP CONFIRMED (expanded search: citation stale AND 5-step content not located anywhere in current DGR, incl. §9.3.6) | MCQ | Not located in current DGR — Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-022 | 0.6.2 Info employés exploitant | FR SOURCE GAP CONFIRMED (§9.5.1.2 confirmed to cover a different topic — pilot-in-command access to ICAO Doc 9481; this claim not located elsewhere) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-023 | 3.4.1 Demande SDS | DRAFT — mechanism + "Not Restricted" term Tier A-confirmed, SDS example itself Tier B | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-023 | 3.4.1 Demande SDS | PARTIALLY CONFIRMED — mechanism + "Not Restricted" term Tier A-confirmed, SDS example itself Tier B | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-024 | 3.4.2 Avertissement consommateur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-025 | 7.1+7.2 Qui/à qui | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-026 | 0.2.2 Exemple appareils dentaires | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.2.4 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-027 | 0.4.1 Classe 2, 3 divisions | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §3.0.2.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-028 | 0.5.2 Étiquette danger chimique | DRAFT — underlying duty Tier A-confirmed (shared with Q-7.2-024's §9.1.7), distinct citation unconfirmed | MCQ | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-028 | 0.5.2 Étiquette danger chimique | PARTIALLY CONFIRMED — underlying duty Tier A-confirmed (shared with Q-7.2-024's §9.1.7), distinct citation unconfirmed | MCQ | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch 2 composition:** 11 MCQ + 6 True/False. Block spread: Block 0 = 14,
 Block 3 = 2, Block 7 = 1.
@@ -2577,9 +2587,11 @@ course's shipment-routing-style "origin/destination/transit" checklist.
 Not contradicted at a topic level (both describe State divergences having
 territorial scope), but the specific 3-state list is not independently
 verified.
-**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+**FR status:** PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed;
 current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
 sovereignty rule instead.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the general divergence concept is Tier A-confirmed, but the specific 3-State scope list does not match current DGR's actual territorial-sovereignty rule (§2.8.1.1.2-.1.1.3).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3136,7 +3148,7 @@ exam/practice-book hit for the GHS-pictogram fact specifically.
 | Q-7.2-034 | 0.2.2 Batteries lithium | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 (UN 3090/3091/3480/3481 table) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-035 | 0.3.1 Conformité expéditeur | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.3.1.1–1.3.1.2 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-036 | 0.3.1 Formation exploitant | DRAFT — partially confirmed, flag for revision | MCQ | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; "test" framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-037 | 0.3.3 Divergence d'État — États concernés | PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-038 | 0.3.3 Niveaux de restrictions | DRAFT — Tier A not attempted | True/False | KOST F7.2 course slide 57 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-039 | 0.4.1 Division 1.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-040 | 0.4.1 Division 6.2 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.2.6 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

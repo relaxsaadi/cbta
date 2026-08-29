@@ -826,9 +826,11 @@ person accuracy/confirmation duty exists, but not the specific "exact
 match to the plan de chargement" framing tested here. Retained as Tier B
 (KOST slide 139) for the specific claim tested; not contradicted by
 current DGR text, but not independently verified either.
-**FR status:** DRAFT — general NOTOC-accuracy duty Tier A-confirmed
+**FR status:** PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed
 (§9.5.1.1.7); the specific "plan de chargement" exact-match wording is
 Tier B only, not located in current DGR text under that name.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: general NOTOC-accuracy duty Tier A-confirmed via §9.5.1.1.7; the specific "plan de chargement" exact-match wording is not located in current DGR text under that name.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -971,7 +973,7 @@ requirement.
 | Q-7.4-010 | 4.2.3 Séparation animaux vivants DGR 9.3.13 | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 119 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-011 | 6.1.4 IT Catégorie I-Blanche | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-012 | 6.1.5 Champs obligatoires NOTOC | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §9.5.1.1.3(a)-(j) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-013 | 6.1.5 Correspondance exacte NOTOC | DRAFT — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | True/False | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-013 | 6.1.5 Correspondance exacte NOTOC | PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | True/False | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-014 | 7.1+7.2 Signalement accidents/incidents DGR 9.6.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-015 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-016 | 7.4 ANAC (DGR 9.6.5) | FROZEN FR / SOURCE VERIFIED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2650,9 +2652,11 @@ not state the simple 3-State list as a general rule (see this topic's
 (§2.8.1.1.2-.1.1.3) is territorial/sovereignty-based, not a shipment-
 routing checklist. The item's distractors 3 and 4 (operator-divergence
 misattribution; AIEA fabrication) remain independently confirmed wrong.
-**FR status:** DRAFT — 3-State scope framing not independently confirmed;
+**FR status:** PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed;
 current DGR §2.8.1.1.2-.1.1.3 states a more nuanced territorial/
 sovereignty rule instead.
+
+**Reconciliation (2026-08-26):** OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: PARTIALLY CONFIRMED. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: the general divergence concept is Tier A-confirmed, but the specific 3-State scope list does not match current DGR's actual territorial-sovereignty rule (§2.8.1.1.2-.1.1.3).
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3150,7 +3154,7 @@ is sourced from a different function's course material.
 | Q-7.4-040 | 0.1.1 Définition complète DGR 1.0 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-041 | 0.1.2 Code IMP « ICE » | DRAFT — Tier A not attempted | MCQ | KOST F7.4 course slide 28 (DGR B.2.2.4) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-042 | 0.3.1 Obligations de formation DGR 1.5 | DRAFT — likely shares Q-7.2-036's competency-framework finding, not independently confirmed | MCQ | KOST F7.4 course slide 55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-043 | 0.3.3 Portée divergence d'État DGR 2.8.1 | DRAFT — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-043 | 0.3.3 Portée divergence d'État DGR 2.8.1 | PARTIALLY CONFIRMED — 3-State scope framing not independently confirmed; current DGR §2.8.1.1.2/.1.1.3 states a more nuanced territorial/sovereignty rule | MCQ | DGR 67e AM1 §2.8.1.1.2-.1.1.3 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-044 | 0.4.1 UN 3090 — lithium métal seules | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §3.9.2.6.0 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-045 | 0.4.1 Division 5.2 — peroxyde organique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 66 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-046 | 0.5.1 Quatre qualités du marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

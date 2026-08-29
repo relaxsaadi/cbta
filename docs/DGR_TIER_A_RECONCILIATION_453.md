@@ -99,38 +99,40 @@ None of the 17 promotions reached `FROZEN FR / SOURCE VERIFIED` — a partial or
 by definition, cannot be promoted all the way to FROZEN. This is why **V2 import eligibility is
 unchanged at 92** (see §5) even though 17 items moved out of the DRAFT bucket.
 
-## 4. Per-function reconciliation matrix (post-Pass 4, current)
+## 4. Per-function reconciliation matrix (post-Pass 5, current)
 
 | FUNCTION | TOTAL | FROZEN | GAP | PARTIAL | STALE | DRAFT/NOT VERIFIED | TEXT NOT RECOVERABLE | IMPORTABLE | NOT IMPORTABLE |
 |---|---|---|---|---|---|---|---|---|---|
 | 7.1 | 19 | 18 | 1 | 0 | 0 | 0 | 5 | 13 | 6 |
 | 7.2 | 49 | 27 | 6 | 5 | 1 | 10 | 0 | 27 | 22 |
 | 7.3 | 45 | 31 | 2 | 2 | 1 | 9 | 0 | 31 | 14 |
-| 7.4 | 53 | 24 | 1 | 3 | 2 | 23 | 0 | 24 | 29 |
+| 7.4 | 53 | 25 | 1 | 3 | 2 | 22 | 0 | 25 | 28 |
 | 7.5 | 44 | 21 | 1 | 4 | 1 | 17 | 0 | 21 | 23 |
-| 7.6 | 56 | 26 | 1 | 5 | 1 | 23 | 0 | 26 | 30 |
+| 7.6 | 56 | 30 | 1 | 5 | 1 | 19 | 0 | 30 | 26 |
 | 7.7 | 53 | 25 | 1 | 5 | 0 | 22 | 0 | 25 | 28 |
 | 7.8 | 51 | 27 | 2 | 3 | 0 | 19 | 0 | 27 | 24 |
 | 7.9 | 39 | 23 | 2 | 2 | 1 | 11 | 0 | 23 | 16 |
 | 7.10 | 44 | 21 | 1 | 2 | 1 | 19 | 0 | 21 | 23 |
-| **TOTAL** | **453** | **243** | **18** | **31** | **8** | **153** | **5** | **238** | **215** |
+| **TOTAL** | **453** | **248** | **18** | **31** | **8** | **148** | **5** | **243** | **210** |
 
 *(Pass 1, 2026-08-26: FROZEN 97 / GAP 6 / PARTIAL 15 / STALE 3 / DRAFT 332 / IMPORTABLE 92.
 Pass 2, 2026-08-29: FROZEN 219 / GAP 18 / PARTIAL 27 / STALE 5 / DRAFT 184 / IMPORTABLE 214.
 Pass 3, 2026-08-29: FROZEN 237 / GAP 18 / PARTIAL 29 / STALE 6 / DRAFT 163 / IMPORTABLE 232
 (packaging + marking/labelling clusters).
-Pass 4, 2026-08-29 same day: the current totals above (classification cluster). See §10 for
-Pass 2, §11 for Pass 3, §12 for Pass 4.)*
+Pass 4, 2026-08-29: FROZEN 243 / GAP 18 / PARTIAL 31 / STALE 8 / DRAFT 153 / IMPORTABLE 238
+(classification cluster).
+Pass 5, 2026-08-29 same day: the current totals above (emergency-response cluster, partial).
+See §10 for Pass 2, §11 for Pass 3, §12 for Pass 4, §13 for Pass 5.)*
 
 Note on 7.1: FROZEN (18) includes the 5 text-not-recoverable items, so IMPORTABLE (13) = FROZEN
 (18) − TEXT NOT RECOVERABLE (5). The single GAP item (Q-7.1-001) is not counted in FROZEN at all.
 NOT IMPORTABLE for 7.1 = 1 GAP + 5 text-not-recoverable = 6.
 
 Cross-check: 19+49+45+53+44+56+53+51+39+44 = **453**. ✓
-FROZEN column sums to **243** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
-in Pass 3 + 6 confirmed in Pass 4 — see §10, §11, §12). ✓
-IMPORTABLE column sums to **238** (92 already in V2 + 146 newly eligible across Pass 2/3/4 — see
-§10, §11, §12). ✓
+FROZEN column sums to **248** (97 ground-truth baseline + 122 confirmed in Pass 2 + 18 confirmed
+in Pass 3 + 6 confirmed in Pass 4 + 5 confirmed in Pass 5 — see §10, §11, §12, §13). ✓
+IMPORTABLE column sums to **243** (92 already in V2 + 151 newly eligible across Passes 2–5 — see
+§10, §11, §12, §13). ✓
 
 ## 5. Text-not-recoverable detail (Function 7.1 only)
 
@@ -495,4 +497,35 @@ V2 IMPORT ELIGIBLE 238** (146 newly eligible beyond the original 92, across Pass
 153 DRAFT items remain. Next priority clusters per the requested order: emergency response,
 general provisions, acceptance, loading/storage, documentation, passenger/crew, remaining
 uncategorized.
+
+## 13. Pass 5 (2026-08-29, same session) — emergency-response cluster (partial)
+
+Of the 33-item emergency-response cluster, a single DGR area — **§9.5.1.1.8–.10 and §9.5.1.2**
+("Renseignements fournis au commandant de bord" / "Renseignements concernant les interventions
+d'urgence") — resolved 5 items in one navigation, each an exact word-for-word match:
+
+| KOST ID | Citation | Confirms |
+|---|---|---|
+| Q-7.6-055 | §9.5.1.1.8 | Information given to the captain must be easily accessible during the flight |
+| Q-7.6-010 | §9.5.1.1.9 | A legible copy of the captain's notification information must be accessible to the flight operations officer/designated ground staff until the flight arrives |
+| Q-7.6-056 | §9.5.1.1.10 | Beyond languages the operator's State may require, English should be used for information provided in writing to the captain |
+| Q-7.4-048, Q-7.6-027 | §9.5.1.2 | For shipments requiring a Shipper's Declaration, the operator must ensure appropriate emergency-response information is immediately available at all times and available to the captain |
+
+**5 items materialized this pass, all FROZEN.**
+
+The remaining ~28 items in this cluster are largely general first-response/procedural content
+(e.g. the KOST course's own 4-step "aviser son supérieur / identifier / isoler / éviter le
+contact" sequence, contaminated-baggage handling, Safety Data Sheet purpose, first-aid measures)
+that reads as ICAO Emergency Response Guidance (Doc 9481) or general safety-training material
+rather than DGR regulatory text as such — one representative check (Q-7.6-054's "why must the
+captain be informed" framing) found no verbatim match in the current DGR text. These remain
+honestly DRAFT; a future pass should specifically check the ICAO Doc 9481 cross-reference
+already visible at §9.5.1.2 if that source becomes available, since the course material appears
+to draw on it directly.
+
+Running totals after Pass 5: **FROZEN 248 / GAP 18 / PARTIAL 31 / STALE 8 / DRAFT 148 /
+V2 IMPORT ELIGIBLE 243** (151 newly eligible beyond the original 92, across Passes 2–5 combined).
+
+148 DRAFT items remain. Next priority clusters: remaining emergency-response items, general
+provisions, acceptance, loading/storage, documentation, passenger/crew, remaining uncategorized.
 

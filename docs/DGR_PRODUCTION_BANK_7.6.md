@@ -660,7 +660,10 @@ re-notifying both the captain and flight-ops of any correction, noted
 honestly as topic-level, not word-for-word, corroboration. Per Stage
 1/cross-validation, this is the sole leaf in Block 6, so it alone determines
 that block's total.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.5.1.1.9 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.5.1.1.9 states verbatim "Un exemplaire ou les renseignements contenus dans la notification au commandant de bord doivent être faciles d'accès à l'agent des opérations aériennes, à l'agent d'opérations ou au personnel au sol désigné qui est chargé des opérations aériennes jusqu'à l'arrivée du vol" — exact match to the tested claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -902,7 +905,7 @@ honestly as topic-level corroboration only.
 | Q-7.6-007 | 0.5.2 Deux types d'étiquettes | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §7.2.2.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-008 | 0.5.2 Étiquette chimique — clarification expéditeur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-009 | 4.3.2 Divergence NOTOC/plan de chargement | PARTIALLY CONFIRMED — general NOTOC-accuracy duty Tier A-confirmed (§9.5.1.1.7), "plan de chargement" exact-match wording not independently located | MCQ | DGR 67e AM1 §9.5.1.1.7 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-010 | 6.1.6 Accessibilité agent des opérations aériennes | DRAFT — Tier A not attempted | True/False | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-010 | 6.1.6 Accessibilité agent des opérations aériennes | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-011 | 7.1+7.2 Signalement accidents/incidents | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-012 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-013 | 7.4 ANAC (DGR 9.6.5) | PARTIALLY CONFIRMED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -1610,7 +1613,10 @@ cross-reference exists for this sub-task**, per binding caveat 6 — this
 generic-awareness-only item rests on course text alone. **This item
 exhausts 0.6.2's full ceiling (count = 1, sample 0–1); no further item
 should be drafted against this leaf without new evidence.**
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.5.1.2 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.5.1.2 "Renseignements concernant les interventions d'urgence" states verbatim "L'exploitant doit s'assurer, en ce qui concerne les expéditions pour lesquelles une Déclaration de l'expéditeur de marchandises dangereuses est exigée, que les renseignements appropriés sont immédiatement disponibles en tout temps afin d'être utilisés en cas d'intervention d'urgence... Ces renseignements doivent être à la disposition du commandant de bord" — exact, word-for-word match to the tested claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1912,7 +1918,7 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-024 | 0.5.1 Lettre "Y" marquage UN-spec | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-025 | 0.5.3 Mention LTA — DGD/CAO | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-026 | 0.6.1 Première mesure d'urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 128 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-027 | 0.6.2 Disponibilité renseignements urgence | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 126 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-027 | 0.6.2 Disponibilité renseignements urgence | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.6 course slide 126 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-028 | 4.1.2 IT=0 catégorie I-Blanche | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 110 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-029 | 4.1.2 Risques multiples — même n° ONU | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.6 course slide 107 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-030 | 4.3.1 NOTOC — exemptions (contre-exemple) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 Tableau 9.5.A / §9.5.1.1.3.4 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -3110,7 +3116,10 @@ evidence basis: agent-des-opérations accessibility) and slide 115
 (`Q-7.6-054`'s own evidence basis: why the captain must be informed in the
 first place). No direct exam/practice hit for this exact
 accessibility-during-flight clause.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.5.1.1.8 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.5.1.1.8 states verbatim "Les renseignements communiqués au commandant de bord doivent lui être facilement accessibles pendant le vol" — exact, word-for-word match.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3156,7 +3165,10 @@ short paragraph. No direct exam/practice hit for this exact
 language-requirement fact.
 **This item brings 6.1.6 to its full ceiling (count = 4); no further item
 should be drafted against this leaf without new evidence.**
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.5.1.1.10 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.5.1.1.10 states verbatim "Outre les langues que peut exiger l'État de l'exploitant, l'anglais devrait être utilisé pour les renseignements fournis par écrit au commandant de bord" — exact, word-for-word match.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3187,8 +3199,8 @@ should be drafted against this leaf without new evidence.**
 | Q-7.6-052 | 4.1.2 CAO interdit en avion passager | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.6 course slide 105 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-053 | 4.1.2 Détermination de l'IT | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 108 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.6-054 | 6.1.6 Pourquoi informer le commandant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 115 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-055 | 6.1.6 Accessible pendant le vol | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.6-056 | 6.1.6 Langue anglaise requise | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-055 | 6.1.6 Accessible pendant le vol | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.6-056 | 6.1.6 Langue anglaise requise | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.6 course slide 122 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 
 **Batch composition:** 17 MCQ + 6 True/False. Block spread: Block 0 = 17
 (0.1.1×2, 0.1.2×1, 0.2.1×2, 0.2.2×1, 0.3.1×2, 0.3.3×1, 0.4.1×3, 0.5.1×1,

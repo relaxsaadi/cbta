@@ -2933,7 +2933,10 @@ first and only item drawn from 0.6.2's ceiling (1); 0.6.2 is now fully drawn
 at its maximum permitted figure and should receive no further items. No
 exam/practice cross-reference found, consistent with Stage 1's own finding
 for this sub-task.
-**FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
+**FR status:** FROZEN FR / SOURCE VERIFIED.
+
+**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.5.1.2 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.5.1.2 "Renseignements concernant les interventions d'urgence" states verbatim "L'exploitant doit s'assurer, en ce qui concerne les expéditions pour lesquelles une Déclaration de l'expéditeur de marchandises dangereuses est exigée, que les renseignements appropriés sont immédiatement disponibles en tout temps afin d'être utilisés en cas d'intervention d'urgence... Ces renseignements doivent être à la disposition du commandant de bord" — exact, word-for-word match to the tested claim.
+
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -3219,7 +3222,7 @@ is sourced from a different function's course material.
 | Q-7.4-045 | 0.4.1 Division 5.2 — peroxyde organique | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 66 (DGR 3.0.2) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-046 | 0.5.1 Quatre qualités du marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2(a)-(c) (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-047 | 0.6.1 Fret/bagages contaminés — obligation exploitant | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slides 147–148 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-048 | 0.6.2 Disponibilité info intervention d'urgence (restricted) | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 143 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-048 | 0.6.2 Disponibilité info intervention d'urgence (restricted) | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.4 course slide 143 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-049 | 4.2.3 Orientation « This Way Up » | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.4 course slides 117–118 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-050 | 6.1.4 Détermination de l'indice de transport | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 127 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-051 | 6.1.4 Distances de séparation = minimums | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 130 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

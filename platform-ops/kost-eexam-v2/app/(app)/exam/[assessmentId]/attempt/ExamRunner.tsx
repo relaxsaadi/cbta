@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { Flag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { saveAnswerAction, saveScenarioSubanswerAction, toggleMarkAction, submitAttemptAction, type ActionResult } from "./actions";
-import { Timer } from "./Timer";
+import { Timer } from "@/components/ui/Timer";
 import { AutosaveIndicator } from "./AutosaveIndicator";
-import { QuestionNavigator } from "./QuestionNavigator";
+import { QuestionNavigator } from "@/components/ui/QuestionNavigator";
 
 interface ChoiceView {
   key: string;

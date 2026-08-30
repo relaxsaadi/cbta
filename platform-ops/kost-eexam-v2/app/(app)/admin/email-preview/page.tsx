@@ -76,7 +76,7 @@ export default async function EmailPreviewPage({
             </select>
           </div>
           <div className="sm:col-span-4">
-            <button type="submit" className="rounded-md bg-brand-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
+            <button type="submit" className="rounded-md bg-accent-9 px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
               Charger
             </button>
           </div>

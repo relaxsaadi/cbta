@@ -128,7 +128,7 @@ export default async function UsersPage({
             </select>
           </div>
           <div className="flex items-end gap-3 lg:col-span-7">
-            <button type="submit" className="rounded-md bg-brand-accent px-3.5 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
+            <button type="submit" className="rounded-md bg-accent-9 px-3.5 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
               Filtrer
             </button>
             {/* Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)

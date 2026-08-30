@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import { Flag, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Timer } from "@/components/ui/Timer";
+import { QuestionNavigator } from "@/components/ui/QuestionNavigator";
 
 // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §20-26 —
 // mode APERÇU CANDIDAT. Volontairement un composant SÉPARÉ de
@@ -49,7 +51,11 @@ interface LocalAnswerState {
   scenarioAnswers: Record<string, string[] | null>;
 }
 
-function formatTime(ms: number): string {
+// Réservé à la carte-résumé "Temps restant" de l'écran de vérification
+// (parité avec ExamRunner.tsx §38) — Timer.tsx (composant partagé) a son
+// propre formatage interne, non exporté ; ce format MM:SS local n'a besoin
+// que d'exister ici.
+function formatDuration(ms: number): string {
   const total = Math.max(0, Math.floor(ms / 1000));
   const m = Math.floor(total / 60).toString().padStart(2, "0");
   const s = (total % 60).toString().padStart(2, "0");
@@ -163,7 +169,7 @@ export function PreviewRunner({
         <div className="rounded-lg border border-border-subtle bg-surface-raised p-5 shadow-sm">
           <h1 className="mb-1 font-display text-[16px] font-semibold text-text-primary">Résumé de l&apos;examen (aperçu)</h1>
           <p className="mb-4 text-[12.5px] text-text-tertiary">{assessmentName}</p>
-          <dl className="grid grid-cols-3 gap-3 text-[13px]">
+          <dl className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-4">
             <div className="rounded-md bg-surface-sunken p-3 text-center">
               <dt className="text-text-tertiary">Questions répondues</dt>
               <dd className="mt-1 text-[18px] font-semibold text-status-verified-text">{answeredCount} / {questions.length}</dd>
@@ -175,6 +181,10 @@ export function PreviewRunner({
             <div className="rounded-md bg-surface-sunken p-3 text-center">
               <dt className="text-text-tertiary">Marquées à revoir</dt>
               <dd className="mt-1 text-[18px] font-semibold text-status-warning-text">{markedCount}</dd>
+            </div>
+            <div className="rounded-md bg-surface-sunken p-3 text-center">
+              <dt className="text-text-tertiary">Temps restant</dt>
+              <dd className="mt-1 text-[18px] font-semibold text-text-primary">{formatDuration(totalMs)}</dd>
             </div>
           </dl>
           <div className="mt-5 flex items-center justify-between">
@@ -198,44 +208,25 @@ export function PreviewRunner({
     <div className="mx-auto flex max-w-3xl flex-col gap-4">
       {PreviewBanner}
 
-      <div className="flex items-center justify-between rounded-md border border-border-subtle bg-surface-raised px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border-subtle bg-surface-raised px-4 py-3">
         <div>
           <p className="text-[13px] font-medium text-text-primary">{assessmentName} — {functionLabel}</p>
           <p className="text-[11.5px] text-text-tertiary">
             Question {index + 1} / {questions.length}{candidateLabel ? ` — vu comme ${candidateLabel}` : ""}
           </p>
         </div>
-        <div className="rounded-md bg-accent-soft-bg px-3 py-1.5 font-mono text-[16px] font-semibold text-accent-11" title="Chronomètre illustratif — jamais authoritatif en mode aperçu">
-          {formatTime(totalMs)}
-        </div>
+        {/* Chronomètre illustratif — jamais décompté (§21 "timer
+            appearance" seulement, aucune vraie tentative n'existe en mode
+            aperçu) : remainingMs = totalMs en permanence, montre l'état
+            "Normal" du même composant Timer que l'examen réel. */}
+        <Timer remainingMs={totalMs} totalMs={totalMs} />
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
-        {questions.map((q, i) => {
-          const st = states[q.attempt_question_id]!;
-          const answered = isAnswered(q, st);
-          return (
-            <button
-              key={q.attempt_question_id}
-              onClick={() => setIndex(i)}
-              title={answered ? "Répondue" : "Sans réponse"}
-              aria-current={i === index ? "step" : undefined}
-              className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-md text-[12px] font-medium border",
-                i === index
-                  ? "border-accent-9 bg-accent-9 text-white"
-                  : st.markedForReview
-                    ? "border-status-warning-border bg-status-warning-bg text-status-warning-text"
-                    : answered
-                      ? "border-status-verified-border bg-status-verified-bg text-status-verified-text"
-                      : "border-border-default text-text-tertiary"
-              )}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-      </div>
+      <QuestionNavigator
+        items={questions.map((q) => ({ id: q.attempt_question_id, answered: isAnswered(q, states[q.attempt_question_id]!), markedForReview: !!states[q.attempt_question_id]?.markedForReview }))}
+        currentIndex={index}
+        onSelect={setIndex}
+      />
 
       <div data-testid="preview-question-card" data-qtype={current.qtype} className="rounded-lg border border-border-subtle bg-surface-raised p-5 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3">

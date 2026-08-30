@@ -73,7 +73,7 @@ export default async function CompaniesPage({
             </select>
           </div>
           <div className="flex items-end gap-3">
-            <button type="submit" className="rounded-md bg-brand-accent px-3.5 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
+            <button type="submit" className="rounded-md bg-accent-9 px-3.5 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
               Filtrer
             </button>
             {(type || q) && (

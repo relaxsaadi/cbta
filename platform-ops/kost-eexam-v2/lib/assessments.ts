@@ -81,6 +81,143 @@ export function listAssessmentsForManager(userId: number): (AssessmentRow & { gr
     .all(userId) as unknown as (AssessmentRow & { group_name: string; company_name: string })[];
 }
 
+// ---------------------------------------------------------------------
+// Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §27-29 —
+// aperçu opérationnel de /exam-preparation : la liste ne montrait jusqu'ici
+// que 5 champs (nom/type/fonction/client-groupe/statut), aucun filtre,
+// aucune action rapide par ligne — voir le diagnostic complet en tête de
+// mission. Section VOLONTAIREMENT séparée de listAssessments/
+// listAssessmentsForManager ci-dessus (inchangées, encore utilisées par
+// les menus déroulants "Examen" de /results, /grading, /notifications où
+// le filtrage riche n'est pas nécessaire).
+// ---------------------------------------------------------------------
+
+export interface ExamManagementFilters {
+  companyId?: number;
+  groupId?: number;
+  functionCode?: string;
+  status?: string;
+  type?: AssessmentType;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+}
+
+/** Liste enrichie pour /exam-preparation — mêmes colonnes que
+ * listAssessments, plus les 7 dimensions de filtre du §28. restrictToManagerUserId
+ * suit le même contrat que partout ailleurs (undefined = illimité). */
+export function listAssessmentsWithFilters(
+  filters: ExamManagementFilters = {},
+  restrictToManagerUserId?: number
+): (AssessmentRow & { group_name: string; company_name: string })[] {
+  const clauses: string[] = [];
+  const params: (string | number)[] = [];
+  if (restrictToManagerUserId) {
+    clauses.push(`g.pedagogical_manager_id = ?`);
+    params.push(restrictToManagerUserId);
+  }
+  if (filters.companyId) {
+    clauses.push(`c.id = ?`);
+    params.push(filters.companyId);
+  }
+  if (filters.groupId) {
+    clauses.push(`g.id = ?`);
+    params.push(filters.groupId);
+  }
+  if (filters.functionCode) {
+    clauses.push(`a.function_code = ?`);
+    params.push(filters.functionCode);
+  }
+  if (filters.status) {
+    clauses.push(`a.status = ?`);
+    params.push(filters.status);
+  }
+  if (filters.type) {
+    clauses.push(`a.type = ?`);
+    params.push(filters.type);
+  }
+  if (filters.dateFrom) {
+    clauses.push(`a.created_at >= ?`);
+    params.push(`${filters.dateFrom}T00:00:00.000Z`);
+  }
+  if (filters.dateTo) {
+    clauses.push(`a.created_at <= ?`);
+    params.push(`${filters.dateTo}T23:59:59.999Z`);
+  }
+  if (filters.search) {
+    clauses.push(`a.name LIKE ?`);
+    params.push(`%${filters.search}%`);
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  return getDb()
+    .prepare(
+      `SELECT a.*, g.name AS group_name, c.name AS company_name
+       FROM assessments a
+       JOIN groups g ON g.id = a.group_id
+       JOIN companies c ON c.id = g.company_id
+       ${where}
+       ORDER BY a.created_at DESC`
+    )
+    .all(...params) as unknown as (AssessmentRow & { group_name: string; company_name: string })[];
+}
+
+export interface AssignmentStats {
+  assigned: number;
+  notStarted: number;
+  inProgress: number;
+  submittedTotal: number;
+  awaitingCorrection: number;
+  resultsAvailable: number;
+}
+
+/** Une seule requête agrégée pour TOUS les examens (jamais N+1 — une
+ * requête par ligne de liste serait invisible en dev mais réelle en
+ * production dès quelques dizaines d'examens). Même prédicat "dernière
+ * tentative par candidat" que trackingForAssessment (réutilisé fidèlement,
+ * jamais une seconde définition de "dernière tentative" qui pourrait
+ * diverger). "submittedTotal" est un cumul (awaitingCorrection +
+ * resultsAvailable), pas un troisième état mutuellement exclusif — cohérent
+ * avec §27 qui liste "Submitted" ET son détail "Awaiting manual
+ * correction"/"Results available" côte à côte. */
+export function getAssignmentStatsByAssessment(): Map<number, AssignmentStats> {
+  const rows = getDb()
+    .prepare(
+      `SELECT aa.assessment_id,
+              COUNT(*) AS assigned,
+              SUM(CASE WHEN at.id IS NULL THEN 1 ELSE 0 END) AS not_started,
+              SUM(CASE WHEN at.status = 'in_progress' THEN 1 ELSE 0 END) AS in_progress,
+              SUM(CASE WHEN at.status IN ('submitted','auto_submitted') THEN 1 ELSE 0 END) AS submitted_total,
+              SUM(CASE WHEN at.status IN ('submitted','auto_submitted') AND r.grading_state = 'AWAITING_MANUAL_REVIEW' THEN 1 ELSE 0 END) AS awaiting_correction,
+              SUM(CASE WHEN at.status IN ('submitted','auto_submitted') AND r.grading_state = 'COMPLETE' THEN 1 ELSE 0 END) AS results_available
+       FROM assessment_assignments aa
+       LEFT JOIN attempts at ON at.assessment_id = aa.assessment_id AND at.candidate_user_id = aa.candidate_user_id
+         AND at.id = (SELECT MAX(id) FROM attempts WHERE assessment_id = aa.assessment_id AND candidate_user_id = aa.candidate_user_id)
+       LEFT JOIN results r ON r.attempt_id = at.id
+       GROUP BY aa.assessment_id`
+    )
+    .all() as {
+    assessment_id: number;
+    assigned: number;
+    not_started: number;
+    in_progress: number;
+    submitted_total: number;
+    awaiting_correction: number;
+    results_available: number;
+  }[];
+  const map = new Map<number, AssignmentStats>();
+  for (const r of rows) {
+    map.set(r.assessment_id, {
+      assigned: r.assigned,
+      notStarted: r.not_started,
+      inProgress: r.in_progress,
+      submittedTotal: r.submitted_total,
+      awaitingCorrection: r.awaiting_correction,
+      resultsAvailable: r.results_available,
+    });
+  }
+  return map;
+}
+
 export function isAssessmentOpenNow(a: AssessmentRow): boolean {
   if (a.status !== "published" && a.status !== "open") return false;
   const now = Date.now();

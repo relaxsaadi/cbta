@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
 import { createUserAction, type CreateUserResult } from "../actions";
 import { QuickCreateCompany, QuickCreateGroup } from "./QuickCreate";
@@ -214,7 +215,24 @@ export function CreateUserWizard({
           Créer sans envoyer maintenant
         </button>
       </div>
-      {state.error && <p className="text-[12.5px] text-status-critical-text">{state.error}</p>}
+      {state.error && (
+        <p className="text-[12.5px] text-status-critical-text">
+          {state.error}
+          {/* Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT
+              DUPLICATE CANDIDATE CREATION" (2026-08-30) §8 — lien "Voir le
+              compte" UNIQUEMENT quand le compte en doublon est visible pour
+              l'acteur courant (jamais pour un conflit cross-tenant, où
+              duplicateUserId reste absent — voir createUserAction). */}
+          {state.duplicateUserId && (
+            <>
+              {" "}
+              <Link href={`/users/${state.duplicateUserId}`} className="underline hover:no-underline">
+                Voir le compte
+              </Link>
+            </>
+          )}
+        </p>
+      )}
       {state.success && <p className="text-[12.5px] text-status-verified-text">{state.success}</p>}
     </form>
   );

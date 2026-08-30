@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
 import { createGroup, addCandidateToGroup, getGroup } from "@/lib/groups";
 import { removeUserFromGroupSafely } from "@/lib/user-affiliation";
-import { createUserPendingActivation, findUserByUsername, updateUserProfile } from "@/lib/users";
-import { hasCompanyAccess, hasGroupAccess } from "@/lib/tenant-scope";
+import { createUserPendingActivation, findUserByUsername, findUserById, updateUserProfile } from "@/lib/users";
+import { hasCompanyAccess, hasGroupAccess, hasUserAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
 import type { Scope } from "@/lib/scope";
@@ -13,6 +13,7 @@ import { createActivationToken } from "@/lib/activation-tokens";
 import { notifyAccountCreated, notifyTemporaryAccessCreated } from "@/lib/email/events";
 import { auditEmailInvitationSent } from "@/lib/email/audit";
 import { createTemporaryAccess } from "@/lib/temp-password";
+import { findDuplicateAccount, CROSS_TENANT_DUPLICATE_MESSAGE } from "@/lib/duplicate-check";
 
 /** Invitation sécurisée (mission email §8-10) — crée le compte SANS mot de
  * passe communiqué, un jeton d'activation, et déclenche ACCOUNT_CREATED.
@@ -138,7 +139,25 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   const group = getGroup(groupId);
   if (!group) return { error: "Groupe introuvable." };
 
+  // Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
+  // CANDIDATE CREATION" (2026-08-30) §8-9 — la correspondance par
+  // IDENTIFIANT (déjà présente avant cette mission) est étendue à
+  // l'email normalisé (bug réel trouvé à l'exploration : aucune
+  // vérification d'email n'existait ici, une collision email non captée
+  // par le nom d'utilisateur remontait l'erreur SQLite brute et non
+  // interceptée). hasUserAccess() protège aussi contre la ré-utilisation
+  // SILENCIEUSE d'un compte hors périmètre (un responsable pédagogique ne
+  // doit jamais pouvoir confirmer/rattacher à son groupe un candidat d'un
+  // AUTRE client simplement en devinant son identifiant ou son email).
   let user = findUserByUsername(username);
+  if (!user && email) {
+    const dup = findDuplicateAccount(session, undefined, email);
+    if (dup) {
+      if (!dup.visible) return { error: CROSS_TENANT_DUPLICATE_MESSAGE };
+      user = findUserById(dup.userId);
+    }
+  }
+  if (user && !hasUserAccess(session, user.id)) return { error: CROSS_TENANT_DUPLICATE_MESSAGE };
   if (user && (user.status === "suspended" || user.status === "archived")) {
     return { error: `Ce compte existe mais est ${user.status === "suspended" ? "suspendu" : "archivé"}.` };
   }
@@ -157,7 +176,17 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
     return { success: `${fullName} (compte existant) ajouté au groupe.` };
   }
 
-  const userId = createUserPendingActivation({ username, fullName, role: "candidate", email });
+  let userId: number;
+  try {
+    userId = createUserPendingActivation({ username, fullName, role: "candidate", email });
+  } catch (err) {
+    // Filet de sécurité résiduel — même discipline que
+    // app/(app)/users/actions.ts::createUserAction.
+    const raw = err instanceof Error ? err.message : "";
+    if (raw.includes("users.email")) return { error: "Un compte utilise déjà cette adresse email." };
+    if (raw.includes("users.username")) return { error: "Cet identifiant est déjà utilisé." };
+    return { error: raw || "Erreur lors de la création du compte." };
+  }
   addCandidateToGroup(groupId, userId, session.userId);
   audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_assigned", targetType: "user", targetId: userId, metadata: { groupId } });
 
@@ -302,7 +331,26 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
       continue;
     }
     try {
+      // Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
+      // CANDIDATE CREATION" (2026-08-30) §8-9 — même correspondance
+      // normalisée username OU email, même garde tenant, que
+      // addCandidateAction ci-dessus (jamais une divergence entre les
+      // deux points d'entrée qui créent des candidats côté groupe).
       let user = findUserByUsername(username);
+      if (!user) {
+        const dup = findDuplicateAccount(session, undefined, email);
+        if (dup) {
+          if (!dup.visible) {
+            report.push({ line: i + 1, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
+            continue;
+          }
+          user = findUserById(dup.userId);
+        }
+      }
+      if (user && !hasUserAccess(session, user.id)) {
+        report.push({ line: i + 1, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
+        continue;
+      }
       if (user && existingMembers.has(user.id)) {
         report.push({ line: i + 1, identifier: username, status: "duplicate_in_group", detail: "Déjà membre de ce groupe — ignoré." });
         continue;
@@ -326,7 +374,16 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
       }
       report.push({ line: i + 1, identifier: username, status: isNew ? "created" : "existing_added" });
     } catch (e) {
-      report.push({ line: i + 1, identifier: username, status: "error", detail: (e as Error).message });
+      // Filet de sécurité résiduel — jamais le message SQLite brut si on
+      // peut le traduire (même discipline que createUserAction/
+      // addCandidateAction ci-dessus).
+      const raw = e instanceof Error ? e.message : "";
+      const detail = raw.includes("users.email")
+        ? "Un compte utilise déjà cette adresse email."
+        : raw.includes("users.username")
+          ? "Cet identifiant est déjà utilisé."
+          : raw || "Erreur inconnue.";
+      report.push({ line: i + 1, identifier: username, status: "error", detail });
     }
   }
 

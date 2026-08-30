@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { editUserAction, type EditUserResult } from "../actions";
 
@@ -56,7 +57,19 @@ export function EditUserForm({
         </button>
         <button type="button" onClick={() => setOpen(false)} className="text-[12px] text-text-tertiary hover:text-text-secondary">Annuler</button>
       </div>
-      {state.error && <p className="text-status-critical-text">{state.error}</p>}
+      {state.error && (
+        <p className="text-status-critical-text">
+          {state.error}
+          {state.duplicateUserId && (
+            <>
+              {" "}
+              <Link href={`/users/${state.duplicateUserId}`} className="underline hover:no-underline">
+                Voir le compte
+              </Link>
+            </>
+          )}
+        </p>
+      )}
       {state.success && <p className="text-status-verified-text">{state.success}</p>}
     </form>
   );

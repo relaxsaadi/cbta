@@ -31,10 +31,18 @@ import { createActivationToken } from "@/lib/activation-tokens";
 import { notifyAccountCreated, notifyAccountSuspended, notifyAccountReactivated, notifyMfaDisabled, notifyUsernameChanged, notifyAdminMessage } from "@/lib/email/events";
 import { auditEmailInvitationSent } from "@/lib/email/audit";
 import { resendInvitation, sendPasswordResetLink, ResendError } from "@/lib/email/resend-actions";
+import { findDuplicateAccount, CROSS_TENANT_DUPLICATE_MESSAGE, VISIBLE_DUPLICATE_MESSAGE } from "@/lib/duplicate-check";
 
 export interface CreateUserResult {
   error?: string;
   success?: string;
+  /** Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
+   * CANDIDATE CREATION" (2026-08-30) §8 — posé UNIQUEMENT quand `error`
+   * signale un doublon ET que le compte existant est visible pour
+   * l'acteur courant (jamais pour un conflit cross-tenant, voir §9) : le
+   * composant client peut alors offrir un vrai lien "Voir le compte",
+   * jamais une redirection automatique. */
+  duplicateUserId?: number;
 }
 
 /** Assistant de création (mission "COMPLETE USER MANAGEMENT", 2026-08-29,
@@ -62,6 +70,20 @@ export async function createUserAction(_prev: CreateUserResult, formData: FormDa
   if (!fullName || !username || !role) return { error: "Nom complet, identifiant et rôle sont obligatoires." };
   if (sendInvitation && !email) return { error: "L'email est obligatoire pour envoyer l'invitation — ou choisissez « Créer sans envoyer maintenant »." };
 
+  // Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
+  // CANDIDATE CREATION" (2026-08-30) §8-9 — vérification PROACTIVE avant
+  // toute tentative d'INSERT (jamais seulement un rattrapage de l'erreur
+  // brute de contrainte UNIQUE de SQLite, qui ne distinguerait de toute
+  // façon pas "identifiant" d'"email" dans son message, et ne couvrirait
+  // jamais le cas normalisé — casse/espaces différents — qui a permis le
+  // doublon réel "Nesrine" en staging). Cross-tenant : jamais un détail
+  // révélé (§9), voir lib/duplicate-check.ts::findDuplicateAccount.
+  const duplicate = findDuplicateAccount(session, username, email || undefined);
+  if (duplicate) {
+    if (!duplicate.visible) return { error: CROSS_TENANT_DUPLICATE_MESSAGE };
+    return { error: VISIBLE_DUPLICATE_MESSAGE, duplicateUserId: duplicate.userId };
+  }
+
   let groupId: number | undefined;
   if (role === "candidate" && candidateType === "entreprise") {
     if (!companyIdRaw || !groupIdRaw) return { error: "Client et groupe/session sont obligatoires pour un candidat Entreprise." };
@@ -82,7 +104,17 @@ export async function createUserAction(_prev: CreateUserResult, formData: FormDa
       candidateType: role === "candidate" ? candidateType : undefined,
     });
   } catch (err) {
-    return { error: err instanceof Error ? err.message : "Erreur — identifiant probablement déjà utilisé." };
+    // Filet de sécurité résiduel (jamais le chemin normal — la
+    // vérification proactive ci-dessus couvre déjà le cas normalisé) :
+    // une vraie course entre deux requêtes simultanées peut en théorie
+    // passer toutes deux la vérification avant que l'une des deux
+    // n'exécute son INSERT. Message distinct selon la colonne SQLite
+    // réellement en cause, jamais un message générique qui pointerait à
+    // tort vers l'identifiant quand c'est l'email qui est en collision.
+    const raw = err instanceof Error ? err.message : "";
+    if (raw.includes("users.email")) return { error: "Un compte utilise déjà cette adresse email." };
+    if (raw.includes("users.username")) return { error: "Cet identifiant est déjà utilisé." };
+    return { error: raw || "Erreur lors de la création du compte." };
   }
 
   if (groupId) addUserToGroup(userId, groupId, session.userId);
@@ -299,11 +331,24 @@ export async function hardDeleteUserAction(userId: number, _prev: HardDeleteResu
 export interface EditUserResult {
   error?: string;
   success?: string;
+  duplicateUserId?: number;
 }
+
+const EMAIL_FORMAT_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** "Modifier" (§34) — nom/email/téléphone/type candidat. Ne touche jamais
  * l'identifiant (action séparée, changeUsernameAction) ni les données
- * d'examen/historique. */
+ * d'examen/historique.
+ *
+ * Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
+ * CANDIDATE CREATION" (2026-08-30) §5/§8-9 — bug réel trouvé (jamais
+ * corrigé avant cette mission, voir exploration du code) : cette action
+ * n'avait AUCUNE vérification de format ni de doublon d'email avant
+ * `updateUserProfile()`, et aucun `try/catch` autour — soumettre un email
+ * déjà utilisé par un AUTRE compte faisait planter la Server Action avec
+ * l'erreur brute SQLite `UNIQUE constraint failed: users.email`, jamais
+ * un message français lisible. Corrigé ici avec la même discipline que
+ * changeUsernameAction (vérification proactive + filet de sécurité). */
 export async function editUserAction(userId: number, _prev: EditUserResult, formData: FormData): Promise<EditUserResult> {
   const session = await requireWriteRole("administrator");
   const target = findUserById(userId);
@@ -315,9 +360,38 @@ export async function editUserAction(userId: number, _prev: EditUserResult, form
   const candidateTypeRaw = String(formData.get("candidateType") ?? "");
   const candidateType = candidateTypeRaw === "particulier" || candidateTypeRaw === "entreprise" ? candidateTypeRaw : null;
   if (!fullName) return { error: "Le nom complet est obligatoire." };
+  if (email && !EMAIL_FORMAT_RE.test(email)) return { error: "Format d'email invalide." };
 
-  updateUserProfile(userId, { fullName, email, phone, candidateType });
-  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_edited", targetType: "user", targetId: userId, metadata: { fullName } });
+  if (email) {
+    const duplicate = findDuplicateAccount(session, undefined, email, userId);
+    if (duplicate) {
+      if (!duplicate.visible) return { error: CROSS_TENANT_DUPLICATE_MESSAGE };
+      return { error: "Cette adresse email est déjà utilisée par un autre compte.", duplicateUserId: duplicate.userId };
+    }
+  }
+
+  const oldEmail = target.email;
+  try {
+    updateUserProfile(userId, { fullName, email, phone, candidateType });
+  } catch (err) {
+    // Filet de sécurité résiduel — même discipline que createUserAction
+    // (course théorique entre la vérification proactive ci-dessus et
+    // l'UPDATE réel).
+    const raw = err instanceof Error ? err.message : "";
+    if (raw.includes("users.email")) return { error: "Cette adresse email est déjà utilisée par un autre compte." };
+    return { error: raw || "Erreur lors de la mise à jour du profil." };
+  }
+  // §5 "audit the profile change" — un changement d'email est distinct
+  // du reste (nom/téléphone/type), tracé séparément (même convention que
+  // changeUsernameAction::metadata: { oldUsername, newUsername }).
+  audit({
+    actorUserId: session.userId,
+    actorRole: session.role,
+    action: "user_edited",
+    targetType: "user",
+    targetId: userId,
+    metadata: email !== (oldEmail ?? undefined) ? { fullName, emailChanged: true, oldEmail: oldEmail ?? null, newEmail: email ?? null } : { fullName },
+  });
   revalidatePath(`/users/${userId}`);
   revalidatePath("/users");
   return { success: "Fiche mise à jour." };

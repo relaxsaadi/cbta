@@ -137,4 +137,74 @@ describe("Outbox email — idempotence, EMAIL_MODE, préférences", async () => 
     });
     assert.equal(result.status, "SUPPRESSED");
   });
+
+  // Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
+  // CANDIDATE CREATION" (2026-08-30) §10-H — le mode EMAIL_MODE=allowlist
+  // lui-même (distinct de "log" testé plus haut, et distinct de la liste
+  // de suppression bounce/plainte testée ci-dessus) n'avait pas encore de
+  // couverture dédiée dans cette suite, alors même que c'est le mode
+  // réellement configuré sur staging. Restaure explicitement
+  // EMAIL_MODE/EMAIL_ALLOWED_RECIPIENTS après coup (jamais de fuite
+  // d'état vers un test suivant dans ce même fichier/process).
+  test("§10-H — EMAIL_MODE=allowlist supprime réellement un destinataire hors liste, envoie réellement un destinataire dans la liste", async () => {
+    const { queueAndSendEmail } = await import("../../lib/email/send");
+    process.env.EMAIL_MODE = "allowlist";
+    process.env.EMAIL_ALLOWED_RECIPIENTS = "approved@example.com";
+    try {
+      const notApproved = await queueAndSendEmail({
+        eventType: "EXAM_ASSIGNED",
+        idempotencyKey: "test-allowlist-suppressed-key",
+        recipientEmail: "not-approved@example.com",
+        userId: null,
+        tenant: { companyId: null, companyName: null },
+        sender: { name: "KOST E-EXAM", address: "exam@kostacademy.com" },
+        rendered: { subject: "Test", html: "<p>Test</p>", text: "Test", templateId: "test", templateVersion: "v1" },
+      });
+      assert.equal(notApproved.status, "SUPPRESSED", "un destinataire hors liste reste SUPPRESSED, jamais envoyé");
+
+      // Insensible à la casse — même normalisation que
+      // lib/email/config.ts::getAllowedRecipients() (.toLowerCase()).
+      const approved = await queueAndSendEmail({
+        eventType: "EXAM_ASSIGNED",
+        idempotencyKey: "test-allowlist-approved-key",
+        recipientEmail: "APPROVED@EXAMPLE.COM",
+        userId: null,
+        tenant: { companyId: null, companyName: null },
+        sender: { name: "KOST E-EXAM", address: "exam@kostacademy.com" },
+        rendered: { subject: "Test", html: "<p>Test</p>", text: "Test", templateId: "test", templateVersion: "v1" },
+      });
+      assert.notEqual(approved.status, "SUPPRESSED", "un destinataire dans la liste (même casse différente) n'est jamais supprimé par l'allowlist elle-même");
+    } finally {
+      delete process.env.EMAIL_MODE;
+      delete process.env.EMAIL_ALLOWED_RECIPIENTS;
+    }
+  });
+
+  // §10-E/F — "Renvoyer l'invitation" (le même mécanisme utilisé pour
+  // Nesrine sur staging) opère TOUJOURS sur le compte EXISTANT passé en
+  // paramètre — structurellement impossible de créer un second compte,
+  // puisque resendInvitation() ne fait jamais d'INSERT INTO users, voir
+  // lib/email/resend-actions.ts. Ce test vérifie l'invariant réel (compte
+  // total inchangé, même id ciblé) plutôt que de re-tester la mécanique
+  // interne déjà couverte par le test forceResendSuffix ci-dessus.
+  test("§10-E/F — resendInvitation() opère sur le compte EXISTANT, ne crée jamais un second compte", async () => {
+    const { resendInvitation } = await import("../../lib/email/resend-actions");
+    const { createUserPendingActivation, findUserByUsername } = await import("../../lib/users");
+    const { getDb } = await import("../../lib/db");
+
+    const userId = createUserPendingActivation({ username: "resend-no-dup-user", fullName: "Resend NoDup", role: "candidate", email: "resend-no-dup@example.com" });
+    const before = (getDb().prepare(`SELECT COUNT(*) n FROM users`).get() as { n: number }).n;
+
+    await resendInvitation(userId, { id: userId, role: "administrator" });
+
+    const after = (getDb().prepare(`SELECT COUNT(*) n FROM users`).get() as { n: number }).n;
+    assert.equal(after, before, "aucun compte supplémentaire créé par le renvoi");
+
+    const stillSameUser = findUserByUsername("resend-no-dup-user");
+    assert.equal(stillSameUser?.id, userId, "le renvoi cible toujours le MÊME compte, jamais un doublon");
+
+    const notifRows = getDb().prepare(`SELECT user_id FROM notification_log WHERE user_id = ? AND event_type = 'ACCOUNT_CREATED'`).all(userId) as { user_id: number }[];
+    assert.ok(notifRows.length >= 1, "au moins une notification réelle a bien été journalisée pour CE compte");
+    for (const row of notifRows) assert.equal(row.user_id, userId);
+  });
 });

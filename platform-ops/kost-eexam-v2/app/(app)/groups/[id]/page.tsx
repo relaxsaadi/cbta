@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
-import { getGroup, listGroupMembers, removeCandidateFromGroup } from "@/lib/groups";
+import { getGroup, listGroupMembers } from "@/lib/groups";
+import { removeUserFromGroupSafely } from "@/lib/user-affiliation";
 import { listAssessments } from "@/lib/assessments";
 import { hasGroupAccess, assertAccess } from "@/lib/tenant-scope";
+import { audit } from "@/lib/audit";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -13,10 +15,10 @@ import { EditCandidateForm } from "./EditCandidateForm";
 import { BulkImportCandidatesForm } from "./BulkImportCandidatesForm";
 import { revalidatePath } from "next/cache";
 
-export default async function GroupDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ q?: string }> }) {
+export default async function GroupDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ q?: string; blocked?: string }> }) {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
   const { id } = await params;
-  const { q } = await searchParams;
+  const { q, blocked } = await searchParams;
   const group = getGroup(Number(id));
   // Voir lib/tenant-scope.ts : introuvable, pas "refusé", pour un groupe
   // hors périmètre.
@@ -35,12 +37,35 @@ export default async function GroupDetailPage({ params, searchParams }: { params
     "use server";
     const s = await guardPage("pedagogical_manager", "administrator");
     assertAccess(hasGroupAccess(s, group!.id));
-    removeCandidateFromGroup(group!.id, Number(formData.get("candidateUserId")));
+    const candidateUserId = Number(formData.get("candidateUserId"));
+    // Audit "MISSION FINALE — TRANSVERSAL STAGING AUDIT" (2026-08-30) §18/
+    // §4 — GAP réel (P1) trouvé : ce bouton appelait directement
+    // removeCandidateFromGroup(), CONTOURNANT le garde-fou "historique
+    // protégé" (hasProtectedGroupHistory / removeUserFromGroupSafely,
+    // lib/user-affiliation.ts) que l'action équivalente côté fiche
+    // "Utilisateur" applique déjà — un responsable pédagogique pouvait donc
+    // retirer silencieusement du groupe un candidat ayant déjà un examen/
+    // une présence de familiarisation sous ce groupe précis, ce qui n'était
+    // jamais possible depuis /users. Corrigé en passant par le MÊME
+    // gardien, avec le MÊME nom d'action audit pour rester cherchable
+    // indépendamment de l'écran d'origine (voir app/(app)/users/actions.ts
+    // ::removeFromGroupAction).
+    const result = removeUserFromGroupSafely(candidateUserId, group!.id);
+    if (!result.removed) {
+      audit({ actorUserId: s.userId, actorRole: s.role, action: "user_group_removal_blocked", targetType: "user", targetId: candidateUserId, result: "failure", metadata: { groupId: group!.id, reason: result.blockedReason } });
+      redirect(`/groups/${group!.id}?blocked=${encodeURIComponent(result.blockedReason ?? "Retrait impossible.")}`);
+    }
+    audit({ actorUserId: s.userId, actorRole: s.role, action: "user_group_removed", targetType: "user", targetId: candidateUserId, metadata: { groupId: group!.id } });
     revalidatePath(`/groups/${group!.id}`);
   }
 
   return (
     <div className="flex flex-col gap-6">
+      {blocked && (
+        <div className="rounded-md border border-status-critical-border bg-status-critical-bg px-4 py-3 text-[13px] text-status-critical-text">
+          {blocked}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-[20px] font-semibold text-text-primary">{group.name}</h1>

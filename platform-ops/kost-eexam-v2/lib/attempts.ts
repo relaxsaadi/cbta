@@ -67,6 +67,20 @@ export function countFinishedAttempts(assessmentId: number, candidateUserId: num
   return row.n;
 }
 
+/** Ce candidat est-il affecté à cette évaluation (assessment_assignments) ?
+ * Extrait de startAttempt() (audit "MISSION FINALE — TRANSVERSAL STAGING
+ * AUDIT", 2026-08-30 §23) pour être réutilisé ailleurs (écran
+ * d'instructions) SANS dupliquer la requête — une seule source de vérité
+ * pour cette vérification, jamais deux implémentations qui pourraient
+ * diverger. */
+export function isCandidateAssignedToAssessment(assessmentId: number, candidateUserId: number): boolean {
+  return Boolean(
+    getDb()
+      .prepare(`SELECT 1 FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?`)
+      .get(assessmentId, candidateUserId)
+  );
+}
+
 /**
  * Démarre une tentative — ou renvoie la tentative déjà en cours si elle
  * existe (double-clic / deux onglets, §9). La garantie réelle est
@@ -81,7 +95,19 @@ export function startAttempt(
   meta: { ip?: string; userAgent?: string }
 ): AttemptRow {
   const existing = getActiveAttempt(assessmentId, candidateUserId);
-  if (existing) return existing;
+  // Audit "MISSION FINALE — TRANSVERSAL STAGING AUDIT" (2026-08-30) §18 —
+  // GAP réel trouvé : reprendre une tentative déjà en cours (retour
+  // délibéré sur /instructions puis clic "Commencer" à nouveau) n'était
+  // jusqu'ici JAMAIS journalisé — seule la toute première création
+  // ('attempt_start' plus bas) l'était. Un simple rafraîchissement de la
+  // page /attempt ne passe pas par startAttempt() (lecture seule, voir
+  // app/(app)/exam/[assessmentId]/attempt/page.tsx) et n'est donc pas
+  // concerné ici — ce point couvre spécifiquement le retour délibéré via
+  // l'écran d'instructions.
+  if (existing) {
+    audit({ actorUserId: candidateUserId, actorRole: "candidate", action: "attempt_resume", targetType: "attempt", targetId: existing.id, ipAddress: meta.ip, metadata: { assessmentId } });
+    return existing;
+  }
 
   // Addendum §9-11 — continuité d'examen : une tentative DÉJÀ en cours
   // (retour anticipé ci-dessus) n'est JAMAIS bloquée par cette
@@ -95,10 +121,7 @@ export function startAttempt(
   if (!assessment) throw new AttemptError("Évaluation introuvable.");
   if (!isAssessmentOpenNow(assessment)) throw new AttemptError("Cette évaluation n'est pas ouverte actuellement.");
 
-  const assigned = getDb()
-    .prepare(`SELECT 1 FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?`)
-    .get(assessmentId, candidateUserId);
-  if (!assigned) throw new AttemptError("Vous n'êtes pas affecté à cette évaluation.");
+  if (!isCandidateAssignedToAssessment(assessmentId, candidateUserId)) throw new AttemptError("Vous n'êtes pas affecté à cette évaluation.");
 
   const finished = countFinishedAttempts(assessmentId, candidateUserId);
   if (assessment.attempts_allowed !== 0 && finished >= assessment.attempts_allowed) {

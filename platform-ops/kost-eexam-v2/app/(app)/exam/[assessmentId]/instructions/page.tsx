@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { guardPage } from "@/lib/rbac";
 import { getAssessment, isAssessmentOpenNow } from "@/lib/assessments";
-import { getActiveAttempt, startAttempt, countFinishedAttempts, AttemptError } from "@/lib/attempts";
+import { getActiveAttempt, startAttempt, countFinishedAttempts, isCandidateAssignedToAssessment, AttemptError } from "@/lib/attempts";
 import { functionLabel } from "@/lib/questions";
 import { Card } from "@/components/ui/Card";
 import { ShieldCheck, Clock, ListChecks } from "lucide-react";
@@ -12,6 +12,17 @@ export default async function InstructionsPage({ params }: { params: Promise<{ a
   const { assessmentId } = await params;
   const assessment = getAssessment(Number(assessmentId));
   if (!assessment) notFound();
+  // Sécurité "MISSION FINALE — TRANSVERSAL STAGING AUDIT" (2026-08-30) §23
+  // — GAP réel (fuite de métadonnées, pas un IDOR d'écriture : startAttempt()
+  // vérifie déjà l'affectation, voir lib/attempts.ts) : sans ce contrôle,
+  // n'importe quel candidat authentifié pouvait consulter le nom, le type,
+  // la fonction DGR, la durée, le nombre de questions et le seuil de
+  // réussite de N'IMPORTE QUELLE évaluation du système en devinant/
+  // énumérant son id, y compris hors de son propre client/groupe. Même
+  // requête que startAttempt() (assessment_assignments), extraite en
+  // fonction partagée pour éviter une divergence future entre les deux
+  // contrôles.
+  if (!isCandidateAssignedToAssessment(assessment.id, session.userId)) notFound();
 
   const active = getActiveAttempt(assessment.id, session.userId);
   if (active) redirect(`/exam/${assessment.id}/attempt`);

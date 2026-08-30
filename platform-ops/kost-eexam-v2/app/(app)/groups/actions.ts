@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createGroup, addCandidateToGroup, removeCandidateFromGroup, getGroup } from "@/lib/groups";
+import { createGroup, addCandidateToGroup, getGroup } from "@/lib/groups";
+import { removeUserFromGroupSafely } from "@/lib/user-affiliation";
 import { createUserPendingActivation, findUserByUsername, updateUserProfile } from "@/lib/users";
 import { hasCompanyAccess, hasGroupAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
@@ -82,6 +83,10 @@ export async function createGroupAction(_prev: CreateGroupResult, formData: Form
     pedagogicalManagerId: session.userId,
     createdBy: session.userId,
   });
+  // Audit "MISSION FINALE — TRANSVERSAL STAGING AUDIT" (2026-08-30) §18 —
+  // GAP réel trouvé : seul le refus (group_create_denied, ci-dessus) était
+  // journalisé, jamais la création réussie elle-même.
+  audit({ actorUserId: session.userId, actorRole: session.role, action: "group_create", targetType: "group", targetId: groupId, metadata: { companyId, name } });
   revalidatePath("/groups");
   revalidatePath(`/companies/${companyId}`);
   return { groupId };
@@ -120,12 +125,21 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
 
   if (user) {
     addCandidateToGroup(groupId, user.id, session.userId);
+    // Audit "MISSION FINALE — TRANSVERSAL STAGING AUDIT" (2026-08-30) §18 —
+    // GAP réel trouvé : cette action (point d'entrée "Groupes") n'auditait
+    // jamais l'ajout, contrairement à son équivalent fonctionnel côté
+    // "Utilisateurs" (assignCompanyGroupAction) — même chaîne d'action
+    // réutilisée volontairement pour qu'une recherche sur
+    // "user_group_assigned" retrouve l'évènement quel que soit l'écran
+    // d'origine.
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_assigned", targetType: "user", targetId: user.id, metadata: { groupId } });
     revalidatePath(`/groups/${groupId}`);
     return { success: `${fullName} (compte existant) ajouté au groupe.` };
   }
 
   const userId = createUserPendingActivation({ username, fullName, role: "candidate", email });
   addCandidateToGroup(groupId, userId, session.userId);
+  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_assigned", targetType: "user", targetId: userId, metadata: { groupId } });
   await inviteNewCandidate({
     userId,
     username,
@@ -141,11 +155,29 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   return { success: `${fullName} créé et invité par email (${email}).` };
 }
 
-export async function removeCandidateAction(groupId: number, candidateUserId: number) {
+/** Non câblée à aucun écran aujourd'hui (audit "MISSION FINALE —
+ * TRANSVERSAL STAGING AUDIT", 2026-08-30 : vérifié par recherche globale,
+ * aucun appelant) — le bouton réel "Retirer du groupe" de la fiche groupe
+ * utilise sa propre action serveur locale (app/(app)/groups/[id]/page.tsx
+ * ::removeCandidate). Corrigée ici quand même, par cohérence et défense en
+ * profondeur : passe désormais par le MÊME garde-fou "historique protégé"
+ * que cette dernière et que l'équivalent côté "Utilisateurs"
+ * (removeFromGroupAction), pour ne jamais réintroduire ce bug si cette
+ * fonction est un jour réellement câblée à une UI. */
+export async function removeCandidateAction(groupId: number, candidateUserId: number): Promise<{ error?: string }> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
-  if (!hasGroupAccess(session, groupId)) return;
-  removeCandidateFromGroup(groupId, candidateUserId);
+  if (!hasGroupAccess(session, groupId)) {
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_remove_denied", targetType: "group", targetId: groupId, result: "failure", metadata: { candidateUserId } });
+    return { error: "Ce groupe n'est pas dans votre périmètre." };
+  }
+  const result = removeUserFromGroupSafely(candidateUserId, groupId);
+  if (!result.removed) {
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_removal_blocked", targetType: "user", targetId: candidateUserId, result: "failure", metadata: { groupId, reason: result.blockedReason } });
+    return { error: result.blockedReason };
+  }
+  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_removed", targetType: "user", targetId: candidateUserId, metadata: { groupId } });
   revalidatePath(`/groups/${groupId}`);
+  return {};
 }
 
 export interface EditCandidateResult {

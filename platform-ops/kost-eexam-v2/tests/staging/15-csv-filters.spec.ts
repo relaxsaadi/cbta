@@ -40,7 +40,10 @@ test.describe("Filtres CSV — écran /results", () => {
     // du <select> ("Yasmine Kaced (pilote) (Air Algérie — DEMO)") contient
     // la même sous-chaîne que le nom recherché — un getByText nu
     // matcherait l'<option> masquée du select fermé, jamais visible.
-    await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" })).toBeVisible();
+    // .first() : Yasmine a désormais plusieurs tentatives réelles
+    // accumulées sur staging (banque démo réutilisée au fil des missions),
+    // même correctif que tests/staging/09-cross-tenant-isolation.spec.ts.
+    await expect(page.getByRole("link", { name: "Yasmine Kaced (pilote)" }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: "Riad Boumediene (pilote)" })).toHaveCount(0);
   });
 

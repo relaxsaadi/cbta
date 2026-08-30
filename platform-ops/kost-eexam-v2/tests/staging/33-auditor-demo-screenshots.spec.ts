@@ -125,10 +125,17 @@ test("Phase 2 — Banque de questions et 8 types", async ({ page }) => {
 
   // Détail d'une question réglementaire réelle (Fonction 7.1) — preuve de
   // traçabilité source, jamais une question DEMO pour cet écran précis.
-  // Pas de <table> ni de filtre functionCode sur cette page (une carte par
-  // fonction, une ligne <div> par question) — cible directement une ligne
-  // réglementaire réelle (source vérifiée) et son lien "Modifier".
-  const firstRealQuestion = page.locator("div.flex.items-center.justify-between", { hasText: "Confirmé — source DGR vérifiée" }).first();
+  // Mission "COMPLETE MISSING FILTERS + NORMALIZE QUESTION COUNTS"
+  // (2026-08-30) : /question-bank est désormais un tableau filtrable à
+  // plat (compteurs réglementaire/DEMO/total + panneau de filtres),
+  // chaque question est une <tr>, plus une carte <div class=
+  // "flex items-center justify-between"> — l'ancien sélecteur ne matchait
+  // plus rien (silencieusement 0 résultat, capture manquante). Filtre
+  // explicitement Fonction=7.1 + Classification=Réglementaire pour cibler
+  // une ligne source-vérifiée sans dépendre de l'ordre alphabétique du
+  // tableau non filtré (où "DEMO-*" trie avant "Q-7.1-*").
+  await page.goto("/question-bank?filterFunctionCode=7.1&filterClassification=regulatory");
+  const firstRealQuestion = page.locator("table tbody tr").first();
   if ((await firstRealQuestion.count()) > 0) {
     await firstRealQuestion.getByRole("link", { name: /modifier/i }).click();
     await page.waitForURL(/\/question-bank\/\d+\/edit/);

@@ -30,8 +30,8 @@ Identité, affectation, fonctions DGR centralisées sur une seule fiche.
 
 ### Partie 2 — Banque de questions
 
-**§7. Ajout de question — statut source** (`07-question-bank.png`)
-Porte d'admissibilité expliquée à l'écran ; 13/21 questions admissibles pour la Fonction 7.1 au moment de la capture.
+**§7. Ajout de question — statut source, compteurs, filtres** (`07-question-bank.png`)
+Compteurs explicites en tête de page (244 réglementaires confirmées / 8 DEMO-brouillon / 252 au total — jamais un total unique présenté comme réglementaire), porte d'admissibilité expliquée à l'écran, panneau de filtres complet (Fonction/Type/Statut source/Statut reviewer/Classification/Statut/Recherche).
 
 **§8. Modification — versionnement immuable** (`08-question-detail.png`)
 Éditer une question crée une nouvelle version ; les examens déjà publiés restent figés.
@@ -101,8 +101,8 @@ Statut de livraison uniquement, jamais le contenu ; `EMAIL_MODE=allowlist` démo
 **§27. Communications et actions compte** (`27-user-communication.png`)
 Historique de statut de livraison, actions administratives, blocage motivé de la suppression définitive.
 
-**§28. Journal d'audit** (`28-audit-log.png`)
-300 événements récents, insert-only — aucune modification possible même par un administrateur.
+**§28. Journal d'audit — filtrable** (`28-audit-log.png`)
+300 événements, insert-only — aucune modification possible même par un administrateur. Filtrable par date, acteur, rôle et action (valeurs réellement observées uniquement).
 
 **§29. Sécurité — MFA** (`29-mfa-security.png`)
 Authentification à deux facteurs TOTP standard disponible pour les comptes à privilèges.

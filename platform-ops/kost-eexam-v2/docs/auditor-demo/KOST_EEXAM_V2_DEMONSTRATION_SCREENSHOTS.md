@@ -100,11 +100,11 @@
 
 **Capture :** `07-question-bank.png`
 
-**Ce que l'auditeur voit :** Formulaire d'ajout de question avec un bandeau explicite : « Saisie contrôlée uniquement — jamais de contenu inventé. Une question non « Confirmé — source DGR vérifiée » n'entre jamais automatiquement dans un examen de production. » En dessous, la liste des questions de la Fonction 7.1 avec leur statut (« Brouillon » pour les questions `[DÉMO]`), et le compteur « 21 question(s) au total — 13 admissible(s) pour un examen de production ».
+**Ce que l'auditeur voit :** Trois compteurs explicites en tête de page — « Questions réglementaires confirmées : 244 », « Questions DEMO / brouillon : 8 », « Total enregistré : 252 » — puis le formulaire d'ajout de question avec un bandeau explicite : « Saisie contrôlée uniquement — jamais de contenu inventé. Une question non « Confirmé — source DGR vérifiée » n'entre jamais automatiquement dans un examen de production. » En dessous, un panneau de filtres complet (Fonction DGR, Type de question, Statut source, Statut reviewer, Classification réglementaire/DEMO, Statut actif/inactif, recherche) au-dessus du tableau des questions, chaque ligne portant son statut source, son statut reviewer et son badge de classification.
 
-**Ce que dit le propriétaire :** « Le statut source d'une question est visible partout, et le moteur d'examen applique cette règle lui-même — ce n'est pas qu'un texte d'interface, c'est une porte structurelle côté serveur. »
+**Ce que dit le propriétaire :** « Le statut source d'une question est visible partout, et le moteur d'examen applique cette règle lui-même — ce n'est pas qu'un texte d'interface, c'est une porte structurelle côté serveur. Les compteurs distinguent maintenant explicitement le réglementaire du DEMO — jamais un total unique qui laisserait croire que les 252 lignes sont toutes des questions officielles. »
 
-**Point de conformité technique :** `lib/questions.ts::isAdmissibleWhereClause()` exige `source_status = 'FROZEN_SOURCE_VERIFIED' AND reviewer_status != 'REJECTED'` — vérifié même en mode de sélection manuelle des questions (`lib/assessments.ts::createAssessmentDraft`), jamais contournable depuis l'interface.
+**Point de conformité technique :** `lib/questions.ts::isAdmissibleWhereClause()` exige `source_status = 'FROZEN_SOURCE_VERIFIED' AND reviewer_status != 'REJECTED'` — vérifié même en mode de sélection manuelle des questions (`lib/assessments.ts::createAssessmentDraft`), jamais contournable depuis l'interface. La classification réglementaire/DEMO (`lib/questions.ts::isDemoQuestionId`) se fie au préfixe `DEMO-` de l'identifiant, jamais au seul `source_status` — une vraie question réglementaire encore en cours de vérification (`DRAFT`/`PARTIAL`/etc.) n'est jamais confondue avec un exemple créé pour tester les 8 types de question.
 
 **Ce qu'il ne faut pas prétendre :** « Confirmé — source DGR vérifiée » signifie que le **texte source** a été vérifié — cela ne signifie pas qu'un réviseur qualifié a **approuvé** la question (`reviewer_status`, champ distinct — voir l'avertissement en tête de dossier).
 
@@ -400,11 +400,11 @@
 
 **Capture :** `28-audit-log.png`
 
-**Ce que l'auditeur voit :** Journal d'audit (« 300 événement(s) récent(s) — Insert-only — aucune modification possible, même par un administrateur ») : horodatage, acteur, rôle, action, cible, résultat pour chaque événement (connexions, créations de compte, envois d'invitation, démarrages de tentative, affectations d'examen).
+**Ce que l'auditeur voit :** Un panneau de filtres (Du/Au, Acteur, Rôle, Action, recherche libre) au-dessus du journal d'audit (« 300 événement(s) — Insert-only — aucune modification possible, même par un administrateur ») : horodatage, acteur, rôle, action, cible, résultat pour chaque événement (connexions, créations de compte, envois d'invitation, démarrages de tentative, affectations d'examen). Le filtre Action ne propose que des valeurs réellement observées dans le journal — jamais une liste inventée.
 
-**Ce que dit le propriétaire :** « Chaque action significative est journalisée de façon irréversible — même un administrateur ne peut pas modifier ou supprimer une entrée du journal. »
+**Ce que dit le propriétaire :** « Chaque action significative est journalisée de façon irréversible — même un administrateur ne peut pas modifier ou supprimer une entrée du journal. Le journal est maintenant filtrable par date, acteur, rôle et type d'action — un auditeur peut isoler précisément ce qu'il cherche sans avoir à parcourir des centaines de lignes. »
 
-**Point de conformité technique :** Journal insert-only au niveau base de données — pas seulement une convention applicative.
+**Point de conformité technique :** Journal insert-only au niveau base de données — pas seulement une convention applicative. Les filtres (`lib/audit.ts::listAuditLogsFiltered`) n'ajoutent que des clauses `WHERE` en lecture ; aucune route de modification/suppression n'existe pour cette table.
 
 **Ce qu'il ne faut pas prétendre :** —
 

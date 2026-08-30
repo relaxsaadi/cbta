@@ -21,7 +21,7 @@ Séquence resserrée pour une présentation en direct à un auditeur, construite
 
 ## 3. Banque de questions et statut source (≈3 min)
 
-**`07-question-bank.png`** — Formulaire de saisie contrôlée, bandeau explicite sur l'admissibilité, compteur de questions admissibles pour publication.
+**`07-question-bank.png`** — Compteurs explicites (244 réglementaires confirmées / 8 DEMO-brouillon / 252 au total), formulaire de saisie contrôlée, bandeau explicite sur l'admissibilité, filtres (Fonction/Type/Statut/Classification/Recherche).
 
 *À dire :* « Une question non confirmée côté source ne peut structurellement jamais entrer dans un examen de production — c'est vérifié côté serveur, pas seulement affiché. » *(Point à approfondir si l'auditeur pose la question : montrer la distinction source vérifiée / revue humaine.)*
 

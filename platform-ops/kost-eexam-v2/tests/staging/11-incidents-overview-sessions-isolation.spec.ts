@@ -8,8 +8,6 @@ import { loginAs, env } from "./helpers";
 // Airlines — DEMO).
 const COMPANY_A_NAME = "Air Algérie — DEMO";
 const COMPANY_B_NAME = "Tassili Airlines — DEMO";
-const EXAM_A_NAME = "DGR Fonction 7.1 — Examen pilote staging";
-const EXAM_B_NAME = "DGR Fonction 7.1 — Isolation multi-client (Company B)";
 
 test.describe("Isolation — Incidents", () => {
   test("un incident déclaré par le responsable A pour son groupe reste invisible du responsable B (UI + URL directe)", async ({ page, context }) => {
@@ -61,31 +59,86 @@ test.describe("Isolation — Incidents", () => {
 });
 
 test.describe("Isolation — Vue d'ensemble (overview)", () => {
-  test("le tableau de bord de chaque responsable ne montre jamais l'autre client", async ({ page, context }) => {
+  // Mission "CLOSE STALE /OVERVIEW ISOLATION TEST" (2026-08-30) — les
+  // anciennes assertions exigeaient qu'un examen pilote HISTORIQUE
+  // (EXAM_A_NAME/EXAM_B_NAME, créés il y a des mois) reste visible dans
+  // "Évaluations récentes", un widget qui montre volontairement les 8
+  // évaluations les PLUS RÉCENTES tous scopes confondus (voir
+  // app/(app)/overview/page.tsx: `assessments.slice(0, 8)`, appliqué
+  // APRÈS le scope tenant déjà imposé en SQL par listAssessmentsForManager
+  // — jamais l'inverse). Après des mois d'activité de test sur ce
+  // staging, cet examen a naturellement quitté la fenêtre des 8 plus
+  // récents (confirmé : 11ᵉ/11 pour son responsable) — une conséquence
+  // normale de la croissance des données, PAS une fuite tenant. La bonne
+  // invariante à tester n'est jamais "cet examen précis reste visible
+  // pour toujours", mais : "un responsable voit toujours SON évaluation
+  // la plus récente, jamais celle d'un autre client, même quand les deux
+  // évaluations sont assez récentes pour être toutes les deux dans une
+  // fenêtre de 8". On crée donc ici deux évaluations FRAÎCHES (une par
+  // responsable, via le VRAI formulaire de création), volontairement
+  // proches dans le temps l'une de l'autre — si le scope tenant était un
+  // jour cassé (ex. liste globale au lieu de listAssessmentsForManager),
+  // l'évaluation de B serait alors la PLUS RÉCENTE de toutes et
+  // apparaîtrait en tête du tableau de bord de A, rendant une régression
+  // immédiatement détectable.
+  async function createDraftAssessment(page: import("@playwright/test").Page, companyNameFilter: string, uniqueName: string) {
+    await page.goto("/exam-preparation");
+    const groupSelect = page.locator("#groupId");
+    const groupValue = await groupSelect.locator("option").filter({ hasText: companyNameFilter }).first().getAttribute("value");
+    await groupSelect.selectOption(groupValue!);
+    await page.locator("#name").fill(uniqueName);
+    // Attend que le comptage admissible réel remplace le "…" initial —
+    // évite la fenêtre de course déjà documentée dans
+    // CreateAssessmentForm.tsx (questionCount dépend de cette valeur).
+    await expect(page.getByText(/Questions admissibles disponibles :/)).not.toContainText("…");
+    await page.getByRole("button", { name: /créer le brouillon/i }).click();
+    await page.waitForLoadState("networkidle");
+  }
+
+  test("le tableau de bord de chaque responsable ne montre que ses PROPRES évaluations les plus récentes, jamais celles de l'autre client", async ({ page, context }) => {
     await loginAs(page, env("STAGING_MANAGER_USER"), env("STAGING_MANAGER_PASS"));
-    await page.goto("/overview");
-    // .first() : les exécutions répétées de 01-responsable-creates-exam
-    // (non idempotent) peuvent laisser plusieurs examens Company A du
-    // même nom — simple vérification de présence, pas d'identité. Sans
-    // impact sur EXAM_B_NAME (jamais dupliqué), qui reste une vraie
-    // preuve d'absence totale.
-    await expect(page.getByText(EXAM_A_NAME).first()).toBeVisible();
-    await expect(page.getByText(EXAM_B_NAME)).toHaveCount(0);
-    await expect(page.getByText(COMPANY_B_NAME)).toHaveCount(0);
+    const nameA = `Isolation overview A ${Date.now()}`;
+    await createDraftAssessment(page, COMPANY_A_NAME, nameA);
 
     await context.clearCookies();
     await loginAs(page, env("STAGING_MANAGER_B_USER"), env("STAGING_MANAGER_B_PASS"));
+    const nameB = `Isolation overview B ${Date.now()}`;
+    await createDraftAssessment(page, COMPANY_B_NAME, nameB);
+
+    // B (créée en dernier, donc la PLUS RÉCENTE de tout le staging) reste
+    // visible pour B lui-même — sa propre évaluation la plus récente.
     await page.goto("/overview");
-    await expect(page.getByText(EXAM_B_NAME)).toBeVisible();
-    await expect(page.getByText(EXAM_A_NAME)).toHaveCount(0);
+    await expect(page.getByText(nameB)).toBeVisible();
+    await expect(page.getByText(nameA)).toHaveCount(0);
     await expect(page.getByText(COMPANY_A_NAME)).toHaveCount(0);
+
+    // A ne voit toujours QUE la sienne, jamais celle — plus récente — de
+    // B : preuve directe que le scope tenant s'applique AVANT la limite
+    // de 8, pas après (sinon B, plus récente, aurait mécaniquement
+    // évincé A de la fenêtre visible de A).
+    await context.clearCookies();
+    await loginAs(page, env("STAGING_MANAGER_USER"), env("STAGING_MANAGER_PASS"));
+    await page.goto("/overview");
+    await expect(page.getByText(nameA)).toBeVisible();
+    await expect(page.getByText(nameB)).toHaveCount(0);
+    await expect(page.getByText(COMPANY_B_NAME)).toHaveCount(0);
   });
 
-  test("administrateur voit les deux clients sur le tableau de bord", async ({ page }) => {
+  test("administrateur voit les évaluations des deux clients sur le tableau de bord", async ({ page, context }) => {
+    await loginAs(page, env("STAGING_MANAGER_USER"), env("STAGING_MANAGER_PASS"));
+    const nameA = `Isolation overview admin-check A ${Date.now()}`;
+    await createDraftAssessment(page, COMPANY_A_NAME, nameA);
+
+    await context.clearCookies();
+    await loginAs(page, env("STAGING_MANAGER_B_USER"), env("STAGING_MANAGER_B_PASS"));
+    const nameB = `Isolation overview admin-check B ${Date.now()}`;
+    await createDraftAssessment(page, COMPANY_B_NAME, nameB);
+
+    await context.clearCookies();
     await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
     await page.goto("/overview");
-    await expect(page.getByText(EXAM_A_NAME).first()).toBeVisible();
-    await expect(page.getByText(EXAM_B_NAME)).toBeVisible();
+    await expect(page.getByText(nameA)).toBeVisible();
+    await expect(page.getByText(nameB)).toBeVisible();
   });
 });
 

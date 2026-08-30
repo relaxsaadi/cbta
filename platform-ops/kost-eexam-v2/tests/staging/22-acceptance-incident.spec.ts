@@ -125,6 +125,10 @@ test("parcours d'acceptance complet : déclaration → classification → action
 
   // ÉTAPE 7 — journal d'audit global : chaque action de ce parcours y
   // laisse une trace indépendante (pas seulement sur la fiche incident).
+  // getByRole('cell', ...) plutôt que getByText().first() : le panneau de
+  // filtres (mission "COMPLETE MISSING FILTERS", 2026-08-30) ajoute un
+  // <select> Action dont l'<option> "incident_declare" (masquée mais
+  // avant la cellule dans le DOM) serait choisie par .first() à sa place.
   await page.goto("/audit-logs");
-  await expect(page.getByText("incident_declare").first()).toBeVisible();
+  await expect(page.getByRole("cell", { name: "incident_declare", exact: true }).first()).toBeVisible();
 });

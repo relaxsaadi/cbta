@@ -11,12 +11,13 @@ const MARKER = "[MODIFIÉ APRÈS PUBLICATION — TEST VERSIONNAGE]";
 test("éditer une question après publication ne modifie jamais la tentative déjà notée", async ({ page }) => {
   await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
 
-  await page.goto("/question-bank");
-  // Le sélecteur générique "div.border-border-subtle" matche à la fois la
-  // carte englobante (Fonction 7.1) et chaque ligne de question — on cible
-  // précisément la ligne (le plus petit conteneur, celui qui a le lien
-  // "Modifier") via .last() sur le résultat filtré.
-  const row = page.locator("div.border-border-subtle").filter({ hasText: "Q-7.1-013" }).last();
+  // /question-bank est désormais un tableau filtrable à plat (mission
+  // "COMPLETE MISSING FILTERS", 2026-08-30) — chaque question est une
+  // <tr>, plus une carte <div class="border-border-subtle">. On isole la
+  // ligne via Fonction=7.1 (évite tout risque de doublon visuel si
+  // Q-7.1-013 apparaissait ailleurs) puis on cible la ligne exacte.
+  await page.goto("/question-bank?filterFunctionCode=7.1");
+  const row = page.locator("table tbody tr").filter({ hasText: "Q-7.1-013" }).last();
   await expect(row).toBeVisible();
   await row.getByRole("link", { name: /modifier/i }).click();
 

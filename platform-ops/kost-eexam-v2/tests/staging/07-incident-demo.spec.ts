@@ -51,10 +51,15 @@ test("incident réel — suspension bloque la connexion, réactivation la restau
   await demoPage.getByRole("button", { name: /se connecter/i }).click();
   await demoPage.waitForURL((url) => !url.pathname.startsWith("/login"));
 
-  // Journal d'audit.
+  // Journal d'audit. getByRole('cell', ...) plutôt que getByText().first() :
+  // le panneau de filtres (mission "COMPLETE MISSING FILTERS", 2026-08-30)
+  // ajoute un <select> Action dont chaque <option> porte le même texte que
+  // le nom d'action — cette <option> est cachée mais précède la cellule de
+  // tableau dans le DOM, donc .first() la sélectionnait (élément masqué),
+  // jamais la vraie ligne visible.
   await adminPage.goto("/audit-logs");
-  await expect(adminPage.getByText("incident_action_suspend_account").first()).toBeVisible();
-  await expect(adminPage.getByText("incident_action_reactivate_account").first()).toBeVisible();
+  await expect(adminPage.getByRole("cell", { name: "incident_action_suspend_account", exact: true }).first()).toBeVisible();
+  await expect(adminPage.getByRole("cell", { name: "incident_action_reactivate_account", exact: true }).first()).toBeVisible();
 
   // Le pilote d'examen (candidat1/2/3) n'a jamais été affecté — vérifie
   // que candidat1 peut toujours se connecter normalement.

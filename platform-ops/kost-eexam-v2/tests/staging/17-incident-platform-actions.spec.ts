@@ -218,15 +218,21 @@ test.describe("Actions plateforme — suspendre un examen ciblé", () => {
       await expect(page.getByText("suspend_assessment")).toBeVisible();
 
       // Effet réel : candidat3 (jamais commencé cet examen) ne peut plus
-      // le démarrer tant qu'il est suspendu — listAssignedAssessmentsFor
-      // Candidate() (lib/assessments.ts) filtre WHERE status IN
-      // ('published','open','closed'), donc un examen suspendu disparaît
-      // ENTIÈREMENT de la liste (pas seulement grisé avec un badge) : la
-      // preuve correcte est son ABSENCE, pas un badge "Suspendu".
+      // le démarrer tant qu'il est suspendu. Assertion mise à jour —
+      // depuis la mission "COMPLETE CANDIDATE EXAM LIFECYCLE"
+      // (2026-08-29) §2, listAssignedAssessmentsForCandidate()
+      // (lib/assessments.ts) inclut DÉLIBÉRÉMENT 'suspended' dans son
+      // WHERE : un examen suspendu reste visible avec un badge SUSPENDU
+      // explicite (lib/candidate-exam-state.ts), il ne disparaît plus
+      // silencieusement (bug réel diagnostiqué et corrigé par cette
+      // mission-là — cette assertion testait encore l'ANCIEN comportement
+      // "disparition totale", jamais mis à jour depuis). La preuve
+      // correcte est donc le badge SUSPENDU visible, pas une absence.
       await context.clearCookies();
       await loginAs(page, env("STAGING_CANDIDATE3_USER"), env("STAGING_CANDIDATE3_PASS"));
       await page.goto("/mes-examens");
-      await expect(page.getByText("DGR Fonction 7.1 — Examen pilote staging")).toHaveCount(0);
+      const examCard = page.locator("div.border-border-subtle").filter({ hasText: "DGR Fonction 7.1 — Examen pilote staging" }).last();
+      await expect(examCard.getByText("SUSPENDU", { exact: true })).toBeVisible();
     } finally {
       await context.clearCookies();
       await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));

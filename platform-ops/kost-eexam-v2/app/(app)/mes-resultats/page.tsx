@@ -34,14 +34,27 @@ export default async function MesResultatsPage({
       <h1 className="font-display text-[20px] font-semibold text-text-primary">Mes résultats</h1>
 
       {justSubmitted && confirmedRow && (
-        <div className="rounded-md border border-status-verified-border bg-status-verified-bg px-4 py-3 text-[13px] text-status-verified-text">
-          <p className="font-medium">
-            {auto === "1" ? "Temps écoulé — votre examen a été envoyé automatiquement." : "Votre examen a bien été envoyé."}
-          </p>
-          <p className="mt-1 text-[12.5px]">
-            {confirmedRow.assessment_name} — envoyé le {new Date(confirmedRow.submitted_at!).toLocaleString("fr-FR")} —{" "}
-            {confirmedRow.grading_state === "AWAITING_MANUAL_REVIEW" ? "en attente de correction" : "résultat disponible ci-dessous"}
-          </p>
+        // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)
+        // §39 — écran de confirmation d'envoi : icône ✓ explicite (jamais
+        // la couleur seule), date/heure d'envoi, statut, et info de
+        // disponibilité du résultat — JAMAIS un score fabriqué tant qu'une
+        // correction manuelle reste en attente (voir ResultCard ci-dessous,
+        // même garde côté affichage détaillé).
+        <div className="flex items-start gap-3 rounded-lg border border-status-verified-border bg-status-verified-bg px-4 py-3.5 shadow-sm">
+          <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-status-verified-text" aria-hidden="true" />
+          <div>
+            <p className="text-[14px] font-semibold text-status-verified-text">
+              {auto === "1" ? "Temps écoulé — votre examen a été envoyé automatiquement." : "✓ Votre examen a bien été envoyé."}
+            </p>
+            <p className="mt-1 text-[12.5px] text-status-verified-text">
+              {confirmedRow.assessment_name} — envoyé le {new Date(confirmedRow.submitted_at!).toLocaleString("fr-FR")}
+            </p>
+            <p className="mt-1.5 text-[12.5px] font-medium text-status-verified-text">
+              {confirmedRow.grading_state === "AWAITING_MANUAL_REVIEW"
+                ? "Statut : en attente de correction — le résultat sera disponible une fois la correction terminée."
+                : "Statut : résultat disponible ci-dessous."}
+            </p>
+          </div>
         </div>
       )}
 

@@ -25,4 +25,12 @@ export default async function globalSetup() {
   // ligne notification_log à afficher dans les tests d'isolation.
   const emailEnv = { ...env, APP_BASE_URL: "http://127.0.0.1:3101", EMAIL_MODE: "log" };
   execSync("node --import tsx scripts/seed-email-demo.ts", { cwd: root, env: emailEnv, stdio: "inherit" });
+  // Fixture "1 réponse en attente de correction" (mission "ADMIN/CLIENT/
+  // CANDIDATE UX IMPROVEMENTS" §42, 2026-08-30) — voir
+  // scripts/seed-grading-demo.ts. Assemblée sur une évaluation DÉDIÉE
+  // (jamais celle de seed-demo.ts) avec questionSource:"manual", donc
+  // sans impact sur le nombre/type de questions attendu par les
+  // scénarios E2E existants qui dépendent de "DGR Fonction 7.1 — Test
+  // démo". candidat1.demo (déjà démo, aucune PII réelle).
+  execSync("node --import tsx scripts/seed-grading-demo.ts", { cwd: root, env, stdio: "inherit" });
 }

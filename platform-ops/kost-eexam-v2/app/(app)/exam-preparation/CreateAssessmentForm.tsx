@@ -87,7 +87,19 @@ export function CreateAssessmentForm({
         {/* Étape 6 */}
         <div>
           <label htmlFor="questionCount" className="mb-1 block text-[12px] font-medium text-text-secondary">6. Nombre à tirer</label>
-          <input id="questionCount" type="number" name="questionCount" required min={1} max={admissible ?? undefined} defaultValue={Math.min(15, admissible ?? 15)} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          {/* Bug réel trouvé en E2E sous charge machine élevée (2026-08-30,
+              mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS") : seul ce
+              champ, parmi ceux dont la valeur par défaut dépend d'un état
+              calculé, n'avait PAS le `key` qui force un vrai remontage React
+              (contrairement à attemptsAllowed/showResult/showCorrectAnswers/
+              feedbackMode ci-dessous, tous keyés sur `type`) — `defaultValue`
+              ne s'applique qu'au MONTAGE initial, donc quand `admissible`
+              passait de `null` à sa vraie valeur après le fetch async
+              (ligne 28), ce champ non-remonté gardait son ancien defaultValue
+              (15) au lieu de suivre l'admissible réel, avec un risque de
+              valeur incohérente si l'utilisateur (ou un test E2E) le
+              remplissait pendant cette fenêtre de course. */}
+          <input id="questionCount" type="number" name="questionCount" required min={1} max={admissible ?? undefined} defaultValue={Math.min(15, admissible ?? 15)} key={`qcount-${functionCode}-${admissible}`} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         {/* Étape 7 */}
         <div>

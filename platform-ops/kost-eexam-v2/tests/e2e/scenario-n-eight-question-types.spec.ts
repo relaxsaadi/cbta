@@ -188,8 +188,8 @@ test("matching + ordering — interaction accessible (select clavier / boutons M
   await page.getByRole("button", { name: /^terminer et envoyer l'examen$/i }).click();
   await page.waitForURL(/\/mes-resultats\?justSubmitted=/);
 
-  // Ancre exacte (jamais une simple sous-chaîne) : candidat3.demo est
-  // PARTAGÉ avec scenario-i/scenario-m (voir ces fichiers) — le test
+  // Ancre de FIN exacte (jamais une simple sous-chaîne) : candidat3.demo
+  // est PARTAGÉ avec scenario-i/scenario-m (voir ces fichiers) — le test
   // d'auto-soumission de scenario-m y laisse un résultat résiduel
   // AWAITING_MANUAL_REVIEW, dont le message de carte ("... et nécessite
   // une correction avant la publication du résultat.") contient LUI AUSSI
@@ -197,8 +197,13 @@ test("matching + ordering — interaction accessible (select clavier / boutons M
   // sélecteur non déterministe (2 éléments correspondants selon l'ordre
   // d'exécution). Le bandeau de confirmation réel se termine, lui,
   // exactement après "envoyé." — jamais un vrai bug produit, uniquement
-  // une ambiguïté de sélecteur côté test.
-  await expect(page.getByText(/^votre examen a bien été envoyé\.$/i)).toBeVisible();
+  // une ambiguïté de sélecteur côté test. Pas d'ancre de DÉBUT (mission
+  // "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" §39, 2026-08-30, a préfixé le
+  // bandeau réel d'un "✓ " explicite — l'icône ✓ seule ne suffit pas au
+  // sens du §32 "jamais la couleur/icône seule sans texte") : le texte
+  // confusable de scenario-m ne commence pas non plus par "✓ ", la
+  // désambiguïsation d'origine ne reposait que sur la fin de chaîne.
+  await expect(page.getByText(/votre examen a bien été envoyé\.$/i)).toBeVisible();
   const resultRow = page.locator("div.rounded-md.border").filter({ hasText: "DGR Fonction 7.3 — Matching + Ordering E2E" });
   await expect(resultRow.getByText("100/100")).toBeVisible();
   await expect(resultRow.getByText("Réussi")).toBeVisible();

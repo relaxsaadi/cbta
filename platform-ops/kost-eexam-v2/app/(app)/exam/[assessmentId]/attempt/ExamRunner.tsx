@@ -455,14 +455,14 @@ export function ExamRunner({
             {current.matchingLeft.map((l) => {
               const map = new Map((current.answer ?? []).map((p) => p.split(":") as [string, string]));
               return (
-                <div key={l.key} className="flex items-center gap-2">
-                  <span className="flex-1 text-[13.5px] text-text-primary">{l.text}</span>
+                <div key={l.key} className="flex flex-wrap items-center gap-2">
+                  <span className="min-w-0 flex-1 text-[13.5px] text-text-primary">{l.text}</span>
                   <span aria-hidden="true" className="text-text-tertiary">→</span>
                   <select
                     aria-label={`Correspondance pour ${l.text}`}
                     value={map.get(l.key) ?? ""}
                     onChange={(e) => setTopLevelAnswer((prevAnswer) => setMatchingPair(prevAnswer, l.key, e.target.value))}
-                    className="rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[13px]"
+                    className="max-w-full min-w-0 rounded-md border border-border-default bg-surface-base px-2.5 py-1.5 text-[13px]"
                   >
                     <option value="">— Choisir —</option>
                     {current.matchingRight.map((r) => (
@@ -484,9 +484,9 @@ export function ExamRunner({
               const order = current.answer && current.answer.length > 0 ? current.answer : current.orderingItems.map((i) => i.key);
               const byKey = new Map(current.orderingItems.map((i) => [i.key, i.text]));
               return order.map((key, idx) => (
-                <div key={key} data-testid="ordering-row" className="flex items-center gap-2 rounded-md border border-border-default px-2.5 py-2">
+                <div key={key} data-testid="ordering-row" className="flex flex-wrap items-center gap-2 rounded-md border border-border-default px-2.5 py-2">
                   <span className="w-5 shrink-0 text-[12px] text-text-tertiary">{idx + 1}.</span>
-                  <span className="flex-1 text-[13.5px] text-text-primary">{byKey.get(key) ?? key}</span>
+                  <span className="min-w-0 flex-1 text-[13.5px] text-text-primary">{byKey.get(key) ?? key}</span>
                   <button
                     type="button"
                     aria-label={`Monter : ${byKey.get(key) ?? key}`}
@@ -596,14 +596,14 @@ export function ExamRunner({
                       const rightOptions = sq.choices.filter((c) => c.key.startsWith("R"));
                       const map = new Map((sq.answer ?? []).map((p) => p.split(":") as [string, string]));
                       return (
-                        <div key={l.key} className="flex items-center gap-2">
-                          <span className="flex-1 text-[13px] text-text-primary">{l.text}</span>
+                        <div key={l.key} className="flex flex-wrap items-center gap-2">
+                          <span className="min-w-0 flex-1 text-[13px] text-text-primary">{l.text}</span>
                           <span aria-hidden="true" className="text-text-tertiary">→</span>
                           <select
                             aria-label={`Correspondance pour ${l.text}`}
                             value={map.get(l.key) ?? ""}
                             onChange={(e) => updateScenarioSubanswer(sq.id, (prevAnswer) => setMatchingPair(prevAnswer, l.key, e.target.value))}
-                            className="rounded-md border border-border-default bg-surface-base px-2 py-1 text-[12.5px]"
+                            className="max-w-full min-w-0 rounded-md border border-border-default bg-surface-base px-2 py-1 text-[12.5px]"
                           >
                             <option value="">— Choisir —</option>
                             {rightOptions.map((r) => (
@@ -623,9 +623,9 @@ export function ExamRunner({
                       const order = sq.answer && sq.answer.length > 0 ? sq.answer : sq.choices.map((c) => c.key);
                       const byKey = new Map(sq.choices.map((c) => [c.key, c.text]));
                       return order.map((key, idx) => (
-                        <div key={key} data-testid="ordering-row" className="flex items-center gap-2 rounded-md border border-border-default px-2 py-1.5">
+                        <div key={key} data-testid="ordering-row" className="flex flex-wrap items-center gap-2 rounded-md border border-border-default px-2 py-1.5">
                           <span className="w-5 shrink-0 text-[11.5px] text-text-tertiary">{idx + 1}.</span>
-                          <span className="flex-1 text-[13px] text-text-primary">{byKey.get(key) ?? key}</span>
+                          <span className="min-w-0 flex-1 text-[13px] text-text-primary">{byKey.get(key) ?? key}</span>
                           <button
                             type="button"
                             aria-label={`Monter : ${byKey.get(key) ?? key}`}

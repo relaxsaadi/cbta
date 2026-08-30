@@ -379,7 +379,6 @@ test("candidats 6-10 — charge concurrente réelle : 5 candidats complètent l'
   const totalMs = Date.now() - started;
   const failures = results.filter((r) => !r.ok);
   const durations = results.map((r) => r.durationMs).sort((a, b) => a - b);
-  // eslint-disable-next-line no-console
   console.log(
     `[charge concurrente] 5 candidats — total ${totalMs}ms, par candidat: min=${durations[0]}ms max=${durations[durations.length - 1]}ms, ` +
       `échecs=${failures.length}/5${failures.length ? " (" + failures.map((f) => `${f.username}: ${f.error}`).join(" | ") + ")" : ""}`

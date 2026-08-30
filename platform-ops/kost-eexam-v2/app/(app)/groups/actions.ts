@@ -10,8 +10,9 @@ import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
 import type { Scope } from "@/lib/scope";
 import { createActivationToken } from "@/lib/activation-tokens";
-import { notifyAccountCreated } from "@/lib/email/events";
+import { notifyAccountCreated, notifyTemporaryAccessCreated } from "@/lib/email/events";
 import { auditEmailInvitationSent } from "@/lib/email/audit";
+import { createTemporaryAccess } from "@/lib/temp-password";
 
 /** Invitation sécurisée (mission email §8-10) — crée le compte SANS mot de
  * passe communiqué, un jeton d'activation, et déclenche ACCOUNT_CREATED.
@@ -95,6 +96,13 @@ export async function createGroupAction(_prev: CreateGroupResult, formData: Form
 export interface AddCandidateResult {
   error?: string;
   success?: string;
+  /** Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §8 —
+   * AFFICHAGE UNIQUE : renvoyé UNE seule fois par cette action, pour la
+   * méthode "Créer un accès temporaire" uniquement. Jamais persisté côté
+   * client au-delà du rendu immédiat, jamais récupérable après coup —
+   * aucune action "Voir le mot de passe actuel" n'existe nulle part. */
+  temporaryPassword?: string;
+  temporaryPasswordExpiresAt?: string;
 }
 
 /** Crée le compte candidat s'il n'existe pas encore (identifiant unique),
@@ -104,7 +112,16 @@ export interface AddCandidateResult {
  * l'admin — le compte est créé 'pending_activation' et le candidat reçoit
  * une invitation par email pour créer lui-même son mot de passe. L'email
  * devient donc obligatoire ici (il ne l'était pas avant), nécessaire pour
- * l'envoi de l'invitation. */
+ * l'envoi de l'invitation.
+ *
+ * Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §5-9 —
+ * ajoute une DEUXIÈME méthode d'accès explicite ("accessMethod"), jamais un
+ * remplacement de l'invitation sécurisée ci-dessus (qui reste RECOMMENDED
+ * et le comportement par défaut) : "Créer un accès temporaire" donne
+ * immédiatement un identifiant/mot de passe fonctionnels, jamais un mot de
+ * passe permanent (voir lib/temp-password.ts pour toutes les garanties de
+ * sécurité — expiration, changement obligatoire, jamais journalisé en
+ * clair). */
 export async function addCandidateAction(groupId: number, _prev: AddCandidateResult, formData: FormData): Promise<AddCandidateResult> {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
   if (!hasGroupAccess(session, groupId)) {
@@ -114,6 +131,7 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   const fullName = String(formData.get("fullName") ?? "").trim();
   const username = String(formData.get("username") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
+  const accessMethod = String(formData.get("accessMethod") ?? "invitation") === "temporary" ? "temporary" : "invitation";
 
   if (!fullName || !username || !email) return { error: "Nom, identifiant et email sont obligatoires (l'email sert à l'invitation)." };
 
@@ -121,7 +139,9 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   if (!group) return { error: "Groupe introuvable." };
 
   let user = findUserByUsername(username);
-  if (user && user.status === "suspended") return { error: "Ce compte existe mais est suspendu." };
+  if (user && (user.status === "suspended" || user.status === "archived")) {
+    return { error: `Ce compte existe mais est ${user.status === "suspended" ? "suspendu" : "archivé"}.` };
+  }
 
   if (user) {
     addCandidateToGroup(groupId, user.id, session.userId);
@@ -140,6 +160,25 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   const userId = createUserPendingActivation({ username, fullName, role: "candidate", email });
   addCandidateToGroup(groupId, userId, session.userId);
   audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_assigned", targetType: "user", targetId: userId, metadata: { groupId } });
+
+  if (accessMethod === "temporary") {
+    const { plaintext, expiresAt } = createTemporaryAccess(userId);
+    // Jamais le mot de passe en clair dans audit() — uniquement le fait
+    // qu'un accès temporaire a été créé, et par qui.
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "temporary_access_created", targetType: "user", targetId: userId, metadata: { groupId } });
+    await notifyTemporaryAccessCreated({
+      userId,
+      email,
+      firstName: fullName.split(/\s+/)[0] ?? fullName,
+      username,
+      temporaryPassword: plaintext,
+      expiresAt,
+      tenant: { companyId: group.company_id, companyName: group.company_name },
+    });
+    revalidatePath(`/groups/${groupId}`);
+    return { success: `${fullName} créé avec un accès temporaire, envoyé à ${email}.`, temporaryPassword: plaintext, temporaryPasswordExpiresAt: expiresAt };
+  }
+
   await inviteNewCandidate({
     userId,
     username,

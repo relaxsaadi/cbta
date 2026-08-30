@@ -136,7 +136,6 @@ test("mesure de charge concurrente dédiée — 10 candidats complètent un exam
   const p50 = durations[Math.floor(durations.length / 2)] ?? 0;
   const max = durations[durations.length - 1] ?? 0;
 
-  // eslint-disable-next-line no-console
   console.log(
     `[MESURE DE CHARGE — ${CONCURRENCY} candidats concurrents, examen réel 5 questions] ` +
       `mur d'horloge total=${wallClockMs}ms, réussis=${succeeded.length}/${CONCURRENCY}, échecs=${failures.length}, ` +

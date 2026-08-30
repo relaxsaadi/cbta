@@ -90,6 +90,11 @@ function ResultCard({ result }: { result: ResultsRow }) {
 
   // Politique A/B/C/D du §11 : selon la config, différer jusqu'à la
   // fermeture, montrer seulement la note, ou la correction complète.
+  // ResultCard est un Server Component (jamais de re-rendu client,
+  // ré-exécuté une fois par requête serveur) : comparer à l'heure serveur
+  // courante ici est le comportement voulu, pas une impureté au sens du
+  // hook de rendu client que cette règle cible réellement.
+  // eslint-disable-next-line react-hooks/purity
   const stillDeferred = settings.feedback_mode === "deferred" && settings.close_at && new Date(settings.close_at).getTime() > Date.now();
   const showResult = settings.show_result === 1 && !stillDeferred;
   const showCorrection = showResult && settings.show_correct_answers === 1;

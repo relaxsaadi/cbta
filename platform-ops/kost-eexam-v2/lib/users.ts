@@ -22,6 +22,8 @@ export interface UserRow {
   last_login_at: string | null;
   candidate_type: CandidateType | null;
   archived_at: string | null;
+  must_change_password: number;
+  temp_password_expires_at: string | null;
 }
 
 export function findUserByUsername(username: string): UserRow | undefined {

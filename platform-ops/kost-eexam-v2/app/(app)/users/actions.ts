@@ -19,7 +19,7 @@ import {
   type CandidateType,
 } from "@/lib/users";
 import { assignFunctionToUser, removeFunctionFromUser } from "@/lib/user-functions";
-import { addUserToGroup, removeUserFromGroupSafely, changeUserGroup, getPrimaryCompanyContext } from "@/lib/user-affiliation";
+import { addUserToGroup, removeUserFromGroupSafely, changeUserGroup, getPrimaryCompanyContext, provisionParticulierAccess } from "@/lib/user-affiliation";
 import { createCompany } from "@/lib/companies";
 import { createGroup, getGroup } from "@/lib/groups";
 import { revokeAllSessionsForUser } from "@/lib/sessions-registry";
@@ -86,6 +86,13 @@ export async function createUserAction(_prev: CreateUserResult, formData: FormDa
   }
 
   if (groupId) addUserToGroup(userId, groupId, session.userId);
+  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §1-4 —
+  // voir provisionParticulierAccess (lib/user-affiliation.ts) pour le
+  // diagnostic complet : sans ceci, un Particulier ne pouvait
+  // structurellement jamais se voir affecter d'examen.
+  if (role === "candidate" && candidateType === "particulier") {
+    provisionParticulierAccess(userId, fullName, session.userId, "production");
+  }
   for (const code of functionCodes) assignFunctionToUser(userId, code, session.userId);
 
   audit({

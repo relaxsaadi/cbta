@@ -16,6 +16,12 @@ export type EmailEventType =
   | "ACCOUNT_ACTIVATED"
   | "PASSWORD_RESET_REQUESTED"
   | "PASSWORD_CHANGED"
+  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §9 —
+  // accès temporaire créé directement par un administrateur (alternative à
+  // ACCOUNT_CREATED + jeton d'activation) — jamais réutiliser
+  // PASSWORD_RESET_REQUESTED, sémantique différente (celui-ci contient le
+  // mot de passe lui-même, jamais un lien).
+  | "TEMPORARY_ACCESS_CREATED"
   // --- MFA (WIRED) ---
   | "MFA_ENABLED"
   | "MFA_DISABLED"
@@ -74,6 +80,7 @@ export const EMAIL_EVENT_TYPES: EmailEventType[] = [
   "ACCOUNT_ACTIVATED",
   "PASSWORD_RESET_REQUESTED",
   "PASSWORD_CHANGED",
+  "TEMPORARY_ACCESS_CREATED",
   "MFA_ENABLED",
   "MFA_DISABLED",
   "MFA_RESET_BY_ADMIN",
@@ -116,6 +123,7 @@ export const MANDATORY_EVENT_TYPES: ReadonlySet<EmailEventType> = new Set([
   "ACCOUNT_ACTIVATED",
   "PASSWORD_RESET_REQUESTED",
   "PASSWORD_CHANGED",
+  "TEMPORARY_ACCESS_CREATED",
   "MFA_ENABLED",
   "MFA_DISABLED",
   "MFA_RESET_BY_ADMIN",
@@ -185,6 +193,19 @@ export interface PasswordResetRequestedPayload extends EmailEventBase {
 export interface PasswordChangedPayload extends EmailEventBase {
   type: "PASSWORD_CHANGED";
   changedAt: string;
+}
+
+/** §7/§9 — le mot de passe temporaire lui-même transite EN CLAIR dans ce
+ * payload (nécessaire pour le rendu de l'email), mais uniquement le temps
+ * de cet appel : jamais persisté (voir lib/temp-password.ts::
+ * createTemporaryAccess, qui écrit le hash AVANT de renvoyer le clair), et
+ * la queue email (lib/email/send.ts) n'écrit jamais le corps rendu dans
+ * notification_log — seul le statut de livraison y est stocké. */
+export interface TemporaryAccessCreatedPayload extends EmailEventBase {
+  type: "TEMPORARY_ACCESS_CREATED";
+  username: string;
+  temporaryPassword: string;
+  expiresAt: string;
 }
 
 export interface MfaEnabledPayload extends EmailEventBase {
@@ -314,6 +335,7 @@ export type EmailEventPayload =
   | AccountActivatedPayload
   | PasswordResetRequestedPayload
   | PasswordChangedPayload
+  | TemporaryAccessCreatedPayload
   | MfaEnabledPayload
   | MfaDisabledPayload
   | MfaResetByAdminPayload

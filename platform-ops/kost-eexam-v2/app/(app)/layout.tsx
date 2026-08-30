@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { getSession, ROLE_LABELS } from "@/lib/session";
 import { isDbSessionValid } from "@/lib/sessions-registry";
 import { getPlatformStatus } from "@/lib/platform-settings";
+import { findUserById } from "@/lib/users";
+import { isTemporaryPasswordExpired } from "@/lib/temp-password";
 import { ConsoleShell } from "@/components/layout/ConsoleShell";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
@@ -17,6 +19,28 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   if (session.dbSessionId && !isDbSessionValid(session.dbSessionId)) {
     session.destroy();
     redirect("/login");
+  }
+
+  // Mot de passe temporaire (mission "ADMIN/CLIENT/CANDIDATE UX
+  // IMPROVEMENTS", 2026-08-30, §7) — point d'application UNIQUE, avant
+  // TOUTE page protégée (jamais une vérification par page, qui serait
+  // facile à oublier sur une nouvelle route) : must_change_password force
+  // la redirection vers l'écran de changement obligatoire. Requêté frais
+  // en base à chaque affichage (jamais depuis le cookie de session, qui ne
+  // reflète pas un accès temporaire posé APRÈS la connexion en cours).
+  // Édition du même jeu de garanties que la révocation server-side
+  // ci-dessus : un flag posé pendant une session déjà active doit prendre
+  // effet immédiatement, pas seulement à la prochaine connexion.
+  const currentUser = findUserById(session.userId);
+  if (currentUser?.must_change_password === 1) {
+    if (isTemporaryPasswordExpired(currentUser)) {
+      // Expiré PENDANT une session déjà active (le login lui-même bloque
+      // déjà ce cas pour une NOUVELLE connexion, voir lib/auth.ts) — jamais
+      // laisser une session active continuer sur un accès temporaire expiré.
+      session.destroy();
+      redirect("/login");
+    }
+    redirect("/mot-de-passe/changer-obligatoire");
   }
 
   // Addendum §9-11 — bannière visible de TOUS les rôles connectés (pas

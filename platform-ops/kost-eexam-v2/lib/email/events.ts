@@ -23,6 +23,11 @@ import PasswordResetRequestedEmail, {
   TEMPLATE_VERSION as PWD_RESET_V,
 } from "./templates/password-reset-requested";
 import PasswordChangedEmail, { passwordChangedSubject, TEMPLATE_ID as PWD_CHANGED_ID, TEMPLATE_VERSION as PWD_CHANGED_V } from "./templates/password-changed";
+import TemporaryAccessCreatedEmail, {
+  temporaryAccessCreatedSubject,
+  TEMPLATE_ID as TEMP_ACCESS_ID,
+  TEMPLATE_VERSION as TEMP_ACCESS_V,
+} from "./templates/temporary-access-created";
 import MfaEnabledEmail, { mfaEnabledSubject, TEMPLATE_ID as MFA_ENABLED_ID, TEMPLATE_VERSION as MFA_ENABLED_V } from "./templates/mfa-enabled";
 import MfaDisabledEmail, { mfaDisabledSubject, TEMPLATE_ID as MFA_DISABLED_ID, TEMPLATE_VERSION as MFA_DISABLED_V } from "./templates/mfa-disabled";
 import AccountSuspendedEmail, {
@@ -246,6 +251,48 @@ export async function notifyPasswordChanged(params: {
       tenant: params.tenant ?? NO_TENANT,
       sender: getSenderSecurity(),
       rendered: { subject: passwordChangedSubject(), html, text, templateId: PWD_CHANGED_ID, templateVersion: PWD_CHANGED_V },
+    });
+  });
+}
+
+// ---------------------------------------------------------------------
+// TEMPORARY_ACCESS_CREATED (mission "ADMIN/CLIENT/CANDIDATE UX
+// IMPROVEMENTS", 2026-08-30, §7-9) — le mot de passe temporaire transite
+// EN CLAIR dans `params.temporaryPassword` jusqu'au rendu du gabarit, puis
+// n'existe plus (jamais stocké, jamais dans metadata, jamais dans le
+// journal d'audit — voir lib/temp-password.ts::createTemporaryAccess et
+// l'appelant, app/(app)/groups/[id]/actions.ts::createTemporaryAccessAction).
+// idempotencyKey inclut expiresAt : chaque émission d'un NOUVEL accès
+// temporaire (ex. remplacement après expiration) produit une ligne
+// notification_log distincte, jamais dédupliquée contre un envoi antérieur.
+export async function notifyTemporaryAccessCreated(params: {
+  userId: number;
+  email: string;
+  firstName: string;
+  username: string;
+  temporaryPassword: string;
+  expiresAt: string;
+  tenant?: EmailTenantContext;
+}): Promise<void> {
+  return safe("TEMPORARY_ACCESS_CREATED", async () => {
+    const loginUrl = `${getAppBaseUrl()}/login`;
+    const { html, text } = await renderBoth(
+      createElement(TemporaryAccessCreatedEmail, {
+        firstName: params.firstName,
+        username: params.username,
+        temporaryPassword: params.temporaryPassword,
+        expiresAtFormatted: formatCandidateDateTime(params.expiresAt),
+        loginUrl,
+      })
+    );
+    await queueAndSendEmail({
+      eventType: "TEMPORARY_ACCESS_CREATED",
+      idempotencyKey: `temporary-access-created/${params.userId}/${params.expiresAt}`,
+      recipientEmail: params.email,
+      userId: params.userId,
+      tenant: params.tenant ?? NO_TENANT,
+      sender: getSenderSecurity(),
+      rendered: { subject: temporaryAccessCreatedSubject(), html, text, templateId: TEMP_ACCESS_ID, templateVersion: TEMP_ACCESS_V },
     });
   });
 }

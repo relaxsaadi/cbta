@@ -7,6 +7,7 @@ import { createDbSession, revokeDbSession } from "./sessions-registry";
 import { audit } from "./audit";
 import { checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
 import { isNewLoginsBlocked } from "./platform-settings";
+import { isTemporaryPasswordExpired } from "./temp-password";
 import { getDb } from "./db";
 import type { ConsoleRole } from "./session";
 import type { UserRow } from "./users";
@@ -84,6 +85,17 @@ export async function login(username: string, password: string, meta: { ip?: str
   if (user.status === "archived") {
     audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "archived" } });
     return { ok: false, error: "Ce compte a été archivé. Contactez un administrateur." };
+  }
+  // Mot de passe temporaire (mission "ADMIN/CLIENT/CANDIDATE UX
+  // IMPROVEMENTS", 2026-08-30, §7) — refusé une fois expiré MÊME s'il
+  // correspond encore au hash stocké (verifyPassword() a déjà réussi
+  // ci-dessus) : lib/temp-password.ts::isTemporaryPasswordExpired().
+  // Jamais confondu avec "mot de passe incorrect" — message dédié, pour
+  // que le candidat sache qu'il doit demander un nouvel accès plutôt que
+  // de ressaisir le même mot de passe.
+  if (isTemporaryPasswordExpired(user)) {
+    audit({ actorUserId: user.id, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { reason: "temp_password_expired" } });
+    return { ok: false, error: "Ce mot de passe temporaire a expiré. Contactez un administrateur pour un nouvel accès." };
   }
   const role = getRoleForUser(user.id);
   if (!role) {

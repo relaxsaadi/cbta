@@ -72,7 +72,7 @@ export function DeclareIncidentForm({
           Compte à notifier par email (facultatif)
         </label>
         <select id="responsibleUserId" name="responsibleUserId" defaultValue="" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
-          <option value="">— Aucun (pas d'email envoyé) —</option>
+          <option value="">— Aucun (pas d&apos;email envoyé) —</option>
           {candidatesByGroup.map((g) =>
             g.members.length > 0 ? (
               <optgroup key={g.groupId} label={g.groupLabel}>
@@ -84,7 +84,7 @@ export function DeclareIncidentForm({
           )}
         </select>
         <p className="mt-1 text-[11.5px] text-text-tertiary">
-          Envoie une notification (sans détail de l'incident) au compte sélectionné — jamais le contenu de la description.
+          Envoie une notification (sans détail de l&apos;incident) au compte sélectionné — jamais le contenu de la description.
         </p>
       </div>
       <div>

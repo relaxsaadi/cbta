@@ -47,6 +47,21 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
   // correction manuelle PAR SOUS-QUESTION d'un scenario, voir lib/schema.sql
   // pour la forme exacte et lib/manual-grading.ts::submitScenarioSubgrade.
   { table: "attempt_answers", column: "scenario_grading_json", ddl: "ALTER TABLE attempt_answers ADD COLUMN scenario_grading_json TEXT" },
+  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §1-4 —
+  // distingue une entreprise réelle d'une entreprise "plomberie"
+  // auto-provisionnée pour un Particulier (voir provisionParticulierAccess,
+  // lib/user-affiliation.ts) — jamais montrée comme un vrai client sur
+  // /companies. Même convention que candidate_type : pas de CHECK
+  // constraint, validation applicative uniquement.
+  { table: "companies", column: "client_type", ddl: "ALTER TABLE companies ADD COLUMN client_type TEXT" },
+  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §7-9 —
+  // accès temporaire (lib/temp-password.ts). must_change_password est
+  // ajoutée avec NOT NULL DEFAULT 0 même via ADD COLUMN (SQLite l'autorise
+  // pour une valeur littérale constante) — tous les comptes déjà existants
+  // repartent donc correctement à "pas de mot de passe temporaire en
+  // attente", jamais un backfill séparé nécessaire.
+  { table: "users", column: "must_change_password", ddl: "ALTER TABLE users ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 0" },
+  { table: "users", column: "temp_password_expires_at", ddl: "ALTER TABLE users ADD COLUMN temp_password_expires_at TEXT" },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {
@@ -388,6 +403,50 @@ function migrateResultsGradingState(db: ReturnType<typeof getDb>) {
   }
 }
 
+// Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §10-11 —
+// bug réel diagnostiqué : le filtre "Type" de /users lit users.candidate_type,
+// mais cette colonne n'est écrite que par le chemin applicatif
+// addUserToGroup()/changeUserGroup() (lib/user-affiliation.ts) — jamais
+// rétroactivement pour un candidat déjà membre d'un groupe avant l'ajout de
+// cette colonne (mission "COMPLETE USER MANAGEMENT", 2026-08-29). Résultat
+// vérifié en direct sur staging : 30 candidats réellement membres d'un
+// groupe (donc "Entreprise" selon la règle de dérivation documentée dans
+// user-affiliation.ts) avaient candidate_type = NULL, et disparaissaient
+// silencieusement de tout filtre Type=Entreprise ET Type=Particulier —
+// exactement le symptôme "les filtres ne marchent pas". Correctif en
+// DONNÉE, jamais en schéma ni en requête (qui étaient déjà corrects) :
+// rattrape candidate_type = 'entreprise' pour tout utilisateur ayant une
+// vraie appartenance à un groupe et encore NULL. N'écrase jamais une valeur
+// déjà posée (donc jamais 'particulier' → 'entreprise'), et jamais
+// destructif — relançable sans risque à chaque migration (les nouveaux
+// candidats retombent tous dans le chemin applicatif normal).
+function backfillCandidateTypeFromGroupMembership(db: ReturnType<typeof getDb>) {
+  const result = db
+    .prepare(
+      `UPDATE users SET candidate_type = 'entreprise'
+       WHERE candidate_type IS NULL
+         AND EXISTS (SELECT 1 FROM group_members gm WHERE gm.candidate_user_id = users.id)`
+    )
+    .run();
+  if (result.changes > 0) {
+    console.log(`candidate_type rattrapé pour ${result.changes} candidat(s) déjà membre(s) d'un groupe.`);
+  }
+}
+
+// Toutes les entreprises déjà existantes AVANT cette mission sont, sans
+// ambiguïté, de vraies entreprises (le mécanisme de provisionnement
+// "particulier" n'existait pas encore) — backfill sûr et non ambigu,
+// contrairement à users.candidate_type (voir backfillCandidateTypeFrom
+// GroupMembership ci-dessus, qui a une vraie ambiguïté résolue par
+// dérivation). Permet à tout le reste du code de comparer client_type
+// sans jamais avoir à gérer un NULL séparément.
+function backfillCompanyClientType(db: ReturnType<typeof getDb>) {
+  const result = db.prepare(`UPDATE companies SET client_type = 'entreprise' WHERE client_type IS NULL`).run();
+  if (result.changes > 0) {
+    console.log(`client_type rattrapé (= 'entreprise') pour ${result.changes} client(s) existant(s).`);
+  }
+}
+
 function main() {
   const db = getDb();
   const schema = readFileSync(resolve(import.meta.dirname, "../lib/schema.sql"), "utf-8");
@@ -399,6 +458,8 @@ function main() {
   migrateIncidentActionsCheckConstraint(db);
   migrateUsersStatusCheckConstraint(db);
   migrateUsersArchivedStatus(db); // doit tourner APRÈS applyAdditiveColumns (candidate_type/archived_at)
+  backfillCandidateTypeFromGroupMembership(db); // doit tourner APRÈS migrateUsersArchivedStatus (même table)
+  backfillCompanyClientType(db); // doit tourner APRÈS applyAdditiveColumns (client_type)
   migrateQuestionsQtypeCheckConstraint(db);
   migrateQuestionsQtypeCheckConstraintV2(db);
   migrateResultsGradingState(db);

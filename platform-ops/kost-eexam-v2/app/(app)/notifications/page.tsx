@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { scopedUserIdsForSessionsOrNull } from "@/lib/tenant-scope";
 import { listNotificationHistory, KNOWN_EVENT_TYPES, type NotificationHistoryRow } from "@/lib/email/history";
+import { listCompanies, listCompaniesForManager } from "@/lib/companies";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -33,10 +35,10 @@ function metadataAssessmentId(row: NotificationHistoryRow): number | null {
 export default async function NotificationsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; event?: string; q?: string }>;
+  searchParams: Promise<{ status?: string; event?: string; q?: string; companyId?: string; dateFrom?: string; dateTo?: string }>;
 }) {
   const session = await guardPage("administrator", "auditor", "pedagogical_manager");
-  const { status, event, q } = await searchParams;
+  const { status, event, q, companyId, dateFrom, dateTo } = await searchParams;
   // Frontière multi-client (lib/tenant-scope.ts) — un responsable
   // pédagogique ne voit que ses propres notifications (lui-même + ses
   // candidats), jamais celles d'un autre client ; réutilise EXACTEMENT le
@@ -44,12 +46,21 @@ export default async function NotificationsPage({
   // comptes visibles d'un responsable).
   const userIdsOrNull = scopedUserIdsForSessionsOrNull(session);
   const canWrite = session.role !== "auditor";
+  const isManager = session.role === "pedagogical_manager";
+  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §12-13 —
+  // même périmètre que /results pour la liste déroulante elle-même (jamais
+  // proposer à un responsable un client hors de son périmètre, même si le
+  // résultat de la requête filtrée serait de toute façon vide).
+  const companies = isManager ? listCompaniesForManager(session.userId) : listCompanies();
 
   const rows = listNotificationHistory({
     userIdsOrNull,
     status: status || undefined,
     eventType: event || undefined,
     search: q || undefined,
+    companyId: companyId ? Number(companyId) : undefined,
+    dateFrom: dateFrom || undefined,
+    dateTo: dateTo || undefined,
     limit: 200,
   });
 
@@ -81,10 +92,34 @@ export default async function NotificationsPage({
               ))}
             </select>
           </div>
-          <div className="flex items-end">
-            <button type="submit" className="w-full rounded-md bg-brand-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
+          {/* Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)
+              §12-13 — Client/Date absents jusqu'ici alors que le backend
+              les supportait déjà en partie (companyId) ou pas du tout
+              (dateFrom/dateTo, ajoutés dans lib/email/history.ts). */}
+          <div>
+            <label htmlFor="companyId" className="mb-1 block text-[12px] font-medium text-text-secondary">Client</label>
+            <select id="companyId" name="companyId" defaultValue={companyId ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+              <option value="">Tous</option>
+              {companies.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="dateFrom" className="mb-1 block text-[12px] font-medium text-text-secondary">Du</label>
+            <input type="date" id="dateFrom" name="dateFrom" defaultValue={dateFrom ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          </div>
+          <div>
+            <label htmlFor="dateTo" className="mb-1 block text-[12px] font-medium text-text-secondary">Au</label>
+            <input type="date" id="dateTo" name="dateTo" defaultValue={dateTo ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          </div>
+          <div className="flex items-end gap-3">
+            <button type="submit" className="rounded-md bg-brand-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
               Filtrer
             </button>
+            {(status || event || q || companyId || dateFrom || dateTo) && (
+              <Link href="/notifications" className="text-[12.5px] font-medium text-text-tertiary hover:text-text-secondary">Réinitialiser les filtres</Link>
+            )}
           </div>
         </form>
       </Card>

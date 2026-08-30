@@ -55,7 +55,20 @@ CREATE TABLE IF NOT EXISTS users (
   -- n'a jamais besoin d'entreprise — jamais d'entreprise fictive créée
   -- pour satisfaire une contrainte de modèle de données.
   candidate_type TEXT,
-  archived_at TEXT
+  archived_at TEXT,
+  -- must_change_password / temp_password_expires_at (mission "ADMIN/CLIENT/
+  -- CANDIDATE UX IMPROVEMENTS", 2026-08-30, §7-9) — accès temporaire créé
+  -- par un administrateur (lib/temp-password.ts::createTemporaryAccess).
+  -- must_change_password force la redirection vers /mot-de-passe/
+  -- changer-obligatoire à la connexion suivante (voir app/(app)/layout.tsx),
+  -- avant toute autre page. temp_password_expires_at rend le mot de passe
+  -- temporaire lui-même refusé à la connexion une fois expiré, MÊME s'il
+  -- correspond encore au hash stocké (lib/auth.ts::login()). Les deux
+  -- colonnes repassent à 0/NULL dès que le titulaire choisit son propre mot
+  -- de passe (clearMustChangePassword) — le mot de passe temporaire devient
+  -- alors structurellement invalide (password_hash a changé).
+  must_change_password INTEGER NOT NULL DEFAULT 0,
+  temp_password_expires_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -86,6 +99,14 @@ CREATE TABLE IF NOT EXISTS companies (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   scope TEXT NOT NULL DEFAULT 'production' CHECK (scope IN ('production','demo','test')),
+  -- client_type (mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS",
+  -- 2026-08-30) — 'entreprise' | 'particulier' (plomberie interne pour un
+  -- candidat individuel, jamais montrée comme un vrai client, voir
+  -- provisionParticulierAccess dans lib/user-affiliation.ts). Pas de CHECK
+  -- constraint, même discipline que users.candidate_type : validé côté
+  -- application uniquement. Présent ici (nouvelles installations) ET dans
+  -- ADDITIVE_COLUMNS de scripts/migrate.ts (bases déjà déployées).
+  client_type TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   created_by INTEGER REFERENCES users(id)
 );

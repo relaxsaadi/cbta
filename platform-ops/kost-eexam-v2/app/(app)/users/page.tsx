@@ -127,10 +127,16 @@ export default async function UsersPage({
               ))}
             </select>
           </div>
-          <div className="flex items-end lg:col-span-7">
+          <div className="flex items-end gap-3 lg:col-span-7">
             <button type="submit" className="rounded-md bg-brand-accent px-3.5 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
               Filtrer
             </button>
+            {/* Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)
+                §11 — absent jusqu'ici (même convention que /results),
+                affiché seulement quand un filtre est réellement actif. */}
+            {(role || status || type || companyId || groupId || functionCode || q) && (
+              <Link href="/users" className="text-[12.5px] font-medium text-text-tertiary hover:text-text-secondary">Réinitialiser les filtres</Link>
+            )}
           </div>
         </form>
       </Card>

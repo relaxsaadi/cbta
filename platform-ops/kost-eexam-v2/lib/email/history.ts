@@ -39,6 +39,14 @@ export interface NotificationHistoryFilters {
   companyId?: number;
   /** Recherche libre sur l'email destinataire (LIKE, insensible à la casse). */
   search?: string;
+  /** Bornes inclusives sur n.created_at (format "YYYY-MM-DD", même
+   * convention que lib/results.ts — T00:00:00.000Z / T23:59:59.999Z).
+   * Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §12-13 —
+   * absent jusqu'ici, seule vraie lacune trouvée sur cette page (le reste
+   * des filtres était déjà correct, vérifié en direct contre des données
+   * réelles). */
+  dateFrom?: string;
+  dateTo?: string;
   limit?: number;
 }
 
@@ -71,6 +79,14 @@ export function listNotificationHistory(filters: NotificationHistoryFilters): No
   if (filters.search) {
     clauses.push(`n.recipient_email LIKE ?`);
     args.push(`%${filters.search.toLowerCase()}%`);
+  }
+  if (filters.dateFrom) {
+    clauses.push(`n.created_at >= ?`);
+    args.push(`${filters.dateFrom}T00:00:00.000Z`);
+  }
+  if (filters.dateTo) {
+    clauses.push(`n.created_at <= ?`);
+    args.push(`${filters.dateTo}T23:59:59.999Z`);
   }
 
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";

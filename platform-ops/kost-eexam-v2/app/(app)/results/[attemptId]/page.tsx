@@ -169,7 +169,18 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
                     </p>
                     <p className="text-[11px] text-text-tertiary">{QTYPE_LABELS[qtype] ?? qtype}</p>
                   </div>
-                  {q.isCorrect === null ? (
+                  {/* Bug réel diagnostiqué (2026-08-30, mission "ADMIN/CLIENT/
+                      CANDIDATE UX IMPROVEMENTS") : ce libellé se basait
+                      uniquement sur q.isCorrect === null, qui est TOUJOURS
+                      vrai avant même que le candidat ait répondu (aucune
+                      ligne attempt_answers n'existe encore) — une tentative
+                      encore in_progress affichait donc "En attente de
+                      correction" dès son lancement, avant même que l'examen
+                      soit envoyé. inProgress doit être vérifié en premier,
+                      jamais après. */}
+                  {inProgress ? (
+                    <span className="text-[11.5px] text-text-tertiary">Examen en cours</span>
+                  ) : q.isCorrect === null ? (
                     <span className="text-[11.5px] text-text-tertiary">{qtype === "short_answer" || qtype === "scenario" ? "En attente de correction" : "Non noté"}</span>
                   ) : q.isCorrect ? (
                     <span className="flex items-center gap-1 text-[11.5px] font-medium text-status-verified-text"><CheckCircle2 size={13} /> Correct</span>
@@ -254,7 +265,17 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
                           <div key={sq.id} className="rounded-md border border-border-subtle p-2.5">
                             <div className="mb-1 flex items-start justify-between gap-2">
                               <p className="text-[13px] font-medium text-text-primary">Q{sqi + 1}. {sq.stem}</p>
-                              {pending ? (
+                              {/* Même correctif qu'au niveau question principale
+                                  (2026-08-30) : "pending" reste calculé tel quel
+                                  (gradeOneQuestion renvoie pending=true pour toute
+                                  sous-question manuelle, y compris jamais répondue)
+                                  — mais inProgress est vérifié EN PREMIER, sinon
+                                  une sous-question jamais atteinte par le candidat
+                                  afficherait "En attente de correction" dès le
+                                  démarrage de la tentative, avant tout envoi. */}
+                              {inProgress ? (
+                                <span className="shrink-0 text-[11px] text-text-tertiary">Examen en cours</span>
+                              ) : pending ? (
                                 <span className="shrink-0 text-[11px] text-text-tertiary">En attente de correction</span>
                               ) : subIsCorrect ? (
                                 <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-status-verified-text"><CheckCircle2 size={12} /> Correct</span>
@@ -262,12 +283,12 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
                                 <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-status-critical-text"><XCircle size={12} /> Incorrect</span>
                               )}
                             </div>
-                            <p className="text-[12px] text-text-secondary">Réponse du candidat : <span className="font-medium text-text-primary">{formatCandidateAnswerForDisplay(sq.qtype, subAnswer ?? null, sq.choices)}</span></p>
-                            {!pending && (
+                            <p className="text-[12px] text-text-secondary">Réponse du candidat : <span className="font-medium text-text-primary">{subAnswer ? formatCandidateAnswerForDisplay(sq.qtype, subAnswer, sq.choices) : "Aucune réponse fournie"}</span></p>
+                            {!inProgress && !pending && (
                               <p className="text-[12px] text-text-secondary">Réponse correcte : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(sq.qtype, sq.correctAnswer, sq.choices)}</span></p>
                             )}
                             {manualVerdict?.comment && <p className="mt-1 text-[11.5px] text-text-tertiary">Commentaire du correcteur : {manualVerdict.comment}</p>}
-                            <p className="mt-1 text-[11px] text-text-tertiary">Points : {pending ? "—" : subPoints} / {sq.points}</p>
+                            <p className="mt-1 text-[11px] text-text-tertiary">Points : {inProgress || pending ? "—" : subPoints} / {sq.points}</p>
                           </div>
                         );
                       })}

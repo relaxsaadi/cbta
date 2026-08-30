@@ -11,8 +11,10 @@
 // supporte déjà nativement le multi-groupe, donc aucun changement de schéma
 // n'était nécessaire pour cette partie de la mission.
 import { getDb } from "./db";
-import { addCandidateToGroup, removeCandidateFromGroup, getGroup } from "./groups";
+import { addCandidateToGroup, removeCandidateFromGroup, getGroup, createGroup } from "./groups";
 import { setCandidateType } from "./users";
+import { createCompany } from "./companies";
+import type { Scope } from "./scope";
 
 export interface CandidateGroupRow {
   group_id: number;
@@ -89,6 +91,41 @@ export function hasProtectedGroupHistory(userId: number, groupId: number): boole
 }
 
 export class AffiliationError extends Error {}
+
+/** Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §1-4 —
+ * bug réel diagnostiqué : un candidat 'particulier' n'avait jusqu'ici
+ * AUCUN groupe (§3 "pas d'entreprise rattachée" masque le bloc
+ * d'affectation dans l'assistant de création), donc ne pouvait
+ * structurellement se voir affecter aucun examen (assessments.group_id
+ * est NOT NULL — vérifié dans lib/schema.sql). Provisionne l'entreprise/
+ * groupe "plomberie" minimale nécessaire, JAMAIS montrée à l'admin comme
+ * un vrai client (companies.client_type='particulier', exclue par défaut
+ * de listCompanies()/listCompaniesForManager()) et JAMAIS un nom
+ * d'organisation inventé (le nom reprend celui du candidat lui-même —
+ * "Do NOT force Entreprise = Particulier or create a fake organization
+ * name", exigence explicite de la mission). N'appelle JAMAIS
+ * addUserToGroup() (qui basculerait candidate_type vers 'entreprise' —
+ * addCandidateToGroup() directement, la primitive brute). Idempotent :
+ * un appel répété pour le même candidat réutilise l'entreprise/groupe déjà
+ * provisionné plutôt que d'en recréer un nouveau à chaque fois. */
+export function provisionParticulierAccess(userId: number, fullName: string, actorId: number, scope: Scope): { companyId: number; groupId: number } {
+  const existing = getDb()
+    .prepare(
+      `SELECT c.id AS company_id, g.id AS group_id
+       FROM group_members gm
+       JOIN groups g ON g.id = gm.group_id
+       JOIN companies c ON c.id = g.company_id
+       WHERE gm.candidate_user_id = ? AND c.client_type = 'particulier'
+       LIMIT 1`
+    )
+    .get(userId) as { company_id: number; group_id: number } | undefined;
+  if (existing) return { companyId: existing.company_id, groupId: existing.group_id };
+
+  const companyId = createCompany({ name: fullName, scope, createdBy: actorId, clientType: "particulier" });
+  const groupId = createGroup({ companyId, name: "Session individuelle", scope, createdBy: actorId });
+  addCandidateToGroup(groupId, userId, actorId);
+  return { companyId, groupId };
+}
 
 /** "Affecter à un groupe" / "Ajouter à un groupe" (§23-24) — toujours sans
  * risque (ajout pur, jamais de suppression) : idempotent, ne casse jamais

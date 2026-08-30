@@ -16,17 +16,69 @@ export interface PendingGradingRow {
   attempt_answer_id: number;
   attempt_question_id: number;
   attempt_id: number;
+  candidate_user_id: number;
   candidate_name: string;
   company_id: number;
   company_name: string;
   group_id: number;
   group_name: string;
+  assessment_id: number;
   assessment_name: string;
   function_code: string;
   stem: string;
   candidate_answer: string;
   points: number;
   submitted_at: string | null;
+}
+
+/** Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §16 —
+ * dimensions de filtrage optionnelles, réutilisées à l'identique par
+ * listPendingManualGrading, listPendingScenarioSubquestions et
+ * listGradedManually (mêmes noms de colonnes/jointures dans les trois). */
+export interface ManualGradingFilters {
+  companyId?: number;
+  groupId?: number;
+  functionCode?: string;
+  assessmentId?: number;
+  candidateUserId?: number;
+  /** Bornes inclusives sur at.submitted_at, format "YYYY-MM-DD" — même
+   * convention que lib/results.ts / lib/email/history.ts. */
+  dateFrom?: string;
+  dateTo?: string;
+}
+
+function manualGradingFilterClauses(filters: ManualGradingFilters): { clauses: string[]; params: (string | number)[] } {
+  const clauses: string[] = [];
+  const params: (string | number)[] = [];
+  if (filters.companyId) {
+    clauses.push(`c.id = ?`);
+    params.push(filters.companyId);
+  }
+  if (filters.groupId) {
+    clauses.push(`g.id = ?`);
+    params.push(filters.groupId);
+  }
+  if (filters.functionCode) {
+    clauses.push(`a.function_code = ?`);
+    params.push(filters.functionCode);
+  }
+  if (filters.assessmentId) {
+    clauses.push(`a.id = ?`);
+    params.push(filters.assessmentId);
+  }
+  if (filters.candidateUserId) {
+    clauses.push(`u.id = ?`);
+    params.push(filters.candidateUserId);
+  }
+  if (filters.dateFrom) {
+    clauses.push(`at.submitted_at >= ?`);
+    params.push(`${filters.dateFrom}T00:00:00.000Z`);
+  }
+  if (filters.dateTo) {
+    clauses.push(`at.submitted_at <= ?`);
+    params.push(`${filters.dateTo}T23:59:59.999Z`);
+  }
+  return { clauses, params };
 }
 
 /** Liste des réponses en attente de correction manuelle — jamais une
@@ -36,20 +88,23 @@ export interface PendingGradingRow {
  * multi-client (lib/tenant-scope.ts) : restrictToGroupIdsOrNull suit le
  * même contrat que partout ailleurs — null = illimité (administrator/
  * auditor), sinon la liste des groupes gérés par ce responsable. */
-export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | null = null): PendingGradingRow[] {
+export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): PendingGradingRow[] {
   const db = getDb();
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
   const clauses: string[] = [`aa.is_correct IS NULL`, `q.qtype = 'short_answer'`, `at.status IN ('submitted','auto_submitted')`];
-  const params: number[] = [];
+  const params: (string | number)[] = [];
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
     clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
     params.push(...restrictToGroupIdsOrNull);
   }
+  const extra = manualGradingFilterClauses(filters);
+  clauses.push(...extra.clauses);
+  params.push(...extra.params);
   return db
     .prepare(
       `SELECT aa.id AS attempt_answer_id, aq.id AS attempt_question_id, at.id AS attempt_id,
-              u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
-              g.id AS group_id, g.name AS group_name, a.name AS assessment_name, a.function_code,
+              u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
+              g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
               s.stem_snapshot AS stem, aa.answer_json, s.points, at.submitted_at
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
@@ -71,11 +126,13 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
         attempt_answer_id: row.attempt_answer_id,
         attempt_question_id: row.attempt_question_id,
         attempt_id: row.attempt_id,
+        candidate_user_id: row.candidate_user_id,
         candidate_name: row.candidate_name,
         company_id: row.company_id,
         company_name: row.company_name,
         group_id: row.group_id,
         group_name: row.group_name,
+        assessment_id: row.assessment_id,
         assessment_name: row.assessment_name,
         function_code: row.function_code,
         stem: row.stem,
@@ -84,6 +141,78 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
         submitted_at: row.submitted_at,
       };
     }) as unknown as PendingGradingRow[];
+}
+
+/** Mission §16 — historique "Corrigé" (Statut). Contrairement aux files
+ * "en attente" ci-dessus, sélectionne les réponses short_answer manuelles
+ * DÉJÀ statuées (graded_by IS NOT NULL — jamais une réponse auto-notée,
+ * qui n'a jamais graded_by posé, voir submitManualGrade/lib/grading.ts).
+ * Mêmes dimensions de filtre, même frontière tenant. */
+export interface GradedManualRow extends PendingGradingRow {
+  is_correct: boolean;
+  points_awarded: number;
+  graded_by: number | null;
+  grader_comment: string | null;
+}
+
+export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): GradedManualRow[] {
+  const db = getDb();
+  if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
+  const clauses: string[] = [`aa.is_correct IS NOT NULL`, `aa.graded_by IS NOT NULL`, `q.qtype = 'short_answer'`];
+  const params: (string | number)[] = [];
+  if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
+    clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
+    params.push(...restrictToGroupIdsOrNull);
+  }
+  const extra = manualGradingFilterClauses(filters);
+  clauses.push(...extra.clauses);
+  params.push(...extra.params);
+  return db
+    .prepare(
+      `SELECT aa.id AS attempt_answer_id, aq.id AS attempt_question_id, at.id AS attempt_id,
+              u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
+              g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
+              s.stem_snapshot AS stem, aa.answer_json, s.points, at.submitted_at,
+              aa.is_correct, aa.points_awarded, aa.graded_by, aa.grader_comment
+       FROM attempt_answers aa
+       JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
+       JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+       JOIN questions q ON q.id = s.question_id
+       JOIN attempts at ON at.id = aa.attempt_id
+       JOIN users u ON u.id = at.candidate_user_id
+       JOIN assessments a ON a.id = at.assessment_id
+       JOIN groups g ON g.id = a.group_id
+       JOIN companies c ON c.id = g.company_id
+       WHERE ${clauses.join(" AND ")}
+       ORDER BY at.submitted_at DESC`
+    )
+    .all(...params)
+    .map((r) => {
+      const row = r as Record<string, unknown>;
+      const answerJson = row.answer_json as string | null;
+      return {
+        attempt_answer_id: row.attempt_answer_id,
+        attempt_question_id: row.attempt_question_id,
+        attempt_id: row.attempt_id,
+        candidate_user_id: row.candidate_user_id,
+        candidate_name: row.candidate_name,
+        company_id: row.company_id,
+        company_name: row.company_name,
+        group_id: row.group_id,
+        group_name: row.group_name,
+        assessment_id: row.assessment_id,
+        assessment_name: row.assessment_name,
+        function_code: row.function_code,
+        stem: row.stem,
+        candidate_answer: answerJson ? (JSON.parse(answerJson)[0] ?? "") : "",
+        points: row.points,
+        submitted_at: row.submitted_at,
+        is_correct: row.is_correct === 1,
+        points_awarded: row.points_awarded,
+        graded_by: row.graded_by,
+        grader_comment: row.grader_comment,
+      };
+    }) as unknown as GradedManualRow[];
 }
 
 export class ManualGradingError extends Error {}
@@ -197,11 +326,13 @@ export interface PendingScenarioSubquestionRow {
   attempt_question_id: number;
   attempt_id: number;
   subquestion_id: string;
+  candidate_user_id: number;
   candidate_name: string;
   company_id: number;
   company_name: string;
   group_id: number;
   group_name: string;
+  assessment_id: number;
   assessment_name: string;
   function_code: string;
   scenario_title: string;
@@ -213,21 +344,26 @@ export interface PendingScenarioSubquestionRow {
 
 /** Même contrat de périmètre tenant (restrictToGroupIdsOrNull) que
  * listPendingManualGrading — null = illimité (administrator/auditor),
- * sinon la liste des groupes gérés par ce responsable. */
-export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number[] | null = null): PendingScenarioSubquestionRow[] {
+ * sinon la liste des groupes gérés par ce responsable. Mêmes dimensions de
+ * filtre optionnelles (§16) que listPendingManualGrading — appliquées au
+ * niveau SQL, avant le parsing JSON par sous-question. */
+export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): PendingScenarioSubquestionRow[] {
   const db = getDb();
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
   const clauses: string[] = [`aa.is_correct IS NULL`, `q.qtype = 'scenario'`, `at.status IN ('submitted','auto_submitted')`];
-  const params: number[] = [];
+  const params: (string | number)[] = [];
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
     clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
     params.push(...restrictToGroupIdsOrNull);
   }
+  const extra = manualGradingFilterClauses(filters);
+  clauses.push(...extra.clauses);
+  params.push(...extra.params);
   const rows = db
     .prepare(
       `SELECT aq.id AS attempt_question_id, at.id AS attempt_id,
-              u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
-              g.id AS group_id, g.name AS group_name, a.name AS assessment_name, a.function_code,
+              u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
+              g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
               s.stem_snapshot AS scenario_title, s.correct_answer_snapshot,
               aa.answer_json, aa.scenario_grading_json, at.submitted_at
        FROM attempt_answers aa
@@ -245,11 +381,13 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
     .all(...params) as {
     attempt_question_id: number;
     attempt_id: number;
+    candidate_user_id: number;
     candidate_name: string;
     company_id: number;
     company_name: string;
     group_id: number;
     group_name: string;
+    assessment_id: number;
     assessment_name: string;
     function_code: string;
     scenario_title: string;
@@ -274,11 +412,13 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
         attempt_question_id: r.attempt_question_id,
         attempt_id: r.attempt_id,
         subquestion_id: sq.id,
+        candidate_user_id: r.candidate_user_id,
         candidate_name: r.candidate_name,
         company_id: r.company_id,
         company_name: r.company_name,
         group_id: r.group_id,
         group_name: r.group_name,
+        assessment_id: r.assessment_id,
         assessment_name: r.assessment_name,
         function_code: r.function_code,
         scenario_title: r.scenario_title,
@@ -286,6 +426,111 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
         candidate_answer: ans && ans[0] ? ans[0] : "",
         points: sq.points,
         submitted_at: r.submitted_at,
+      });
+    }
+  }
+  return out;
+}
+
+/** Mission §16 — historique "Corrigé" pour les sous-questions de scénario,
+ * symétrique de listGradedManually côté réponses courtes autonomes. Une
+ * sous-question individuelle peut être "corrigée" (présente dans
+ * scenario_grading_json) alors que la ligne scénario elle-même reste
+ * aa.is_correct IS NULL (d'AUTRES sous-questions du même scénario restent
+ * en attente) — jamais filtré sur aa.is_correct ici, seulement sur la
+ * présence de scenario_grading_json et, par sous-question, sur
+ * progress[sq.id]. */
+export interface GradedScenarioSubquestionRow extends PendingScenarioSubquestionRow {
+  is_correct: boolean;
+  points_awarded: number;
+  graded_by: number | null;
+  grader_comment?: string;
+}
+
+export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): GradedScenarioSubquestionRow[] {
+  const db = getDb();
+  if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
+  const clauses: string[] = [`q.qtype = 'scenario'`, `aa.scenario_grading_json IS NOT NULL`];
+  const params: (string | number)[] = [];
+  if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
+    clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
+    params.push(...restrictToGroupIdsOrNull);
+  }
+  const extra = manualGradingFilterClauses(filters);
+  clauses.push(...extra.clauses);
+  params.push(...extra.params);
+  const rows = db
+    .prepare(
+      `SELECT aq.id AS attempt_question_id, at.id AS attempt_id,
+              u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
+              g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
+              s.stem_snapshot AS scenario_title, s.correct_answer_snapshot,
+              aa.answer_json, aa.scenario_grading_json, at.submitted_at
+       FROM attempt_answers aa
+       JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
+       JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+       JOIN questions q ON q.id = s.question_id
+       JOIN attempts at ON at.id = aa.attempt_id
+       JOIN users u ON u.id = at.candidate_user_id
+       JOIN assessments a ON a.id = at.assessment_id
+       JOIN groups g ON g.id = a.group_id
+       JOIN companies c ON c.id = g.company_id
+       WHERE ${clauses.join(" AND ")}
+       ORDER BY at.submitted_at DESC`
+    )
+    .all(...params) as {
+    attempt_question_id: number;
+    attempt_id: number;
+    candidate_user_id: number;
+    candidate_name: string;
+    company_id: number;
+    company_name: string;
+    group_id: number;
+    group_name: string;
+    assessment_id: number;
+    assessment_name: string;
+    function_code: string;
+    scenario_title: string;
+    correct_answer_snapshot: string;
+    answer_json: string | null;
+    scenario_grading_json: string | null;
+    submitted_at: string | null;
+  }[];
+
+  const out: GradedScenarioSubquestionRow[] = [];
+  for (const r of rows) {
+    const spec = JSON.parse(r.correct_answer_snapshot) as { subquestions: { id: string; qtype: string; stem: string; points: number; correctAnswer: { mode?: string } }[] };
+    const given = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
+    const progress = (r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {}) as Record<
+      string,
+      { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string }
+    >;
+    for (const sq of spec.subquestions) {
+      const verdict = progress[sq.id];
+      if (!verdict) continue; // pas encore corrigée — jamais dans l'historique.
+      const ans = given[sq.id];
+      out.push({
+        attempt_question_id: r.attempt_question_id,
+        attempt_id: r.attempt_id,
+        subquestion_id: sq.id,
+        candidate_user_id: r.candidate_user_id,
+        candidate_name: r.candidate_name,
+        company_id: r.company_id,
+        company_name: r.company_name,
+        group_id: r.group_id,
+        group_name: r.group_name,
+        assessment_id: r.assessment_id,
+        assessment_name: r.assessment_name,
+        function_code: r.function_code,
+        scenario_title: r.scenario_title,
+        subquestion_stem: sq.stem,
+        candidate_answer: ans && ans[0] ? ans[0] : "",
+        points: sq.points,
+        submitted_at: r.submitted_at,
+        is_correct: verdict.isCorrect,
+        points_awarded: verdict.pointsAwarded,
+        graded_by: verdict.gradedBy,
+        grader_comment: verdict.comment,
       });
     }
   }

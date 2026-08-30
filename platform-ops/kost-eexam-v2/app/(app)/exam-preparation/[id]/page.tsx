@@ -89,6 +89,15 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          {/* Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)
+              §26 — même condition que "Rapport global" (nécessite les
+              snapshots figés à la publication, voir app/(app)/apercu-
+              candidat/[assessmentId]/page.tsx). */}
+          {assessment.status !== "draft" && (
+            <Link href={`/apercu-candidat/${assessmentId}`} className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
+              Prévisualiser comme candidat
+            </Link>
+          )}
           {assessment.status !== "draft" && (
             <Link href={`/exam-preparation/${assessmentId}/rapport-global`} className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
               Rapport global

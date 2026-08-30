@@ -10,6 +10,8 @@ import { hasCompletedActivation } from "@/lib/activation-tokens";
 import { listCompanies } from "@/lib/companies";
 import { listGroups } from "@/lib/groups";
 import { listFunctions } from "@/lib/functions";
+import { getDb } from "@/lib/db";
+import { Eye } from "lucide-react";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
 import { ROLE_LABELS, type ConsoleRole } from "@/lib/session";
@@ -56,6 +58,19 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
   const functions = listUserFunctions(userId);
   const candidateGroups = listCandidateGroups(userId);
   const examSummary = getExamSummary(userId);
+  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §25 —
+  // "Prévisualiser l'espace candidat" depuis la fiche candidat : liste ses
+  // examens réellement affectés et PUBLIÉS (jamais un brouillon, qui n'a
+  // pas encore de snapshot figé à prévisualiser — voir apercu-candidat/
+  // [assessmentId]/page.tsx).
+  const assignedAssessments =
+    role === "candidate"
+      ? (getDb()
+          .prepare(
+            `SELECT a.id, a.name FROM assessment_assignments aa JOIN assessments a ON a.id = aa.assessment_id WHERE aa.candidate_user_id = ? AND a.status != 'draft' ORDER BY aa.assigned_at DESC`
+          )
+          .all(userId) as { id: number; name: string }[])
+      : [];
   const commHistory = listNotificationHistory({ userIdsOrNull: null, userId, limit: 50 });
   const hardDeleteCheck = canHardDeleteUser(userId);
   const everInvited = hasCompletedActivation(userId) === false || user.status !== "pending_activation" || commHistory.some((h) => h.event_type === "ACCOUNT_CREATED");
@@ -145,6 +160,22 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             <p className="text-[11.5px] text-text-tertiary">Réussies</p>
           </div>
         </div>
+        {assignedAssessments.length > 0 && (
+          <div className="mt-4 border-t border-border-subtle pt-4">
+            <p className="mb-2 text-[12px] font-medium text-text-secondary">Prévisualiser l&apos;espace candidat</p>
+            <div className="flex flex-col gap-1.5">
+              {assignedAssessments.map((a) => (
+                <Link
+                  key={a.id}
+                  href={`/apercu-candidat/${a.id}?candidateId=${userId}`}
+                  className="flex items-center gap-1.5 text-[12.5px] font-medium text-accent-9 hover:underline"
+                >
+                  <Eye size={13} /> {a.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </Card>
 
       {/* COMMUNICATIONS */}

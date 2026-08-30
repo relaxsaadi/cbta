@@ -221,6 +221,87 @@ export interface AttemptQuestionView {
   scenario: ScenarioCandidateView | null;
 }
 
+/** Ligne source commune (snapshot + éventuel contexte de tentative) —
+ * point d'entrée UNIQUE de sanitisation candidate-safe (jamais
+ * `correctAnswer`/`correct_answer_snapshot` brut au-delà de cette
+ * fonction). Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)
+ * §20-26 — extrait de getAttemptQuestions() ci-dessous pour être réutilisé
+ * TEL QUEL par getPreviewQuestions() (mode aperçu admin, sans tentative
+ * réelle) : jamais une 2e implémentation de ce mapping qui risquerait de
+ * diverger et d'exposer une réponse correcte en mode aperçu. */
+interface SnapshotSourceRow {
+  attempt_question_id: number;
+  position: number;
+  choices_order_json: string | null;
+  marked_for_review: number;
+  stem_snapshot: string;
+  choices_snapshot_json: string;
+  correct_answer_snapshot: string;
+  answer_json: string | null;
+  qtype: string;
+}
+
+function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionView {
+  const allChoices: { key: string; text: string }[] = JSON.parse(r.choices_snapshot_json);
+  const order: string[] = r.choices_order_json ? JSON.parse(r.choices_order_json) : allChoices.map((c) => c.key);
+  const byKey = new Map(allChoices.map((c) => [c.key, c]));
+  const isMcqLike = r.qtype === "mcq_single" || r.qtype === "mcq_multi" || r.qtype === "true_false";
+
+  let matchingLeft: { key: string; text: string }[] = [];
+  let matchingRight: { key: string; text: string }[] = [];
+  if (r.qtype === "matching") {
+    // Un même mélange global (choices_order_json) partitionné par
+    // préfixe de clé conserve un ordre indépendant et uniforme sur
+    // chaque côté — voir MatchingAnswerSpec pour la preuve.
+    matchingLeft = order.filter((k) => k.startsWith("L")).map((k) => byKey.get(k)!).filter(Boolean);
+    matchingRight = order.filter((k) => k.startsWith("R")).map((k) => byKey.get(k)!).filter(Boolean);
+  }
+
+  let orderingItems: { key: string; text: string }[] = [];
+  if (r.qtype === "ordering") {
+    orderingItems = order.map((k) => byKey.get(k)!).filter(Boolean);
+  }
+
+  let scenario: ScenarioCandidateView | null = null;
+  if (r.qtype === "scenario") {
+    const spec = JSON.parse(r.correct_answer_snapshot) as {
+      context: string;
+      documentRef?: string;
+      subquestions: { id: string; qtype: string; stem: string; choices: { key: string; text: string }[] }[];
+    };
+    const savedAnswers = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
+    scenario = {
+      context: spec.context,
+      documentRef: spec.documentRef ?? null,
+      subquestions: spec.subquestions.map((sq) => ({
+        id: sq.id,
+        qtype: sq.qtype,
+        stem: sq.stem,
+        choices: sq.choices,
+        unit: sq.qtype === "numeric" ? (sq.choices.find((c) => c.key === "unit")?.text ?? null) : null,
+        multiSelect: sq.qtype === "mcq_multi",
+        answer: savedAnswers[sq.id] ?? null,
+      })),
+    };
+  }
+
+  return {
+    attempt_question_id: r.attempt_question_id,
+    position: r.position,
+    stem: r.stem_snapshot,
+    qtype: r.qtype,
+    choices: isMcqLike ? order.map((k) => byKey.get(k)!).filter(Boolean) : [],
+    unit: r.qtype === "numeric" ? (allChoices.find((c) => c.key === "unit")?.text ?? null) : null,
+    marked_for_review: r.marked_for_review,
+    answer: r.qtype === "scenario" ? null : r.answer_json ? JSON.parse(r.answer_json) : null,
+    multiSelect: r.qtype === "mcq_multi",
+    matchingLeft,
+    matchingRight,
+    orderingItems,
+    scenario,
+  };
+}
+
 export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
   const rows = getDb()
     .prepare(
@@ -234,78 +315,47 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
        WHERE aq.attempt_id = ?
        ORDER BY aq.position`
     )
-    .all(attemptId) as {
-    attempt_question_id: number;
-    position: number;
-    choices_order_json: string;
-    marked_for_review: number;
-    stem_snapshot: string;
-    choices_snapshot_json: string;
-    correct_answer_snapshot: string;
-    answer_json: string | null;
-    qtype: string;
-  }[];
+    .all(attemptId) as unknown as SnapshotSourceRow[];
 
-  return rows.map((r) => {
-    const allChoices: { key: string; text: string }[] = JSON.parse(r.choices_snapshot_json);
-    const order: string[] = r.choices_order_json ? JSON.parse(r.choices_order_json) : allChoices.map((c) => c.key);
-    const byKey = new Map(allChoices.map((c) => [c.key, c]));
-    const isMcqLike = r.qtype === "mcq_single" || r.qtype === "mcq_multi" || r.qtype === "true_false";
+  return rows.map(mapSnapshotRowToCandidateView);
+}
 
-    let matchingLeft: { key: string; text: string }[] = [];
-    let matchingRight: { key: string; text: string }[] = [];
-    if (r.qtype === "matching") {
-      // Un même mélange global (choices_order_json) partitionné par
-      // préfixe de clé conserve un ordre indépendant et uniforme sur
-      // chaque côté — voir MatchingAnswerSpec pour la preuve.
-      matchingLeft = order.filter((k) => k.startsWith("L")).map((k) => byKey.get(k)!).filter(Boolean);
-      matchingRight = order.filter((k) => k.startsWith("R")).map((k) => byKey.get(k)!).filter(Boolean);
-    }
+/** Mode APERÇU (mission §20-26) — aucune tentative réelle n'existe encore :
+ * lit directement assessment_question_snapshots (jamais attempt_questions/
+ * attempt_answers, qui n'existent qu'après un vrai démarrage de tentative
+ * via startAttempt()). Réutilise EXACTEMENT mapSnapshotRowToCandidateView,
+ * donc la même garantie qu'aucune correctAnswer ne quitte jamais le
+ * serveur avant notation. attempt_question_id est synthétique (l'id de
+ * snapshot lui-même, négatif pour ne jamais collisionner avec un vrai id
+ * de attempt_questions si jamais comparé par erreur) — jamais un ID réel,
+ * puisqu'aucune ligne attempt_questions n'existe pour cet aperçu.
+ * choices_order_json est toujours NULL ici (ordre naturel du snapshot,
+ * jamais mélangé) — l'aperçu montre la STRUCTURE de la question, pas une
+ * preuve d'anti-triche par mélange, hors sujet en mode aperçu. */
+export function getPreviewQuestions(assessmentId: number): AttemptQuestionView[] {
+  const rows = getDb()
+    .prepare(
+      `SELECT s.id AS snapshot_id, s.position, s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot, q.qtype
+       FROM assessment_question_snapshots s
+       JOIN questions q ON q.id = s.question_id
+       WHERE s.assessment_id = ?
+       ORDER BY s.position`
+    )
+    .all(assessmentId) as { snapshot_id: number; position: number; stem_snapshot: string; choices_snapshot_json: string; correct_answer_snapshot: string; qtype: string }[];
 
-    let orderingItems: { key: string; text: string }[] = [];
-    if (r.qtype === "ordering") {
-      orderingItems = order.map((k) => byKey.get(k)!).filter(Boolean);
-    }
-
-    let scenario: ScenarioCandidateView | null = null;
-    if (r.qtype === "scenario") {
-      const spec = JSON.parse(r.correct_answer_snapshot) as {
-        context: string;
-        documentRef?: string;
-        subquestions: { id: string; qtype: string; stem: string; choices: { key: string; text: string }[] }[];
-      };
-      const savedAnswers = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
-      scenario = {
-        context: spec.context,
-        documentRef: spec.documentRef ?? null,
-        subquestions: spec.subquestions.map((sq) => ({
-          id: sq.id,
-          qtype: sq.qtype,
-          stem: sq.stem,
-          choices: sq.choices,
-          unit: sq.qtype === "numeric" ? (sq.choices.find((c) => c.key === "unit")?.text ?? null) : null,
-          multiSelect: sq.qtype === "mcq_multi",
-          answer: savedAnswers[sq.id] ?? null,
-        })),
-      };
-    }
-
-    return {
-      attempt_question_id: r.attempt_question_id,
+  return rows.map((r) =>
+    mapSnapshotRowToCandidateView({
+      attempt_question_id: -r.snapshot_id,
       position: r.position,
-      stem: r.stem_snapshot,
+      choices_order_json: null,
+      marked_for_review: 0,
+      stem_snapshot: r.stem_snapshot,
+      choices_snapshot_json: r.choices_snapshot_json,
+      correct_answer_snapshot: r.correct_answer_snapshot,
+      answer_json: null,
       qtype: r.qtype,
-      choices: isMcqLike ? order.map((k) => byKey.get(k)!).filter(Boolean) : [],
-      unit: r.qtype === "numeric" ? (allChoices.find((c) => c.key === "unit")?.text ?? null) : null,
-      marked_for_review: r.marked_for_review,
-      answer: r.qtype === "scenario" ? null : r.answer_json ? JSON.parse(r.answer_json) : null,
-      multiSelect: r.qtype === "mcq_multi",
-      matchingLeft,
-      matchingRight,
-      orderingItems,
-      scenario,
-    };
-  });
+    })
+  );
 }
 
 /** Revérifie l'expiration côté serveur à CHAQUE appel (§8 : le timer ne

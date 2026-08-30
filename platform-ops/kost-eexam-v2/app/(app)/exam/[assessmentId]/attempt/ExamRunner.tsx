@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { Flag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { saveAnswerAction, saveScenarioSubanswerAction, toggleMarkAction, submitAttemptAction, type ActionResult } from "./actions";
+import { Timer } from "./Timer";
+import { AutosaveIndicator } from "./AutosaveIndicator";
+import { QuestionNavigator } from "./QuestionNavigator";
 
 interface ChoiceView {
   key: string;
@@ -69,6 +72,7 @@ export function ExamRunner({
   attemptId,
   assessmentId,
   expiresAt,
+  durationMinutes,
   questionCount,
   initialQuestions,
   assessmentName,
@@ -76,6 +80,7 @@ export function ExamRunner({
   attemptId: number;
   assessmentId: number;
   expiresAt: string;
+  durationMinutes: number;
   questionCount: number;
   initialQuestions: RunnerQuestion[];
   assessmentName: string;
@@ -313,7 +318,9 @@ export function ExamRunner({
         <div className="rounded-lg border border-border-subtle bg-surface-raised p-5 shadow-sm">
           <h1 className="mb-1 font-display text-[16px] font-semibold text-text-primary">Résumé de l&apos;examen</h1>
           <p className="mb-4 text-[12.5px] text-text-tertiary">{assessmentName}</p>
-          <dl className="grid grid-cols-3 gap-3 text-[13px]">
+          {/* Mission §38 — 4 cartes-résumé (Répondues/Sans réponse/À
+              revoir/Temps restant), jamais seulement les 3 premières. */}
+          <dl className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-4">
             <div className="rounded-md bg-surface-sunken p-3 text-center">
               <dt className="text-text-tertiary">Questions répondues</dt>
               <dd className="mt-1 text-[18px] font-semibold text-status-verified-text">{answeredCount} / {questionCount}</dd>
@@ -325,6 +332,10 @@ export function ExamRunner({
             <div className="rounded-md bg-surface-sunken p-3 text-center">
               <dt className="text-text-tertiary">Marquées à revoir</dt>
               <dd className="mt-1 text-[18px] font-semibold text-status-warning-text">{markedCount}</dd>
+            </div>
+            <div className="rounded-md bg-surface-sunken p-3 text-center">
+              <dt className="text-text-tertiary">Temps restant</dt>
+              <dd className={cn("mt-1 font-mono text-[18px] font-semibold", low ? "text-status-critical-text" : "text-text-primary")}>{formatTime(remainingMs)}</dd>
             </div>
           </dl>
 
@@ -364,40 +375,26 @@ export function ExamRunner({
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-4">
-      <div className="flex items-center justify-between rounded-md border border-border-subtle bg-surface-raised px-4 py-3">
+      {/* Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30)
+          §37 — mode focus : uniquement la marque KOST (déjà posée par
+          ConsoleShell au niveau du layout, jamais dupliquée ici), le nom
+          de l'examen, le chronomètre, la progression et le statut
+          d'enregistrement — jamais de navigation admin exposée à un
+          candidat sur cette page (elle n'existe structurellement pas
+          ici, ExamRunner ne rend jamais la barre latérale). */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border-subtle bg-surface-raised px-4 py-3">
         <div>
           <p className="text-[13px] font-medium text-text-primary">{assessmentName}</p>
           <p className="text-[11.5px] text-text-tertiary">Question {index + 1} / {questionCount}</p>
         </div>
-        <div className={cn("rounded-md px-3 py-1.5 font-mono text-[16px] font-semibold", low ? "bg-status-critical-bg text-status-critical-text" : "bg-accent-soft-bg text-accent-11")}>
-          {formatTime(remainingMs)}
-        </div>
+        <Timer remainingMs={remainingMs} totalMs={durationMinutes * 60 * 1000} />
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
-        {questions.map((q, i) => {
-          const answered = isQuestionAnswered(q);
-          return (
-            <button
-              key={q.attempt_question_id}
-              onClick={() => setIndex(i)}
-              title={answered ? "Répondue" : "Sans réponse"}
-              className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-md text-[12px] font-medium border",
-                i === index
-                  ? "border-accent-9 bg-accent-9 text-white"
-                  : q.marked_for_review
-                    ? "border-status-warning-border bg-status-warning-bg text-status-warning-text"
-                    : answered
-                      ? "border-status-verified-border bg-status-verified-bg text-status-verified-text"
-                      : "border-border-default text-text-tertiary"
-              )}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-      </div>
+      <QuestionNavigator
+        items={questions.map((q) => ({ id: q.attempt_question_id, answered: isQuestionAnswered(q), markedForReview: !!q.marked_for_review }))}
+        currentIndex={index}
+        onSelect={setIndex}
+      />
 
       <div data-testid="exam-question-card" data-qtype={current.qtype} className="rounded-lg border border-border-subtle bg-surface-raised p-5 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3">
@@ -671,9 +668,9 @@ export function ExamRunner({
           </div>
         )}
 
-        <p className="mt-2 text-[11px] text-text-tertiary">
-          {saveStatus === "saving" ? "Enregistrement…" : saveStatus === "saved" ? "Enregistré" : saveStatus === "error" ? "Erreur d'enregistrement" : ""}
-        </p>
+        <div className="mt-2">
+          <AutosaveIndicator status={saveStatus} />
+        </div>
       </div>
 
       {error && <p className="text-[12.5px] text-status-critical-text">{error}</p>}

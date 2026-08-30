@@ -20,6 +20,7 @@ export default async function AttemptPage({ params }: { params: Promise<{ assess
       attemptId={attempt.id}
       assessmentId={assessment.id}
       expiresAt={attempt.expires_at}
+      durationMinutes={assessment.duration_minutes}
       questionCount={questions.length}
       initialQuestions={questions}
       assessmentName={assessment.name}

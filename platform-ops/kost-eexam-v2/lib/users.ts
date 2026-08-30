@@ -335,6 +335,30 @@ export function hardDeleteUser(userId: number): void {
     throw new Error("Cet utilisateur possède un historique d'examen et ne peut pas être supprimé définitivement. Vous pouvez archiver son compte.");
   }
   const db = getDb();
+
+  // Capturé AVANT suppression : la "plomberie" Particulier dédiée
+  // (provisionParticulierAccess, lib/user-affiliation.ts — company.
+  // client_type='particulier', un groupe "Session individuelle" nommé
+  // d'après le candidat lui-même) dont ce compte est l'UNIQUE membre.
+  // Bug réel trouvé en E2E (2026-08-30, mission "ADMIN/CLIENT/CANDIDATE UX
+  // IMPROVEMENTS") : cette plomberie n'était jamais nettoyée par
+  // hardDeleteUser (qui ne supprimait que la ligne users), et restait
+  // affichée indéfiniment dans les sélecteurs "Groupe" admin (ex. "Delete
+  // Safe {tag} — Session individuelle") après suppression définitive du
+  // candidat. Un Particulier a toujours EXACTEMENT un groupe dédié 1:1
+  // (jamais partagé), donc "unique membre" identifie sans ambiguïté la
+  // plomberie devenue orpheline.
+  const plumbing = db
+    .prepare(
+      `SELECT c.id AS company_id
+       FROM group_members gm
+       JOIN groups g ON g.id = gm.group_id
+       JOIN companies c ON c.id = g.company_id
+       WHERE gm.candidate_user_id = ? AND c.client_type = 'particulier'
+         AND (SELECT COUNT(*) FROM group_members gm2 WHERE gm2.group_id = g.id) = 1`
+    )
+    .all(userId) as { company_id: number }[];
+
   db.exec("BEGIN IMMEDIATE");
   try {
     db.prepare(`UPDATE notification_log SET user_id = NULL WHERE user_id = ?`).run(userId);
@@ -344,5 +368,26 @@ export function hardDeleteUser(userId: number): void {
   } catch (err) {
     db.exec("ROLLBACK");
     throw err;
+  }
+
+  // Nettoyage "best effort" de la plomberie devenue orpheline —
+  // délibérément APRÈS le COMMIT ci-dessus et dans sa PROPRE transaction :
+  // la suppression du compte, déjà validée et actée, ne doit jamais être
+  // remise en cause par ce nettoyage secondaire (ex. un examen brouillon
+  // référencerait encore ce groupe → violation de contrainte FK). La
+  // suppression de `companies` cascade vers `groups` puis `group_members`
+  // (ON DELETE CASCADE, lib/schema.sql) — un seul DELETE suffit.
+  for (const p of plumbing) {
+    try {
+      db.exec("BEGIN IMMEDIATE");
+      db.prepare(`DELETE FROM companies WHERE id = ?`).run(p.company_id);
+      db.exec("COMMIT");
+    } catch {
+      db.exec("ROLLBACK");
+      // Une dépendance imprévue (ex. examen référençant encore ce groupe)
+      // bloque le nettoyage : on laisse la plomberie orpheline plutôt que
+      // de faire échouer quoi que ce soit — la suppression du compte reste
+      // acquise ci-dessus.
+    }
   }
 }

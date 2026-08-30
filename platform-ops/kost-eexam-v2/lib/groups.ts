@@ -17,16 +17,22 @@ export interface GroupRow {
 
 export function listGroups(scopes?: Scope[]): (GroupRow & { company_name: string; member_count: number })[] {
   const db = getDb();
-  const scopeClause = scopes && scopes.length ? `WHERE g.scope IN (${scopes.map(() => "?").join(",")})` : "";
+  const clauses: string[] = [];
+  const params: string[] = [];
+  if (scopes && scopes.length > 0) {
+    clauses.push(`g.scope IN (${scopes.map(() => "?").join(",")})`);
+    params.push(...scopes);
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   return db
     .prepare(
       `SELECT g.*, c.name AS company_name,
               (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
-       ${scopeClause}
+       ${where}
        ORDER BY g.created_at DESC`
     )
-    .all(...(scopes ?? [])) as unknown as (GroupRow & { company_name: string; member_count: number })[];
+    .all(...params) as unknown as (GroupRow & { company_name: string; member_count: number })[];
 }
 
 export function getGroup(id: number): (GroupRow & { company_name: string }) | undefined {

@@ -22,12 +22,25 @@ const STATUS_BADGE: Record<string, "verified" | "warning" | "critical" | "neutra
 
 interface ExamManagementSearchParams {
   groupId?: string;
-  companyId?: string;
-  functionCode?: string;
-  status?: string;
-  type?: string;
-  dateFrom?: string;
-  dateTo?: string;
+  // Bug réel trouvé en E2E (2026-08-30) : le formulaire de CRÉATION
+  // (CreateAssessmentForm) utilise déjà les noms de champ groupId/
+  // functionCode/type — les réutiliser tels quels pour ce NOUVEAU
+  // formulaire de filtre produisait deux éléments id="groupId" (etc.) sur
+  // la même page, un vrai bug HTML/accessibilité (id dupliqué, jamais
+  // seulement "le test casse"), et cassait un sélecteur E2E qui supposait
+  // — légitimement, avant cette mission — un seul groupId sur la page.
+  // "groupId" reste RÉSERVÉ à la présélection du formulaire de création
+  // (voir app/(app)/groups/[id]/page.tsx, qui déep-link vers
+  // /exam-preparation?groupId=... avec exactement cette sémantique
+  // établie) — jamais réutilisé pour le filtre, qui prend systématiquement
+  // le préfixe "filter".
+  filterCompanyId?: string;
+  filterGroupId?: string;
+  filterFunctionCode?: string;
+  filterStatus?: string;
+  filterType?: string;
+  filterDateFrom?: string;
+  filterDateTo?: string;
   q?: string;
 }
 
@@ -50,19 +63,19 @@ export default async function ExamPreparationPage({ searchParams }: { searchPara
   const canWrite = session.role !== "auditor";
 
   const filters: ExamManagementFilters = {
-    companyId: sp.companyId ? Number(sp.companyId) : undefined,
-    groupId: sp.groupId ? Number(sp.groupId) : undefined,
-    functionCode: sp.functionCode || undefined,
-    status: sp.status || undefined,
-    type: (sp.type as ExamManagementFilters["type"]) || undefined,
-    dateFrom: sp.dateFrom || undefined,
-    dateTo: sp.dateTo || undefined,
+    companyId: sp.filterCompanyId ? Number(sp.filterCompanyId) : undefined,
+    groupId: sp.filterGroupId ? Number(sp.filterGroupId) : undefined,
+    functionCode: sp.filterFunctionCode || undefined,
+    status: sp.filterStatus || undefined,
+    type: (sp.filterType as ExamManagementFilters["type"]) || undefined,
+    dateFrom: sp.filterDateFrom || undefined,
+    dateTo: sp.filterDateTo || undefined,
     search: sp.q || undefined,
   };
   const assessments = listAssessmentsWithFilters(filters, isManager ? session.userId : undefined);
   const stats = getAssignmentStatsByAssessment();
 
-  const anyFilterActive = Boolean(sp.companyId || sp.groupId || sp.functionCode || sp.status || sp.type || sp.dateFrom || sp.dateTo || sp.q);
+  const anyFilterActive = Boolean(sp.filterCompanyId || sp.filterGroupId || sp.filterFunctionCode || sp.filterStatus || sp.filterType || sp.filterDateFrom || sp.filterDateTo || sp.q);
 
   return (
     <div className="flex flex-col gap-6">
@@ -84,29 +97,29 @@ export default async function ExamPreparationPage({ searchParams }: { searchPara
             <input id="q" name="q" defaultValue={sp.q ?? ""} placeholder="Nom de l'examen…" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
           </div>
           <div>
-            <label htmlFor="companyId" className="mb-1 block text-[12px] font-medium text-text-secondary">Client</label>
-            <select id="companyId" name="companyId" defaultValue={sp.companyId ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <label htmlFor="filterCompanyId" className="mb-1 block text-[12px] font-medium text-text-secondary">Client</label>
+            <select id="filterCompanyId" name="filterCompanyId" defaultValue={sp.filterCompanyId ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
               <option value="">Tous</option>
               {companies.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
             </select>
           </div>
           <div>
-            <label htmlFor="groupId" className="mb-1 block text-[12px] font-medium text-text-secondary">Groupe</label>
-            <select id="groupId" name="groupId" defaultValue={sp.groupId ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <label htmlFor="filterGroupId" className="mb-1 block text-[12px] font-medium text-text-secondary">Groupe</label>
+            <select id="filterGroupId" name="filterGroupId" defaultValue={sp.filterGroupId ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
               <option value="">Tous</option>
               {groups.map((g) => (<option key={g.id} value={g.id}>{g.company_name} — {g.name}</option>))}
             </select>
           </div>
           <div>
-            <label htmlFor="functionCode" className="mb-1 block text-[12px] font-medium text-text-secondary">Fonction DGR</label>
-            <select id="functionCode" name="functionCode" defaultValue={sp.functionCode ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <label htmlFor="filterFunctionCode" className="mb-1 block text-[12px] font-medium text-text-secondary">Fonction DGR</label>
+            <select id="filterFunctionCode" name="filterFunctionCode" defaultValue={sp.filterFunctionCode ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
               <option value="">Toutes</option>
               {functions.map((f) => (<option key={f.code} value={f.code}>{f.code}</option>))}
             </select>
           </div>
           <div>
-            <label htmlFor="status" className="mb-1 block text-[12px] font-medium text-text-secondary">Statut</label>
-            <select id="status" name="status" defaultValue={sp.status ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <label htmlFor="filterStatus" className="mb-1 block text-[12px] font-medium text-text-secondary">Statut</label>
+            <select id="filterStatus" name="filterStatus" defaultValue={sp.filterStatus ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
               <option value="">Tous</option>
               <option value="draft">Brouillon</option>
               <option value="published">Publié</option>
@@ -117,8 +130,8 @@ export default async function ExamPreparationPage({ searchParams }: { searchPara
             </select>
           </div>
           <div>
-            <label htmlFor="type" className="mb-1 block text-[12px] font-medium text-text-secondary">Type</label>
-            <select id="type" name="type" defaultValue={sp.type ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <label htmlFor="filterType" className="mb-1 block text-[12px] font-medium text-text-secondary">Type</label>
+            <select id="filterType" name="filterType" defaultValue={sp.filterType ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
               <option value="">Tous</option>
               <option value="exercice">Exercice</option>
               <option value="test">Test</option>
@@ -126,12 +139,12 @@ export default async function ExamPreparationPage({ searchParams }: { searchPara
             </select>
           </div>
           <div>
-            <label htmlFor="dateFrom" className="mb-1 block text-[12px] font-medium text-text-secondary">Créé du</label>
-            <input type="date" id="dateFrom" name="dateFrom" defaultValue={sp.dateFrom ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+            <label htmlFor="filterDateFrom" className="mb-1 block text-[12px] font-medium text-text-secondary">Créé du</label>
+            <input type="date" id="filterDateFrom" name="filterDateFrom" defaultValue={sp.filterDateFrom ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
           </div>
           <div>
-            <label htmlFor="dateTo" className="mb-1 block text-[12px] font-medium text-text-secondary">Au</label>
-            <input type="date" id="dateTo" name="dateTo" defaultValue={sp.dateTo ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+            <label htmlFor="filterDateTo" className="mb-1 block text-[12px] font-medium text-text-secondary">Au</label>
+            <input type="date" id="filterDateTo" name="filterDateTo" defaultValue={sp.filterDateTo ?? ""} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
           </div>
           <div className="flex items-end gap-3">
             <button type="submit" className="rounded-md bg-brand-accent px-3.5 py-1.5 text-[13px] font-medium text-white hover:opacity-90">

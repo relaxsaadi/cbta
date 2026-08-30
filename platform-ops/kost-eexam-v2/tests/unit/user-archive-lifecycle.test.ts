@@ -215,6 +215,28 @@ describe("Archivage / restauration / suppression définitive (mission COMPLETE U
     assert.equal(after.n, 0);
   });
 
+  // --- N. hardDeleteUser() nettoie la "plomberie" Particulier orpheline (bug réel trouvé en E2E, 2026-08-30) ---
+  test("N — supprimer un Particulier nettoie sa plomberie (company/groupe dédiés) devenue orpheline, sans toucher celle d'un AUTRE Particulier actif", async () => {
+    const t = tag();
+    const { provisionParticulierAccess } = await import("../../lib/user-affiliation");
+    const adminId = createUser({ username: `${t}.admin2`, password: "x".repeat(10), fullName: "Admin", role: "administrator" });
+
+    const deletedId = createUser({ username: `${t}.solo`, password: "x".repeat(10), fullName: `Delete Safe ${t}`, role: "candidate" });
+    const { companyId: deletedCompanyId, groupId: deletedGroupId } = provisionParticulierAccess(deletedId, `Delete Safe ${t}`, adminId, "test");
+
+    const keptId = createUser({ username: `${t}.kept`, password: "x".repeat(10), fullName: `Keep Me ${t}`, role: "candidate" });
+    const { companyId: keptCompanyId, groupId: keptGroupId } = provisionParticulierAccess(keptId, `Keep Me ${t}`, adminId, "test");
+
+    hardDeleteUser(deletedId);
+
+    assert.equal(getDb().prepare(`SELECT 1 FROM companies WHERE id = ?`).get(deletedCompanyId), undefined, "l'entreprise plomberie orpheline est supprimée");
+    assert.equal(getDb().prepare(`SELECT 1 FROM groups WHERE id = ?`).get(deletedGroupId), undefined, "le groupe plomberie orphelin est supprimé (cascade)");
+
+    assert.ok(getDb().prepare(`SELECT 1 FROM companies WHERE id = ?`).get(keptCompanyId), "la plomberie d'un AUTRE Particulier actif n'est jamais touchée");
+    assert.ok(getDb().prepare(`SELECT 1 FROM groups WHERE id = ?`).get(keptGroupId), "le groupe d'un AUTRE Particulier actif n'est jamais touché");
+    assert.ok(findUserById(keptId), "l'autre Particulier reste actif");
+  });
+
   // --- M. hardDeleteUser() re-vérifie lui-même la sécurité — un appelant ne peut jamais contourner canHardDeleteUser() ---
   test("M — hardDeleteUser() revérifie lui-même la sécurité (defense in depth), même si l'appelant ne l'a pas fait", () => {
     const t = tag();

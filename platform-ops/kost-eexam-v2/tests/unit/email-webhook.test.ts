@@ -150,3 +150,168 @@ describe("applyWebhookEvent — progression de statut MONOTONE, jamais de régre
     assert.equal(first.status, second.status);
   });
 });
+
+// Mission "MISSION DE FERMETURE" (2026-08-30) §3 — extension de la
+// politique de précédence monotone à TOUS les états terminaux
+// (bounced/complained/failed n'avaient jusqu'ici AUCUNE garde, contraire
+// à sent/delivered/delivery_delayed déjà protégés). Couvre exactement les
+// 6 séquences hors-ordre exigées par la mission + le cas "doublon d'un
+// même événement TERMINAL" (distinct du doublon 'delivered' déjà testé
+// plus haut) + le cas "événement terminal inhabituel arrivant après un
+// autre état terminal déjà enregistré" (ex. bounced après delivered).
+describe("applyWebhookEvent — précédence terminale étendue (bounced/complained/failed), idempotence, séquences hors-ordre (mission « fermeture », 2026-08-30)", async () => {
+  let db: ReturnType<typeof import("../../lib/db").getDb>;
+
+  // Pas de nouvel appel à setupTestDb() ici : getDb() est un singleton
+  // MODULE-LEVEL (lib/db.ts) — un second appel à setupTestDb() dans le
+  // MÊME fichier de test réutiliserait la connexion déjà ouverte par le
+  // `before` du describe précédent (celui-ci s'exécute en premier, ordre
+  // séquentiel par défaut de node:test pour des describe de premier
+  // niveau) et retenterait d'insérer les rôles/fonctions de référence en
+  // double → violation de contrainte UNIQUE (bug réel rencontré en
+  // écrivant ces tests). On réutilise donc simplement la connexion déjà
+  // initialisée par le describe "applyWebhookEvent — progression de
+  // statut..." ci-dessus.
+  before(async () => {
+    db = (await import("../../lib/db")).getDb();
+  });
+
+  function makeNotification(idempotencyKey: string, providerMessageId: string, initialStatus = "SENT") {
+    const r = db
+      .prepare(
+        `INSERT INTO notification_log (recipient_email, event_type, template_id, template_version, subject, idempotency_key, status, provider_message_id, created_at)
+         VALUES ('candidate-terminal@example.com', 'ACCOUNT_CREATED', 'test', 'v1', 'Test', ?, ?, ?, strftime('%Y-%m-%dT%H:%M:%fZ','now'))`
+      )
+      .run(idempotencyKey, initialStatus, providerMessageId);
+    return Number(r.lastInsertRowid);
+  }
+
+  function status(id: number): string {
+    return (db.prepare(`SELECT status FROM notification_log WHERE id = ?`).get(id) as { status: string }).status;
+  }
+
+  function auditCount(action: string, targetId: number): number {
+    return (db.prepare(`SELECT COUNT(*) n FROM audit_logs WHERE action = ? AND target_type = 'notification_log' AND target_id = ?`).get(action, targetId) as { n: number }).n;
+  }
+
+  function isSuppressed(email: string): boolean {
+    return Boolean(db.prepare(`SELECT 1 FROM email_suppressions WHERE email = ?`).get(email.toLowerCase()));
+  }
+
+  // --- Les 6 séquences hors-ordre explicitement exigées par la mission ---
+
+  test("séquence 'delivered → sent' — 'sent' tardif ne régresse jamais un DELIVERED (régression déjà couverte ci-dessus, reconfirmée ici avec la nouvelle politique élargie)", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const id = makeNotification("seq-delivered-sent", "msg-seq-1");
+    applyWebhookEvent("email.delivered", "msg-seq-1");
+    assert.equal(status(id), "DELIVERED");
+    const res = applyWebhookEvent("email.sent", "msg-seq-1");
+    assert.equal(status(id), "DELIVERED");
+    assert.equal(res.applied, false);
+    assert.equal(res.reason, "stale_or_duplicate_event");
+  });
+
+  test("séquence 'bounced → sent' — 'sent' tardif ne régresse jamais un BOUNCED", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const id = makeNotification("seq-bounced-sent", "msg-seq-2");
+    applyWebhookEvent("email.bounced", "msg-seq-2");
+    assert.equal(status(id), "BOUNCED");
+    const res = applyWebhookEvent("email.sent", "msg-seq-2");
+    assert.equal(status(id), "BOUNCED", "un 'sent' tardif ne doit jamais régresser un BOUNCED déjà enregistré");
+    assert.equal(res.applied, false);
+  });
+
+  test("séquence 'failed → sent' — 'sent' tardif ne régresse jamais un FAILED", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const id = makeNotification("seq-failed-sent", "msg-seq-3");
+    applyWebhookEvent("email.failed", "msg-seq-3");
+    assert.equal(status(id), "FAILED");
+    const res = applyWebhookEvent("email.sent", "msg-seq-3");
+    assert.equal(status(id), "FAILED");
+    assert.equal(res.applied, false);
+  });
+
+  test("séquence 'complained → delivered' — 'delivered' tardif ne régresse jamais un COMPLAINED", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const id = makeNotification("seq-complained-delivered", "msg-seq-4");
+    applyWebhookEvent("email.complained", "msg-seq-4");
+    assert.equal(status(id), "COMPLAINED");
+    const res = applyWebhookEvent("email.delivered", "msg-seq-4");
+    assert.equal(status(id), "COMPLAINED");
+    assert.equal(res.applied, false);
+  });
+
+  test("séquence 'delivery_delayed → sent' — bug réel de cette mission : un 'sent' tardif effaçait auparavant l'information DELAYED (aucune garde n'excluait DELAYED du cas 'sent')", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const id = makeNotification("seq-delayed-sent", "msg-seq-5");
+    applyWebhookEvent("email.delivery_delayed", "msg-seq-5");
+    assert.equal(status(id), "DELAYED");
+    const res = applyWebhookEvent("email.sent", "msg-seq-5");
+    assert.equal(status(id), "DELAYED", "un 'sent' tardif ne doit jamais effacer un DELAYED déjà connu (DELAYED est strictement plus informatif)");
+    assert.equal(res.applied, false);
+  });
+
+  test("doublon d'un événement TERMINAL (bounced rejoué deux fois) — idempotent : statut/bounced_at inchangés, UNE SEULE entrée d'audit, suppression toujours présente une seule fois", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const email = "duplicate-bounce@example.com";
+    const r = db
+      .prepare(
+        `INSERT INTO notification_log (recipient_email, event_type, template_id, template_version, subject, idempotency_key, status, provider_message_id, created_at)
+         VALUES (?, 'ACCOUNT_CREATED', 'test', 'v1', 'Test', 'seq-bounce-dup', 'SENT', 'msg-seq-6', strftime('%Y-%m-%dT%H:%M:%fZ','now'))`
+      )
+      .run(email);
+    const id = Number(r.lastInsertRowid);
+
+    applyWebhookEvent("email.bounced", "msg-seq-6");
+    const firstBouncedAt = (db.prepare(`SELECT bounced_at FROM notification_log WHERE id = ?`).get(id) as { bounced_at: string }).bounced_at;
+    assert.equal(status(id), "BOUNCED");
+    assert.equal(auditCount("notification_bounced", id), 1);
+    assert.ok(isSuppressed(email));
+
+    // Rejoué (webhook Resend "au moins une fois", retry légitime) — ne
+    // doit RIEN changer de plus, en particulier jamais une 2e entrée
+    // d'audit pour le même évènement déjà traité.
+    const res = applyWebhookEvent("email.bounced", "msg-seq-6");
+    assert.equal(res.applied, false, "un doublon exact ne doit pas se prétendre 'appliqué' une seconde fois");
+    assert.equal(status(id), "BOUNCED");
+    const secondBouncedAt = (db.prepare(`SELECT bounced_at FROM notification_log WHERE id = ?`).get(id) as { bounced_at: string }).bounced_at;
+    assert.equal(firstBouncedAt, secondBouncedAt, "bounced_at ne doit jamais être re-timestampé par un doublon");
+    assert.equal(auditCount("notification_bounced", id), 1, "jamais une 2e entrée d'audit pour un doublon du même évènement");
+  });
+
+  // --- Cas explicitement demandé par la mission : "définir ce qui se
+  // passe si le fournisseur envoie un événement terminal inhabituel après
+  // 'delivered'" — décision documentée en tête de lib/email/webhook.ts :
+  // le PREMIER état terminal gagne définitivement pour la colonne status,
+  // mais la liste de suppression reste mise à jour (protège les PROCHAINS
+  // envois, jamais cette ligne déjà figée). ---
+  test("événement terminal inhabituel après DELIVERED (ex. bounced tardif) — status reste DELIVERED (premier terminal gagné), MAIS la liste de suppression est quand même mise à jour pour protéger les prochains envois", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const email = "late-bounce-after-delivered@example.com";
+    const r = db
+      .prepare(
+        `INSERT INTO notification_log (recipient_email, event_type, template_id, template_version, subject, idempotency_key, status, provider_message_id, created_at)
+         VALUES (?, 'ACCOUNT_CREATED', 'test', 'v1', 'Test', 'seq-late-bounce', 'SENT', 'msg-seq-7', strftime('%Y-%m-%dT%H:%M:%fZ','now'))`
+      )
+      .run(email);
+    const id = Number(r.lastInsertRowid);
+
+    applyWebhookEvent("email.delivered", "msg-seq-7");
+    assert.equal(status(id), "DELIVERED");
+    assert.equal(isSuppressed(email), false);
+
+    const res = applyWebhookEvent("email.bounced", "msg-seq-7");
+    assert.equal(status(id), "DELIVERED", "le PREMIER état terminal (DELIVERED) reste enregistré, jamais écrasé par un 'bounced' tardif");
+    assert.equal(res.applied, false, "la colonne status elle-même n'est pas considérée 'appliquée' — cohérent avec la politique documentée");
+    assert.ok(isSuppressed(email), "la liste de suppression protège quand même les PROCHAINS envois à cette adresse, même si CETTE ligne reste figée sur DELIVERED");
+    assert.equal(auditCount("notification_bounced", id), 0, "aucune entrée d'audit 'notification_bounced' quand le statut n'a pas réellement changé");
+  });
+
+  test("SUPPRESSED reste protégé — un 'delivered' ne réactive jamais une ligne délibérément mise en SUPPRESSED (EMAIL_MODE=allowlist)", async () => {
+    const { applyWebhookEvent } = await import("../../lib/email/webhook");
+    const id = makeNotification("seq-suppressed-delivered", "msg-seq-8", "SUPPRESSED");
+    const res = applyWebhookEvent("email.delivered", "msg-seq-8");
+    assert.equal(status(id), "SUPPRESSED");
+    assert.equal(res.applied, false);
+  });
+});

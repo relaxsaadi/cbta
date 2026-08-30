@@ -35,6 +35,10 @@ export default async function UsersPage({
 }: {
   searchParams: Promise<{ role?: string; status?: string; type?: string; companyId?: string; groupId?: string; functionCode?: string; q?: string }>;
 }) {
+  // Politique produit délibérée, pas un oubli — ADMIN ONLY, confirmée par
+  // deux audits transversaux (2026-08-30). Voir la justification complète
+  // (ce que le responsable pédagogique gère déjà dans son propre périmètre
+  // vs. ce qui reste administrateur) sur lib/tenant-scope.ts::hasUserAccess().
   await guardPage("administrator");
   const { role, status, type, companyId, groupId, functionCode, q } = await searchParams;
 

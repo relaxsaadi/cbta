@@ -486,8 +486,16 @@ test("cycle complet — les 8 types de question dans un seul examen démo, y com
   await page.waitForURL(/\/mes-resultats\?justSubmitted=/);
 
   // --- La sous-question manuelle du scénario bloque le résultat final ---
-  await expect(page.getByText("Votre examen a bien été envoyé et nécessite une correction avant la publication du résultat.")).toBeVisible();
-  await expect(page.getByText("En attente de correction", { exact: true })).toBeVisible();
+  // Ancré sur `examName` (jamais une recherche pleine page) : candidat3.demo
+  // est PARTAGÉ avec scenario-i/scenario-m (voir ces fichiers) — le test
+  // d'auto-soumission de scenario-m y laisse un résultat résiduel
+  // AWAITING_MANUAL_REVIEW dont le message de carte et le badge "En
+  // attente de correction" sont IDENTIQUES (texte générique, jamais
+  // spécifique à un examen), rendant ces deux sélecteurs non déterministes
+  // sans portée explicite — jamais un vrai bug produit.
+  const pendingRow = page.locator("div.rounded-md.border").filter({ hasText: examName });
+  await expect(pendingRow.getByText("Votre examen a bien été envoyé et nécessite une correction avant la publication du résultat.")).toBeVisible();
+  await expect(pendingRow.getByText("En attente de correction", { exact: true })).toBeVisible();
 
   // --- Un administrateur corrige la sous-question manuelle via /grading ---
   await logout(page);

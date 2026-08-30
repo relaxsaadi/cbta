@@ -158,14 +158,35 @@ export function scopedUserIdsForSessionsOrNull(session: ScopeSession): number[] 
   return [session.userId, ...getManagedCandidateUserIds(session.userId)];
 }
 
-/** Mission "COMPLETE USER MANAGEMENT" (2026-08-29) — frontière pour
+/** Mission "COMPLETE USER MANAGEMENT" (2026-08-29) — frontière PRÉVUE pour
  * /users et sa fiche détaillée : un responsable pédagogique ne doit
  * jamais voir/agir sur un compte hors de son périmètre — ni un autre
  * membre du staff, ni un candidat "Particulier" pas encore affecté à l'un
- * de ses groupes (ce dernier n'a par définition PAS ENCORE de tenant
- * assignable ; seul un administrator peut le voir avant affectation).
- * Réutilise getManagedCandidateUserIds() — jamais une requête réimplémentée
- * localement dans les Server Actions de /users. */
+ * de ses groupes. Réutilise getManagedCandidateUserIds() — jamais une
+ * requête réimplémentée localement dans les Server Actions de /users.
+ *
+ * DÉCISION DE POLITIQUE PRODUIT, PAS UN OUBLI (confirmée et documentée
+ * lors de deux audits transversaux indépendants, 2026-08-30) :
+ * `/users`, `/users/nouveau` et `/users/[id]` restent **ADMIN ONLY**
+ * (`guardPage("administrator")`, `requireWriteRole("administrator")` sur
+ * chaque action) — un responsable pédagogique n'atteint AUCUNE de ces
+ * routes aujourd'hui, quel que soit le compte ciblé, y compris DANS son
+ * propre périmètre. Cette fonction reste donc du CODE MORT (zéro
+ * appelant dans tout le dépôt, vérifié par grep les deux fois) — conservée
+ * volontairement plutôt que supprimée, en cas d'ouverture future de
+ * /users au rôle responsable pédagogique.
+ *
+ * Le responsable pédagogique gère déjà, dans son propre périmètre
+ * tenant : /companies, /groups (créer un groupe, ajouter/retirer un
+ * candidat — y compris CRÉER le compte candidat via « Ajouter un
+ * candidat »), /exam-preparation (créer/publier/reprogrammer un examen),
+ * /grading (corriger une réponse en attente). Aucun flux produit existant
+ * n'a été identifié qui nécessiterait, en plus, l'administration
+ * SENSIBLE d'un compte (édition libre de tous les champs, suspension/
+ * archivage/suppression définitive, changement d'identifiant,
+ * réinitialisation MFA, affiliation cross-tenant) — cette administration
+ * reste donc, par choix, strictement administrateur. Ne pas élargir sans
+ * décision explicite du propriétaire de la plateforme. */
 export function hasUserAccess(session: ScopeSession, targetUserId: number): boolean {
   if (session.role !== "pedagogical_manager") return true;
   return getManagedCandidateUserIds(session.userId).includes(targetUserId);

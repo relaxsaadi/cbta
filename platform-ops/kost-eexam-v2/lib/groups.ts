@@ -55,6 +55,81 @@ export function listGroupsForManager(userId: number): (GroupRow & { company_name
     .all(userId) as unknown as (GroupRow & { company_name: string; member_count: number })[];
 }
 
+export interface GroupsFilter {
+  companyId?: number;
+  /** companies.client_type — 'entreprise' | 'particulier'. */
+  clientType?: string;
+  status?: "active" | "closed";
+  /** Aucune colonne function_code directe sur `groups` — relation réelle
+   * mais INDIRECTE via les examens du groupe (assessments.group_id +
+   * .function_code). "Function DGR where group/function relationship
+   * exists" (mission "COMPLETE MISSING FILTERS", 2026-08-30 §6) : ce
+   * EXISTS reflète cette relation réelle, n'invente rien. */
+  functionCode?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+  /** Frontière multi-client — vient de la session serveur (jamais d'un
+   * paramètre client), même garde que listGroupsForManager(). */
+  restrictToManagerId?: number;
+}
+
+/** Version filtrée/à plat pour /groups (§6) — s'ajoute à listGroups() et
+ * listGroupsForManager() ci-dessus, ne les remplace pas (utilisées ailleurs
+ * telles quelles pour peupler des <select> de formulaire, jamais touchées
+ * ici pour éviter toute régression sur ces usages existants). Toutes les
+ * clauses sont ET, même discipline que lib/results.ts::listResults. */
+export function listGroupsFiltered(filter: GroupsFilter = {}): (GroupRow & { company_name: string; member_count: number })[] {
+  const db = getDb();
+  const clauses: string[] = [];
+  const params: (string | number)[] = [];
+
+  if (filter.restrictToManagerId !== undefined) {
+    clauses.push(`g.pedagogical_manager_id = ?`);
+    params.push(filter.restrictToManagerId);
+  }
+  if (filter.companyId) {
+    clauses.push(`g.company_id = ?`);
+    params.push(filter.companyId);
+  }
+  if (filter.clientType) {
+    clauses.push(`c.client_type = ?`);
+    params.push(filter.clientType);
+  }
+  if (filter.status) {
+    clauses.push(`g.status = ?`);
+    params.push(filter.status);
+  }
+  if (filter.functionCode) {
+    clauses.push(`EXISTS (SELECT 1 FROM assessments a WHERE a.group_id = g.id AND a.function_code = ?)`);
+    params.push(filter.functionCode);
+  }
+  if (filter.dateFrom) {
+    clauses.push(`g.date_start >= ?`);
+    params.push(filter.dateFrom);
+  }
+  if (filter.dateTo) {
+    clauses.push(`g.date_start <= ?`);
+    params.push(filter.dateTo);
+  }
+  if (filter.search) {
+    clauses.push(`(LOWER(g.name) LIKE ? OR LOWER(c.name) LIKE ?)`);
+    const needle = `%${filter.search.toLowerCase()}%`;
+    params.push(needle, needle);
+  }
+
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  return db
+    .prepare(
+      `SELECT g.*, c.name AS company_name,
+              (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) AS member_count
+       FROM groups g JOIN companies c ON c.id = g.company_id
+       ${where}
+       ORDER BY g.created_at DESC`
+    )
+    .all(...params) as unknown as (GroupRow & { company_name: string; member_count: number })[];
+}
+
 export function createGroup(params: {
   companyId: number;
   name: string;

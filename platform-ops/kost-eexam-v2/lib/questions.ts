@@ -402,6 +402,110 @@ export function listQuestionsByFunction(functionCode: string): (QuestionRow & { 
     .all(functionCode) as unknown as (QuestionRow & { stem: string })[];
 }
 
+// Mission "NORMALIZE QUESTION COUNTS + QUESTION BANK FILTERS" (2026-08-30) —
+// classification RÉGLEMENTAIRE / DEMO-DRAFT. Signal AUTORITATIF : le préfixe
+// "DEMO-" du kost_question_id, jamais source_status seul. Aujourd'hui les
+// deux coïncident exactement (244 FROZEN_SOURCE_VERIFIED, 8 DRAFT = les 8
+// DEMO-*), mais source_status seul ne suffirait pas à long terme : une VRAIE
+// question réglementaire en cours de vérification peut légitimement être
+// DRAFT/PARTIAL/STALE/SOURCE_GAP/SOURCE_CONFLICT/NOT_ATTEMPTED — elle reste
+// réglementaire (en cours), jamais un exemple DEMO créé pour tester les 8
+// types de question. Se fier au préfixe d'identifiant (choix d'auteurage
+// délibéré et stable, jamais recalculé) évite de mal classer ce cas futur.
+export function isDemoQuestionId(kostQuestionId: string): boolean {
+  return kostQuestionId.startsWith("DEMO-");
+}
+
+export interface QuestionListFilter {
+  functionCode?: string;
+  qtype?: QType;
+  sourceStatus?: SourceStatus;
+  reviewerStatus?: "PENDING" | "APPROVED" | "REJECTED";
+  /** "regulatory" = kost_question_id ne commence PAS par "DEMO-" ; "demo" =
+   * commence par "DEMO-". Jamais les deux mélangés dans un même filtre. */
+  classification?: "regulatory" | "demo";
+  active?: boolean;
+  search?: string;
+}
+
+export type QuestionListRow = QuestionRow & { stem: string; is_demo: number };
+
+/** Liste filtrée à plat pour /question-bank (§3-5 de la mission) — jamais
+ * utilisée pour le tirage de production (voir isAdmissibleWhereClause plus
+ * haut, fonction séparée, non touchée ici). Toutes les clauses sont ET
+ * (jamais OR) — même discipline que lib/results.ts::listResults et
+ * lib/user-directory.ts::listUsers. */
+export function listQuestions(filter: QuestionListFilter = {}): QuestionListRow[] {
+  const db = getDb();
+  const clauses: string[] = [];
+  const params: (string | number)[] = [];
+
+  if (filter.functionCode) {
+    clauses.push(`q.function_code = ?`);
+    params.push(filter.functionCode);
+  }
+  if (filter.qtype) {
+    clauses.push(`q.qtype = ?`);
+    params.push(filter.qtype);
+  }
+  if (filter.sourceStatus) {
+    clauses.push(`q.source_status = ?`);
+    params.push(filter.sourceStatus);
+  }
+  if (filter.reviewerStatus) {
+    clauses.push(`q.reviewer_status = ?`);
+    params.push(filter.reviewerStatus);
+  }
+  if (filter.classification === "demo") {
+    clauses.push(`q.kost_question_id LIKE 'DEMO-%'`);
+  } else if (filter.classification === "regulatory") {
+    clauses.push(`q.kost_question_id NOT LIKE 'DEMO-%'`);
+  }
+  if (filter.active !== undefined) {
+    clauses.push(`q.active = ?`);
+    params.push(filter.active ? 1 : 0);
+  }
+  if (filter.search) {
+    clauses.push(`(LOWER(q.kost_question_id) LIKE ? OR LOWER(COALESCE(qv.stem, '')) LIKE ? OR LOWER(COALESCE(q.regulatory_reference, '')) LIKE ?)`);
+    const needle = `%${filter.search.toLowerCase()}%`;
+    params.push(needle, needle, needle);
+  }
+
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  return db
+    .prepare(
+      `SELECT q.*, qv.stem, (CASE WHEN q.kost_question_id LIKE 'DEMO-%' THEN 1 ELSE 0 END) AS is_demo
+       FROM questions q
+       LEFT JOIN question_versions qv ON qv.id = q.current_version_id
+       ${where}
+       ORDER BY q.function_code, q.kost_question_id`
+    )
+    .all(...params) as unknown as QuestionListRow[];
+}
+
+export interface QuestionCountsByClassification {
+  regulatory: number;
+  demo: number;
+  total: number;
+}
+
+/** Compteurs globaux pour l'en-tête UI (§2 de la mission) — jamais présenter
+ * "252 questions réglementaires" alors que seules 244 sont
+ * FROZEN_SOURCE_VERIFIED/non-DEMO. */
+export function countQuestionsByClassification(): QuestionCountsByClassification {
+  const db = getDb();
+  const row = db
+    .prepare(
+      `SELECT
+         SUM(CASE WHEN kost_question_id NOT LIKE 'DEMO-%' THEN 1 ELSE 0 END) AS regulatory,
+         SUM(CASE WHEN kost_question_id LIKE 'DEMO-%' THEN 1 ELSE 0 END) AS demo,
+         COUNT(*) AS total
+       FROM questions`
+    )
+    .get() as { regulatory: number | null; demo: number | null; total: number };
+  return { regulatory: row.regulatory ?? 0, demo: row.demo ?? 0, total: row.total };
+}
+
 export function getQuestionVersion(versionId: number): QuestionVersionRow | undefined {
   return getDb().prepare(`SELECT * FROM question_versions WHERE id = ?`).get(versionId) as QuestionVersionRow | undefined;
 }

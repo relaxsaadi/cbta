@@ -49,6 +49,83 @@ export function listFamiliarizationSessions(restrictToGroupIdsOrNull: number[] |
     .all(...(restrictToGroupIdsOrNull ?? [])) as unknown as FamiliarizationSessionWithContext[];
 }
 
+export interface FamiliarizationFilter {
+  companyId?: number;
+  groupId?: number;
+  functionCode?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+  restrictToGroupIdsOrNull?: number[] | null;
+}
+
+/** Version filtrée pour /familiarisation (§11). Pas de filtre Candidat/
+ * Rôle/Statut au niveau de CETTE liste : une session de familiarisation
+ * porte sur un GROUPE entier (une ligne de présence PAR candidat du
+ * groupe, table familiarization_attendance — granularité différente, déjà
+ * consultable dans le détail d'une session via
+ * app/(app)/familiarisation/[id]/page.tsx, jamais dupliquée ici). Inventer
+ * un filtre Candidat/Statut à ce niveau produirait "une session contient
+ * au moins un candidat correspondant", une sémantique différente et non
+ * demandée — voir §14/§6 "do not invent relationships that do not exist".
+ * "Rôle" n'a pas non plus de colonne réelle correspondante sur une session
+ * (organized_by est une personne, pas un rôle stocké séparément). */
+export function listFamiliarizationSessionsFiltered(filter: FamiliarizationFilter = {}): FamiliarizationSessionWithContext[] {
+  const db = getDb();
+  const clauses: string[] = [];
+  const params: (string | number)[] = [];
+
+  const restrict = filter.restrictToGroupIdsOrNull;
+  if (restrict !== undefined) {
+    if (restrict === null) {
+      // pas de restriction (administrator/auditor)
+    } else if (restrict.length === 0) {
+      return [];
+    } else {
+      clauses.push(`fs.group_id IN (${restrict.map(() => "?").join(",")})`);
+      params.push(...restrict);
+    }
+  }
+  if (filter.companyId) {
+    clauses.push(`c.id = ?`);
+    params.push(filter.companyId);
+  }
+  if (filter.groupId) {
+    clauses.push(`fs.group_id = ?`);
+    params.push(filter.groupId);
+  }
+  if (filter.functionCode) {
+    clauses.push(`fs.function_code = ?`);
+    params.push(filter.functionCode);
+  }
+  if (filter.dateFrom) {
+    clauses.push(`fs.held_at >= ?`);
+    params.push(`${filter.dateFrom}T00:00:00.000Z`);
+  }
+  if (filter.dateTo) {
+    clauses.push(`fs.held_at <= ?`);
+    params.push(`${filter.dateTo}T23:59:59.999Z`);
+  }
+  if (filter.search) {
+    clauses.push(`(LOWER(g.name) LIKE ? OR LOWER(c.name) LIKE ? OR LOWER(COALESCE(fs.location, '')) LIKE ?)`);
+    const needle = `%${filter.search.toLowerCase()}%`;
+    params.push(needle, needle, needle);
+  }
+
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  return db
+    .prepare(
+      `SELECT fs.*, g.name AS group_name, c.name AS company_name, u.full_name AS organizer_name
+       FROM familiarization_sessions fs
+       JOIN groups g ON g.id = fs.group_id
+       JOIN companies c ON c.id = g.company_id
+       LEFT JOIN users u ON u.id = fs.organized_by
+       ${where}
+       ORDER BY fs.held_at DESC`
+    )
+    .all(...params) as unknown as FamiliarizationSessionWithContext[];
+}
+
 export function getFamiliarizationSession(id: number): FamiliarizationSessionWithContext | undefined {
   return getDb()
     .prepare(

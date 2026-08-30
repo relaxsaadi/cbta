@@ -63,6 +63,80 @@ export function getIncident(id: number): IncidentRow | undefined {
   return getDb().prepare(`SELECT * FROM incidents WHERE id = ?`).get(id) as IncidentRow | undefined;
 }
 
+export interface IncidentsFilter {
+  status?: IncidentStatus;
+  severity?: IncidentSeverity;
+  companyId?: number;
+  groupId?: number;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+  /** Frontière multi-client — vient TOUJOURS de la session serveur (jamais
+   * d'un paramètre client), même garde que listIncidents() ci-dessus :
+   * `null` = pas de restriction (administrator/auditor) ; un tableau (même
+   * vide) restreint aux incidents plateforme (group_id NULL) unis à ceux
+   * des groupes listés. */
+  restrictToGroupIdsOrNull?: number[] | null;
+}
+
+/** Version filtrée pour /incidents (§9). Pas de filtre "Assessment/exam" :
+ * `incidents` n'a aucune colonne assessment_id (le lien à un examen
+ * n'existe qu'au niveau d'une ACTION ponctuelle — incident_actions de type
+ * suspend_assessment/reopen_assessment — jamais une propriété stable de
+ * l'incident lui-même) ; l'inventer produirait une relation qui n'existe
+ * pas réellement à ce niveau. */
+export function listIncidentsFiltered(filter: IncidentsFilter = {}): IncidentRow[] {
+  const db = getDb();
+  const clauses: string[] = [];
+  const params: (string | number)[] = [];
+
+  const restrict = filter.restrictToGroupIdsOrNull;
+  if (restrict !== undefined && restrict !== null) {
+    if (restrict.length === 0) {
+      clauses.push(`i.group_id IS NULL`);
+    } else {
+      clauses.push(`(i.group_id IS NULL OR i.group_id IN (${restrict.map(() => "?").join(",")}))`);
+      params.push(...restrict);
+    }
+  }
+  if (filter.status) {
+    clauses.push(`i.status = ?`);
+    params.push(filter.status);
+  }
+  if (filter.severity) {
+    clauses.push(`i.severity = ?`);
+    params.push(filter.severity);
+  }
+  if (filter.companyId) {
+    // Un client donné ne concerne que les incidents de SES groupes —
+    // jamais les incidents plateforme (group_id NULL) quand ce filtre
+    // précis est actif : l'utilisateur a explicitement demandé "ce
+    // client", pas "ce client + tout le reste".
+    clauses.push(`i.group_id IN (SELECT id FROM groups WHERE company_id = ?)`);
+    params.push(filter.companyId);
+  }
+  if (filter.groupId) {
+    clauses.push(`i.group_id = ?`);
+    params.push(filter.groupId);
+  }
+  if (filter.dateFrom) {
+    clauses.push(`i.occurred_at >= ?`);
+    params.push(`${filter.dateFrom}T00:00:00.000Z`);
+  }
+  if (filter.dateTo) {
+    clauses.push(`i.occurred_at <= ?`);
+    params.push(`${filter.dateTo}T23:59:59.999Z`);
+  }
+  if (filter.search) {
+    clauses.push(`(LOWER(i.type) LIKE ? OR LOWER(i.description) LIKE ?)`);
+    const needle = `%${filter.search.toLowerCase()}%`;
+    params.push(needle, needle);
+  }
+
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  return db.prepare(`SELECT * FROM incidents i ${where} ORDER BY i.created_at DESC`).all(...params) as unknown as IncidentRow[];
+}
+
 export function declareIncident(params: {
   type: string;
   severity: IncidentSeverity;

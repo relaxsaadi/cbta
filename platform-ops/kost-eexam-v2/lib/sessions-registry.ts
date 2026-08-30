@@ -103,6 +103,70 @@ export function listActiveSessions(
     .all(nowIso(), ...(restrictToUserIdsOrNull ?? [])) as unknown as (SessionRow & { username: string; full_name: string; role: string | null })[];
 }
 
+export interface ActiveSessionsFilter {
+  role?: string;
+  search?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  restrictToUserIdsOrNull?: number[] | null;
+}
+
+/** Version filtrée pour /sessions (§10 — "active/auth sessions" confirmé
+ * par lecture de app/(app)/sessions/page.tsx). Pas de filtre "Statut" :
+ * cette liste ne contient PAR CONSTRUCTION que des sessions actives
+ * (revoked_at IS NULL AND expires_at > maintenant, voir listActiveSessions
+ * ci-dessus) — un filtre Statut n'aurait qu'une seule valeur possible,
+ * donc rien de réel à filtrer (inventer un "Actif/Révoqué" ici afficherait
+ * un contrôle qui ne fait jamais rien, l'inverse de l'objectif de cette
+ * mission). Jamais de token/secret exposé — mêmes colonnes que
+ * listActiveSessions, jamais session_token_hash. `dateFrom`/`dateTo`
+ * filtrent sur l'ouverture (created_at), cohérent avec la colonne
+ * "Ouverte" déjà affichée. */
+export function listActiveSessionsFiltered(
+  filter: ActiveSessionsFilter = {}
+): (SessionRow & { username: string; full_name: string; role: string | null })[] {
+  const db = getDb();
+  const clauses: string[] = [`s.revoked_at IS NULL`, `s.expires_at > ?`];
+  const params: (string | number)[] = [nowIso()];
+
+  const restrict = filter.restrictToUserIdsOrNull;
+  if (restrict !== undefined && restrict !== null) {
+    if (restrict.length === 0) return [];
+    clauses.push(`s.user_id IN (${restrict.map(() => "?").join(",")})`);
+    params.push(...restrict);
+  }
+  if (filter.role) {
+    clauses.push(
+      `(SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id LIMIT 1) = ?`
+    );
+    params.push(filter.role);
+  }
+  if (filter.dateFrom) {
+    clauses.push(`s.created_at >= ?`);
+    params.push(`${filter.dateFrom}T00:00:00.000Z`);
+  }
+  if (filter.dateTo) {
+    clauses.push(`s.created_at <= ?`);
+    params.push(`${filter.dateTo}T23:59:59.999Z`);
+  }
+  if (filter.search) {
+    clauses.push(`(LOWER(u.full_name) LIKE ? OR LOWER(u.username) LIKE ?)`);
+    const needle = `%${filter.search.toLowerCase()}%`;
+    params.push(needle, needle);
+  }
+
+  return db
+    .prepare(
+      `SELECT s.*, u.username, u.full_name,
+              (SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id LIMIT 1) AS role
+       FROM sessions s
+       JOIN users u ON u.id = s.user_id
+       WHERE ${clauses.join(" AND ")}
+       ORDER BY s.last_seen_at DESC`
+    )
+    .all(...params) as unknown as (SessionRow & { username: string; full_name: string; role: string | null })[];
+}
+
 export function listSessionsForUser(userId: number): SessionRow[] {
   return getDb()
     .prepare(`SELECT * FROM sessions WHERE user_id = ? ORDER BY created_at DESC`)

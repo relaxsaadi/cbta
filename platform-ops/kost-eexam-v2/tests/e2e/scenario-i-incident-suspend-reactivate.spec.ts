@@ -46,9 +46,14 @@ test("suspendre un compte via un incident bloque réellement la connexion, réac
   await candidatePage.waitForURL((url) => !url.pathname.startsWith("/login"));
 
   // Journal d'audit — les deux actions doivent être tracées, insert-only.
+  // getByRole('cell', ...) plutôt que getByText : le panneau de filtres
+  // (mission "COMPLETE MISSING FILTERS", 2026-08-30) ajoute un <select>
+  // Action dont chaque <option> porte le même texte que le nom d'action —
+  // un getByText nu matcherait aussi cette <option>, jamais visible dans
+  // un <select> fermé (violation du mode strict).
   await adminPage.goto("/audit-logs");
-  await expect(adminPage.getByText("incident_action_suspend_account")).toBeVisible();
-  await expect(adminPage.getByText("incident_action_reactivate_account")).toBeVisible();
+  await expect(adminPage.getByRole("cell", { name: "incident_action_suspend_account", exact: true })).toBeVisible();
+  await expect(adminPage.getByRole("cell", { name: "incident_action_reactivate_account", exact: true })).toBeVisible();
 
   await adminContext.close();
   await candidateContext.close();

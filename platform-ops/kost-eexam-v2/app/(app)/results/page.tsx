@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
-import { listResults, listCandidateOptions } from "@/lib/results";
+import { listResults, listCandidateOptions, type ResultsFilter } from "@/lib/results";
 import { listCompanies, listCompaniesForManager } from "@/lib/companies";
 import { listGroups, listGroupsForManager } from "@/lib/groups";
 import { listAssessments, listAssessmentsForManager } from "@/lib/assessments";
@@ -31,6 +31,11 @@ interface ResultsSearchParams {
   candidateUserId?: string;
   dateFrom?: string;
   dateTo?: string;
+  // Mission "FINAL FILTERS ACCEPTANCE GATE" (2026-08-30) §7 — voir
+  // lib/results.ts::ResultsFilter["status"] pour la justification
+  // complète (mêmes 5 états EXACTS que statusLabel() ci-dessous, jamais
+  // une seconde classification divergente).
+  status?: string;
 }
 
 export default async function ResultsPage({
@@ -63,6 +68,7 @@ export default async function ResultsPage({
     candidateUserId: sp.candidateUserId ? Number(sp.candidateUserId) : undefined,
     dateFrom: sp.dateFrom || undefined,
     dateTo: sp.dateTo || undefined,
+    status: (sp.status as ResultsFilter["status"]) || undefined,
     restrictToGroupIds: restrictToGroupIds ?? undefined,
   });
 
@@ -75,6 +81,7 @@ export default async function ResultsPage({
   if (sp.candidateUserId) qs.set("candidateUserId", sp.candidateUserId);
   if (sp.dateFrom) qs.set("dateFrom", sp.dateFrom);
   if (sp.dateTo) qs.set("dateTo", sp.dateTo);
+  if (sp.status) qs.set("status", sp.status);
 
   return (
     <div className="flex flex-col gap-6">
@@ -136,6 +143,17 @@ export default async function ResultsPage({
             </select>
           </div>
           <div>
+            <label htmlFor="status" className="mb-1 block text-[12px] font-medium text-text-secondary">Statut</label>
+            <select id="status" name="status" defaultValue={sp.status ?? ""} className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+              <option value="">Tous</option>
+              <option value="en_cours">En cours</option>
+              <option value="a_corriger">À corriger</option>
+              <option value="resultat_disponible">Résultat disponible</option>
+              <option value="abandonne">Abandonné</option>
+              <option value="termine">Terminé</option>
+            </select>
+          </div>
+          <div>
             <label htmlFor="dateFrom" className="mb-1 block text-[12px] font-medium text-text-secondary">Du</label>
             <input type="date" id="dateFrom" name="dateFrom" defaultValue={sp.dateFrom ?? ""} className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
           </div>
@@ -144,7 +162,7 @@ export default async function ResultsPage({
             <input type="date" id="dateTo" name="dateTo" defaultValue={sp.dateTo ?? ""} className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
           </div>
           <button type="submit" className="rounded-md bg-accent-9 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-accent-10">Filtrer</button>
-          {(sp.functionCode || sp.passed || sp.companyId || sp.groupId || sp.assessmentId || sp.candidateUserId || sp.dateFrom || sp.dateTo) && (
+          {(sp.functionCode || sp.passed || sp.companyId || sp.groupId || sp.assessmentId || sp.candidateUserId || sp.dateFrom || sp.dateTo || sp.status) && (
             <Link href="/results" className="text-[12.5px] font-medium text-text-tertiary hover:text-text-secondary">Réinitialiser</Link>
           )}
         </form>

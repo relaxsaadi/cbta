@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
 import { getCompany } from "@/lib/companies";
-import { listGroups } from "@/lib/groups";
+import { listGroups, listGroupsForManager } from "@/lib/groups";
 import { hasCompanyAccess } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -20,7 +20,16 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
   // deviné appartenant à un autre client).
   if (!company || !hasCompanyAccess(session, company.id)) notFound();
 
-  const groups = listGroups().filter((g) => g.company_id === company.id);
+  // Bug de frontière trouvé lors de l'audit filtres (§21) : hasCompanyAccess
+  // autorise un responsable dès qu'il gère AU MOINS UN groupe de ce client
+  // (lib/tenant-scope.ts), mais un même client peut avoir des groupes
+  // répartis entre plusieurs responsables. listGroups() non filtré exposait
+  // donc les groupes (noms, effectifs) d'un AUTRE responsable dans ce même
+  // client — même correction que /groups/page.tsx.
+  const isManager = session.role === "pedagogical_manager";
+  const groups = (isManager ? listGroupsForManager(session.userId) : listGroups()).filter(
+    (g) => g.company_id === company.id
+  );
 
   return (
     <div className="flex flex-col gap-6">

@@ -12,6 +12,18 @@ export interface ResultsFilter {
    * format "YYYY-MM-DD", bornes inclusives). */
   dateFrom?: string;
   dateTo?: string;
+  /** Mission "FINAL FILTERS ACCEPTANCE GATE" (2026-08-30) §7 — filtre
+   * "Statut" jamais exposé jusqu'ici alors que le concept existait déjà
+   * (colonne d'affichage calculée, app/(app)/results/page.tsx::
+   * statusLabel()) : les 5 mêmes états EXACTS, jamais une seconde
+   * classification divergente. "termine" et "abandonne" restent
+   * distincts (comme statusLabel() les distingue déjà) même si le
+   * premier est rare en pratique — la notation étant synchrone
+   * (submitAttempt() → gradeAttempt()), une tentative "submitted" sans
+   * ligne `results` associée à AWAITING_MANUAL_REVIEW/COMPLETE ne devrait
+   * normalement jamais exister, mais ce filtre reste fidèle à la logique
+   * d'affichage réelle plutôt que de supposer ce cas impossible. */
+  status?: "en_cours" | "a_corriger" | "resultat_disponible" | "abandonne" | "termine";
   scopes?: Scope[];
   /** Frontière multi-client (lib/tenant-scope.ts) — calculée côté serveur
    * à partir de la session, JAMAIS depuis un paramètre fourni par le
@@ -132,6 +144,16 @@ export function listResults(filter: ResultsFilter = {}): ResultsRow[] {
   if (filter.dateTo) {
     clauses.push("at.started_at <= ?");
     params.push(`${filter.dateTo}T23:59:59.999Z`);
+  }
+  if (filter.status) {
+    // Même logique EXACTE que statusLabel() (app/(app)/results/page.tsx) —
+    // jamais une seconde classification divergente de ce qui est déjà
+    // affiché à l'écran.
+    if (filter.status === "en_cours") clauses.push(`at.status = 'in_progress'`);
+    else if (filter.status === "a_corriger") clauses.push(`r.grading_state = 'AWAITING_MANUAL_REVIEW'`);
+    else if (filter.status === "resultat_disponible") clauses.push(`r.grading_state = 'COMPLETE'`);
+    else if (filter.status === "abandonne") clauses.push(`at.status = 'abandoned'`);
+    else if (filter.status === "termine") clauses.push(`at.status != 'in_progress' AND at.status != 'abandoned' AND r.grading_state IS NULL`);
   }
   if (filter.scopes && filter.scopes.length) {
     clauses.push(`a.scope IN (${filter.scopes.map(() => "?").join(",")})`);

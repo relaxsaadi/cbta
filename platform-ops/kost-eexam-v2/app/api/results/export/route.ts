@@ -1,5 +1,5 @@
 import { requireRole } from "@/lib/rbac";
-import { listResults } from "@/lib/results";
+import { listResults, type ResultsFilter } from "@/lib/results";
 import { toCsv, RESULTS_CSV_COLUMNS } from "@/lib/csv";
 import { getDb, nowIso } from "@/lib/db";
 import { audit } from "@/lib/audit";
@@ -33,6 +33,7 @@ export async function GET(request: Request) {
     passed: searchParams.get("passed") === "true" ? true : searchParams.get("passed") === "false" ? false : undefined,
     dateFrom: searchParams.get("dateFrom") || undefined,
     dateTo: searchParams.get("dateTo") || undefined,
+    status: (searchParams.get("status") as ResultsFilter["status"]) || undefined,
     restrictToGroupIds: scopedGroupIdsOrNull(session) ?? undefined,
   });
 

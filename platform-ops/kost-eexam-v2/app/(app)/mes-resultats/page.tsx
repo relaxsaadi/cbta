@@ -1,7 +1,8 @@
 import { guardPage } from "@/lib/rbac";
 import { listResults, getAttemptDetail, type ResultsRow } from "@/lib/results";
 import { getAssessmentSettingsForAttempt } from "@/lib/attempts";
-import { formatCorrectAnswerForDisplay } from "@/lib/questions";
+import { formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } from "@/lib/questions";
+import { gradeOneQuestion } from "@/lib/grading";
 import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -133,12 +134,42 @@ function ResultCard({ result }: { result: ResultsRow }) {
           <summary className="cursor-pointer text-[12.5px] font-medium text-accent-9">Voir la correction complète</summary>
           <div className="mt-2 flex flex-col gap-2">
             {detail.questions.map((q) => {
+              // Mission "MISSION FINALE CIBLÉE" (2026-08-30) — un scénario
+              // se déroule par sous-question (jamais une seule ligne
+              // "Votre réponse", qui perdrait le détail des 8 types).
+              if (q.qtype === "scenario") {
+                const spec = q.correctAnswer as { context: string; subquestions: { id: string; qtype: string; stem: string; points: number; choices: { key: string; text: string }[]; correctAnswer: unknown }[] };
+                const given = (q.candidateAnswer ?? {}) as Record<string, string[]>;
+                return (
+                  <div key={q.position} className="rounded border border-border-subtle p-2.5 text-[12.5px]">
+                    <p className="font-medium text-text-primary">Q{q.position}. {q.stem}</p>
+                    <p className="mb-1.5 mt-1 whitespace-pre-wrap text-text-tertiary">{spec.context}</p>
+                    <div className="flex flex-col gap-1.5">
+                      {spec.subquestions.map((sq, sqi) => {
+                        const manualVerdict = q.scenarioGrading?.[sq.id];
+                        const subAnswer = given[sq.id];
+                        const auto = manualVerdict ? null : gradeOneQuestion(sq.qtype, JSON.stringify(sq.correctAnswer), subAnswer ? JSON.stringify(subAnswer) : null);
+                        const pending = !manualVerdict && auto?.pending;
+                        const subIsCorrect = manualVerdict ? manualVerdict.isCorrect : auto?.isCorrect;
+                        const subCorrectText = formatCorrectAnswerForDisplay(sq.qtype, sq.correctAnswer, sq.choices);
+                        return (
+                          <p key={sq.id} className="text-text-secondary">
+                            Q{sqi + 1}. Votre réponse : {formatCandidateAnswerForDisplay(sq.qtype, subAnswer ?? null, sq.choices)} {pending ? "(en attente de correction)" : subIsCorrect ? "✓" : "✗"}
+                            {!pending && !subIsCorrect && subCorrectText && <span className="text-status-verified-text"> — Bonne réponse : {subCorrectText}</span>}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+              const candidateText = formatCandidateAnswerForDisplay(q.qtype, q.candidateAnswer, q.choices);
               const correctText = formatCorrectAnswerForDisplay(q.qtype, q.correctAnswer, q.choices);
               return (
                 <div key={q.position} className="rounded border border-border-subtle p-2.5 text-[12.5px]">
                   <p className="font-medium text-text-primary">Q{q.position}. {q.stem}</p>
                   <p className="mt-1 text-text-secondary">
-                    Votre réponse : {q.candidateAnswer.join(", ") || "—"} {q.isCorrect ? "✓" : "✗"}
+                    Votre réponse : {candidateText} {q.isCorrect ? "✓" : "✗"}
                   </p>
                   {!q.isCorrect && correctText && <p className="text-status-verified-text">Bonne réponse : {correctText}</p>}
                 </div>

@@ -43,6 +43,10 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
   // gradeAttempt() (notation automatique), uniquement par submitManualGrade().
   { table: "attempt_answers", column: "graded_by", ddl: "ALTER TABLE attempt_answers ADD COLUMN graded_by INTEGER REFERENCES users(id)" },
   { table: "attempt_answers", column: "grader_comment", ddl: "ALTER TABLE attempt_answers ADD COLUMN grader_comment TEXT" },
+  // Mission "MISSION FINALE CIBLÉE" (2026-08-30) §5/§9 — progrès de
+  // correction manuelle PAR SOUS-QUESTION d'un scenario, voir lib/schema.sql
+  // pour la forme exacte et lib/manual-grading.ts::submitScenarioSubgrade.
+  { table: "attempt_answers", column: "scenario_grading_json", ddl: "ALTER TABLE attempt_answers ADD COLUMN scenario_grading_json TEXT" },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {
@@ -282,6 +286,61 @@ function migrateQuestionsQtypeCheckConstraint(db: ReturnType<typeof getDb>) {
   }
 }
 
+// Mission "MISSION FINALE CIBLÉE" (2026-08-30) — second élargissement de la
+// MÊME contrainte questions.qtype (ajoute matching/ordering/scenario).
+// Fonction SÉPARÉE de migrateQuestionsQtypeCheckConstraint ci-dessus —
+// exactement la même raison que migrateUsersArchivedStatus vs
+// migrateUsersStatusCheckConstraint plus haut : celle-ci est gardée par
+// .includes("'numeric'"), déjà vrai sur toute base migrée depuis la
+// mission précédente, elle ne se redéclencherait donc jamais pour ajouter
+// les 3 nouveaux types. Garde dédiée sur "matching" à la place.
+function migrateQuestionsQtypeCheckConstraintV2(db: ReturnType<typeof getDb>) {
+  const row = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'questions'`).get() as { sql: string } | undefined;
+  if (!row || row.sql.includes("'matching'")) return;
+
+  db.exec("PRAGMA foreign_keys = OFF");
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.exec(`
+      CREATE TABLE questions_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        kost_question_id TEXT NOT NULL UNIQUE,
+        function_code TEXT NOT NULL REFERENCES functions(code),
+        subtask TEXT,
+        qtype TEXT NOT NULL DEFAULT 'mcq_single' CHECK (qtype IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')),
+        language TEXT NOT NULL DEFAULT 'fr',
+        source_status TEXT NOT NULL DEFAULT 'NOT_ATTEMPTED' CHECK (source_status IN
+          ('FROZEN_SOURCE_VERIFIED','DRAFT','PARTIAL','STALE','SOURCE_GAP','SOURCE_CONFLICT','NOT_ATTEMPTED')),
+        regulatory_reference TEXT,
+        reviewer_status TEXT NOT NULL DEFAULT 'PENDING' CHECK (reviewer_status IN ('PENDING','APPROVED','REJECTED')),
+        review_date TEXT,
+        verification_date TEXT,
+        current_version_id INTEGER,
+        active INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+        created_by INTEGER REFERENCES users(id),
+        updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+      );
+    `);
+    // Colonnes explicites des deux côtés — jamais SELECT * (voir l'incident
+    // réel documenté au-dessus de migrateUsersStatusCheckConstraint).
+    db.exec(`
+      INSERT INTO questions_new (id, kost_question_id, function_code, subtask, qtype, language, source_status, regulatory_reference, reviewer_status, review_date, verification_date, current_version_id, active, created_at, created_by, updated_at)
+      SELECT id, kost_question_id, function_code, subtask, qtype, language, source_status, regulatory_reference, reviewer_status, review_date, verification_date, current_version_id, active, created_at, created_by, updated_at FROM questions;
+    `);
+    db.exec(`DROP TABLE questions;`);
+    db.exec(`ALTER TABLE questions_new RENAME TO questions;`);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_questions_function ON questions(function_code);`);
+    db.exec("COMMIT");
+    console.log("Contrainte questions.qtype élargie une seconde fois (matching, ordering, scenario) — toutes les questions existantes (dont les 244 confirmées) sont réinsérées à l'identique, aucune valeur modifiée.");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
 // Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §26-30/§55-57 —
 // results.passed devient NULLABLE (résultat réellement inconnu tant qu'une
 // correction manuelle est en attente, jamais un booléen fabriqué) +
@@ -341,6 +400,7 @@ function main() {
   migrateUsersStatusCheckConstraint(db);
   migrateUsersArchivedStatus(db); // doit tourner APRÈS applyAdditiveColumns (candidate_type/archived_at)
   migrateQuestionsQtypeCheckConstraint(db);
+  migrateQuestionsQtypeCheckConstraintV2(db);
   migrateResultsGradingState(db);
 
   const upsertRole = db.prepare(

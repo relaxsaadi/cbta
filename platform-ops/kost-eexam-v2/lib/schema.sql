@@ -144,11 +144,14 @@ CREATE TABLE IF NOT EXISTS questions (
   -- toujours auto-notée) et 'short_answer' (réponse courte — soit une
   -- liste explicite de réponses acceptées auto-notée par correspondance
   -- exacte normalisée, soit correction manuelle obligatoire ; jamais de
-  -- correction par IA générative/floue, voir lib/grading.ts). matching/
-  -- ordering/scenario NE SONT PAS ajoutés cette passe (portée assumée et
-  -- documentée dans le rapport final — architecture déjà extensible pour
-  -- les ajouter plus tard sans réécrire ce CHECK une seconde fois par type).
-  qtype TEXT NOT NULL DEFAULT 'mcq_single' CHECK (qtype IN ('mcq_single','mcq_multi','true_false','numeric','short_answer')),
+  -- correction par IA générative/floue, voir lib/grading.ts).
+  -- Mission "MISSION FINALE CIBLÉE" (2026-08-30) — 'matching' (appariement,
+  -- ALL_OR_NOTHING), 'ordering' (ordre/séquence, ALL_OR_NOTHING) et
+  -- 'scenario' (cas pratique : contexte + sous-questions embarquées dans
+  -- correct_answer, crédit partiel = somme des points des sous-questions,
+  -- voir lib/questions.ts::ScenarioAnswerSpec et lib/grading.ts). Les 8
+  -- types requis sont désormais tous supportés.
+  qtype TEXT NOT NULL DEFAULT 'mcq_single' CHECK (qtype IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')),
   language TEXT NOT NULL DEFAULT 'fr',
   source_status TEXT NOT NULL DEFAULT 'NOT_ATTEMPTED' CHECK (source_status IN
     ('FROZEN_SOURCE_VERIFIED','DRAFT','PARTIAL','STALE','SOURCE_GAP','SOURCE_CONFLICT','NOT_ATTEMPTED')),
@@ -305,6 +308,18 @@ CREATE TABLE IF NOT EXISTS attempt_answers (
   points_awarded REAL,
   graded_by INTEGER REFERENCES users(id),
   grader_comment TEXT,
+  -- scenario_grading_json (mission "MISSION FINALE CIBLÉE", 2026-08-30) —
+  -- UNIQUEMENT pour une ligne qtype='scenario' : progrès de correction
+  -- manuelle PAR SOUS-QUESTION, tant que la ligne reste globalement en
+  -- attente (is_correct IS NULL sur CETTE ligne). Forme :
+  -- { [subquestionId]: { isCorrect, pointsAwarded, gradedBy, comment? } }.
+  -- Alimentée uniquement par lib/manual-grading.ts::submitScenarioSubgrade
+  -- — jamais par gradeAttempt(). Une fois TOUTES les sous-questions
+  -- manuelles présentes ici, is_correct/points_awarded de CETTE ligne sont
+  -- calculés une fois pour toutes (agrégat auto + manuel) et la ligne
+  -- quitte l'état "en attente" — même sémantique NULL-jusqu'à-notation que
+  -- le short_answer autonome, appliquée au niveau de la sous-question.
+  scenario_grading_json TEXT,
   UNIQUE(attempt_question_id)
 );
 

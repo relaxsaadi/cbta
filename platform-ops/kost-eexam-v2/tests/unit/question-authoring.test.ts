@@ -119,7 +119,13 @@ describe("Auteurage de question — lib/questions.ts (parseAuthoringFormData/val
   });
 
   // ---------- type inconnu — jamais un enregistrement silencieux ----------
+  // Mission "MISSION FINALE CIBLÉE" (2026-08-30) — "matching" est
+  // désormais un type réellement supporté (voir
+  // matching-ordering-scenario-authoring.test.ts pour sa propre
+  // validation) ; ce test utilise maintenant une valeur qui ne
+  // correspondra JAMAIS à un type réel, pour continuer à couvrir
+  // exactement le même cas ("un qtype totalement inconnu").
   test("un qtype inconnu à validateQuestionAuthoring est explicitement refusé, jamais accepté par défaut", () => {
-    assert.equal(validateQuestionAuthoring("matching" as never, [], [] as never), "Type de question inconnu.");
+    assert.equal(validateQuestionAuthoring("nonexistent_type" as never, [], [] as never), "Type de question inconnu.");
   });
 });

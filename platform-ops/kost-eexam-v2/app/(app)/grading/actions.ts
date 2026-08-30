@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireWriteRole } from "@/lib/rbac";
-import { submitManualGrade, finalizeManualGradingIfComplete, ManualGradingError } from "@/lib/manual-grading";
+import { submitManualGrade, submitScenarioSubgrade, finalizeManualGradingIfComplete, ManualGradingError } from "@/lib/manual-grading";
 import { notifyResultAvailableForAttempt } from "@/lib/email/notify-result";
 import { hasAttemptAccess, assertAccess } from "@/lib/tenant-scope";
 import { getDb } from "@/lib/db";
@@ -60,6 +60,42 @@ export async function gradeAnswerAction(attemptQuestionId: number, _prev: GradeA
   // `justSubmitted` de /mes-resultats — la confirmation vient alors du
   // NOUVEAU rendu de page, jamais d'un état client sur un nœud en train
   // de disparaître.
+  revalidatePath("/grading");
+  revalidatePath(`/results/${attemptId}`);
+  redirect(`/grading?graded=1&finalized=${finalized ? "1" : "0"}`);
+}
+
+/** Mission "MISSION FINALE CIBLÉE" (2026-08-30) §5/§9-15 — même
+ * composition que gradeAnswerAction ci-dessus (submitX puis
+ * finalizeManualGradingIfComplete puis redirect avec confirmation), mais
+ * pour UNE sous-question de scénario (voir lib/manual-grading.ts::
+ * submitScenarioSubgrade — n'écrit jamais directement is_correct/
+ * points_awarded de la ligne scénario tant qu'il reste d'autres
+ * sous-questions manuelles en attente pour CE scénario). */
+export async function gradeScenarioSubAnswerAction(attemptQuestionId: number, subquestionId: string, _prev: GradeAnswerResult, formData: FormData): Promise<GradeAnswerResult> {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  const isCorrect = String(formData.get("isCorrect") ?? "") === "true";
+  const comment = String(formData.get("comment") ?? "").trim() || undefined;
+
+  const attemptRow = getDb()
+    .prepare(`SELECT at.id AS attempt_id FROM attempt_questions aq JOIN attempts at ON at.id = aq.attempt_id WHERE aq.id = ?`)
+    .get(attemptQuestionId) as { attempt_id: number } | undefined;
+  if (!attemptRow) return { error: "Réponse introuvable." };
+  assertAccess(hasAttemptAccess(session, attemptRow.attempt_id));
+
+  let attemptId: number;
+  try {
+    const result = submitScenarioSubgrade(attemptQuestionId, subquestionId, isCorrect, session.userId, session.role, comment);
+    attemptId = result.attemptId;
+  } catch (err) {
+    return { error: err instanceof ManualGradingError ? err.message : "Erreur lors de la correction." };
+  }
+
+  const { finalized } = finalizeManualGradingIfComplete(attemptId);
+  if (finalized) {
+    await notifyResultAvailableForAttempt(attemptId);
+  }
+
   revalidatePath("/grading");
   revalidatePath(`/results/${attemptId}`);
   redirect(`/grading?graded=1&finalized=${finalized ? "1" : "0"}`);

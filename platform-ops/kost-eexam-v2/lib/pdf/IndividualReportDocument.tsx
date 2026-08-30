@@ -8,7 +8,7 @@ import { Document, Page, View, Text } from "@react-pdf/renderer";
 import { pdfStyles } from "./theme";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
 import type { AttemptDetail } from "../results";
-import { formatCorrectAnswerForDisplay } from "../questions";
+import { formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } from "../questions";
 
 export function IndividualReportDocument({
   detail,
@@ -81,7 +81,7 @@ export function IndividualReportDocument({
                 <Text style={{ fontSize: 8, marginTop: 3 }}>{q.stem}</Text>
                 {(q.qtype === "mcq_single" || q.qtype === "mcq_multi" || q.qtype === "true_false") &&
                   q.choices.map((c) => {
-                    const chosen = q.candidateAnswer.includes(c.key);
+                    const chosen = (q.candidateAnswer as string[]).includes(c.key);
                     const correct = (q.correctAnswer as string[]).includes(c.key);
                     return (
                       <Text
@@ -96,10 +96,20 @@ export function IndividualReportDocument({
                   })}
                 {(q.qtype === "numeric" || q.qtype === "short_answer") && (
                   <>
-                    <Text style={pdfStyles.choiceLine}>Réponse du candidat : {q.candidateAnswer[0] || "—"}</Text>
+                    <Text style={pdfStyles.choiceLine}>Réponse du candidat : {formatCandidateAnswerForDisplay(q.qtype, q.candidateAnswer, q.choices)}</Text>
                     <Text style={[pdfStyles.choiceLine, pdfStyles.choiceCorrect]}>
                       {q.qtype === "numeric" ? "Réponse correcte" : "Réponses acceptées"} : {formatCorrectAnswerForDisplay(q.qtype, q.correctAnswer)}
                     </Text>
+                  </>
+                )}
+                {/* Mission "MISSION FINALE CIBLÉE" (2026-08-30) — matching/
+                    ordering/scenario : même paire candidat/correcte que
+                    ci-dessus, formatée par le point d'entrée unique
+                    partagé (jamais une 5e implémentation divergente). */}
+                {(q.qtype === "matching" || q.qtype === "ordering" || q.qtype === "scenario") && (
+                  <>
+                    <Text style={pdfStyles.choiceLine}>Réponse du candidat : {formatCandidateAnswerForDisplay(q.qtype, q.candidateAnswer, q.choices)}</Text>
+                    <Text style={[pdfStyles.choiceLine, pdfStyles.choiceCorrect]}>Réponse correcte : {formatCorrectAnswerForDisplay(q.qtype, q.correctAnswer, q.choices)}</Text>
                   </>
                 )}
                 {q.explanation && <Text style={{ fontSize: 7.5, marginTop: 3, color: "#5a5a5a" }}>Explication : {q.explanation}</Text>}

@@ -1,7 +1,7 @@
 "use server";
 
 import { requireRole } from "@/lib/rbac";
-import { saveAnswer, toggleMark, submitAttempt, AttemptError } from "@/lib/attempts";
+import { saveAnswer, saveScenarioSubanswer, toggleMark, submitAttempt, AttemptError } from "@/lib/attempts";
 import { getDb } from "@/lib/db";
 import { notifyResultAvailableForAttempt } from "@/lib/email/notify-result";
 import { notifySubmissionEvents } from "@/lib/email/notify-submission";
@@ -16,6 +16,21 @@ export async function saveAnswerAction(attemptId: number, attemptQuestionId: num
   const session = await requireRole("candidate");
   try {
     saveAnswer(attemptId, session.userId, attemptQuestionId, answerKeys);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof AttemptError) return { ok: false, error: err.message, expired: /écoulé/.test(err.message) };
+    throw err;
+  }
+}
+
+/** Autosave d'UNE sous-question de scénario (mission "MISSION FINALE
+ * CIBLÉE", 2026-08-30, §9) — jamais saveAnswerAction ci-dessus, qui
+ * écraserait tout answer_json du scénario au lieu de fusionner une seule
+ * sous-question (voir lib/attempts.ts::saveScenarioSubanswer). */
+export async function saveScenarioSubanswerAction(attemptId: number, attemptQuestionId: number, subquestionId: string, answerKeys: string[]): Promise<ActionResult> {
+  const session = await requireRole("candidate");
+  try {
+    saveScenarioSubanswer(attemptId, session.userId, attemptQuestionId, subquestionId, answerKeys);
     return { ok: true };
   } catch (err) {
     if (err instanceof AttemptError) return { ok: false, error: err.message, expired: /écoulé/.test(err.message) };

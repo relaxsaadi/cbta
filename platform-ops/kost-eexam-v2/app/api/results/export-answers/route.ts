@@ -1,6 +1,6 @@
 import { requireRole } from "@/lib/rbac";
 import { listResults, getAttemptDetail } from "@/lib/results";
-import { formatCorrectAnswerForDisplay } from "@/lib/questions";
+import { formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } from "@/lib/questions";
 import { toCsv, ANSWERS_CSV_COLUMNS } from "@/lib/csv";
 import { getDb, nowIso } from "@/lib/db";
 import { audit } from "@/lib/audit";
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
         exam: r.assessment_name,
         question_position: q.position,
         question_stem: q.stem,
-        candidate_answer: q.candidateAnswer.join("|"),
+        candidate_answer: formatCandidateAnswerForDisplay(q.qtype, q.candidateAnswer, q.choices),
         correct_answer: formatCorrectAnswerForDisplay(q.qtype, q.correctAnswer, q.choices),
         result: q.isCorrect === null ? "" : q.isCorrect ? "CORRECT" : "INCORRECT",
         points_awarded: q.pointsAwarded ?? "",

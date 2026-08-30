@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
 import { getAttemptDetail } from "@/lib/results";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
-import { functionLabel, formatCorrectAnswerForDisplay, QTYPE_LABELS, type QType } from "@/lib/questions";
+import { functionLabel, formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay, QTYPE_LABELS, type QType } from "@/lib/questions";
+import { gradeOneQuestion } from "@/lib/grading";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
 import { CheckCircle2, XCircle } from "lucide-react";
@@ -29,6 +30,18 @@ const STATUS_LABELS: Record<string, string> = {
   abandoned: "ABANDONNÉ",
 };
 
+/** Mission "MISSION FINALE CIBLÉE" (2026-08-30) — une question 'scenario'
+ * n'est "répondue" que si TOUTES ses sous-questions le sont (même
+ * définition qu'ExamRunner.tsx::isQuestionAnswered côté candidat). */
+function isAnswered(qtype: string, candidateAnswer: unknown): boolean {
+  if (qtype === "scenario") {
+    const given = (candidateAnswer ?? {}) as Record<string, string[]>;
+    const entries = Object.values(given);
+    return entries.length > 0 && entries.every((a) => a && a.length > 0 && a[0] !== "");
+  }
+  return Array.isArray(candidateAnswer) && candidateAnswer.length > 0;
+}
+
 function attemptStatusBadge(status: string, gradingState: string | null): { label: string; variant: BadgeStatus } {
   if (status === "in_progress") return { label: "EN COURS", variant: "warning" };
   if (gradingState === "AWAITING_MANUAL_REVIEW") return { label: "EN ATTENTE DE CORRECTION", variant: "warning" };
@@ -50,7 +63,7 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
   const awaitingReview = detail.grading_state === "AWAITING_MANUAL_REVIEW";
   const finalResultAvailable = detail.grading_state === "COMPLETE";
   const badge = attemptStatusBadge(detail.status, detail.grading_state);
-  const answeredCount = detail.questions.filter((q) => q.candidateAnswer.length > 0).length;
+  const answeredCount = detail.questions.filter((q) => isAnswered(q.qtype, q.candidateAnswer)).length;
 
   return (
     <div className="flex flex-col gap-6">
@@ -157,7 +170,7 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
                     <p className="text-[11px] text-text-tertiary">{QTYPE_LABELS[qtype] ?? qtype}</p>
                   </div>
                   {q.isCorrect === null ? (
-                    <span className="text-[11.5px] text-text-tertiary">{qtype === "short_answer" ? "En attente de correction" : "Non noté"}</span>
+                    <span className="text-[11.5px] text-text-tertiary">{qtype === "short_answer" || qtype === "scenario" ? "En attente de correction" : "Non noté"}</span>
                   ) : q.isCorrect ? (
                     <span className="flex items-center gap-1 text-[11.5px] font-medium text-status-verified-text"><CheckCircle2 size={13} /> Correct</span>
                   ) : (
@@ -168,7 +181,7 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
                 {(qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false") && (
                   <ul className="flex flex-col gap-1">
                     {q.choices.map((c) => {
-                      const chosen = q.candidateAnswer.includes(c.key);
+                      const chosen = (q.candidateAnswer as string[]).includes(c.key);
                       const correctKeys = Array.isArray(q.correctAnswer) ? (q.correctAnswer as string[]) : [];
                       const isCorrectChoice = correctKeys.includes(c.key);
                       return (
@@ -188,18 +201,79 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
 
                 {qtype === "numeric" && (
                   <div className="text-[12.5px] text-text-secondary">
-                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{q.candidateAnswer[0] ?? "—"}</span></p>
+                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{formatCandidateAnswerForDisplay(qtype, q.candidateAnswer, q.choices)}</span></p>
                     <p>Réponse correcte : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(qtype, q.correctAnswer)}</span></p>
                   </div>
                 )}
 
                 {qtype === "short_answer" && (
                   <div className="text-[12.5px] text-text-secondary">
-                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{q.candidateAnswer[0] || "—"}</span></p>
+                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{formatCandidateAnswerForDisplay(qtype, q.candidateAnswer, q.choices)}</span></p>
                     <p>Réponses acceptées : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(qtype, q.correctAnswer)}</span></p>
                     {q.graderComment && <p className="mt-1 text-text-tertiary">Commentaire du correcteur : {q.graderComment}</p>}
                   </div>
                 )}
+
+                {/* §2/§3 — appariement/ordre : ALL_OR_NOTHING, réponse
+                    candidate/correcte formatées par le point d'entrée
+                    unique partagé (jamais une 5e implémentation). */}
+                {(qtype === "matching" || qtype === "ordering") && (
+                  <div className="text-[12.5px] text-text-secondary">
+                    <p>Réponse du candidat : <span className="font-medium text-text-primary">{formatCandidateAnswerForDisplay(qtype, q.candidateAnswer, q.choices)}</span></p>
+                    <p>Réponse correcte : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(qtype, q.correctAnswer, q.choices)}</span></p>
+                  </div>
+                )}
+
+                {/* §4-5 — scénario : contexte affiché une fois, puis
+                    détail par sous-question (candidat/correcte/état). Les
+                    sous-questions auto-notées sont recalculées ICI via
+                    gradeOneQuestion (jamais une 6e implémentation
+                    divergente de la notation elle-même) ; les manuelles
+                    lisent scenarioGrading (verdict humain déjà écrit). */}
+                {qtype === "scenario" && (() => {
+                  const spec = q.correctAnswer as {
+                    context: string;
+                    documentRef?: string;
+                    subquestions: { id: string; qtype: string; stem: string; points: number; choices: { key: string; text: string }[]; correctAnswer: unknown }[];
+                  };
+                  const given = (q.candidateAnswer ?? {}) as Record<string, string[]>;
+                  return (
+                    <div className="flex flex-col gap-3">
+                      <div className="rounded-md bg-surface-sunken p-2.5">
+                        <p className="whitespace-pre-wrap text-[12.5px] text-text-secondary">{spec.context}</p>
+                        {spec.documentRef && <p className="mt-1 text-[11px] text-text-tertiary">Document/référence : {spec.documentRef}</p>}
+                      </div>
+                      {spec.subquestions.map((sq, sqi) => {
+                        const manualVerdict = q.scenarioGrading?.[sq.id];
+                        const subAnswer = given[sq.id];
+                        const auto = manualVerdict ? null : gradeOneQuestion(sq.qtype, JSON.stringify(sq.correctAnswer), subAnswer ? JSON.stringify(subAnswer) : null);
+                        const pending = !manualVerdict && auto?.pending;
+                        const subIsCorrect = manualVerdict ? manualVerdict.isCorrect : auto?.isCorrect;
+                        const subPoints = manualVerdict ? manualVerdict.pointsAwarded : auto?.partialPoints ?? (auto?.isCorrect ? sq.points : 0);
+                        return (
+                          <div key={sq.id} className="rounded-md border border-border-subtle p-2.5">
+                            <div className="mb-1 flex items-start justify-between gap-2">
+                              <p className="text-[13px] font-medium text-text-primary">Q{sqi + 1}. {sq.stem}</p>
+                              {pending ? (
+                                <span className="shrink-0 text-[11px] text-text-tertiary">En attente de correction</span>
+                              ) : subIsCorrect ? (
+                                <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-status-verified-text"><CheckCircle2 size={12} /> Correct</span>
+                              ) : (
+                                <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-status-critical-text"><XCircle size={12} /> Incorrect</span>
+                              )}
+                            </div>
+                            <p className="text-[12px] text-text-secondary">Réponse du candidat : <span className="font-medium text-text-primary">{formatCandidateAnswerForDisplay(sq.qtype, subAnswer ?? null, sq.choices)}</span></p>
+                            {!pending && (
+                              <p className="text-[12px] text-text-secondary">Réponse correcte : <span className="font-medium text-status-verified-text">{formatCorrectAnswerForDisplay(sq.qtype, sq.correctAnswer, sq.choices)}</span></p>
+                            )}
+                            {manualVerdict?.comment && <p className="mt-1 text-[11.5px] text-text-tertiary">Commentaire du correcteur : {manualVerdict.comment}</p>}
+                            <p className="mt-1 text-[11px] text-text-tertiary">Points : {pending ? "—" : subPoints} / {sq.points}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
 
                 <p className="mt-1.5 text-[11.5px] text-text-tertiary">Points : {q.pointsAwarded ?? "—"} / {q.points}</p>
                 {q.explanation && (

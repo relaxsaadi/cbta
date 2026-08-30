@@ -32,12 +32,15 @@ export const SOURCE_STATUS_LABELS: Record<SourceStatus, string> = {
   NOT_ATTEMPTED: "Non traité",
 };
 
-// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-50 — types
-// de question extensibles. matching/ordering/scenario ne sont PAS ajoutés
-// cette passe (portée assumée, voir le rapport final) : le CHECK de schéma
-// et ce type ne portent que les types réellement livrés, jamais une valeur
-// fantôme qu'aucun code ne saurait noter.
-export type QType = "mcq_single" | "mcq_multi" | "true_false" | "numeric" | "short_answer";
+// Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-50, complétée
+// par "MISSION FINALE CIBLÉE" (2026-08-30) §1-6 — les 8 types requis sont
+// désormais tous supportés. 'matching'/'ordering' réutilisent le mécanisme
+// choices_order_json déjà existant (voir lib/attempts.ts::startAttempt, non
+// modifié) — un seul type de "clé mélangée" pour tout le moteur. 'scenario'
+// est un CONTENEUR : ses sous-questions sont embarquées dans son propre
+// correct_answer (jamais des lignes `questions` séparées) — voir
+// ScenarioAnswerSpec plus bas pour la justification complète.
+export type QType = "mcq_single" | "mcq_multi" | "true_false" | "numeric" | "short_answer" | "matching" | "ordering" | "scenario";
 
 export const QTYPE_LABELS: Record<QType, string> = {
   mcq_single: "QCM — une seule réponse",
@@ -45,6 +48,9 @@ export const QTYPE_LABELS: Record<QType, string> = {
   true_false: "Vrai / Faux",
   numeric: "Réponse numérique",
   short_answer: "Réponse courte",
+  matching: "Appariement",
+  ordering: "Ordre / séquence",
+  scenario: "Cas pratique / scénario",
 };
 
 export interface Choice {
@@ -74,7 +80,74 @@ export interface NumericAnswerSpec {
  *              correcteur autorisé statue (voir lib/manual-grading.ts). */
 export type ShortAnswerSpec = { mode: "exact"; acceptedAnswers: string[] } | { mode: "manual" };
 
-export type CorrectAnswerData = string[] | NumericAnswerSpec | ShortAnswerSpec;
+/** Encodage pour 'matching' (mission "MISSION FINALE CIBLÉE", 2026-08-30,
+ * §2) — `choices` porte LES DEUX côtés dans un seul tableau, distingués par
+ * préfixe de clé ("L1","L2"... à gauche, "R1","R2"... à droite, même
+ * convention de clé arbitraire que "A"/"B" pour un QCM). `pairs` référence
+ * ces clés — jamais le texte directement (permet de renommer un élément
+ * sans casser l'appariement). Le mélange gauche/droite indépendant à
+ * l'affichage candidat vient GRATUITEMENT du mécanisme choices_order_json
+ * déjà existant (un seul mélange global des clés, puis partitionné par
+ * préfixe — un sous-ensemble d'une permutation uniforme reste une
+ * permutation uniforme, aucune logique de mélange dédiée nécessaire).
+ * ALL_OR_NOTHING (§2 : "jamais de crédit partiel sauf configuré") — voir
+ * lib/grading.ts. */
+export interface MatchingAnswerSpec {
+  mode: "matching";
+  pairs: { left: string; right: string }[];
+}
+
+/** Encodage pour 'ordering' (§3) — `choices` porte les éléments dans leur
+ * ORDRE AUTEUR (= l'ordre correct, par construction : l'auteur les saisit
+ * dans le bon ordre). `sequence` est explicite plutôt qu'implicite (jamais
+ * une dépendance silencieuse à l'ordre de `choices`, qui lui EST mélangé à
+ * l'affichage candidat via choices_order_json, inchangé). ALL_OR_NOTHING —
+ * séquence complète exacte requise, jamais de crédit partiel par position
+ * correcte sauf configuré explicitement (non implémenté cette passe,
+ * jamais inventé silencieusement). */
+export interface OrderingAnswerSpec {
+  mode: "ordering";
+  sequence: string[];
+}
+
+/** Sous-question d'un scénario (§4) — mêmes formes que les questions
+ * autonomes (Choice[]/CorrectAnswerData), MAIS embarquées : jamais une ligne
+ * `questions` séparée. `id` est stable PAR SCÉNARIO (assigné à l'auteurage,
+ * jamais recalculé), utilisé comme clé dans la réponse candidat
+ * (Record<subquestionId, string[]>, voir lib/attempts.ts::
+ * saveScenarioSubanswer) et dans le progrès de correction manuelle (voir
+ * attempt_answers.scenario_grading_json, lib/schema.sql). `qtype` exclut
+ * explicitement 'scenario' — jamais de scénario imbriqué (appliqué au
+ * typage ET revérifié à l'exécution dans validateQuestionAuthoring). */
+export type ScenarioSubQType = Exclude<QType, "scenario">;
+export interface ScenarioSubquestion {
+  id: string;
+  qtype: ScenarioSubQType;
+  stem: string;
+  points: number;
+  choices: Choice[];
+  correctAnswer: string[] | NumericAnswerSpec | ShortAnswerSpec | MatchingAnswerSpec | OrderingAnswerSpec;
+}
+
+/** Encodage pour 'scenario' (§4-5) — contexte partagé affiché UNE SEULE
+ * FOIS (jamais dupliqué par sous-question, §4 de la mission) + sous-
+ * questions embarquées, chacune notée selon SA PROPRE règle. Le score du
+ * scénario = somme des points des sous-questions (§5 — crédit partiel
+ * explicitement voulu ici, à la différence de matching/ordering) ; si AU
+ * MOINS UNE sous-question exige une correction manuelle non statuée, le
+ * scénario entier reste EN ATTENTE DE CORRECTION (voir lib/grading.ts::
+ * gradeOneQuestion, cas 'scenario', qui délègue récursivement à chaque
+ * sous-question). `documentRef` : référence textuelle (description/URL)
+ * d'un document/image justificatif — l'architecture existante ne stocke
+ * aucun binaire ; jamais un upload de fichier inventé cette passe. */
+export interface ScenarioAnswerSpec {
+  mode: "scenario";
+  context: string;
+  documentRef?: string;
+  subquestions: ScenarioSubquestion[];
+}
+
+export type CorrectAnswerData = string[] | NumericAnswerSpec | ShortAnswerSpec | MatchingAnswerSpec | OrderingAnswerSpec | ScenarioAnswerSpec;
 
 /** Construit {choices, correctAnswer} depuis un FormData d'auteurage, selon
  * le qtype — point d'entrée UNIQUE réutilisé par la création ET l'édition
@@ -109,16 +182,88 @@ export function parseAuthoringFormData(qtype: QType, formData: FormData): { choi
       correctAnswer: { mode: "numeric", value, tolerance, unit: unit || undefined },
     };
   }
-  // short_answer
-  const mode = String(formData.get("shortAnswerMode") ?? "exact");
-  if (mode === "manual") {
-    return { choices: [], correctAnswer: { mode: "manual" } };
+  if (qtype === "short_answer") {
+    const mode = String(formData.get("shortAnswerMode") ?? "exact");
+    if (mode === "manual") {
+      return { choices: [], correctAnswer: { mode: "manual" } };
+    }
+    const acceptedAnswers = String(formData.get("acceptedAnswers") ?? "")
+      .split(/\r?\n|,/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    return { choices: [], correctAnswer: { mode: "exact", acceptedAnswers } };
   }
-  const acceptedAnswers = String(formData.get("acceptedAnswers") ?? "")
-    .split(/\r?\n|,/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  return { choices: [], correctAnswer: { mode: "exact", acceptedAnswers } };
+  if (qtype === "matching") {
+    return parseMatchingPairs(formData.getAll("matchingLeftText").map(String), formData.getAll("matchingRightText").map(String));
+  }
+  if (qtype === "ordering") {
+    const itemTexts = formData
+      .getAll("orderingItemText")
+      .map(String)
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const choices: Choice[] = itemTexts.map((text, i) => ({ key: `S${i + 1}`, text }));
+    return { choices, correctAnswer: { mode: "ordering", sequence: choices.map((c) => c.key) } };
+  }
+  // scenario — sous-questions déjà construites côté client (mêmes règles
+  // par type que ce parseur, voir CreateQuestionForm.tsx) et sérialisées en
+  // JSON dans un champ caché : la structure dynamique (N sous-questions,
+  // chacune d'un type différent) n'a pas d'encodage FormData plat pratique.
+  // JAMAIS une confiance aveugle malgré tout — parseScenarioSubmission()
+  // revalide intégralement la forme (voir validateQuestionAuthoring, qui
+  // rappelle RÉCURSIVEMENT ce même validateur par sous-question).
+  return parseScenarioSubmission(String(formData.get("scenarioContext") ?? ""), String(formData.get("scenarioDocumentRef") ?? ""), String(formData.get("scenarioSubquestionsJson") ?? "[]"));
+}
+
+/** §2 — un appariement s'auteure comme une liste de PAIRES parallèles
+ * (Élément gauche → Correspondance droite), jamais deux listes séparées à
+ * relier manuellement à l'auteurage : plus simple, moins d'erreurs. Le
+ * mélange indépendant gauche/droite n'intervient qu'à l'AFFICHAGE candidat
+ * (voir lib/attempts.ts::getAttemptQuestions), jamais ici. */
+function parseMatchingPairs(leftTexts: string[], rightTexts: string[]): { choices: Choice[]; correctAnswer: MatchingAnswerSpec } {
+  const n = Math.max(leftTexts.length, rightTexts.length);
+  const choices: Choice[] = [];
+  const pairs: { left: string; right: string }[] = [];
+  let idx = 0;
+  for (let i = 0; i < n; i++) {
+    const l = (leftTexts[i] ?? "").trim();
+    const r = (rightTexts[i] ?? "").trim();
+    if (!l || !r) continue; // ligne incomplète — ignorée silencieusement à l'auteurage (comme un choix MCQ vide), la validation refusera s'il en résulte moins de 2 paires.
+    idx += 1;
+    const leftKey = `L${idx}`;
+    const rightKey = `R${idx}`;
+    choices.push({ key: leftKey, text: l }, { key: rightKey, text: r });
+    pairs.push({ left: leftKey, right: rightKey });
+  }
+  return { choices, correctAnswer: { mode: "matching", pairs } };
+}
+
+/** Reconstruit {choices:[], correctAnswer:ScenarioAnswerSpec} depuis le
+ * JSON sérialisé côté client. `id` de chaque sous-question est réassigné
+ * ICI de façon déterministe (sq1, sq2…) — jamais une valeur fournie par le
+ * client, pour éviter toute collision/manipulation d'identifiant. Les
+ * champs bruts inattendus sont ignorés (pick explicite), jamais propagés
+ * tels quels dans la base. */
+function parseScenarioSubmission(context: string, documentRef: string, rawJson: string): { choices: Choice[]; correctAnswer: ScenarioAnswerSpec } {
+  let raw: unknown[];
+  try {
+    raw = JSON.parse(rawJson);
+    if (!Array.isArray(raw)) throw new Error("not an array");
+  } catch {
+    throw new Error("Sous-questions de scénario invalides (format inattendu) — veuillez réessayer.");
+  }
+  const subquestions: ScenarioSubquestion[] = raw.map((item, i) => {
+    const r = item as Record<string, unknown>;
+    return {
+      id: `sq${i + 1}`,
+      qtype: r.qtype as ScenarioSubQType,
+      stem: String(r.stem ?? ""),
+      points: Number(r.points ?? 1),
+      choices: Array.isArray(r.choices) ? (r.choices as Choice[]) : [],
+      correctAnswer: r.correctAnswer as ScenarioSubquestion["correctAnswer"],
+    };
+  });
+  return { choices: [], correctAnswer: { mode: "scenario", context: context.trim(), documentRef: documentRef.trim() || undefined, subquestions } };
 }
 
 /** §53 — validations d'auteurage : empêche les états d'auteurage invalides
@@ -148,6 +293,43 @@ export function validateQuestionAuthoring(qtype: QType, choices: Choice[], corre
     if (Array.isArray(correctAnswer) || (correctAnswer.mode !== "exact" && correctAnswer.mode !== "manual")) return "Configuration de réponse courte invalide.";
     if (correctAnswer.mode === "exact" && (!correctAnswer.acceptedAnswers || correctAnswer.acceptedAnswers.filter((a) => a.trim()).length === 0)) {
       return "Au moins une réponse acceptée est requise en mode correspondance exacte (ou choisissez le mode correction manuelle).";
+    }
+    return null;
+  }
+  if (qtype === "matching") {
+    if (Array.isArray(correctAnswer) || correctAnswer.mode !== "matching") return "Configuration d'appariement invalide.";
+    if (choices.some((c) => !c.text || !c.text.trim())) return "Aucun élément d'appariement ne peut être vide.";
+    if (correctAnswer.pairs.length < 2) return "Au moins deux paires sont requises pour un appariement.";
+    const keys = new Set(choices.map((c) => c.key));
+    if (correctAnswer.pairs.some((p) => !keys.has(p.left) || !keys.has(p.right))) return "Une paire d'appariement référence un élément qui n'existe pas.";
+    const leftKeys = correctAnswer.pairs.map((p) => p.left);
+    if (new Set(leftKeys).size !== leftKeys.length) return "Chaque élément de gauche ne peut être associé qu'une seule fois — paire en double.";
+    return null;
+  }
+  if (qtype === "ordering") {
+    if (Array.isArray(correctAnswer) || correctAnswer.mode !== "ordering") return "Configuration d'ordre/séquence invalide.";
+    if (choices.some((c) => !c.text || !c.text.trim())) return "Aucun élément de la séquence ne peut être vide.";
+    if (correctAnswer.sequence.length < 2) return "Au moins deux éléments sont requis pour un ordre/séquence.";
+    if (new Set(correctAnswer.sequence).size !== correctAnswer.sequence.length) return "La séquence contient un élément identifiant en double.";
+    const keys = new Set(choices.map((c) => c.key));
+    if (correctAnswer.sequence.some((k) => !keys.has(k))) return "La séquence référence un élément qui n'existe pas.";
+    return null;
+  }
+  if (qtype === "scenario") {
+    if (Array.isArray(correctAnswer) || correctAnswer.mode !== "scenario") return "Configuration de scénario invalide.";
+    if (!correctAnswer.context || !correctAnswer.context.trim()) return "Le contexte du scénario est obligatoire — jamais un cas pratique sans mise en situation.";
+    if (!correctAnswer.subquestions || correctAnswer.subquestions.length === 0) return "Un scénario doit contenir au moins une sous-question.";
+    for (const sq of correctAnswer.subquestions) {
+      // Jamais un scénario imbriqué — vérifié ici en plus du typage
+      // (ScenarioSubQType exclut déjà 'scenario' à la compilation), au cas
+      // où une sous-question arrive via le JSON sérialisé côté client
+      // (jamais une confiance aveugle envers une donnée qui a transité par
+      // le navigateur, même construite par notre propre UI).
+      if ((sq.qtype as QType) === "scenario") return "Un scénario ne peut pas contenir un autre scénario en sous-question.";
+      if (!sq.stem || !sq.stem.trim()) return `Sous-question "${sq.id}" : le texte est obligatoire.`;
+      if (!Number.isFinite(sq.points) || sq.points <= 0) return `Sous-question "${sq.id}" : le nombre de points doit être positif.`;
+      const subError = validateQuestionAuthoring(sq.qtype, sq.choices, sq.correctAnswer);
+      if (subError) return `Sous-question "${sq.id}" invalide : ${subError}`;
     }
     return null;
   }
@@ -348,6 +530,72 @@ export function formatCorrectAnswerForDisplay(qtype: string, correctAnswer: unkn
     const spec = correctAnswer as { mode?: string; acceptedAnswers?: string[] } | null;
     if (spec?.mode === "manual") return "(correction manuelle)";
     return (spec?.acceptedAnswers ?? []).join(" / ");
+  }
+  if (qtype === "matching") {
+    const spec = correctAnswer as { pairs?: { left: string; right: string }[] } | null;
+    if (!spec?.pairs) return "—";
+    if (!choices) return spec.pairs.map((p) => `${p.left} → ${p.right}`).join(" ; ");
+    const byKey = new Map(choices.map((c) => [c.key, c.text]));
+    return spec.pairs.map((p) => `${byKey.get(p.left) ?? p.left} → ${byKey.get(p.right) ?? p.right}`).join(" ; ");
+  }
+  if (qtype === "ordering") {
+    const spec = correctAnswer as { sequence?: string[] } | null;
+    if (!spec?.sequence) return "—";
+    if (!choices) return spec.sequence.join(" → ");
+    const byKey = new Map(choices.map((c) => [c.key, c.text]));
+    return spec.sequence.map((k) => byKey.get(k) ?? k).join(" → ");
+  }
+  if (qtype === "scenario") {
+    const spec = correctAnswer as { subquestions?: unknown[] } | null;
+    return spec?.subquestions ? `Scénario — ${spec.subquestions.length} sous-question(s)` : "—";
+  }
+  return "";
+}
+
+/** Miroir de formatCorrectAnswerForDisplay pour la réponse du CANDIDAT
+ * (mission "MISSION FINALE CIBLÉE", 2026-08-30) — même point d'entrée
+ * unique réutilisé par les 4 mêmes consommateurs (fiche admin, "Mes
+ * résultats", export CSV, PDF individuel), jamais quatre implémentations
+ * divergentes. Pour 'scenario', une ligne "id: réponse" par sous-question
+ * — un résumé compact suffisant pour CSV/PDF ; les pages interactives
+ * (résultats détaillés) affichent en plus un rendu structuré complet par
+ * sous-question, voir leur propre logique. */
+export function formatCandidateAnswerForDisplay(qtype: string, candidateAnswer: unknown, choices?: Choice[]): string {
+  if (qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false") {
+    const keys = Array.isArray(candidateAnswer) ? (candidateAnswer as string[]) : [];
+    if (keys.length === 0) return "—";
+    if (!choices) return keys.join(", ");
+    const byKey = new Map(choices.map((c) => [c.key, c.text]));
+    return keys.map((k) => byKey.get(k) ?? k).join(", ");
+  }
+  if (qtype === "numeric" || qtype === "short_answer") {
+    const arr = Array.isArray(candidateAnswer) ? (candidateAnswer as string[]) : [];
+    if (!arr[0]) return "—";
+    const unit = choices?.find((c) => c.key === "unit")?.text;
+    return qtype === "numeric" && unit ? `${arr[0]} ${unit}` : arr[0];
+  }
+  if (qtype === "matching") {
+    const pairs = Array.isArray(candidateAnswer) ? (candidateAnswer as string[]) : [];
+    if (pairs.length === 0) return "—";
+    const byKey = new Map((choices ?? []).map((c) => [c.key, c.text]));
+    return pairs
+      .map((p) => {
+        const [l, r] = p.split(":");
+        return `${byKey.get(l ?? "") ?? l} → ${byKey.get(r ?? "") ?? r}`;
+      })
+      .join(" ; ");
+  }
+  if (qtype === "ordering") {
+    const seq = Array.isArray(candidateAnswer) ? (candidateAnswer as string[]) : [];
+    if (seq.length === 0) return "—";
+    const byKey = new Map((choices ?? []).map((c) => [c.key, c.text]));
+    return seq.map((k) => byKey.get(k) ?? k).join(" → ");
+  }
+  if (qtype === "scenario") {
+    const given = (candidateAnswer ?? {}) as Record<string, string[]>;
+    const entries = Object.entries(given);
+    if (entries.length === 0) return "—";
+    return entries.map(([id, ans]) => `${id}: ${ans?.[0] ?? "—"}`).join(" ; ");
   }
   return "";
 }

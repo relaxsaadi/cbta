@@ -145,6 +145,27 @@ export function startAttempt(
   }
 }
 
+/** Sous-question d'un scénario telle qu'exposée au CANDIDAT — jamais
+ * `correctAnswer` (voir lib/questions.ts::ScenarioSubquestion, dont ce type
+ * est le sous-ensemble sûr, même principe que `unit` pour 'numeric' :
+ * value/tolerance/pairs/sequence/acceptedAnswers ne quittent jamais le
+ * serveur avant notation). `answer` = la réponse DÉJÀ enregistrée pour
+ * CETTE sous-question, si la tentative est reprise après reconnexion. */
+export interface ScenarioCandidateSubquestion {
+  id: string;
+  qtype: string;
+  stem: string;
+  choices: { key: string; text: string }[];
+  unit: string | null;
+  multiSelect: boolean;
+  answer: string[] | null;
+}
+export interface ScenarioCandidateView {
+  context: string;
+  documentRef: string | null;
+  subquestions: ScenarioCandidateSubquestion[];
+}
+
 export interface AttemptQuestionView {
   attempt_question_id: number;
   position: number;
@@ -158,13 +179,30 @@ export interface AttemptQuestionView {
   marked_for_review: number;
   answer: string[] | null;
   multiSelect: boolean;
+  // Mission "MISSION FINALE CIBLÉE" (2026-08-30) §2/§3/§4 — toujours
+  // présents dans la forme (tableau/valeur vide si non pertinent pour CE
+  // type), jamais des champs conditionnellement absents : plus simple à
+  // consommer côté client (ExamRunner.tsx) sans garde de type répétée.
+  /** 'matching' — les DEUX côtés mélangés INDÉPENDAMMENT, sans indication
+   * de correspondance (voir le commentaire de MatchingAnswerSpec pour la
+   * preuve que ce mélange indépendant vient gratuitement du mécanisme
+   * choices_order_json déjà existant). */
+  matchingLeft: { key: string; text: string }[];
+  matchingRight: { key: string; text: string }[];
+  /** 'ordering' — les éléments dans leur ORDRE D'AFFICHAGE mélangé (jamais
+   * l'ordre correct) ; la réponse candidate (`answer`) porte l'arrangement
+   * ACTUEL du candidat, initialisé côté client à cet ordre d'affichage. */
+  orderingItems: { key: string; text: string }[];
+  /** 'scenario' — contexte + sous-questions candidate-safe, null pour tout
+   * autre type. */
+  scenario: ScenarioCandidateView | null;
 }
 
 export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
   const rows = getDb()
     .prepare(
       `SELECT aq.id AS attempt_question_id, aq.position, aq.choices_order_json, aq.marked_for_review,
-              s.stem_snapshot, s.choices_snapshot_json,
+              s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot,
               aa.answer_json, q.qtype
        FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
@@ -180,6 +218,7 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
     marked_for_review: number;
     stem_snapshot: string;
     choices_snapshot_json: string;
+    correct_answer_snapshot: string;
     answer_json: string | null;
     qtype: string;
   }[];
@@ -189,6 +228,45 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
     const order: string[] = r.choices_order_json ? JSON.parse(r.choices_order_json) : allChoices.map((c) => c.key);
     const byKey = new Map(allChoices.map((c) => [c.key, c]));
     const isMcqLike = r.qtype === "mcq_single" || r.qtype === "mcq_multi" || r.qtype === "true_false";
+
+    let matchingLeft: { key: string; text: string }[] = [];
+    let matchingRight: { key: string; text: string }[] = [];
+    if (r.qtype === "matching") {
+      // Un même mélange global (choices_order_json) partitionné par
+      // préfixe de clé conserve un ordre indépendant et uniforme sur
+      // chaque côté — voir MatchingAnswerSpec pour la preuve.
+      matchingLeft = order.filter((k) => k.startsWith("L")).map((k) => byKey.get(k)!).filter(Boolean);
+      matchingRight = order.filter((k) => k.startsWith("R")).map((k) => byKey.get(k)!).filter(Boolean);
+    }
+
+    let orderingItems: { key: string; text: string }[] = [];
+    if (r.qtype === "ordering") {
+      orderingItems = order.map((k) => byKey.get(k)!).filter(Boolean);
+    }
+
+    let scenario: ScenarioCandidateView | null = null;
+    if (r.qtype === "scenario") {
+      const spec = JSON.parse(r.correct_answer_snapshot) as {
+        context: string;
+        documentRef?: string;
+        subquestions: { id: string; qtype: string; stem: string; choices: { key: string; text: string }[] }[];
+      };
+      const savedAnswers = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
+      scenario = {
+        context: spec.context,
+        documentRef: spec.documentRef ?? null,
+        subquestions: spec.subquestions.map((sq) => ({
+          id: sq.id,
+          qtype: sq.qtype,
+          stem: sq.stem,
+          choices: sq.choices,
+          unit: sq.qtype === "numeric" ? (sq.choices.find((c) => c.key === "unit")?.text ?? null) : null,
+          multiSelect: sq.qtype === "mcq_multi",
+          answer: savedAnswers[sq.id] ?? null,
+        })),
+      };
+    }
+
     return {
       attempt_question_id: r.attempt_question_id,
       position: r.position,
@@ -197,8 +275,12 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
       choices: isMcqLike ? order.map((k) => byKey.get(k)!).filter(Boolean) : [],
       unit: r.qtype === "numeric" ? (allChoices.find((c) => c.key === "unit")?.text ?? null) : null,
       marked_for_review: r.marked_for_review,
-      answer: r.answer_json ? JSON.parse(r.answer_json) : null,
+      answer: r.qtype === "scenario" ? null : r.answer_json ? JSON.parse(r.answer_json) : null,
       multiSelect: r.qtype === "mcq_multi",
+      matchingLeft,
+      matchingRight,
+      orderingItems,
+      scenario,
     };
   });
 }
@@ -229,6 +311,34 @@ export function saveAnswer(attemptId: number, candidateUserId: number, attemptQu
        ON CONFLICT(attempt_question_id) DO UPDATE SET answer_json = excluded.answer_json, answered_at = excluded.answered_at`
     )
     .run(attemptId, attemptQuestionId, JSON.stringify(answerKeys), nowIso());
+}
+
+/** Autosave POUR UNE SOUS-QUESTION de scénario (mission "MISSION FINALE
+ * CIBLÉE", 2026-08-30, §9) — seul point d'écriture qui MERGE dans
+ * `answer_json` (Record<subquestionId, string[]>) plutôt que de
+ * l'écraser : une ligne attempt_answers = UN scénario entier, jamais une
+ * ligne par sous-question (voir lib/questions.ts::ScenarioAnswerSpec pour
+ * la justification complète du choix d'embarquement). Mêmes garanties que
+ * saveAnswer() ci-dessus (propriété de la tentative, non-expiration). */
+export function saveScenarioSubanswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, subquestionId: string, answerKeys: string[]): void {
+  const attempt = getAttempt(attemptId);
+  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
+  assertNotExpiredOrAutoSubmit(attempt);
+
+  const owns = getDb().prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
+  if (!owns) throw new AttemptError("Question hors de cette tentative.");
+
+  const existing = getDb().prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
+  const merged: Record<string, string[]> = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
+  merged[subquestionId] = answerKeys;
+
+  getDb()
+    .prepare(
+      `INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at)
+       VALUES (?, ?, ?, ?)
+       ON CONFLICT(attempt_question_id) DO UPDATE SET answer_json = excluded.answer_json, answered_at = excluded.answered_at`
+    )
+    .run(attemptId, attemptQuestionId, JSON.stringify(merged), nowIso());
 }
 
 export function toggleMark(attemptId: number, candidateUserId: number, attemptQuestionId: number, marked: boolean): void {

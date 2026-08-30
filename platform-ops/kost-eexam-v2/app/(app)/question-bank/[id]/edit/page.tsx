@@ -1,6 +1,16 @@
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
-import { getQuestionById, getCurrentVersion, QTYPE_LABELS, type QType, type NumericAnswerSpec, type ShortAnswerSpec } from "@/lib/questions";
+import {
+  getQuestionById,
+  getCurrentVersion,
+  QTYPE_LABELS,
+  type QType,
+  type NumericAnswerSpec,
+  type ShortAnswerSpec,
+  type MatchingAnswerSpec,
+  type OrderingAnswerSpec,
+  type ScenarioAnswerSpec,
+} from "@/lib/questions";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { EditQuestionForm } from "./EditQuestionForm";
 
@@ -23,6 +33,14 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
   const correct: string[] = qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false" ? JSON.parse(version.correct_answer) : [];
   const numericSpec: NumericAnswerSpec | null = qtype === "numeric" ? JSON.parse(version.correct_answer) : null;
   const shortAnswerSpec: ShortAnswerSpec | null = qtype === "short_answer" ? JSON.parse(version.correct_answer) : null;
+  // Mission "MISSION FINALE CIBLÉE" (2026-08-30) — mêmes principe : qtype
+  // est FIXE après création (§4, append-only), seul le contenu propre au
+  // type est modifiable. `choices` (déjà JSON.parse plus haut) porte les
+  // deux côtés d'un appariement / les éléments d'un ordre — EditQuestionForm
+  // reconstruit les champs bruts d'auteurage à partir de ces deux valeurs.
+  const matchingSpec: MatchingAnswerSpec | null = qtype === "matching" ? JSON.parse(version.correct_answer) : null;
+  const orderingSpec: OrderingAnswerSpec | null = qtype === "ordering" ? JSON.parse(version.correct_answer) : null;
+  const scenarioSpec: ScenarioAnswerSpec | null = qtype === "scenario" ? JSON.parse(version.correct_answer) : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -44,6 +62,9 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
           initialExplanation={version.explanation ?? ""}
           initialNumeric={numericSpec}
           initialShortAnswer={shortAnswerSpec}
+          initialMatching={matchingSpec}
+          initialOrdering={orderingSpec}
+          initialScenario={scenarioSpec}
         />
       </Card>
     </div>

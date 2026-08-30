@@ -222,6 +222,31 @@ const CANDIDATE_OUT_OF_SCOPE_MESSAGE =
  * écriture (y compris une entrée d'audit) à l'intérieur d'une transaction
  * qui se termine par un throw est annulée avec elle — enregistrer un
  * refus puis l'annuler serait pire qu'aucune trace du tout. */
+
+/** Mission "MISSION FINALE CIBLÉE" (2026-08-30) §5 — le score d'un scénario
+ * = somme des points de ses sous-questions (crédit partiel explicitement
+ * voulu ici, à la différence de tous les autres types qui restent à 1
+ * point). Détecté directement depuis le JSON de `correct_answer` (mode:
+ * "scenario") plutôt que via le qtype de la question — évite une requête
+ * supplémentaire, et reste correct même si l'appelant n'a que la version.
+ * Repli sûr sur 1 si le JSON est invalide ou la somme est nulle (jamais une
+ * question publiée à 0 point). */
+function pointsForVersion(version: { correct_answer: string }): number {
+  try {
+    const parsed = JSON.parse(version.correct_answer) as { mode?: string; subquestions?: { points?: number }[] };
+    if (parsed?.mode === "scenario" && Array.isArray(parsed.subquestions)) {
+      const sum = parsed.subquestions.reduce((acc, sq) => acc + (Number(sq.points) || 0), 0);
+      return sum > 0 ? sum : 1;
+    }
+  } catch {
+    // correct_answer est toujours écrit par createQuestion/addQuestionVersion
+    // (JSON.stringify contrôlé) — ce cas ne devrait jamais survenir, mais
+    // jamais une exception non gérée qui bloquerait toute la publication
+    // pour une seule question mal formée : repli sûr sur 1 ci-dessous.
+  }
+  return 1;
+}
+
 export function publishAssessment(
   assessmentId: number,
   actorUserId: number,
@@ -272,12 +297,12 @@ export function publishAssessment(
     const insertSnap = db.prepare(
       `INSERT INTO assessment_question_snapshots
          (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, explanation_snapshot, points)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     );
     selected.forEach((questionId, idx) => {
       const version = getCurrentVersion(questionId);
       if (!version) throw new Error(`Question ${questionId} n'a aucune version — donnée corrompue, publication annulée.`);
-      insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, version.explanation ?? null);
+      insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, version.explanation ?? null, pointsForVersion(version));
     });
 
     // Les candidatUserIds fournis ont déjà été intégralement validés

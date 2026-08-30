@@ -182,17 +182,26 @@ export interface AttemptDetailQuestion {
   stem: string;
   qtype: string;
   choices: { key: string; text: string }[];
-  candidateAnswer: string[];
+  /** string[] pour tous les types SAUF 'scenario', où c'est un objet
+   * Record<subquestionId, string[]> (voir lib/questions.ts::
+   * ScenarioAnswerSpec) — typé large ici pour la même raison que
+   * `correctAnswer` ci-dessous, la page l'interprète selon `qtype`. */
+  candidateAnswer: unknown;
   /** Tableau de clés pour mcq_single/mcq_multi/true_false ; objet
-   * NumericAnswerSpec/ShortAnswerSpec (voir lib/questions.ts) pour
-   * numeric/short_answer — typé large ici, la page l'interprète selon
-   * `qtype`, jamais en devinant une forme. */
+   * NumericAnswerSpec/ShortAnswerSpec/MatchingAnswerSpec/OrderingAnswerSpec/
+   * ScenarioAnswerSpec (voir lib/questions.ts) pour les autres types — typé
+   * large ici, la page l'interprète selon `qtype`, jamais en devinant une
+   * forme. */
   correctAnswer: unknown;
   isCorrect: boolean | null;
   pointsAwarded: number | null;
   points: number;
   gradedBy: number | null;
   graderComment: string | null;
+  /** UNIQUEMENT pour 'scenario' — progrès/verdicts de correction manuelle
+   * PAR SOUS-QUESTION (voir lib/schema.sql::attempt_answers.
+   * scenario_grading_json), null pour tout autre type. */
+  scenarioGrading: Record<string, { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string }> | null;
   /** Snapshotée à la publication (jamais relue depuis la question source
    * après coup) — addendum §3 « explication/correction si autorisée » ;
    * n'afficher que si showCorrectAnswers est vrai (même politique que la
@@ -263,7 +272,7 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
   const rows = db
     .prepare(
       `SELECT aq.position, s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot, s.explanation_snapshot, s.points, q.qtype,
-              aa.answer_json, aa.is_correct, aa.points_awarded, aa.graded_by, aa.grader_comment
+              aa.answer_json, aa.is_correct, aa.points_awarded, aa.graded_by, aa.grader_comment, aa.scenario_grading_json
        FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
        JOIN questions q ON q.id = s.question_id
@@ -284,6 +293,7 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
     points_awarded: number | null;
     graded_by: number | null;
     grader_comment: string | null;
+    scenario_grading_json: string | null;
   }[];
 
   const showCorrectAnswers = header.show_correct_answers === 1;
@@ -302,6 +312,7 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
       points: r.points,
       gradedBy: r.graded_by,
       graderComment: r.grader_comment,
+      scenarioGrading: r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : null,
       explanation: showCorrectAnswers ? r.explanation_snapshot : null,
     })),
   };

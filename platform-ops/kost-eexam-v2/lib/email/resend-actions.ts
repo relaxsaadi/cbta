@@ -28,7 +28,13 @@ function resendRateLimitKey(kind: string, targetUserId: number): string {
  * ACCOUNT_CREATED. Réservé aux comptes encore 'pending_activation'
  * (renvoyer une invitation à un compte déjà activé n'a pas de sens —
  * voir PASSWORD_RESET_REQUESTED pour un compte déjà actif). */
-export async function resendInvitation(targetUserId: number, actor: { id: number; role: ConsoleRole }): Promise<void> {
+// Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §12 — retourne
+// maintenant le statut réel de livraison (ex. SUPPRESSED en staging hors
+// allowlist) au lieu de void : les 3 appelants (groupes, fiche
+// utilisateur, historique notifications) composent chacun un message UI
+// honnête à partir de cette valeur, jamais "Invitation envoyée" par
+// défaut quel que soit le résultat réel.
+export async function resendInvitation(targetUserId: number, actor: { id: number; role: ConsoleRole }): Promise<string | null> {
   const rl = checkLoginRateLimit(resendRateLimitKey("invitation", targetUserId));
   if (!rl.allowed) throw new ResendError(`Trop de renvois récents pour ce compte. Réessayez dans ${Math.ceil(rl.retryAfterSeconds / 60)} minute(s).`);
 
@@ -56,7 +62,7 @@ export async function resendInvitation(targetUserId: number, actor: { id: number
   // tentative — "Renvoyer l'invitation" ne renvoyait donc jamais rien en
   // pratique, quel que soit le statut de la tentative d'origine (voir
   // lib/email/events.ts::notifyAccountCreated pour le détail).
-  await notifyAccountCreated({
+  const status = await notifyAccountCreated({
     userId: targetUserId,
     email: target.email,
     firstName,
@@ -78,6 +84,7 @@ export async function resendInvitation(targetUserId: number, actor: { id: number
 
   recordLoginFailure(resendRateLimitKey("invitation", targetUserId)); // consomme un "essai" du limiteur, même en cas de succès (anti-spam, pas anti-erreur)
   auditEmailInvitationResent(actor.id, actor.role, targetUserId);
+  return status;
 }
 
 /** "Envoyer lien réinitialisation" (mission "COMPLETE USER MANAGEMENT",

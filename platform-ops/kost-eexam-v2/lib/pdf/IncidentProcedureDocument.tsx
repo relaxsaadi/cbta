@@ -5,7 +5,7 @@
 // aspirationnelle. Toute modification de ces fichiers doit se répercuter
 // ici.
 import { Document, Page, View, Text } from "@react-pdf/renderer";
-import { pdfStyles } from "./theme";
+import { pdfStyles, pdfSafeText } from "./theme";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
 
 const P = { fontSize: 9, color: "#1a1a1a", marginBottom: 6, lineHeight: 1.4 } as const;
@@ -29,7 +29,8 @@ export function IncidentProcedureDocument({ meta }: { meta: DocumentMeta }) {
 
         <Text style={pdfStyles.h2}>2. Détection et déclaration</Text>
         <Text style={P}>
-          Tout responsable pédagogique ou administrateur peut déclarer un incident via l&apos;écran « Incidents » →
+          Tout responsable pédagogique ou administrateur peut déclarer un incident via l&apos;écran « Incidents »
+          {" "}{pdfSafeText("→")}{" "}
           « Déclarer un incident ». Le formulaire capture : le type d&apos;incident, la sévérité, une description, le
           système concerné, les personnes concernées, et — pour un responsable pédagogique — le groupe/client concerné
           (obligatoire, restreint à son propre périmètre). Un administrateur peut en plus déclarer un incident «

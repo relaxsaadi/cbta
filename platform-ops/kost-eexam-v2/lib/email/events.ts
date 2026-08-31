@@ -141,8 +141,16 @@ export async function notifyAccountCreated(params: {
    * notifyAccountCreated). Omis = comportement normal (un seul envoi par
    * création de compte). */
   forceResendSuffix?: string;
-}): Promise<void> {
-  return safe("ACCOUNT_CREATED", async () => {
+}): Promise<string | null> {
+  // Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §12 — jamais un
+  // safe() void ici (à la différence de tous les autres notify*
+  // ci-dessous, volontairement inchangés) : l'appelant a besoin du statut
+  // RÉEL de livraison (ex. SUPPRESSED par la politique d'allowlist de
+  // staging) pour composer un message UI honnête, jamais un "invitation
+  // envoyée" générique qui mentirait quand l'envoi a en réalité été
+  // bloqué. null = échec AVANT l'outbox (aucune ligne notification_log —
+  // très rare, ex. gabarit qui lève), toujours loggé comme avant.
+  try {
     const activationUrl = `${getAppBaseUrl()}/activer?token=${params.activationToken}`;
     const { html, text } = await renderBoth(
       createElement(AccountCreatedEmail, {
@@ -155,7 +163,7 @@ export async function notifyAccountCreated(params: {
       })
     );
     const idempotencyKey = params.forceResendSuffix ? `account-created-resend/${params.userId}/${params.forceResendSuffix}` : `account-created/${params.userId}`;
-    await queueAndSendEmail({
+    const result = await queueAndSendEmail({
       eventType: "ACCOUNT_CREATED",
       idempotencyKey,
       recipientEmail: params.email,
@@ -164,7 +172,11 @@ export async function notifyAccountCreated(params: {
       sender: getSenderExam(),
       rendered: { subject: accountCreatedSubject(), html, text, templateId: ACCOUNT_CREATED_ID, templateVersion: ACCOUNT_CREATED_V },
     });
-  });
+    return result.status;
+  } catch (err) {
+    console.error(`[email] ACCOUNT_CREATED — échec avant l'outbox (aucune ligne notification_log créée) :`, err instanceof Error ? err.message : String(err));
+    return null;
+  }
 }
 
 // ---------------------------------------------------------------------
@@ -273,8 +285,10 @@ export async function notifyTemporaryAccessCreated(params: {
   temporaryPassword: string;
   expiresAt: string;
   tenant?: EmailTenantContext;
-}): Promise<void> {
-  return safe("TEMPORARY_ACCESS_CREATED", async () => {
+}): Promise<string | null> {
+  // Même traitement que notifyAccountCreated ci-dessus (mission "FIX
+  // EMPLOYEE TESTING ISSUES" §12) — statut réel renvoyé, jamais un void.
+  try {
     const loginUrl = `${getAppBaseUrl()}/login`;
     const { html, text } = await renderBoth(
       createElement(TemporaryAccessCreatedEmail, {
@@ -285,7 +299,7 @@ export async function notifyTemporaryAccessCreated(params: {
         loginUrl,
       })
     );
-    await queueAndSendEmail({
+    const result = await queueAndSendEmail({
       eventType: "TEMPORARY_ACCESS_CREATED",
       idempotencyKey: `temporary-access-created/${params.userId}/${params.expiresAt}`,
       recipientEmail: params.email,
@@ -294,7 +308,11 @@ export async function notifyTemporaryAccessCreated(params: {
       sender: getSenderSecurity(),
       rendered: { subject: temporaryAccessCreatedSubject(), html, text, templateId: TEMP_ACCESS_ID, templateVersion: TEMP_ACCESS_V },
     });
-  });
+    return result.status;
+  } catch (err) {
+    console.error(`[email] TEMPORARY_ACCESS_CREATED — échec avant l'outbox (aucune ligne notification_log créée) :`, err instanceof Error ? err.message : String(err));
+    return null;
+  }
 }
 
 // ---------------------------------------------------------------------

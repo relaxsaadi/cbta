@@ -71,10 +71,10 @@ export function PdfFooter({ meta }: { meta: DocumentMeta }) {
           qu'ajoutée en bout de cette Text : évite tout risque de
           chevauchement avec "Page X / Y" à droite sur un docId long. */}
       <View style={pdfStyles.footerRow}>
-        <Text>
+        <Text style={pdfStyles.footerGenerated}>
           Généré le {meta.generatedAt} par {meta.generatedBy} — Document : {meta.docId}
         </Text>
-        <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} / ${totalPages}`} />
+        <Text style={pdfStyles.footerPageNum} render={({ pageNumber, totalPages }) => `Page ${pageNumber} / ${totalPages}`} />
       </View>
       {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF"
           (2026-08-31) §2 — support KOST Academy sur TOUS les documents PDF

@@ -38,15 +38,30 @@ export function pdfSafeText(text: string): string {
 }
 
 export const pdfStyles = StyleSheet.create({
-  page: { paddingTop: 100, paddingBottom: 56, paddingHorizontal: 40, fontSize: 9.5, color: COLORS.text, fontFamily: "Helvetica" },
+  /** paddingTop volontairement à 0 — voir headerFixed ci-dessous : le
+   * header n'est PLUS position:absolute, donc plus besoin (et surtout
+   * plus SANS RISQUE) de deviner sa hauteur ici. Mission "FIX EMPLOYEE
+   * TESTING ISSUES" (2026-08-31) §3 — bug réel reproduit visuellement :
+   * avec l'ancien paddingTop fixe (100) + un header position:absolute,
+   * un nom d'entreprise/groupe/examen long faisait grandir le header
+   * réel au-delà de 100pt SANS que le corps du document ne le sache —
+   * le corps démarrait quand même à y=100, chevauchant le bas du header
+   * sur CHAQUE page (le header est `fixed`, donc identique partout). */
+  page: { paddingTop: 0, paddingBottom: 56, paddingHorizontal: 40, fontSize: 9.5, color: COLORS.text, fontFamily: "Helvetica" },
+  /** Ex-position:absolute — repositionné en flux normal + `fixed` (même
+   * mécanisme que tableHeaderRow ci-dessous, déjà éprouvé dans ce fichier
+   * pour répéter un en-tête de tableau sans chevauchement). En flux
+   * normal, @react-pdf/renderer réserve exactement la hauteur RÉELLEMENT
+   * mesurée du header à chaque page, quel que soit son contenu — plus
+   * aucune valeur à deviner, donc plus de désynchronisation possible. */
   headerFixed: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
+    // Pas de paddingHorizontal ici : le header vit maintenant DANS la
+    // boîte de contenu de la page (paddingHorizontal:40 déjà appliqué
+    // par `page` ci-dessus) — un paddingHorizontal ici doublerait la
+    // marge (40+40) au lieu de l'aligner avec les cartes du corps.
     paddingTop: 24,
-    paddingHorizontal: 40,
     paddingBottom: 12,
+    marginBottom: 12,
     borderBottomWidth: 1.5,
     borderBottomColor: COLORS.navy,
   },
@@ -80,6 +95,12 @@ export const pdfStyles = StyleSheet.create({
     color: COLORS.textMuted,
   },
   footerRow: { flexDirection: "row", justifyContent: "space-between" },
+  /** flexShrink+maxWidth : si "Généré le… par…" est long (nom complet
+   * long, docId long), il se réduit/enveloppe SUR SA PROPRE largeur au
+   * lieu de pousser "Page X / Y" hors de la page ou de le chevaucher —
+   * "Page X / Y" (footerPageNum) ne rétrécit jamais, toujours lisible. */
+  footerGenerated: { flexShrink: 1, maxWidth: "78%", paddingRight: 8 },
+  footerPageNum: { flexShrink: 0 },
   /** Ligne support KOST Academy — addendum §2 (2026-08-31), sur son propre
    * Text pour ne jamais entrer en conflit de largeur avec "Page X / Y". */
   footerSupport: { marginTop: 2, fontSize: 6.5, color: COLORS.textMuted },

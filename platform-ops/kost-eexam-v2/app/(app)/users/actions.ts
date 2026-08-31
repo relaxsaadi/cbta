@@ -556,12 +556,18 @@ export interface ResendResult {
  * correct). */
 export async function resendInvitationAction(userId: number, _prev: ResendResult, _formData: FormData): Promise<ResendResult> {
   const session = await requireWriteRole("administrator");
+  let status: string | null;
   try {
-    await resendInvitation(userId, { id: session.userId, role: session.role });
+    status = await resendInvitation(userId, { id: session.userId, role: session.role });
   } catch (err) {
     return { error: err instanceof ResendError ? err.message : "Erreur lors de l'envoi de l'invitation." };
   }
   revalidatePath(`/users/${userId}`);
+  // Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §12 — jamais
+  // "Invitation envoyée" inconditionnel : un statut SUPPRESSED (politique
+  // d'environnement de test, ex. allowlist) est annoncé pour ce qu'il est.
+  if (status === "SUPPRESSED") return { success: "Invitation créée — envoi bloqué par la politique d'envoi de cet environnement de test." };
+  if (status === null) return { success: "Invitation créée — l'envoi n'a pas pu être préparé (voir journal serveur)." };
   return { success: "Invitation envoyée." };
 }
 

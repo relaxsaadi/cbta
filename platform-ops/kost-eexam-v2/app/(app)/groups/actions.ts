@@ -14,6 +14,23 @@ import { notifyAccountCreated, notifyTemporaryAccessCreated } from "@/lib/email/
 import { auditEmailInvitationSent } from "@/lib/email/audit";
 import { createTemporaryAccess } from "@/lib/temp-password";
 import { findDuplicateAccount, CROSS_TENANT_DUPLICATE_MESSAGE } from "@/lib/duplicate-check";
+import { resendInvitation, ResendError } from "@/lib/email/resend-actions";
+
+// Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §12 — un statut
+// "SUPPRESSED" (staging : hors EMAIL_ALLOWED_RECIPIENTS, ou EMAIL_MODE=log)
+// n'est JAMAIS annoncé comme "invitation envoyée" à l'écran : c'est un
+// comportement de politique d'environnement de test attendu (§9), pas un
+// échec, mais l'UI doit rester honnête sur ce qui s'est réellement passé.
+// Tout autre statut (SENT/QUEUED/DELIVERED/FAILED...) signifie qu'un envoi
+// réel a été tenté — annoncé comme tel, y compris FAILED (échec réseau/
+// fournisseur reste visible dans "Notifications", jamais masqué ici mais
+// jamais non plus confondu avec un blocage de politique volontaire).
+function deliveryPhrase(status: string | null, email: string, kind: "invitation" | "accès temporaire" = "invitation"): string {
+  const label = kind === "invitation" ? "Invitation" : "Accès temporaire";
+  if (status === "SUPPRESSED") return `${label} créé(e) pour ${email} — envoi bloqué par la politique d'envoi de cet environnement de test (destinataire non approuvé ou mode test).`;
+  if (status === null) return `${label} créé(e) pour ${email} — l'envoi n'a pas pu être préparé (voir journal serveur).`;
+  return `${label} envoyé(e) à ${email}.`;
+}
 
 /** Invitation sécurisée (mission email §8-10) — crée le compte SANS mot de
  * passe communiqué, un jeton d'activation, et déclenche ACCOUNT_CREATED.
@@ -30,10 +47,10 @@ async function inviteNewCandidate(params: {
   groupName: string;
   actorUserId: number;
   actorRole: "pedagogical_manager" | "administrator";
-}) {
+}): Promise<string> {
   const firstName = params.fullName.trim().split(/\s+/)[0] ?? params.fullName;
   const { token, expiresAt } = createActivationToken({ userId: params.userId, purpose: "account_setup", createdBy: params.actorUserId });
-  await notifyAccountCreated({
+  const status = await notifyAccountCreated({
     userId: params.userId,
     email: params.email,
     firstName,
@@ -49,6 +66,7 @@ async function inviteNewCandidate(params: {
     expiresAt,
   });
   auditEmailInvitationSent(params.actorUserId, params.actorRole, params.userId);
+  return deliveryPhrase(status, params.email);
 }
 
 export interface CreateGroupResult {
@@ -173,7 +191,59 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
     // d'origine.
     audit({ actorUserId: session.userId, actorRole: session.role, action: "user_group_assigned", targetType: "user", targetId: user.id, metadata: { groupId } });
     revalidatePath(`/groups/${groupId}`);
-    return { success: `${fullName} (compte existant) ajouté au groupe.` };
+
+    // Mission "FIX EMPLOYEE TESTING ISSUES — PDF OVERLAP + GROUP CANDIDATE
+    // INVITATION DELIVERY" (2026-08-31) §10/§14 — bug réel trouvé : un
+    // candidat EXISTANT (même identifiant/email déjà en base — cas
+    // fréquent : réaffectation à un second groupe, ou nouvelle tentative
+    // après une première saisie déjà enregistrée) était simplement rattaché
+    // au groupe SANS JAMAIS relancer d'invitation ni d'accès temporaire,
+    // quelle que soit la méthode d'accès choisie dans le formulaire — donc
+    // AUCUN email, silencieusement, tout en affichant un message de succès
+    // qui ne mentionnait même pas l'absence d'envoi. Corrigé : pour un
+    // compte encore 'pending_activation' (jamais activé), la méthode
+    // choisie est maintenant réellement exécutée, exactement comme pour un
+    // nouveau compte — jamais un no-op silencieux. §13 : pour un compte
+    // déjà 'active', on ne relance jamais d'invitation d'activation (elle
+    // n'aurait plus de sens) — voir sendPasswordResetLink pour ce cas,
+    // action distincte et volontairement non déclenchée automatiquement
+    // ici (ce formulaire n'exprime jamais une intention de réinitialisation).
+    if (user.status !== "pending_activation") {
+      return { success: `${fullName} (compte existant, déjà actif) ajouté au groupe. Aucune invitation d'activation n'est nécessaire — le compte est déjà utilisable.` };
+    }
+
+    const existingEmail = user.email ?? email;
+    if (accessMethod === "temporary") {
+      const { plaintext, expiresAt } = createTemporaryAccess(user.id);
+      audit({ actorUserId: session.userId, actorRole: session.role, action: "temporary_access_created", targetType: "user", targetId: user.id, metadata: { groupId } });
+      await notifyTemporaryAccessCreated({
+        userId: user.id,
+        email: existingEmail,
+        firstName: user.full_name.split(/\s+/)[0] ?? user.full_name,
+        username: user.username,
+        temporaryPassword: plaintext,
+        expiresAt,
+        tenant: { companyId: group.company_id, companyName: group.company_name },
+      });
+      return {
+        success: `${fullName} (compte existant, en attente d'activation) ajouté au groupe — nouvel accès temporaire créé et envoyé à ${existingEmail}.`,
+        temporaryPassword: plaintext,
+        temporaryPasswordExpiresAt: expiresAt,
+      };
+    }
+
+    let resendStatus: string | null;
+    try {
+      resendStatus = await resendInvitation(user.id, { id: session.userId, role: session.role as "pedagogical_manager" | "administrator" });
+    } catch (err) {
+      // Truthful UI (§12) : le rattachement au groupe a déjà réussi
+      // ci-dessus (revalidatePath déjà appelé) — seul le RENVOI
+      // d'invitation a échoué (ex. limite de débit anti-spam) ; jamais
+      // annoncé comme "invitation envoyée" dans ce cas.
+      const msg = err instanceof ResendError ? err.message : "Erreur lors de l'envoi de l'invitation.";
+      return { success: `${fullName} (compte existant, en attente d'activation) ajouté au groupe.`, error: `Invitation non renvoyée : ${msg}` };
+    }
+    return { success: `${fullName} (compte existant, en attente d'activation) ajouté au groupe — ${deliveryPhrase(resendStatus, existingEmail).toLowerCase()}` };
   }
 
   let userId: number;
@@ -195,7 +265,7 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
     // Jamais le mot de passe en clair dans audit() — uniquement le fait
     // qu'un accès temporaire a été créé, et par qui.
     audit({ actorUserId: session.userId, actorRole: session.role, action: "temporary_access_created", targetType: "user", targetId: userId, metadata: { groupId } });
-    await notifyTemporaryAccessCreated({
+    const tempStatus = await notifyTemporaryAccessCreated({
       userId,
       email,
       firstName: fullName.split(/\s+/)[0] ?? fullName,
@@ -205,10 +275,14 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
       tenant: { companyId: group.company_id, companyName: group.company_name },
     });
     revalidatePath(`/groups/${groupId}`);
-    return { success: `${fullName} créé avec un accès temporaire, envoyé à ${email}.`, temporaryPassword: plaintext, temporaryPasswordExpiresAt: expiresAt };
+    // Le mot de passe reste affiché une fois à l'écran (Affichage unique,
+    // AddCandidateForm.tsx) MÊME si l'email est bloqué par la politique de
+    // test — jamais un blocage silencieux pour cette méthode d'accès,
+    // seul le message ci-dessous reflète honnêtement l'envoi email.
+    return { success: `${fullName} créé avec un accès temporaire. ${deliveryPhrase(tempStatus, email, "accès temporaire")}`, temporaryPassword: plaintext, temporaryPasswordExpiresAt: expiresAt };
   }
 
-  await inviteNewCandidate({
+  const deliveryMsg = await inviteNewCandidate({
     userId,
     username,
     email,
@@ -220,7 +294,7 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
     actorRole: session.role as "pedagogical_manager" | "administrator",
   });
   revalidatePath(`/groups/${groupId}`);
-  return { success: `${fullName} créé et invité par email (${email}).` };
+  return { success: `${fullName} créé. ${deliveryMsg}` };
 }
 
 /** Non câblée à aucun écran aujourd'hui (audit "MISSION FINALE —
@@ -359,8 +433,9 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
       const userId = user ? user.id : createUserPendingActivation({ username, fullName, role: "candidate", email, phone });
       addCandidateToGroup(groupId, userId, session.userId);
       existingMembers.add(userId);
+      let importDetail: string | undefined;
       if (isNew) {
-        await inviteNewCandidate({
+        importDetail = await inviteNewCandidate({
           userId,
           username,
           email,
@@ -371,8 +446,21 @@ export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImp
           actorUserId: session.userId,
           actorRole: session.role as "pedagogical_manager" | "administrator",
         });
+      } else if (user!.status === "pending_activation") {
+        // Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §10/§14 — même
+        // bug/même correctif que addCandidateAction ci-dessus, présent ici
+        // aussi (chemin d'import CSV, même écran "Groupes") : un candidat
+        // existant réimporté restait sans invitation renvoyée, quel que
+        // soit son statut. Un compte déjà 'active' n'a jamais besoin de ce
+        // renvoi (§13) — aucune action supplémentaire dans ce cas.
+        try {
+          const status = await resendInvitation(userId, { id: session.userId, role: session.role as "pedagogical_manager" | "administrator" });
+          importDetail = deliveryPhrase(status, user!.email ?? email);
+        } catch (err) {
+          importDetail = `invitation non renvoyée : ${err instanceof ResendError ? err.message : "erreur d'envoi"}`;
+        }
       }
-      report.push({ line: i + 1, identifier: username, status: isNew ? "created" : "existing_added" });
+      report.push({ line: i + 1, identifier: username, status: isNew ? "created" : "existing_added", detail: importDetail });
     } catch (e) {
       // Filet de sécurité résiduel — jamais le message SQLite brut si on
       // peut le traduire (même discipline que createUserAction/

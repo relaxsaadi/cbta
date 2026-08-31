@@ -53,10 +53,10 @@ export default function MentionsLegalesPage() {
             </section>
             <section>
               <h2 className="text-xl font-bold text-[#0f1c2e] mb-2">
-                Certification IATA
+                Méthode de formation
               </h2>
               <p>
-                KOST GROUP est officiellement certifié <strong>CBTA Provider</strong> par l'International Air Transport Association (IATA). La vérification est disponible publiquement sur{" "}
+                KOST GROUP dispense ses formations DGR selon la méthode <strong>CBTA</strong> (Competency-Based Training and Assessment), le référentiel utilisé par le registre IATA CBTA Center. Pour en savoir plus, consultez{" "}
                 <a
                   href="https://www.iata.org/en/training/cbta-center-registry/"
                   target="_blank"

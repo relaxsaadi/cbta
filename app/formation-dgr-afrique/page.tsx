@@ -40,9 +40,9 @@ const PAYS = [
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
-  name: "KOST GROUP — Centre IATA CBTA",
+  name: "KOST GROUP — Formation IATA DGR",
   description:
-    "Premier centre IATA CBTA Provider certifié d'Algérie, spécialisé dans la formation DGR (Dangerous Goods Regulations) pour toute l'Afrique.",
+    "Centre de formation DGR (Dangerous Goods Regulations) basé en Algérie, méthode CBTA, pour toute l'Afrique.",
   url: "https://dgr.kostacademy.com",
   telephone: "+213542305383",
   address: {
@@ -65,13 +65,13 @@ export default function Page() {
       <main style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" }}>
         {/* Hero */}
         <section style={{ background: "linear-gradient(135deg, #003087 0%, #0052cc 100%)", color: "white", padding: "80px 24px", textAlign: "center" }}>
-          <p style={{ fontSize: 14, letterSpacing: 2, opacity: 0.8, marginBottom: 12 }}>IATA CBTA PROVIDER CERTIFIÉ</p>
+          <p style={{ fontSize: 14, letterSpacing: 2, opacity: 0.8, marginBottom: 12 }}>MÉTHODE CBTA</p>
           <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", fontWeight: 700, margin: "0 0 16px" }}>
             Formation IATA DGR en Afrique
           </h1>
           <p style={{ fontSize: 18, opacity: 0.9, maxWidth: 600, margin: "0 auto 32px" }}>
-            Le premier centre CBTA certifié d&apos;Algérie au service de toute l&apos;Afrique —
-            formations officielles IATA DGR, examen CBTA, certificat reconnu mondialement.
+            Un centre basé en Algérie, au service de toute l&apos;Afrique —
+            formations DGR, méthode CBTA.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#pays" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -118,10 +118,10 @@ export default function Page() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 20 }}>
               {[
-                { icon: "🏅", title: "1er centre CBTA d'Algérie", text: "Seul centre accrédité IATA CBTA Provider en Algérie, reconnu par les autorités de l'aviation civile africaines." },
+                { icon: "🏅", title: "Formation méthode CBTA en Algérie", text: "Formation DGR dispensée depuis l'Algérie, selon la méthode CBTA." },
                 { icon: "🌍", title: "Formation intra en Afrique", text: "Nos formateurs se déplacent dans votre pays. Vous formez votre équipe sans déplacements coûteux vers l'Europe." },
                 { icon: "💰", title: "50 % moins cher que Paris", text: "Tarifs adaptés au marché africain — économisez sur les frais de déplacement, visa et hébergement." },
-                { icon: "📜", title: "Certificat IATA reconnu", text: "Certificat IATA DGR-CBTA valable 24 mois, reconnu par toutes les compagnies aériennes et autorités mondiales." },
+                { icon: "📜", title: "Certificat DGR-CBTA", text: "Certificat DGR-CBTA valable 24 mois." },
               ].map((r) => (
                 <div key={r.title} style={{ background: "white", borderRadius: 12, padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
                   <div style={{ fontSize: 32, marginBottom: 12 }}>{r.icon}</div>

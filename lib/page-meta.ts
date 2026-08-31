@@ -34,7 +34,7 @@ export function courseSchema(formation: Formation) {
       availability: "https://schema.org/InStock",
       category: "Professional Training",
     },
-    educationalCredentialAwarded: "Certificat IATA CBTA",
+    educationalCredentialAwarded: "Certificat DGR-CBTA",
     timeRequired: formation.duree,
   };
 }

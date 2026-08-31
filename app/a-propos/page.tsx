@@ -7,12 +7,12 @@ import { Award, MapPin, CheckCircle, Globe, BadgeCheck, Users } from "lucide-rea
 export const metadata: Metadata = {
   title: "À propos de KOST GROUP",
   description:
-    "Premier centre IATA CBTA Provider certifié en Algérie. Fondé pour rendre la certification DGR accessible en Afrique francophone à prix juste.",
+    "Centre de formation DGR basé en Algérie, méthode CBTA. Fondé pour rendre la formation DGR accessible en Afrique francophone à prix juste.",
   alternates: { canonical: "/a-propos" },
   openGraph: {
     title: "À propos de KOST GROUP",
     description:
-      "Premier centre IATA CBTA Provider certifié en Algérie. Certification DGR officielle pour l'Afrique francophone.",
+      "Centre de formation DGR basé en Algérie, méthode CBTA, pour l'Afrique francophone.",
     url: "/a-propos",
   },
 };
@@ -27,7 +27,7 @@ const orgSchema = {
   logo: `${siteUrl}/kost-group-logo.svg`,
   image: `${siteUrl}/og-image.jpg`,
   description:
-    "Premier centre IATA CBTA Provider certifié en Algérie, proposant les formations DGR (Marchandises Dangereuses) officielles pour l'aviation et le fret aérien en Afrique francophone.",
+    "Centre de formation DGR (Marchandises Dangereuses) basé en Algérie, méthode CBTA, pour l'aviation et le fret aérien en Afrique francophone.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki",
@@ -49,19 +49,10 @@ const orgSchema = {
     opens: "08:30",
     closes: "16:30",
   },
-  sameAs: ["https://www.iata.org/en/training/cbta-center-registry/"],
-  hasCredential: {
-    "@type": "EducationalOccupationalCredential",
-    credentialCategory: "IATA CBTA Provider",
-    recognizedBy: {
-      "@type": "Organization",
-      name: "International Air Transport Association (IATA)",
-    },
-  },
   employee: {
     "@type": "Person",
     name: "Formateur Principal IATA DGR",
-    jobTitle: "Formateur & Instructeur IATA CBTA Certifié",
+    jobTitle: "Formateur DGR — méthode CBTA",
     worksFor: { "@type": "Organization", name: "KOST GROUP" },
     knowsAbout: [
       "IATA DGR Dangerous Goods Regulations",
@@ -113,15 +104,16 @@ export default function AProposPage() {
             </nav>
             <div className="inline-flex items-center gap-2 bg-[#F39C12]/20 border border-[#F39C12]/40 px-4 py-1.5 rounded-full text-sm font-bold text-[#F39C12] mb-5">
               <Award className="h-4 w-4" aria-hidden />
-              IATA CBTA Provider Certifié — Algérie
+              Formation DGR — Méthode CBTA · Algérie
             </div>
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
               À propos de KOST GROUP
             </h1>
             <p className="text-lg text-white/80 leading-relaxed max-w-2xl">
-              Premier centre IATA CBTA (Competency-Based Training & Assessment) certifié en Algérie
-              et en Afrique francophone. Nous formons les professionnels du transport aérien
-              aux Réglementations Marchandises Dangereuses (DGR) depuis Alger.
+              Centre de formation basé en Algérie, actif en Afrique francophone, utilisant la
+              méthode IATA CBTA (Competency-Based Training & Assessment). Nous formons les
+              professionnels du transport aérien aux Réglementations Marchandises Dangereuses
+              (DGR) depuis Alger.
             </p>
           </div>
         </section>
@@ -138,19 +130,18 @@ export default function AProposPage() {
               entre 3 000 et 5 000 euros. KOST GROUP a été fondé pour rompre avec cette réalité.
             </p>
             <p>
-              En obtenant la certification IATA CBTA Provider — la seule en Algérie, vérifiable
-              sur{" "}
+              Nous proposons 12 formations DGR à partir de 650 €, selon la méthode CBTA
+              (Competency-Based Training and Assessment) utilisée par le{" "}
               <a
                 href="https://www.iata.org/en/training/cbta-center-registry/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#003D7A] underline"
               >
-                iata.org/cbta-center-registry
-              </a>{" "}
-              — nous proposons les 12 formations IATA DGR officielles à partir de 650 €, avec
-              le même certificat qu'à Bruxelles, valide auprès des 300+ compagnies aériennes
-              membres IATA.
+                registre IATA CBTA Center
+              </a>
+              . Nous vous recommandons de vérifier les exigences spécifiques de votre compagnie
+              aérienne ou autorité de tutelle.
             </p>
             <p>
               Nos formations couvrent tous les rôles réglementés : expéditeurs, agents de fret,
@@ -169,10 +160,10 @@ export default function AProposPage() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { num: "13", label: "Formations DGR certifiées IATA" },
+                { num: "13", label: "Formations DGR (méthode CBTA)" },
                 { num: "95%+", label: "Taux de réussite examen IATA" },
                 { num: "9", label: "Pays couverts en Afrique" },
-                { num: "24 mois", label: "Validité du certificat IATA" },
+                { num: "24 mois", label: "Validité du certificat DGR" },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -209,14 +200,14 @@ export default function AProposPage() {
                 Alger · Déplacements Afrique francophone
               </p>
               <p className="text-gray-700 leading-relaxed mb-4 text-sm">
-                Praticien du fret aérien international, certifié IATA Instructor & Evaluator avec plus de 15 ans d'expérience en compagnie aérienne et en agence de fret. Spécialiste de la réglementation IATA DGR (67e édition 2026), il a accompagné des centaines d'apprenants vers la certification — avec un taux de réussite supérieur à 95% au premier examen.
+                Praticien du fret aérien international, formé aux méthodes IATA Instructor & Evaluator, avec plus de 15 ans d'expérience en compagnie aérienne et en agence de fret. Spécialiste de la réglementation IATA DGR (67e édition 2026), il a accompagné des centaines d'apprenants — avec un taux de réussite supérieur à 95% au premier examen.
               </p>
               <ul className="space-y-1.5 text-sm">
                 {[
-                  "Certifié IATA CBTA Instructor & Evaluator",
+                  "Formé aux méthodes IATA Instructor & Evaluator",
                   "15+ années dans le fret aérien international",
                   "Ancien agent acceptation DGR — compagnie aérienne",
-                  "Formateur agréé Algérie · Maroc · Afrique francophone",
+                  "Formateur actif en Algérie · Maroc · Afrique francophone",
                 ].map((c) => (
                   <li key={c} className="flex items-center gap-2 text-gray-700">
                     <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" aria-hidden />
@@ -263,8 +254,8 @@ export default function AProposPage() {
             {[
               {
                 icon: BadgeCheck,
-                title: "IATA CBTA Provider — seul en Algérie",
-                desc: "Certification vérifiable sur iata.org/cbta-center-registry. Le certificat délivré est identique à celui obtenu à Bruxelles.",
+                title: "Formation méthode CBTA en Algérie",
+                desc: "Formation dispensée localement selon la méthode CBTA (Competency-Based Training and Assessment) utilisée par le registre IATA CBTA Center.",
               },
               {
                 icon: Award,

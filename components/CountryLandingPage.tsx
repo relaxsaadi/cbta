@@ -49,7 +49,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
   const t = isEnglish
     ? {
         heroTitle: `IATA DGR Training in ${data.pays}`,
-        heroSub: `IATA CBTA-certified training for dangerous goods by air — delivered locally in Africa`,
+        heroSub: `DGR training for dangerous goods by air, using the CBTA approach — delivered locally in Africa`,
         whyTitle: `Why train in ${data.pays} with KOST GROUP?`,
         obligTitle: `Regulatory obligation — ${data.autoriteRegionale}`,
         obligText: `Under ICAO Annex 18 and the regulations of ${data.autoriteRegionale}, all personnel involved in the air transport of dangerous goods must be trained and certified before taking up their duties. Certification is valid for 24 months.`,
@@ -61,7 +61,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
       }
     : {
         heroTitle: `Formation IATA DGR ${data.paysPreposition} ${data.pays}`,
-        heroSub: `Premier centre IATA CBTA Provider certifié en Algérie — formations marchandises dangereuses pour toute l'Afrique`,
+        heroSub: `Formation marchandises dangereuses, méthode CBTA — pour toute l'Afrique francophone`,
         whyTitle: `Pourquoi choisir KOST GROUP pour votre formation DGR ${data.paysPreposition} ${data.pays} ?`,
         obligTitle: `Obligation réglementaire — ${data.autoriteRegionale}`,
         obligText: `Conformément à l'Annexe 18 de l'OACI et à la réglementation de ${data.autoriteRegionale}, tout personnel impliqué dans le transport aérien de marchandises dangereuses doit être formé et certifié avant d'exercer ses fonctions. La certification est valide 24 mois.`,
@@ -74,29 +74,29 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
 
   const reasons = isEnglish
     ? [
-        { icon: "🏆", title: "First CBTA Provider in Algeria", text: "KOST GROUP is the first and only IATA CBTA Provider certified training center in Algeria. Your certificates are identical to those issued in Paris or Dubai." },
-        { icon: "💰", title: `Save ${data.savingsVsParis}% vs. Europe`, text: "Same IATA certification. Same passing rate. At a fraction of the cost of sending staff to Belgium or France." },
-        { icon: "🌍", title: "We come to you", text: `On-site training in ${data.pays} from 6 participants. No travel required. Our certified trainers travel across Africa.` },
+        { icon: "🏆", title: "CBTA-based training in Algeria", text: "KOST GROUP delivers DGR training in Algeria using the CBTA approach, so your team can train locally instead of traveling to Europe." },
+        { icon: "💰", title: `Save ${data.savingsVsParis}% vs. Europe`, text: "Same CBTA method. Same passing rate. At a fraction of the cost of sending staff to Belgium or France." },
+        { icon: "🌍", title: "We come to you", text: `On-site training in ${data.pays} from 6 participants. No travel required. Our trainers travel across Africa.` },
         { icon: "📄", title: "Local invoicing", text: `Invoice in EUR, USD or local currency. Compatible with your accounting requirements in ${data.pays}.` },
       ]
     : [
-        { icon: "🏆", title: "1er centre CBTA Provider d'Algérie", text: `KOST GROUP est le premier et unique centre IATA CBTA Provider certifié en Algérie. Vos certificats sont identiques à ceux délivrés à Paris ou Dubaï — reconnus par ${data.autoriteRegionale}.` },
-        { icon: "💰", title: `${data.savingsVsParis}% moins cher qu'en Europe`, text: "Même certification IATA. Même taux de réussite. À une fraction du coût d'un déplacement en Belgique ou en France." },
+        { icon: "🏆", title: "Formation méthode CBTA en Algérie", text: `KOST GROUP dispense ses formations DGR en Algérie selon la méthode CBTA, pour éviter à vos équipes un déplacement en Europe.` },
+        { icon: "💰", title: `${data.savingsVsParis}% moins cher qu'en Europe`, text: "Même méthode CBTA. Même taux de réussite. À une fraction du coût d'un déplacement en Belgique ou en France." },
         { icon: "🌍", title: "Formation intra possible", text: `Nous venons dans votre entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Pas de déplacement requis pour vos équipes.` },
         { icon: "📄", title: "Facturation adaptée", text: `Facture en EUR, USD ou monnaie locale. Compatible avec vos exigences comptables ${data.paysPreposition} ${data.pays}.` },
       ];
 
   const faqItems = isEnglish
     ? [
-        { q: `Is the IATA DGR certificate recognized in ${data.pays}?`, a: `Yes. The IATA CBTA certificate is internationally recognized and accepted by ${data.autoriteRegionale} and all IATA member airlines (300+ carriers worldwide). Our CBTA Provider number is verifiable on iata.org.` },
+        { q: `Is the IATA DGR certificate recognized in ${data.pays}?`, a: `The IATA Dangerous Goods Regulations (DGR) are the training standard referenced by IATA member airlines and civil aviation authorities, including ${data.autoriteRegionale}. We recommend confirming your airline's specific requirements when booking.` },
         { q: "How long is the certificate valid?", a: "24 months from the date of successful examination. A Recurrent (renewal) training is mandatory before expiry to maintain the qualification." },
-        { q: `Can you deliver training in ${data.pays}?`, a: `Yes. We organize intra-company training sessions in ${data.pays} from 6 participants. Our IATA-certified trainers travel to your site. Contact us for a quote.` },
+        { q: `Can you deliver training in ${data.pays}?`, a: `Yes. We organize intra-company training sessions in ${data.pays} from 6 participants. Our trainers travel to your site. Contact us for a quote.` },
         { q: "What is the examination pass rate?", a: "Over 90% on first attempt for our participants. Our CBTA-based approach focuses on practical skill demonstration, not just theory." },
       ]
     : [
-        { q: `Le certificat IATA DGR est-il reconnu ${data.paysPreposition} ${data.pays} ?`, a: `Oui. Le certificat IATA CBTA est reconnu internationalement par ${data.autoriteRegionale} et par les 300+ compagnies aériennes membres de l'IATA. Notre numéro CBTA Provider est vérifiable sur iata.org.` },
+        { q: `Le certificat IATA DGR est-il reconnu ${data.paysPreposition} ${data.pays} ?`, a: `Le référentiel IATA DGR (Dangerous Goods Regulations) est le standard de formation utilisé par les compagnies aériennes membres de l'IATA et repris par les autorités de l'aviation civile, dont ${data.autoriteRegionale}. Nous vous recommandons de vérifier les exigences spécifiques de votre compagnie lors de la réservation.` },
         { q: "Combien de temps dure la certification ?", a: "24 mois à compter de la date de réussite à l'examen. Un recyclage (Recurrent) est obligatoire avant l'expiration pour maintenir la qualification." },
-        { q: `Pouvez-vous former ${data.paysPreposition} ${data.pays} ?`, a: `Oui. Nous organisons des sessions intra-entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Nos formateurs IATA certifiés se déplacent sur votre site. Contactez-nous pour un devis.` },
+        { q: `Pouvez-vous former ${data.paysPreposition} ${data.pays} ?`, a: `Oui. Nous organisons des sessions intra-entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Nos formateurs se déplacent sur votre site. Contactez-nous pour un devis.` },
         { q: "Quel est le taux de réussite à l'examen ?", a: "Plus de 90% à la première tentative pour nos stagiaires. Notre approche CBTA axée sur la démonstration de compétences garantit une préparation optimale." },
         { q: `Y a-t-il une session prochainement ${data.paysPreposition} ${data.pays} ?`, a: `Des sessions inter-entreprises ont lieu régulièrement à Alger. Pour ${data.pays}, nous organisons des sessions intra à partir de 6 participants. Consultez le planning ou contactez-nous.` },
       ];
@@ -131,7 +131,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
               marginBottom: 20,
             }}
           >
-            IATA CBTA Provider Certifié · {t.savingsLabel}
+            Formation IATA DGR · {t.savingsLabel}
           </div>
           <h1
             style={{

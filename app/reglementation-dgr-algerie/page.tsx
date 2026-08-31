@@ -68,7 +68,7 @@ const faqSchema = {
       name: "Le format CBTA est-il obligatoire pour les formations DGR ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Le CBTA (Competency-Based Training and Assessment) est le format défini par l'OACI (Annexe 18, Décision DGP/27) et repris par la réglementation IATA DGR (section 1.5) comme standard international de référence pour la formation aux marchandises dangereuses. KOST GROUP est le premier centre CBTA Provider certifié IATA en Algérie.",
+        text: "Le CBTA (Competency-Based Training and Assessment) est le format défini par l'OACI (Annexe 18, Décision DGP/27) et repris par la réglementation IATA DGR (section 1.5) comme standard international de référence pour la formation aux marchandises dangereuses. KOST GROUP dispense ses formations DGR en Algérie selon ce format.",
       },
     },
   ],
@@ -202,16 +202,15 @@ export default function ReglementationPage() {
         {/* Positionnement KOST */}
         <section className="container-x max-w-3xl py-14">
           <h2 className="text-2xl font-extrabold text-[#0f1c2e] mb-4">
-            3. KOST GROUP — Premier centre CBTA Provider certifié IATA en Algérie
+            3. KOST GROUP — Formation DGR méthode CBTA en Algérie
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             Face à cette double obligation — contrôle ANAC (Décret 21-253) et standard
-            international CBTA (OACI/IATA) — KOST GROUP est le premier centre de formation en
-            Algérie certifié IATA CBTA Provider, permettant à vos équipes d'obtenir une
-            certification reconnue sans déplacement à l'étranger.
+            international CBTA (OACI/IATA) — KOST GROUP dispense en Algérie une formation DGR
+            selon la méthode CBTA, sans déplacement à l'étranger pour vos équipes.
           </p>
           <p className="text-sm text-gray-500">
-            Vérifiez notre statut directement sur le{" "}
+            Pour en savoir plus sur ce standard, consultez le{" "}
             <a
               href="https://www.iata.org/en/training/cbta-center-registry/"
               target="_blank"

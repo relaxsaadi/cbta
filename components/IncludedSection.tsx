@@ -1,10 +1,10 @@
 import { Check } from "lucide-react";
 
 const ITEMS = [
-  { text: "Formation présentielle 4-5 jours avec formateur IATA certifié", value: "2 250 €" },
+  { text: "Formation présentielle 4-5 jours avec formateur expérimenté", value: "2 250 €" },
   { text: "Manuel IATA DGR 2026 (67e édition) inclus", value: "200 €" },
-  { text: "Examen IATA officiel CBTA inclus", value: "✓" },
-  { text: "Certificat IATA numérique vérifiable en ligne", value: "✓" },
+  { text: "Évaluation CBTA incluse", value: "✓" },
+  { text: "Certificat DGR-CBTA numérique", value: "✓" },
   { text: "Exercices pratiques et cas réels", value: "✓" },
   { text: "Facturation officielle France ou Algérie", value: "✓" },
   { text: "Hébergement et restauration inclus pour multi-jours (sur demande)", value: "✓" },

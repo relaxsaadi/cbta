@@ -40,7 +40,7 @@ const JSON_LD = {
   },
   courseCode: "DGR-7.1-7.2",
   availableLanguage: "fr",
-  occupationalCredentialAwarded: "Certificat IATA DGR-CBTA",
+  occupationalCredentialAwarded: "Certificat DGR-CBTA",
   offers: {
     "@type": "Offer",
     price: "900",
@@ -117,7 +117,7 @@ export default function Page() {
             Catégories <strong>7.1 & 7.2</strong> — Certifiez vos équipes pour expédier légalement des marchandises dangereuses par avion.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            Obligation OACI Annexe 18 · CBTA Provider certifié · Certificat valable 24 mois
+            Obligation OACI Annexe 18 · Méthode CBTA · Certificat valable 24 mois
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#formations" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -185,10 +185,10 @@ export default function Page() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
-                { icon: "🏅", t: "1er CBTA Provider d'Algérie", d: "Seul centre IATA CBTA accrédité en Algérie — vos certificats sont reconnus par toutes les compagnies aériennes." },
+                { icon: "🏅", t: "Formation méthode CBTA en Algérie", d: "Formation DGR dispensée localement en Algérie, sans déplacement en Europe." },
                 { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
-                { icon: "🏢", t: "Intra-entreprise possible", d: "Formateur IATA déplacé dans vos locaux pour former tout votre pôle export DGR en une session." },
-                { icon: "💶", t: "50% moins cher qu'en Europe", d: "Même certification IATA, même formateur accrédité, moitié prix par rapport à Paris ou Bruxelles." },
+                { icon: "🏢", t: "Intra-entreprise possible", d: "Formateur déplacé dans vos locaux pour former tout votre pôle export DGR en une session." },
+                { icon: "💶", t: "50% moins cher qu'en Europe", d: "Même méthode CBTA, même exigence de formation, moitié prix par rapport à Paris ou Bruxelles." },
               ].map((r) => (
                 <div key={r.t} style={{ background: "white", borderRadius: 10, padding: "20px" }}>
                   <div style={{ fontSize: 30, marginBottom: 10 }}>{r.icon}</div>
@@ -207,8 +207,8 @@ export default function Page() {
             { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "Oui. Tout agent qui prépare, classe, emballe ou documente des envois DGR doit détenir un certificat DGR 7.1 en cours de validité (OACI Annexe 18, IATA DGR Section 1)." },
             { q: "Quelle est la validité de la certification ?", a: "24 mois. À l'échéance, votre agent doit suivre la formation DGR 7.1 Recurrent pour renouveler son certificat." },
             { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
-            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Oui. KOST GROUP est un IATA CBTA Provider officiel. Le certificat émis est un certificat IATA reconnu par toutes les compagnies aériennes mondiales." },
-            { q: "Y a-t-il un examen à la fin ?", a: "Oui. L'examen CBTA est basé sur des compétences (Competency-Based Training and Assessment). Le taux de réussite de nos stagiaires dépasse 95 %." },
+            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Le certificat délivré suit le référentiel IATA DGR et la méthode CBTA. Nous vous recommandons de vérifier les exigences spécifiques de votre compagnie aérienne partenaire." },
+            { q: "Y a-t-il un examen à la fin ?", a: "Oui. L'évaluation CBTA est basée sur des compétences (Competency-Based Training and Assessment)." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#003087" }}>{faq.q}</summary>

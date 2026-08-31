@@ -10,7 +10,7 @@ import TrackedLink from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Formation IATA DGR Pharmacie & Biomédical — Glace Sèche, UN 3373",
   description:
-    "Formation IATA DGR pour le secteur pharmaceutique et biomédical : glace sèche (PI 954), substances biologiques UN 3373, matières infectieuses UN 2814/2900. Centre CBTA certifié en Algérie.",
+    "Formation IATA DGR pour le secteur pharmaceutique et biomédical : glace sèche (PI 954), substances biologiques UN 3373, matières infectieuses UN 2814/2900. Méthode CBTA, en Algérie.",
   alternates: { canonical: "/formation-dgr-pharmacie" },
   keywords: [
     "formation DGR pharmacie",
@@ -94,7 +94,7 @@ export default function Page() {
             Glace sèche · UN 3373 · UN 2814 · Azote liquide — Certifiez vos équipes pour l&apos;expédition aérienne de produits pharmaceutiques et biologiques.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            CBTA Provider certifié · Conformité IATA DGR dernière édition · Algérie & Afrique
+            Méthode CBTA · Conformité IATA DGR dernière édition · Algérie & Afrique
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#contact" style={{ background: "white", color: "#003d1a", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>

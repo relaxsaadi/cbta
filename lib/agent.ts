@@ -91,7 +91,7 @@ Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy
   } catch {
     return {
       subject: `Formation DGR IATA obligatoire — ${company.name}`,
-      body: `${contactName},\n\nKOST GROUP, premier centre IATA CBTA certifié d'Algérie, propose des formations DGR IATA adaptées à votre secteur.\n\nCordialement,\nKOST GROUP\n+213 542 30 53 83\ndgr.kostacademy.com`,
+      body: `${contactName},\n\nKOST GROUP propose des formations DGR IATA, méthode CBTA, adaptées à votre secteur.\n\nCordialement,\nKOST GROUP\n+213 542 30 53 83\ndgr.kostacademy.com`,
     }
   }
 }

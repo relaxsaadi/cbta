@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { assignCompanyGroupAction, addToGroupAction, changeGroupAction, removeFromGroupAction, type AffiliationResult } from "../actions";
-import { ActionButton } from "../ActionButton";
+import { ActionButton } from "@/components/ui/ActionButton";
 
 interface CandidateGroupRow {
   group_id: number;

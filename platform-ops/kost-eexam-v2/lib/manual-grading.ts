@@ -153,6 +153,12 @@ export interface GradedManualRow extends PendingGradingRow {
   points_awarded: number;
   graded_by: number | null;
   grader_comment: string | null;
+  /** Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+   * §7 — "Historique des corrections" : qui/quand/statut final. NULL pour
+   * une décision écrite avant l'ajout de graded_at (historique existant). */
+  graded_at: string | null;
+  grader_name: string | null;
+  attempt_grading_state: "COMPLETE" | "AWAITING_MANUAL_REVIEW" | null;
 }
 
 export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): GradedManualRow[] {
@@ -173,7 +179,8 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
               u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
               g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
               s.stem_snapshot AS stem, aa.answer_json, s.points, at.submitted_at,
-              aa.is_correct, aa.points_awarded, aa.graded_by, aa.grader_comment
+              aa.is_correct, aa.points_awarded, aa.graded_by, aa.grader_comment, aa.graded_at,
+              grader.full_name AS grader_name, r.grading_state AS attempt_grading_state
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
@@ -183,6 +190,8 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
        JOIN assessments a ON a.id = at.assessment_id
        JOIN groups g ON g.id = a.group_id
        JOIN companies c ON c.id = g.company_id
+       LEFT JOIN users grader ON grader.id = aa.graded_by
+       LEFT JOIN results r ON r.attempt_id = at.id
        WHERE ${clauses.join(" AND ")}
        ORDER BY at.submitted_at DESC`
     )
@@ -211,6 +220,9 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
         points_awarded: row.points_awarded,
         graded_by: row.graded_by,
         grader_comment: row.grader_comment,
+        graded_at: row.graded_at,
+        grader_name: row.grader_name,
+        attempt_grading_state: row.attempt_grading_state,
       };
     }) as unknown as GradedManualRow[];
 }
@@ -245,11 +257,12 @@ export function submitManualGrade(
   if (row.is_correct !== null) throw new ManualGradingError("Cette réponse a déjà été corrigée.");
 
   const pointsAwarded = isCorrect ? row.points : 0;
-  db.prepare(`UPDATE attempt_answers SET is_correct = ?, points_awarded = ?, graded_by = ?, grader_comment = ? WHERE id = ?`).run(
+  db.prepare(`UPDATE attempt_answers SET is_correct = ?, points_awarded = ?, graded_by = ?, grader_comment = ?, graded_at = ? WHERE id = ?`).run(
     isCorrect ? 1 : 0,
     pointsAwarded,
     graderUserId,
     comment ?? null,
+    nowIso(),
     row.attempt_answer_id
   );
 
@@ -445,6 +458,16 @@ export interface GradedScenarioSubquestionRow extends PendingScenarioSubquestion
   points_awarded: number;
   graded_by: number | null;
   grader_comment?: string;
+  /** Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+   * §7 — "Historique des corrections" : qui/quand. NULL pour une décision
+   * écrite avant l'ajout de gradedAt au JSON (historique existant). */
+  graded_at: string | null;
+  grader_name: string | null;
+  /** Statut de la TENTATIVE parente (résultat déjà finalisé, ou encore
+   * d'autres réponses en attente ailleurs dans le même examen) — §7
+   * "finalized result status". Jamais recalculé ici : lu tel quel depuis
+   * `results.grading_state` (source unique de vérité, lib/results.ts). */
+  attempt_grading_state: "COMPLETE" | "AWAITING_MANUAL_REVIEW" | null;
 }
 
 export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): GradedScenarioSubquestionRow[] {
@@ -465,7 +488,7 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
               u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
               g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
               s.stem_snapshot AS scenario_title, s.correct_answer_snapshot,
-              aa.answer_json, aa.scenario_grading_json, at.submitted_at
+              aa.answer_json, aa.scenario_grading_json, at.submitted_at, r.grading_state
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
@@ -475,6 +498,7 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
        JOIN assessments a ON a.id = at.assessment_id
        JOIN groups g ON g.id = a.group_id
        JOIN companies c ON c.id = g.company_id
+       LEFT JOIN results r ON r.attempt_id = at.id
        WHERE ${clauses.join(" AND ")}
        ORDER BY at.submitted_at DESC`
     )
@@ -495,7 +519,25 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
     answer_json: string | null;
     scenario_grading_json: string | null;
     submitted_at: string | null;
+    grading_state: "COMPLETE" | "AWAITING_MANUAL_REVIEW" | null;
   }[];
+
+  // §7 — gradedBy vit DANS le JSON par sous-question (pas une colonne SQL
+  // indexable, voir commentaire d'en-tête de section) : résolution des noms
+  // en un seul aller-retour supplémentaire, jamais une requête par ligne.
+  const graderIds = new Set<number>();
+  for (const r of rows) {
+    const progress = (r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {}) as Record<string, { gradedBy: number }>;
+    for (const v of Object.values(progress)) graderIds.add(v.gradedBy);
+  }
+  const graderNames = new Map<number, string>();
+  if (graderIds.size > 0) {
+    const idList = [...graderIds];
+    const users = db
+      .prepare(`SELECT id, full_name FROM users WHERE id IN (${idList.map(() => "?").join(",")})`)
+      .all(...idList) as { id: number; full_name: string }[];
+    for (const u of users) graderNames.set(u.id, u.full_name);
+  }
 
   const out: GradedScenarioSubquestionRow[] = [];
   for (const r of rows) {
@@ -503,7 +545,7 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
     const given = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
     const progress = (r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {}) as Record<
       string,
-      { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string }
+      { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string; gradedAt?: string }
     >;
     for (const sq of spec.subquestions) {
       const verdict = progress[sq.id];
@@ -531,6 +573,9 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
         points_awarded: verdict.pointsAwarded,
         graded_by: verdict.gradedBy,
         grader_comment: verdict.comment,
+        graded_at: verdict.gradedAt ?? null,
+        grader_name: graderNames.get(verdict.gradedBy) ?? null,
+        attempt_grading_state: r.grading_state,
       });
     }
   }
@@ -592,12 +637,12 @@ export function submitScenarioSubgrade(
 
   const progress = (row.scenario_grading_json ? JSON.parse(row.scenario_grading_json) : {}) as Record<
     string,
-    { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string }
+    { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string; gradedAt?: string }
   >;
   if (progress[subquestionId]) throw new ManualGradingError("Cette sous-question a déjà été corrigée.");
 
   const pointsAwarded = isCorrect ? sq.points : 0;
-  progress[subquestionId] = { isCorrect, pointsAwarded, gradedBy: graderUserId, comment };
+  progress[subquestionId] = { isCorrect, pointsAwarded, gradedBy: graderUserId, comment, gradedAt: nowIso() };
 
   audit({
     actorUserId: graderUserId,

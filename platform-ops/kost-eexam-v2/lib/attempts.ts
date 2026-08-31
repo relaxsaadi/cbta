@@ -358,6 +358,40 @@ export function getPreviewQuestions(assessmentId: number): AttemptQuestionView[]
   );
 }
 
+/** §11-14 de la mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF"
+ * (2026-08-31) — "Tester la question" depuis la banque de questions : lit
+ * la VERSION COURANTE (question_versions.current_version_id), jamais un
+ * snapshot d'examen — une question doit pouvoir être testée AVANT même
+ * d'avoir jamais été publiée. Même transform que getPreviewQuestions
+ * ci-dessus (mapSnapshotRowToCandidateView) — jamais un rendu divergent
+ * entre "aperçu examen" et "test question isolée", exactement le rendu que
+ * verrait un candidat. attempt_question_id synthétique négatif (même
+ * convention que getPreviewQuestions, -snapshot_id) pour ne jamais
+ * collisionner avec un vrai id réel — structurellement impossible d'écrire
+ * dans attempt_answers avec cet id (toujours négatif, jamais une vraie PK). */
+export function getQuestionTestPreview(questionId: number): AttemptQuestionView | undefined {
+  const row = getDb()
+    .prepare(
+      `SELECT qv.id AS version_id, qv.stem, qv.choices_json, qv.correct_answer, q.qtype
+       FROM questions q
+       JOIN question_versions qv ON qv.id = q.current_version_id
+       WHERE q.id = ?`
+    )
+    .get(questionId) as { version_id: number; stem: string; choices_json: string; correct_answer: string; qtype: string } | undefined;
+  if (!row) return undefined;
+  return mapSnapshotRowToCandidateView({
+    attempt_question_id: -row.version_id,
+    position: 1,
+    choices_order_json: null,
+    marked_for_review: 0,
+    stem_snapshot: row.stem,
+    choices_snapshot_json: row.choices_json,
+    correct_answer_snapshot: row.correct_answer,
+    answer_json: null,
+    qtype: row.qtype,
+  });
+}
+
 /** Revérifie l'expiration côté serveur à CHAQUE appel (§8 : le timer ne
  * dépend jamais uniquement du navigateur). Si expiré, auto-soumet
  * immédiatement au lieu d'accepter l'action demandée. */

@@ -57,13 +57,10 @@ export default async function FamiliarizationPage({ searchParams }: { searchPara
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-[20px] font-semibold text-text-primary">Familiarisation</h1>
 
-      {canWrite && (
-        <Card>
-          <CardHeader title="Déclarer une session de familiarisation" description="Une ligne de présence est créée pour chaque candidat actuellement dans le groupe." />
-          <CreateSessionForm groups={groups} functions={functions} />
-        </Card>
-      )}
-
+      {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+          §15/§23 — panneau de filtres placé AVANT le formulaire de
+          déclaration (même correctif que /question-bank, /groups,
+          /incidents). */}
       <Card>
         <form className="flex flex-wrap items-end gap-3" method="get">
           <div>
@@ -105,6 +102,13 @@ export default async function FamiliarizationPage({ searchParams }: { searchPara
           )}
         </form>
       </Card>
+
+      {canWrite && (
+        <Card>
+          <CardHeader title="Déclarer une session de familiarisation" description="Une ligne de présence est créée pour chaque candidat actuellement dans le groupe." />
+          <CreateSessionForm groups={groups} functions={functions} />
+        </Card>
+      )}
 
       <Card>
         <CardHeader title={`${sessions.length} session(s)`} />

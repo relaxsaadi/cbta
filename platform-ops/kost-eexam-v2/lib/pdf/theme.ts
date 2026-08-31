@@ -18,6 +18,25 @@ export const COLORS = {
 // toujours disponible sans configuration réseau).
 Font.registerHyphenationCallback((word) => [word]);
 
+/** Défaut réel trouvé lors du contrôle qualité visuel du rapport
+ * individuel (mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF",
+ * 2026-08-31, §39) : Helvetica (police standard de @react-pdf/renderer)
+ * n'a qu'un encodage WinAnsi — "→" (U+2192) n'y existe pas et se rendait
+ * comme un caractère erroné dans le PDF final (jamais visible côté écran,
+ * où "→" s'affiche correctement partout). Utilitaire PARTAGÉ pour
+ * substituer ce caractère (et d'éventuels autres hors WinAnsi trouvés
+ * plus tard) UNIQUEMENT à la frontière PDF — jamais dans
+ * formatCorrectAnswerForDisplay/formatCandidateAnswerForDisplay
+ * elles-mêmes (lib/questions.ts), qui restent le seul point d'entrée
+ * partagé écran+PDF et doivent continuer d'afficher "→" correctement à
+ * l'écran. Appliqué pour l'instant dans IndividualReportDocument.tsx ;
+ * les autres documents PDF utilisant "→" (Guide/IncidentProcedure/
+ * ResultsList) n'ont pas été revérifiés visuellement cette mission —
+ * candidats à un même correctif dans un passage ultérieur. */
+export function pdfSafeText(text: string): string {
+  return text.replace(/→/g, "->");
+}
+
 export const pdfStyles = StyleSheet.create({
   page: { paddingTop: 100, paddingBottom: 56, paddingHorizontal: 40, fontSize: 9.5, color: COLORS.text, fontFamily: "Helvetica" },
   headerFixed: {
@@ -57,11 +76,13 @@ export const pdfStyles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: 0.75,
     borderTopColor: COLORS.border,
-    flexDirection: "row",
-    justifyContent: "space-between",
     fontSize: 7,
     color: COLORS.textMuted,
   },
+  footerRow: { flexDirection: "row", justifyContent: "space-between" },
+  /** Ligne support KOST Academy — addendum §2 (2026-08-31), sur son propre
+   * Text pour ne jamais entrer en conflit de largeur avec "Page X / Y". */
+  footerSupport: { marginTop: 2, fontSize: 6.5, color: COLORS.textMuted },
   h2: { fontSize: 11, fontWeight: 700, color: COLORS.navy, marginTop: 14, marginBottom: 6 },
   card: { borderWidth: 0.75, borderColor: COLORS.border, borderRadius: 3, padding: 10, marginBottom: 8 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 12 },

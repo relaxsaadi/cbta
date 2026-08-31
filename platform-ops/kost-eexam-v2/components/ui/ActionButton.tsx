@@ -7,11 +7,14 @@ export interface SimpleActionResult {
   success?: string;
 }
 
-/** Bouton d'action générique réutilisé pour toutes les actions "Result +
- * champs cachés + bouton unique" de la fiche candidat (renvoyer
+/** Bouton d'action générique — "Result + champs cachés + bouton unique",
+ * avec confirmation navigateur optionnelle avant soumission. Utilisé à
+ * l'origine uniquement par la fiche candidat (/users/[id] — renvoyer
  * l'invitation, réinitialisation, archiver, retirer d'un groupe, retirer
- * une fonction…) — même pattern que app/(app)/notifications/ResendButton.tsx,
- * généralisé pour ne pas dupliquer ce composant N fois. */
+ * une fonction…), promu ici (mission "FINAL PRODUCT IMPROVEMENTS BEFORE
+ * AUDITOR PDF", 2026-08-31 §8-10) car /question-bank a exactement le même
+ * besoin ("Supprimer définitivement cette question ?" / "Désactiver
+ * cette question ?") — jamais une 2e implémentation quasi-identique. */
 export function ActionButton({
   action,
   hiddenFields,

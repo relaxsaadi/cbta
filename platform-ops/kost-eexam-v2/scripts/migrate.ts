@@ -62,6 +62,19 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
   // attente", jamais un backfill séparé nécessaire.
   { table: "users", column: "must_change_password", ddl: "ALTER TABLE users ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 0" },
   { table: "users", column: "temp_password_expires_at", ddl: "ALTER TABLE users ADD COLUMN temp_password_expires_at TEXT" },
+  // Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+  // §7 — "Historique des corrections" doit montrer QUAND une réponse
+  // courte autonome a été corrigée manuellement (qui = graded_by, déjà
+  // présent depuis "COMPLETE CANDIDATE EXAM LIFECYCLE"). Pour les
+  // sous-questions de scénario, l'horodatage équivalent vit DANS
+  // scenario_grading_json (déjà additive, pas de nouvelle colonne
+  // nécessaire) — voir submitScenarioSubgrade. Nullable : NULL pour toute
+  // ligne déjà corrigée AVANT cette migration (historique existant, jamais
+  // un backfill inventé).
+  { table: "attempt_answers", column: "graded_at", ddl: "ALTER TABLE attempt_answers ADD COLUMN graded_at TEXT" },
+  // Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+  // §25-26 — déclaration d'incident candidat, tentative auto-associée.
+  { table: "incidents", column: "attempt_id", ddl: "ALTER TABLE incidents ADD COLUMN attempt_id INTEGER REFERENCES attempts(id)" },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {

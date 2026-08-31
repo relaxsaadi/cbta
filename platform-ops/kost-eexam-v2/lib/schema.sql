@@ -329,6 +329,11 @@ CREATE TABLE IF NOT EXISTS attempt_answers (
   points_awarded REAL,
   graded_by INTEGER REFERENCES users(id),
   grader_comment TEXT,
+  -- graded_at (mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF",
+  -- 2026-08-31 §7) — horodatage de LA décision manuelle elle-même (distinct
+  -- de results.graded_at, qui est la clôture de la TENTATIVE entière).
+  -- NULL pour une réponse pas encore corrigée manuellement, ou auto-notée.
+  graded_at TEXT,
   -- scenario_grading_json (mission "MISSION FINALE CIBLÉE", 2026-08-30) —
   -- UNIQUEMENT pour une ligne qtype='scenario' : progrès de correction
   -- manuelle PAR SOUS-QUESTION, tant que la ligne reste globalement en
@@ -393,7 +398,15 @@ CREATE TABLE IF NOT EXISTS incidents (
   group_id INTEGER REFERENCES groups(id),
   status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open','investigating','resolved','closed')),
   created_by INTEGER REFERENCES users(id),
-  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  -- attempt_id (mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF",
+  -- 2026-08-31 §25-26) — tentative concernée, auto-associée quand
+  -- l'incident est déclaré depuis un examen (candidat) ou choisi
+  -- explicitement (admin/responsable). NULL = incident sans tentative
+  -- précise (ex. problème de connexion avant même de démarrer). Jamais un
+  -- index ici pour la même raison que group_id ci-dessus (colonne ajoutée
+  -- après coup par migrate.ts sur une base déjà existante).
+  attempt_id INTEGER REFERENCES attempts(id)
 );
 
 -- action_type ci-dessous inclut les 6 actions plateforme ajoutées pour

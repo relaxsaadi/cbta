@@ -51,6 +51,13 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
         <div>
           <h1 className="font-display text-[20px] font-semibold text-text-primary">Incident #{incident.id} — {incident.type}</h1>
           <p className="mt-1 text-[13px] text-text-tertiary">{incident.description}</p>
+          {/* §29 — "Déclaré par le candidat" + tentative/examen
+              auto-associée quand applicable (§25-26), jamais deviné. */}
+          {incident.reported_by_candidate === 1 && (
+            <p className="mt-1.5 text-[12px] font-medium text-status-warning-text">
+              Déclaré par le candidat{incident.attempt_id ? ` — tentative #${incident.attempt_id}` : ""}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <Link href="/api/reports/incident-procedure" className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">

@@ -236,6 +236,14 @@ export interface AttemptDetail {
   candidate_name: string;
   candidate_username: string;
   company_name: string;
+  /** "entreprise" | "particulier" — addendum §2 rapport PDF individuel
+   * (mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF", 2026-08-31) :
+   * un candidat "particulier" est rattaché à une société "plomberie"
+   * auto-provisionnée (lib/companies.ts) — sans ce champ, le rapport
+   * affichait son nom comme s'il s'agissait d'une vraie entreprise cliente
+   * sans jamais le distinguer. COALESCE(NULL, 'entreprise') côté SQL,
+   * jamais un simple != (même piège que lib/companies.ts). */
+  client_type: "entreprise" | "particulier";
   group_name: string;
   function_code: string;
   assessment_name: string;
@@ -266,7 +274,8 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
   const header = db
     .prepare(
       `SELECT at.id AS attempt_id, u.full_name AS candidate_name, u.username AS candidate_username,
-              c.name AS company_name, g.name AS group_name, a.function_code,
+              c.name AS company_name, COALESCE(c.client_type, 'entreprise') AS client_type,
+              g.name AS group_name, a.function_code,
               a.name AS assessment_name, a.type AS assessment_type, at.attempt_number,
               a.duration_minutes AS duration_minutes_allowed,
               at.started_at, at.submitted_at, at.status,
@@ -338,4 +347,26 @@ export function getAttemptDetail(attemptId: number): AttemptDetail | undefined {
       explanation: showCorrectAnswers ? r.explanation_snapshot : null,
     })),
   };
+}
+
+const ATTEMPT_STATUS_LABELS: Record<string, string> = {
+  in_progress: "EN COURS",
+  submitted: "SOUMIS",
+  auto_submitted: "AUTO-SOUMIS",
+  abandoned: "ABANDONNÉ",
+};
+
+/** Statut d'affichage unique d'une tentative — point d'entrée partagé par
+ * la fiche admin (/results/[attemptId]) ET le rapport PDF individuel
+ * (mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF", 2026-08-31 §2-3)
+ * : jamais une seconde classification divergente entre écran et PDF. Ne
+ * distingue PAS "notation automatique" de "notation manuelle" comme deux
+ * champs séparés — ce ne sont pas deux états indépendants dans le modèle de
+ * données actuel (grading_state est la seule source de vérité), les
+ * inventer séparément serait fabriquer une information qui n'existe pas. */
+export function attemptStatusLabel(status: string, gradingState: "COMPLETE" | "AWAITING_MANUAL_REVIEW" | null): string {
+  if (status === "in_progress") return "EN COURS";
+  if (gradingState === "AWAITING_MANUAL_REVIEW") return "EN ATTENTE DE CORRECTION MANUELLE";
+  if (gradingState === "COMPLETE") return "RÉSULTAT DISPONIBLE";
+  return ATTEMPT_STATUS_LABELS[status] ?? status.toUpperCase();
 }

@@ -66,10 +66,21 @@ export function PdfHeader({ meta }: { meta: DocumentMeta }) {
 export function PdfFooter({ meta }: { meta: DocumentMeta }) {
   return (
     <View style={pdfStyles.footerFixed} fixed>
-      <Text>
-        Généré le {meta.generatedAt} par {meta.generatedBy} — Document : {meta.docId}
-      </Text>
-      <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} / ${totalPages}`} />
+      {/* Ligne existante inchangée (déjà validée visuellement) — la ligne
+          support KOST Academy est une 2e ligne séparée ci-dessous plutôt
+          qu'ajoutée en bout de cette Text : évite tout risque de
+          chevauchement avec "Page X / Y" à droite sur un docId long. */}
+      <View style={pdfStyles.footerRow}>
+        <Text>
+          Généré le {meta.generatedAt} par {meta.generatedBy} — Document : {meta.docId}
+        </Text>
+        <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} / ${totalPages}`} />
+      </View>
+      {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF"
+          (2026-08-31) §2 — support KOST Academy sur TOUS les documents PDF
+          (même pied de page partagé, jamais réinventé par template, voir
+          commentaire d'en-tête de ce fichier). */}
+      <Text style={pdfStyles.footerSupport}>Support KOST Academy : cbta@kostacademy.com</Text>
     </View>
   );
 }

@@ -6,6 +6,7 @@ import { gradeOneQuestion } from "@/lib/grading";
 import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { DeclareIncidentModal } from "@/components/candidate/DeclareIncidentModal";
 import { FileClock, CheckCircle2, XCircle } from "lucide-react";
 
 export default async function MesResultatsPage({
@@ -54,6 +55,11 @@ export default async function MesResultatsPage({
                 ? "Statut : en attente de correction — le résultat sera disponible une fois la correction terminée."
                 : "Statut : résultat disponible ci-dessous."}
             </p>
+            {/* §24 — "immédiatement après la soumission", l'un des 3 points
+                d'entrée demandés (voir DeclareIncidentModal.tsx). */}
+            <div className="mt-2.5">
+              <DeclareIncidentModal attemptId={confirmedRow.attempt_id} variant="compact" />
+            </div>
           </div>
         </div>
       )}

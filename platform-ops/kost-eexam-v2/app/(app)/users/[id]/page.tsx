@@ -23,7 +23,7 @@ import { AffiliationSection } from "./AffiliationForms";
 import { FunctionsManager } from "./FunctionsManager";
 import { SendMessageForm } from "./SendMessageForm";
 import { HardDeleteForm } from "./HardDeleteForm";
-import { ActionButton } from "../ActionButton";
+import { ActionButton } from "@/components/ui/ActionButton";
 import {
   quickSuspendAction,
   quickReactivateAction,

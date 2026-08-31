@@ -76,13 +76,9 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
         </Link>
       </div>
 
-      {canWrite && (
-        <Card>
-          <CardHeader title="Déclarer un incident" />
-          <DeclareIncidentForm groups={groupsForForm} groupRequired={isManager} candidatesByGroup={candidatesByGroup} />
-        </Card>
-      )}
-
+      {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+          §15/§23 — panneau de filtres placé AVANT le formulaire de
+          déclaration (même correctif que /question-bank et /groups). */}
       <Card>
         <form className="flex flex-wrap items-end gap-3" method="get">
           <div>
@@ -138,6 +134,13 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
         </form>
       </Card>
 
+      {canWrite && (
+        <Card>
+          <CardHeader title="Déclarer un incident" />
+          <DeclareIncidentForm groups={groupsForForm} groupRequired={isManager} candidatesByGroup={candidatesByGroup} />
+        </Card>
+      )}
+
       <Card>
         <CardHeader title={`${incidents.length} incident(s)`} />
         {incidents.length === 0 ? (
@@ -151,6 +154,11 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
                   <p className="text-[12px] text-text-tertiary">{new Date(i.created_at).toLocaleString("fr-FR")}</p>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* §29 — labellisé clairement "Déclaré par le candidat"
+                      (lib/incidents.ts::reported_by_candidate, calculé
+                      depuis le rôle réel de created_by, jamais une colonne
+                      figée). */}
+                  {i.reported_by_candidate === 1 && <StatusBadge status="neutral">Déclaré par le candidat</StatusBadge>}
                   <StatusBadge status={SEVERITY_BADGE[i.severity] ?? "neutral"}>{i.severity}</StatusBadge>
                   <StatusBadge status={STATUS_BADGE[i.status] ?? "neutral"}>{i.status}</StatusBadge>
                 </div>

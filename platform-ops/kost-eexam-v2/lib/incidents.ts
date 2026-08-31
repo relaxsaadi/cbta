@@ -39,7 +39,26 @@ export interface IncidentRow {
   status: IncidentStatus;
   created_by: number | null;
   created_at: string;
+  /** §25-26 de la mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF"
+   * (2026-08-31) — tentative auto-associée quand déclaré depuis un examen. */
+  attempt_id: number | null;
+  /** Calculé (jamais une colonne figée qui pourrait diverger du rôle réel
+   * de created_by) — voir INCIDENT_ORIGIN_SUBQUERY plus bas. 1 = déclaré
+   * par un compte candidat, 0 sinon (y compris created_by NULL). */
+  reported_by_candidate: number;
 }
+
+/** Sous-requête partagée (§29 "clairement labellisé « Déclaré par le
+ * candidat »") — même patron déjà établi ailleurs pour résoudre un rôle
+ * depuis user_roles/roles (lib/users.ts::getRoleForUser, lib/
+ * sessions-registry.ts, lib/user-directory.ts) : jamais une colonne
+ * dupliquée qui pourrait diverger si le rôle d'un compte changeait après
+ * coup — toujours recalculé depuis la source de vérité (user_roles). */
+const INCIDENT_ORIGIN_SUBQUERY = `
+  (EXISTS (
+    SELECT 1 FROM user_roles ur JOIN roles r ON r.id = ur.role_id
+    WHERE ur.user_id = i.created_by AND r.code = 'candidate'
+  )) AS reported_by_candidate`;
 
 /** Frontière multi-client (lib/tenant-scope.ts) — `restrictToGroupIdsOrNull`
  * vient de la session serveur, jamais d'un paramètre client. `null` = pas
@@ -48,19 +67,21 @@ export interface IncidentRow {
  * incidents des groupes listés — jamais les incidents d'un autre client. */
 export function listIncidents(restrictToGroupIdsOrNull: number[] | null = null): IncidentRow[] {
   if (restrictToGroupIdsOrNull === null) {
-    return getDb().prepare(`SELECT * FROM incidents ORDER BY created_at DESC`).all() as unknown as IncidentRow[];
+    return getDb().prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i ORDER BY i.created_at DESC`).all() as unknown as IncidentRow[];
   }
   if (restrictToGroupIdsOrNull.length === 0) {
-    return getDb().prepare(`SELECT * FROM incidents WHERE group_id IS NULL ORDER BY created_at DESC`).all() as unknown as IncidentRow[];
+    return getDb()
+      .prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i WHERE i.group_id IS NULL ORDER BY i.created_at DESC`)
+      .all() as unknown as IncidentRow[];
   }
   const placeholders = restrictToGroupIdsOrNull.map(() => "?").join(",");
   return getDb()
-    .prepare(`SELECT * FROM incidents WHERE group_id IS NULL OR group_id IN (${placeholders}) ORDER BY created_at DESC`)
+    .prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i WHERE i.group_id IS NULL OR i.group_id IN (${placeholders}) ORDER BY i.created_at DESC`)
     .all(...restrictToGroupIdsOrNull) as unknown as IncidentRow[];
 }
 
 export function getIncident(id: number): IncidentRow | undefined {
-  return getDb().prepare(`SELECT * FROM incidents WHERE id = ?`).get(id) as IncidentRow | undefined;
+  return getDb().prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i WHERE i.id = ?`).get(id) as IncidentRow | undefined;
 }
 
 export interface IncidentsFilter {
@@ -134,7 +155,7 @@ export function listIncidentsFiltered(filter: IncidentsFilter = {}): IncidentRow
   }
 
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
-  return db.prepare(`SELECT * FROM incidents i ${where} ORDER BY i.created_at DESC`).all(...params) as unknown as IncidentRow[];
+  return db.prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i ${where} ORDER BY i.created_at DESC`).all(...params) as unknown as IncidentRow[];
 }
 
 export function declareIncident(params: {
@@ -145,13 +166,17 @@ export function declareIncident(params: {
   peopleConcerned?: string;
   responsibleUserId?: number;
   groupId?: number;
+  /** §25-26 — tentative concernée (auto-associée côté candidat, choix
+   * explicite possible côté admin/responsable plus tard si le besoin se
+   * présente — non exposé dans DeclareIncidentForm.tsx pour l'instant). */
+  attemptId?: number;
   createdBy: number;
   createdByRole: ConsoleRole;
 }): number {
   const result = getDb()
     .prepare(
-      `INSERT INTO incidents (type, severity, description, system_concerned, people_concerned, responsible_user_id, group_id, created_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO incidents (type, severity, description, system_concerned, people_concerned, responsible_user_id, group_id, created_by, attempt_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       params.type,
@@ -161,11 +186,87 @@ export function declareIncident(params: {
       params.peopleConcerned ?? null,
       params.responsibleUserId ?? null,
       params.groupId ?? null,
-      params.createdBy
+      params.createdBy,
+      params.attemptId ?? null
     );
   const incidentId = Number(result.lastInsertRowid);
-  audit({ actorUserId: params.createdBy, actorRole: params.createdByRole, action: "incident_declare", targetType: "incident", targetId: incidentId, metadata: { type: params.type, severity: params.severity, groupId: params.groupId ?? null } });
+  audit({ actorUserId: params.createdBy, actorRole: params.createdByRole, action: "incident_declare", targetType: "incident", targetId: incidentId, metadata: { type: params.type, severity: params.severity, groupId: params.groupId ?? null, attemptId: params.attemptId ?? null } });
   return incidentId;
+}
+
+export class CandidateIncidentError extends Error {}
+
+/** §24-33 — déclaration candidat, wrapper CONTRAINT autour de
+ * declareIncident() (jamais un second point d'écriture divergent) :
+ *   - severity JAMAIS fournie par le candidat (§25 — classification
+ *     réservée à l'admin) : toujours 'low', l'admin réévalue/escalade
+ *     ensuite via le workflow incident existant s'il y a lieu.
+ *   - attemptId, s'il est fourni, DOIT appartenir à ce candidat — jamais
+ *     une confiance aveugle dans une valeur venue du client (§37 "cannot
+ *     spoof another attempt ID").
+ *   - groupId dérivé SERVEUR (tentative→examen→groupe, ou 1ère
+ *     affiliation du candidat si aucune tentative) — jamais fourni par le
+ *     candidat, garantit que l'incident reste dans le même périmètre
+ *     tenant que tout le reste (lib/tenant-scope.ts) pour la visibilité
+ *     responsable/admin (§29/§33).
+ *   - audit DÉDIÉ candidate_incident_declared en plus de incident_declare
+ *     (déjà tiré par declareIncident ci-dessus) — §31 "au moins
+ *     CANDIDATE_INCIDENT_CREATED (ou nommage existant cohérent)" : nommage
+ *     snake_case aligné sur la convention déjà établie de ce fichier
+ *     (incident_declare, incident_action_*, incident_status_change),
+ *     jamais la casse ad-hoc suggérée littéralement par la mission. */
+export function declareCandidateIncident(params: {
+  type: string;
+  description: string;
+  attemptId?: number;
+  candidateUserId: number;
+}): number {
+  const db = getDb();
+  let groupId: number | undefined;
+
+  if (params.attemptId !== undefined) {
+    const attempt = db
+      .prepare(`SELECT at.candidate_user_id, a.group_id FROM attempts at JOIN assessments a ON a.id = at.assessment_id WHERE at.id = ?`)
+      .get(params.attemptId) as { candidate_user_id: number; group_id: number } | undefined;
+    if (!attempt || attempt.candidate_user_id !== params.candidateUserId) {
+      throw new CandidateIncidentError("Tentative introuvable.");
+    }
+    groupId = attempt.group_id;
+  } else {
+    const membership = db.prepare(`SELECT group_id FROM group_members WHERE candidate_user_id = ? LIMIT 1`).get(params.candidateUserId) as { group_id: number } | undefined;
+    groupId = membership?.group_id;
+  }
+
+  const incidentId = declareIncident({
+    type: params.type,
+    severity: "low",
+    description: params.description,
+    groupId,
+    attemptId: params.attemptId,
+    createdBy: params.candidateUserId,
+    createdByRole: "candidate",
+  });
+
+  audit({
+    actorUserId: params.candidateUserId,
+    actorRole: "candidate",
+    action: "candidate_incident_declared",
+    targetType: "incident",
+    targetId: incidentId,
+    metadata: { type: params.type, attemptId: params.attemptId ?? null, groupId: groupId ?? null },
+  });
+
+  return incidentId;
+}
+
+/** §28 — le candidat voit UNIQUEMENT ses propres incidents déclarés
+ * (created_by = lui-même), jamais ceux d'un autre candidat, jamais les
+ * notes/preuves internes (incident_actions n'est jamais lu ici — voir
+ * app/(app)/mes-examens/page.tsx, qui n'affiche que type/statut/date). */
+export function listMyIncidents(candidateUserId: number): IncidentRow[] {
+  return getDb()
+    .prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i WHERE i.created_by = ? ORDER BY i.created_at DESC`)
+    .all(candidateUserId) as unknown as IncidentRow[];
 }
 
 export function listIncidentActions(incidentId: number) {

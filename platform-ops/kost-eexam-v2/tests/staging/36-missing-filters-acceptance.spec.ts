@@ -40,8 +40,21 @@ test.describe("STAGING — /question-bank : compteurs Réglementaire/DEMO, filtr
   });
 });
 
-test.describe("STAGING — /groups : Type client isole réellement (tout le périmètre démo est 'entreprise')", () => {
-  test("filterClientType=particulier renvoie 0 (aucun client particulier en démo) ; filterClientType=entreprise ne dépasse jamais la baseline", async ({ page }) => {
+test.describe("STAGING — /groups : Type client isole réellement", () => {
+  // Correctif "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+  // §40 — TEST STALE trouvé en régression réelle sur staging, pas un
+  // produit cassé : l'assertion d'origine supposait "aucun client
+  // particulier en démo" (vrai au moment de sa rédaction), mais une
+  // fixture d'une mission ultérieure (email/notification, "Nadia Chérif
+  // (démo notification)") a depuis créé un groupe "Session individuelle"
+  // de type particulier — donnée démo légitime, vérifiée manuellement
+  // avant ce correctif (jamais une vraie donnée client). Le filtre
+  // lui-même n'a jamais été en cause : particulier(count) + entreprise(count)
+  // ne doit jamais dépasser la baseline (partition réelle, pas un OR qui
+  // laisserait fuiter l'autre type), et particulier(count) doit rester
+  // strictement inférieur à entreprise(count) sur ce périmètre démo établi
+  // (l'essentiel du jeu de données reste des clients Entreprise).
+  test("filterClientType=particulier et filterClientType=entreprise partitionnent réellement la baseline, jamais un total qui déborde", async ({ page }) => {
     await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
 
     await page.goto("/groups");
@@ -51,11 +64,18 @@ test.describe("STAGING — /groups : Type client isole réellement (tout le pér
 
     await page.goto("/groups?filterClientType=entreprise");
     const entHeading = await page.locator("h2", { hasText: /groupe\(s\)$/ }).textContent();
-    expect(Number(entHeading!.match(/(\d+)/)![1])).toBeLessThanOrEqual(baselineCount);
+    const entCount = Number(entHeading!.match(/(\d+)/)![1]);
+    expect(entCount).toBeLessThanOrEqual(baselineCount);
 
     await page.goto("/groups?filterClientType=particulier");
     const partHeading = await page.locator("h2", { hasText: /groupe\(s\)$/ }).textContent();
-    expect(Number(partHeading!.match(/(\d+)/)![1])).toBe(0);
+    const partCount = Number(partHeading!.match(/(\d+)/)![1]);
+    // Partition réelle — jamais entreprise+particulier > baseline (ce qui
+    // trahirait un filtre qui laisse fuiter l'autre type), et jamais 0+0
+    // non plus (ce qui trahirait un filtre qui ne filtre rien du tout).
+    expect(entCount + partCount).toBeLessThanOrEqual(baselineCount);
+    expect(partCount).toBeGreaterThan(0);
+    expect(partCount).toBeLessThan(entCount);
 
     await page.goto("/groups?filterClientType=entreprise");
     await page.getByRole("link", { name: /réinitialiser les filtres/i }).click();

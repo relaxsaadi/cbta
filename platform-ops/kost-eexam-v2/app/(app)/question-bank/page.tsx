@@ -13,8 +13,10 @@ import {
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { Library } from "lucide-react";
 import { CreateQuestionForm } from "./CreateQuestionForm";
+import { deleteQuestionAction, setQuestionActiveAction } from "./actions";
 
 const SOURCE_STATUS_BADGE: Record<string, "verified" | "warning" | "critical" | "neutral"> = {
   FROZEN_SOURCE_VERIFIED: "verified",
@@ -105,16 +107,20 @@ export default async function QuestionBankPage({
         </div>
       </Card>
 
-      {canWrite && (
-        <Card>
-          <CardHeader
-            title="Ajouter une question"
-            description={`Saisie contrôlée uniquement — jamais de contenu inventé. Une question non « Confirmé — source DGR vérifiée » n'entre jamais automatiquement dans un examen de production.`}
-          />
-          <CreateQuestionForm functions={functions} />
-        </Card>
-      )}
-
+      {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+          §15/§23 — root cause trouvée en testant staging réel (pas
+          seulement du code) : le panneau de filtres était placé APRÈS le
+          formulaire de création, qui porte lui-même un champ "3. Fonction
+          DGR" à l'étape 3 — même libellé visuel que le filtre "Fonction
+          DGR" plus bas, deux <select> distincts (ids déjà préfixés, aucune
+          collision technique) mais très facile à confondre pour un
+          utilisateur réel qui cherche "le" champ Fonction DGR de la page.
+          Le panneau de filtres passe donc AVANT le formulaire de création
+          (même ordre que /users, jamais de collision par construction —
+          Client, groupe, préparation d'examen, etc. suivent tous déjà ce
+          patron), qui reste accessible juste en dessous. Même correctif
+          appliqué à /groups, /incidents, /familiarisation (même
+          anti-patron trouvé sur ces trois pages). */}
       <Card>
         <form className="flex flex-wrap items-end gap-3" method="get">
           <div>
@@ -174,6 +180,16 @@ export default async function QuestionBankPage({
         </form>
       </Card>
 
+      {canWrite && (
+        <Card>
+          <CardHeader
+            title="Ajouter une question"
+            description={`Saisie contrôlée uniquement — jamais de contenu inventé. Une question non « Confirmé — source DGR vérifiée » n'entre jamais automatiquement dans un examen de production.`}
+          />
+          <CreateQuestionForm functions={functions} />
+        </Card>
+      )}
+
       <Card>
         <CardHeader title={`${questions.length} question(s)`} />
         {questions.length === 0 ? (
@@ -190,7 +206,7 @@ export default async function QuestionBankPage({
                   <th className="pb-2 pr-3 font-medium">Reviewer</th>
                   <th className="pb-2 pr-3 font-medium">Classification</th>
                   <th className="pb-2 pr-3 font-medium">Statut</th>
-                  {canWrite && <th className="pb-2 font-medium"></th>}
+                  {canWrite && <th className="pb-2 font-medium">Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -217,8 +233,48 @@ export default async function QuestionBankPage({
                       <StatusBadge status={q.active ? "verified" : "neutral"}>{q.active ? "Actif" : "Inactif"}</StatusBadge>
                     </td>
                     {canWrite && (
-                      <td className="py-2 text-right">
-                        <Link href={`/question-bank/${q.id}/edit`} className="text-[12px] font-medium text-accent-9 hover:underline">Modifier</Link>
+                      <td className="py-2">
+                        {/* §8-10 de la mission "FINAL PRODUCT IMPROVEMENTS
+                            BEFORE AUDITOR PDF" (2026-08-31) — Supprimer
+                            n'apparaît QUE si cette question n'a jamais été
+                            publiée (q.is_protected, lib/questions.ts::
+                            isQuestionProtected/EXISTS sur
+                            assessment_question_snapshots) : jamais un bouton
+                            visible puis refusé par le serveur, la sécurité
+                            réelle ET l'UI portent la même règle. Désactiver/
+                            Réactiver reste toujours disponible (réversible,
+                            jamais destructif — §9). */}
+                        <div className="flex flex-wrap items-center justify-end gap-2">
+                          <Link href={`/question-bank/${q.id}/edit`} className="text-[12px] font-medium text-accent-9 hover:underline">Modifier</Link>
+                          {/* §11-14 — même périmètre que "Modifier" (administrateur), voir /question-bank/[id]/test/page.tsx. */}
+                          <Link href={`/question-bank/${q.id}/test`} className="text-[12px] font-medium text-accent-9 hover:underline">Tester</Link>
+                          <ActionButton
+                            action={setQuestionActiveAction.bind(null, q.id)}
+                            hiddenFields={{ active: q.active ? "false" : "true" }}
+                            label={q.active ? "Désactiver" : "Réactiver"}
+                            pendingLabel="…"
+                            confirmMessage={
+                              q.active
+                                ? `Désactiver ${q.kost_question_id} ? Elle sera conservée pour l'historique mais ne pourra plus être utilisée dans de nouveaux examens.`
+                                : undefined
+                            }
+                          />
+                          {q.is_protected ? (
+                            <span className="text-[11px] italic text-text-tertiary" title="Cette question a déjà été utilisée dans un examen publié — conservée pour l'historique, suppression définitive impossible.">
+                              Déjà utilisée — non supprimable
+                            </span>
+                          ) : (
+                            session.role === "administrator" && (
+                              <ActionButton
+                                action={deleteQuestionAction.bind(null, q.id)}
+                                label="Supprimer"
+                                pendingLabel="…"
+                                variant="danger"
+                                confirmMessage={`Supprimer définitivement cette question (${q.kost_question_id}) ? Cette action est irréversible.`}
+                              />
+                            )
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>

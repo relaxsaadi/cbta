@@ -4,10 +4,26 @@ import { listAssignedAssessmentsForCandidate } from "@/lib/assessments";
 import { getActiveAttempt, countFinishedAttempts, sweepExpiredAttempts } from "@/lib/attempts";
 import { computeCandidateExamState, getLatestAttemptInfo, type CandidateExamStateKind } from "@/lib/candidate-exam-state";
 import { functionLabel } from "@/lib/questions";
+import { listMyIncidents } from "@/lib/incidents";
+import { INCIDENT_TYPES } from "@/lib/incident-constants";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
+import { DeclareIncidentModal } from "@/components/candidate/DeclareIncidentModal";
 import { BookOpenCheck } from "lucide-react";
+
+const INCIDENT_STATUS_BADGE: Record<string, BadgeStatus> = {
+  open: "critical",
+  investigating: "warning",
+  resolved: "verified",
+  closed: "neutral",
+};
+const INCIDENT_STATUS_LABEL: Record<string, string> = {
+  open: "Ouvert",
+  investigating: "En cours d'investigation",
+  resolved: "Résolu",
+  closed: "Clôturé",
+};
 
 // Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §2 — bug réel
 // diagnostiqué (root cause avant tout changement de code, voir le rapport
@@ -38,10 +54,20 @@ export default async function MesExamensPage() {
   sweepExpiredAttempts();
 
   const assessments = listAssignedAssessmentsForCandidate(session.userId);
+  // §24/§28 — "avant l'examen" (aucun attemptId : pas encore de tentative
+  // précise à associer) + liste en lecture seule des incidents DÉJÀ
+  // déclarés par CE candidat (lib/incidents.ts::listMyIncidents — jamais
+  // ceux d'un autre candidat, jamais les notes internes/preuves
+  // d'investigation, voir son propre commentaire).
+  const myIncidents = listMyIncidents(session.userId);
+  const incidentTypeLabel = new Map(INCIDENT_TYPES.map((t) => [t.value, t.label]));
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-[20px] font-semibold text-text-primary">Mes examens</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-[20px] font-semibold text-text-primary">Mes examens</h1>
+        <DeclareIncidentModal />
+      </div>
 
       <Card>
         {assessments.length === 0 ? (
@@ -85,6 +111,23 @@ export default async function MesExamensPage() {
           </div>
         )}
       </Card>
+
+      {myIncidents.length > 0 && (
+        <Card>
+          <CardHeader title="Mes incidents déclarés" description="Statut de vos signalements — un responsable pédagogique traite chaque incident." />
+          <div className="flex flex-col gap-2">
+            {myIncidents.map((i) => (
+              <div key={i.id} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2.5">
+                <div>
+                  <p className="text-[13px] font-medium text-text-primary">{incidentTypeLabel.get(i.type) ?? i.type}</p>
+                  <p className="text-[11.5px] text-text-tertiary">{new Date(i.created_at).toLocaleString("fr-FR")}</p>
+                </div>
+                <StatusBadge status={INCIDENT_STATUS_BADGE[i.status] ?? "neutral"}>{INCIDENT_STATUS_LABEL[i.status] ?? i.status}</StatusBadge>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

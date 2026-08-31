@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import {
   getQuestionById,
@@ -44,12 +45,17 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-display text-[20px] font-semibold text-text-primary">Modifier {question.kost_question_id}</h1>
-        <p className="mt-1 text-[13px] text-text-tertiary">
-          Type : {QTYPE_LABELS[qtype] ?? qtype} — Version actuelle : v{version.version_no}. Enregistrer crée une NOUVELLE version — les examens déjà
-          publiés avec la version précédente ne sont jamais modifiés rétroactivement.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="font-display text-[20px] font-semibold text-text-primary">Modifier {question.kost_question_id}</h1>
+          <p className="mt-1 text-[13px] text-text-tertiary">
+            Type : {QTYPE_LABELS[qtype] ?? qtype} — Version actuelle : v{version.version_no}. Enregistrer crée une NOUVELLE version — les examens déjà
+            publiés avec la version précédente ne sont jamais modifiés rétroactivement.
+          </p>
+        </div>
+        <Link href={`/question-bank/${question.id}/test`} className="shrink-0 rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
+          Tester la question
+        </Link>
       </div>
       <Card>
         <CardHeader title="Nouvelle version" />

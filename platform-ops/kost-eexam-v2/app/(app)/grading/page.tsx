@@ -288,7 +288,16 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                             {p.company_name} — {p.group_name} — {p.assessment_name} ({p.function_code})
                           </p>
                         </div>
-                        <StatusBadge status={p.is_correct ? "verified" : "critical"}>{p.is_correct ? "Correcte" : "Incorrecte"}</StatusBadge>
+                        <div className="flex items-center gap-2">
+                          {/* §7 — statut du RÉSULTAT de la tentative parente,
+                              distinct du statut de CETTE réponse (déjà
+                              corrigée) : d'autres réponses peuvent encore
+                              être en attente ailleurs dans le même examen. */}
+                          {p.attempt_grading_state === "AWAITING_MANUAL_REVIEW" && (
+                            <StatusBadge status="warning">Autres corrections en attente</StatusBadge>
+                          )}
+                          <StatusBadge status={p.is_correct ? "verified" : "critical"}>{p.is_correct ? "Correcte" : "Incorrecte"}</StatusBadge>
+                        </div>
                       </div>
                       <p className="mb-2 text-[13px] text-text-primary">{p.stem}</p>
                       <p className="mb-1 rounded-md bg-surface-sunken px-2.5 py-1.5 text-[12.5px] text-text-secondary">
@@ -296,6 +305,9 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                         {p.candidate_answer ? <span className="font-medium text-text-primary">{p.candidate_answer}</span> : <span className="italic text-text-tertiary">Aucune réponse fournie</span>}
                       </p>
                       <p className="text-[11.5px] text-text-tertiary">Points : {p.points_awarded} / {p.points}{p.grader_comment ? ` — Commentaire : ${p.grader_comment}` : ""}</p>
+                      <p className="mt-1 text-[11px] text-text-tertiary">
+                        Corrigé par {p.grader_name ?? "correcteur inconnu (historique antérieur)"}{p.graded_at ? ` le ${new Date(p.graded_at).toLocaleString("fr-FR")}` : ""}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -319,7 +331,12 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                             {p.company_name} — {p.group_name} — {p.assessment_name} ({p.function_code}) — Scénario : {p.scenario_title}
                           </p>
                         </div>
-                        <StatusBadge status={p.is_correct ? "verified" : "critical"}>{p.is_correct ? "Correcte" : "Incorrecte"}</StatusBadge>
+                        <div className="flex items-center gap-2">
+                          {p.attempt_grading_state === "AWAITING_MANUAL_REVIEW" && (
+                            <StatusBadge status="warning">Autres corrections en attente</StatusBadge>
+                          )}
+                          <StatusBadge status={p.is_correct ? "verified" : "critical"}>{p.is_correct ? "Correcte" : "Incorrecte"}</StatusBadge>
+                        </div>
                       </div>
                       <p className="mb-2 text-[13px] text-text-primary">{p.subquestion_stem}</p>
                       <p className="mb-1 rounded-md bg-surface-sunken px-2.5 py-1.5 text-[12.5px] text-text-secondary">
@@ -327,6 +344,9 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                         {p.candidate_answer ? <span className="font-medium text-text-primary">{p.candidate_answer}</span> : <span className="italic text-text-tertiary">Aucune réponse fournie</span>}
                       </p>
                       <p className="text-[11.5px] text-text-tertiary">Points : {p.points_awarded} / {p.points}{p.grader_comment ? ` — Commentaire : ${p.grader_comment}` : ""}</p>
+                      <p className="mt-1 text-[11px] text-text-tertiary">
+                        Corrigé par {p.grader_name ?? "correcteur inconnu (historique antérieur)"}{p.graded_at ? ` le ${new Date(p.graded_at).toLocaleString("fr-FR")}` : ""}
+                      </p>
                     </div>
                   ))}
                 </div>

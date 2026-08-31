@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
-import { getAttemptDetail } from "@/lib/results";
+import { getAttemptDetail, attemptStatusLabel } from "@/lib/results";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
-import { functionLabel, formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay, QTYPE_LABELS, type QType } from "@/lib/questions";
+import { functionLabel, formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay, isAnswered, QTYPE_LABELS, type QType } from "@/lib/questions";
 import { gradeOneQuestion } from "@/lib/grading";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge, type BadgeStatus } from "@/components/ui/Badge";
@@ -22,31 +22,14 @@ function formatDuration(startedAt: string, submittedAt: string | null): string {
 // mesuré, alors qu'aucune notation n'avait encore eu lieu. Le statut réel
 // de la tentative est maintenant TOUJOURS affiché en premier, et la carte
 // "Résultat" ne s'affiche QUE quand grading_state === 'COMPLETE' — jamais
-// un zéro fabriqué à la place d'un "pas encore noté".
-const STATUS_LABELS: Record<string, string> = {
-  in_progress: "EN COURS",
-  submitted: "SOUMIS",
-  auto_submitted: "AUTO-SOUMIS",
-  abandoned: "ABANDONNÉ",
-};
-
-/** Mission "MISSION FINALE CIBLÉE" (2026-08-30) — une question 'scenario'
- * n'est "répondue" que si TOUTES ses sous-questions le sont (même
- * définition qu'ExamRunner.tsx::isQuestionAnswered côté candidat). */
-function isAnswered(qtype: string, candidateAnswer: unknown): boolean {
-  if (qtype === "scenario") {
-    const given = (candidateAnswer ?? {}) as Record<string, string[]>;
-    const entries = Object.values(given);
-    return entries.length > 0 && entries.every((a) => a && a.length > 0 && a[0] !== "");
-  }
-  return Array.isArray(candidateAnswer) && candidateAnswer.length > 0;
-}
-
-function attemptStatusBadge(status: string, gradingState: string | null): { label: string; variant: BadgeStatus } {
-  if (status === "in_progress") return { label: "EN COURS", variant: "warning" };
-  if (gradingState === "AWAITING_MANUAL_REVIEW") return { label: "EN ATTENTE DE CORRECTION", variant: "warning" };
-  if (gradingState === "COMPLETE") return { label: "RÉSULTAT DISPONIBLE", variant: "verified" };
-  return { label: STATUS_LABELS[status] ?? status.toUpperCase(), variant: "neutral" };
+// un zéro fabriqué à la place d'un "pas encore noté". Le libellé lui-même
+// vient maintenant de lib/results.ts::attemptStatusLabel — point d'entrée
+// partagé avec le PDF individuel (mission "FINAL PRODUCT IMPROVEMENTS
+// BEFORE AUDITOR PDF", 2026-08-31 §2-3), jamais une 2e classification.
+function attemptStatusBadge(status: string, gradingState: "COMPLETE" | "AWAITING_MANUAL_REVIEW" | null): { label: string; variant: BadgeStatus } {
+  const label = attemptStatusLabel(status, gradingState);
+  const variant: BadgeStatus = status === "in_progress" || gradingState === "AWAITING_MANUAL_REVIEW" ? "warning" : gradingState === "COMPLETE" ? "verified" : "neutral";
+  return { label, variant };
 }
 
 export default async function AttemptDetailPage({ params }: { params: Promise<{ attemptId: string }> }) {
@@ -79,22 +62,31 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
             <StatusBadge status={badge.variant}>{badge.label}</StatusBadge>
           </p>
         </div>
-        {finalResultAvailable && (
-          <div className="flex shrink-0 gap-2">
-            <a
-              href={`/api/reports/individual/${attemptIdNum}?level=simple`}
-              className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
-            >
-              PDF simple
-            </a>
-            <a
-              href={`/api/reports/individual/${attemptIdNum}?level=detailed`}
-              className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
-            >
-              PDF détaillé
-            </a>
-          </div>
-        )}
+        {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF"
+            (2026-08-31) §1/§3 — le bouton PDF était auparavant masqué tant
+            que finalResultAvailable était faux, alors que cette MÊME page
+            affiche déjà le détail question par question pour une tentative
+            EN COURS ou EN ATTENTE DE CORRECTION (section "Questions et
+            réponses" ci-dessous, jamais gatée) : aucune exposition
+            nouvelle en rendant le PDF disponible dans les mêmes conditions.
+            Le document lui-même (lib/pdf/IndividualReportDocument.tsx)
+            affiche désormais le statut réel et un message explicite au
+            lieu d'un score — jamais un score fabriqué pour une tentative
+            non finalisée (§3). */}
+        <div className="flex shrink-0 gap-2">
+          <a
+            href={`/api/reports/individual/${attemptIdNum}?level=simple`}
+            className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+          >
+            PDF simple
+          </a>
+          <a
+            href={`/api/reports/individual/${attemptIdNum}?level=detailed`}
+            className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
+          >
+            PDF détaillé
+          </a>
+        </div>
       </div>
 
       {/* IDENTITÉ — addendum §3 */}
@@ -102,6 +94,7 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
         <CardHeader title="Identité" />
         <dl className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-5">
           <div><dt className="text-text-tertiary">Candidat</dt><dd className="font-medium text-text-primary">{detail.candidate_name}</dd></div>
+          <div><dt className="text-text-tertiary">Type de client</dt><dd className="font-medium text-text-primary">{detail.client_type === "particulier" ? "Particulier" : "Entreprise"}</dd></div>
           <div><dt className="text-text-tertiary">Entreprise</dt><dd className="font-medium text-text-primary">{detail.company_name}</dd></div>
           <div><dt className="text-text-tertiary">Groupe / session</dt><dd className="font-medium text-text-primary">{detail.group_name}</dd></div>
           <div><dt className="text-text-tertiary">Fonction</dt><dd className="font-medium text-text-primary">{functionLabel(detail.function_code)}</dd></div>

@@ -3,7 +3,21 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createQuestion, addQuestionVersion, getQuestionById, parseAuthoringFormData, validateQuestionAuthoring, type SourceStatus, type QType } from "@/lib/questions";
+import {
+  createQuestion,
+  addQuestionVersion,
+  getQuestionById,
+  parseAuthoringFormData,
+  validateQuestionAuthoring,
+  isQuestionProtected,
+  deleteQuestion,
+  setQuestionActive,
+  QuestionDeleteError,
+  type SourceStatus,
+  type QType,
+} from "@/lib/questions";
+import { audit } from "@/lib/audit";
+import type { SimpleActionResult } from "@/components/ui/ActionButton";
 
 export interface CreateQuestionResult {
   error?: string;
@@ -85,4 +99,68 @@ export async function editQuestionAction(questionId: number, _prev: EditQuestion
   addQuestionVersion(questionId, { stem, choices, correctAnswer, explanation }, session.userId);
   revalidatePath("/question-bank");
   redirect("/question-bank");
+}
+
+/** §8-10 — suppression DÉFINITIVE, réservée à l'administrateur (même
+ * frontière de risque qu'editQuestionAction : plus sensible que la simple
+ * saisie initiale, ici irréversible en plus). Revérifie isQuestionProtected
+ * ICI (jamais une confiance aveugle dans le bouton UI, qui ne devrait de
+ * toute façon jamais s'afficher pour une question protégée — défense en
+ * profondeur réelle, pas décorative) ; lib/questions.ts::deleteQuestion
+ * revérifie une 3e fois avant le DELETE lui-même. */
+export async function deleteQuestionAction(questionId: number, _prev: SimpleActionResult, _formData: FormData): Promise<SimpleActionResult> {
+  const session = await requireWriteRole("administrator");
+  const question = getQuestionById(questionId);
+  if (!question) return { error: "Question introuvable." };
+  if (isQuestionProtected(questionId)) {
+    return { error: "Cette question a déjà été publiée dans une évaluation — suppression définitive impossible. Utilisez « Désactiver » à la place." };
+  }
+  try {
+    deleteQuestion(questionId);
+  } catch (err) {
+    return { error: err instanceof QuestionDeleteError ? err.message : "Erreur inconnue." };
+  }
+  audit({
+    actorUserId: session.userId,
+    actorRole: session.role,
+    action: "question_deleted",
+    targetType: "question",
+    targetId: questionId,
+    metadata: { kostQuestionId: question.kost_question_id, previousSourceStatus: question.source_status },
+  });
+  revalidatePath("/question-bank");
+  redirect("/question-bank");
+}
+
+/** §8-10 — archivage/désactivation réversible. Ouvert au responsable
+ * pédagogique ET à l'administrateur (même périmètre que createQuestionAction
+ * — moins sensible qu'un DELETE ou qu'une nouvelle version, entièrement
+ * réversible) — jamais à l'auditeur (lecture seule, déjà appliqué par
+ * requireWriteRole). `active` porté en champ caché par le formulaire
+ * appelant (ActionButton) : bascule explicite, jamais devinée. */
+export async function setQuestionActiveAction(
+  questionId: number,
+  _prev: SimpleActionResult,
+  formData: FormData
+): Promise<SimpleActionResult> {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  const question = getQuestionById(questionId);
+  if (!question) return { error: "Question introuvable." };
+  const nextActive = String(formData.get("active")) === "true";
+  try {
+    setQuestionActive(questionId, nextActive);
+  } catch (err) {
+    return { error: err instanceof QuestionDeleteError ? err.message : "Erreur inconnue." };
+  }
+  audit({
+    actorUserId: session.userId,
+    actorRole: session.role,
+    action: nextActive ? "question_reactivated" : "question_archived",
+    targetType: "question",
+    targetId: questionId,
+    metadata: { kostQuestionId: question.kost_question_id, previousActive: question.active === 1, wasProtected: isQuestionProtected(questionId) },
+  });
+  revalidatePath("/question-bank");
+  revalidatePath(`/question-bank/${questionId}/edit`);
+  return { success: nextActive ? "Question réactivée." : "Question désactivée — conservée pour l'historique, plus disponible pour de nouveaux examens." };
 }

@@ -1,4 +1,4 @@
-import { getDb, nowIso } from "./db";
+import { getDb, nowIso, transaction } from "./db";
 
 // Statuts de provenance réglementaire — §3 de la mission. Une question dont
 // le statut n'est pas FROZEN_SOURCE_VERIFIED n'est JAMAIS admissible pour un
@@ -428,7 +428,7 @@ export interface QuestionListFilter {
   search?: string;
 }
 
-export type QuestionListRow = QuestionRow & { stem: string; is_demo: number };
+export type QuestionListRow = QuestionRow & { stem: string; is_demo: number; is_protected: number };
 
 /** Liste filtrée à plat pour /question-bank (§3-5 de la mission) — jamais
  * utilisée pour le tirage de production (voir isAdmissibleWhereClause plus
@@ -474,7 +474,8 @@ export function listQuestions(filter: QuestionListFilter = {}): QuestionListRow[
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   return db
     .prepare(
-      `SELECT q.*, qv.stem, (CASE WHEN q.kost_question_id LIKE 'DEMO-%' THEN 1 ELSE 0 END) AS is_demo
+      `SELECT q.*, qv.stem, (CASE WHEN q.kost_question_id LIKE 'DEMO-%' THEN 1 ELSE 0 END) AS is_demo,
+              EXISTS(SELECT 1 FROM assessment_question_snapshots s WHERE s.question_id = q.id) AS is_protected
        FROM questions q
        LEFT JOIN question_versions qv ON qv.id = q.current_version_id
        ${where}
@@ -606,6 +607,66 @@ export function getQuestionById(id: number): QuestionRow | undefined {
   return getDb().prepare(`SELECT * FROM questions WHERE id = ?`).get(id) as QuestionRow | undefined;
 }
 
+// ============================================================================
+// Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+// §8-10 — suppression/archivage sûrs. Le signal d'"historique protégé" est
+// `assessment_question_snapshots.question_id` : cette table n'est écrite
+// QU'À LA PUBLICATION d'une évaluation (lib/assessments.ts, jamais au
+// brouillon — voir son commentaire d'en-tête "Copie figée exacte, prise UNE
+// fois à la publication"), et attempt_questions référence toujours un
+// snapshot_id, jamais directement question_id : donc "aucun snapshot" ⇒
+// aucune tentative candidate, aucun résultat, aucun historique de
+// correction ne peut exister pour cette question, par construction — un
+// seul EXISTS suffit, jamais besoin d'interroger attempts/results
+// séparément. `questions.active=1` reste le SEUL contrôle qui empêche déjà
+// une question désactivée d'entrer dans un tirage de production
+// (isAdmissibleWhereClause ci-dessus) — archiver/désactiver ne fait donc
+// qu'exposer dans l'UI un état déjà pleinement effectif côté moteur.
+// ============================================================================
+
+/** Vrai si cette question a déjà été publiée dans au moins une évaluation
+ * (donc potentiellement des tentatives/résultats/corrections en dépendent)
+ * — jamais supprimable définitivement dans ce cas, uniquement archivable. */
+export function isQuestionProtected(questionId: number): boolean {
+  const row = getDb().prepare(`SELECT 1 FROM assessment_question_snapshots WHERE question_id = ? LIMIT 1`).get(questionId);
+  return !!row;
+}
+
+export class QuestionDeleteError extends Error {}
+
+/** Suppression DÉFINITIVE — réservée aux questions jamais publiées
+ * (isQuestionProtected doit avoir été vérifié par l'appelant AVANT, cette
+ * fonction revérifie elle-même en défense en profondeur, jamais une
+ * confiance aveugle dans l'appelant). Retire d'abord les lignes
+ * assessment_question_pool (sélection d'un brouillon PAS ENCORE publié —
+ * jamais un historique, sans quoi la contrainte FK ON DELETE (RESTRICT par
+ * défaut, PRAGMA foreign_keys=ON, lib/db.ts) ferait échouer le DELETE
+ * suivant) ; question_versions/question_tags se suppriment seuls (ON DELETE
+ * CASCADE, lib/schema.sql). Jamais de renumérotation d'aucune autre
+ * question (§10) — un DELETE par id ne touche que cette ligne. */
+export function deleteQuestion(questionId: number): void {
+  if (isQuestionProtected(questionId)) {
+    throw new QuestionDeleteError("Cette question a déjà été publiée dans une évaluation — suppression définitive impossible, utilisez l'archivage.");
+  }
+  transaction((db) => {
+    db.prepare(`DELETE FROM assessment_question_pool WHERE question_id = ?`).run(questionId);
+    const result = db.prepare(`DELETE FROM questions WHERE id = ?`).run(questionId);
+    if (result.changes === 0) throw new QuestionDeleteError("Question introuvable.");
+  });
+}
+
+/** Archivage/désactivation réversible — jamais destructif, jamais de perte
+ * de preuve (§9-10) : une question archivée reste entièrement lisible dans
+ * l'historique de tout examen déjà publié (assessment_question_snapshots
+ * est une copie figée, indépendante de `questions`/`active`). `active=0`
+ * l'exclut simplement de tout FUTUR tirage/sélection (déjà l'unique
+ * contrôle réel, voir isAdmissibleWhereClause). Symétrique et réversible :
+ * la même fonction réactive (active=true) — jamais une porte à sens unique. */
+export function setQuestionActive(questionId: number, active: boolean): void {
+  const result = getDb().prepare(`UPDATE questions SET active = ?, updated_at = ? WHERE id = ?`).run(active ? 1 : 0, nowIso(), questionId);
+  if (result.changes === 0) throw new QuestionDeleteError("Question introuvable.");
+}
+
 export function functionLabel(code: string): string {
   const row = getDb().prepare(`SELECT label FROM functions WHERE code = ?`).get(code) as { label: string } | undefined;
   return row?.label ?? code;
@@ -702,4 +763,21 @@ export function formatCandidateAnswerForDisplay(qtype: string, candidateAnswer: 
     return entries.map(([id, ans]) => `${id}: ${ans?.[0] ?? "—"}`).join(" ; ");
   }
   return "";
+}
+
+/** Point d'entrée unique "cette question a-t-elle une réponse ?" pour la
+ * lecture d'une tentative déjà passée (fiche admin /results/[attemptId],
+ * PDF individuel — mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF",
+ * 2026-08-31 §2). Une question 'scenario' n'est répondue que si TOUTES ses
+ * sous-questions le sont — même définition que ExamRunner.tsx::
+ * isQuestionAnswered côté candidat en cours d'examen (signature différente
+ * là-bas : state client live, pas candidateAnswer déjà persisté — donc pas
+ * fusionné avec celle-ci, mais la RÈGLE métier reste identique). */
+export function isAnswered(qtype: string, candidateAnswer: unknown): boolean {
+  if (qtype === "scenario") {
+    const given = (candidateAnswer ?? {}) as Record<string, string[]>;
+    const entries = Object.values(given);
+    return entries.length > 0 && entries.every((a) => a && a.length > 0 && a[0] !== "");
+  }
+  return Array.isArray(candidateAnswer) && candidateAnswer.length > 0;
 }

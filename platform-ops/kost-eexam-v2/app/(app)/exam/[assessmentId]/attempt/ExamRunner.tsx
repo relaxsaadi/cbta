@@ -8,6 +8,7 @@ import { saveAnswerAction, saveScenarioSubanswerAction, toggleMarkAction, submit
 import { Timer } from "@/components/ui/Timer";
 import { AutosaveIndicator } from "./AutosaveIndicator";
 import { QuestionNavigator } from "@/components/ui/QuestionNavigator";
+import { DeclareIncidentModal } from "@/components/candidate/DeclareIncidentModal";
 
 interface ChoiceView {
   key: string;
@@ -387,7 +388,13 @@ export function ExamRunner({
           <p className="text-[13px] font-medium text-text-primary">{assessmentName}</p>
           <p className="text-[11.5px] text-text-tertiary">Question {index + 1} / {questionCount}</p>
         </div>
-        <Timer remainingMs={remainingMs} totalMs={durationMinutes * 60 * 1000} />
+        <div className="flex items-center gap-3">
+          {/* §24/§27/§32 — modale, jamais une navigation : le chronomètre
+              et l'autosave ci-dessous continuent sans interruption pendant
+              que la modale est ouverte (voir DeclareIncidentModal.tsx). */}
+          <DeclareIncidentModal attemptId={attemptId} variant="compact" />
+          <Timer remainingMs={remainingMs} totalMs={durationMinutes * 60 * 1000} />
+        </div>
       </div>
 
       <QuestionNavigator

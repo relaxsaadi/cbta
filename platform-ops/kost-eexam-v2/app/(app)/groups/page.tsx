@@ -56,13 +56,12 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-[20px] font-semibold text-text-primary">Groupes</h1>
 
-      {canWrite && (
-        <Card>
-          <CardHeader title="Nouveau groupe" description="Client → Groupe → Candidats" />
-          <CreateGroupForm companies={companies} defaultCompanyId={sp.companyId ? Number(sp.companyId) : undefined} />
-        </Card>
-      )}
-
+      {/* Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
+          §15/§23 — panneau de filtres placé AVANT le formulaire de
+          création (même correctif que /question-bank : "Client" figure
+          aussi comme champ du formulaire de création juste en dessous,
+          libellé visuel identique — jamais une collision d'id, mais une
+          confusion positionnelle réelle pour un utilisateur). */}
       <Card>
         <form className="flex flex-wrap items-end gap-3" method="get">
           <div>
@@ -113,6 +112,13 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
           )}
         </form>
       </Card>
+
+      {canWrite && (
+        <Card>
+          <CardHeader title="Nouveau groupe" description="Client → Groupe → Candidats" />
+          <CreateGroupForm companies={companies} defaultCompanyId={sp.companyId ? Number(sp.companyId) : undefined} />
+        </Card>
+      )}
 
       <Card>
         <CardHeader title={`${groups.length} groupe(s)`} />

@@ -30,12 +30,27 @@ export function CreateSessionForm({
           </select>
         </div>
         <div>
-          <label htmlFor="heldAt" className="mb-1 block text-[12px] font-medium text-text-secondary">Date / heure</label>
+          <label htmlFor="heldAt" className="mb-1 block text-[12px] font-medium text-text-secondary">Date / heure de début</label>
           <input id="heldAt" name="heldAt" type="datetime-local" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         <div>
-          <label htmlFor="location" className="mb-1 block text-[12px] font-medium text-text-secondary">Lieu</label>
-          <input id="location" name="location" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          <label htmlFor="endedAt" className="mb-1 block text-[12px] font-medium text-text-secondary">Heure de fin (optionnel)</label>
+          <input id="endedAt" name="endedAt" type="datetime-local" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+        </div>
+        <div>
+          <label htmlFor="location" className="mb-1 block text-[12px] font-medium text-text-secondary">Lieu / mode</label>
+          <input id="location" name="location" placeholder="ex. Salle KOST Academy Alger, ou À distance" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+        </div>
+        <div>
+          {/* Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §14/§17 — l'auditeur
+              exige que la familiarisation soit planifiable pour le PERSONNEL
+              ET pour les CANDIDATS, explicitement déclaré ici. */}
+          <label htmlFor="audience" className="mb-1 block text-[12px] font-medium text-text-secondary">Public visé</label>
+          <select id="audience" name="audience" required defaultValue="candidats" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+            <option value="candidats">Candidats</option>
+            <option value="personnel">Personnel</option>
+            <option value="mixte">Mixte (personnel + candidats)</option>
+          </select>
         </div>
       </div>
       <div>

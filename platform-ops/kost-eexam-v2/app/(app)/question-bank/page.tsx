@@ -7,8 +7,10 @@ import {
   countAdmissibleQuestions,
   SOURCE_STATUS_LABELS,
   QTYPE_LABELS,
+  ANNUAL_REVIEW_LABELS,
   type SourceStatus,
   type QType,
+  type AnnualReviewDecision,
 } from "@/lib/questions";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -39,6 +41,16 @@ const REVIEWER_STATUS_BADGE: Record<string, "verified" | "warning" | "critical" 
   REJECTED: "critical",
 };
 
+// Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §2-3 — statut de la revue
+// ANNUELLE, un troisième concept distinct de Source/Reviewer ci-dessus
+// (jamais confondu — voir lib/questions.ts en tête de section revue
+// annuelle). null = aucune revue jamais enregistrée = "À revoir".
+const ANNUAL_REVIEW_BADGE: Record<string, "verified" | "warning" | "neutral"> = {
+  A_REVOIR: "warning",
+  REVUE_EN_COURS: "neutral",
+  REVUE_TERMINEE: "verified",
+};
+
 // "functionCode"/"qtype"/"sourceStatus" (sans préfixe) sont déjà les
 // name/id des champs de CreateQuestionForm plus bas sur cette MÊME page —
 // un id dupliqué est un vrai bug HTML/accessibilité (voir le même
@@ -53,6 +65,7 @@ interface QuestionBankSearchParams {
   filterReviewerStatus?: string;
   filterClassification?: string;
   filterActive?: string;
+  filterAnnualReview?: string;
   q?: string;
 }
 
@@ -81,9 +94,12 @@ export default async function QuestionBankPage({
     classification: (sp.filterClassification as "regulatory" | "demo") || undefined,
     active: sp.filterActive === "1" ? true : sp.filterActive === "0" ? false : undefined,
     search: sp.q || undefined,
+    annualReviewStatus: sp.filterAnnualReview === "NONE" ? "NONE" : (sp.filterAnnualReview as AnnualReviewDecision) || undefined,
   });
 
-  const hasFilters = !!(sp.filterFunctionCode || sp.filterQtype || sp.filterSourceStatus || sp.filterReviewerStatus || sp.filterClassification || sp.filterActive || sp.q);
+  const hasFilters = !!(
+    sp.filterFunctionCode || sp.filterQtype || sp.filterSourceStatus || sp.filterReviewerStatus || sp.filterClassification || sp.filterActive || sp.filterAnnualReview || sp.q
+  );
 
   return (
     <div className="flex flex-col gap-6">
@@ -170,6 +186,15 @@ export default async function QuestionBankPage({
             </select>
           </div>
           <div>
+            <label htmlFor="filterAnnualReview" className="mb-1 block text-[12px] font-medium text-text-secondary">Revue annuelle</label>
+            <select id="filterAnnualReview" name="filterAnnualReview" defaultValue={sp.filterAnnualReview ?? ""} className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+              <option value="">Toutes</option>
+              <option value="NONE">{ANNUAL_REVIEW_LABELS.A_REVOIR} (jamais revue)</option>
+              <option value="REVUE_EN_COURS">{ANNUAL_REVIEW_LABELS.REVUE_EN_COURS}</option>
+              <option value="REVUE_TERMINEE">{ANNUAL_REVIEW_LABELS.REVUE_TERMINEE}</option>
+            </select>
+          </div>
+          <div>
             <label htmlFor="q" className="mb-1 block text-[12px] font-medium text-text-secondary">Recherche</label>
             <input id="q" name="q" defaultValue={sp.q ?? ""} placeholder="ID, texte, référence…" className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
           </div>
@@ -204,6 +229,7 @@ export default async function QuestionBankPage({
                   <th className="pb-2 pr-3 font-medium">Type</th>
                   <th className="pb-2 pr-3 font-medium">Source</th>
                   <th className="pb-2 pr-3 font-medium">Reviewer</th>
+                  <th className="pb-2 pr-3 font-medium">Revue annuelle</th>
                   <th className="pb-2 pr-3 font-medium">Classification</th>
                   <th className="pb-2 pr-3 font-medium">Statut</th>
                   {canWrite && <th className="pb-2 font-medium">Actions</th>}
@@ -225,6 +251,11 @@ export default async function QuestionBankPage({
                     </td>
                     <td className="py-2 pr-3">
                       <StatusBadge status={REVIEWER_STATUS_BADGE[q.reviewer_status] ?? "neutral"}>{REVIEWER_STATUS_LABELS[q.reviewer_status] ?? q.reviewer_status}</StatusBadge>
+                    </td>
+                    <td className="py-2 pr-3">
+                      <StatusBadge status={ANNUAL_REVIEW_BADGE[q.latest_annual_review_decision ?? "A_REVOIR"] ?? "warning"}>
+                        {ANNUAL_REVIEW_LABELS[q.latest_annual_review_decision ?? "A_REVOIR"]}
+                      </StatusBadge>
                     </td>
                     <td className="py-2 pr-3">
                       <StatusBadge status={q.is_demo ? "warning" : "verified"}>{q.is_demo ? "DEMO / brouillon" : "Réglementaire"}</StatusBadge>

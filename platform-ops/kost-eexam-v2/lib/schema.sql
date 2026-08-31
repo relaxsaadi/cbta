@@ -188,6 +188,44 @@ CREATE TABLE IF NOT EXISTS questions (
 );
 CREATE INDEX IF NOT EXISTS idx_questions_function ON questions(function_code);
 
+-- Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §2-4 — l'auditeur exige une
+-- REVUE ANNUELLE par un instructeur habilité, DISTINCTE des deux concepts
+-- déjà existants sur `questions` : source_status ("CONFIRMÉ — SOURCE DGR
+-- VÉRIFIÉE", vérification de la source réglementaire) et reviewer_status
+-- (PENDING/APPROVED/REJECTED, une revue humaine ponctuelle À LA CRÉATION).
+-- Ni l'un ni l'autre ne trace un CYCLE ANNUEL récurrent (année applicable,
+-- édition DGR, identité du réviseur, prochaine échéance). Table en AJOUT
+-- SEUL — même discipline que question_versions ci-dessous : chaque revue
+-- annuelle est une NOUVELLE ligne, jamais une mise à jour d'une revue
+-- précédente, pour conserver l'historique complet exigé par l'auditeur
+-- ("previous review/version"). AUCUNE ligne n'est créée automatiquement
+-- pour les questions existantes — l'absence de ligne pour une question =
+-- "À revoir" (jamais un statut "terminé" fabriqué, §2/§25 de la mission).
+CREATE TABLE IF NOT EXISTS question_annual_reviews (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+  review_year INTEGER NOT NULL,
+  applicable_edition TEXT NOT NULL,
+  -- Identité du réviseur QUALIFIÉ (instructeur habilité) — texte libre,
+  -- jamais forcé à un compte KOST E-EXAM existant : l'instructeur habilité
+  -- qui a réellement mené la revue n'a pas nécessairement de compte sur
+  -- cette plateforme. reviewer_user_id reste disponible quand un compte
+  -- existe réellement, sans jamais être obligatoire.
+  reviewer_name TEXT NOT NULL,
+  reviewer_qualification TEXT,
+  reviewer_user_id INTEGER REFERENCES users(id),
+  review_date TEXT NOT NULL,
+  decision TEXT NOT NULL CHECK (decision IN ('A_REVOIR','REVUE_EN_COURS','REVUE_TERMINEE')),
+  comment TEXT,
+  next_review_due TEXT,
+  -- Compte KOST E-EXAM ayant SAISI cet enregistrement (traçabilité
+  -- applicative — distinct de reviewer_name/reviewer_user_id ci-dessus,
+  -- qui identifient qui a MENÉ la revue elle-même).
+  created_by INTEGER REFERENCES users(id),
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_question_annual_reviews_question ON question_annual_reviews(question_id);
+
 -- Append-only : jamais d'UPDATE sur une version existante (§4 de la
 -- mission — un examen publié doit toujours pouvoir montrer la version EXACTE
 -- reçue par le candidat, même si la question a changé depuis).
@@ -509,7 +547,14 @@ CREATE TABLE IF NOT EXISTS familiarization_sessions (
   location TEXT,
   notes TEXT,
   organized_by INTEGER REFERENCES users(id),
-  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  -- audience/ended_at (mission "CLOSE AUDITOR REMARKS", 2026-08-31, §17-19)
+  -- — déclarées ICI (base fraîche : tests unitaires, nouveau déploiement)
+  -- ET dans scripts/migrate.ts::ADDITIVE_COLUMNS (base déjà existante avec
+  -- des données réelles — même convention double que mfa_secret/
+  -- candidate_type plus haut dans ce fichier).
+  audience TEXT,
+  ended_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS familiarization_attendance (
@@ -523,6 +568,28 @@ CREATE TABLE IF NOT EXISTS familiarization_attendance (
 );
 CREATE INDEX IF NOT EXISTS idx_familiarization_sessions_group ON familiarization_sessions(group_id);
 CREATE INDEX IF NOT EXISTS idx_familiarization_attendance_candidate ON familiarization_attendance(candidate_user_id);
+
+-- Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §17-20 — l'auditeur exige que
+-- la familiarisation puisse être planifiée/tracée à la fois pour le
+-- PERSONNEL et pour les CANDIDATS, et que la preuve (feuille de présence,
+-- justificatif) soit rattachée et consultable. `audience`/`ended_at` sont
+-- des colonnes ADDITIVES sur familiarization_sessions (voir
+-- scripts/migrate.ts::ADDITIVE_COLUMNS — cette table existe déjà en
+-- staging). `familiarization_evidence` est un journal en AJOUT SEUL (même
+-- discipline que incident_actions/attach_evidence, lib/incidents.ts) : une
+-- RÉFÉRENCE/description textuelle horodatée, jamais un fichier binaire
+-- uploadé — élimine structurellement tout risque de stockage public/URL
+-- exposée (§20 : "private storage, no public file URL") tout en
+-- répondant à l'exigence de traçabilité (qui a rattaché quelle preuve,
+-- quand).
+CREATE TABLE IF NOT EXISTS familiarization_evidence (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id INTEGER NOT NULL REFERENCES familiarization_sessions(id) ON DELETE CASCADE,
+  description TEXT NOT NULL,
+  recorded_by INTEGER REFERENCES users(id),
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_familiarization_evidence_session ON familiarization_evidence(session_id);
 
 -- ===========================================================================
 -- Sous-système email transactionnel (mission "RESEND EMAIL EXPERIENCE

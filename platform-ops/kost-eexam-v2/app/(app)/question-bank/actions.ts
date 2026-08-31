@@ -12,9 +12,11 @@ import {
   isQuestionProtected,
   deleteQuestion,
   setQuestionActive,
+  recordAnnualReview,
   QuestionDeleteError,
   type SourceStatus,
   type QType,
+  type AnnualReviewDecision,
 } from "@/lib/questions";
 import { audit } from "@/lib/audit";
 import type { SimpleActionResult } from "@/components/ui/ActionButton";
@@ -163,4 +165,66 @@ export async function setQuestionActiveAction(
   revalidatePath("/question-bank");
   revalidatePath(`/question-bank/${questionId}/edit`);
   return { success: nextActive ? "Question réactivée." : "Question désactivée — conservée pour l'historique, plus disponible pour de nouveaux examens." };
+}
+
+export interface RecordAnnualReviewResult {
+  error?: string;
+  success?: string;
+}
+
+/** Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §2-4 — enregistre une revue
+ * annuelle RÉELLEMENT menée par un instructeur habilité. Ce formulaire
+ * n'invente RIEN : reviewerName/reviewDate doivent décrire un événement
+ * humain déjà survenu ; l'opérateur qui saisit ce formulaire (session.userId,
+ * created_by) n'est PAS nécessairement le réviseur lui-même — un
+ * administrateur/responsable pédagogique transcrit ici la décision d'un
+ * instructeur habilité qui a réellement mené la revue, exactement comme
+ * createQuestionAction transcrit une question depuis une source déjà
+ * vérifiée sans jamais en inventer le contenu. */
+export async function recordAnnualReviewAction(questionId: number, _prev: RecordAnnualReviewResult, formData: FormData): Promise<RecordAnnualReviewResult> {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  const question = getQuestionById(questionId);
+  if (!question) return { error: "Question introuvable." };
+
+  const reviewYear = Number(formData.get("reviewYear"));
+  const applicableEdition = String(formData.get("applicableEdition") ?? "").trim();
+  const reviewerName = String(formData.get("reviewerName") ?? "").trim();
+  const reviewerQualification = String(formData.get("reviewerQualification") ?? "").trim() || undefined;
+  const reviewDate = String(formData.get("reviewDate") ?? "").trim();
+  const decision = String(formData.get("decision") ?? "") as AnnualReviewDecision;
+  const comment = String(formData.get("comment") ?? "").trim() || undefined;
+  const nextReviewDue = String(formData.get("nextReviewDue") ?? "").trim() || undefined;
+
+  if (!reviewYear || !applicableEdition || !reviewerName || !reviewDate) {
+    return { error: "Année, édition applicable, nom du réviseur et date de revue sont obligatoires." };
+  }
+  if (!["A_REVOIR", "REVUE_EN_COURS", "REVUE_TERMINEE"].includes(decision)) {
+    return { error: "Décision invalide." };
+  }
+
+  const reviewId = recordAnnualReview({
+    questionId,
+    reviewYear,
+    applicableEdition,
+    reviewerName,
+    reviewerQualification,
+    reviewDate,
+    decision,
+    comment,
+    nextReviewDue,
+    createdBy: session.userId,
+  });
+
+  audit({
+    actorUserId: session.userId,
+    actorRole: session.role,
+    action: "question_annual_review_recorded",
+    targetType: "question",
+    targetId: questionId,
+    metadata: { kostQuestionId: question.kost_question_id, reviewId, reviewYear, decision, reviewerName },
+  });
+
+  revalidatePath(`/question-bank/${questionId}/edit`);
+  revalidatePath("/question-bank");
+  return { success: `Revue annuelle ${reviewYear} enregistrée pour ${reviewerName}.` };
 }

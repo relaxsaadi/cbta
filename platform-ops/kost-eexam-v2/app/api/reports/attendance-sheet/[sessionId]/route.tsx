@@ -37,7 +37,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ sess
   };
 
   const buffer = await renderToBuffer(
-    <AttendanceSheetDocument rows={attendance} location={fs.location} heldAt={fs.held_at} meta={meta} />
+    <AttendanceSheetDocument rows={attendance} location={fs.location} heldAt={fs.held_at} endedAt={fs.ended_at} audience={fs.audience} meta={meta} />
   );
 
   audit({

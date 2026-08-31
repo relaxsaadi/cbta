@@ -1,11 +1,18 @@
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
-import { getFamiliarizationSession, listAttendance, getCandidateFamiliarizationHistory } from "@/lib/familiarization";
+import { getFamiliarizationSession, listAttendance, getCandidateFamiliarizationHistory, listFamiliarizationEvidence } from "@/lib/familiarization";
 import { hasFamiliarizationSessionAccess } from "@/lib/tenant-scope";
 import { functionLabel } from "@/lib/questions";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { markAttendanceAction } from "../actions";
+import { AddEvidenceForm } from "./AddEvidenceForm";
+
+const AUDIENCE_LABELS: Record<string, string> = {
+  candidats: "Candidats",
+  personnel: "Personnel",
+  mixte: "Mixte (personnel + candidats)",
+};
 
 export default async function FamiliarizationSessionPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await guardPage("pedagogical_manager", "administrator", "auditor");
@@ -18,6 +25,7 @@ export default async function FamiliarizationSessionPage({ params }: { params: P
   const canWrite = session.role !== "auditor";
   const attendance = listAttendance(sessionId);
   const presentCount = attendance.filter((a) => a.present).length;
+  const evidence = listFamiliarizationEvidence(sessionId);
 
   async function toggleAttendance(formData: FormData) {
     "use server";
@@ -32,7 +40,10 @@ export default async function FamiliarizationSessionPage({ params }: { params: P
             Familiarisation — {fs.company_name} — {fs.group_name}
           </h1>
           <p className="mt-1 text-[13px] text-text-tertiary">
-            {functionLabel(fs.function_code)} — {new Date(fs.held_at).toLocaleString("fr-FR")}{fs.location ? ` — ${fs.location}` : ""}
+            {functionLabel(fs.function_code)} — {new Date(fs.held_at).toLocaleString("fr-FR")}
+            {fs.ended_at ? ` → ${new Date(fs.ended_at).toLocaleTimeString("fr-FR")}` : ""}
+            {fs.location ? ` — ${fs.location}` : ""}
+            {fs.audience ? ` — Public : ${AUDIENCE_LABELS[fs.audience] ?? fs.audience}` : ""}
           </p>
         </div>
         <a
@@ -81,6 +92,28 @@ export default async function FamiliarizationSessionPage({ params }: { params: P
             );
           })}
         </div>
+      </Card>
+
+      {/* Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §20-21 — preuve/
+          justificatif rattaché à la session, consultable par tout
+          utilisateur autorisé (auditeur en lecture seule). Référence
+          textuelle horodatée, jamais un fichier — voir
+          lib/familiarization.ts pour la justification complète. */}
+      <Card>
+        <CardHeader title={`Preuves rattachées (${evidence.length})`} description="Référence/description de la preuve de familiarisation (ex. classement physique/numérique de la feuille de présence signée) — jamais un fichier hébergé publiquement." />
+        {canWrite && <AddEvidenceForm sessionId={sessionId} />}
+        {evidence.length > 0 && (
+          <div className="mt-3 flex flex-col gap-1.5">
+            {evidence.map((e) => (
+              <div key={e.id} className="rounded-md border border-border-subtle px-3 py-2">
+                <p className="text-[13px] text-text-primary">{e.description}</p>
+                <p className="mt-1 text-[11px] text-text-tertiary">
+                  Rattaché le {new Date(e.created_at).toLocaleString("fr-FR")}{e.recorded_by_name ? ` par ${e.recorded_by_name}` : ""}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </Card>
     </div>
   );

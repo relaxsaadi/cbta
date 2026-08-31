@@ -75,6 +75,14 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
   // Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
   // §25-26 — déclaration d'incident candidat, tentative auto-associée.
   { table: "incidents", column: "attempt_id", ddl: "ALTER TABLE incidents ADD COLUMN attempt_id INTEGER REFERENCES attempts(id)" },
+  // Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §17-19 — l'auditeur exige
+  // que la familiarisation puisse être explicitement déclarée pour le
+  // PERSONNEL ou pour les CANDIDATS (audience), et que l'heure de fin
+  // soit traçable (ended_at) pour la feuille de présence. Nullable :
+  // aucune session existante n'est rétroactivement complétée (§25 — jamais
+  // une valeur inventée pour l'historique).
+  { table: "familiarization_sessions", column: "audience", ddl: "ALTER TABLE familiarization_sessions ADD COLUMN audience TEXT" },
+  { table: "familiarization_sessions", column: "ended_at", ddl: "ALTER TABLE familiarization_sessions ADD COLUMN ended_at TEXT" },
 ];
 
 function applyAdditiveColumns(db: ReturnType<typeof getDb>) {

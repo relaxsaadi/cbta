@@ -16,6 +16,12 @@ export interface FamiliarizationSessionRow {
   notes: string | null;
   organized_by: number | null;
   created_at: string;
+  /** Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §17 — l'auditeur exige
+   * que la familiarisation soit planifiable pour le PERSONNEL et pour les
+   * CANDIDATS. Colonnes additives (scripts/migrate.ts) — nullable, jamais
+   * rétroactivement complétées pour une session existante. */
+  audience: string | null;
+  ended_at: string | null;
 }
 
 export interface FamiliarizationSessionWithContext extends FamiliarizationSessionRow {
@@ -150,15 +156,29 @@ export function createFamiliarizationSession(params: {
   notes?: string;
   organizedBy: number;
   organizerRole: ConsoleRole;
+  /** "candidats" | "personnel" | "mixte" — texte libre validé côté UI
+   * (pas de CHECK en base, même convention que candidate_type/client_type
+   * ailleurs dans ce schéma). */
+  audience?: string;
+  endedAt?: string;
 }): number {
   const members = listGroupMembers(params.groupId);
   return transaction((db) => {
     const result = db
       .prepare(
-        `INSERT INTO familiarization_sessions (group_id, function_code, held_at, location, notes, organized_by)
-         VALUES (?, ?, ?, ?, ?, ?)`
+        `INSERT INTO familiarization_sessions (group_id, function_code, held_at, location, notes, organized_by, audience, ended_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
       )
-      .run(params.groupId, params.functionCode, params.heldAt, params.location ?? null, params.notes ?? null, params.organizedBy);
+      .run(
+        params.groupId,
+        params.functionCode,
+        params.heldAt,
+        params.location ?? null,
+        params.notes ?? null,
+        params.organizedBy,
+        params.audience ?? null,
+        params.endedAt ?? null
+      );
     const sessionId = Number(result.lastInsertRowid);
     const insertAttendance = db.prepare(
       `INSERT INTO familiarization_attendance (session_id, candidate_user_id, present) VALUES (?, ?, 0)`
@@ -229,4 +249,46 @@ export function getCandidateFamiliarizationHistory(candidateUserId: number): Can
        ORDER BY fs.held_at DESC`
     )
     .all(candidateUserId) as unknown as CandidateFamiliarizationRecord[];
+}
+
+// ---------------------------------------------------------------------
+// Preuve de familiarisation (mission "CLOSE AUDITOR REMARKS", 2026-08-31,
+// §20-21) — une RÉFÉRENCE/description textuelle horodatée, jamais un
+// fichier binaire uploadé (même discipline que incident_actions/
+// attach_evidence, lib/incidents.ts) : élimine structurellement tout
+// risque de stockage public/URL exposée. Journal en ajout seul.
+// ---------------------------------------------------------------------
+export interface FamiliarizationEvidenceRow {
+  id: number;
+  session_id: number;
+  description: string;
+  recorded_by: number | null;
+  recorded_by_name: string | null;
+  created_at: string;
+}
+
+export function addFamiliarizationEvidence(sessionId: number, description: string, actor: { id: number; role: ConsoleRole }): number {
+  const result = getDb()
+    .prepare(`INSERT INTO familiarization_evidence (session_id, description, recorded_by) VALUES (?, ?, ?)`)
+    .run(sessionId, description, actor.id);
+  audit({
+    actorUserId: actor.id,
+    actorRole: actor.role,
+    action: "familiarization_evidence_attached",
+    targetType: "familiarization_session",
+    targetId: sessionId,
+  });
+  return Number(result.lastInsertRowid);
+}
+
+export function listFamiliarizationEvidence(sessionId: number): FamiliarizationEvidenceRow[] {
+  return getDb()
+    .prepare(
+      `SELECT fe.*, u.full_name AS recorded_by_name
+       FROM familiarization_evidence fe
+       LEFT JOIN users u ON u.id = fe.recorded_by
+       WHERE fe.session_id = ?
+       ORDER BY fe.id DESC`
+    )
+    .all(sessionId) as unknown as FamiliarizationEvidenceRow[];
 }

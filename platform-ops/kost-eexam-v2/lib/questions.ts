@@ -365,6 +365,96 @@ export interface QuestionVersionRow {
   created_at: string;
 }
 
+// ---------------------------------------------------------------------
+// Revue annuelle (mission "CLOSE AUDITOR REMARKS", 2026-08-31, §2-4) —
+// distincte de source_status ("CONFIRMÉ — SOURCE DGR VÉRIFIÉE", provenance
+// réglementaire) ET de reviewer_status (PENDING/APPROVED/REJECTED, une
+// revue humaine ponctuelle à la création) : un CYCLE RÉCURRENT, une ligne
+// en ajout seul par revue réellement menée par un instructeur habilité.
+// Aucune ligne = "À revoir" par défaut, jamais fabriqué.
+// ---------------------------------------------------------------------
+export type AnnualReviewDecision = "A_REVOIR" | "REVUE_EN_COURS" | "REVUE_TERMINEE";
+
+export const ANNUAL_REVIEW_LABELS: Record<AnnualReviewDecision, string> = {
+  A_REVOIR: "À revoir",
+  REVUE_EN_COURS: "Revue annuelle en cours",
+  REVUE_TERMINEE: "Revue annuelle terminée",
+};
+
+export interface QuestionAnnualReviewRow {
+  id: number;
+  question_id: number;
+  review_year: number;
+  applicable_edition: string;
+  reviewer_name: string;
+  reviewer_qualification: string | null;
+  reviewer_user_id: number | null;
+  review_date: string;
+  decision: AnnualReviewDecision;
+  comment: string | null;
+  next_review_due: string | null;
+  created_by: number | null;
+  created_at: string;
+}
+
+/** Enregistre une revue RÉELLEMENT menée — jamais appelée pour fabriquer un
+ * historique. reviewerName/reviewDate doivent provenir d'un événement
+ * humain déjà survenu, jamais générés/devinés par le système (§4/§25 de la
+ * mission). Ne modifie/n'écrase JAMAIS une ligne précédente — chaque appel
+ * crée une nouvelle ligne, l'historique complet reste consultable. */
+export function recordAnnualReview(params: {
+  questionId: number;
+  reviewYear: number;
+  applicableEdition: string;
+  reviewerName: string;
+  reviewerQualification?: string;
+  reviewerUserId?: number;
+  reviewDate: string;
+  decision: AnnualReviewDecision;
+  comment?: string;
+  nextReviewDue?: string;
+  createdBy: number;
+}): number {
+  const result = getDb()
+    .prepare(
+      `INSERT INTO question_annual_reviews
+         (question_id, review_year, applicable_edition, reviewer_name, reviewer_qualification, reviewer_user_id,
+          review_date, decision, comment, next_review_due, created_by)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      params.questionId,
+      params.reviewYear,
+      params.applicableEdition,
+      params.reviewerName,
+      params.reviewerQualification ?? null,
+      params.reviewerUserId ?? null,
+      params.reviewDate,
+      params.decision,
+      params.comment ?? null,
+      params.nextReviewDue ?? null,
+      params.createdBy
+    );
+  return Number(result.lastInsertRowid);
+}
+
+/** Historique complet, le plus récent en premier — jamais seulement le
+ * dernier (l'auditeur exige explicitement "previous review/version"). */
+export function getAnnualReviewHistory(questionId: number): QuestionAnnualReviewRow[] {
+  return getDb()
+    .prepare(`SELECT * FROM question_annual_reviews WHERE question_id = ? ORDER BY id DESC`)
+    .all(questionId) as unknown as QuestionAnnualReviewRow[];
+}
+
+/** Revue la plus récente, ou undefined si aucune n'a jamais été menée — le
+ * seul cas où l'appelant doit afficher "À revoir" (jamais une valeur par
+ * défaut écrite en base). */
+export function getLatestAnnualReview(questionId: number): QuestionAnnualReviewRow | undefined {
+  return getDb()
+    .prepare(`SELECT * FROM question_annual_reviews WHERE question_id = ? ORDER BY id DESC LIMIT 1`)
+    .get(questionId) as QuestionAnnualReviewRow | undefined;
+}
+
 /** Admissible pour un tirage de PRODUCTION (Test/Examen) : source vérifiée,
  * active, revue non rejetée. Une question DRAFT/PARTIAL/STALE/GAP/CONFLICT/
  * NOT_ATTEMPTED n'entre jamais automatiquement dans un examen de production
@@ -426,9 +516,21 @@ export interface QuestionListFilter {
   classification?: "regulatory" | "demo";
   active?: boolean;
   search?: string;
+  /** "NONE" = aucune revue annuelle jamais enregistrée (équivalent
+   * affiché "À revoir") — distinct de la valeur littérale A_REVOIR qui
+   * suppose qu'une ligne existe réellement en base. */
+  annualReviewStatus?: AnnualReviewDecision | "NONE";
 }
 
-export type QuestionListRow = QuestionRow & { stem: string; is_demo: number; is_protected: number };
+export type QuestionListRow = QuestionRow & {
+  stem: string;
+  is_demo: number;
+  is_protected: number;
+  /** Décision de la revue annuelle la PLUS RÉCENTE, ou null si aucune
+   * revue n'a jamais été enregistrée pour cette question (§2/§25 — jamais
+   * un statut fabriqué ; null s'affiche comme "À revoir" côté UI). */
+  latest_annual_review_decision: AnnualReviewDecision | null;
+};
 
 /** Liste filtrée à plat pour /question-bank (§3-5 de la mission) — jamais
  * utilisée pour le tirage de production (voir isAdmissibleWhereClause plus
@@ -470,12 +572,19 @@ export function listQuestions(filter: QuestionListFilter = {}): QuestionListRow[
     const needle = `%${filter.search.toLowerCase()}%`;
     params.push(needle, needle, needle);
   }
+  if (filter.annualReviewStatus === "NONE") {
+    clauses.push(`(SELECT decision FROM question_annual_reviews WHERE question_id = q.id ORDER BY id DESC LIMIT 1) IS NULL`);
+  } else if (filter.annualReviewStatus) {
+    clauses.push(`(SELECT decision FROM question_annual_reviews WHERE question_id = q.id ORDER BY id DESC LIMIT 1) = ?`);
+    params.push(filter.annualReviewStatus);
+  }
 
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   return db
     .prepare(
       `SELECT q.*, qv.stem, (CASE WHEN q.kost_question_id LIKE 'DEMO-%' THEN 1 ELSE 0 END) AS is_demo,
-              EXISTS(SELECT 1 FROM assessment_question_snapshots s WHERE s.question_id = q.id) AS is_protected
+              EXISTS(SELECT 1 FROM assessment_question_snapshots s WHERE s.question_id = q.id) AS is_protected,
+              (SELECT decision FROM question_annual_reviews WHERE question_id = q.id ORDER BY id DESC LIMIT 1) AS latest_annual_review_decision
        FROM questions q
        LEFT JOIN question_versions qv ON qv.id = q.current_version_id
        ${where}

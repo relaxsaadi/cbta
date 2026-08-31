@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireWriteRole } from "@/lib/rbac";
 import { hasGroupAccess, hasFamiliarizationSessionAccess, assertAccess } from "@/lib/tenant-scope";
-import { createFamiliarizationSession, markAttendance } from "@/lib/familiarization";
+import { createFamiliarizationSession, markAttendance, addFamiliarizationEvidence } from "@/lib/familiarization";
 import { audit } from "@/lib/audit";
 import { listGroupMembers, getGroup } from "@/lib/groups";
 import { findUserById } from "@/lib/users";
@@ -20,8 +20,10 @@ export async function createFamiliarizationSessionAction(_prev: CreateSessionRes
   const groupId = Number(formData.get("groupId"));
   const functionCode = String(formData.get("functionCode") ?? "").trim();
   const heldAt = String(formData.get("heldAt") ?? "").trim();
+  const endedAt = String(formData.get("endedAt") ?? "").trim() || undefined;
   const location = String(formData.get("location") ?? "").trim() || undefined;
   const notes = String(formData.get("notes") ?? "").trim() || undefined;
+  const audience = String(formData.get("audience") ?? "").trim() || undefined;
 
   if (!groupId || !functionCode || !heldAt) {
     return { error: "Groupe, fonction et date/heure sont obligatoires." };
@@ -35,8 +37,10 @@ export async function createFamiliarizationSessionAction(_prev: CreateSessionRes
     groupId,
     functionCode,
     heldAt,
+    endedAt,
     location,
     notes,
+    audience,
     organizedBy: session.userId,
     organizerRole: session.role,
   });
@@ -77,4 +81,24 @@ export async function markAttendanceAction(sessionId: number, formData: FormData
   if (!candidateUserId) return;
   markAttendance(sessionId, candidateUserId, present, { id: session.userId, role: session.role });
   revalidatePath(`/familiarisation/${sessionId}`);
+}
+
+export interface AddEvidenceResult {
+  error?: string;
+  success?: string;
+}
+
+/** Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §20 — RÉFÉRENCE/description
+ * textuelle de preuve (ex. "Feuille de présence signée, classée dossier
+ * RH n°..."), jamais un fichier binaire uploadé (voir lib/familiarization.ts
+ * pour la justification complète — même discipline que attach_evidence sur
+ * les incidents). Aucune preuve n'est jamais fabriquée automatiquement. */
+export async function addFamiliarizationEvidenceAction(sessionId: number, _prev: AddEvidenceResult, formData: FormData): Promise<AddEvidenceResult> {
+  const session = await requireWriteRole("pedagogical_manager", "administrator");
+  assertAccess(hasFamiliarizationSessionAccess(session, sessionId));
+  const description = String(formData.get("description") ?? "").trim();
+  if (!description) return { error: "Description de la preuve obligatoire." };
+  addFamiliarizationEvidence(sessionId, description, { id: session.userId, role: session.role });
+  revalidatePath(`/familiarisation/${sessionId}`);
+  return { success: "Preuve rattachée à la session." };
 }

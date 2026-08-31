@@ -8,21 +8,21 @@ import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR Transitaires Algérie — Cat. 7.1 & 7.2",
+  title: "Formation DGR Transitaires Algérie – Fret Aérien 7.1/7.2",
   description:
-    "Formation IATA DGR pour transitaires et agents de fret en Algérie. Catégories 7.1 & 7.2, CBTA Provider certifié, reconnu par 300+ compagnies. Devis sous 24h.",
+    "Formation DGR en Algérie pour transitaires et agents de fret, méthode CBTA, couvrant les catégories 7.1 & 7.2. Sessions intra-entreprise possibles. Devis 24h.",
   alternates: { canonical: "/formation-dgr-transitaires" },
   keywords: [
     "formation DGR transitaires",
     "formation IATA DGR agents de fret",
     "DGR 7.1 transitaires",
     "formation marchandises dangereuses transitaires Algérie",
-    "certification DGR freight forwarders",
+    "formation DGR agents de fret internationaux",
   ],
   openGraph: {
     title: "Formation DGR pour Transitaires — KOST GROUP",
     description:
-      "DGR 7.1 & 7.2 certifiés CBTA pour transitaires, commissionnaires en douane et agents de fret aérien.",
+      "Formation DGR 7.1 & 7.2, méthode CBTA, pour transitaires, commissionnaires en douane et agents de fret aérien.",
     url: "https://dgr.kostacademy.com/formation-dgr-transitaires",
   },
 };

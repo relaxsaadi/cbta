@@ -4,7 +4,7 @@ import CountryLandingPage from "@/components/CountryLandingPage";
 export const metadata: Metadata = {
   title: "IATA Dangerous Goods Training Algeria | DGR Courses",
   description:
-    "IATA DGR training center based in Algeria. Classroom or in-house sessions, official IATA exam, CBTA training method. Contact us for a free quote within 24h.",
+    "DGR training in Algeria covering IATA DGR topics, using a CBTA approach. Classroom or in-house sessions available. Contact us for a free quote within 24h.",
   alternates: { canonical: "/iata-dangerous-goods-training-algeria" },
   keywords: [
     "IATA dangerous goods training Algeria",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "IATA DGR Training Algeria — KOST GROUP",
     description:
-      "IATA DGR training center in Algeria for freight forwarders, airlines and cargo agents.",
+      "DGR training in Algeria covering IATA DGR topics for freight forwarders, airlines and cargo agents, using a CBTA approach.",
     url: "https://dgr.kostacademy.com/iata-dangerous-goods-training-algeria",
   },
 };

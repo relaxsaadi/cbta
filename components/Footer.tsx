@@ -22,12 +22,12 @@ export default function Footer() {
               />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              1<sup>er</sup> CBTA Provider IATA en Algérie. Formations DGR officielles pour l'aviation et le fret aérien.
+              Formation IATA DGR en Algérie, méthode CBTA, pour l'aviation et le fret aérien.
             </p>
             <div className="mt-4 inline-flex items-center gap-2 text-xs text-gray-400">
               <BadgeCheck className="h-4 w-4 text-[#F39C12]" aria-hidden />
               <span>
-                Vérifiable sur{" "}
+                En savoir plus sur{" "}
                 <a
                   href="https://www.iata.org/en/training/cbta-center-registry/"
                   target="_blank"

@@ -4,10 +4,10 @@ import Image from "next/image";
 import { Award, CheckCircle, Globe } from "lucide-react";
 
 const CREDS = [
-  "Certifié IATA CBTA Instructor & Evaluator",
+  "Formé aux méthodes IATA Instructor & Evaluator",
   "15+ années dans le fret aérien international",
   "Ancien agent acceptation DGR — compagnie aérienne",
-  "Formateur agréé Algérie · Maroc · Afrique francophone",
+  "Formateur actif en Algérie · Maroc · Afrique francophone",
 ];
 
 export default function TrainerBio() {
@@ -46,7 +46,7 @@ export default function TrainerBio() {
               Alger, Algérie · Déplacements Afrique francophone
             </p>
             <p className="text-gray-700 leading-relaxed mb-6 max-w-xl">
-              Praticien du fret aérien international, formateur certifié IATA et instructeur CBTA agréé. Sa formation académique en sécurité aéronautique et son expérience en acceptation cargo dangereux lui permettent de transmettre exactement ce que les examinateurs IATA attendent — pas seulement la théorie, mais les réflexes opérationnels qui font réussir les apprenants dès le premier examen.
+              Praticien du fret aérien international, formé aux méthodes IATA Instructor & Evaluator et à la méthode CBTA. Sa formation académique en sécurité aéronautique et son expérience en acceptation cargo dangereux lui permettent de transmettre les réflexes opérationnels qui font réussir les apprenants dès le premier examen.
             </p>
             <ul className="space-y-2 text-sm text-left">
               {CREDS.map((c) => (
@@ -61,7 +61,7 @@ export default function TrainerBio() {
 
         {/* Note transparence E-E-A-T */}
         <p className="text-center text-xs text-gray-400 mt-4">
-          Le numéro CBTA Provider de KOST GROUP est vérifiable sur{" "}
+          Pour en savoir plus sur le référentiel IATA CBTA, consultez le registre officiel sur{" "}
           <a
             href="https://www.iata.org/en/training/cbta-center-registry/"
             target="_blank"

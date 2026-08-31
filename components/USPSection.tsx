@@ -3,17 +3,17 @@ import { Award, Globe, Users, FileCheck } from "lucide-react";
 const USPS = [
   {
     icon: Award,
-    title: "1er CBTA Provider IATA en Algérie",
-    desc: "Officiellement certifié et vérifiable sur le registre IATA des centres CBTA. Pas un partenaire — un centre titulaire.",
+    title: "Formation DGR méthode CBTA en Algérie",
+    desc: "Formation dispensée localement en Algérie, selon la méthode CBTA (Competency-Based Training and Assessment).",
   },
   {
     icon: Globe,
-    title: "Même certificat IATA qu'à Bruxelles",
-    desc: "Identique à celui délivré dans les centres européens, mais à 50% du prix. Aucune différence de reconnaissance internationale.",
+    title: "Même méthode qu'à Bruxelles",
+    desc: "Même méthode CBTA que dans les centres européens, mais à 50% du prix.",
   },
   {
     icon: Users,
-    title: "Formateurs internationaux certifiés IATA",
+    title: "Formateurs internationaux expérimentés",
     desc: "Instructeurs ayant suivi le cursus Train-the-Trainer IATA, avec expérience opérationnelle en compagnie aérienne et fret.",
   },
   {

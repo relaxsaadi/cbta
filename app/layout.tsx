@@ -19,11 +19,11 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Formation IATA DGR Algérie | Certificat Officiel CBTA",
+    default: "Formation IATA DGR Algérie | Méthode CBTA",
     template: "%s — KOST GROUP",
   },
   description:
-    "Seul centre IATA CBTA Provider certifié d'Algérie. Formations DGR 7.1 à 7.10, reconnues par 300+ compagnies. Sessions régulières, devis gratuit sous 24h.",
+    "Formation IATA DGR en Algérie, méthode CBTA. Catégories 7.1 à 7.10. Sessions régulières, devis gratuit sous 24h.",
   keywords: [
     "Formation IATA DGR",
     "CBTA",
@@ -58,15 +58,15 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: siteUrl,
     siteName: "KOST GROUP",
-    title: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié",
+    title: "Formation DGR IATA Algérie — Méthode CBTA",
     description:
-      "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Reconnu par 300+ compagnies. Sessions mensuelles, places limitées.",
+      "Formation IATA DGR à Alger, méthode CBTA. Sessions mensuelles, places limitées.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "KOST GROUP — 1er Centre CBTA Provider Certifié IATA en Algérie",
+        alt: "KOST GROUP — Formation IATA DGR, méthode CBTA, Algérie",
       },
     ],
   },
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Formation IATA DGR-CBTA — KOST GROUP",
     description:
-      "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel.",
+      "Formation IATA DGR en Algérie, méthode CBTA.",
     images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
@@ -99,7 +99,7 @@ const orgSchema = {
   },
   image: `${siteUrl}/og-image.jpg`,
   description:
-    "1er Centre CBTA Provider Certifié IATA en Algérie. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
+    "Centre de formation IATA DGR (marchandises dangereuses) basé en Algérie, méthode CBTA. Catégories 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki, Bab Ezzouar",
@@ -142,7 +142,7 @@ const orgSchema = {
           "@type": "Course",
           name: "Formation IATA DGR Catégorie 7 — Initial",
           description:
-            "Formation initiale aux marchandises dangereuses IATA DGR en 3 jours. Catégories 7.1 à 7.5. Certification officielle IATA.",
+            "Formation initiale aux marchandises dangereuses IATA DGR en 3 jours. Catégories 7.1 à 7.5, méthode CBTA.",
           provider: { "@type": "Organization", name: "KOST GROUP" },
         },
       },
@@ -152,7 +152,7 @@ const orgSchema = {
           "@type": "Course",
           name: "Formation IATA DGR Recyclage — Recurrent",
           description:
-            "Recyclage biennal IATA DGR pour maintenir la certification. Catégories 7.1 à 7.10. Format CBTA accrédité.",
+            "Recyclage biennal IATA DGR pour maintenir la certification. Catégories 7.1 à 7.10. Méthode CBTA.",
           provider: { "@type": "Organization", name: "KOST GROUP" },
         },
       },

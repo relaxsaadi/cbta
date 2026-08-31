@@ -190,10 +190,10 @@ export default function DGRPage({ formation }: { formation: Formation }) {
             <div className="card">
               <ul className="space-y-3">
                 {[
-                  "Formation présentielle avec formateur IATA certifié",
+                  "Formation présentielle avec formateur expérimenté",
                   "Manuel IATA DGR 2026 (67e édition)",
-                  "Examen IATA officiel CBTA",
-                  "Certificat IATA numérique vérifiable en ligne",
+                  "Évaluation CBTA",
+                  "Certificat DGR-CBTA numérique",
                   "Exercices pratiques et cas réels",
                   "Facturation officielle France ou Algérie",
                 ].map((t) => (
@@ -234,7 +234,7 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                 },
                 {
                   q: "Le certificat est-il reconnu hors Algérie ?",
-                  a: "Oui — le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA et toutes les autorités de l'aviation civile.",
+                  a: "Le référentiel IATA DGR-CBTA est le standard de formation utilisé au niveau international. Nous vous recommandons de vérifier les exigences spécifiques de votre compagnie aérienne ou autorité.",
                 },
               ].map((it, i) => (
                 <details

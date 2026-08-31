@@ -25,7 +25,7 @@ const faqSchema = {
       name: "Est-ce reconnu dans mon pays (Maroc, Sénégal, Tunisie, Côte d'Ivoire) ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par l'autorité de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
+        text: "Le référentiel IATA DGR-CBTA est le standard de formation utilisé au niveau international, repris par les autorités de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Nous vous recommandons de vérifier les exigences spécifiques de votre compagnie aérienne ou autorité.",
       },
     },
     {
@@ -65,7 +65,7 @@ const faqSchema = {
       name: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard obligatoire pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion — c'est la seule reconnue par les 300+ compagnies aériennes membres de l'IATA et exigée par l'ANAC en Algérie. Si votre activité touche au transport aérien, c'est cette certification qu'il vous faut, pas une formation HSE générique.",
+        text: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard requis par l'ANAC en Algérie pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion. Si votre activité touche au transport aérien, c'est cette formation qu'il vous faut, pas une formation HSE générique.",
       },
     },
     {

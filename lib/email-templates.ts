@@ -18,7 +18,7 @@ export function leadConfirmationEmail(lead: LeadPayload): {
 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
   <tr><td style="background:#ffffff;padding:28px;text-align:center;border-bottom:3px solid ${PRIMARY};">
     <img src="https://dgr.kostacademy.com/kost-group-logo-800.png" alt="KOST GROUP" width="240" height="auto" style="max-width:240px;height:auto;display:inline-block;"/>
-    <div style="font-size:12px;color:#5b6b80;margin-top:12px;letter-spacing:1px;text-transform:uppercase;">1er Centre CBTA Provider Certifié IATA en Algérie</div>
+    <div style="font-size:12px;color:#5b6b80;margin-top:12px;letter-spacing:1px;text-transform:uppercase;">Formation IATA DGR — Méthode CBTA — Algérie</div>
   </td></tr>
   <tr><td style="padding:36px 36px 16px 36px;">
     <h1 style="margin:0 0 16px;font-size:22px;color:${PRIMARY};">Bonjour ${escape(lead.prenom)},</h1>
@@ -48,7 +48,7 @@ export function leadConfirmationEmail(lead: LeadPayload): {
   </td></tr>
   <tr><td style="background:#0f1c2e;padding:24px 36px;color:#a8b3c4;font-size:12px;line-height:1.6;text-align:center;">
     KOST GROUP · 176 Cité Boushaki, Bab Ezzouar, Alger<br>
-    Certifié IATA — Vérifiable sur iata.org/cbta-center-registry<br>
+    Méthode CBTA — En savoir plus sur iata.org/cbta-center-registry<br>
     Paiement EUR/USD via STRATEGIX (entité française)
   </td></tr>
 </table>

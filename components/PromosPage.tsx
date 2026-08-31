@@ -281,7 +281,7 @@ export default function PromosPage() {
               <tfoot>
                 <tr>
                   <td colSpan={4} className="pt-3 px-4 text-xs text-white/25 italic">
-                    Tarifs IATA Bruxelles au catalogue 2026 · AFTRAL estimés (session inter) · Tous incluent l'examen officiel IATA
+                    Tarifs IATA Bruxelles au catalogue 2026 · AFTRAL estimés (session inter) · Tous incluent l'évaluation CBTA
                   </td>
                 </tr>
               </tfoot>
@@ -362,7 +362,7 @@ export default function PromosPage() {
             </Link>
           </div>
           <div className="mt-6 flex justify-center">
-            <Image src="/iata-cbta-provider.png" alt="IATA CBTA Provider" width={40} height={40} className="object-contain opacity-60" />
+            <Image src="/iata-cbta-provider.png" alt="Formation IATA DGR" width={40} height={40} className="object-contain opacity-60" />
           </div>
         </motion.div>
       </section>

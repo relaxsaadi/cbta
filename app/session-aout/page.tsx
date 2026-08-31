@@ -188,16 +188,16 @@ export default function SessionAoutPage() {
 
           {/* Social proof */}
           <div className="bg-[#0f2557] rounded-2xl p-5 text-white">
-            <div className="text-xs text-blue-300 uppercase tracking-wider mb-3">KOST GROUP — Certifié IATA CBTA</div>
+            <div className="text-xs text-blue-300 uppercase tracking-wider mb-3">KOST GROUP — Méthode CBTA</div>
             <div className="grid grid-cols-3 gap-3 text-center mb-4">
-              {[{ v: '95%', l: 'Taux réussite' }, { v: '1er', l: "Centre CBTA Algérie" }, { v: '10', l: 'Catégories DGR' }].map(({ v, l }) => (
+              {[{ v: '95%', l: 'Taux réussite' }, { v: 'CBTA', l: "Méthode utilisée" }, { v: '10', l: 'Catégories DGR' }].map(({ v, l }) => (
                 <div key={l}>
                   <div className="text-2xl font-black text-yellow-400">{v}</div>
                   <div className="text-xs text-blue-200">{l}</div>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-blue-200">Certifié par l'IATA — Certificat reconnu mondialement, identique à Genève ou Bruxelles.</p>
+            <p className="text-xs text-blue-200">Formation DGR, méthode CBTA — même format qu'à Genève ou Bruxelles.</p>
             <a href="https://wa.me/213542305383" target="_blank" onClick={() => trackWhatsApp("session-aout-sidebar")} className="flex items-center justify-center gap-2 mt-4 py-2.5 bg-green-500 hover:bg-green-600 rounded-xl text-sm font-bold transition-colors">
               💬 Question ? WhatsApp direct
             </a>

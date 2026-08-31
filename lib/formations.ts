@@ -32,7 +32,7 @@ export const FORMATIONS: Formation[] = [
       "Documents de transport et déclaration de l'expéditeur",
       "Quantités exemptées et limitées",
       "Lithium batteries, biens de consommation, matières infectieuses",
-      "Cas pratiques et examen IATA officiel",
+      "Cas pratiques et évaluation CBTA",
     ],
     postes: [
       "Expéditeurs et déclarants DG",
@@ -57,7 +57,7 @@ export const FORMATIONS: Formation[] = [
       "Révision des classes et étiquetages",
       "Nouveaux variants opérateurs",
       "Lithium batteries — règles 2026",
-      "Cas pratiques et examen IATA",
+      "Cas pratiques et évaluation CBTA",
     ],
     postes: [
       "Tout personnel certifié 7.1 arrivant à échéance",
@@ -79,7 +79,7 @@ export const FORMATIONS: Formation[] = [
       "Procédures de refus et escalade",
       "Documents fret et indices de DG non déclarées",
       "Coordination avec acceptation DG",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: [
       "Agents acceptation cargo",
@@ -105,7 +105,7 @@ export const FORMATIONS: Formation[] = [
       "NOTOC et briefing équipage",
       "Stockage et ségrégation au sol",
       "Gestion des non-conformités et rejets",
-      "Cas pratiques d'acceptation et examen IATA",
+      "Cas pratiques d'acceptation et évaluation CBTA",
     ],
     postes: [
       "Agents d'acceptation DG compagnies aériennes",
@@ -128,7 +128,7 @@ export const FORMATIONS: Formation[] = [
       "Mises à jour IATA DGR 2026",
       "Nouveautés sur les variants opérateurs",
       "Cas d'acceptation difficiles retour d'expérience",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: ["Personnel 7.3 arrivant à échéance de 24 mois"],
   },
@@ -149,7 +149,7 @@ export const FORMATIONS: Formation[] = [
       "Procédures de chargement aéronef",
       "Plans de chargement et NOTOC",
       "Réponse aux incidents au sol",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: [
       "Agents de piste",
@@ -173,7 +173,7 @@ export const FORMATIONS: Formation[] = [
       "Lithium batteries, e-cigarettes, fauteuils électriques",
       "Affichage et information passagers",
       "Procédures de refus et de saisie",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: [
       "Agents d'enregistrement",
@@ -197,7 +197,7 @@ export const FORMATIONS: Formation[] = [
       "Ségrégation soute et compatibilité",
       "Limites quantitatives par aéronef",
       "Communication équipage et briefing",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: [
       "Loadmasters",
@@ -221,7 +221,7 @@ export const FORMATIONS: Formation[] = [
       "Lecture du NOTOC en cockpit",
       "Procédures d'urgence DG en vol (ICAO Doc 9481)",
       "Communication ATC en cas d'incident",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: ["Commandants de bord", "Officiers pilotes de ligne"],
   },
@@ -241,7 +241,7 @@ export const FORMATIONS: Formation[] = [
       "Préparation NOTOC",
       "Restrictions de routes et survols",
       "Coordination chargement / équipage",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: [
       "Flight dispatchers",
@@ -265,7 +265,7 @@ export const FORMATIONS: Formation[] = [
       "Incidents batteries lithium en cabine",
       "Procédures d'urgence et fire containment bag",
       "Communication équipage technique",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: ["Personnel navigant commercial", "Chefs de cabine"],
   },
@@ -285,7 +285,7 @@ export const FORMATIONS: Formation[] = [
       "Étiquettes, marques, matières suspectes",
       "Procédures d'escalade et de saisie",
       "Coordination avec agents acceptation DG",
-      "Examen IATA",
+      "Évaluation CBTA",
     ],
     postes: [
       "Agents de sûreté cargo",

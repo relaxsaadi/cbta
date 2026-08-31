@@ -10,7 +10,7 @@ import TrackedLink from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Formation DGR IATA Entreprises & Grands Comptes — Intra & Groupe",
   description:
-    "Formation IATA DGR intra-entreprise et groupe pour grands comptes en Algérie. Seul centre IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059). Sonatrach, Air Algérie, TotalEnergies.",
+    "Formation IATA DGR intra-entreprise et groupe pour grands comptes en Algérie, méthode CBTA. Sonatrach, Air Algérie, TotalEnergies.",
   alternates: { canonical: "/entreprises" },
   keywords: [
     "formation DGR entreprises Algérie",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR IATA Entreprises — KOST GROUP",
     description:
-      "Formations DGR pour grands comptes. Seul prestataire IATA CBTA Provider certifié en Algérie.",
+      "Formations DGR pour grands comptes, méthode CBTA, en Algérie.",
     url: "https://dgr.kostacademy.com/entreprises",
   },
 };
@@ -48,10 +48,6 @@ const JSON_LD = {
   },
   areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "GA"],
   serviceType: "Formation professionnelle DGR IATA",
-  hasCredential: {
-    "@type": "EducationalOccupationalCredential",
-    name: "IATA CBTA Provider n°CBTA-PR-25-0059",
-  },
 };
 
 const SECTEURS = [
@@ -90,13 +86,13 @@ const SECTEURS = [
 const AVANTAGES = [
   {
     icon: "✅",
-    titre: "Seul centre IATA CBTA Provider certifié en Algérie",
-    desc: "Numéro d'accréditation officiel IATA : CBTA-PR-25-0059, vérifiable sur le registre officiel IATA CBTA Center Registry. Nos certificats sont reconnus par toutes les compagnies aériennes membres IATA.",
+    titre: "Formation DGR méthode CBTA en Algérie",
+    desc: "Formations dispensées localement en Algérie selon la méthode CBTA (Competency-Based Training and Assessment).",
   },
   {
     icon: "📋",
     titre: "Accréditation ANAC en cours de finalisation",
-    desc: "En parallèle de notre certification IATA CBTA, notre dossier d'accréditation ANAC est en phase finale — nous vous tenons informés de sa validation officielle.",
+    desc: "En parallèle de notre formation IATA CBTA, notre dossier d'accréditation ANAC est en phase finale — nous vous tenons informés de sa validation officielle.",
   },
   {
     icon: "🚁",
@@ -123,8 +119,8 @@ const ETAPES = [
   },
   {
     num: "03",
-    titre: "Formation + certification IATA CBTA individuelle",
-    desc: "Chaque participant reçoit son certificat IATA CBTA nominatif, valide 24 mois, reconnue à l'international. Vous recevez un rapport de conformité remis à votre direction et utilisable lors d'audits.",
+    titre: "Formation + certificat DGR-CBTA individuel",
+    desc: "Chaque participant reçoit son certificat DGR-CBTA nominatif, valide 24 mois. Vous recevez un rapport de conformité remis à votre direction et utilisable lors d'audits.",
   },
 ];
 
@@ -186,10 +182,10 @@ export default function Page() {
             Intra &amp; Groupe
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 }}>
-            Premier centre CBTA Provider certifié IATA en Algérie (n°CBTA-PR-25-0059). Formations sur site ou dans notre centre.
+            Formation DGR en Algérie, méthode CBTA. Formations sur site ou dans notre centre.
           </p>
           <p style={{ fontSize: 13, opacity: 0.65, marginBottom: 36 }}>
-            Accréditation ANAC en cours de finalisation · Certificats individuels reconnus IATA
+            Accréditation ANAC en cours de finalisation · Certificats individuels DGR-CBTA
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a

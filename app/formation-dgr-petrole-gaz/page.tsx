@@ -10,7 +10,7 @@ import TrackedLink from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Formation IATA DGR Pétrole & Gaz — Marchandises Dangereuses Hydrocarbures",
   description:
-    "Formation IATA DGR pour les entreprises pétrolières et gazières. Expédition par avion de produits pétroliers, gaz comprimés, matières corrosives et équipements chimiques. Centre CBTA certifié.",
+    "Formation IATA DGR pour les entreprises pétrolières et gazières. Expédition par avion de produits pétroliers, gaz comprimés, matières corrosives et équipements chimiques. Méthode CBTA.",
   alternates: { canonical: "/formation-dgr-petrole-gaz" },
   keywords: [
     "formation DGR pétrole gaz",
@@ -70,7 +70,7 @@ export default function Page() {
             Expédiez vos produits pétroliers, gaz comprimés et équipements chimiques par avion en toute conformité OACI.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            Classes 2, 3, 8, 9 · CBTA Provider certifié · Algérie & Afrique
+            Classes 2, 3, 8, 9 · Méthode CBTA · Algérie & Afrique
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#contact" style={{ background: "white", color: "#7c3800", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -168,7 +168,7 @@ export default function Page() {
             <div style={{ background: "#1c1c1c", color: "white", borderRadius: 12, padding: "24px 28px", marginBottom: 28 }}>
               <p style={{ fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase", opacity: 0.6, marginBottom: 8 }}>Positionnement</p>
               <p style={{ fontSize: 15, lineHeight: 1.7, margin: 0 }}>
-                En tant que <strong>seul prestataire IATA CBTA Provider certifié en Algérie</strong> (n°CBTA-PR-25-0059), KOST accompagne Sonatrach et ses filiales dans leur conformité DGR. Contactez-nous pour évaluer les options d&apos;approvisionnement adaptées à votre procédure d&apos;achat.
+                KOST GROUP accompagne Sonatrach et ses filiales dans leur conformité DGR, formation dispensée selon la méthode CBTA. Contactez-nous pour évaluer les options d&apos;approvisionnement adaptées à votre procédure d&apos;achat.
               </p>
             </div>
 
@@ -223,7 +223,7 @@ export default function Page() {
             <div style={{ background: "#f0f7ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: "20px 24px" }}>
               <p style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Référençable sur Sequana</p>
               <p style={{ fontSize: 13, color: "#555", lineHeight: 1.6, margin: 0 }}>
-                Le portail fournisseurs TotalEnergies (Sequana) exige un référencement préalable. KOST GROUP est référençable sur Sequana — nous fournissons tous les documents de conformité (accréditation IATA CBTA Provider) nécessaires à votre processus achat.
+                Le portail fournisseurs TotalEnergies (Sequana) exige un référencement préalable. KOST GROUP est référençable sur Sequana — nous fournissons tous les documents de conformité (attestations de formation DGR, méthode CBTA) nécessaires à votre processus achat.
               </p>
             </div>
           </div>
@@ -252,11 +252,11 @@ export default function Page() {
         <section style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px 60px" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 28, textAlign: "center" }}>FAQ — DGR Pétrole & Gaz</h2>
           {[
-            { q: "Sonatrach, TotalEnergies, Eni — leurs exigences DGR sont-elles couvertes ?", a: "Oui. La formation DGR 7.1 KOST est conforme IATA DGR dernière édition, reconnue par toutes les majors pétrolières et les compagnies aériennes cargo (Air Algérie, Air France Cargo, etc.)." },
+            { q: "Sonatrach, TotalEnergies, Eni — leurs exigences DGR sont-elles couvertes ?", a: "Oui. La formation DGR 7.1 KOST suit l'édition IATA DGR en vigueur et la méthode CBTA. Nous vous invitons à vérifier les exigences spécifiques de votre entreprise ou compagnie aérienne partenaire." },
             { q: "Peut-on former des agents sur un site de production éloigné ?", a: "Oui. KOST GROUP propose des formations intra sur site dans les bassins pétroliers algériens (Hassi Messaoud, In Amenas, etc.) et dans tout pays africain à la demande." },
             { q: "Quels produits pétroliers sont réglementés DGR par avion ?", a: "Tout produit inflammable (classe 3), gazeux comprimé (classe 2), corrosif (classe 8) ou chimique de forage est soumis aux réglementations IATA DGR. La liste précise est dans le Dangerous Goods Regulations (DGR) IATA, Section 3." },
-            { q: "Quelle est votre procédure de référencement fournisseur pour Sonatrach ?", a: "KOST GROUP, en tant que seul prestataire IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059), peut fournir tous les documents de conformité nécessaires à votre processus achat interne (accréditation IATA, RIB, extrait de registre de commerce, fiches HSE). Contactez-nous pour évaluer avec vos services achats la procédure la plus adaptée à votre cas." },
-            { q: "TotalEnergies utilise Sequana — êtes-vous référençable ?", a: "Oui. KOST GROUP est référençable sur Sequana, le portail fournisseurs de TotalEnergies. Nous fournissons l'ensemble des documents requis : accréditation IATA CBTA Provider, RIB, extrait de registre de commerce, et fiches de conformité HSE. Contactez-nous pour initier le processus de référencement." },
+            { q: "Quelle est votre procédure de référencement fournisseur pour Sonatrach ?", a: "KOST GROUP peut fournir les documents nécessaires à votre processus achat interne (attestations de formation DGR, RIB, extrait de registre de commerce, fiches HSE). Contactez-nous pour évaluer avec vos services achats la procédure la plus adaptée à votre cas." },
+            { q: "TotalEnergies utilise Sequana — êtes-vous référençable ?", a: "Oui. KOST GROUP est référençable sur Sequana, le portail fournisseurs de TotalEnergies. Nous fournissons les documents requis : attestations de formation DGR, RIB, extrait de registre de commerce, et fiches de conformité HSE. Contactez-nous pour initier le processus de référencement." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#7c3800" }}>{faq.q}</summary>

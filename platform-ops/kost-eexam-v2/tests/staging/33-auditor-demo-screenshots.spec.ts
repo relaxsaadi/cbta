@@ -182,12 +182,34 @@ test("Phase 3 — Constructeur d'examen / examen publié / reprogrammation", asy
 });
 
 // ---------------------------------------------------------------------
-// PHASE 4 — Parcours candidat (examen démo 8 types, candidat3.staging) :
-// tableau de bord, instructions, examen en cours, types de question,
-// reprise, révision finale, soumission.
+// PHASE 4 — Parcours candidat (examen démo 8 types) : tableau de bord,
+// instructions, examen en cours, types de question, reprise, révision
+// finale, soumission.
+//
+// Rafraîchi le 2026-08-31 (mission "FINAL AUDITOR PACK COMPLETENESS
+// AUDIT") : candidat3.staging (utilisé initialement) a désormais un
+// résultat déjà disponible sur cet examen depuis la capture d'origine —
+// /mes-examens lui montre "Voir mon résultat", plus jamais "Commencer
+// l'examen", même si attempts_allowed=20 permettrait une nouvelle
+// tentative (le tableau de bord priorise le résultat existant, un
+// comportement correct, pas un bug). Utilise donc candidat1.staging
+// (Yasmine Kaced), jamais encore affecté à CET examen précis — affecté ici
+// via le VRAI formulaire admin (AssignMoreCandidatesForm — action serveur
+// réelle), exactement comme le fait déjà Phase 4bis plus bas pour
+// candidat2.staging.
 // ---------------------------------------------------------------------
 test("Phase 4 — Parcours candidat complet (8 types, autosave, soumission)", async ({ page }) => {
-  await loginAs(page, env("STAGING_CANDIDATE3_USER"), env("STAGING_CANDIDATE3_PASS"));
+  await loginAs(page, env("STAGING_ADMIN_USER"), env("STAGING_ADMIN_PASS"));
+  await page.goto("/exam-preparation/34");
+  const assignCheckbox = page.locator("label", { hasText: "Yasmine Kaced (pilote)" }).locator('input[type="checkbox"]');
+  if ((await assignCheckbox.count()) > 0) {
+    await assignCheckbox.check();
+    await page.getByRole("button", { name: /affecter la sélection/i }).click();
+    await page.waitForLoadState("load").catch(() => {});
+  }
+  await logout(page);
+
+  await loginAs(page, env("STAGING_CANDIDATE1_USER"), env("STAGING_CANDIDATE1_PASS"));
 
   await page.goto("/mes-examens");
   const demoRow = page.locator("div.flex.items-center.justify-between", { hasText: "Démonstration auditeur (8 types)" });

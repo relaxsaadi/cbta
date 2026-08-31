@@ -1,8 +1,8 @@
-# KOST E-EXAM V2 — Parcours complet de démonstration (31 captures)
+# KOST E-EXAM V2 — Parcours complet de démonstration (33 captures)
 
-Document de sauvegarde documentaire — la même démonstration que `KOST_EEXAM_V2_DEMO_SHORT.md`, mais sans rien omettre : les 31 captures dans l'ordre naturel d'un parcours complet (administrateur → responsable pédagogique → candidat → administrateur → auditeur). À utiliser comme document à laisser à l'auditeur, ou comme trace complète si la présentation live a dû être écourtée.
+Document de sauvegarde documentaire — la même démonstration que `KOST_EEXAM_V2_DEMO_SHORT.md`, mais sans rien omettre : les captures dans l'ordre naturel d'un parcours complet (administrateur → responsable pédagogique → candidat → administrateur → auditeur). À utiliser comme document à laisser à l'auditeur, ou comme trace complète si la présentation live a dû être écourtée.
 
-Pour le détail complet par capture (ce que dit le propriétaire, point de conformité, ce qu'il ne faut pas prétendre), voir `KOST_EEXAM_V2_DEMONSTRATION_SCREENSHOTS.md`. Pour l'index tabulaire, voir `SCREENSHOT_INDEX.md`.
+Pour le détail complet par capture (ce que dit le propriétaire, point de conformité, ce qu'il ne faut pas prétendre), voir `KOST_EEXAM_V2_DEMONSTRATION_SCREENSHOTS.md`. Pour l'index tabulaire, voir `SCREENSHOT_INDEX.md`. Pour les preuves mobile/tablette, voir `RESPONSIVE_EVIDENCE.md`.
 
 > **Rappel permanent :** `CONFIRMÉ — SOURCE DGR VÉRIFIÉE` ≠ `REVU/APPROUVÉ PAR UN RÉVISEUR QUALIFIÉ`. Ce dossier démontre la plateforme technique, pas la revue réglementaire du contenu ni une accréditation ANAC/IATA.
 
@@ -44,11 +44,19 @@ Le plus riche des 8 types : contexte unique + sous-questions de tout type.
 **§10. Constructeur d'examen** (`10-exam-builder.png`)
 12 étapes, compteur de questions admissibles avant publication.
 
+**§10bis. Filtres et actions rapides** (`10b-exam-management-filters.png`)
+Panneau de filtres (Client/Groupe/Fonction/Statut/Type/Date) et actions rapides par ligne (Prévisualiser comme candidat, Voir les résultats), sous le formulaire de création sur la même page.
+
 **§11. Examen publié** (`11-published-exam.png`)
-Récapitulatif, actions Suspendre/Clôturer, suivi des candidats affectés.
+Récapitulatif, actions Suspendre/Clôturer, suivi des candidats affectés, lien « Prévisualiser comme candidat ».
 
 **§12. Reprogrammation** (`12-reschedule.png`)
 Changement de fenêtre bloqué si une tentative est en cours ; notification automatique aux candidats affectés.
+
+### Partie 3bis — Aperçu candidat (sans jamais toucher un vrai historique)
+
+**§NOUVEAU. Mode Aperçu** (`32-candidate-preview-mode.png`)
+Bannière « MODE APERÇU — aucune action ne sera enregistrée dans l'historique du candidat » ; composant séparé du moteur réel, aucune action serveur importée — structurellement incapable d'écrire une tentative.
 
 ### Partie 4 — Parcours candidat complet
 
@@ -117,4 +125,4 @@ Mêmes données que l'administrateur sur son périmètre, aucune action d'écrit
 
 ---
 
-**Fin du parcours — 31/31 captures réelles.** Voir le rapport de mission pour le détail des trois corrections de confidentialité appliquées avant publication de ce dossier (captures 11, 12, 22, 26, 30).
+**Fin du parcours — 33/33 captures réelles** (31 numérotées + §10bis + §NOUVEAU aperçu candidat), plus 4 preuves responsive dans `RESPONSIVE_EVIDENCE.md`. Voir `SCREENSHOT_INDEX.md` pour le détail des corrections de confidentialité et des rafraîchissements appliqués avant publication de ce dossier (captures 11, 12, 15-18, 20, 22, 23, 26, 30, 31 — voir la colonne Notes).

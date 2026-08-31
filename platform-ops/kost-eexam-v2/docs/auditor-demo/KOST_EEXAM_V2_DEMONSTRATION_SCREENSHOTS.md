@@ -1,7 +1,7 @@
 # KOST E-EXAM V2 — Dossier de démonstration auditeur (référence complète)
 
 **Environnement démontré :** https://staging.kostacademy.com — plateforme d'examen DGR native (V2), pré-production.
-**Captures :** 31 captures réelles (jamais simulées/fabriquées), 1440×900, capturées le 2026-08-30 via Chromium Playwright isolé sur l'environnement de staging réel.
+**Captures :** 33 captures réelles (jamais simulées/fabriquées), 1440×900, capturées le 2026-08-30 et rafraîchies le 2026-08-31 via Chromium Playwright isolé sur l'environnement de staging réel (voir `SCREENSHOT_INDEX.md` pour le détail des rafraîchissements et `RESPONSIVE_EVIDENCE.md` pour les preuves mobile/tablette).
 **Données :** comptes et questions clairement étiquetés `(pilote)`, `(démo)` ou `[DÉMO]` partout où c'est pertinent. Les 8 questions démo créées pour ce dossier restent `Brouillon` (`DRAFT`) — jamais promues dans la banque réglementaire des 244 questions.
 
 ## Avertissement — à lire avant toute présentation à un auditeur
@@ -36,7 +36,9 @@
 
 **Point de conformité technique :** Séparation structurelle des données démo/test/production au niveau du modèle de données (`scope` sur `assessments`), pas seulement une convention de nommage.
 
-**Ce qu'il ne faut pas prétendre :** Le compteur « 283 Incidents ouverts » reflète l'activité cumulée de la suite de tests automatisés sur cet environnement de préproduction partagé — **ne pas le présenter comme des incidents opérationnels réels**. Un déploiement production réel repart de zéro.
+**Ce qu'il ne faut pas prétendre :** Le compteur d'incidents ouverts reflète l'activité cumulée de la suite de tests automatisés sur cet environnement de préproduction partagé — **ne pas le présenter comme des incidents opérationnels réels**. Un déploiement production réel repart de zéro.
+
+> **Rafraîchi le 2026-08-31 :** contenu de « Évaluations récentes » actualisé (activité de test cumulée depuis la capture d'origine) — le principe démontré (scope explicite, jamais ambigu) est inchangé.
 
 ---
 
@@ -152,19 +154,37 @@
 
 ---
 
+## 10bis — Préparation d'examen : filtres et actions rapides
+
+**Capture :** `10b-exam-management-filters.png`
+
+**Ce que l'auditeur voit :** Sous le formulaire de création (même page que §10), un panneau de filtres complet (Recherche, Client, Groupe, Fonction DGR, Statut, Type, Créé du/au) et la liste des évaluations avec, par ligne, deux actions rapides directes : « Prévisualiser comme candidat » et « Voir les résultats ».
+
+**Ce que dit le propriétaire :** « Un responsable retrouve immédiatement n'importe quel examen parmi des dizaines, et agit directement depuis la liste — sans naviguer à travers plusieurs écrans. »
+
+**Point de conformité technique :** Filtres appliqués côté serveur (`lib/assessments.ts`), jamais un simple masquage côté client — une évaluation hors périmètre du responsable n'est jamais chargée en mémoire, quel que soit le filtre demandé.
+
+**Ce qu'il ne faut pas prétendre :** —
+
+> **Preuve ajoutée le 2026-08-31 :** absente du dossier original — §10 ne montrait que le formulaire de création (haut de page), jamais ce panneau situé plus bas sur la même page.
+
+---
+
 ## 11 — Examen publié — récapitulatif et suivi
 
 **Capture :** `11-published-exam.png`
 
-**Ce que l'auditeur voit :** Détail d'un examen publié (« DGR Fonction 7.1 — Examen pilote staging ») : récapitulatif (7 questions, 30 min, seuil 80 %, 1 tentative), actions Suspendre/Clôturer, panneau de reprogrammation, et un tableau « Suivi des candidats » (statut, score, résultat) pour les candidats pilotes déjà affectés.
+**Ce que l'auditeur voit :** Détail d'un examen publié (« DGR Fonction 7.1 — Examen pilote staging ») : lien « Prévisualiser comme candidat » et « Rapport global » en tête, récapitulatif (7 questions, 30 min, seuil 80 %, 1 tentative), actions Suspendre/Clôturer, panneau de reprogrammation, et un tableau « Suivi des candidats » (statut, score, résultat) pour les candidats pilotes déjà affectés.
 
-**Ce que dit le propriétaire :** « Un responsable pédagogique voit en un coup d'œil qui a terminé, qui n'a pas commencé, et les résultats de tous les candidats affectés à cet examen. »
+**Ce que dit le propriétaire :** « Un responsable pédagogique voit en un coup d'œil qui a terminé, qui n'a pas commencé, et les résultats de tous les candidats affectés à cet examen — et peut prévisualiser l'examen tel qu'un candidat le verrait, directement depuis cette fiche. »
 
 **Point de conformité technique :** Actions Suspendre/Clôturer disponibles à tout moment sans supprimer l'examen ni son historique.
 
 **Ce qu'il ne faut pas prétendre :** —
 
-> **Note de correction (2026-08-30) :** la version précédente de cette capture affichait aussi un panneau « Affecter d'autres candidats » listant un membre réel du groupe démo sans étiquette « (pilote) »/« (démo) » (probablement un testeur interne antérieur à cette mission). Ce panneau a été masqué au niveau de l'affichage navigateur avant la capture finale — aucune donnée n'a été modifiée en base pour produire cette capture.
+> **Note de correction (2026-08-30, reconduite le 2026-08-31) :** cette capture a systématiquement affiché aussi un panneau « Affecter d'autres candidats » listant des membres réels du groupe démo sans étiquette « (pilote) »/« (démo) » (probablement des testeurs internes antérieurs à cette mission). Ce panneau est masqué au niveau de l'affichage navigateur avant CHAQUE capture — aucune donnée n'est modifiée en base pour produire cette capture. Un incident de revue a été rattrapé le 2026-08-31 : une première recapture avait omis ce masquage et exposait ces noms ; supprimée avant tout envoi, recapturée correctement.
+>
+> **Rafraîchi le 2026-08-31 :** le lien « Prévisualiser comme candidat » n'apparaissait pas du tout dans la version précédente de cette capture (antérieure à l'ajout de cette fonctionnalité) — désormais visible.
 
 ---
 
@@ -186,13 +206,15 @@
 
 **Capture :** `13-candidate-dashboard.png`
 
-**Ce que l'auditeur voit :** Vue candidat (« Amel Ferhati (pilote) ») listant tous les examens affectés avec statut individuel (« À commencer », « En cours », etc.) et bouton d'action correspondant.
+**Ce que l'auditeur voit :** Vue candidat (compte pilote démo) listant tous les examens affectés avec statut individuel (« À commencer », « En cours », etc.) et bouton d'action correspondant.
 
 **Ce que dit le propriétaire :** « Le candidat voit exactement ce qui lui est affecté, avec un statut sans ambiguïté pour chaque examen. »
 
 **Point de conformité technique :** Chaque examen affiché provient d'une affectation explicite (`assessment_assignments`) — jamais une liste globale non filtrée.
 
 **Ce qu'il ne faut pas prétendre :** —
+
+> **Rafraîchi le 2026-08-31 :** capturé avec un autre compte pilote démo (« Yasmine Kaced (pilote) » au lieu de « Amel Ferhati (pilote) ») — le compte d'origine avait déjà un résultat disponible sur cet examen précis et ne pouvait plus démontrer l'état « À commencer ». Aucun changement de fond : toujours un compte pilote démo, jamais un candidat réel.
 
 ---
 
@@ -214,13 +236,15 @@
 
 **Capture :** `15-exam-in-progress.png`
 
-**Ce que l'auditeur voit :** Interface d'examen active : chronomètre en décompte réel (29:59), navigation par numéro de question, question `[DÉMO]` de type Vrai/Faux, indicateur de progression (« 0/8 répondue(s) »).
+**Ce que l'auditeur voit :** Interface d'examen active : chronomètre circulaire en décompte réel (anneau SVG + icône d'état + libellé « Temps restant » + « 29:59 »), barre de progression « Question 1 sur 8 » avec compteur répondu/sans réponse, navigation par numéro de question, question `[DÉMO]` de type Vrai/Faux.
 
 **Ce que dit le propriétaire :** « Le chronomètre tourne réellement, question par question, avec une navigation libre et un compteur de progression permanent. »
 
 **Point de conformité technique :** Type de question Vrai/Faux — l'un des 8 types nativement supportés.
 
 **Ce qu'il ne faut pas prétendre :** —
+
+> **Rafraîchi le 2026-08-31 :** la version précédente montrait un chronomètre plat (texte seul, sans anneau), antérieure à la refonte du composant `Timer` partagé (anneau circulaire, icône d'état, barre de progression) — désormais rendue fidèlement.
 
 ---
 
@@ -264,6 +288,8 @@
 
 **Ce qu'il ne faut pas prétendre :** —
 
+> **Rafraîchi le 2026-08-31 (§16-18) :** même correctif que §15 — chronomètre circulaire moderne désormais rendu fidèlement sur ces trois captures (chronomètre plat obsolète auparavant).
+
 ---
 
 ## 19 — Reprise après interruption (preuve d'autosave)
@@ -284,13 +310,15 @@
 
 **Capture :** `20-final-review.png`
 
-**Ce que l'auditeur voit :** Écran de résumé avant soumission : « Questions répondues : 8/8 », « Questions sans réponse : 0 », « Marquées à revoir : 0 », bouton « Retourner aux questions ».
+**Ce que l'auditeur voit :** Écran de résumé avant soumission avec 4 cartes-résumé : « Questions répondues », « Questions sans réponse », « Marquées à revoir », **« Temps restant »**, puis les deux boutons « Retourner aux questions » et « Terminer et envoyer l'examen ».
 
 **Ce que dit le propriétaire :** « Le candidat a une dernière vue d'ensemble avant d'envoyer définitivement son examen — aucune surprise après soumission. »
 
 **Point de conformité technique :** Les questions non répondues et marquées « à revoir » sont explicitement comptées, jamais masquées.
 
 **Ce qu'il ne faut pas prétendre :** —
+
+> **Rafraîchi le 2026-08-31 :** la version précédente ne montrait que 3 cartes-résumé (sans « Temps restant ») et le bouton de soumission n'apparaissait pas dans le cadre — antérieure à l'ajout de la 4ᵉ carte. Les deux boutons sont désormais visibles ensemble.
 
 ---
 
@@ -312,15 +340,17 @@
 
 **Capture :** `22-in-progress-admin-view.png`
 
-**Ce que l'auditeur voit :** Écran « Résultats » filtré sur le groupe et l'examen démo : deux tentatives, l'une avec score/résultat vides et statut « En cours », l'autre déjà notée (« Résultat disponible », 90/100, « Réussi »).
+**Ce que l'auditeur voit :** Écran « Résultats » filtré sur le groupe et l'examen démo, avec le filtre **Statut** visible (Tous/En cours/À corriger/Résultat disponible/Abandonné/Terminé) : plusieurs tentatives, certaines avec score/résultat vides et statut « À corriger »/« En cours », une autre déjà notée (« Résultat disponible », 90/100, « Réussi »).
 
-**Ce que dit le propriétaire :** « Une tentative en cours n'affiche jamais de score, nulle part dans l'application — ni côté candidat, ni côté administrateur, ni côté auditeur. »
+**Ce que dit le propriétaire :** « Une tentative en cours n'affiche jamais de score, nulle part dans l'application — ni côté candidat, ni côté administrateur, ni côté auditeur. Le filtre Statut permet de retrouver immédiatement les tentatives dans un état précis, sans les mélanger. »
 
 **Point de conformité technique :** Le statut « En cours » (`in_progress`) est calculé et affiché de façon cohérente sur toutes les vues — jamais de score partiel ou provisoire exposé.
 
 **Ce qu'il ne faut pas prétendre :** —
 
-> **Note de correction (2026-08-30) :** cette vue est filtrée par groupe démo ET par l'examen démo précis, afin de ne jamais exposer l'historique réel d'un candidat non démo (Brahimi) présent dans le même tenant. La tentative « En cours » montrée ici a été créée par une action réelle et authentique (démarrage d'examen non finalisé par un compte pilote), affecté au préalable via le formulaire d'affectation réel de l'application — jamais une donnée fabriquée en base.
+> **Note de correction (2026-08-30, reconduite le 2026-08-31) :** cette vue est filtrée par groupe démo ET par l'examen démo précis, afin de ne jamais exposer l'historique réel d'un candidat non démo (Brahimi) présent dans le même tenant. Les tentatives montrées ici proviennent d'actions réelles et authentiques (démarrages d'examen par des comptes pilote), affectés au préalable via le formulaire d'affectation réel de l'application — jamais une donnée fabriquée en base.
+>
+> **Rafraîchi le 2026-08-31 :** le filtre « Statut » n'apparaissait pas du tout dans la version précédente de cette capture (antérieure à son ajout) — désormais visible.
 
 ---
 
@@ -328,13 +358,15 @@
 
 **Capture :** `23-manual-grading.png`
 
-**Ce que l'auditeur voit :** Écran « Correction manuelle » : deux compteurs à zéro (« 0 réponse(s) en attente de correction », « 0 sous-question(s) de scénario en attente de correction »), état vide explicite.
+**Ce que l'auditeur voit :** Écran « Correction manuelle » avec le panneau de filtres complet (Type/Statut/Client/Groupe/Fonction DGR/Examen/Candidat/Date) : compteur global « Corrections en attente : 2 », qui se décompose exactement en « Réponses courtes : 0 » + « Scénarios : 2 » — le détail par section ci-dessous montre 0 réponse courte et 2 sous-questions de scénario en attente, cohérent avec le total affiché.
 
-**Ce que dit le propriétaire :** « Toutes les réponses à correction manuelle ont été traitées au moment de cette capture — la file se vide dès qu'un correcteur qualifié traite les réponses en attente. »
+**Ce que dit le propriétaire :** « Le compteur global n'est jamais en contradiction avec le détail filtré — si le global dit 2, le détail montre exactement où sont ces 2, jamais un chiffre qui ne se retrouve nulle part. »
 
 **Point de conformité technique :** File dédiée aux réponses à correction manuelle (réponse courte et sous-questions de scénario) — jamais mélangée aux questions auto-notées.
 
-**Ce qu'il ne faut pas prétendre :** Un état vide au moment de la capture ne signifie pas qu'aucune correction manuelle n'a jamais lieu — voir la mention explicite « uniquement pour des tentatives déjà envoyées » sur l'écran lui-même.
+**Ce qu'il ne faut pas prétendre :** Un compteur à zéro pour une catégorie ne signifie pas qu'aucune correction manuelle n'a jamais lieu sur cette catégorie — voir la mention explicite « uniquement pour des tentatives déjà envoyées » sur l'écran lui-même.
+
+> **Rafraîchi le 2026-08-31 :** la version précédente ne montrait AUCUN panneau de filtres (antérieure à son ajout) et un état vide (0 partout) — moins démonstratif que la cohérence globale/détail visible maintenant.
 
 ---
 
@@ -436,7 +468,9 @@
 
 **Ce qu'il ne faut pas prétendre :** —
 
-> **Note de correction (2026-08-30) :** même correctif que la capture §22 (filtrage groupe + examen démo précis) — jamais l'historique non filtré d'un candidat réel non démo.
+> **Note de correction (2026-08-30, reconduite le 2026-08-31) :** même correctif que la capture §22 (filtrage groupe + examen démo précis) — jamais l'historique non filtré d'un candidat réel non démo.
+>
+> **Rafraîchi le 2026-08-31 :** même ajout que §22 — le filtre « Statut » n'apparaissait pas dans la version précédente.
 
 ---
 
@@ -452,6 +486,24 @@
 
 **Ce qu'il ne faut pas prétendre :** L'accès global de l'auditeur à tous les tenants est une propriété **du rôle auditeur spécifiquement** (lecture seule) — ne pas généraliser cette visibilité à un autre rôle.
 
+> **Rafraîchi le 2026-08-31 :** la version précédente ne montrait aucun panneau de filtres (Recherche/Type) — ajouté depuis — et montrait à tort une carte « Nouveau client » pour l'auditeur. **Vérifié en direct sur staging que ce n'est plus le cas** (`canWrite = role !== "auditor"` dans le code actuel, confirmé par un test live avant toute conclusion) : capture obsolète, jamais une fuite RBAC réelle.
+
 ---
 
-*Fin du dossier de référence — 31/31 captures documentées. Voir `SCREENSHOT_INDEX.md` pour l'index tabulaire, `KOST_EEXAM_V2_DEMO_SHORT.md` pour la séquence de présentation live (~12 captures, ≈20 minutes), `KOST_EEXAM_V2_DEMO_FULL.md` pour le parcours narratif complet des 31 captures.*
+## 32 — Mode Aperçu candidat
+
+**Capture :** `32-candidate-preview-mode.png`
+
+**Ce que l'auditeur voit :** Écran `/apercu-candidat/[id]` ouvert depuis la fiche d'un examen publié : bannière permanente « MODE APERÇU — aucune action ne sera enregistrée dans l'historique du candidat », puis le même moteur d'examen que verrait un vrai candidat (chronomètre, navigateur de questions, progression) affiché en lecture/manipulation locale uniquement.
+
+**Ce que dit le propriétaire :** « Un responsable peut vérifier exactement ce qu'un candidat va voir avant de publier ou de contacter quiconque — sans jamais créer une trace, un score ou une notification. »
+
+**Point de conformité technique :** `PreviewRunner.tsx` est un composant volontairement SÉPARÉ du moteur réel (`ExamRunner.tsx`) — aucune Server Action n'y est importée (ni sauvegarde de réponse, ni soumission), donc structurellement incapable d'écrire dans `attempts`/`attempt_answers`/`results`, quel que soit un bug futur de garde applicative. Toute interaction reste un état React local, perdu au rafraîchissement.
+
+**Ce qu'il ne faut pas prétendre :** Le chronomètre affiché en mode aperçu est purement illustratif (jamais décompté, jamais lié à un `expires_at` serveur réel) — ne jamais le présenter comme un décompte authentique.
+
+> **Preuve ajoutée le 2026-08-31 :** absente du dossier original (fonctionnalité déjà présente dans le produit mais jamais capturée).
+
+---
+
+*Fin du dossier de référence — 33/33 captures documentées (31 numérotées + §10bis + §32). Voir `SCREENSHOT_INDEX.md` pour l'index tabulaire, `KOST_EEXAM_V2_DEMO_SHORT.md` pour la séquence de présentation live (≈25 minutes), `KOST_EEXAM_V2_DEMO_FULL.md` pour le parcours narratif complet, `RESPONSIVE_EVIDENCE.md` pour les preuves mobile/tablette.*

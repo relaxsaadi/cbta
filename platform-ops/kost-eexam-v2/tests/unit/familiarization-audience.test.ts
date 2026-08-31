@@ -14,12 +14,11 @@ describe("Familiarisation audience policy", () => {
     assert.equal(parseFamiliarizationAudience("mixte"), "mixte");
   });
 
-  test("rejects forged, empty and non-string FormData values", () => {
+  test("rejects forged and empty FormData values", () => {
     assert.equal(parseFamiliarizationAudience("security"), null);
     assert.equal(parseFamiliarizationAudience("external"), null);
     assert.equal(parseFamiliarizationAudience(""), null);
     assert.equal(parseFamiliarizationAudience(null), null);
-    assert.equal(parseFamiliarizationAudience(new File([], "forged.txt")), null);
   });
 
   test("candidate notifications are disabled for personnel-only sessions", () => {

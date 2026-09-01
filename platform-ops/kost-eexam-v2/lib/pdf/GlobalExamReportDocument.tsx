@@ -48,7 +48,8 @@ export function GlobalExamReportDocument({
   rows: SessionReportRow[];
   assessmentName: string;
   /** Date de l'examen déjà formatée (fr-FR) par l'appelant — première
-   * tentative démarrée, ou date de publication si aucune tentative encore. */
+   * tentative réellement démarrée, ou "Non commencé" si aucun candidat
+   * n'a encore commencé. */
   examDate: string;
   meta: DocumentMeta;
 }) {
@@ -95,7 +96,7 @@ export function GlobalExamReportDocument({
 
         <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
           <View>
-            <Text style={{ fontSize: 8, color: "#5a5a5a" }}>Certifié par : ____________________________</Text>
+            <Text style={{ fontSize: 8, color: "#5a5a5a" }}>Validation interne : ____________________________</Text>
             <Text style={{ fontSize: 7, color: "#5a5a5a", marginTop: 4 }}>Nom, fonction, signature</Text>
           </View>
           <View>

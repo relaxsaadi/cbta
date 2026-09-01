@@ -21,14 +21,23 @@ export default async function MesResultatsPage({
   // été envoyée) : /mes-examens montre déjà "Reprendre" pour ce cas, la
   // lister aussi ici comme "en attente de notation" serait trompeur.
   const results = listResults({ candidateUserId: session.userId, excludeInProgress: true });
-  // §17 — confirmation de fin de tentative. `justSubmitted` (l'ID de
-  // l'évaluation) était posé par ExamRunner.tsx depuis le tout début de ce
-  // sous-système mais jamais lu nulle part (bug réel trouvé en revisitant
-  // ce flux pour cette mission) : aucune confirmation "Votre examen a bien
-  // été envoyé" ne s'affichait jamais après une soumission, manuelle ou
-  // automatique. On retrouve la tentative la plus récente de cette
-  // évaluation pour afficher Examen/Date d'envoi/Statut (§17).
-  const confirmedRow = justSubmitted ? results.filter((r) => r.submitted_at).sort((a, b) => (b.submitted_at! > a.submitted_at! ? 1 : -1))[0] : undefined;
+  // §17 — confirmation de fin de tentative. `justSubmitted` porte l'ID de
+  // l'évaluation envoyé par ExamRunner.tsx. La confirmation doit donc être
+  // liée à CETTE évaluation, et jamais à la dernière tentative soumise d'un
+  // autre examen du même candidat. Le paramètre URL est non fiable : seules
+  // les valeurs entières strictement positives sont acceptées avant de les
+  // utiliser comme filtre de lecture.
+  const justSubmittedAssessmentId = Number(justSubmitted);
+  const confirmedRow =
+    justSubmitted && Number.isInteger(justSubmittedAssessmentId) && justSubmittedAssessmentId > 0
+      ? listResults({
+          candidateUserId: session.userId,
+          excludeInProgress: true,
+          assessmentId: justSubmittedAssessmentId,
+        })
+          .filter((r) => r.submitted_at)
+          .sort((a, b) => (b.submitted_at! > a.submitted_at! ? 1 : -1))[0]
+      : undefined;
 
   return (
     <div className="flex flex-col gap-6">
@@ -140,7 +149,7 @@ function ResultCard({ result }: { result: ResultsRow }) {
               {detail.passed ? (
                 <span className="flex items-center gap-1"><CheckCircle2 size={12} /> Réussi</span>
               ) : (
-                <span className="flex items-center gap-1"><XCircle size={12} /> Échoué</span>
+                <span className="flex items-center gap-1"><XCircle2 size={12} /> Échoué</span>
               )}
             </StatusBadge>
             <a

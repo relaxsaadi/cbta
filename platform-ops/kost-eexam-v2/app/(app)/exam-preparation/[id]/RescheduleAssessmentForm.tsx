@@ -51,8 +51,9 @@ export function RescheduleAssessmentForm({
         </div>
       </div>
       <p className="text-[11.5px] text-text-tertiary">
-        Laisser un champ vide = pas de limite pour cette borne. Les candidats déjà affectés recevront une notification
-        avec l&apos;ancienne et la nouvelle fenêtre. Bloqué si une tentative est actuellement en cours.
+        Une borne peut rester vide uniquement si la configuration de feedback le permet. Avec un feedback « Différé »,
+        une date de fermeture explicite est obligatoire. Les candidats déjà affectés recevront une notification avec
+        l&apos;ancienne et la nouvelle fenêtre. Bloqué si une tentative est actuellement en cours.
       </p>
       <div>
         <button

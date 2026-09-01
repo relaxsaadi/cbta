@@ -82,8 +82,8 @@ Contexte KOST GROUP:
 Réponds en JSON strict avec ce format:
 {"subject": "...", "body": "..."}
 
-Le body doit être en texte brut (pas de HTML), paragraphes séparés par \n\n.
-Signe toujours: Cordialement,\nKOST GROUP\n+213 542 30 53 83\ndgr.kostacademy.com`,
+Le body doit être en texte brut (pas de HTML), paragraphes séparés par \\n\\n.
+Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy.com`,
     maxOutputTokens: 500,
   })
 

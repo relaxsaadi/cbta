@@ -18,6 +18,7 @@ import {
   type QType,
   type AnnualReviewDecision,
 } from "@/lib/questions";
+import { validateAnnualReviewPolicy } from "@/lib/annual-review-policy";
 import { audit } from "@/lib/audit";
 import type { SimpleActionResult } from "@/components/ui/ActionButton";
 
@@ -201,6 +202,14 @@ export async function recordAnnualReviewAction(questionId: number, _prev: Record
   if (!["A_REVOIR", "REVUE_EN_COURS", "REVUE_TERMINEE"].includes(decision)) {
     return { error: "Décision invalide." };
   }
+
+  // Readiness blocker #16 — une valeur terminale est une preuve d'audit,
+  // pas un simple libellé UI. Le serveur refuse donc une revue future,
+  // une année incohérente avec la date réelle, ou REVUE_TERMINEE sans
+  // qualification/autorité documentée du réviseur. Les états non terminaux
+  // restent représentables sans fabriquer une qualification inexistante.
+  const policyError = validateAnnualReviewPolicy({ reviewYear, reviewDate, decision, reviewerQualification });
+  if (policyError) return { error: policyError };
 
   const reviewId = recordAnnualReview({
     questionId,

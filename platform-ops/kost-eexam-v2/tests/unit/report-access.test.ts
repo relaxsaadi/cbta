@@ -1,8 +1,49 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import { candidateCanDownloadIndividualReport, candidateCanSeePublishedResult } from "../../lib/report-access";
+import {
+  candidateCanDownloadIndividualReport,
+  candidateCanSeePublishedResult,
+  feedbackScheduleWriteError,
+} from "../../lib/report-access";
 
 const NOW_MS = Date.parse("2026-09-01T20:00:00.000Z");
+
+describe("feedbackScheduleWriteError — server write configuration guard", () => {
+  test("deferred feedback requires an explicit parseable close boundary", () => {
+    for (const closeAt of [undefined, null, ""]) {
+      assert.match(
+        feedbackScheduleWriteError({ feedbackMode: "deferred", closeAt }) ?? "",
+        /requiert une date de fermeture explicite/
+      );
+    }
+    assert.match(
+      feedbackScheduleWriteError({ feedbackMode: "deferred", closeAt: "not-a-date" }) ?? "",
+      /Date de fermeture invalide/
+    );
+    assert.equal(
+      feedbackScheduleWriteError({ feedbackMode: "deferred", closeAt: "2026-09-02T18:00:00.000Z" }),
+      null
+    );
+  });
+
+  test("immediate/none may omit close_at, but malformed non-empty dates are rejected", () => {
+    assert.equal(feedbackScheduleWriteError({ feedbackMode: "immediate", closeAt: null }), null);
+    assert.equal(feedbackScheduleWriteError({ feedbackMode: "none", closeAt: undefined }), null);
+    assert.match(
+      feedbackScheduleWriteError({ feedbackMode: "immediate", closeAt: "not-a-date" }) ?? "",
+      /Date de fermeture invalide/
+    );
+  });
+
+  test("unknown or forged feedback modes are rejected before persistence", () => {
+    for (const feedbackMode of [undefined, null, "", "delayed", "forged"]) {
+      assert.match(
+        feedbackScheduleWriteError({ feedbackMode, closeAt: "2026-09-02T18:00:00.000Z" }) ?? "",
+        /Mode de feedback invalide/
+      );
+    }
+  });
+});
 
 describe("candidateCanSeePublishedResult — shared fail-closed feedback policy", () => {
   test("immediate feedback publishes only when show_result is explicitly enabled", () => {

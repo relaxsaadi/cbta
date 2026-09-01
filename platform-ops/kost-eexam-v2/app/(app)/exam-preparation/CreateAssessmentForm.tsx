@@ -131,6 +131,7 @@ export function CreateAssessmentForm({
         <div>
           <label htmlFor="closeAt" className="mb-1 block text-[12px] font-medium text-text-secondary">10. Fermeture</label>
           <input id="closeAt" type="datetime-local" name="closeAt" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          <p className="mt-1 text-[11px] text-text-tertiary">Obligatoire lorsque le feedback est « Différé ».</p>
         </div>
       </div>
 

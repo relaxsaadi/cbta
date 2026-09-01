@@ -25,6 +25,7 @@ import { findUserById } from "@/lib/users";
 import { functionLabel } from "@/lib/questions";
 import { notifyExamAssigned, notifyExamRescheduled } from "@/lib/email/events";
 import { auditExamNotificationSent } from "@/lib/email/audit";
+import { feedbackScheduleWriteError } from "@/lib/report-access";
 
 export interface CreateAssessmentResult {
   error?: string;
@@ -53,6 +54,15 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
   if (!name || !functionCode || !groupId || !questionCount || !durationMinutes) {
     return { error: "Merci de compléter tous les champs obligatoires." };
   }
+
+  // Issue #27 — le chemin de lecture candidat est fail-closed, mais la
+  // création doit également refuser une configuration deferred sans borne
+  // explicite. Ne jamais inventer de date pour "réparer" silencieusement un
+  // formulaire incomplet ; l'opérateur doit la fournir. La même frontière
+  // rejette aussi un feedbackMode forgé et une closeAt mal formée.
+  const feedbackError = feedbackScheduleWriteError({ feedbackMode, closeAt });
+  if (feedbackError) return { error: feedbackError };
+
   // Frontière multi-client (lib/tenant-scope.ts) — sans ce contrôle, un
   // responsable pourrait créer une évaluation pour le groupe d'un autre
   // client en forgeant groupId dans la requête.
@@ -117,6 +127,20 @@ export async function publishAssessmentAction(
   if (mode !== "group" && candidateUserIds.length === 0) {
     return { error: "Sélectionnez au moins un candidat pour ce mode d'affectation." };
   }
+
+  // Un ancien brouillon créé avant le durcissement de #27 peut encore
+  // contenir deferred+NULL. Le read path de #28 empêcherait toute fuite de
+  // résultat, mais publier ce brouillon créerait un examen opérationnellement
+  // incohérent dont le résultat ne pourrait jamais être libéré. Bloquer ici
+  // force une correction explicite de la configuration avant affectation.
+  const draft = getAssessment(assessmentId);
+  if (!draft) return { error: "Évaluation introuvable." };
+  const publishFeedbackError = feedbackScheduleWriteError({
+    feedbackMode: draft.feedback_mode,
+    closeAt: draft.close_at,
+  });
+  if (publishFeedbackError) return { error: `Publication impossible : ${publishFeedbackError}` };
+
   try {
     publishAssessment(assessmentId, session.userId, mode === "group" ? {} : { candidateUserIds });
   } catch (err) {
@@ -217,6 +241,19 @@ export async function rescheduleAssessmentAction(assessmentId: number, _prev: Re
   const closeAtRaw = String(formData.get("closeAt") ?? "").trim();
   const newOpenAt = openAtRaw || null;
   const newCloseAt = closeAtRaw || null;
+
+  // Issue #27 — une reprogrammation ne doit pas pouvoir supprimer la borne
+  // d'un examen deferred. Les anciennes lignes deferred+NULL restent
+  // volontairement non publiées par le read path jusqu'à une correction
+  // explicite ; cette action exige donc une vraie close_at au lieu d'en
+  // inventer une automatiquement.
+  const existingAssessment = getAssessment(assessmentId);
+  if (!existingAssessment) return { error: "Évaluation introuvable." };
+  const feedbackError = feedbackScheduleWriteError({
+    feedbackMode: existingAssessment.feedback_mode,
+    closeAt: newCloseAt,
+  });
+  if (feedbackError) return { error: feedbackError };
 
   let result;
   try {

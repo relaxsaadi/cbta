@@ -1,5 +1,38 @@
 export type IndividualReportLevel = "simple" | "detailed";
 
+const ALLOWED_FEEDBACK_MODES = new Set(["immediate", "deferred", "none"]);
+
+/**
+ * Validate assessment feedback configuration before a write reaches storage.
+ *
+ * Candidate reads already fail closed, but newly created/rescheduled deferred
+ * assessments must not silently enter close_at=NULL and remain indefinitely
+ * unpublished. This helper deliberately never invents a closure date: the
+ * operator must provide one explicitly. It also rejects forged feedback modes
+ * and malformed non-empty close boundaries at the server boundary.
+ */
+export function feedbackScheduleWriteError({
+  feedbackMode,
+  closeAt,
+}: {
+  feedbackMode: string | null | undefined;
+  closeAt: string | null | undefined;
+}): string | null {
+  if (!feedbackMode || !ALLOWED_FEEDBACK_MODES.has(feedbackMode)) {
+    return "Mode de feedback invalide.";
+  }
+
+  if (closeAt && !Number.isFinite(Date.parse(closeAt))) {
+    return "Date de fermeture invalide.";
+  }
+
+  if (feedbackMode === "deferred" && !closeAt) {
+    return "Le feedback différé requiert une date de fermeture explicite.";
+  }
+
+  return null;
+}
+
 /**
  * Single fail-closed publication policy for candidate-visible results.
  *

@@ -31,8 +31,14 @@ export function parseBackupFilename(name: string): BackupCandidate | null {
   if (!match) return null;
 
   const [, dayKey, hour, minute, second, millisecond] = match;
-  const parsed = Date.parse(`${dayKey}T${hour}:${minute}:${second}.${millisecond}Z`);
+  const canonicalTimestamp = `${dayKey}T${hour}:${minute}:${second}.${millisecond}Z`;
+  const parsed = Date.parse(canonicalTimestamp);
   if (!Number.isFinite(parsed)) return null;
+
+  // Destructive retention must only manage filenames that round-trip to a
+  // real UTC instant. Date.parse can normalize impossible dates (for example
+  // 31 February) on some runtimes; such files must be treated as unmanaged.
+  if (new Date(parsed).toISOString() !== canonicalTimestamp) return null;
 
   return {
     name,
@@ -68,20 +74,23 @@ export function selectBackupFilesToDelete(
 
   const keep = new Set<string>([protectedBackupName]);
   const dailyDays = new Set<string>();
-  let oldestDailyTimestamp = Number.POSITIVE_INFINITY;
+  const dailyWeeks = new Set<string>();
 
   for (const candidate of candidates) {
     if (dailyDays.has(candidate.dayKey)) continue;
     if (dailyDays.size >= policy.retentionDailyCopies) break;
 
     dailyDays.add(candidate.dayKey);
+    dailyWeeks.add(candidate.weekKey);
     keep.add(candidate.name);
-    oldestDailyTimestamp = Math.min(oldestDailyTimestamp, candidate.timestampMs);
   }
 
   const weeklyWeeks = new Set<string>();
   for (const candidate of candidates) {
-    if (candidate.timestampMs >= oldestDailyTimestamp) continue;
+    // Weekly copies must be additional, older ISO weeks. Do not let an older
+    // duplicate from a retained daily day (or another day in a daily-covered
+    // ISO week) consume one of the four weekly slots.
+    if (dailyDays.has(candidate.dayKey) || dailyWeeks.has(candidate.weekKey)) continue;
     if (weeklyWeeks.has(candidate.weekKey)) continue;
     if (weeklyWeeks.size >= policy.retentionWeeklyCopies) break;
 

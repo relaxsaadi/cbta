@@ -21,6 +21,7 @@ describe("Rétention des sauvegardes SQLite", () => {
 
     assert.equal(parseBackupFilename(newest)?.dayKey, "2026-09-01");
     assert.equal(parseBackupFilename("notes.txt"), null);
+    assert.equal(parseBackupFilename("kost-eexam-v2_2026-02-31T00-00-00-000Z.db"), null);
 
     const deleted = selectBackupFilesToDelete(
       [oldest, newest, previous],
@@ -62,6 +63,24 @@ describe("Rétention des sauvegardes SQLite", () => {
     assert.equal(kept.length, 18);
     assert.ok(kept.includes(newest));
     for (const daily of files.slice(0, 14)) assert.ok(kept.includes(daily));
+  });
+
+  test("une copie plus ancienne d'une journée quotidienne ne consomme pas un slot hebdomadaire", () => {
+    const dailyNewest = backupName("2026-09-01T23:00:00.000Z");
+    const sameDailyDayOlder = backupName("2026-09-01T01:00:00.000Z");
+    const olderSameWeek = backupName("2026-08-31T23:00:00.000Z");
+    const olderWeek = backupName("2026-08-23T23:00:00.000Z");
+
+    const deleted = selectBackupFilesToDelete(
+      [olderWeek, sameDailyDayOlder, olderSameWeek, dailyNewest],
+      { retentionDailyCopies: 1, retentionWeeklyCopies: 1 },
+      dailyNewest,
+    );
+    const kept = [olderWeek, sameDailyDayOlder, olderSameWeek, dailyNewest].filter(
+      (name) => !deleted.includes(name),
+    );
+
+    assert.deepEqual(kept, [olderWeek, dailyNewest]);
   });
 
   test("ne supprime jamais la sauvegarde protégée même en cas d'ordre temporel anormal", () => {

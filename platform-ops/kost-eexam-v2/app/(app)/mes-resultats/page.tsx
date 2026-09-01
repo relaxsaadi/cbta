@@ -149,7 +149,7 @@ function ResultCard({ result }: { result: ResultsRow }) {
               {detail.passed ? (
                 <span className="flex items-center gap-1"><CheckCircle2 size={12} /> Réussi</span>
               ) : (
-                <span className="flex items-center gap-1"><XCircle2 size={12} /> Échoué</span>
+                <span className="flex items-center gap-1"><XCircle size={12} /> Échoué</span>
               )}
             </StatusBadge>
             <a

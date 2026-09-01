@@ -32,15 +32,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ asse
   const group = getGroup(assessment.group_id);
   const { rows } = getSessionReport(assessmentIdNum);
 
-  // Date de l'examen — la première tentative réellement démarrée si elle
-  // existe (le déroulement réel), sinon la date de publication (l'examen
-  // n'a pas encore été passé) — jamais la date de génération du PDF
-  // elle-même, qui n'est pas "la date de l'examen".
+  // Data-integrity guard: "Date" means an exam actually started. Before the
+  // first candidate starts, publishing/creating the assessment is not an
+  // exam occurrence and must never be presented as such in an auditor-facing
+  // report. Keep the state explicit instead of fabricating a date.
   const earliestStart = rows
     .map((r) => r.started_at)
     .filter((d): d is string => d !== null)
     .sort()[0];
-  const examDate = new Date(earliestStart ?? assessment.published_at ?? assessment.created_at).toLocaleDateString("fr-FR");
+  const examDate = earliestStart ? new Date(earliestStart).toLocaleDateString("fr-FR") : "Non commencé";
 
   const meta: DocumentMeta = {
     docTitle: `Rapport global d'examen — ${assessment.name}`,
@@ -70,6 +70,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ asse
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="rapport-global-examen-${assessmentIdNum}.pdf"`,
+      // Candidate result documents contain personal examination data. Do not
+      // allow shared/intermediary caches to retain an authenticated download.
+      "Cache-Control": "private, no-store",
     },
   });
 }

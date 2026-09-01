@@ -4,6 +4,7 @@ import { hasAssessmentAccess } from "@/lib/tenant-scope";
 import { getAssessment, getSessionReport } from "@/lib/assessments";
 import { getGroup } from "@/lib/groups";
 import { functionLabel } from "@/lib/questions";
+import { globalExamDateLabel } from "@/lib/global-exam-report";
 import { audit } from "@/lib/audit";
 import { GlobalExamReportDocument } from "@/lib/pdf/GlobalExamReportDocument";
 import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
@@ -32,15 +33,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ asse
   const group = getGroup(assessment.group_id);
   const { rows } = getSessionReport(assessmentIdNum);
 
-  // Data-integrity guard: "Date" means an exam actually started. Before the
-  // first candidate starts, publishing/creating the assessment is not an
-  // exam occurrence and must never be presented as such in an auditor-facing
-  // report. Keep the state explicit instead of fabricating a date.
-  const earliestStart = rows
-    .map((r) => r.started_at)
-    .filter((d): d is string => d !== null)
-    .sort()[0];
-  const examDate = earliestStart ? new Date(earliestStart).toLocaleDateString("fr-FR") : "Non commencé";
+  const examDate = globalExamDateLabel(rows.map((r) => r.started_at));
 
   const meta: DocumentMeta = {
     docTitle: `Rapport global d'examen — ${assessment.name}`,

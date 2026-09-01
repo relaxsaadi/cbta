@@ -10,34 +10,11 @@
 import { Document, Page, View, Text } from "@react-pdf/renderer";
 import { pdfStyles } from "./theme";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
+import {
+  globalExamMentionLabel,
+  globalExamResultLabel,
+} from "../global-exam-report";
 import type { SessionReportRow } from "../assessments";
-
-/** Résultat "complétude" — jamais RÉUSSITE/ÉCHEC ici, uniquement l'état
- * d'avancement de la tentative (§3 : colonne "Résultat", distincte de
- * "Mention"). */
-function resultatLabel(r: SessionReportRow): string {
-  if (!r.attempt_status) return "Non commencé";
-  if (r.attempt_status === "in_progress") return "En cours";
-  if (r.attempt_status === "abandoned") return "Abandonné";
-  // submitted / auto_submitted :
-  if (r.passed === null) return "Envoyé — en attente de correction";
-  return r.score_100 !== null ? `${r.score_100} / 100` : "Terminé";
-}
-
-/** Mention RÉUSSITE/ÉCHEC — JAMAIS fabriquée quand le résultat n'est pas
- * réellement final (§3/§9 de la mission : "do NOT fabricate RÉUSSITE/ÉCHEC
- * ... use truthful status"). Un examen soumis mais encore
- * AWAITING_MANUAL_REVIEW (passed IS NULL malgré un statut "submitted") est
- * distingué explicitement d'un examen jamais terminé — même détection déjà
- * utilisée à l'écran (results r.passed via getSessionReport(), jamais
- * recalculée séparément ici). */
-function mentionLabel(r: SessionReportRow): { text: string; kind: "success" | "fail" | "pending" | "none" } {
-  const isSubmitted = r.attempt_status === "submitted" || r.attempt_status === "auto_submitted";
-  if (isSubmitted && r.passed === null) return { text: "EN ATTENTE DE CORRECTION", kind: "pending" };
-  if (r.passed === 1) return { text: "RÉUSSITE", kind: "success" };
-  if (r.passed === 0) return { text: "ÉCHEC", kind: "fail" };
-  return { text: "NON FINALISÉ", kind: "none" };
-}
 
 export function GlobalExamReportDocument({
   rows,
@@ -80,14 +57,14 @@ export function GlobalExamReportDocument({
             <Text style={[pdfStyles.tableCellHeader, { width: "28%" }]}>Mention</Text>
           </View>
           {sorted.map((r, i) => {
-            const mention = mentionLabel(r);
+            const mention = globalExamMentionLabel(r);
             const mentionStyle =
               mention.kind === "success" ? pdfStyles.badgeOk : mention.kind === "fail" ? pdfStyles.badgeFail : undefined;
             return (
               <View key={r.candidate_user_id} style={pdfStyles.tableRow} wrap={false}>
                 <Text style={[pdfStyles.tableCell, { width: "8%" }]}>{i + 1}</Text>
                 <Text style={[pdfStyles.tableCell, { width: "37%" }]}>{r.full_name}</Text>
-                <Text style={[pdfStyles.tableCell, { width: "27%" }]}>{resultatLabel(r)}</Text>
+                <Text style={[pdfStyles.tableCell, { width: "27%" }]}>{globalExamResultLabel(r)}</Text>
                 <Text style={[pdfStyles.tableCell, mentionStyle, { width: "28%", fontWeight: 700 }]}>{mention.text}</Text>
               </View>
             );

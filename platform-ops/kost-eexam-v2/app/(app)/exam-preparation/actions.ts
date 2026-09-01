@@ -127,6 +127,20 @@ export async function publishAssessmentAction(
   if (mode !== "group" && candidateUserIds.length === 0) {
     return { error: "Sélectionnez au moins un candidat pour ce mode d'affectation." };
   }
+
+  // Un ancien brouillon créé avant le durcissement de #27 peut encore
+  // contenir deferred+NULL. Le read path de #28 empêcherait toute fuite de
+  // résultat, mais publier ce brouillon créerait un examen opérationnellement
+  // incohérent dont le résultat ne pourrait jamais être libéré. Bloquer ici
+  // force une correction explicite de la configuration avant affectation.
+  const draft = getAssessment(assessmentId);
+  if (!draft) return { error: "Évaluation introuvable." };
+  const publishFeedbackError = feedbackScheduleWriteError({
+    feedbackMode: draft.feedback_mode,
+    closeAt: draft.close_at,
+  });
+  if (publishFeedbackError) return { error: `Publication impossible : ${publishFeedbackError}` };
+
   try {
     publishAssessment(assessmentId, session.userId, mode === "group" ? {} : { candidateUserIds });
   } catch (err) {

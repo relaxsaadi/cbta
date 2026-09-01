@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CountryLandingPage from "@/components/CountryLandingPage";
 
 export const metadata: Metadata = {
-  title: "IATA Dangerous Goods Training Algeria — CBTA Certified Provider",
+  title: "DGR Training in Algeria | IATA CBTA Certified",
   description:
-    "Official IATA DGR-CBTA training in Algeria. First IATA CBTA Provider certified in Algeria. Classroom or in-house sessions. Globally recognized IATA certificate. Compliant with ANAC Algeria & ICAO.",
+    "Algeria's only IATA CBTA certified DGR training center. Categories 7.1-7.10, recognized by 300+ IATA airlines. Sessions in Algiers or in-house, quote in 24h.",
   alternates: { canonical: "/iata-dangerous-goods-training-algeria" },
   keywords: [
     "IATA dangerous goods training Algeria",

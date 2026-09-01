@@ -68,6 +68,17 @@ export default async function SessionReportPage({ params }: { params: Promise<{ 
           </a>
           <a
             href={`/api/reports/session/${assessmentId}`}
+            className="rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong"
+          >
+            Rapport détaillé PDF (statistiques)
+          </a>
+          {/* Mission "URGENT AUDITOR FOLLOW-UP" (2026-08-31) Issue 1 —
+              l'auditeur veut un PDF SIMPLE (Candidat / Résultat / Mention
+              RÉUSSITE-ÉCHEC) comme action principale, distinct du rapport
+              détaillé ci-dessus (statistiques agrégées, orientation
+              paysage) — jamais un remplacement, les deux coexistent. */}
+          <a
+            href={`/api/reports/global-exam/${assessmentId}`}
             className="rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
           >
             Rapport global PDF

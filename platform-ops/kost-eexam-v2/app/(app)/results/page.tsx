@@ -88,6 +88,19 @@ export default async function ResultsPage({
       <div className="flex items-center justify-between">
         <h1 className="font-display text-[20px] font-semibold text-text-primary">Résultats</h1>
         <div className="flex gap-2">
+          {/* Mission "URGENT AUDITOR FOLLOW-UP" (2026-08-31) Issue 1 —
+              "Instead of relying on CSV download, provide a SIMPLE PDF
+              download" : le bouton apparaît dès qu'UN examen précis est
+              filtré (le rapport global a toujours une portée d'UN seul
+              examen/groupe/session, jamais une liste multi-examens). */}
+          {sp.assessmentId && (
+            <a
+              href={`/api/reports/global-exam/${sp.assessmentId}`}
+              className="flex items-center gap-1.5 rounded-md bg-accent-9 px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-accent-10"
+            >
+              <Download size={13} /> Rapport global PDF
+            </a>
+          )}
           <a href={`/api/results/export?${qs.toString()}`} className="flex items-center gap-1.5 rounded-md border border-border-default px-3 py-1.5 text-[12.5px] font-medium text-text-secondary hover:border-border-strong">
             <Download size={13} /> Export CSV (résultats)
           </a>

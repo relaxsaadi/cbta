@@ -1,6 +1,7 @@
 import { guardPage } from "@/lib/rbac";
 import { listResults, getAttemptDetail, type ResultsRow } from "@/lib/results";
 import { getAssessmentSettingsForAttempt } from "@/lib/attempts";
+import { candidateCanSeePublishedResult } from "@/lib/report-access";
 import { formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } from "@/lib/questions";
 import { gradeOneQuestion } from "@/lib/grading";
 import { Card } from "@/components/ui/Card";
@@ -29,6 +30,15 @@ export default async function MesResultatsPage({
   // automatique. On retrouve la tentative la plus récente de cette
   // évaluation pour afficher Examen/Date d'envoi/Statut (§17).
   const confirmedRow = justSubmitted ? results.filter((r) => r.submitted_at).sort((a, b) => (b.submitted_at! > a.submitted_at! ? 1 : -1))[0] : undefined;
+  const confirmedSettings = confirmedRow ? getAssessmentSettingsForAttempt(confirmedRow.attempt_id) : undefined;
+  const confirmedResultPublished =
+    confirmedRow?.grading_state !== "AWAITING_MANUAL_REVIEW" && confirmedSettings
+      ? candidateCanSeePublishedResult({
+          showResult: confirmedSettings.show_result,
+          feedbackMode: confirmedSettings.feedback_mode,
+          closeAt: confirmedSettings.close_at,
+        })
+      : false;
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,7 +63,9 @@ export default async function MesResultatsPage({
             <p className="mt-1.5 text-[12.5px] font-medium text-status-verified-text">
               {confirmedRow.grading_state === "AWAITING_MANUAL_REVIEW"
                 ? "Statut : en attente de correction — le résultat sera disponible une fois la correction terminée."
-                : "Statut : résultat disponible ci-dessous."}
+                : confirmedResultPublished
+                  ? "Statut : résultat disponible ci-dessous."
+                  : "Statut : examen envoyé — le résultat n'est pas encore publié."}
             </p>
             {/* §24 — "immédiatement après la soumission", l'un des 3 points
                 d'entrée demandés (voir DeclareIncidentModal.tsx). */}
@@ -107,16 +119,17 @@ function ResultCard({ result }: { result: ResultsRow }) {
     );
   }
 
-  // Politique A/B/C/D du §11 : selon la config, différer jusqu'à la
-  // fermeture, montrer seulement la note, ou la correction complète.
-  // ResultCard est un Server Component (jamais de re-rendu client,
-  // ré-exécuté une fois par requête serveur) : comparer à l'heure serveur
-  // courante ici est le comportement voulu, pas une impureté au sens du
-  // hook de rendu client que cette règle cible réellement.
-  // eslint-disable-next-line react-hooks/purity
-  const stillDeferred = settings.feedback_mode === "deferred" && settings.close_at && new Date(settings.close_at).getTime() > Date.now();
-  const showResult = settings.show_result === 1 && !stillDeferred;
+  // Une seule politique de publication est partagée avec l'API PDF. Le
+  // mode deferred exige une vraie close_at atteinte ; close_at absente ou
+  // invalide reste non publiée (fail closed), au lieu de retomber
+  // silencieusement en diffusion immédiate.
+  const showResult = candidateCanSeePublishedResult({
+    showResult: settings.show_result,
+    feedbackMode: settings.feedback_mode,
+    closeAt: settings.close_at,
+  });
   const showCorrection = showResult && settings.show_correct_answers === 1;
+  const waitingForDeferredPublication = settings.feedback_mode === "deferred" && !showResult;
 
   return (
     <div className="rounded-md border border-border-subtle p-3.5">
@@ -129,7 +142,7 @@ function ResultCard({ result }: { result: ResultsRow }) {
         </div>
         {!showResult ? (
           <span className="text-[12px] text-text-tertiary">
-            {stillDeferred ? "Résultat différé jusqu'à la fermeture de l'examen" : "En attente de notation"}
+            {waitingForDeferredPublication ? "Résultat différé — publication non encore disponible" : "Résultat non publié"}
           </span>
         ) : detail.passed === null ? (
           <span className="text-[12px] text-text-tertiary">En attente de notation</span>

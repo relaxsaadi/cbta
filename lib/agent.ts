@@ -3,7 +3,9 @@ import { generateText } from 'ai'
 import { supabase, SECTORS, type Lead, type LeadStatus } from './supabase'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Preview/build environments are not required to carry an outbound-email
+// credential. Avoid constructing Resend with an undefined key at module import.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'contact@dgr.kostacademy.com'
 const FROM_NAME = 'KOST GROUP — DGR IATA'
 
@@ -98,6 +100,7 @@ Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy
 
 // Send email via Resend
 async function sendEmail(to: string, subject: string, body: string): Promise<boolean> {
+  if (!resend) return false
   try {
     const { error } = await resend.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,

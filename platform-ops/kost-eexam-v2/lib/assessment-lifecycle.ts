@@ -1,6 +1,7 @@
 import { audit } from "./audit";
 import { getDb, transaction } from "./db";
 import type { AssessmentStatus } from "./assessments";
+import { feedbackScheduleWriteError } from "./report-access";
 import { validateAssessmentSchedule, type AssessmentScheduleIssue } from "./assessment-schedule";
 import type { ConsoleRole } from "./session";
 
@@ -16,6 +17,7 @@ interface PersistedTransitionState {
   status: AssessmentStatus;
   open_at: string | null;
   close_at: string | null;
+  feedback_mode: string | null;
 }
 
 type TransitionPreconditionFailure = {
@@ -92,7 +94,7 @@ function applyTransition(
 
   const outcome = transaction((db) => {
     const current = db
-      .prepare(`SELECT status, open_at, close_at FROM assessments WHERE id = ?`)
+      .prepare(`SELECT status, open_at, close_at, feedback_mode FROM assessments WHERE id = ?`)
       .get(assessmentId) as PersistedTransitionState | undefined;
 
     if (!current) return { kind: "missing" as const };
@@ -157,20 +159,38 @@ function applyTransition(
   );
 }
 
-function validScheduleForReopen(
+function validConfigurationForReopen(
   current: PersistedTransitionState
 ): TransitionPreconditionFailure | null {
   const schedule = validateAssessmentSchedule({
     openAt: current.open_at,
     closeAt: current.close_at,
   });
-  if (schedule.valid) return null;
+  if (!schedule.valid) {
+    return {
+      reason: "invalid_schedule",
+      metadata: { scheduleIssue: schedule.issue },
+      message: `Réouverture impossible : planning invalide (${SCHEDULE_ISSUE_LABELS[schedule.issue]}).`,
+    };
+  }
 
-  return {
-    reason: "invalid_schedule",
-    metadata: { scheduleIssue: schedule.issue },
-    message: `Réouverture impossible : planning invalide (${SCHEDULE_ISSUE_LABELS[schedule.issue]}).`,
-  };
+  // Reopen writes `published` directly, so it must preserve the same deferred
+  // feedback invariant enforced by create/publish/reschedule in PR #29. A
+  // suspended legacy row with deferred+NULL must not bypass that publication
+  // boundary merely because its open/close schedule is otherwise syntactically
+  // valid. Do not invent a close_at; require an explicit operator correction.
+  const feedbackError = feedbackScheduleWriteError({
+    feedbackMode: current.feedback_mode,
+    closeAt: current.close_at,
+  });
+  if (feedbackError) {
+    return {
+      reason: "invalid_feedback_configuration",
+      message: `Réouverture impossible : ${feedbackError}`,
+    };
+  }
+
+  return null;
 }
 
 export function suspendAssessment(
@@ -187,7 +207,7 @@ export function reopenAssessment(assessmentId: number, actorUserId: number): voi
     actorUserId,
     TRANSITIONS.reopen,
     undefined,
-    validScheduleForReopen
+    validConfigurationForReopen
   );
 }
 

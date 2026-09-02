@@ -1,5 +1,5 @@
 import { audit } from "./audit";
-import { getDb } from "./db";
+import { getDb, transaction } from "./db";
 import type { AssessmentStatus } from "./assessments";
 
 type LifecycleAction = "assessment_suspend" | "assessment_reopen" | "assessment_close";
@@ -37,6 +37,13 @@ const TRANSITIONS = {
  * Server Action call cannot move an assessment through an unsupported
  * transition.
  *
+ * A successful governed mutation and its success audit entry are committed
+ * in the same SQLite transaction. If the audit write fails, the status
+ * change is rolled back rather than leaving an unaudited lifecycle change.
+ * Denial audits are deliberately written after the failed compare-and-set
+ * transaction has ended so throwing the caller-facing error cannot roll the
+ * denial record back.
+ *
  * IMPORTANT: reopening deliberately does not attempt to validate the exam
  * schedule here. Issue #30 owns the shared schedule-validation invariant;
  * this guard must be composed with that validation before #31 can be closed.
@@ -47,13 +54,15 @@ function applyTransition(
   spec: TransitionSpec,
   metadata?: Record<string, unknown>
 ): void {
-  const db = getDb();
   const placeholders = spec.from.map(() => "?").join(",");
-  const result = db
-    .prepare(`UPDATE assessments SET status = ? WHERE id = ? AND status IN (${placeholders})`)
-    .run(spec.to, assessmentId, ...spec.from);
 
-  if (Number(result.changes) === 1) {
+  const changed = transaction((db) => {
+    const result = db
+      .prepare(`UPDATE assessments SET status = ? WHERE id = ? AND status IN (${placeholders})`)
+      .run(spec.to, assessmentId, ...spec.from);
+
+    if (Number(result.changes) !== 1) return false;
+
     audit({
       actorUserId,
       actorRole: null,
@@ -62,9 +71,12 @@ function applyTransition(
       targetId: assessmentId,
       metadata,
     });
-    return;
-  }
+    return true;
+  });
 
+  if (changed) return;
+
+  const db = getDb();
   const current = db.prepare(`SELECT status FROM assessments WHERE id = ?`).get(assessmentId) as
     | { status: AssessmentStatus }
     | undefined;

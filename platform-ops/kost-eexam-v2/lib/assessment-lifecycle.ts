@@ -1,6 +1,7 @@
 import { audit } from "./audit";
 import { getDb, transaction } from "./db";
 import type { AssessmentStatus } from "./assessments";
+import type { ConsoleRole } from "./session";
 
 type LifecycleAction = "assessment_suspend" | "assessment_reopen" | "assessment_close";
 
@@ -29,6 +30,20 @@ const TRANSITIONS = {
 } as const satisfies Record<string, TransitionSpec>;
 
 /**
+ * Resolve the actor role from the same persisted user record used by the
+ * authenticated session. Lifecycle callers already pass the authenticated
+ * user id; keeping role resolution here prevents these high-value transition
+ * events from being written with actor_role=NULL and therefore disappearing
+ * from role-filtered audit reviews.
+ */
+function actorRoleForUser(actorUserId: number): ConsoleRole | null {
+  const row = getDb().prepare(`SELECT role FROM users WHERE id = ?`).get(actorUserId) as
+    | { role: ConsoleRole }
+    | undefined;
+  return row?.role ?? null;
+}
+
+/**
  * Server-side lifecycle guard for the normal assessment-management actions.
  *
  * The UI already hides invalid actions, but UI visibility is not an
@@ -55,6 +70,7 @@ function applyTransition(
   metadata?: Record<string, unknown>
 ): void {
   const placeholders = spec.from.map(() => "?").join(",");
+  const actorRole = actorRoleForUser(actorUserId);
 
   const changed = transaction((db) => {
     const result = db
@@ -65,7 +81,7 @@ function applyTransition(
 
     audit({
       actorUserId,
-      actorRole: null,
+      actorRole,
       action: spec.action,
       targetType: "assessment",
       targetId: assessmentId,
@@ -85,7 +101,7 @@ function applyTransition(
 
   audit({
     actorUserId,
-    actorRole: null,
+    actorRole,
     action: "assessment_transition_denied",
     targetType: "assessment",
     targetId: assessmentId,

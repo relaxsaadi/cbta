@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDate, formatAlgeriaTime } from "@/lib/timezone";
 import { getAttemptDetail, attemptStatusLabel } from "@/lib/results";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { functionLabel, formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay, isAnswered, QTYPE_LABELS, type QType } from "@/lib/questions";
@@ -106,9 +107,9 @@ export default async function AttemptDetailPage({ params }: { params: Promise<{ 
       <Card>
         <CardHeader title="Tentative" />
         <dl className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-4">
-          <div><dt className="text-text-tertiary">Date</dt><dd className="font-medium text-text-primary">{new Date(detail.started_at).toLocaleDateString("fr-FR")}</dd></div>
-          <div><dt className="text-text-tertiary">Heure début</dt><dd className="font-medium text-text-primary">{new Date(detail.started_at).toLocaleTimeString("fr-FR")}</dd></div>
-          <div><dt className="text-text-tertiary">Heure fin</dt><dd className="font-medium text-text-primary">{detail.submitted_at ? new Date(detail.submitted_at).toLocaleTimeString("fr-FR") : "—"}</dd></div>
+          <div><dt className="text-text-tertiary">Date</dt><dd className="font-medium text-text-primary">{formatAlgeriaDate(detail.started_at, { day: "2-digit", month: "2-digit", year: "numeric" })}</dd></div>
+          <div><dt className="text-text-tertiary">Heure début</dt><dd className="font-medium text-text-primary">{formatAlgeriaTime(detail.started_at, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</dd></div>
+          <div><dt className="text-text-tertiary">Heure fin</dt><dd className="font-medium text-text-primary">{detail.submitted_at ? formatAlgeriaTime(detail.submitted_at, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</dd></div>
           <div><dt className="text-text-tertiary">Tentative n°</dt><dd className="font-medium text-text-primary">{detail.attempt_number}</dd></div>
           <div><dt className="text-text-tertiary">Durée autorisée</dt><dd className="font-medium text-text-primary">{detail.duration_minutes_allowed} min</dd></div>
           <div><dt className="text-text-tertiary">Durée réelle</dt><dd className="font-medium text-text-primary">{formatDuration(detail.started_at, detail.submitted_at)}</dd></div>

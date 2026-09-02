@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime, formatAlgeriaTime, formatAlgeriaDate } from "@/lib/timezone";
 import { getFamiliarizationSession, listAttendance, getCandidateFamiliarizationHistory, listFamiliarizationEvidence } from "@/lib/familiarization";
 import { hasFamiliarizationSessionAccess } from "@/lib/tenant-scope";
 import { functionLabel } from "@/lib/questions";
@@ -40,8 +41,8 @@ export default async function FamiliarizationSessionPage({ params }: { params: P
             Familiarisation — {fs.company_name} — {fs.group_name}
           </h1>
           <p className="mt-1 text-[13px] text-text-tertiary">
-            {functionLabel(fs.function_code)} — {new Date(fs.held_at).toLocaleString("fr-FR")}
-            {fs.ended_at ? ` → ${new Date(fs.ended_at).toLocaleTimeString("fr-FR")}` : ""}
+            {functionLabel(fs.function_code)} — {formatAlgeriaDateTime(fs.held_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+            {fs.ended_at ? ` → ${formatAlgeriaTime(fs.ended_at, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}` : ""}
             {fs.location ? ` — ${fs.location}` : ""}
             {fs.audience ? ` — Public : ${AUDIENCE_LABELS[fs.audience] ?? fs.audience}` : ""}
           </p>
@@ -73,7 +74,7 @@ export default async function FamiliarizationSessionPage({ params }: { params: P
                   <p className="text-[11.5px] text-text-tertiary">
                     {history.length === 0
                       ? "Aucune autre familiarisation dans l'historique"
-                      : `${history.length} autre(s) familiarisation(s) — dernière le ${new Date(history[0]!.held_at).toLocaleDateString("fr-FR")} (${history[0]!.present ? "présent" : "absent"})`}
+                      : `${history.length} autre(s) familiarisation(s) — dernière le ${formatAlgeriaDate(history[0]!.held_at, { day: "2-digit", month: "2-digit", year: "numeric" })} (${history[0]!.present ? "présent" : "absent"})`}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -108,7 +109,7 @@ export default async function FamiliarizationSessionPage({ params }: { params: P
               <div key={e.id} className="rounded-md border border-border-subtle px-3 py-2">
                 <p className="text-[13px] text-text-primary">{e.description}</p>
                 <p className="mt-1 text-[11px] text-text-tertiary">
-                  Rattaché le {new Date(e.created_at).toLocaleString("fr-FR")}{e.recorded_by_name ? ` par ${e.recorded_by_name}` : ""}
+                  Rattaché le {formatAlgeriaDateTime(e.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}{e.recorded_by_name ? ` par ${e.recorded_by_name}` : ""}
                 </p>
               </div>
             ))}

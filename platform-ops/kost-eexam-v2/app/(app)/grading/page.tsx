@@ -13,6 +13,7 @@ import { listAssessments, listAssessmentsForManager } from "@/lib/assessments";
 import { listCandidateOptions } from "@/lib/results";
 import { listFunctions } from "@/lib/functions";
 import { scopedGroupIdsOrNull } from "@/lib/tenant-scope";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -202,7 +203,7 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                             {p.company_name} — {p.group_name} — {p.assessment_name} ({p.function_code})
                           </p>
                         </div>
-                        <p className="text-[11px] text-text-tertiary">{p.submitted_at ? new Date(p.submitted_at).toLocaleString("fr-FR") : "—"}</p>
+                        <p className="text-[11px] text-text-tertiary">{p.submitted_at ? formatAlgeriaDateTime(p.submitted_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</p>
                       </div>
                       <p className="mb-2 text-[13px] text-text-primary">{p.stem}</p>
                       {/* Bug réel diagnostiqué (2026-08-30, mission "ADMIN/CLIENT/
@@ -248,7 +249,7 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                             {p.company_name} — {p.group_name} — {p.assessment_name} ({p.function_code}) — Scénario : {p.scenario_title}
                           </p>
                         </div>
-                        <p className="text-[11px] text-text-tertiary">{p.submitted_at ? new Date(p.submitted_at).toLocaleString("fr-FR") : "—"}</p>
+                        <p className="text-[11px] text-text-tertiary">{p.submitted_at ? formatAlgeriaDateTime(p.submitted_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</p>
                       </div>
                       <p className="mb-2 text-[13px] text-text-primary">{p.subquestion_stem}</p>
                       <p className="mb-3 rounded-md bg-surface-sunken px-2.5 py-1.5 text-[12.5px] text-text-secondary">
@@ -306,7 +307,7 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                       </p>
                       <p className="text-[11.5px] text-text-tertiary">Points : {p.points_awarded} / {p.points}{p.grader_comment ? ` — Commentaire : ${p.grader_comment}` : ""}</p>
                       <p className="mt-1 text-[11px] text-text-tertiary">
-                        Corrigé par {p.grader_name ?? "correcteur inconnu (historique antérieur)"}{p.graded_at ? ` le ${new Date(p.graded_at).toLocaleString("fr-FR")}` : ""}
+                        Corrigé par {p.grader_name ?? "correcteur inconnu (historique antérieur)"}{p.graded_at ? ` le ${formatAlgeriaDateTime(p.graded_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}` : ""}
                       </p>
                     </div>
                   ))}
@@ -345,7 +346,7 @@ export default async function GradingPage({ searchParams }: { searchParams: Prom
                       </p>
                       <p className="text-[11.5px] text-text-tertiary">Points : {p.points_awarded} / {p.points}{p.grader_comment ? ` — Commentaire : ${p.grader_comment}` : ""}</p>
                       <p className="mt-1 text-[11px] text-text-tertiary">
-                        Corrigé par {p.grader_name ?? "correcteur inconnu (historique antérieur)"}{p.graded_at ? ` le ${new Date(p.graded_at).toLocaleString("fr-FR")}` : ""}
+                        Corrigé par {p.grader_name ?? "correcteur inconnu (historique antérieur)"}{p.graded_at ? ` le ${formatAlgeriaDateTime(p.graded_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}` : ""}
                       </p>
                     </div>
                   ))}

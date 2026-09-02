@@ -18,6 +18,7 @@
 // jamais un score/une mention "—" ambigu à la place d'un "pas encore noté".
 import { Document, Page, View, Text } from "@react-pdf/renderer";
 import { pdfStyles, pdfSafeText } from "./theme";
+import { formatAlgeriaDate, formatAlgeriaTime } from "../timezone";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
 import type { AttemptDetail } from "../results";
 import { attemptStatusLabel } from "../results";
@@ -68,9 +69,9 @@ export function IndividualReportDocument({
         <View style={pdfStyles.card}>
           <View style={pdfStyles.row}>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Statut</Text><Text style={pdfStyles.fieldValue}>{statusLabel}</Text></View>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Date</Text><Text style={pdfStyles.fieldValue}>{startedAt.toLocaleDateString("fr-FR")}</Text></View>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Heure début</Text><Text style={pdfStyles.fieldValue}>{startedAt.toLocaleTimeString("fr-FR")}</Text></View>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Heure fin</Text><Text style={pdfStyles.fieldValue}>{submittedAt ? submittedAt.toLocaleTimeString("fr-FR") : "—"}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Date</Text><Text style={pdfStyles.fieldValue}>{formatAlgeriaDate(startedAt, { day: "2-digit", month: "2-digit", year: "numeric" })}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Heure début</Text><Text style={pdfStyles.fieldValue}>{formatAlgeriaTime(startedAt, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Heure fin</Text><Text style={pdfStyles.fieldValue}>{submittedAt ? formatAlgeriaTime(submittedAt, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Tentative n°</Text><Text style={pdfStyles.fieldValue}>{detail.attempt_number}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Durée autorisée</Text><Text style={pdfStyles.fieldValue}>{detail.duration_minutes_allowed} min</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Durée réelle</Text><Text style={pdfStyles.fieldValue}>{durationMin === null ? "—" : durationMin < 1 ? "< 1 min" : `${durationMin} min`}</Text></View>

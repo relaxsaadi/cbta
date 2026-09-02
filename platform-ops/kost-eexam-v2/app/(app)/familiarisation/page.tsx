@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { listFamiliarizationSessionsFiltered } from "@/lib/familiarization";
 import { listGroups, listGroupsForManager } from "@/lib/groups";
 import { listCompanies, listCompaniesForManager } from "@/lib/companies";
@@ -120,7 +121,7 @@ export default async function FamiliarizationPage({ searchParams }: { searchPara
               <Link key={s.id} href={`/familiarisation/${s.id}`} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2.5 hover:border-border-strong transition-colors">
                 <div>
                   <p className="text-[13.5px] font-medium text-text-primary">{s.company_name} — {s.group_name} — Fonction {s.function_code}</p>
-                  <p className="text-[12px] text-text-tertiary">{new Date(s.held_at).toLocaleString("fr-FR")}{s.location ? ` — ${s.location}` : ""}</p>
+                  <p className="text-[12px] text-text-tertiary">{formatAlgeriaDateTime(s.held_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}{s.location ? ` — ${s.location}` : ""}</p>
                 </div>
               </Link>
             ))}

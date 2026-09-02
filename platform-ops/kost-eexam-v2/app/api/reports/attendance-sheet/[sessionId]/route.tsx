@@ -1,5 +1,6 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { getSession } from "@/lib/session";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasFamiliarizationSessionAccess } from "@/lib/tenant-scope";
 import { getFamiliarizationSession, listAttendance } from "@/lib/familiarization";
 import { functionLabel } from "@/lib/questions";
@@ -30,7 +31,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ sess
     docTitle: `Feuille de présence — familiarisation`,
     docId: `KOST-EEXAM-PRES-${sessionIdNum}-v1`,
     generatedBy: `${session.fullName ?? session.username} (${session.role})`,
-    generatedAt: new Date().toLocaleString("fr-FR"),
+    generatedAt: formatAlgeriaDateTime(new Date(), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     company: fs.company_name,
     groupOrSession: fs.group_name,
     function: functionLabel(fs.function_code),

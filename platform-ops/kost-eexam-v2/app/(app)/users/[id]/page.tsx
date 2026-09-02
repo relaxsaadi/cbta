@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { findUserById, getRoleForUser, canHardDeleteUser } from "@/lib/users";
 import { listUserFunctions } from "@/lib/user-functions";
 import { listCandidateGroups } from "@/lib/user-affiliation";
@@ -139,7 +140,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
               </span>
             )}
           </p>
-          <p><span className="text-text-tertiary">Dernière connexion :</span> <span className="text-text-primary">{user.last_login_at ? new Date(user.last_login_at).toLocaleString("fr-FR") : "Jamais"}</span></p>
+          <p><span className="text-text-tertiary">Dernière connexion :</span> <span className="text-text-primary">{user.last_login_at ? formatAlgeriaDateTime(user.last_login_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "Jamais"}</span></p>
         </div>
       </Card>
 
@@ -197,7 +198,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
               <tbody>
                 {commHistory.map((c) => (
                   <tr key={c.id} className="border-b border-border-subtle last:border-0">
-                    <td className="py-1.5 pr-3 font-mono text-[11.5px] text-text-tertiary">{new Date(c.created_at).toLocaleString("fr-FR")}</td>
+                    <td className="py-1.5 pr-3 font-mono text-[11.5px] text-text-tertiary">{formatAlgeriaDateTime(c.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</td>
                     <td className="py-1.5 pr-3 text-text-secondary">{c.event_type}</td>
                     <td className="py-1.5 pr-3 text-text-secondary">{c.subject}</td>
                     <td className="py-1.5">

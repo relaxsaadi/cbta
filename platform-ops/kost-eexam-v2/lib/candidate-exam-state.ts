@@ -11,6 +11,7 @@
 import { getDb } from "./db";
 import type { AssessmentRow } from "./assessments";
 import { isAssessmentOpenNow } from "./assessments";
+import { formatAlgeriaDateTime } from "./timezone";
 
 export type CandidateExamStateKind =
   | "suspended"
@@ -58,7 +59,7 @@ export function getLatestAttemptInfo(assessmentId: number, candidateUserId: numb
 }
 
 function formatOpensAt(openAt: string): string {
-  return new Date(openAt).toLocaleString("fr-FR", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return formatAlgeriaDateTime(openAt, { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 /** État complet — §6 : politique NULL explicite et cohérente (NULL

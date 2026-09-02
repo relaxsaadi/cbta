@@ -1,5 +1,6 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { getSession } from "@/lib/session";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { getGuide } from "@/lib/guides";
 import { audit } from "@/lib/audit";
 import { GuideDocument } from "@/lib/pdf/GuideDocument";
@@ -32,7 +33,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     docTitle: guide.title,
     docId: `KOST-EEXAM-GUIDE-${slug}-v1`,
     generatedBy: `${session.fullName ?? session.username} (${session.role})`,
-    generatedAt: new Date().toLocaleString("fr-FR"),
+    generatedAt: formatAlgeriaDateTime(new Date(), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
   };
 
   const buffer = await renderToBuffer(<GuideDocument guide={guide} meta={meta} />);

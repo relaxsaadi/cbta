@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import {
   createAssessmentDraft,
   publishAssessment,
@@ -131,10 +132,10 @@ export async function publishAssessmentAction(
   const availability = !published.open_at
     ? "Maintenant"
     : new Date(published.open_at).getTime() > Date.now()
-      ? `Ouverture : ${new Date(published.open_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
+      ? `Ouverture : ${formatAlgeriaDateTime(published.open_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
       : "Maintenant";
   const closure = published.close_at
-    ? ` — Clôture : ${new Date(published.close_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
+    ? ` — Clôture : ${formatAlgeriaDateTime(published.close_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
     : "";
   return { success: `Examen affecté avec succès. Disponible : ${availability}${closure}` };
 }

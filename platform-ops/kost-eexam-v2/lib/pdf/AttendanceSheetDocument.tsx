@@ -6,6 +6,7 @@ import { Document, Page, View, Text } from "@react-pdf/renderer";
 import { pdfStyles } from "./theme";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
 import type { AttendanceRow } from "../familiarization";
+import { formatAlgeriaDateTime, formatAlgeriaTime } from "../timezone";
 
 const AUDIENCE_LABELS: Record<string, string> = {
   candidats: "Candidats",
@@ -38,8 +39,8 @@ export function AttendanceSheetDocument({
         <Text style={pdfStyles.h2}>Feuille de présence — familiarisation</Text>
         <View style={pdfStyles.card}>
           <View style={pdfStyles.row}>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Début</Text><Text style={pdfStyles.fieldValue}>{new Date(heldAt).toLocaleString("fr-FR")}</Text></View>
-            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Fin</Text><Text style={pdfStyles.fieldValue}>{endedAt ? new Date(endedAt).toLocaleTimeString("fr-FR") : "—"}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Début</Text><Text style={pdfStyles.fieldValue}>{formatAlgeriaDateTime(heldAt, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</Text></View>
+            <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Fin</Text><Text style={pdfStyles.fieldValue}>{endedAt ? formatAlgeriaTime(endedAt, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Lieu / mode</Text><Text style={pdfStyles.fieldValue}>{location ?? "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Public visé</Text><Text style={pdfStyles.fieldValue}>{audience ? (AUDIENCE_LABELS[audience] ?? audience) : "—"}</Text></View>
             <View style={pdfStyles.field}><Text style={pdfStyles.fieldLabel}>Participants convoqués</Text><Text style={pdfStyles.fieldValue}>{sorted.length}</Text></View>

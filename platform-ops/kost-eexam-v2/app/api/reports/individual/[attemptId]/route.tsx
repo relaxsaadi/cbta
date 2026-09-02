@@ -1,5 +1,6 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { getSession } from "@/lib/session";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { getAttempt, getAssessmentSettingsForAttempt } from "@/lib/attempts";
 import { getAttemptDetail } from "@/lib/results";
@@ -54,7 +55,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ atte
     docTitle: `Rapport individuel — ${level === "detailed" ? "détaillé" : "simple"}`,
     docId: `KOST-EEXAM-RI-${attemptIdNum}-${level === "detailed" ? "D" : "S"}-v1`,
     generatedBy: `${session.fullName ?? session.username} (${session.role})`,
-    generatedAt: new Date().toLocaleString("fr-FR"),
+    generatedAt: formatAlgeriaDateTime(new Date(), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     company: detail.company_name,
     groupOrSession: detail.group_name,
     function: detail.function_code,

@@ -5,9 +5,10 @@ import { Document, Page, View, Text } from "@react-pdf/renderer";
 import { pdfStyles } from "./theme";
 import { PdfHeader, PdfFooter, type DocumentMeta } from "./DocumentChrome";
 import type { SessionReportRow, SessionReportStats } from "../assessments";
+import { formatAlgeriaTime } from "../timezone";
 
 function fmtTime(iso: string | null): string {
-  return iso ? new Date(iso).toLocaleTimeString("fr-FR") : "—";
+  return iso ? formatAlgeriaTime(iso, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—";
 }
 function fmtDuration(start: string | null, end: string | null): string {
   if (!start || !end) return "—";

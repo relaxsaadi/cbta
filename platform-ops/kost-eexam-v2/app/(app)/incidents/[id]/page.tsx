@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { getIncident, listIncidentActions } from "@/lib/incidents";
 import { listUsersByRole } from "@/lib/users";
 import { listAssessments } from "@/lib/assessments";
@@ -162,7 +163,7 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
                 <span className="text-text-primary">
                   {a.action_type}{a.target_type ? ` — ${a.target_type}#${a.target_id}` : ""}{a.detail ? ` — ${a.detail}` : ""}
                 </span>
-                <span className="text-text-tertiary">{new Date(a.created_at).toLocaleString("fr-FR")}</span>
+                <span className="text-text-tertiary">{formatAlgeriaDateTime(a.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</span>
               </div>
             ))}
           </div>

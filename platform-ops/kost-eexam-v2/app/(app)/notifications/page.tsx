@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { scopedUserIdsForSessionsOrNull } from "@/lib/tenant-scope";
 import { listNotificationHistory, KNOWN_EVENT_TYPES, type NotificationHistoryRow } from "@/lib/email/history";
 import { listCompanies, listCompaniesForManager } from "@/lib/companies";
@@ -150,7 +151,7 @@ export default async function NotificationsPage({
                   const assessmentId = metadataAssessmentId(n);
                   return (
                     <tr key={n.id} className="border-b border-border-subtle last:border-0">
-                      <td className="py-1.5 pr-3 font-mono text-[11.5px] text-text-tertiary">{new Date(n.created_at).toLocaleString("fr-FR")}</td>
+                      <td className="py-1.5 pr-3 font-mono text-[11.5px] text-text-tertiary">{formatAlgeriaDateTime(n.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</td>
                       <td className="py-1.5 pr-3 text-text-primary">
                         {n.full_name ?? "—"}
                         <div className="text-[11px] text-text-tertiary">{n.recipient_email}</div>

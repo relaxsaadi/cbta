@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { listIncidentsFiltered, type IncidentStatus, type IncidentSeverity } from "@/lib/incidents";
 import { listGroups, listGroupsForManager, listGroupMembers } from "@/lib/groups";
 import { listCompanies, listCompaniesForManager } from "@/lib/companies";
@@ -151,7 +152,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
               <Link key={i.id} href={`/incidents/${i.id}`} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2.5 hover:border-border-strong transition-colors">
                 <div>
                   <p className="text-[13.5px] font-medium text-text-primary">{i.type} — {i.description.slice(0, 80)}</p>
-                  <p className="text-[12px] text-text-tertiary">{new Date(i.created_at).toLocaleString("fr-FR")}</p>
+                  <p className="text-[12px] text-text-tertiary">{formatAlgeriaDateTime(i.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   {/* §29 — labellisé clairement "Déclaré par le candidat"

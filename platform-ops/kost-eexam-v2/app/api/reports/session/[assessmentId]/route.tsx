@@ -1,5 +1,6 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { getSession } from "@/lib/session";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasAssessmentAccess } from "@/lib/tenant-scope";
 import { getAssessment, getSessionReport } from "@/lib/assessments";
 import { getGroup } from "@/lib/groups";
@@ -33,7 +34,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ asse
     docTitle: `Rapport global de session — ${assessment.name}`,
     docId: `KOST-EEXAM-RG-${assessmentIdNum}-v1`,
     generatedBy: `${session.fullName ?? session.username} (${session.role})`,
-    generatedAt: new Date().toLocaleString("fr-FR"),
+    generatedAt: formatAlgeriaDateTime(new Date(), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     company: group?.company_name,
     groupOrSession: group?.name,
     function: functionLabel(assessment.function_code),

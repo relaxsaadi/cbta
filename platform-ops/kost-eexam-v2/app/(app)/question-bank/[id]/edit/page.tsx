@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDate } from "@/lib/timezone";
 import {
   getQuestionById,
   getCurrentVersion,
@@ -129,11 +130,11 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
                         {r.reviewer_name}
                         {r.reviewer_qualification ? ` (${r.reviewer_qualification})` : ""}
                       </td>
-                      <td className="py-2 pr-3 text-text-secondary">{new Date(r.review_date).toLocaleDateString("fr-FR")}</td>
+                      <td className="py-2 pr-3 text-text-secondary">{formatAlgeriaDate(r.review_date, { day: "2-digit", month: "2-digit", year: "numeric" })}</td>
                       <td className="py-2 pr-3">
                         <StatusBadge status={ANNUAL_REVIEW_BADGE[r.decision] ?? "warning"}>{ANNUAL_REVIEW_LABELS[r.decision]}</StatusBadge>
                       </td>
-                      <td className="py-2 pr-3 text-text-secondary">{r.next_review_due ? new Date(r.next_review_due).toLocaleDateString("fr-FR") : "—"}</td>
+                      <td className="py-2 pr-3 text-text-secondary">{r.next_review_due ? formatAlgeriaDate(r.next_review_due, { day: "2-digit", month: "2-digit", year: "numeric" }) : "—"}</td>
                       <td className="py-2 text-text-secondary">{r.comment ?? "—"}</td>
                     </tr>
                   ))}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { guardPage, requireWriteRole } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { getAssessment, trackingForAssessment, suspendAssessment, reopenAssessment, closeAssessment, listAssignedCandidateIds } from "@/lib/assessments";
 import { functionLabel } from "@/lib/questions";
 import { getGroup, listGroupMembers } from "@/lib/groups";
@@ -126,9 +127,9 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
             <div className="col-span-2">
               <dt className="text-text-tertiary">Fenêtre de disponibilité</dt>
               <dd className="font-medium text-text-primary">
-                {assessment.open_at ? new Date(assessment.open_at).toLocaleString("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "dès maintenant"}
+                {assessment.open_at ? formatAlgeriaDateTime(assessment.open_at, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "dès maintenant"}
                 {" → "}
-                {assessment.close_at ? new Date(assessment.close_at).toLocaleString("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "sans limite"}
+                {assessment.close_at ? formatAlgeriaDateTime(assessment.close_at, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "sans limite"}
               </dd>
             </div>
           )}

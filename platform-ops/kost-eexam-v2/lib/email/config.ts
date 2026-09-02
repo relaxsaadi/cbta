@@ -10,6 +10,8 @@
 // exposer la valeur de RESEND_API_KEY / RESEND_WEBHOOK_SECRET — seules des
 // fonctions de PRÉSENCE (booléen) existent pour ces deux-là.
 
+import { APP_TIME_ZONE } from "../timezone";
+
 export type EmailMode = "log" | "allowlist" | "send";
 
 export interface EmailSenderIdentity {
@@ -66,8 +68,15 @@ export function getAllowedRecipients(): string[] {
     .filter(Boolean);
 }
 
+// Bug réel corrigé (mission "URGENT AUDITOR FOLLOW-UP — ALGERIA TIMEZONE",
+// 2026-09-02) : le défaut était "Europe/Paris", qui bascule à UTC+2
+// pendant l'heure d'été européenne alors que l'Algérie reste UTC+1 toute
+// l'année — décalait d'1h les dates/heures d'examen communiquées par
+// email au candidat. Le défaut est maintenant le fuseau canonique unique
+// de l'application (lib/timezone.ts) ; EMAIL_DEFAULT_TIMEZONE reste
+// disponible pour un override explicite si jamais nécessaire.
 export function getDefaultTimezone(): string {
-  return readOptional("EMAIL_DEFAULT_TIMEZONE") ?? "Europe/Paris";
+  return readOptional("EMAIL_DEFAULT_TIMEZONE") ?? APP_TIME_ZONE;
 }
 
 export function getAppBaseUrl(): string {

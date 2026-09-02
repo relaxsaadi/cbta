@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { listActiveSessionsFiltered } from "@/lib/sessions-registry";
 import { scopedUserIdsForSessionsOrNull } from "@/lib/tenant-scope";
 import { Card, CardHeader } from "@/components/ui/Card";
@@ -93,8 +94,8 @@ export default async function SessionsPage({ searchParams }: { searchParams: Pro
                   <tr key={s.id} className="border-b border-border-subtle last:border-0">
                     <td className="py-2 pr-3 text-text-primary">{s.full_name}</td>
                     <td className="py-2 pr-3 text-text-secondary">{s.role}</td>
-                    <td className="py-2 pr-3 text-text-secondary">{new Date(s.created_at).toLocaleString("fr-FR")}</td>
-                    <td className="py-2 pr-3 text-text-secondary">{new Date(s.last_seen_at).toLocaleString("fr-FR")}</td>
+                    <td className="py-2 pr-3 text-text-secondary">{formatAlgeriaDateTime(s.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</td>
+                    <td className="py-2 pr-3 text-text-secondary">{formatAlgeriaDateTime(s.last_seen_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</td>
                     <td className="py-2 pr-3 text-text-secondary">{s.ip_address ?? "—"}</td>
                     {canWrite && (
                       <td className="py-2 text-right">

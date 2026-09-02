@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { listAssignedAssessmentsForCandidate } from "@/lib/assessments";
 import { getActiveAttempt, countFinishedAttempts, sweepExpiredAttempts } from "@/lib/attempts";
 import { computeCandidateExamState, getLatestAttemptInfo, type CandidateExamStateKind } from "@/lib/candidate-exam-state";
@@ -120,7 +121,7 @@ export default async function MesExamensPage() {
               <div key={i.id} className="flex items-center justify-between rounded-md border border-border-subtle px-3 py-2.5">
                 <div>
                   <p className="text-[13px] font-medium text-text-primary">{incidentTypeLabel.get(i.type) ?? i.type}</p>
-                  <p className="text-[11.5px] text-text-tertiary">{new Date(i.created_at).toLocaleString("fr-FR")}</p>
+                  <p className="text-[11.5px] text-text-tertiary">{formatAlgeriaDateTime(i.created_at, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</p>
                 </div>
                 <StatusBadge status={INCIDENT_STATUS_BADGE[i.status] ?? "neutral"}>{INCIDENT_STATUS_LABEL[i.status] ?? i.status}</StatusBadge>
               </div>

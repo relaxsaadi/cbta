@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaTime } from "@/lib/timezone";
 import { getAssessment, getSessionReport } from "@/lib/assessments";
 import { getGroup } from "@/lib/groups";
 import { functionLabel } from "@/lib/questions";
@@ -132,8 +133,8 @@ export default async function SessionReportPage({ params }: { params: Promise<{ 
               {rows.map((r) => (
                 <tr key={r.candidate_user_id} className="border-b border-border-subtle last:border-0">
                   <td className="py-2 pr-3 text-text-primary">{r.full_name}</td>
-                  <td className="py-2 pr-3 text-text-secondary">{r.started_at ? new Date(r.started_at).toLocaleTimeString("fr-FR") : "—"}</td>
-                  <td className="py-2 pr-3 text-text-secondary">{r.submitted_at ? new Date(r.submitted_at).toLocaleTimeString("fr-FR") : "—"}</td>
+                  <td className="py-2 pr-3 text-text-secondary">{r.started_at ? formatAlgeriaTime(r.started_at, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</td>
+                  <td className="py-2 pr-3 text-text-secondary">{r.submitted_at ? formatAlgeriaTime(r.submitted_at, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—"}</td>
                   <td className="py-2 pr-3 text-text-secondary">{formatDuration(r.started_at, r.submitted_at)}</td>
                   <td className="py-2 pr-3 text-status-verified-text">{r.attempt_status ? r.correct_count : "—"}</td>
                   <td className="py-2 pr-3 text-status-critical-text">{r.attempt_status ? r.incorrect_count : "—"}</td>

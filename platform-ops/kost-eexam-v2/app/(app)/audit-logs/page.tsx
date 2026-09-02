@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
 import { listAuditLogsFiltered, listDistinctAuditActions, listDistinctAuditActors } from "@/lib/audit";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -109,7 +110,7 @@ export default async function AuditLogsPage({ searchParams }: { searchParams: Pr
               <tbody>
                 {logs.map((l) => (
                   <tr key={l.id} className="border-b border-border-subtle last:border-0">
-                    <td className="py-1.5 pr-3 font-mono text-[11.5px] text-text-tertiary">{new Date(l.timestamp).toLocaleString("fr-FR")}</td>
+                    <td className="py-1.5 pr-3 font-mono text-[11.5px] text-text-tertiary">{formatAlgeriaDateTime(l.timestamp, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</td>
                     <td className="py-1.5 pr-3 text-text-primary">{l.actor_username ?? "système"}</td>
                     <td className="py-1.5 pr-3 text-text-secondary">{l.actor_role ?? "—"}</td>
                     <td className="py-1.5 pr-3 text-text-secondary">{l.action}</td>

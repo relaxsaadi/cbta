@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useActionState } from "react";
 import { addCandidateAction, type AddCandidateResult } from "../actions";
+import { formatAlgeriaDateTime } from "@/lib/timezone";
 
 // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §5-9 —
 // MÉTHODE D'ACCÈS explicite : A. invitation sécurisée (RECOMMENDED, défaut
@@ -24,7 +25,7 @@ export function AddCandidateForm({ groupId }: { groupId: number }) {
           <p className="text-[11.5px] text-text-tertiary">Mot de passe temporaire</p>
           <p className="font-mono text-[14px] font-semibold text-text-primary">{state.temporaryPassword}</p>
           {state.temporaryPasswordExpiresAt && (
-            <p className="mt-1 text-[11px] text-text-tertiary">Expire le {new Date(state.temporaryPasswordExpiresAt).toLocaleString("fr-FR")}</p>
+            <p className="mt-1 text-[11px] text-text-tertiary">Expire le {formatAlgeriaDateTime(state.temporaryPasswordExpiresAt, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</p>
           )}
         </div>
         <p className="text-[11.5px] text-text-tertiary">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDate } from "@/lib/timezone";
 import { listFunctions } from "@/lib/functions";
 import { listGroups, listGroupsForManager } from "@/lib/groups";
 import { listCompanies, listCompaniesForManager } from "@/lib/companies";
@@ -178,9 +179,9 @@ export default async function ExamPreparationPage({ searchParams }: { searchPara
                         {(a.open_at || a.close_at) && (
                           <>
                             {" — "}
-                            {a.open_at ? new Date(a.open_at).toLocaleDateString("fr-FR") : "dès maintenant"}
+                            {a.open_at ? formatAlgeriaDate(a.open_at, { day: "2-digit", month: "2-digit", year: "numeric" }) : "dès maintenant"}
                             {" → "}
-                            {a.close_at ? new Date(a.close_at).toLocaleDateString("fr-FR") : "sans limite"}
+                            {a.close_at ? formatAlgeriaDate(a.close_at, { day: "2-digit", month: "2-digit", year: "numeric" }) : "sans limite"}
                           </>
                         )}
                       </p>

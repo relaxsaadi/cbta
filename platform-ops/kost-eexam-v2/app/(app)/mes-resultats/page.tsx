@@ -1,4 +1,5 @@
 import { guardPage } from "@/lib/rbac";
+import { formatAlgeriaDateTime, formatAlgeriaDate } from "@/lib/timezone";
 import { listResults, getAttemptDetail, type ResultsRow } from "@/lib/results";
 import { getAssessmentSettingsForAttempt } from "@/lib/attempts";
 import { formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } from "@/lib/questions";
@@ -48,7 +49,7 @@ export default async function MesResultatsPage({
               {auto === "1" ? "Temps écoulé — votre examen a été envoyé automatiquement." : "✓ Votre examen a bien été envoyé."}
             </p>
             <p className="mt-1 text-[12.5px] text-status-verified-text">
-              {confirmedRow.assessment_name} — envoyé le {new Date(confirmedRow.submitted_at!).toLocaleString("fr-FR")}
+              {confirmedRow.assessment_name} — envoyé le {formatAlgeriaDateTime(confirmedRow.submitted_at!, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </p>
             <p className="mt-1.5 text-[12.5px] font-medium text-status-verified-text">
               {confirmedRow.grading_state === "AWAITING_MANUAL_REVIEW"
@@ -95,7 +96,7 @@ function ResultCard({ result }: { result: ResultsRow }) {
           <div>
             <p className="text-[13.5px] font-medium text-text-primary">{detail.assessment_name}</p>
             <p className="text-[12px] text-text-tertiary">
-              {detail.function_code} — {new Date(detail.started_at).toLocaleDateString("fr-FR")}
+              {detail.function_code} — {formatAlgeriaDate(detail.started_at, { day: "2-digit", month: "2-digit", year: "numeric" })}
             </p>
           </div>
           <StatusBadge status="warning">En attente de correction</StatusBadge>
@@ -124,7 +125,7 @@ function ResultCard({ result }: { result: ResultsRow }) {
         <div>
           <p className="text-[13.5px] font-medium text-text-primary">{detail.assessment_name}</p>
           <p className="text-[12px] text-text-tertiary">
-            {detail.function_code} — {new Date(detail.started_at).toLocaleDateString("fr-FR")}
+            {detail.function_code} — {formatAlgeriaDate(detail.started_at, { day: "2-digit", month: "2-digit", year: "numeric" })}
           </p>
         </div>
         {!showResult ? (

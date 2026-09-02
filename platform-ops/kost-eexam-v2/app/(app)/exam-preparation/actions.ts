@@ -6,9 +6,6 @@ import { requireWriteRole } from "@/lib/rbac";
 import {
   createAssessmentDraft,
   publishAssessment,
-  suspendAssessment,
-  reopenAssessment,
-  closeAssessment,
   rescheduleAssessment,
   assignCandidatesToAssessment,
   unassignCandidateFromAssessment,
@@ -17,6 +14,7 @@ import {
   type AssessmentType,
   type FeedbackMode,
 } from "@/lib/assessments";
+import { suspendAssessment, reopenAssessment, closeAssessment } from "@/lib/assessment-lifecycle";
 import { hasGroupAccess, hasAssessmentAccess, assertAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
 import type { Scope } from "@/lib/scope";

@@ -1,6 +1,7 @@
 import { audit } from "./audit";
 import { getDb, transaction } from "./db";
 import type { AssessmentStatus } from "./assessments";
+import { validateAssessmentSchedule, type AssessmentScheduleIssue } from "./assessment-schedule";
 import type { ConsoleRole } from "./session";
 
 type LifecycleAction = "assessment_suspend" | "assessment_reopen" | "assessment_close";
@@ -10,6 +11,22 @@ interface TransitionSpec {
   to: AssessmentStatus;
   action: LifecycleAction;
 }
+
+interface PersistedTransitionState {
+  status: AssessmentStatus;
+  open_at: string | null;
+  close_at: string | null;
+}
+
+type TransitionPreconditionFailure = {
+  reason: string;
+  metadata?: Record<string, unknown>;
+  message?: string;
+};
+
+type TransitionPrecondition = (
+  current: PersistedTransitionState
+) => TransitionPreconditionFailure | null;
 
 const TRANSITIONS = {
   suspend: {
@@ -29,6 +46,12 @@ const TRANSITIONS = {
   },
 } as const satisfies Record<string, TransitionSpec>;
 
+const SCHEDULE_ISSUE_LABELS: Record<AssessmentScheduleIssue, string> = {
+  invalid_open_at: "date d'ouverture invalide",
+  invalid_close_at: "date de fermeture invalide",
+  non_increasing_window: "la fermeture doit être strictement postérieure à l'ouverture",
+};
+
 /**
  * Resolve the actor role from the same persisted user record used by the
  * authenticated session. Lifecycle callers already pass the authenticated
@@ -47,37 +70,55 @@ function actorRoleForUser(actorUserId: number): ConsoleRole | null {
  * Server-side lifecycle guard for the normal assessment-management actions.
  *
  * The UI already hides invalid actions, but UI visibility is not an
- * authorization or integrity boundary. This helper performs an atomic
- * compare-and-set against the current persisted status so a forged/stale
- * Server Action call cannot move an assessment through an unsupported
- * transition.
+ * authorization or integrity boundary. This helper reads the current row and
+ * performs the compare-and-set inside one SQLite write transaction so a
+ * forged/stale Server Action call cannot move an assessment through an
+ * unsupported transition.
  *
  * A successful governed mutation and its success audit entry are committed
- * in the same SQLite transaction. If the audit write fails, the status
- * change is rolled back rather than leaving an unaudited lifecycle change.
- * Denial audits are deliberately written after the failed compare-and-set
- * transaction has ended so throwing the caller-facing error cannot roll the
- * denial record back.
- *
- * IMPORTANT: reopening deliberately does not attempt to validate the exam
- * schedule here. Issue #30 owns the shared schedule-validation invariant;
- * this guard must be composed with that validation before #31 can be closed.
+ * in the same transaction. If the audit write fails, the status change is
+ * rolled back rather than leaving an unaudited lifecycle change. Denial
+ * audits are deliberately written after that transaction has ended so the
+ * caller-facing exception cannot roll the denial record back.
  */
 function applyTransition(
   assessmentId: number,
   actorUserId: number,
   spec: TransitionSpec,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
+  precondition?: TransitionPrecondition
 ): void {
-  const placeholders = spec.from.map(() => "?").join(",");
   const actorRole = actorRoleForUser(actorUserId);
 
-  const changed = transaction((db) => {
-    const result = db
-      .prepare(`UPDATE assessments SET status = ? WHERE id = ? AND status IN (${placeholders})`)
-      .run(spec.to, assessmentId, ...spec.from);
+  const outcome = transaction((db) => {
+    const current = db
+      .prepare(`SELECT status, open_at, close_at FROM assessments WHERE id = ?`)
+      .get(assessmentId) as PersistedTransitionState | undefined;
 
-    if (Number(result.changes) !== 1) return false;
+    if (!current) return { kind: "missing" as const };
+
+    if (!spec.from.includes(current.status)) {
+      return {
+        kind: "denied" as const,
+        current,
+        failure: { reason: "invalid_status" } as TransitionPreconditionFailure,
+      };
+    }
+
+    const failure = precondition?.(current) ?? null;
+    if (failure) return { kind: "denied" as const, current, failure };
+
+    const result = db
+      .prepare(`UPDATE assessments SET status = ? WHERE id = ? AND status = ?`)
+      .run(spec.to, assessmentId, current.status);
+
+    if (Number(result.changes) !== 1) {
+      return {
+        kind: "denied" as const,
+        current,
+        failure: { reason: "stale_status" } as TransitionPreconditionFailure,
+      };
+    }
 
     audit({
       actorUserId,
@@ -87,17 +128,11 @@ function applyTransition(
       targetId: assessmentId,
       metadata,
     });
-    return true;
+    return { kind: "changed" as const };
   });
 
-  if (changed) return;
-
-  const db = getDb();
-  const current = db.prepare(`SELECT status FROM assessments WHERE id = ?`).get(assessmentId) as
-    | { status: AssessmentStatus }
-    | undefined;
-
-  if (!current) throw new Error("Évaluation introuvable.");
+  if (outcome.kind === "changed") return;
+  if (outcome.kind === "missing") throw new Error("Évaluation introuvable.");
 
   audit({
     actorUserId,
@@ -107,15 +142,35 @@ function applyTransition(
     targetId: assessmentId,
     result: "failure",
     metadata: {
-      fromStatus: current.status,
+      fromStatus: outcome.current.status,
       requestedStatus: spec.to,
       requestedAction: spec.action,
+      reason: outcome.failure.reason,
+      ...(outcome.failure.metadata ?? {}),
     },
   });
 
+  if (outcome.failure.message) throw new Error(outcome.failure.message);
+
   throw new Error(
-    `Transition d'évaluation impossible : statut « ${current.status} » vers « ${spec.to} ».`
+    `Transition d'évaluation impossible : statut « ${outcome.current.status} » vers « ${spec.to} ».`
   );
+}
+
+function validScheduleForReopen(
+  current: PersistedTransitionState
+): TransitionPreconditionFailure | null {
+  const schedule = validateAssessmentSchedule({
+    openAt: current.open_at,
+    closeAt: current.close_at,
+  });
+  if (schedule.valid) return null;
+
+  return {
+    reason: "invalid_schedule",
+    metadata: { scheduleIssue: schedule.issue },
+    message: `Réouverture impossible : planning invalide (${SCHEDULE_ISSUE_LABELS[schedule.issue]}).`,
+  };
 }
 
 export function suspendAssessment(
@@ -127,7 +182,13 @@ export function suspendAssessment(
 }
 
 export function reopenAssessment(assessmentId: number, actorUserId: number): void {
-  applyTransition(assessmentId, actorUserId, TRANSITIONS.reopen);
+  applyTransition(
+    assessmentId,
+    actorUserId,
+    TRANSITIONS.reopen,
+    undefined,
+    validScheduleForReopen
+  );
 }
 
 export function closeAssessment(assessmentId: number, actorUserId: number): void {

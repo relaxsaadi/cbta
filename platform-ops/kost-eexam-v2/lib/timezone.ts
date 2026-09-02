@@ -114,6 +114,61 @@ function timeZoneOffsetMs(utcInstant: Date, timeZone: string): number {
   return asIfUtc - utcInstant.getTime();
 }
 
+/** Parse strictement les composants civils produits par datetime-local.
+ *
+ * Important : `Date.parse()` seul n'est PAS un validateur de calendrier.
+ * JavaScript normalise certaines dates impossibles (par exemple
+ * `2026-02-31` devient mars) au lieu de retourner NaN. Comme cette valeur
+ * pilote l'ouverture réelle d'un examen, une requête Server Action forgée
+ * doit échouer plutôt que programmer silencieusement un autre jour.
+ */
+function parseStrictLocalDateTime(localValue: string): Date {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(localValue);
+  if (!match) {
+    throw new Error(`Date/heure invalide : "${localValue}".`);
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const hour = Number(match[4]);
+  const minute = Number(match[5]);
+  const second = Number(match[6] ?? "0");
+
+  if (
+    year < 1 ||
+    month < 1 || month > 12 ||
+    day < 1 || day > 31 ||
+    hour < 0 || hour > 23 ||
+    minute < 0 || minute > 59 ||
+    second < 0 || second > 59
+  ) {
+    throw new Error(`Date/heure invalide : "${localValue}".`);
+  }
+
+  // Utiliser setUTCFullYear évite le comportement historique de Date.UTC
+  // qui traite les années 0..99 comme 1900..1999. Le round-trip des
+  // composants rejette ensuite toute normalisation de calendrier
+  // (31 février, 29 février hors année bissextile, etc.).
+  const asIfUtc = new Date(0);
+  asIfUtc.setUTCHours(0, 0, 0, 0);
+  asIfUtc.setUTCFullYear(year, month - 1, day);
+  asIfUtc.setUTCHours(hour, minute, second, 0);
+
+  if (
+    asIfUtc.getUTCFullYear() !== year ||
+    asIfUtc.getUTCMonth() !== month - 1 ||
+    asIfUtc.getUTCDate() !== day ||
+    asIfUtc.getUTCHours() !== hour ||
+    asIfUtc.getUTCMinutes() !== minute ||
+    asIfUtc.getUTCSeconds() !== second
+  ) {
+    throw new Error(`Date/heure invalide : "${localValue}".`);
+  }
+
+  return asIfUtc;
+}
+
 /** Convertit une valeur SANS fuseau saisie par un formulaire (ex. un
  * `<input type="datetime-local">`, "2026-09-02T11:30" — un navigateur ne
  * lui attache JAMAIS de fuseau) en instant UTC réel, en interprétant
@@ -131,21 +186,13 @@ function timeZoneOffsetMs(utcInstant: Date, timeZone: string): number {
  * — ce que la couche de stockage attend déjà pour toute autre colonne
  * horodatée.
  *
- * @throws si `localValue` ne peut pas être interprété comme une date/
- * heure valide (jamais un instant silencieusement faux stocké).
+ * @throws si `localValue` n'est pas un datetime-local civil réellement
+ * valide (jamais de normalisation silencieuse d'une date impossible).
  */
 export function parseAlgeriaLocalDateTimeToUtc(localValue: string): string {
   const trimmed = localValue.trim();
-  // Les composants numériques de la valeur datetime-local ("2026-09-02T
-  // 11:30" ou "…:30:00") sont d'abord lus comme s'ils étaient déjà de
-  // l'UTC — étape purement mécanique, indépendante du fuseau du
-  // processus Node qui exécute ce code (jamais un `new Date(trimmed)`
-  // nu, dont l'interprétation dépendrait de l'environnement d'exécution).
-  const asIfUtcMs = Date.parse(`${trimmed}Z`);
-  if (Number.isNaN(asIfUtcMs)) {
-    throw new Error(`Date/heure invalide : "${localValue}".`);
-  }
-  const asIfUtc = new Date(asIfUtcMs);
+  const asIfUtc = parseStrictLocalDateTime(trimmed);
+  const asIfUtcMs = asIfUtc.getTime();
   const offsetMs = timeZoneOffsetMs(asIfUtc, APP_TIME_ZONE);
   // La valeur saisie représente l'heure murale À Alger ; l'instant UTC
   // réel est donc en RETARD de ce décalage (Alger = UTC + offsetMs).

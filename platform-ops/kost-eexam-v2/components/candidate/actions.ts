@@ -3,11 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/rbac";
 import { declareCandidateIncident, CandidateIncidentError } from "@/lib/incidents";
+import { CANDIDATE_INCIDENT_TYPES } from "@/lib/incident-constants";
 
 export interface DeclareCandidateIncidentResult {
   error?: string;
   success?: string;
 }
+
+const ALLOWED_CANDIDATE_INCIDENT_TYPES = new Set(CANDIDATE_INCIDENT_TYPES.map((item) => item.value));
 
 // Mission "FINAL PRODUCT IMPROVEMENTS BEFORE AUDITOR PDF" (2026-08-31)
 // §24-33 — Server Action partagée par les 3 points d'entrée candidat
@@ -28,6 +31,15 @@ export async function declareCandidateIncidentAction(
   const type = String(formData.get("type") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   if (!type || !description) return { error: "Type et description sont obligatoires." };
+
+  // Le <select> côté client n'est pas une frontière de confiance : un appel
+  // direct de Server Action peut forger n'importe quelle valeur FormData.
+  // Réappliquer ici le sous-ensemble candidate-friendly empêche notamment
+  // un candidat de forger les catégories admin-only "security" / "exam_access"
+  // ou de polluer la taxonomie d'incidents avec une valeur arbitraire.
+  if (!ALLOWED_CANDIDATE_INCIDENT_TYPES.has(type)) {
+    return { error: "Type d’incident invalide." };
+  }
 
   try {
     declareCandidateIncident({ type, description, attemptId: attemptId ?? undefined, candidateUserId: session.userId });

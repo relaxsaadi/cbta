@@ -82,6 +82,12 @@ describe("assessment lifecycle — server-side transition guards", async () => {
       .run(openAt, closeAt, assessmentId);
   }
 
+  function setFeedbackMode(assessmentId: number, feedbackMode: string): void {
+    getDb()
+      .prepare(`UPDATE assessments SET feedback_mode = ? WHERE id = ?`)
+      .run(feedbackMode, assessmentId);
+  }
+
   test("published -> suspended is accepted and audited with the acting role", () => {
     const { assessmentId, managerId } = makeAssessment("published");
     suspendAssessment(assessmentId, managerId, "incident test");
@@ -148,6 +154,28 @@ describe("assessment lifecycle — server-side transition guards", async () => {
       assert.equal(metadata.reason, "invalid_schedule");
       assert.equal(metadata.scheduleIssue, scenario.issue);
     }
+  });
+
+  test("suspended deferred assessment without close_at cannot bypass the publication feedback guard on reopen", () => {
+    const { assessmentId, managerId } = makeAssessment("suspended");
+    setFeedbackMode(assessmentId, "deferred");
+    setSchedule(assessmentId, null, null);
+
+    assert.throws(
+      () => reopenAssessment(assessmentId, managerId),
+      /feedback différé requiert une date de fermeture explicite/
+    );
+    assert.equal(statusOf(assessmentId), "suspended");
+
+    const denied = getDb()
+      .prepare(`SELECT result, actor_role, metadata_json FROM audit_logs WHERE action = 'assessment_transition_denied' AND target_id = ? ORDER BY id DESC LIMIT 1`)
+      .get(assessmentId) as { result: string; actor_role: string | null; metadata_json: string };
+    assert.equal(denied.result, "failure");
+    assert.equal(denied.actor_role, "pedagogical_manager");
+    const metadata = JSON.parse(denied.metadata_json);
+    assert.equal(metadata.fromStatus, "suspended");
+    assert.equal(metadata.requestedAction, "assessment_reopen");
+    assert.equal(metadata.reason, "invalid_feedback_configuration");
   });
 
   test("published/open -> closed are accepted", () => {

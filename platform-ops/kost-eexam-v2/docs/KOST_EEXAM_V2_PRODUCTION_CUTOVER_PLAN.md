@@ -10,7 +10,10 @@ plateforme — la bascule finale reste la seule action irréversible/visible
 de l'extérieur nécessitant une autorisation explicite.
 
 Voir `docs/KOST_EEXAM_V2_PRODUCTION_READINESS_REPORT.md` pour l'état
-technique détaillé au moment de la rédaction de ce plan.
+technique détaillé au moment de la rédaction de ce plan. Ce rapport doit être
+considéré comme un instantané historique s'il diverge du registre Stage 2B
+courant, des blockers GitHub ouverts ou de la réconciliation de provenance
+réglementaire la plus récente.
 
 ---
 
@@ -25,10 +28,18 @@ technique détaillé au moment de la rédaction de ce plan.
 
 ## 2. Pré-requis GO — doivent tous être vrais avant de déclencher ce plan
 
-1. `docs/KOST_EEXAM_V2_PRODUCTION_READINESS_REPORT.md` conclut **PRODUCTION CUTOVER: GO**, sans blocage humain/réglementaire actif de type bloquant (voir sa section D pour la liste exacte des blocages restants et leur nature).
-2. Une revue humaine qualifiée du contenu réglementaire réel (au minimum Fonction 7.1, idéalement toutes les fonctions migrées) a formellement fait passer le statut de FROZEN/SOURCE VERIFIED à APPROVED pour au moins les fonctions qui seront utilisées en premier en production (mission §47 — jamais fait automatiquement).
+1. Le registre de readiness courant ne contient aucun blocker technique critique ouvert pour la production. Un ancien `PRODUCTION CUTOVER: GO` documentaire ne prévaut jamais sur un blocker GitHub ou une preuve plus récente.
+2. **Toutes les fonctions CBTA activées en production doivent avoir terminé leur propre chaîne réglementaire. Pour l'objectif de readiness global KOST, cela signifie les Fonctions 7.1 à 7.10, chacune séparément.** Pour chaque fonction, il faut au minimum :
+   - une matrice source/compétence et un blueprint dérivés de la table de tâches CBTA propre à cette fonction, sans recopier mécaniquement la structure de la Fonction 7.1 ;
+   - une preuve Tier A directe et actuelle pour chaque claim réglementaire applicable, liée à l'IATA DGR 67e édition 2026 et aux addenda/correctifs applicables ;
+   - des états explicites `SOURCE_GAP` / `SOURCE_CONFLICT` / provenance manquante lorsqu'une preuve défendable n'existe pas ;
+   - une vérification FR de la source ;
+   - une revue EN/bilingue séparée lorsque le contenu anglais est utilisé ;
+   - `APPROVED` uniquement après sign-off d'un reviewer qualifié **nommé et daté**, avec traçabilité de la décision.
+
+   `FROZEN_SOURCE_VERIFIED` seul n'est pas une approbation humaine et ne suffit pas à rendre une question admissible en production. Aucune fonction ne doit être considérée prête par simple extrapolation du travail effectué sur 7.1.
 3. Décision explicite du propriétaire sur MFA obligatoire pour les comptes administrateur (actuellement disponible, pas forcé — voir §14 du rapport).
-4. Décision explicite du propriétaire sur la copie de sauvegarde chiffrée hors site (actuellement MISSING — dépend du choix d'hébergement final).
+4. Décision explicite du propriétaire sur la copie de sauvegarde chiffrée hors site (actuellement MISSING — dépend du choix d'hébergement final), avec rétention réellement appliquée et restore drill depuis cette copie avant de qualifier le dispositif de disaster recovery complet.
 5. Autorisation explicite, séparée, de procéder à CETTE bascule précise (mission §55).
 
 ## 3. Sauvegarde pré-bascule (les deux systèmes)
@@ -36,11 +47,12 @@ technique détaillé au moment de la rédaction de ce plan.
 1. **V1 (Moodle)** — déclencher manuellement `/root/backups/scripts/backup.sh` (dump MySQL + moodledata + config), vérifier le fichier produit et son `sha256`, copier hors du serveur de production avant de continuer.
 2. **V2** — `docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/backup.ts`, vérifier `/system` (statut "Réussie"), copier `data/backups/*.db` le plus récent hors du serveur.
 3. Ne PAS continuer si l'une des deux sauvegardes échoue.
+4. Ne pas présenter cette sauvegarde locale comme un disaster recovery complet tant que la copie hors site chiffrée, la rétention et le restore drill associé ne sont pas effectivement prouvés.
 
 ## 4. Migration des comptes/contenu
 
 - **Comptes candidats/responsables/administrateurs réels** — export depuis Moodle/console V1 (identifiants, rôles, appartenance société/groupe), import contrôlé dans V2 via un script dédié (à écrire à ce moment — aucun script de migration de comptes réels n'existe aujourd'hui, seul l'import CSV candidat par candidat/groupe existe côté V2, suffisant pour un import manuel mais pas encore automatisé pour un volume de production complet). **Ne jamais réutiliser un mot de passe existant tel quel** — réinitialisation forcée ou lien d'activation à la première connexion, à décider.
-- **Contenu réel DGR** — déjà migré function par function dans V2 pour les items FROZEN/SOURCE VERIFIED récupérables (92/97, voir §3bis du gap analysis) — vérifier qu'aucune régression n'a eu lieu entre cette rédaction et la bascule (re-comparer les comptes par fonction).
+- **Contenu réel DGR** — ne jamais se fier à un ancien total historique (`92/97`, `244`, ou autre) comme preuve de readiness réglementaire. Avant toute bascule, recalculer les comptes par Fonction 7.1→7.10 et les rapprocher du registre de provenance courant. Pour chaque question, distinguer au minimum la provenance Tier A réellement vérifiée, `SOURCE_GAP`, `SOURCE_CONFLICT`, provenance manquante et le statut de revue humaine. Les imports ou anciens marqueurs `FROZEN_SOURCE_VERIFIED` ne doivent pas être convertis rétroactivement en preuve Tier A ou en `APPROVED` sans evidence authentique récupérable et revue qualifiée.
 - **Historique des résultats/tentatives V1** — décision à prendre : rester consultable uniquement dans V1 (lecture seule, archivé), ou migré dans V2 pour continuité candidat. Aucune décision prise à ce jour — à trancher avant la bascule.
 
 ## 5. Domaine cible et TLS

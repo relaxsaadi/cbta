@@ -5,6 +5,7 @@ import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { getAttempt, getAssessmentSettingsForAttempt } from "@/lib/attempts";
 import { getAttemptDetail } from "@/lib/results";
 import { audit } from "@/lib/audit";
+import { candidateCanDownloadIndividualReport } from "@/lib/report-access";
 import { IndividualReportDocument } from "@/lib/pdf/IndividualReportDocument";
 import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 
@@ -12,13 +13,12 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 //   - pedagogical_manager/administrator : dans leur périmètre client
 //     (lib/tenant-scope.ts hasAttemptAccess) ;
 //   - auditor : lecture globale (même fonction, true pour ce rôle) ;
-//   - candidate : UNIQUEMENT sa propre tentative, ET seulement si
-//     l'administrateur a activé la visibilité du résultat pour cet examen
-//     (assessments.show_result — le même interrupteur qui contrôle déjà
-//     l'affichage à l'écran sur "Mes résultats" ; télécharger en PDF les
-//     mêmes données déjà autorisées à l'écran n'est pas une divulgation
-//     nouvelle). Un candidat ne peut JAMAIS télécharger le rapport d'un
-//     autre candidat, quel que soit ce réglage.
+//   - candidate : UNIQUEMENT sa propre tentative. Le rapport simple exige
+//     assessments.show_result=1 et respecte la diffusion différée. Le rapport
+//     détaillé, qui contient la correction question par question, exige EN PLUS
+//     assessments.show_correct_answers=1. Ces deux réglages sont indépendants
+//     dans le schéma : l'API les applique donc côté serveur et ne se fie jamais
+//     au seul niveau choisi par l'URL/UI.
 export async function GET(request: Request, { params }: { params: Promise<{ attemptId: string }> }) {
   const session = await getSession();
   if (!session.isLoggedIn || !session.userId || !session.role) {
@@ -34,12 +34,21 @@ export async function GET(request: Request, { params }: { params: Promise<{ atte
     if (!attempt || attempt.candidate_user_id !== session.userId) {
       return new Response("Rapport introuvable.", { status: 404 });
     }
-    // Même politique A/B/C/D que l'écran "Mes résultats" (§11) — jamais
-    // un interrupteur séparé qui pourrait diverger : si le résultat est
-    // encore différé à l'écran, le PDF l'est aussi.
+    // Même politique A/B/C/D que l'écran "Mes résultats" (§11), appliquée
+    // côté serveur pour empêcher qu'une URL ?level=detailed contourne
+    // show_correct_answers lorsque seul le résultat simple est publiable.
     const settings = getAssessmentSettingsForAttempt(attemptIdNum);
     const stillDeferred = !!settings && settings.feedback_mode === "deferred" && !!settings.close_at && new Date(settings.close_at).getTime() > Date.now();
-    if (!settings || settings.show_result !== 1 || stillDeferred) {
+    const allowed = candidateCanDownloadIndividualReport({
+      showResult: settings?.show_result,
+      showCorrectAnswers: settings?.show_correct_answers,
+      stillDeferred,
+      level,
+    });
+    if (!allowed) {
+      if (level === "detailed" && settings?.show_result === 1 && !stillDeferred) {
+        return new Response("La correction détaillée n'est pas disponible pour cet examen.", { status: 403 });
+      }
       return new Response("Le téléchargement du rapport n'est pas encore disponible pour cet examen.", { status: 403 });
     }
   } else if (!["pedagogical_manager", "administrator", "auditor"].includes(session.role)) {
@@ -77,6 +86,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ atte
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="rapport-individuel-${attemptIdNum}-${level}.pdf"`,
+      "Cache-Control": "private, no-store",
     },
   });
 }

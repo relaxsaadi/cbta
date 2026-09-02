@@ -76,6 +76,12 @@ describe("assessment lifecycle — server-side transition guards", async () => {
     return row.status;
   }
 
+  function setSchedule(assessmentId: number, openAt: string | null, closeAt: string | null): void {
+    getDb()
+      .prepare(`UPDATE assessments SET open_at = ?, close_at = ? WHERE id = ?`)
+      .run(openAt, closeAt, assessmentId);
+  }
+
   test("published -> suspended is accepted and audited with the acting role", () => {
     const { assessmentId, managerId } = makeAssessment("published");
     suspendAssessment(assessmentId, managerId, "incident test");
@@ -99,6 +105,49 @@ describe("assessment lifecycle — server-side transition guards", async () => {
     const { assessmentId, managerId } = makeAssessment("suspended");
     reopenAssessment(assessmentId, managerId);
     assert.equal(statusOf(assessmentId), "published");
+  });
+
+  test("suspended reopen accepts a valid future schedule without making it immediately open", () => {
+    const { assessmentId, managerId } = makeAssessment("suspended");
+    setSchedule(assessmentId, "2030-01-01T09:00:00.000Z", "2030-01-01T10:00:00.000Z");
+    reopenAssessment(assessmentId, managerId);
+    assert.equal(statusOf(assessmentId), "published");
+  });
+
+  test("suspended reopen rejects malformed/equal/reversed legacy schedules fail-closed", () => {
+    const cases = [
+      { openAt: "not-a-date", closeAt: null, issue: "invalid_open_at" },
+      { openAt: null, closeAt: "still-not-a-date", issue: "invalid_close_at" },
+      {
+        openAt: "2030-01-01T09:00:00.000Z",
+        closeAt: "2030-01-01T09:00:00.000Z",
+        issue: "non_increasing_window",
+      },
+      {
+        openAt: "2030-01-01T10:00:00.000Z",
+        closeAt: "2030-01-01T09:00:00.000Z",
+        issue: "non_increasing_window",
+      },
+    ] as const;
+
+    for (const scenario of cases) {
+      const { assessmentId, managerId } = makeAssessment("suspended");
+      setSchedule(assessmentId, scenario.openAt, scenario.closeAt);
+
+      assert.throws(() => reopenAssessment(assessmentId, managerId), /planning invalide/);
+      assert.equal(statusOf(assessmentId), "suspended");
+
+      const denied = getDb()
+        .prepare(`SELECT result, actor_role, metadata_json FROM audit_logs WHERE action = 'assessment_transition_denied' AND target_id = ? ORDER BY id DESC LIMIT 1`)
+        .get(assessmentId) as { result: string; actor_role: string | null; metadata_json: string };
+      assert.equal(denied.result, "failure");
+      assert.equal(denied.actor_role, "pedagogical_manager");
+      const metadata = JSON.parse(denied.metadata_json);
+      assert.equal(metadata.fromStatus, "suspended");
+      assert.equal(metadata.requestedAction, "assessment_reopen");
+      assert.equal(metadata.reason, "invalid_schedule");
+      assert.equal(metadata.scheduleIssue, scenario.issue);
+    }
   });
 
   test("published/open -> closed are accepted", () => {
@@ -128,6 +177,7 @@ describe("assessment lifecycle — server-side transition guards", async () => {
     assert.equal(metadata.fromStatus, "draft");
     assert.equal(metadata.requestedStatus, "published");
     assert.equal(metadata.requestedAction, "assessment_reopen");
+    assert.equal(metadata.reason, "invalid_status");
   });
 
   test("invalid suspend/close/reopen transitions never mutate status", () => {

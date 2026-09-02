@@ -36,7 +36,7 @@ export const SERVER_CHARACTERISTICS: ServerCharacteristic[] = [
   { label: "État du conteneur applicatif", value: "En service, redémarrage automatique en cas d'arrêt" },
   {
     label: "Sauvegardes",
-    value: "Automatiques quotidiennes (rotation + copie hors site) avec test de restauration automatisé hebdomadaire",
+    value: "Automatiques quotidiennes sur l'hôte avec test de restauration automatisé hebdomadaire ; copie hors site chiffrée non encore configurée (décision propriétaire en attente)",
   },
 ];
 

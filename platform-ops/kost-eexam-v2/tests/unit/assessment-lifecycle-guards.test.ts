@@ -76,15 +76,16 @@ describe("assessment lifecycle — server-side transition guards", async () => {
     return row.status;
   }
 
-  test("published -> suspended is accepted and audited", () => {
+  test("published -> suspended is accepted and audited with the acting role", () => {
     const { assessmentId, managerId } = makeAssessment("published");
     suspendAssessment(assessmentId, managerId, "incident test");
     assert.equal(statusOf(assessmentId), "suspended");
 
     const row = getDb()
-      .prepare(`SELECT result, metadata_json FROM audit_logs WHERE action = 'assessment_suspend' AND target_id = ? ORDER BY id DESC LIMIT 1`)
-      .get(assessmentId) as { result: string; metadata_json: string };
+      .prepare(`SELECT result, actor_role, metadata_json FROM audit_logs WHERE action = 'assessment_suspend' AND target_id = ? ORDER BY id DESC LIMIT 1`)
+      .get(assessmentId) as { result: string; actor_role: string | null; metadata_json: string };
     assert.equal(row.result, "success");
+    assert.equal(row.actor_role, "pedagogical_manager");
     assert.equal(JSON.parse(row.metadata_json).reason, "incident test");
   });
 
@@ -110,7 +111,7 @@ describe("assessment lifecycle — server-side transition guards", async () => {
     assert.equal(statusOf(second.assessmentId), "closed");
   });
 
-  test("a forged reopen from draft is rejected fail-closed and audited", () => {
+  test("a forged reopen from draft is rejected fail-closed and audited with the acting role", () => {
     const { assessmentId, managerId } = makeAssessment("draft");
     assert.throws(
       () => reopenAssessment(assessmentId, managerId),
@@ -119,9 +120,10 @@ describe("assessment lifecycle — server-side transition guards", async () => {
     assert.equal(statusOf(assessmentId), "draft");
 
     const denied = getDb()
-      .prepare(`SELECT result, metadata_json FROM audit_logs WHERE action = 'assessment_transition_denied' AND target_id = ? ORDER BY id DESC LIMIT 1`)
-      .get(assessmentId) as { result: string; metadata_json: string };
+      .prepare(`SELECT result, actor_role, metadata_json FROM audit_logs WHERE action = 'assessment_transition_denied' AND target_id = ? ORDER BY id DESC LIMIT 1`)
+      .get(assessmentId) as { result: string; actor_role: string | null; metadata_json: string };
     assert.equal(denied.result, "failure");
+    assert.equal(denied.actor_role, "pedagogical_manager");
     const metadata = JSON.parse(denied.metadata_json);
     assert.equal(metadata.fromStatus, "draft");
     assert.equal(metadata.requestedStatus, "published");

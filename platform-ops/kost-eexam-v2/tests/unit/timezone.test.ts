@@ -6,6 +6,8 @@ import {
   formatAlgeriaDate,
   formatAlgeriaTime,
   formatAlgeriaDateTimeLong,
+  parseAlgeriaLocalDateTimeToUtc,
+  formatAlgeriaDateTimeInputValue,
 } from "../../lib/timezone";
 
 // Mission "URGENT AUDITOR FOLLOW-UP — ALGERIA TIMEZONE" (2026-09-02) §7 —
@@ -60,5 +62,59 @@ describe("Fuseau horaire canonique Africa/Algiers (lib/timezone.ts)", () => {
   test("accepte un objet Date en plus d'une chaîne ISO", () => {
     const instant = new Date("2026-09-02T09:00:00.000Z");
     assert.equal(formatAlgeriaTime(instant), "10:00");
+  });
+});
+
+// Mission "URGENT — FIX ONLY EXAM SCHEDULING +1H BUG" (2026-09-02) —
+// preuve du sens WRITE (formulaire → UTC stocké), symétrique de la preuve
+// DISPLAY ci-dessus (UTC stocké → écran). Bug réel : une valeur
+// <input type="datetime-local"> ("2026-09-02T11:30", SANS fuseau) passait
+// jusqu'ici brute à new Date(), interprétée comme l'heure locale du
+// PROCESSUS Node (UTC sur le conteneur) plutôt que comme une heure
+// murale d'Alger — un responsable saisissant 11:30 programmait en réalité
+// un examen à 12:30 heure d'Algérie.
+describe("Analyse WRITE : datetime-local → UTC via parseAlgeriaLocalDateTimeToUtc (lib/timezone.ts)", () => {
+  test("11:30 saisi (Alger) → 10:30:00.000Z stocké — jamais 11:30Z (l'ancien bug) ni 12:30Z", () => {
+    assert.equal(parseAlgeriaLocalDateTimeToUtc("2026-09-02T11:30"), "2026-09-02T10:30:00.000Z");
+  });
+
+  test("15:00 saisi (Alger) → 14:00:00.000Z stocké", () => {
+    assert.equal(parseAlgeriaLocalDateTimeToUtc("2026-09-02T15:00"), "2026-09-02T14:00:00.000Z");
+  });
+
+  test("round-trip complet : saisie 11:30 → stockage UTC → réaffichage Africa/Algiers redonne exactement 11:30, jamais 12:30", () => {
+    const storedUtc = parseAlgeriaLocalDateTimeToUtc("2026-09-02T11:30");
+    assert.equal(formatAlgeriaTime(storedUtc), "11:30");
+  });
+
+  test("accepte les secondes explicites (format datetime-local complet)", () => {
+    assert.equal(parseAlgeriaLocalDateTimeToUtc("2026-09-02T11:30:00"), "2026-09-02T10:30:00.000Z");
+  });
+
+  test("un passage de minuit (23:30 Alger → 22:30Z, jour inchangé côté UTC ici) reste correct", () => {
+    assert.equal(parseAlgeriaLocalDateTimeToUtc("2026-09-02T23:30"), "2026-09-02T22:30:00.000Z");
+  });
+
+  test("une valeur illisible lève une erreur explicite, jamais un instant faux silencieux", () => {
+    assert.throws(() => parseAlgeriaLocalDateTimeToUtc("pas-une-date"));
+  });
+
+  test("le fuseau utilisé est bien Africa/Algiers, jamais Europe/Paris (l'écart resterait +1h même en été si Europe/Paris était encore utilisé par erreur)", () => {
+    // Si le bug consistait à utiliser Europe/Paris (UTC+2 en septembre)
+    // au lieu d'Africa/Algiers (UTC+1 toute l'année), 11:30 saisi aurait
+    // donné 09:30Z au lieu du 10:30Z attendu — cette assertion échouerait.
+    assert.notEqual(parseAlgeriaLocalDateTimeToUtc("2026-09-02T11:30"), "2026-09-02T09:30:00.000Z");
+    assert.equal(parseAlgeriaLocalDateTimeToUtc("2026-09-02T11:30"), "2026-09-02T10:30:00.000Z");
+  });
+
+  test("formatAlgeriaDateTimeInputValue est l'inverse exact de parseAlgeriaLocalDateTimeToUtc — re-ouvrir le formulaire réaffiche la valeur saisie à l'origine, jamais l'heure UTC brute", () => {
+    const stored = parseAlgeriaLocalDateTimeToUtc("2026-09-02T11:30");
+    assert.equal(formatAlgeriaDateTimeInputValue(stored), "2026-09-02T11:30");
+  });
+
+  test("formatAlgeriaDateTimeInputValue(null/vide) → chaîne vide, jamais 'Invalid Date'", () => {
+    assert.equal(formatAlgeriaDateTimeInputValue(null), "");
+    assert.equal(formatAlgeriaDateTimeInputValue(undefined), "");
+    assert.equal(formatAlgeriaDateTimeInputValue(""), "");
   });
 });

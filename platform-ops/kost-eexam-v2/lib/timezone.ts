@@ -89,3 +89,89 @@ export function formatAlgeriaDateLong(value: string | Date): string {
   }).format(toDate(value));
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
+
+/** Décalage (en ms) de `timeZone` par rapport à UTC, TEL QU'IL S'APPLIQUE
+ * à l'instant UTC donné — calculé via Intl (jamais une constante "+1h"
+ * codée en dur), pour rester correct même si la règle du fuseau
+ * changeait un jour. Positif si `timeZone` est en avance sur UTC (cas de
+ * Africa/Algiers, UTC+1 toute l'année). */
+function timeZoneOffsetMs(utcInstant: Date, timeZone: string): number {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).formatToParts(utcInstant);
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? "0");
+  // Lit les composants de date/heure TELS QU'AFFICHÉS dans `timeZone`,
+  // puis les réinterprète comme s'ils étaient déjà de l'UTC — l'écart
+  // avec l'instant UTC d'origine EST le décalage du fuseau à cet instant.
+  const asIfUtc = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second"));
+  return asIfUtc - utcInstant.getTime();
+}
+
+/** Convertit une valeur SANS fuseau saisie par un formulaire (ex. un
+ * `<input type="datetime-local">`, "2026-09-02T11:30" — un navigateur ne
+ * lui attache JAMAIS de fuseau) en instant UTC réel, en interprétant
+ * EXPLICITEMENT cette valeur comme une heure murale d'Africa/Algiers —
+ * jamais Europe/Paris, jamais un `new Date(valeur)` brut (qui
+ * l'interpréterait comme l'heure locale du PROCESSUS Node, c'est-à-dire
+ * UTC sur le conteneur de production — bug réel corrigé par cette
+ * fonction, mission "URGENT — FIX ONLY EXAM SCHEDULING +1H BUG",
+ * 2026-09-02 : un responsable saisissant 11:30 se retrouvait avec un
+ * examen programmé à 12:30 affiché). Jamais un décalage arithmétique
+ * manuel — le décalage réel d'Africa/Algiers est calculé via Intl
+ * (timeZoneOffsetMs), pas codé en dur.
+ *
+ * Retourne une chaîne ISO 8601 UTC (même format que nowIso(), lib/db.ts)
+ * — ce que la couche de stockage attend déjà pour toute autre colonne
+ * horodatée.
+ *
+ * @throws si `localValue` ne peut pas être interprété comme une date/
+ * heure valide (jamais un instant silencieusement faux stocké).
+ */
+export function parseAlgeriaLocalDateTimeToUtc(localValue: string): string {
+  const trimmed = localValue.trim();
+  // Les composants numériques de la valeur datetime-local ("2026-09-02T
+  // 11:30" ou "…:30:00") sont d'abord lus comme s'ils étaient déjà de
+  // l'UTC — étape purement mécanique, indépendante du fuseau du
+  // processus Node qui exécute ce code (jamais un `new Date(trimmed)`
+  // nu, dont l'interprétation dépendrait de l'environnement d'exécution).
+  const asIfUtcMs = Date.parse(`${trimmed}Z`);
+  if (Number.isNaN(asIfUtcMs)) {
+    throw new Error(`Date/heure invalide : "${localValue}".`);
+  }
+  const asIfUtc = new Date(asIfUtcMs);
+  const offsetMs = timeZoneOffsetMs(asIfUtc, APP_TIME_ZONE);
+  // La valeur saisie représente l'heure murale À Alger ; l'instant UTC
+  // réel est donc en RETARD de ce décalage (Alger = UTC + offsetMs).
+  return new Date(asIfUtcMs - offsetMs).toISOString();
+}
+
+/** Sens INVERSE de parseAlgeriaLocalDateTimeToUtc — reconvertit un
+ * instant UTC stocké (ex. "2026-09-02T10:30:00.000Z") en la chaîne SANS
+ * fuseau qu'un `<input type="datetime-local">` attend comme
+ * `defaultValue`/`value` ("2026-09-02T11:30"), en heure murale
+ * Africa/Algiers. Contrepartie obligatoire du correctif WRITE ci-dessus :
+ * sans elle, RE-OUVRIR le formulaire de reprogrammation après une
+ * sauvegarde désormais correcte réafficherait quand même la mauvaise
+ * heure préremplie (l'heure UTC brute au lieu de l'heure d'Alger saisie).
+ * `null`/vide → chaîne vide (aucune borne définie). */
+export function formatAlgeriaDateTimeInputValue(value: string | null | undefined): string {
+  if (!value) return "";
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: APP_TIME_ZONE,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).formatToParts(toDate(value));
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "00";
+  return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}`;
+}

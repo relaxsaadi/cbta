@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { formatAlgeriaDateTime } from "@/lib/timezone";
+import { formatAlgeriaDateTime, parseAlgeriaLocalDateTimeToUtc } from "@/lib/timezone";
 import {
   createAssessmentDraft,
   publishAssessment,
@@ -42,8 +42,24 @@ export async function createAssessmentAction(_prev: CreateAssessmentResult, form
   const durationMinutes = Number(formData.get("durationMinutes"));
   const passThresholdPct = Number(formData.get("passThresholdPct"));
   const attemptsAllowed = Number(formData.get("attemptsAllowed"));
-  const openAt = String(formData.get("openAt") ?? "") || undefined;
-  const closeAt = String(formData.get("closeAt") ?? "") || undefined;
+  // Bug réel corrigé (mission "URGENT — FIX ONLY EXAM SCHEDULING +1H BUG",
+  // 2026-09-02) : <input type="datetime-local"> ne porte JAMAIS de fuseau
+  // ("2026-09-02T11:30") — passer cette valeur brute à new Date()
+  // l'interprétait comme l'heure locale du PROCESSUS Node (UTC sur le
+  // conteneur), pas comme l'heure murale d'Alger saisie par le
+  // responsable. parseAlgeriaLocalDateTimeToUtc() l'interprète
+  // EXPLICITEMENT comme Africa/Algiers avant tout stockage — jamais
+  // Europe/Paris, jamais un décalage arithmétique manuel.
+  const openAtRaw = String(formData.get("openAt") ?? "").trim();
+  const closeAtRaw = String(formData.get("closeAt") ?? "").trim();
+  let openAt: string | undefined;
+  let closeAt: string | undefined;
+  try {
+    openAt = openAtRaw ? parseAlgeriaLocalDateTimeToUtc(openAtRaw) : undefined;
+    closeAt = closeAtRaw ? parseAlgeriaLocalDateTimeToUtc(closeAtRaw) : undefined;
+  } catch {
+    return { error: "Date d'ouverture ou de fermeture invalide." };
+  }
   const shuffleQuestions = formData.get("shuffleQuestions") === "on";
   const shuffleAnswers = formData.get("shuffleAnswers") === "on";
   const feedbackMode = String(formData.get("feedbackMode") ?? "deferred") as FeedbackMode;
@@ -216,8 +232,19 @@ export async function rescheduleAssessmentAction(assessmentId: number, _prev: Re
 
   const openAtRaw = String(formData.get("openAt") ?? "").trim();
   const closeAtRaw = String(formData.get("closeAt") ?? "").trim();
-  const newOpenAt = openAtRaw || null;
-  const newCloseAt = closeAtRaw || null;
+
+  let newOpenAt: string | null;
+  let newCloseAt: string | null;
+  try {
+    // Même correctif WRITE que createAssessmentAction ci-dessus (mission
+    // "URGENT — FIX ONLY EXAM SCHEDULING +1H BUG", 2026-09-02) — jamais
+    // la valeur datetime-local brute passée directement à
+    // rescheduleAssessment().
+    newOpenAt = openAtRaw ? parseAlgeriaLocalDateTimeToUtc(openAtRaw) : null;
+    newCloseAt = closeAtRaw ? parseAlgeriaLocalDateTimeToUtc(closeAtRaw) : null;
+  } catch {
+    return { error: "Date d'ouverture ou de fermeture invalide." };
+  }
 
   let result;
   try {

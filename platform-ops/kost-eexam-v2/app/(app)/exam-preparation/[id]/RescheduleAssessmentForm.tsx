@@ -2,14 +2,19 @@
 
 import { useActionState } from "react";
 import { rescheduleAssessmentAction, type RescheduleAssessmentResult } from "../actions";
+import { formatAlgeriaDateTimeInputValue } from "@/lib/timezone";
 
-// Mission "COMPLETE REAL EXAM RESCHEDULING WORKFLOW" (2026-08-29) — mêmes
-// champs datetime-local que l'étape 10 du formulaire de création
-// (CreateAssessmentForm.tsx), pour rester cohérent avec la convention déjà
-// établie (chaîne "AAAA-MM-JJTHH:mm" passée telle quelle, jamais convertie
-// — voir le commentaire dans lib/assessments.ts sur le modèle de fuseau
-// horaire actuel). Affiche la fenêtre ACTUELLE en préremplissage — jamais
-// un formulaire vide qui obligerait à redevoir la deviner.
+// Mission "COMPLETE REAL EXAM RESCHEDULING WORKFLOW" (2026-08-29), corrigé
+// par la mission "URGENT — FIX ONLY EXAM SCHEDULING +1H BUG" (2026-09-02) —
+// mêmes champs datetime-local que l'étape 10 du formulaire de création
+// (CreateAssessmentForm.tsx). Affiche la fenêtre ACTUELLE en
+// préremplissage — jamais un formulaire vide qui obligerait à redevoir la
+// deviner. `currentOpenAt`/`currentCloseAt` sont stockés en UTC
+// (ex. "2026-09-02T10:30:00.000Z") — formatAlgeriaDateTimeInputValue()
+// les reconvertit en heure murale Africa/Algiers ("2026-09-02T11:30")
+// AVANT de préremplir l'input, jamais la valeur UTC brute (qui afficherait
+// une heure fausse à la réouverture du formulaire, contrepartie
+// obligatoire du correctif WRITE dans actions.ts).
 export function RescheduleAssessmentForm({
   assessmentId,
   currentOpenAt,
@@ -33,7 +38,7 @@ export function RescheduleAssessmentForm({
             id="reschedule-openAt"
             type="datetime-local"
             name="openAt"
-            defaultValue={currentOpenAt ?? ""}
+            defaultValue={formatAlgeriaDateTimeInputValue(currentOpenAt)}
             className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]"
           />
         </div>
@@ -45,7 +50,7 @@ export function RescheduleAssessmentForm({
             id="reschedule-closeAt"
             type="datetime-local"
             name="closeAt"
-            defaultValue={currentCloseAt ?? ""}
+            defaultValue={formatAlgeriaDateTimeInputValue(currentCloseAt)}
             className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]"
           />
         </div>

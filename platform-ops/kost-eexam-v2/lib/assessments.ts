@@ -2,7 +2,7 @@ import { getDb, transaction, nowIso } from "./db";
 import { audit } from "./audit";
 import { listAdmissibleQuestionIds, getCurrentVersion, type QuestionRow } from "./questions";
 import { listGroupMembers } from "./groups";
-import type { Scope } from "./scope";
+import { ALL_SCOPES, type Scope } from "./scope";
 
 export type AssessmentType = "exercice" | "test" | "examen";
 export type AssessmentStatus = "draft" | "published" | "open" | "closed" | "suspended" | "archived";
@@ -226,10 +226,47 @@ export function isAssessmentOpenNow(a: AssessmentRow): boolean {
   return true;
 }
 
+function assertAssessmentScope(scope: string): asserts scope is Scope {
+  if (!ALL_SCOPES.includes(scope as Scope)) {
+    throw new Error("Périmètre d'évaluation invalide.");
+  }
+}
+
+/**
+ * Questions admissibles pour une évaluation, avec séparation explicite du
+ * gate PRODUCTION. `listAdmissibleQuestionIds()` reste le gate de provenance
+ * source/activité historique pour les scopes contrôlés démo/test.
+ *
+ * Readiness blocker #7 : en production, une question PENDING ne doit jamais
+ * être sélectionnée ni snapshotée. Le schéma actuel ne porte pas encore
+ * l'identité/qualification du reviewer ni le gate EN séparé : exiger ici
+ * APPROVED + review_date ferme le trou PENDING->production mais ne suffit pas
+ * à clôturer #7. Aucun statut existant n'est promu par cette fonction.
+ */
+export function listAssessmentAdmissibleQuestionIds(functionCode: string, scope: Scope): number[] {
+  assertAssessmentScope(scope);
+  if (scope !== "production") return listAdmissibleQuestionIds(functionCode);
+
+  const rows = getDb()
+    .prepare(
+      `SELECT q.id
+       FROM questions q
+       WHERE q.function_code = ?
+         AND q.active = 1
+         AND q.source_status = 'FROZEN_SOURCE_VERIFIED'
+         AND q.reviewer_status = 'APPROVED'
+         AND q.review_date IS NOT NULL
+       ORDER BY q.id`
+    )
+    .all(functionCode) as { id: number }[];
+  return rows.map((r) => r.id);
+}
+
 /** Étape 4-5 du formulaire de création (§5 de la mission) — le nombre
- * réellement disponible, jamais une estimation. */
-export function admissibleCountFor(functionCode: string): number {
-  return listAdmissibleQuestionIds(functionCode).length;
+ * réellement disponible, jamais une estimation. Production est le défaut
+ * fail-closed ; l'UI transmet le scope explicitement pour démo/test. */
+export function admissibleCountFor(functionCode: string, scope: Scope = "production"): number {
+  return listAssessmentAdmissibleQuestionIds(functionCode, scope).length;
 }
 
 export interface CreateAssessmentInput {
@@ -259,8 +296,9 @@ export interface CreateAssessmentInput {
  * « interdire nombre demandé > questions disponibles » — jamais seulement
  * une validation client, qui peut être contournée). */
 export function createAssessmentDraft(input: CreateAssessmentInput): number {
+  assertAssessmentScope(input.scope);
   const preset = TYPE_PRESETS[input.type];
-  const admissibleIds = listAdmissibleQuestionIds(input.functionCode);
+  const admissibleIds = listAssessmentAdmissibleQuestionIds(input.functionCode, input.scope);
 
   let poolIds: number[];
   if (input.questionSource === "manual") {
@@ -414,18 +452,20 @@ export function publishAssessment(
     const a = db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(assessmentId) as AssessmentRow | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
     if (a.status !== "draft") throw new Error(`Impossible de publier : statut actuel "${a.status}".`);
+    assertAssessmentScope(a.scope);
 
     const poolRows = db.prepare(`SELECT question_id FROM assessment_question_pool WHERE assessment_id = ?`).all(assessmentId) as { question_id: number }[];
     let poolIds = poolRows.map((r) => r.question_id);
 
     // Revalidation stricte : chaque question du pool doit toujours être
     // admissible au moment de la publication (pas seulement au moment de
-    // la création du brouillon).
-    const admissibleNow = new Set(listAdmissibleQuestionIds(a.function_code));
+    // la création du brouillon). Pour un scope production, ceci revalide
+    // aussi APPROVED + review_date juste avant le snapshot.
+    const admissibleNow = new Set(listAssessmentAdmissibleQuestionIds(a.function_code, a.scope));
     poolIds = poolIds.filter((id) => admissibleNow.has(id));
     if (poolIds.length < a.question_count) {
       throw new Error(
-        `Publication impossible : seules ${poolIds.length} question(s) admissible(s) restent disponibles pour ${a.function_code} (${a.question_count} requises). Une question a peut-être été désactivée depuis la création du brouillon.`
+        `Publication impossible : seules ${poolIds.length} question(s) admissible(s) restent disponibles pour ${a.function_code} (${a.question_count} requises). Une question a peut-être été désactivée ou sa revue a changé depuis la création du brouillon.`
       );
     }
 

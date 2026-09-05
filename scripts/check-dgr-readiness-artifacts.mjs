@@ -10,10 +10,10 @@
  * 1. required per-function governance artifacts exist;
  * 2. every drafted production-bank question ID has exactly one EN review
  *    package entry, with no extra EN-only IDs;
- * 3. durable "representative sample / item not independently re-read"
- *    provenance records remain a readiness failure until they are classified
- *    and resolved item-by-item with direct current Tier-A evidence or a
- *    truthful non-frozen state;
+ * 3. a currently FROZEN item fails readiness when its durable provenance says
+ *    only a representative sample was checked or its own citation was not
+ *    independently re-read; historical notes on truthfully downgraded items
+ *    remain auditable without blocking readiness merely by existing;
  * 4. an APPROVED item must carry a non-pending named reviewer and an ISO
  *    review date in the same item block.
  *
@@ -113,15 +113,23 @@ function assertApprovedHasReviewerAndDate(text, fn, artifactLabel) {
   }
 }
 
-function countUnresolvedRepresentativeEvidence(text) {
-  const ownCitationNotRead = /(?:item['’]s\s+)?own specific citation was not independently re-read/gi;
-  const specificMatches = [...text.matchAll(ownCitationNotRead)].length;
-  if (specificMatches > 0) return specificMatches;
+function hasRepresentativeEvidenceCaveat(text) {
+  return (
+    /(?:item['’]s\s+)?own specific citation was not independently re-read/i.test(text) ||
+    /representative sample(?: of this citation pattern)?/i.test(text)
+  );
+}
 
-  // Older wording may only say that a representative sample was checked.
-  // Count it only as a fallback so one reconciliation record is not counted
-  // twice when both phrases occur in the same record.
-  return [...text.matchAll(/representative sample(?: of this citation pattern)?/gi)].length;
+function latestFrStatus(blockText) {
+  const matches = [...blockText.matchAll(/^\s*\*\*FR status:\*\*\s*(.+)$/gmi)];
+  return matches.length ? matches.at(-1)[1].trim() : "";
+}
+
+function frozenRepresentativeEvidenceItems(text, fn) {
+  return itemBlocks(text, fn)
+    .filter((block) => /^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(latestFrStatus(block.text)))
+    .filter((block) => hasRepresentativeEvidenceCaveat(block.text))
+    .map((block) => block.id);
 }
 
 // Presence checks. Function 7.1 has a recovered Stage 2A/pilot history rather
@@ -151,7 +159,7 @@ let totalBank = 0;
 let totalEn = 0;
 let totalMissing = 0;
 let totalExtra = 0;
-let totalProvenanceRecords = 0;
+let totalProvenanceBlockers = 0;
 
 for (const fn of functions) {
   const bankPath = `docs/DGR_PRODUCTION_BANK_${fn}.md`;
@@ -173,40 +181,41 @@ for (const fn of functions) {
   const enDupes = duplicates(enHeadingList);
   const missing = difference(canonicalBankIds, enIds);
   const extra = difference(enIds, canonicalBankIds);
-  const provenanceRecords = countUnresolvedRepresentativeEvidence(bank);
+  const provenanceBlockers = frozenRepresentativeEvidenceItems(bank, fn);
 
   if (bankDupes.length) fail(`${bankPath}: duplicate question headings: ${bankDupes.join(", ")}`);
   if (enDupes.length) fail(`${enPath}: duplicate EN question headings: ${enDupes.join(", ")}`);
   if (missing.length) fail(`${fn}: EN package missing ${missing.length} bank ID(s): ${missing.join(", ")}`);
   if (extra.length) fail(`${fn}: EN package has ${extra.length} extra ID(s) not in canonical bank: ${extra.join(", ")}`);
 
-  if (provenanceRecords > 0) {
+  if (provenanceBlockers.length > 0) {
     // This is intentionally a readiness failure, not an automatic downgrade.
-    // The records must be classified item-by-item: direct 67th-Edition Tier-A
-    // verification may preserve a FROZEN state; otherwise the truthful
-    // GAP/PARTIAL/DRAFT/CONFLICT state must remain or be restored.
-    fail(`${fn}: ${provenanceRecords} unresolved representative-evidence record(s) require item-specific classification before readiness`);
+    // A FROZEN state must be backed by direct item-specific current Tier-A
+    // evidence. If the item is truthfully downgraded to GAP/PARTIAL/DRAFT/
+    // CONFLICT, its historical representative-sample note may remain for audit
+    // history without creating a false permanent blocker.
+    fail(`${fn}: ${provenanceBlockers.length} FROZEN item(s) still rely on representative/non-item-specific evidence: ${provenanceBlockers.join(", ")}`);
   }
 
   assertApprovedHasReviewerAndDate(bank, fn, bankPath);
   assertApprovedHasReviewerAndDate(en, fn, enPath);
 
-  rows.push({ fn, bank: canonicalBankIds.length, en: enIds.length, missing: missing.length, extra: extra.length, provenanceRecords });
+  rows.push({ fn, bank: canonicalBankIds.length, en: enIds.length, missing: missing.length, extra: extra.length, provenanceBlockers: provenanceBlockers.length });
   totalBank += canonicalBankIds.length;
   totalEn += enIds.length;
   totalMissing += missing.length;
   totalExtra += extra.length;
-  totalProvenanceRecords += provenanceRecords;
+  totalProvenanceBlockers += provenanceBlockers.length;
 }
 
 console.log("\nDGR/CBTA readiness artifact summary");
-console.log("Function | Bank IDs | EN IDs | Missing EN | Extra EN | Provenance records to classify");
-console.log("---------|----------|--------|------------|----------|-------------------------------");
+console.log("Function | Bank IDs | EN IDs | Missing EN | Extra EN | Frozen provenance blockers");
+console.log("---------|----------|--------|------------|----------|---------------------------");
 for (const row of rows) {
-  console.log(`${row.fn.padEnd(8)} | ${String(row.bank).padStart(8)} | ${String(row.en).padStart(6)} | ${String(row.missing).padStart(10)} | ${String(row.extra).padStart(8)} | ${String(row.provenanceRecords).padStart(29)}`);
+  console.log(`${row.fn.padEnd(8)} | ${String(row.bank).padStart(8)} | ${String(row.en).padStart(6)} | ${String(row.missing).padStart(10)} | ${String(row.extra).padStart(8)} | ${String(row.provenanceBlockers).padStart(26)}`);
 }
-console.log("---------|----------|--------|------------|----------|-------------------------------");
-console.log(`TOTAL    | ${String(totalBank).padStart(8)} | ${String(totalEn).padStart(6)} | ${String(totalMissing).padStart(10)} | ${String(totalExtra).padStart(8)} | ${String(totalProvenanceRecords).padStart(29)}`);
+console.log("---------|----------|--------|------------|----------|---------------------------");
+console.log(`TOTAL    | ${String(totalBank).padStart(8)} | ${String(totalEn).padStart(6)} | ${String(totalMissing).padStart(10)} | ${String(totalExtra).padStart(8)} | ${String(totalProvenanceBlockers).padStart(26)}`);
 
 if (failed) {
   console.error("\nREADINESS ARTIFACT CHECK: FAIL");

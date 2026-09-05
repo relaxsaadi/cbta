@@ -31,7 +31,6 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const docsDir = path.join(root, "docs");
 const functions = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
 let failed = false;
@@ -115,17 +114,14 @@ function assertApprovedHasReviewerAndDate(text, fn, artifactLabel) {
 }
 
 function countUnresolvedRepresentativeEvidence(text) {
-  const patterns = [
-    /representative sample(?: of this citation pattern)?/gi,
-    /item['’]s own specific citation was not independently re-read/gi,
-    /own specific citation was not independently re-read/gi,
-  ];
+  const ownCitationNotRead = /(?:item['’]s\s+)?own specific citation was not independently re-read/gi;
+  const specificMatches = [...text.matchAll(ownCitationNotRead)].length;
+  if (specificMatches > 0) return specificMatches;
 
-  // Count the strongest phrase when present so variants in the same record are
-  // not double-counted. Fall back to the broader representative-sample phrase.
-  const specific = [...text.matchAll(patterns[1])].length + [...text.matchAll(patterns[2])].length;
-  if (specific > 0) return specific;
-  return [...text.matchAll(patterns[0])].length;
+  // Older wording may only say that a representative sample was checked.
+  // Count it only as a fallback so one reconciliation record is not counted
+  // twice when both phrases occur in the same record.
+  return [...text.matchAll(/representative sample(?: of this citation pattern)?/gi)].length;
 }
 
 // Presence checks. Function 7.1 has a recovered Stage 2A/pilot history rather

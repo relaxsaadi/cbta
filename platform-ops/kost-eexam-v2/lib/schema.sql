@@ -479,10 +479,12 @@ CREATE TABLE IF NOT EXISTS platform_settings (
   updated_by INTEGER REFERENCES users(id)
 );
 
--- Insert-only. Le rôle DB applicatif de production ne doit pas avoir les
--- droits UPDATE/DELETE sur cette table (voir docs §12) ; en SQLite (pas de
--- GRANT par table), l'invariant est appliqué par convention de code stricte
--- : aucune fonction d'écriture autre que audit() dans lib/audit.ts.
+-- Journal d'audit append-only au niveau SQLite pour tous les accès
+-- applicatifs ordinaires. Les triggers idempotents ci-dessous sont créés
+-- par le schéma sur une base neuve ET par scripts/migrate.ts sur une base
+-- existante, puisque ce fichier est ré-exécuté au début de chaque migration.
+-- Ils ne constituent pas une protection contre un administrateur hôte/DB
+-- pleinement privilégié capable de modifier le schéma SQLite lui-même.
 CREATE TABLE IF NOT EXISTS audit_logs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   timestamp TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
@@ -499,6 +501,18 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE INDEX IF NOT EXISTS idx_audit_actor ON audit_logs(actor_user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_target ON audit_logs(target_type, target_id);
 CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON audit_logs(timestamp);
+
+CREATE TRIGGER IF NOT EXISTS audit_logs_no_update
+BEFORE UPDATE ON audit_logs
+BEGIN
+  SELECT RAISE(ABORT, 'audit_logs is append-only: UPDATE denied');
+END;
+
+CREATE TRIGGER IF NOT EXISTS audit_logs_no_delete
+BEFORE DELETE ON audit_logs
+BEGIN
+  SELECT RAISE(ABORT, 'audit_logs is append-only: DELETE denied');
+END;
 
 CREATE TABLE IF NOT EXISTS exports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

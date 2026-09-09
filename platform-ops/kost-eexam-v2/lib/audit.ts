@@ -1,8 +1,11 @@
-// Point d'écriture UNIQUE vers audit_logs (§11 de la mission). Aucun autre
-// fichier du projet ne doit faire `INSERT INTO audit_logs` directement —
-// c'est une convention de code stricte (SQLite n'a pas de GRANT par table
-// comme MySQL ; l'invariant "insert-only, un seul point d'entrée" est donc
-// appliqué ici, pas au niveau moteur de données).
+// Point d'écriture canonique vers audit_logs (§11 de la mission). Aucun autre
+// fichier du projet ne doit faire `INSERT INTO audit_logs` directement.
+// L'absence d'UPDATE/DELETE n'est plus une simple convention : schema.sql
+// installe des triggers SQLite idempotents qui refusent ces mutations pour
+// tout accès applicatif ordinaire. Cette garantie locale ne protège pas
+// contre un administrateur hôte/DB pleinement privilégié capable de modifier
+// le schéma SQLite lui-même ; une réparation forensique doit remplacer/restaurer
+// la base par une procédure hors application, jamais via un bypass applicatif.
 import { getDb, nowIso } from "./db";
 import type { ConsoleRole } from "./session";
 

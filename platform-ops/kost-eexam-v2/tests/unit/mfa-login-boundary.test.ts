@@ -38,13 +38,21 @@ function activeSessionCount(userId: number): number {
   return Number(row.n);
 }
 
+function successfulLoginAuditCount(userId: number): number {
+  const row = getDb()
+    .prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE actor_user_id = ? AND action = 'login' AND result = 'success'`)
+    .get(userId) as { n: number };
+  return Number(row.n);
+}
+
 describe("MFA factor-2 authorization boundary", () => {
-  test("active at factor 1 -> suspended before factor 2 is denied without a session", () => {
+  test("active at factor 1 -> suspended before factor 2 is denied without a session or successful login audit", () => {
     const u = createMfaUser();
     getDb().prepare(`UPDATE users SET status = 'suspended' WHERE id = ?`).run(u.userId);
     const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), {});
     assert.deepEqual(result.ok ? null : result.reason, "account_not_active");
     assert.equal(activeSessionCount(u.userId), 0);
+    assert.equal(successfulLoginAuditCount(u.userId), 0);
   });
 
   test("active at factor 1 -> archived before factor 2 is denied without a session", () => {
@@ -107,6 +115,41 @@ describe("MFA factor-2 authorization boundary", () => {
     assert.equal(activeSessionCount(u.userId), 1);
     const row = getDb().prepare(`SELECT mfa_recovery_codes_json FROM users WHERE id = ?`).get(u.userId) as { mfa_recovery_codes_json: string };
     assert.equal(JSON.parse(row.mfa_recovery_codes_json).length, 7);
+  });
+
+  test("failure before durable session creation rolls back recovery-code and last-login mutations", () => {
+    const u = createMfaUser("candidate", true);
+    const code = u.recoveryCodes!.plain[0]!;
+    const beforeRow = getDb()
+      .prepare(`SELECT mfa_recovery_codes_json, last_login_at FROM users WHERE id = ?`)
+      .get(u.userId) as { mfa_recovery_codes_json: string; last_login_at: string | null };
+    const triggerName = `force_mfa_session_failure_${u.userId}`;
+
+    getDb().exec(
+      `CREATE TRIGGER ${triggerName}
+       BEFORE INSERT ON sessions
+       WHEN NEW.user_id = ${u.userId}
+       BEGIN
+         SELECT RAISE(ABORT, 'forced_mfa_session_failure');
+       END`
+    );
+    try {
+      assert.throws(() => claimMfaLogin(u.userId, code, {}), /forced_mfa_session_failure/);
+    } finally {
+      getDb().exec(`DROP TRIGGER IF EXISTS ${triggerName}`);
+    }
+
+    assert.equal(activeSessionCount(u.userId), 0);
+    const afterFailure = getDb()
+      .prepare(`SELECT mfa_recovery_codes_json, last_login_at FROM users WHERE id = ?`)
+      .get(u.userId) as { mfa_recovery_codes_json: string; last_login_at: string | null };
+    assert.equal(afterFailure.mfa_recovery_codes_json, beforeRow.mfa_recovery_codes_json);
+    assert.equal(afterFailure.last_login_at, beforeRow.last_login_at);
+    assert.equal(successfulLoginAuditCount(u.userId), 0);
+
+    const retried = claimMfaLogin(u.userId, code, {});
+    assert.equal(retried.ok, true);
+    assert.equal(activeSessionCount(u.userId), 1);
   });
 
   test("cookie-persist compensation revokes the claimed session and CAS-restores untouched recovery state", () => {

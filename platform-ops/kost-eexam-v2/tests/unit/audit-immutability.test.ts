@@ -31,18 +31,24 @@ function auditRow(db: DatabaseSync, id: number): { id: number; action: string } 
   };
 }
 
+function assertAuditRow(db: DatabaseSync, id: number, originalAction: string): void {
+  const row = auditRow(db, id);
+  assert.equal(row.id, id);
+  assert.equal(row.action, originalAction);
+}
+
 function assertAppendOnly(db: DatabaseSync, id: number, originalAction: string): void {
   assert.throws(
     () => db.prepare("UPDATE audit_logs SET action = 'tampered' WHERE id = ?").run(id),
     /audit_logs is append-only/i
   );
-  assert.deepEqual(auditRow(db, id), { id, action: originalAction });
+  assertAuditRow(db, id, originalAction);
 
   assert.throws(
     () => db.prepare("DELETE FROM audit_logs WHERE id = ?").run(id),
     /audit_logs is append-only/i
   );
-  assert.deepEqual(auditRow(db, id), { id, action: originalAction });
+  assertAuditRow(db, id, originalAction);
 }
 
 test("audit_logs accepts inserts but rejects direct update/delete at SQLite boundary", () => {
@@ -88,12 +94,11 @@ test("schema migration is idempotent and preserves pre-existing audit rows", () 
 
   try {
     const id = insertAudit(db, "before_migration");
-    const before = auditRow(db, id);
 
     db.exec(SCHEMA);
     db.exec(SCHEMA);
 
-    assert.deepEqual(auditRow(db, id), before);
+    assertAuditRow(db, id, "before_migration");
     assertAppendOnly(db, id, "before_migration");
   } finally {
     db.close();

@@ -2,13 +2,12 @@ import "server-only";
 import { getSession } from "./session";
 import { findUserByUsername, findUserById, getRoleForUser, touchLastLogin } from "./users";
 import { verifyPassword } from "./passwords";
-import { verifyTotpCode, consumeRecoveryCode } from "./mfa";
 import { createDbSession, revokeDbSession } from "./sessions-registry";
 import { audit } from "./audit";
 import { checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
 import { isNewLoginsBlocked } from "./platform-settings";
 import { isTemporaryPasswordExpired } from "./temp-password";
-import { getDb } from "./db";
+import { claimMfaLogin, compensateMfaLoginClaim } from "./mfa-login-boundary";
 import type { ConsoleRole } from "./session";
 import type { UserRow } from "./users";
 
@@ -18,9 +17,11 @@ export interface LoginResult {
   mfaRequired?: boolean;
 }
 
-/** Finalise une connexion (création de la ligne `sessions`, cookie
- * iron-session, audit) — point d'écriture UNIQUE partagé par le chemin
- * sans MFA et par `completeMfaLogin()`, jamais dupliqué. */
+/** Finalise une connexion sans MFA (création de la ligne `sessions`, cookie
+ * iron-session, audit). Le chemin MFA utilise une frontière SQLite distincte
+ * dans lib/mfa-login-boundary.ts afin que la réévaluation d'éligibilité,
+ * l'usage éventuel d'un code de secours et la création de session soient
+ * sérialisés sous le même verrou d'écriture. */
 async function finalizeLogin(user: UserRow, role: ConsoleRole, meta: { ip?: string; userAgent?: string }): Promise<void> {
   const { dbSessionId } = createDbSession({ userId: user.id, ipAddress: meta.ip, userAgent: meta.userAgent });
   touchLastLogin(user.id);
@@ -128,50 +129,110 @@ export async function login(username: string, password: string, meta: { ip?: str
 
 /** Second facteur — mot de passe déjà vérifié (session "en attente"),
  * exige un code TOTP à 6 chiffres OU un code de secours à usage unique.
- * Même limiteur anti-force-brute que le mot de passe (clé partagée) —
- * empêche un balayage de codes MFA après un mot de passe déjà compromis. */
+ *
+ * La décision d'autorisation est reprise à zéro à cette frontière : statut
+ * du compte, expiration du mot de passe temporaire, blocage des nouvelles
+ * connexions, rôle et configuration MFA sont relus sous BEGIN IMMEDIATE.
+ * Le même verrou couvre la consommation d'un éventuel code de secours et la
+ * création de la session serveur. Ainsi, une décision de suspension/archive
+ * qui gagne la course ne peut pas être contournée par un ancien cookie MFA,
+ * et deux requêtes ne peuvent pas dépenser le même code de secours. */
 export async function completeMfaLogin(code: string, meta: { ip?: string; userAgent?: string }): Promise<LoginResult> {
   const session = await getSession();
   const pendingUserId = session.pendingMfaUserId;
   if (!pendingUserId) {
     return { ok: false, error: "Aucune connexion en attente de vérification MFA. Reconnectez-vous." };
   }
-  const user = findUserById(pendingUserId);
-  const role = user ? getRoleForUser(user.id) : null;
-  if (!user || !role || !user.mfa_secret) {
+
+  // Snapshot uniquement utilisé pour le limiteur anti-force-brute. Il ne
+  // participe PAS à la décision d'autorisation : claimMfaLogin() relit tout
+  // l'état pertinent sous le verrou SQLite avant de créer une session.
+  const preflightUser = findUserById(pendingUserId);
+  const preflightRole = preflightUser ? getRoleForUser(preflightUser.id) : null;
+  if (!preflightUser || !preflightRole) {
     session.destroy();
     return { ok: false, error: "Session de connexion invalide. Reconnectez-vous." };
   }
 
-  const rateLimitKey = `${meta.ip ?? "unknown"}:${user.username}`;
+  const rateLimitKey = `${meta.ip ?? "unknown"}:${preflightUser.username}`;
   const rateLimit = checkLoginRateLimit(rateLimitKey);
   if (!rateLimit.allowed) {
-    audit({ actorUserId: user.id, actorRole: role, action: "mfa_verify", result: "failure", ipAddress: meta.ip, metadata: { reason: "rate_limited" } });
+    audit({ actorUserId: preflightUser.id, actorRole: preflightRole, action: "mfa_verify", result: "failure", ipAddress: meta.ip, metadata: { reason: "rate_limited" } });
     const minutes = Math.ceil(rateLimit.retryAfterSeconds / 60);
     return { ok: false, error: `Trop de tentatives échouées. Réessayez dans ${minutes} minute${minutes > 1 ? "s" : ""}.` };
   }
 
-  const isTotpValid = verifyTotpCode(user.mfa_secret, code);
-  let usedRecoveryCode = false;
-  if (!isTotpValid && user.mfa_recovery_codes_json) {
-    const remaining = consumeRecoveryCode(user.mfa_recovery_codes_json, code);
-    if (remaining !== null) {
-      getDb().prepare(`UPDATE users SET mfa_recovery_codes_json = ? WHERE id = ?`).run(remaining, user.id);
-      usedRecoveryCode = true;
+  const claim = claimMfaLogin(pendingUserId, code, meta);
+  if (!claim.ok) {
+    if (claim.reason === "invalid_code") {
+      recordLoginFailure(rateLimitKey);
+      audit({ actorUserId: claim.userId ?? preflightUser.id, actorRole: claim.role ?? preflightRole, action: "mfa_verify", result: "failure", ipAddress: meta.ip });
+      return { ok: false, error: "Code invalide. Réessayez." };
     }
+
+    // Une modification administrative ou de politique intervenue entre les
+    // deux facteurs invalide définitivement cette tentative MFA. Ne pas
+    // laisser le cookie pending être rejoué après le refus.
+    session.destroy();
+    audit({
+      actorUserId: claim.userId ?? preflightUser.id,
+      actorRole: claim.role ?? preflightRole,
+      action: "mfa_verify",
+      result: "failure",
+      ipAddress: meta.ip,
+      metadata: { reason: claim.reason },
+    });
+
+    if (claim.reason === "account_not_active") {
+      return { ok: false, error: "Ce compte n'est plus autorisé à se connecter. Reconnectez-vous ou contactez un administrateur." };
+    }
+    if (claim.reason === "temp_password_expired") {
+      return { ok: false, error: "Ce mot de passe temporaire a expiré. Reconnectez-vous avec un nouvel accès." };
+    }
+    if (claim.reason === "platform_logins_blocked") {
+      return { ok: false, error: "Connexions temporairement suspendues (maintenance en cours). Réessayez plus tard ou contactez un administrateur." };
+    }
+    return { ok: false, error: "Session de connexion invalide. Reconnectez-vous." };
   }
 
-  if (!isTotpValid && !usedRecoveryCode) {
-    recordLoginFailure(rateLimitKey);
-    audit({ actorUserId: user.id, actorRole: role, action: "mfa_verify", result: "failure", ipAddress: meta.ip });
-    return { ok: false, error: "Code invalide. Réessayez." };
+  session.isLoggedIn = true;
+  session.userId = claim.userId;
+  session.username = claim.username;
+  session.fullName = claim.fullName;
+  session.role = claim.role;
+  session.dbSessionId = claim.dbSessionId;
+  session.pendingMfaUserId = undefined;
+
+  try {
+    await session.save();
+  } catch {
+    // Le cookie navigateur n'a pas été persisté : ne jamais laisser une
+    // session serveur active que le client ne possède pas. La compensation
+    // révoque toujours cette session et restaure le code de secours /
+    // last_login uniquement si aucun état plus récent ne les a remplacés.
+    const compensation = compensateMfaLoginClaim(claim);
+    session.destroy();
+    audit({
+      actorUserId: claim.userId,
+      actorRole: claim.role,
+      action: "mfa_verify",
+      result: "failure",
+      ipAddress: meta.ip,
+      sessionId: claim.dbSessionId,
+      metadata: {
+        reason: "session_cookie_persist_failed",
+        recoveryCodeRestored: compensation.recoveryCodeRestored,
+        lastLoginRestored: compensation.lastLoginRestored,
+      },
+    });
+    return { ok: false, error: "Impossible de finaliser la connexion. Reconnectez-vous." };
   }
 
   resetLoginRateLimit(rateLimitKey);
-  if (usedRecoveryCode) {
-    audit({ actorUserId: user.id, actorRole: role, action: "mfa_recovery_code_used", result: "success", ipAddress: meta.ip });
+  if (claim.usedRecoveryCode) {
+    audit({ actorUserId: claim.userId, actorRole: claim.role, action: "mfa_recovery_code_used", result: "success", ipAddress: meta.ip, sessionId: claim.dbSessionId });
   }
-  await finalizeLogin(user, role, meta);
+  audit({ actorUserId: claim.userId, actorRole: claim.role, action: "login", result: "success", ipAddress: meta.ip, sessionId: claim.dbSessionId });
   return { ok: true };
 }
 

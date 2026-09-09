@@ -1,4 +1,5 @@
 import "server-only";
+import { buildMoodleRestRequest } from "./moodle-request.mjs";
 
 const WS_SERVICE = process.env.MOODLE_WS_SERVICE ?? "kost_eexam_console";
 
@@ -43,21 +44,24 @@ export async function loginToMoodle(username: string, password: string): Promise
  * Appelle une fonction Web Service Moodle avec un token donné (celui de
  * l'utilisateur connecté, ou celui du compte de service technique pour les
  * requêtes d'agrégation qui ne dépendent pas d'un utilisateur précis).
+ *
+ * Le token et les paramètres sont envoyés en POST application/x-www-form-urlencoded,
+ * jamais dans l'URI. Moodle REST accepte les paramètres GET/POST ; garder les
+ * secrets hors de l'URL évite leur capture accidentelle par les access logs,
+ * traces proxy/APM et historiques de requêtes.
  */
 export async function callMoodleWs<T = unknown>(
   token: string,
   wsfunction: string,
   params: Record<string, string | number> = {}
 ): Promise<T> {
-  const url = new URL(`${getMoodleBaseUrl()}/webservice/rest/server.php`);
-  url.searchParams.set("wstoken", token);
-  url.searchParams.set("wsfunction", wsfunction);
-  url.searchParams.set("moodlewsrestformat", "json");
-  for (const [k, v] of Object.entries(params)) {
-    url.searchParams.set(k, String(v));
-  }
+  const { url, body } = buildMoodleRestRequest(getMoodleBaseUrl(), token, wsfunction, params);
 
-  const res = await fetch(url.toString(), { cache: "no-store" });
+  const res = await fetch(url, {
+    method: "POST",
+    body,
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new MoodleApiError(`Moodle WS a répondu ${res.status} pour ${wsfunction}`);
   }

@@ -173,18 +173,22 @@ async function attemptSend(notificationId: number, input: SendAttemptInput): Pro
   try {
     const resend = getResendClient();
     const replyTo = getReplyTo();
-    const { data, error } = await resend.emails.send({
-      from: `${input.sender.name} <${input.sender.address}>`,
-      to: input.recipientEmail,
-      subject: input.subject,
-      html: input.html,
-      text: input.text,
-      ...(replyTo ? { replyTo } : {}),
-      // §34 — idempotence côté fournisseur EN PLUS de la garantie
-      // applicative (contrainte UNIQUE sur idempotency_key) : double
-      // filet en cas de retry réseau côté client Resend lui-même.
-      headers: { "Idempotency-Key": input.idempotencyKey },
-    });
+    const { data, error } = await resend.emails.send(
+      {
+        from: `${input.sender.name} <${input.sender.address}>`,
+        to: input.recipientEmail,
+        subject: input.subject,
+        html: input.html,
+        text: input.text,
+        ...(replyTo ? { replyTo } : {}),
+      },
+      // §34 — l'idempotence fournisseur est une OPTION DE REQUÊTE du SDK
+      // Resend, pas un header personnalisé dans le message. Le mettre dans
+      // `payload.headers` ne protège pas contre deux appels réseau du même
+      // outbox row ; ce second argument est la primitive documentée par
+      // Resend pour dédupliquer une même requête côté fournisseur.
+      { idempotencyKey: input.idempotencyKey }
+    );
 
     if (error) {
       const safeReason = safeFailureReason(error.message ?? "erreur fournisseur");

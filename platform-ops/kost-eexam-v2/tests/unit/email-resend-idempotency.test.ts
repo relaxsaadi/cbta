@@ -22,7 +22,7 @@ describe("Resend — idempotence fournisseur réelle", async () => {
   test("la clé durable est transmise comme option HTTP Resend, jamais comme header du message", async () => {
     const key = "provider-idempotency-contract-211";
     let providerHeader: string | null = null;
-    let messagePayload: Record<string, unknown> | null = null;
+    let messagePayload: Record<string, unknown> = {};
 
     globalThis.fetch = (async (_input: string | URL | Request, init?: RequestInit) => {
       const headers = new Headers(init?.headers);
@@ -54,7 +54,7 @@ describe("Resend — idempotence fournisseur réelle", async () => {
     assert.equal(result.status, "SENT");
     assert.equal(providerHeader, key, "Resend doit recevoir Idempotency-Key au niveau de la requête HTTP");
 
-    const customMessageHeaders = messagePayload?.headers as Record<string, unknown> | undefined;
+    const customMessageHeaders = messagePayload.headers as Record<string, unknown> | undefined;
     assert.equal(
       customMessageHeaders?.["Idempotency-Key"],
       undefined,

@@ -68,14 +68,13 @@ test.describe.configure({ mode: "serial" });
 
 test("#47 — rejouer le bon mot de passe ne remet jamais à zéro les échecs MFA; la tentative bloquée ne consomme pas le recovery code", async ({ page }) => {
   const u = createManager({ recoveryCodes: true });
-  const bad = invalidTotp(u.secret);
   const originalRecoveryJson = u.recovery!.hashedJson;
 
   await passwordLogin(page, u.username, u.password);
   await page.waitForURL(/\/login\/verifier-mfa/);
 
   for (let i = 0; i < 4; i += 1) {
-    await submitMfa(page, bad);
+    await submitMfa(page, invalidTotp(u.secret));
     await expect(page.getByRole("alert")).toContainText("Code invalide");
   }
 
@@ -85,7 +84,7 @@ test("#47 — rejouer le bon mot de passe ne remet jamais à zéro les échecs M
   await passwordLogin(page, u.username, u.password);
   await page.waitForURL(/\/login\/verifier-mfa/);
 
-  await submitMfa(page, bad); // cinquième échec : encore traité, puis bucket épuisé
+  await submitMfa(page, invalidTotp(u.secret)); // cinquième échec : encore traité, puis bucket épuisé
   await expect(page.getByRole("alert")).toContainText("Code invalide");
 
   // La sixième tentative est un VRAI code de secours valide. Elle doit être
@@ -105,12 +104,11 @@ test("#47 — rejouer le bon mot de passe ne remet jamais à zéro les échecs M
 
 test("#47 — un succès MFA complet remet le bucket MFA à zéro pour la prochaine connexion légitime", async ({ page }) => {
   const u = createManager();
-  const bad = invalidTotp(u.secret);
 
   await passwordLogin(page, u.username, u.password);
   await page.waitForURL(/\/login\/verifier-mfa/);
   for (let i = 0; i < 4; i += 1) {
-    await submitMfa(page, bad);
+    await submitMfa(page, invalidTotp(u.secret));
     await expect(page.getByRole("alert")).toContainText("Code invalide");
   }
 
@@ -123,10 +121,10 @@ test("#47 — un succès MFA complet remet le bucket MFA à zéro pour la procha
   await passwordLogin(page, u.username, u.password);
   await page.waitForURL(/\/login\/verifier-mfa/);
   for (let i = 0; i < 5; i += 1) {
-    await submitMfa(page, bad);
+    await submitMfa(page, invalidTotp(u.secret));
     await expect(page.getByRole("alert")).toContainText("Code invalide");
   }
-  await submitMfa(page, bad);
+  await submitMfa(page, invalidTotp(u.secret));
   await expect(page.getByRole("alert")).toContainText(/Trop de tentatives échouées/i);
 });
 

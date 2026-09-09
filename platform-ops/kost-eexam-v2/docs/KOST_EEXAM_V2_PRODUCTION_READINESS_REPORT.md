@@ -1,5 +1,14 @@
 # KOST E-EXAM V2 — Rapport de disponibilité production
 
+> [!CAUTION]
+> **SNAPSHOT HISTORIQUE DU 2026-08-28 — SUPERSEDED POUR TOUT GO/NO-GO ACTUEL.**
+>
+> Ce document conserve les mesures et constats observés au **2026-08-28** ; il ne constitue plus l'autorité de readiness actuelle et sa conclusion historique `GO techniquement` ne doit pas être utilisée pour autoriser une bascule. Depuis sa génération, des audits Stage 2B.1 ont ouvert des blockers techniques, sécurité et intégrité des données qui doivent être réconciliés sur un même head avant toute nouvelle conclusion de readiness.
+>
+> **Réconciliation documentaire : 2026-09-09.** Head V2 observé lors de cette réconciliation : `058ed0b259ff732e5ae7561393d01f976c32f0e8` (`feature/kost-eexam-v2-native`). Le statut courant reste **PRE-PRODUCTION**. Toute future déclaration de GO technique doit citer son propre head SHA, sa date, le snapshot des blockers ouverts/fermés et les preuves fraîches build/typecheck/unit/E2E/proxy/concurrency/backup/restore applicables à ce même head.
+>
+> Cette réconciliation documentaire **ne ferme aucun blocker d'implémentation** et ne transforme aucun statut réglementaire. La production DGR reste soumise, fonction par fonction 7.1–7.10, aux preuves directes IATA DGR 67e édition 2026 Tier-A, aux états SOURCE GAP/CONFLICT honnêtes, à la vérification FR, à la revue EN séparée et à un reviewer humain qualifié nommé + date avant tout `APPROVED`. Elle ne constitue aucune approbation ANAC/IATA.
+
 **Date :** 2026-08-28
 **Branche :** `feature/kost-eexam-v2-native`
 **Tag :** `kost-eexam-v2-production-rc1`
@@ -59,7 +68,7 @@ Fonctionnalités natives complètes : auth/RBAC 4 rôles, isolation multi-client
 | 34 | Scénario d'acceptance réaliste (10 candidats) | PASS | 7/7 — réussite/échec/timeout/reconnexion/suspension-reprise, tous réels |
 | 35 | Charge concurrente | PASS à l'échelle testée | 10/10 candidats réels concurrents, 4,46 s, 0 échec, V1 non impacté |
 
-**Bilan** : 32/35 PASS complet, 3 PARTIAL (MFA obligatoire = décision de politique, pas un défaut technique ; supervision = alerte active manquante, pas la détection elle-même ; anti-force-brute = limite architecturale connue et acceptée). **Aucun FAIL.**
+**Bilan historique au 2026-08-28** : 32/35 PASS complet, 3 PARTIAL (MFA obligatoire = décision de politique, pas un défaut technique ; supervision = alerte active manquante, pas la détection elle-même ; anti-force-brute = limite architecturale connue et acceptée). **Aucun FAIL constaté dans ce snapshot historique. Cette phrase ne décrit pas l'état courant après les audits ultérieurs.**
 
 ## C. Disponibilité EXACTE du contenu réel DGR par fonction (7.1–7.10)
 
@@ -95,11 +104,13 @@ Ces éléments sont des **blocages légitimes**, pas des tâches techniques inco
 
 Aucun de ces points n'est contourné, deviné, ou déclaré résolu ici.
 
-## E. PRODUCTION CUTOVER : **GO techniquement, NO-GO réglementairement tant que D.1 n'est pas levé**
+## E. CONCLUSION HISTORIQUE DU 2026-08-28 — **SUPERSEDED POUR LE GO/NO-GO ACTUEL**
 
-- **Techniquement** : la plateforme native fonctionne de bout en bout, testée en profondeur (93 tests E2E + 43 tests unitaires, tous verts sur staging réel), sans dépendance Moodle, sans régression connue, sans placeholder, avec un filet de sécurité chronomètre, une sauvegarde/restauration automatisées et vérifiées, une isolation multi-client exhaustivement auditée, et une charge de 10 candidats concurrents absorbée sans impact sur V1. → **GO technique.**
+> La conclusion ci-dessous est conservée pour la traçabilité du snapshot du 2026-08-28. Elle **n'est plus une autorisation de cutover** et ne décrit pas le statut courant après les audits Stage 2B.1.
+
+- **Conclusion technique historique** : la plateforme native fonctionnait de bout en bout selon les preuves disponibles à cette date (93 tests E2E + 43 tests unitaires, avec les résultats réels détaillés en tête du rapport), sans dépendance Moodle, avec les mécanismes alors vérifiés de chronomètre, sauvegarde/restauration, isolation multi-client et charge testée de 10 candidats concurrents. → **Le rapport avait conclu à un GO technique au 2026-08-28 ; cette conclusion est désormais superseded.**
 - **Réglementairement** : tant qu'aucune question n'est `APPROVED` par un réviseur qualifié (§D.1), la plateforme ne doit **jamais** être présentée comme prête à délivrer une certification DGR réelle. → **NO-GO tant que cette revue n'a pas eu lieu.**
-- **Cette distinction est intentionnelle et ne doit jamais être aplatie** : le rapport ne déclare ni "prêt pour production" au sens absolu, ni "approuvé ANAC" — les deux resteraient faux.
+- **Statut courant de ce document : historique uniquement.** Un nouveau GO technique exige la fermeture vérifiée de tous les blockers techniques/security/data-integrity critiques sur un head reconcilié, avec preuves fraîches sur ce même SHA. La readiness réglementaire reste séparée et ne peut jamais être déduite du seul GO technique.
 
 ## F. Plan de bascule
 
@@ -109,4 +120,4 @@ Voir `docs/KOST_EEXAM_V2_PRODUCTION_CUTOVER_PLAN.md` — document séparé, comp
 
 ## Rappel — mission §55
 
-**Même si ce rapport conclut à un GO technique, aucune bascule finale (remplacement de V1, changement de DNS de production, déplacement de `exam.kostacademy.com`, suppression de Moodle, fusion de production automatique) n'a été exécutée et ne le sera pas sans une demande explicite et séparée du propriétaire de la plateforme.**
+**La conclusion GO technique historique de ce rapport est superseded. Aucune bascule finale (remplacement de V1, changement de DNS de production, déplacement de `exam.kostacademy.com`, suppression de Moodle, fusion de production automatique) ne doit être exécutée sur la base de ce snapshot ; une nouvelle décision exige un head reconcilié, des gates actuels verts et l'autorisation explicite et séparée du propriétaire de la plateforme.**

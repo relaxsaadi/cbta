@@ -8,9 +8,14 @@
 
 // Limiteur de tentatives en mémoire — protection anti-force-brute sur la
 // connexion (absente jusqu'ici, trouvée lors de la revue sécurité de la
-// phase staging). Clé = IP + nom d'utilisateur (pas IP seule) : ralentit
-// une attaque ciblée sur UN compte sans risquer de bloquer collectivement
-// tout un bureau/NAT partageant la même IP publique que la victime.
+// phase staging). Les facteurs mot de passe et MFA ont volontairement des
+// buckets distincts. Cela empêche une nouvelle soumission correcte du mot
+// de passe de remettre à zéro les échecs du second facteur — possession du
+// facteur 1 ne doit jamais neutraliser la protection du facteur 2.
+//
+// La partie IP+utilisateur évite un blocage collectif d'un bureau/NAT ; le
+// suffixe de facteur rend les sémantiques de reset explicites et évite tout
+// recouplage accidentel futur entre mot de passe et MFA.
 //
 // Limite connue et assumée : stockage en mémoire de PROCESSUS, adapté au
 // déploiement actuel (une seule instance Node par service, pas de scaling
@@ -21,6 +26,12 @@
 interface Bucket {
   failures: number;
   windowStart: number;
+}
+
+export type LoginRateLimitFactor = "password" | "mfa";
+
+export function buildLoginRateLimitKey(ip: string | undefined, username: string, factor: LoginRateLimitFactor): string {
+  return `${ip ?? "unknown"}:${username}:${factor}`;
 }
 
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes

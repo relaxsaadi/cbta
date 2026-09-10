@@ -4,7 +4,7 @@ import { findUserByUsername, findUserById, getRoleForUser, touchLastLogin } from
 import { verifyPassword } from "./passwords";
 import { createDbSession, revokeDbSession } from "./sessions-registry";
 import { audit } from "./audit";
-import { checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
+import { buildLoginRateLimitKey, checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
 import { isNewLoginsBlocked } from "./platform-settings";
 import { isTemporaryPasswordExpired } from "./temp-password";
 import { claimMfaLogin, compensateMfaLoginClaim } from "./mfa-login-boundary";
@@ -49,7 +49,7 @@ async function finalizeLogin(user: UserRow, role: ConsoleRole, meta: { ip?: stri
  * `completeMfaLogin()` doit réussir avant tout accès à une route
  * protégée. */
 export async function login(username: string, password: string, meta: { ip?: string; userAgent?: string }): Promise<LoginResult> {
-  const rateLimitKey = `${meta.ip ?? "unknown"}:${username}`;
+  const rateLimitKey = buildLoginRateLimitKey(meta.ip, username, "password");
   const rateLimit = checkLoginRateLimit(rateLimitKey);
   if (!rateLimit.allowed) {
     audit({ actorUserId: null, actorRole: null, action: "login", result: "failure", ipAddress: meta.ip, metadata: { username, reason: "rate_limited" } });
@@ -112,9 +112,11 @@ export async function login(username: string, password: string, meta: { ip?: str
     return { ok: false, error: "Connexions temporairement suspendues (maintenance en cours). Réessayez plus tard ou contactez un administrateur." };
   }
 
-  resetLoginRateLimit(rateLimitKey);
-
   if (user.mfa_enabled === 1) {
+    // Ne PAS remettre le limiteur MFA à zéro ici. Un mot de passe correct
+    // n'est encore que le facteur 1 et ne doit jamais effacer l'historique
+    // de tentatives du facteur 2. Le bucket mot de passe lui-même n'est
+    // remis à zéro qu'après le succès complet du MFA, ci-dessous.
     const session = await getSession();
     session.isLoggedIn = false;
     session.pendingMfaUserId = user.id;
@@ -123,6 +125,11 @@ export async function login(username: string, password: string, meta: { ip?: str
     return { ok: false, mfaRequired: true };
   }
 
+  // Comportement historique conservé pour les comptes sans MFA : un mot de
+  // passe valide est le dernier facteur, donc son bucket peut être remis à
+  // zéro avant la finalisation existante. L'atomicité cookie/session plus
+  // large reste suivie séparément dans #57 et n'est pas masquée ici.
+  resetLoginRateLimit(rateLimitKey);
   await finalizeLogin(user, role, meta);
   return { ok: true };
 }
@@ -154,7 +161,7 @@ export async function completeMfaLogin(code: string, meta: { ip?: string; userAg
     return { ok: false, error: "Session de connexion invalide. Reconnectez-vous." };
   }
 
-  const rateLimitKey = `${meta.ip ?? "unknown"}:${preflightUser.username}`;
+  const rateLimitKey = buildLoginRateLimitKey(meta.ip, preflightUser.username, "mfa");
   const rateLimit = checkLoginRateLimit(rateLimitKey);
   if (!rateLimit.allowed) {
     audit({ actorUserId: preflightUser.id, actorRole: preflightRole, action: "mfa_verify", result: "failure", ipAddress: meta.ip, metadata: { reason: "rate_limited" } });
@@ -228,7 +235,11 @@ export async function completeMfaLogin(code: string, meta: { ip?: string; userAg
     return { ok: false, error: "Impossible de finaliser la connexion. Reconnectez-vous." };
   }
 
+  // Seulement un login MFA complètement finalisé remet à zéro les deux
+  // compteurs indépendants : le facteur 1 ne peut donc pas réinitialiser le
+  // facteur 2, et un prochain login légitime repart proprement après succès.
   resetLoginRateLimit(rateLimitKey);
+  resetLoginRateLimit(buildLoginRateLimitKey(meta.ip, claim.username, "password"));
   if (claim.usedRecoveryCode) {
     audit({ actorUserId: claim.userId, actorRole: claim.role, action: "mfa_recovery_code_used", result: "success", ipAddress: meta.ip, sessionId: claim.dbSessionId });
   }

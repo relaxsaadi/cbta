@@ -165,17 +165,55 @@ export interface GroupMemberRow {
   added_at: string;
 }
 
+/**
+ * Roster candidat fail-closed : `group_members` est une relation de
+ * candidats, pas une relation staff→groupe. Les lignes historiques
+ * incohérentes restent en base pour remédiation explicite mais ne sont
+ * jamais réinterprétées comme des candidats par les consommateurs.
+ */
 export function listGroupMembers(groupId: number): GroupMemberRow[] {
   return getDb()
     .prepare(
       `SELECT gm.candidate_user_id, u.full_name, u.username, gm.added_at
-       FROM group_members gm JOIN users u ON u.id = gm.candidate_user_id
+       FROM group_members gm
+       JOIN users u ON u.id = gm.candidate_user_id
+       JOIN user_roles ur ON ur.user_id = u.id
+       JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
        WHERE gm.group_id = ? ORDER BY u.full_name`
     )
     .all(groupId) as unknown as GroupMemberRow[];
 }
 
+/** Exact group + candidate-role predicate for server/data-boundary checks. */
+export function isCandidateMemberOfGroup(groupId: number, candidateUserId: number): boolean {
+  return !!getDb()
+    .prepare(
+      `SELECT 1
+       FROM group_members gm
+       JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+       JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+       WHERE gm.group_id = ? AND gm.candidate_user_id = ?`
+    )
+    .get(groupId, candidateUserId);
+}
+
+/**
+ * Authoritative write guard for candidate membership. Downstream RBAC,
+ * assessment assignment and familiarisation logic all trust this relation,
+ * so a staff account must never be inserted merely because a privileged
+ * caller supplies its user id.
+ */
 export function addCandidateToGroup(groupId: number, candidateUserId: number, addedBy: number): void {
+  const isCandidate = !!getDb()
+    .prepare(
+      `SELECT 1
+       FROM user_roles ur
+       JOIN roles r ON r.id = ur.role_id
+       WHERE ur.user_id = ? AND r.code = 'candidate'`
+    )
+    .get(candidateUserId);
+  if (!isCandidate) throw new Error("Seul un compte candidat peut être ajouté à un groupe.");
+
   getDb()
     .prepare(`INSERT OR IGNORE INTO group_members (group_id, candidate_user_id, added_by) VALUES (?, ?, ?)`)
     .run(groupId, candidateUserId, addedBy);

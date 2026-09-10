@@ -15,7 +15,11 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   // Revalidation de la révocation server-side à chaque affichage (§20) — un
   // cookie authentifié sans identifiant de session DB est lui aussi refusé :
   // le registre serveur est obligatoire, jamais une protection optionnelle.
-  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId)) {
+  // La ligne DB doit en plus appartenir au même utilisateur que le cookie et
+  // son compte doit encore être actif ; une suspension/archive gagne donc
+  // immédiatement à cette frontière même si une ancienne ligne de session
+  // avait échappé à la révocation.
+  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId)) {
     session.destroy();
     redirect("/login");
   }

@@ -44,15 +44,32 @@ export interface SessionRow {
   user_agent: string | null;
 }
 
-/** Revalidée à chaque requête (middleware). Renvoie false si expirée ou
- * révoquée — le cookie doit alors être détruit même s'il reste valide
- * cryptographiquement. */
-export function isDbSessionValid(dbSessionId: number): boolean {
+/** Revalidée à chaque requête authentifiée. La ligne de session n'est pas
+ * suffisante à elle seule : elle doit appartenir au MÊME utilisateur que le
+ * cookie et cet utilisateur doit encore être `active`. Ainsi un ancien cookie
+ * ne reste pas autorisé si une révocation de session a été manquée après une
+ * suspension/archive, et un dbSessionId valide ne peut jamais être combiné à
+ * l'identité/rôle mis en cache d'un autre utilisateur.
+ *
+ * Cette défense en profondeur ne remplace pas l'atomicité de la transition
+ * suspend/archive + révocation suivie dans #52 ; elle garantit simplement que
+ * la frontière d'autorisation échoue fermée même devant une ligne legacy non
+ * révoquée. */
+export function isDbSessionValid(dbSessionId: number, expectedUserId: number): boolean {
   const db = getDb();
-  const row = db.prepare(`SELECT expires_at, revoked_at FROM sessions WHERE id = ?`).get(dbSessionId) as
-    | { expires_at: string; revoked_at: string | null }
+  const row = db
+    .prepare(
+      `SELECT s.user_id, s.expires_at, s.revoked_at, u.status
+       FROM sessions s
+       JOIN users u ON u.id = s.user_id
+       WHERE s.id = ?`
+    )
+    .get(dbSessionId) as
+    | { user_id: number; expires_at: string; revoked_at: string | null; status: string }
     | undefined;
   if (!row) return false;
+  if (row.user_id !== expectedUserId) return false;
+  if (row.status !== "active") return false;
   if (row.revoked_at) return false;
   if (new Date(row.expires_at).getTime() < Date.now()) return false;
   return true;

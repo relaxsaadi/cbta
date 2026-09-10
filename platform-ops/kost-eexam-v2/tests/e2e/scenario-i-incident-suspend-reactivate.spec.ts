@@ -15,11 +15,14 @@ test("suspendre un compte via un incident bloque réellement la connexion, réac
   await adminPage.getByRole("button", { name: /déclarer un incident/i }).click();
   await adminPage.waitForURL(/\/incidents\/\d+/);
 
-  // Suspend le compte candidat3.demo (Yacine Haddad) depuis le sélecteur
-  // "Compte utilisateur".
-  const userBlock = adminPage.locator("div").filter({ hasText: "Compte utilisateur" }).first();
-  await userBlock.locator('select[name="targetId"]').first().selectOption({ label: "Yacine Haddad (démo) (candidat3.demo)" });
-  await userBlock.getByRole("button", { name: /^suspendre$/i }).first().click();
+  // Cible explicitement le formulaire de suspension : les trois actions
+  // Compte utilisateur ont chacune leur propre <select name="targetId">.
+  // Le sélecteur historique sur un grand <div> pouvait associer le select
+  // d'un formulaire au bouton d'un autre lorsque la liste d'utilisateurs
+  // devenait longue après d'autres scénarios E2E.
+  const suspendForm = adminPage.locator("form").filter({ has: adminPage.getByRole("button", { name: /^suspendre$/i }) }).first();
+  await suspendForm.locator('select[name="targetId"]').selectOption({ label: "Yacine Haddad (démo) (candidat3.demo)" });
+  await suspendForm.getByRole("button", { name: /^suspendre$/i }).press("Enter");
   await expect(adminPage.getByText(/suspend_account/)).toBeVisible();
 
   // Vérification réelle : la connexion doit maintenant échouer.
@@ -32,11 +35,12 @@ test("suspendre un compte via un incident bloque réellement la connexion, réac
   await expect(candidatePage.getByText(/suspendu/i)).toBeVisible();
   await expect(candidatePage).toHaveURL(/\/login/);
 
-  // Réactivation.
+  // Réactivation : même isolation du formulaire, sans dépendre de nth(1)
+  // sur une collection de selects issue d'un conteneur trop large.
   await adminPage.reload();
-  const userBlock2 = adminPage.locator("div").filter({ hasText: "Compte utilisateur" }).first();
-  await userBlock2.locator('select[name="targetId"]').nth(1).selectOption({ label: "Yacine Haddad (démo) (candidat3.demo)" });
-  await userBlock2.getByRole("button", { name: /^réactiver$/i }).click();
+  const reactivateForm = adminPage.locator("form").filter({ has: adminPage.getByRole("button", { name: /^réactiver$/i }) }).first();
+  await reactivateForm.locator('select[name="targetId"]').selectOption({ label: "Yacine Haddad (démo) (candidat3.demo)" });
+  await reactivateForm.getByRole("button", { name: /^réactiver$/i }).press("Enter");
   await expect(adminPage.getByText(/reactivate_account/)).toBeVisible();
 
   // La connexion doit maintenant refonctionner.

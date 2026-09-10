@@ -1,4 +1,4 @@
-import { getDb } from "./db";
+import { getDb, transaction } from "./db";
 import { audit } from "./audit";
 import { setUserStatus, reactivateUserSafely } from "./users";
 import { revokeAllSessionsForUser } from "./sessions-registry";
@@ -287,10 +287,21 @@ function recordAction(incidentId: number, actionType: IncidentActionType, actorU
 // (incident_actions + audit_logs) — jamais un bouton qui ne fait que du
 // texte (§18 de la mission : « une capacité réelle d'action »).
 
+/**
+ * Suspension liée à un incident — frontière atomique (#52).
+ * Le statut, la révocation set-based des sessions, l'incident_action et son
+ * audit de succès doivent tous valider ensemble. Si une de ces écritures
+ * SQLite échoue, BEGIN IMMEDIATE/ROLLBACK de transaction() restaure l'état
+ * antérieur et aucune trace de succès partielle ne subsiste. La notification
+ * email reste volontairement dans l'action serveur appelante, après le retour
+ * de cette fonction, donc uniquement après COMMIT.
+ */
 export function actionSuspendAccount(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }) {
-  setUserStatus(targetUserId, "suspended");
-  revokeAllSessionsForUser(targetUserId, actor.id);
-  recordAction(incidentId, "suspend_account", actor.id, actor.role, "user", targetUserId, "Compte suspendu + sessions révoquées");
+  transaction(() => {
+    setUserStatus(targetUserId, "suspended");
+    revokeAllSessionsForUser(targetUserId, actor.id);
+    recordAction(incidentId, "suspend_account", actor.id, actor.role, "user", targetUserId, "Compte suspendu + sessions révoquées");
+  });
 }
 
 /** Même correctif que quickReactivateAction (app/(app)/users/actions.ts,

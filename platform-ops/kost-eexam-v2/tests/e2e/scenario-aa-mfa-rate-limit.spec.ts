@@ -75,7 +75,7 @@ test("#47 — rejouer le bon mot de passe ne remet jamais à zéro les échecs M
 
   for (let i = 0; i < 4; i += 1) {
     await submitMfa(page, invalidTotp(u.secret));
-    await expect(page.getByRole("alert")).toContainText("Code invalide");
+    await expect(page.locator('p[role="alert"]')).toContainText("Code invalide");
   }
 
   // C'est exactement le bypass historique : une nouvelle soumission du bon
@@ -85,12 +85,12 @@ test("#47 — rejouer le bon mot de passe ne remet jamais à zéro les échecs M
   await page.waitForURL(/\/login\/verifier-mfa/);
 
   await submitMfa(page, invalidTotp(u.secret)); // cinquième échec : encore traité, puis bucket épuisé
-  await expect(page.getByRole("alert")).toContainText("Code invalide");
+  await expect(page.locator('p[role="alert"]')).toContainText("Code invalide");
 
   // La sixième tentative est un VRAI code de secours valide. Elle doit être
   // bloquée AVANT toute vérification/consommation du credential.
   await submitMfa(page, u.recovery!.plain[0]!);
-  await expect(page.getByRole("alert")).toContainText(/Trop de tentatives échouées/i);
+  await expect(page.locator('p[role="alert"]')).toContainText(/Trop de tentatives échouées/i);
 
   const db = openDb();
   const user = db.prepare(`SELECT mfa_recovery_codes_json FROM users WHERE id = ?`).get(u.userId) as { mfa_recovery_codes_json: string };
@@ -109,7 +109,7 @@ test("#47 — un succès MFA complet remet le bucket MFA à zéro pour la procha
   await page.waitForURL(/\/login\/verifier-mfa/);
   for (let i = 0; i < 4; i += 1) {
     await submitMfa(page, invalidTotp(u.secret));
-    await expect(page.getByRole("alert")).toContainText("Code invalide");
+    await expect(page.locator('p[role="alert"]')).toContainText("Code invalide");
   }
 
   await submitMfa(page, totpAt(u.secret, Date.now()));
@@ -122,10 +122,10 @@ test("#47 — un succès MFA complet remet le bucket MFA à zéro pour la procha
   await page.waitForURL(/\/login\/verifier-mfa/);
   for (let i = 0; i < 5; i += 1) {
     await submitMfa(page, invalidTotp(u.secret));
-    await expect(page.getByRole("alert")).toContainText("Code invalide");
+    await expect(page.locator('p[role="alert"]')).toContainText("Code invalide");
   }
   await submitMfa(page, invalidTotp(u.secret));
-  await expect(page.getByRole("alert")).toContainText(/Trop de tentatives échouées/i);
+  await expect(page.locator('p[role="alert"]')).toContainText(/Trop de tentatives échouées/i);
 });
 
 test("#47 — un compte sans MFA conserve le reset normal après une connexion réussie", async ({ page }) => {
@@ -134,7 +134,7 @@ test("#47 — un compte sans MFA conserve le reset normal après une connexion r
 
   for (let i = 0; i < 4; i += 1) {
     await passwordLogin(page, u.username, wrong);
-    await expect(page.getByRole("alert")).toContainText(/Identifiant ou mot de passe incorrect/i);
+    await expect(page.locator('p[role="alert"]')).toContainText(/Identifiant ou mot de passe incorrect/i);
   }
 
   await passwordLogin(page, u.username, u.password);
@@ -145,8 +145,8 @@ test("#47 — un compte sans MFA conserve le reset normal après une connexion r
   // password à zéro. Cinq nouveaux échecs sont donc traités avant blocage.
   for (let i = 0; i < 5; i += 1) {
     await passwordLogin(page, u.username, wrong);
-    await expect(page.getByRole("alert")).toContainText(/Identifiant ou mot de passe incorrect/i);
+    await expect(page.locator('p[role="alert"]')).toContainText(/Identifiant ou mot de passe incorrect/i);
   }
   await passwordLogin(page, u.username, wrong);
-  await expect(page.getByRole("alert")).toContainText(/Trop de tentatives échouées/i);
+  await expect(page.locator('p[role="alert"]')).toContainText(/Trop de tentatives échouées/i);
 });

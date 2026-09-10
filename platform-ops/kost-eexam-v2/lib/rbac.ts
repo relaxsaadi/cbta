@@ -12,17 +12,17 @@ export class UnauthorizedError extends Error {
 
 /** Garde à appeler en TÊTE de chaque server action / route mutante — jamais
  * une vérification côté UI seule (§19 de la mission : « RBAC serveur »).
- * Revérifie aussi la révocation server-side (§20) : un cookie valide dont la
- * session DB a été révoquée est refusé ici, pas seulement au prochain
- * rechargement de page. */
+ * Revérifie aussi la révocation server-side (§20) : le registre DB est
+ * obligatoire. Un cookie authentifié sans `dbSessionId`, expiré ou révoqué
+ * est refusé ici, pas seulement au prochain rechargement de page. */
 export async function requireRole(...allowed: ConsoleRole[]) {
   const session = await getSession();
   if (!session.isLoggedIn || !session.userId || !session.role) {
     throw new UnauthorizedError("Session expirée — reconnectez-vous.");
   }
-  if (session.dbSessionId && !isDbSessionValid(session.dbSessionId)) {
+  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId)) {
     session.destroy();
-    throw new UnauthorizedError("Session révoquée — reconnectez-vous.");
+    throw new UnauthorizedError("Session révoquée ou invalide — reconnectez-vous.");
   }
   if (!allowed.includes(session.role)) {
     throw new UnauthorizedError(`Rôle "${session.role}" non autorisé pour cette action.`);

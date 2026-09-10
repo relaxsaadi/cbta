@@ -13,10 +13,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     redirect("/login");
   }
   // Revalidation de la révocation server-side à chaque affichage (§20) — un
-  // cookie valide dont la session DB a été révoquée par un administrateur
-  // (incident, "déconnecter toutes les sessions") ne doit pas continuer à
-  // fonctionner jusqu'à expiration naturelle du cookie chiffré.
-  if (session.dbSessionId && !isDbSessionValid(session.dbSessionId)) {
+  // cookie authentifié sans identifiant de session DB est lui aussi refusé :
+  // le registre serveur est obligatoire, jamais une protection optionnelle.
+  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId)) {
     session.destroy();
     redirect("/login");
   }

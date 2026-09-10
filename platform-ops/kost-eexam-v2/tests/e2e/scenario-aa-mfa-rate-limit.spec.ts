@@ -61,7 +61,17 @@ async function passwordLogin(page: Page, username: string, password: string) {
 
 async function submitMfa(page: Page, code: string) {
   await page.getByLabel("Code").fill(code);
-  await page.getByRole("button", { name: /^valider$/i }).click();
+  // `useActionState` conserve l'ancien state.error pendant que la Server
+  // Action suivante est en vol. Sans attendre la réponse POST, l'assertion
+  // qui suit pouvait donc valider immédiatement l'ancien "Code invalide"
+  // et laisser la boucle enchaîner avant que le compteur ait réellement été
+  // incrémenté. Attendre la réponse du POST rend chaque tentative strictement
+  // séquentielle et prouve le comportement du vrai boundary serveur.
+  const [response] = await Promise.all([
+    page.waitForResponse((r) => r.request().method() === "POST" && new URL(r.url()).pathname === "/login/verifier-mfa"),
+    page.getByRole("button", { name: /^valider$/i }).click(),
+  ]);
+  expect(response.status(), "la Server Action MFA doit répondre sans erreur HTTP").toBeLessThan(500);
 }
 
 test.describe.configure({ mode: "serial" });

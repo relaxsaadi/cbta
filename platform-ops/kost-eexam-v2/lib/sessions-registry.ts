@@ -86,16 +86,26 @@ export function revokeDbSession(dbSessionId: number, revokedBy: number): void {
 }
 
 /** "Déconnecter toutes les sessions de cet utilisateur" (§20). `exceptId`
- * permet "…sauf la mienne" quand l'admin se révoque lui-même. */
+ * permet "…sauf la mienne" quand l'admin se révoque lui-même.
+ *
+ * IMPORTANT (#52) : la révocation est volontairement un UPDATE set-based,
+ * pas une boucle SELECT puis UPDATE par session. SQLite exécute ainsi la
+ * révocation de toutes les lignes ciblées comme une seule instruction
+ * atomique : une erreur ne peut plus laisser seulement une partie des
+ * sessions révoquées. Cela ne rend pas encore atomique, à lui seul, le
+ * changement de statut suspend/archive effectué par certains appelants ;
+ * cette frontière plus large reste suivie séparément par #52. */
 export function revokeAllSessionsForUser(userId: number, revokedBy: number, exceptId?: number): number {
   const db = getDb();
-  const rows = db
-    .prepare(`SELECT id FROM sessions WHERE user_id = ? AND revoked_at IS NULL${exceptId ? " AND id != ?" : ""}`)
-    .all(...(exceptId ? [userId, exceptId] : [userId])) as { id: number }[];
-  const stmt = db.prepare(`UPDATE sessions SET revoked_at = ?, revoked_by = ? WHERE id = ?`);
   const ts = nowIso();
-  for (const r of rows) stmt.run(ts, revokedBy, r.id);
-  return rows.length;
+  const result = exceptId
+    ? db
+        .prepare(`UPDATE sessions SET revoked_at = ?, revoked_by = ? WHERE user_id = ? AND revoked_at IS NULL AND id != ?`)
+        .run(ts, revokedBy, userId, exceptId)
+    : db
+        .prepare(`UPDATE sessions SET revoked_at = ?, revoked_by = ? WHERE user_id = ? AND revoked_at IS NULL`)
+        .run(ts, revokedBy, userId);
+  return Number(result.changes);
 }
 
 /** Frontière multi-client (lib/tenant-scope.ts) — `restrictToUserIdsOrNull`

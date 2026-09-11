@@ -1,11 +1,15 @@
 // Module de familiarisation (addendum §18-21) — sessions de
 // familiarisation à la plateforme AVANT l'examen réel, distinctes des
-// évaluations. Chaque session porte sur un groupe et une fonction DGR ;
-// chaque candidat du groupe y a une ligne de présence.
+// évaluations. Les lignes de présence candidat ne sont créées que pour les
+// sessions qui incluent effectivement les candidats.
 import { getDb, transaction, nowIso } from "./db";
 import { audit } from "./audit";
 import { listGroupMembers } from "./groups";
 import type { ConsoleRole } from "./session";
+import {
+  familiarizationAudienceIncludesCandidates,
+  type FamiliarizationAudience,
+} from "./familiarization-audience";
 
 export interface FamiliarizationSessionRow {
   id: number;
@@ -20,7 +24,7 @@ export interface FamiliarizationSessionRow {
    * que la familiarisation soit planifiable pour le PERSONNEL et pour les
    * CANDIDATS. Colonnes additives (scripts/migrate.ts) — nullable, jamais
    * rétroactivement complétées pour une session existante. */
-  audience: string | null;
+  audience: FamiliarizationAudience | null;
   ended_at: string | null;
 }
 
@@ -67,14 +71,15 @@ export interface FamiliarizationFilter {
 
 /** Version filtrée pour /familiarisation (§11). Pas de filtre Candidat/
  * Rôle/Statut au niveau de CETTE liste : une session de familiarisation
- * porte sur un GROUPE entier (une ligne de présence PAR candidat du
- * groupe, table familiarization_attendance — granularité différente, déjà
+ * porte sur un GROUPE entier. Pour les audiences candidats/mixte, la table
+ * familiarization_attendance porte la granularité candidat et reste
  * consultable dans le détail d'une session via
- * app/(app)/familiarisation/[id]/page.tsx, jamais dupliquée ici). Inventer
- * un filtre Candidat/Statut à ce niveau produirait "une session contient
- * au moins un candidat correspondant", une sémantique différente et non
- * demandée — voir §14/§6 "do not invent relationships that do not exist".
- * "Rôle" n'a pas non plus de colonne réelle correspondante sur une session
+ * app/(app)/familiarisation/[id]/page.tsx. Une session personnel ne crée
+ * volontairement aucune présence candidat. Inventer un filtre
+ * Candidat/Statut à ce niveau produirait "une session contient au moins un
+ * candidat correspondant", une sémantique différente et non demandée —
+ * voir §14/§6 "do not invent relationships that do not exist". "Rôle"
+ * n'a pas non plus de colonne réelle correspondante sur une session
  * (organized_by est une personne, pas un rôle stocké séparément). */
 export function listFamiliarizationSessionsFiltered(filter: FamiliarizationFilter = {}): FamiliarizationSessionWithContext[] {
   const db = getDb();
@@ -145,9 +150,10 @@ export function getFamiliarizationSession(id: number): FamiliarizationSessionWit
     .get(id) as FamiliarizationSessionWithContext | undefined;
 }
 
-/** Crée la session ET une ligne de présence (absent par défaut) pour
- * chaque membre actuel du groupe — évite d'avoir à ressaisir la liste
- * des candidats séparément (même source que le groupe réel). */
+/** Crée la session et, uniquement quand l'audience inclut les candidats,
+ * une ligne de présence (absent par défaut) pour chaque membre actuel du
+ * groupe. Une audience NULL est traitée comme l'ancien comportement
+ * candidat-facing afin de préserver les appels/données historiques. */
 export function createFamiliarizationSession(params: {
   groupId: number;
   functionCode: string;
@@ -156,13 +162,12 @@ export function createFamiliarizationSession(params: {
   notes?: string;
   organizedBy: number;
   organizerRole: ConsoleRole;
-  /** "candidats" | "personnel" | "mixte" — texte libre validé côté UI
-   * (pas de CHECK en base, même convention que candidate_type/client_type
-   * ailleurs dans ce schéma). */
-  audience?: string;
+  audience?: FamiliarizationAudience;
   endedAt?: string;
 }): number {
-  const members = listGroupMembers(params.groupId);
+  const includesCandidates =
+    params.audience == null || familiarizationAudienceIncludesCandidates(params.audience);
+  const members = includesCandidates ? listGroupMembers(params.groupId) : [];
   return transaction((db) => {
     const result = db
       .prepare(
@@ -180,17 +185,25 @@ export function createFamiliarizationSession(params: {
         params.endedAt ?? null
       );
     const sessionId = Number(result.lastInsertRowid);
-    const insertAttendance = db.prepare(
-      `INSERT INTO familiarization_attendance (session_id, candidate_user_id, present) VALUES (?, ?, 0)`
-    );
-    for (const m of members) insertAttendance.run(sessionId, m.candidate_user_id);
+    if (includesCandidates) {
+      const insertAttendance = db.prepare(
+        `INSERT INTO familiarization_attendance (session_id, candidate_user_id, present) VALUES (?, ?, 0)`
+      );
+      for (const m of members) insertAttendance.run(sessionId, m.candidate_user_id);
+    }
     audit({
       actorUserId: params.organizedBy,
       actorRole: params.organizerRole,
       action: "familiarization_session_create",
       targetType: "familiarization_session",
       targetId: sessionId,
-      metadata: { groupId: params.groupId, functionCode: params.functionCode, heldAt: params.heldAt, candidateCount: members.length },
+      metadata: {
+        groupId: params.groupId,
+        functionCode: params.functionCode,
+        heldAt: params.heldAt,
+        audience: params.audience ?? null,
+        candidateCount: members.length,
+      },
     });
     return sessionId;
   });
@@ -234,10 +247,11 @@ export interface CandidateFamiliarizationRecord {
 }
 
 /** Historique de familiarisation d'un candidat (addendum §18-21 —
- * « familiarization records tied to user history ») — toutes les
- * sessions où ce candidat a une ligne de présence, quel que soit le
- * groupe (utile après un transfert de groupe), triées les plus
- * récentes d'abord. */
+ * « familiarization records tied to user history ») — sessions
+ * candidats/mixte où ce candidat a une ligne de présence, quel que soit le
+ * groupe (utile après un transfert). Les anciennes sessions sans audience
+ * restent visibles. Le filtre personnel est défensif : il empêche aussi
+ * d'exposer d'éventuelles lignes candidat créées avant ce correctif. */
 export function getCandidateFamiliarizationHistory(candidateUserId: number): CandidateFamiliarizationRecord[] {
   return getDb()
     .prepare(
@@ -246,6 +260,7 @@ export function getCandidateFamiliarizationHistory(candidateUserId: number): Can
        JOIN familiarization_sessions fs ON fs.id = fa.session_id
        JOIN groups g ON g.id = fs.group_id
        WHERE fa.candidate_user_id = ?
+         AND (fs.audience IS NULL OR fs.audience <> 'personnel')
        ORDER BY fs.held_at DESC`
     )
     .all(candidateUserId) as unknown as CandidateFamiliarizationRecord[];

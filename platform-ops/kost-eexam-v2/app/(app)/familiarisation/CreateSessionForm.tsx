@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { FAMILIARIZATION_AUDIENCES } from "@/lib/familiarization-audience";
 import { createFamiliarizationSessionAction, type CreateSessionResult } from "./actions";
 
 export function CreateSessionForm({
@@ -44,12 +45,13 @@ export function CreateSessionForm({
         <div>
           {/* Mission "CLOSE AUDITOR REMARKS" (2026-08-31) §14/§17 — l'auditeur
               exige que la familiarisation soit planifiable pour le PERSONNEL
-              ET pour les CANDIDATS, explicitement déclaré ici. */}
+              ET pour les CANDIDATS. Les valeurs proviennent de la même source
+              de vérité que la validation côté serveur. */}
           <label htmlFor="audience" className="mb-1 block text-[12px] font-medium text-text-secondary">Public visé</label>
           <select id="audience" name="audience" required defaultValue="candidats" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
-            <option value="candidats">Candidats</option>
-            <option value="personnel">Personnel</option>
-            <option value="mixte">Mixte (personnel + candidats)</option>
+            {FAMILIARIZATION_AUDIENCES.map((entry) => (
+              <option key={entry.value} value={entry.value}>{entry.label}</option>
+            ))}
           </select>
         </div>
       </div>

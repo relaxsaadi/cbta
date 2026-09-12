@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { requireRole } from "@/lib/rbac";
+import { requireRole, UnauthorizedError } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { audit } from "@/lib/audit";
 import { SERVER_CHARACTERISTICS_INSPECTION_DATE } from "@/lib/server-characteristics";
@@ -13,7 +13,11 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // jamais responsable pédagogique/candidat (infrastructure hors de leur
 // périmètre métier).
 export async function GET() {
-  const session = await requireRole("administrator", "auditor");
+  const session = await requireRole("administrator", "auditor").catch((error: unknown) => {
+    if (error instanceof UnauthorizedError) return null;
+    throw error;
+  });
+  if (!session) return new Response("Rôle non autorisé.", { status: 403 });
 
   const meta: DocumentMeta = {
     docTitle: "Caractéristiques de l'environnement serveur",

@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { requireRole } from "@/lib/rbac";
+import { requireRole, UnauthorizedError } from "@/lib/rbac";
 import { formatAlgeriaDateTime, formatAlgeriaDate } from "@/lib/timezone";
 import { hasAssessmentAccess } from "@/lib/tenant-scope";
 import { getAssessment, getSessionReport } from "@/lib/assessments";
@@ -16,7 +16,11 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // — seule la PRÉSENTATION diffère (lib/pdf/GlobalExamReportDocument.tsx,
 // volontairement simple : Candidat / Résultat / Mention RÉUSSITE-ÉCHEC).
 export async function GET(request: Request, { params }: { params: Promise<{ assessmentId: string }> }) {
-  const session = await requireRole("pedagogical_manager", "administrator", "auditor");
+  const session = await requireRole("pedagogical_manager", "administrator", "auditor").catch((error: unknown) => {
+    if (error instanceof UnauthorizedError) return null;
+    throw error;
+  });
+  if (!session) return new Response("Rôle non autorisé.", { status: 403 });
   const { assessmentId } = await params;
   const assessmentIdNum = Number(assessmentId);
 

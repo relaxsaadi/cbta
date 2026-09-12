@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { requireRole } from "@/lib/rbac";
+import { requireRole, UnauthorizedError } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { getAttempt, getAssessmentSettingsForAttempt } from "@/lib/attempts";
@@ -20,7 +20,11 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 //     nouvelle). Un candidat ne peut JAMAIS télécharger le rapport d'un
 //     autre candidat, quel que soit ce réglage.
 export async function GET(request: Request, { params }: { params: Promise<{ attemptId: string }> }) {
-  const session = await requireRole("candidate", "pedagogical_manager", "administrator", "auditor");
+  const session = await requireRole("candidate", "pedagogical_manager", "administrator", "auditor").catch((error: unknown) => {
+    if (error instanceof UnauthorizedError) return null;
+    throw error;
+  });
+  if (!session) return new Response("Rôle non autorisé.", { status: 403 });
   const { attemptId } = await params;
   const attemptIdNum = Number(attemptId);
   const { searchParams } = new URL(request.url);

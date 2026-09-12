@@ -21,7 +21,11 @@ const protectedReportRoutes = [
 test("protected report GET routes use the authoritative DB-backed role guard", () => {
   for (const route of protectedReportRoutes) {
     const source = readRelative(route);
-    assert.match(source, /import\s*\{\s*requireRole\s*\}\s*from\s*["']@\/lib\/rbac["']/, `${route} must import requireRole`);
+    assert.match(
+      source,
+      /import\s*\{[^}]*\brequireRole\b[^}]*\}\s*from\s*["']@\/lib\/rbac["']/,
+      `${route} must import requireRole from the canonical RBAC module`,
+    );
     assert.match(source, /await\s+requireRole\(/, `${route} must invoke requireRole before serving protected content`);
     assert.doesNotMatch(source, /\bgetSession\s*\(/, `${route} must not fall back to direct cookie-only getSession authorization`);
   }

@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { getAttempt, getAssessmentSettingsForAttempt } from "@/lib/attempts";
@@ -20,10 +20,7 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 //     nouvelle). Un candidat ne peut JAMAIS télécharger le rapport d'un
 //     autre candidat, quel que soit ce réglage.
 export async function GET(request: Request, { params }: { params: Promise<{ attemptId: string }> }) {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
+  const session = await requireRole("candidate", "pedagogical_manager", "administrator", "auditor");
   const { attemptId } = await params;
   const attemptIdNum = Number(attemptId);
   const { searchParams } = new URL(request.url);
@@ -42,8 +39,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ atte
     if (!settings || settings.show_result !== 1 || stillDeferred) {
       return new Response("Le téléchargement du rapport n'est pas encore disponible pour cet examen.", { status: 403 });
     }
-  } else if (!["pedagogical_manager", "administrator", "auditor"].includes(session.role)) {
-    return new Response("Rôle non autorisé.", { status: 403 });
   } else if (!hasAttemptAccess({ userId: session.userId, role: session.role }, attemptIdNum)) {
     return new Response("Rapport introuvable.", { status: 404 });
   }

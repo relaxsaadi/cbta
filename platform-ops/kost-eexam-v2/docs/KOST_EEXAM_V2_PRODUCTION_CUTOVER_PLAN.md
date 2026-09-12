@@ -70,12 +70,20 @@ la dernière réconciliation des blockers et les preuves CI/runtime du même hea
 6. Sauvegarde manuelle immédiate après bascule (RPO ne doit jamais dépendre uniquement du cron 2h du matin pour le tout premier jour).
 7. V1 (`console.kostacademy.com` s'il reste actif, ou toute autre dépendance résiduelle) toujours fonctionnel si non désactivé intentionnellement.
 
-## 8. Stratégie DNS et rollback
+> [!IMPORTANT]
+> Le test candidat du point 3 crée déjà des écritures V2 (tentative, réponses, résultat et preuves d'audit). Dès qu'il est exécuté avec des données de production, la procédure est dans le régime **post-écriture V2** décrit au §8 : un simple retour DNS vers V1 n'est plus un rollback de données complet.
 
-- **TTL DNS** — abaisser le TTL du enregistrement `exam.kostacademy.com` (ex. 300s) au moins 24h AVANT la bascule, pour permettre un rollback rapide si besoin.
-- **Rollback** — remettre l'enregistrement DNS sur l'IP/la configuration précédente (V1). Aucune donnée V1 n'aura été modifiée par la bascule (migration = copie, jamais une suppression de V1) — un rollback DNS seul suffit à revenir à V1 tel quel.
-- **Délai de rollback** — décision à prendre AVANT la bascule, pas pendant : combien de temps après la bascule un rollback reste-t-il la réponse par défaut à un problème sérieux (ex. 4h, 24h) plutôt qu'un correctif en avant ("roll forward").
-- **Critères d'abandon (abort criteria)** — déclencher un rollback immédiat si : taux d'erreur applicatif anormal sur `/api/health` ou les journaux, un candidat perd une tentative en cours de façon non récupérable, une fuite de données cross-tenant est détectée, ou toute régression touchant l'intégrité de la notation.
+## 8. Stratégie DNS, frontière de divergence et rollback
+
+- **TTL DNS** — abaisser le TTL du enregistrement `exam.kostacademy.com` (ex. 300s) au moins 24h AVANT la bascule, pour permettre de modifier rapidement le routage si besoin. Un TTL court ne constitue pas, à lui seul, une stratégie de rollback des données.
+- **Frontière de cutover** — consigner explicitement l'heure et le checkpoint/sauvegarde vérifié immédiatement avant l'ouverture de V2 aux écritures de production. Cette frontière permet de distinguer un rollback sans divergence d'un rollback après divergence V1/V2.
+- **Avant la première écriture V2** — si V2 est encore en maintenance/lecture seule et qu'aucune écriture de production n'a été acceptée, remettre le routage sur V1 peut suffire : V1 reste alors l'unique historique de production depuis la frontière.
+- **Après la première écriture V2** — un changement DNS seul vers V1 est **interdit comme procédure normale de rollback**. V1 ne contient pas les nouvelles tentatives, réponses, résultats, audits, changements de compte/session, incidents ou autres écritures déjà commises dans V2. Revenir au routage V1 sans les réconcilier créerait deux historiques divergents et masquerait des données de production valides.
+- **Procédure minimale post-écriture** — avant tout retour vers V1 : (1) arrêter/drainer les nouvelles écritures V2 ; (2) créer et vérifier une sauvegarde/checkpoint V2 ; (3) préserver la base et les preuves d'audit V2 intactes ; (4) identifier les écritures depuis la frontière de cutover ; (5) les réconcilier vers le datastore qui sera déclaré autoritatif au moyen d'une procédure testée, ou maintenir la plateforme en état fail-closed/maintenance jusqu'à résolution ; (6) rouvrir le trafic seulement lorsque l'intégrité/continuité est démontrée.
+- **Aucun reverse-migration V2→V1 n'est actuellement démontré** — tant qu'un tel mécanisme n'existe pas et n'a pas été testé en environnement jetable, le défaut après une écriture V2 doit privilégier **roll-forward** ou maintenance fail-closed. Un retour d'urgence vers V1 qui abandonnerait la continuité des écritures V2 exige une décision explicite du propriétaire sur l'impact exact ; il ne doit jamais être présenté comme sans perte.
+- **Délai de rollback** — le délai temporel seul ne décide pas si un retour V1 est sûr. Le critère déterminant est aussi l'existence ou non d'écritures V2 depuis la frontière. Définir avant la bascule les critères de roll-forward, maintenance et éventuel reverse-migration.
+- **Critères d'abandon (abort criteria)** — en cas de taux d'erreur anormal, perte non récupérable de tentative, fuite cross-tenant ou régression de notation : bloquer/drainer d'abord les nouvelles écritures si cela peut être fait sans aggraver l'incident, préserver immédiatement l'état V2, puis appliquer le régime de rollback correspondant à la frontière de divergence. Ne pas masquer une divergence par un simple changement DNS.
+- **Preuve obligatoire avant GO** — réaliser en environnement jetable deux drills distincts : (a) échec avant toute écriture V2, retour routage vers V1 sans divergence ; (b) échec après une tentative/résultat/audit V2 commis, démontrant que ces écritures restent préservées et que le datastore autoritatif final est explicite. Ce gate est suivi par le blocker GitHub de continuité cutover/DR.
 
 ## 9. Monitoring post-bascule
 
@@ -91,6 +99,7 @@ la dernière réconciliation des blockers et les preuves CI/runtime du même hea
 - Sort de l'historique de résultats V1 (migré vs archivé séparément).
 - Fournisseur/emplacement de la copie de sauvegarde chiffrée hors site.
 - Canal d'alerte actif (e-mail/SMS/Slack) pour le monitoring — actuellement journalisation seule.
+- Procédure et outil éventuels de reverse-migration des écritures V2 vers V1 si un retour post-écriture devait être supporté ; rien de tel n'est démontré aujourd'hui.
 
 ---
 

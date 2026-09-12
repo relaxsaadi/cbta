@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 import { getDb, nowIso } from "@/lib/db";
 import { latestOfType, BACKUP_POLICY } from "@/lib/backup";
-import { safeEmailConfigReport } from "@/lib/email/config";
 
 // Mission "PRODUCTION READINESS" §12 — endpoint de santé public (aucune
-// session requise, exempté du proxy — voir proxy.ts, même logique que
-// /api/attempts/sweep : un outil de supervision externe n'a pas de cookie
-// de session). Volontairement MINIMAL dans ce qu'il expose : statut
-// booléen + horodatages, jamais de détail interne (chemin de fichier,
-// version de dépendance, message d'erreur brut) qui aiderait un
-// attaquant à cartographier l'infrastructure. Consommé par
-// deploy/monitor.sh (cron), et utilisable par tout outil de supervision
-// externe (UptimeRobot, Pingdom, etc. — choix d'hébergement/outil non
-// tranché, voir docs/KOST_EEXAM_V2_PRODUCTION_READINESS_REPORT.md).
+// session requise, exempté du proxy — voir proxy.ts). Il expose uniquement
+// l'état opérationnel nécessaire à la supervision externe : santé globale,
+// disponibilité/latence DB et fraîcheur des preuves backup/restore. Les
+// détails de configuration applicative (email, secrets configurés, mode
+// d'envoi, destinataires, etc.) restent hors de cette surface publique.
+// Consommé par deploy/monitor.sh et utilisable par un outil de supervision
+// externe ; jamais de chemin de fichier, version interne ou message d'erreur
+// brut dans la réponse.
 export async function GET() {
   const startedAt = Date.now();
   let dbOk = false;
@@ -57,12 +55,6 @@ export async function GET() {
         ageHours: restoreTestAgeHours !== null ? Math.round(restoreTestAgeHours * 10) / 10 : null,
         stale: restoreTestStale,
       },
-      // Mission email §56/§74 — présence de configuration UNIQUEMENT
-      // (booléens/compte/enum), jamais une valeur de secret — voir le
-      // commentaire sur safeEmailConfigReport() (lib/email/config.ts).
-      // N'appelle jamais le SDK Resend : lecture de process.env pure,
-      // aucun coût réseau supplémentaire par requête.
-      email: safeEmailConfigReport(),
       uptimeSeconds: Math.round(process.uptime()),
     },
     { status: healthy ? 200 : 503 }

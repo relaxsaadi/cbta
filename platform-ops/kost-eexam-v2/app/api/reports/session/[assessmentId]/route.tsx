@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasAssessmentAccess } from "@/lib/tenant-scope";
 import { getAssessment, getSessionReport } from "@/lib/assessments";
@@ -13,13 +13,7 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // responsable/admin/auditeur — jamais candidat (statistiques agrégées sur
 // tout le groupe, hors périmètre self-scope d'un candidat).
 export async function GET(request: Request, { params }: { params: Promise<{ assessmentId: string }> }) {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
-  if (!["pedagogical_manager", "administrator", "auditor"].includes(session.role)) {
-    return new Response("Rôle non autorisé.", { status: 403 });
-  }
+  const session = await requireRole("pedagogical_manager", "administrator", "auditor");
   const { assessmentId } = await params;
   const assessmentIdNum = Number(assessmentId);
 

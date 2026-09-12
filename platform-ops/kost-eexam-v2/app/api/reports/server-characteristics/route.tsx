@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole, UnauthorizedError } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { audit } from "@/lib/audit";
 import { SERVER_CHARACTERISTICS_INSPECTION_DATE } from "@/lib/server-characteristics";
@@ -13,13 +13,11 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // jamais responsable pédagogique/candidat (infrastructure hors de leur
 // périmètre métier).
 export async function GET() {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
-  if (!["administrator", "auditor"].includes(session.role)) {
-    return new Response("Rôle non autorisé.", { status: 403 });
-  }
+  const session = await requireRole("administrator", "auditor").catch((error: unknown) => {
+    if (error instanceof UnauthorizedError) return null;
+    throw error;
+  });
+  if (!session) return new Response("Rôle non autorisé.", { status: 403 });
 
   const meta: DocumentMeta = {
     docTitle: "Caractéristiques de l'environnement serveur",

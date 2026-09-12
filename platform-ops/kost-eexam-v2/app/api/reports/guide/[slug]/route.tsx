@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole, UnauthorizedError } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { getGuide } from "@/lib/guides";
 import { audit } from "@/lib/audit";
@@ -19,10 +19,14 @@ const GUIDE_ROLES: Record<string, ConsoleRole[]> = {
 };
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
+  // Validate the durable DB-backed session before returning any protected guide.
+  // The slug-specific role subset remains checked below so this route keeps the
+  // same guide-by-guide authorization semantics as the corresponding pages.
+  const session = await requireRole("candidate", "pedagogical_manager", "administrator", "auditor").catch((error: unknown) => {
+    if (error instanceof UnauthorizedError) return null;
+    throw error;
+  });
+  if (!session) return new Response("Rôle non autorisé.", { status: 403 });
   const { slug } = await params;
   const guide = getGuide(slug);
   const allowedRoles = GUIDE_ROLES[slug];

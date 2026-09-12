@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasFamiliarizationSessionAccess } from "@/lib/tenant-scope";
 import { getFamiliarizationSession, listAttendance } from "@/lib/familiarization";
@@ -11,13 +11,7 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // Feuille de présence PDF (addendum §18-21) — réservée personnel
 // (responsable/admin/auditeur), scopée tenant.
 export async function GET(request: Request, { params }: { params: Promise<{ sessionId: string }> }) {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
-  if (!["pedagogical_manager", "administrator", "auditor"].includes(session.role)) {
-    return new Response("Rôle non autorisé.", { status: 403 });
-  }
+  const session = await requireRole("pedagogical_manager", "administrator", "auditor");
   const { sessionId } = await params;
   const sessionIdNum = Number(sessionId);
 

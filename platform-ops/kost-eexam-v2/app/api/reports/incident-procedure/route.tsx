@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole, UnauthorizedError } from "@/lib/rbac";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { audit } from "@/lib/audit";
 import { IncidentProcedureDocument } from "@/lib/pdf/IncidentProcedureDocument";
@@ -11,13 +11,11 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // statique mais décrivant exclusivement des capacités réellement
 // implémentées — voir lib/pdf/IncidentProcedureDocument.tsx.
 export async function GET() {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
-  if (!["pedagogical_manager", "administrator", "auditor"].includes(session.role)) {
-    return new Response("Rôle non autorisé.", { status: 403 });
-  }
+  const session = await requireRole("pedagogical_manager", "administrator", "auditor").catch((error: unknown) => {
+    if (error instanceof UnauthorizedError) return null;
+    throw error;
+  });
+  if (!session) return new Response("Rôle non autorisé.", { status: 403 });
 
   const meta: DocumentMeta = {
     docTitle: "Procédure incident, cyberattaque et interruption de service",

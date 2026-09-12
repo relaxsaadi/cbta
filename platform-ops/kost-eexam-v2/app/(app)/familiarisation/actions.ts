@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { requireWriteRole } from "@/lib/rbac";
 import { hasGroupAccess, hasFamiliarizationSessionAccess, assertAccess } from "@/lib/tenant-scope";
 import { createFamiliarizationSession, markAttendance, addFamiliarizationEvidence } from "@/lib/familiarization";
+import { familiarizationAudienceIncludesCandidates, parseFamiliarizationAudience } from "@/lib/familiarization-audience";
 import { audit } from "@/lib/audit";
 import { listGroupMembers, getGroup } from "@/lib/groups";
 import { findUserById } from "@/lib/users";
@@ -23,10 +24,22 @@ export async function createFamiliarizationSessionAction(_prev: CreateSessionRes
   const endedAt = String(formData.get("endedAt") ?? "").trim() || undefined;
   const location = String(formData.get("location") ?? "").trim() || undefined;
   const notes = String(formData.get("notes") ?? "").trim() || undefined;
-  const audience = String(formData.get("audience") ?? "").trim() || undefined;
+  const audience = parseFamiliarizationAudience(formData.get("audience"));
 
   if (!groupId || !functionCode || !heldAt) {
     return { error: "Groupe, fonction et date/heure sont obligatoires." };
+  }
+  if (!audience) {
+    audit({
+      actorUserId: session.userId,
+      actorRole: session.role,
+      action: "familiarization_session_create_denied",
+      result: "failure",
+      targetType: "group",
+      targetId: groupId || undefined,
+      metadata: { reason: "invalid_audience" },
+    });
+    return { error: "Public visé invalide." };
   }
   if (!hasGroupAccess(session, groupId)) {
     audit({ actorUserId: session.userId, actorRole: session.role, action: "familiarization_session_create_denied", result: "failure", targetType: "group", targetId: groupId });
@@ -47,25 +60,28 @@ export async function createFamiliarizationSessionAction(_prev: CreateSessionRes
 
   // FAMILIARIZATION_INVITATION (mission email §26) — après coup, jamais
   // dans la transaction de création elle-même (§35 — outbox). Un candidat
-  // sans email au dossier est silencieusement ignoré.
-  const group = getGroup(groupId);
-  if (group) {
-    const members = listGroupMembers(groupId);
-    const label = functionLabel(functionCode);
-    for (const m of members) {
-      const candidate = findUserById(m.candidate_user_id);
-      if (!candidate?.email) continue;
-      const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
-      await notifyFamiliarizationInvitation({
-        userId: candidate.id,
-        email: candidate.email,
-        firstName,
-        sessionId: id,
-        functionLabel: label,
-        heldAt,
-        location: location ?? null,
-        tenant: { companyId: group.company_id, companyName: group.company_name },
-      });
+  // sans email au dossier est silencieusement ignoré. Une session destinée
+  // uniquement au personnel ne déclenche aucune communication candidat.
+  if (familiarizationAudienceIncludesCandidates(audience)) {
+    const group = getGroup(groupId);
+    if (group) {
+      const members = listGroupMembers(groupId);
+      const label = functionLabel(functionCode);
+      for (const m of members) {
+        const candidate = findUserById(m.candidate_user_id);
+        if (!candidate?.email) continue;
+        const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
+        await notifyFamiliarizationInvitation({
+          userId: candidate.id,
+          email: candidate.email,
+          firstName,
+          sessionId: id,
+          functionLabel: label,
+          heldAt,
+          location: location ?? null,
+          tenant: { companyId: group.company_id, companyName: group.company_name },
+        });
+      }
     }
   }
 

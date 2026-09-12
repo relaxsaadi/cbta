@@ -1,10 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { join, relative } from "node:path";
 
-const readRelative = (relative: string) =>
-  readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8");
+const readRelative = (relativePath: string) =>
+  readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), "utf8");
 
 const protectedReportRoutes = [
   "../../app/api/reports/session/[assessmentId]/route.tsx",
@@ -47,4 +48,32 @@ test("staff and operational report role scopes remain explicit", () => {
   assert.match(attendance, staffGuard);
   assert.match(attendance, /hasFamiliarizationSessionAccess\(/, "attendance tenant scope must remain present");
   assert.match(serverCharacteristics, /requireRole\(\s*["']administrator["']\s*,\s*["']auditor["']\s*\)/);
+});
+
+function routeFilesUnder(dir: string): string[] {
+  const routes: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      routes.push(...routeFilesUnder(fullPath));
+    } else if (entry.isFile() && (entry.name === "route.ts" || entry.name === "route.tsx")) {
+      routes.push(fullPath);
+    }
+  }
+  return routes;
+}
+
+test("non-auth API routes cannot silently reintroduce direct cookie-only getSession authorization", () => {
+  const apiRoot = fileURLToPath(new URL("../../app/api/", import.meta.url));
+  const directSessionRoutes = routeFilesUnder(apiRoot)
+    .filter((routePath) => !relative(apiRoot, routePath).startsWith(`auth${process.platform === "win32" ? "\\" : "/"}`))
+    .filter((routePath) => /\bgetSession\s*\(/.test(readFileSync(routePath, "utf8")))
+    .map((routePath) => relative(apiRoot, routePath).replaceAll("\\", "/"))
+    .sort();
+
+  assert.deepEqual(
+    directSessionRoutes,
+    [],
+    `Protected/public API routes outside app/api/auth must use an explicit shared security model instead of direct getSession(): ${directSessionRoutes.join(", ")}`,
+  );
 });

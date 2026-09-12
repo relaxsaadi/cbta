@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getSession } from "@/lib/session";
+import { requireRole } from "@/lib/rbac";
 import { formatAlgeriaDateTime, formatAlgeriaDate } from "@/lib/timezone";
 import { hasAssessmentAccess } from "@/lib/tenant-scope";
 import { getAssessment, getSessionReport } from "@/lib/assessments";
@@ -16,13 +16,7 @@ import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
 // — seule la PRÉSENTATION diffère (lib/pdf/GlobalExamReportDocument.tsx,
 // volontairement simple : Candidat / Résultat / Mention RÉUSSITE-ÉCHEC).
 export async function GET(request: Request, { params }: { params: Promise<{ assessmentId: string }> }) {
-  const session = await getSession();
-  if (!session.isLoggedIn || !session.userId || !session.role) {
-    return new Response("Non authentifié.", { status: 401 });
-  }
-  if (!["pedagogical_manager", "administrator", "auditor"].includes(session.role)) {
-    return new Response("Rôle non autorisé.", { status: 403 });
-  }
+  const session = await requireRole("pedagogical_manager", "administrator", "auditor");
   const { assessmentId } = await params;
   const assessmentIdNum = Number(assessmentId);
 

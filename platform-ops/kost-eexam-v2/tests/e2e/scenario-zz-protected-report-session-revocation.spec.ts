@@ -6,6 +6,7 @@ import { loginAs } from "./helpers";
 // This deliberately mutates only the disposable E2E SQLite database; no
 // production/session data is touched.
 process.env.DB_PATH = "./data/e2e-test.db";
+const E2E_SESSION_SECRET = "e2e-test-session-secret-at-least-32-chars";
 
 async function testLib() {
   const { getDb } = await import("../../lib/db");
@@ -147,4 +148,40 @@ test("staff-only operational PDF rejects a still-unrevoked cookie as soon as the
     // zz spec normally runs last; keeps the test self-contained on retries.
     db.prepare(`UPDATE users SET status = 'active' WHERE id = ?`).run(admin.id);
   }
+});
+
+test("authenticated-looking cookie without dbSessionId fails closed on protected report route", async ({ page }) => {
+  const lib = await testLib();
+  const admin = lib.findUserByUsername("admin")!;
+  const { sealData } = await import("iron-session");
+
+  // Build a cryptographically valid E2E iron-session cookie that carries
+  // the legacy/auth-looking identity fields but deliberately omits the
+  // mandatory dbSessionId. This is not a forged production secret: it uses
+  // the fixed local Playwright-only secret configured in playwright.config.
+  const sealed = await sealData(
+    {
+      isLoggedIn: true,
+      userId: admin.id,
+      username: admin.username,
+      fullName: admin.full_name,
+      role: "administrator",
+    },
+    { password: E2E_SESSION_SECRET, ttl: 60 * 60 * 8 }
+  );
+
+  await page.context().clearCookies();
+  await page.context().addCookies([
+    {
+      name: "kost_eexam_v2_session",
+      value: sealed,
+      url: "http://127.0.0.1:3101",
+      httpOnly: true,
+      sameSite: "Strict",
+    },
+  ]);
+
+  const resp = await page.request.get("/api/reports/server-characteristics");
+  expect(resp.status()).toBe(403);
+  expect(resp.headers()["content-type"] ?? "").not.toContain("application/pdf");
 });

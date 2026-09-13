@@ -1,12 +1,9 @@
 "use server";
 
 import { getSession } from "@/lib/session";
-import { setPassword, findUserById } from "@/lib/users";
-import { clearMustChangePassword } from "@/lib/temp-password";
-import { audit } from "@/lib/audit";
 import { notifyPasswordChanged } from "@/lib/email/events";
-import { revokeAllSessionsForUser } from "@/lib/sessions-registry";
-import { getDb, nowIso } from "@/lib/db";
+import { getDb } from "@/lib/db";
+import { completeForcedPasswordChange } from "@/lib/forced-password-change";
 
 export interface ForcedPasswordChangeResult {
   error?: string;
@@ -17,21 +14,18 @@ export interface ForcedPasswordChangeResult {
  * IMPROVEMENTS", 2026-08-30, §7-9) — pas de jeton ici : l'authentification
  * est la session déjà active elle-même (l'utilisateur vient de se
  * connecter avec le mot de passe temporaire, encore valide — voir
- * app/(app)/layout.tsx pour la redirection forcée qui amène ici). Toujours
- * vérifier session.userId côté serveur, jamais faire confiance à un champ
- * caché du formulaire pour identifier le compte cible. */
+ * app/(app)/layout.tsx pour la redirection forcée qui amène ici).
+ *
+ * Sécurité #60 : le cookie iron-session n'est jamais une autorité suffisante
+ * à lui seul. completeForcedPasswordChange() revalide le dbSessionId, son
+ * binding au même utilisateur, l'absence de révocation/expiration et le
+ * statut courant 'active', puis sérialise mot de passe + flag temporaire +
+ * révocation des autres sessions + audit dans une seule transaction SQLite.
+ */
 export async function forcedPasswordChangeAction(_prev: ForcedPasswordChangeResult, formData: FormData): Promise<ForcedPasswordChangeResult> {
   const session = await getSession();
-  if (!session.isLoggedIn || !session.userId) {
+  if (!session.isLoggedIn || !session.userId || !session.dbSessionId) {
     return { error: "Session expirée — reconnectez-vous." };
-  }
-  const user = findUserById(session.userId);
-  if (!user) return { error: "Compte introuvable." };
-  if (user.must_change_password !== 1) {
-    // Déjà traité (ex. double-soumission, ou déjà changé dans un autre
-    // onglet) — jamais une erreur, l'appelant sera de toute façon
-    // redirigé normalement au prochain rendu du layout.
-    return { success: true };
   }
 
   const password = String(formData.get("password") ?? "");
@@ -43,21 +37,25 @@ export async function forcedPasswordChangeAction(_prev: ForcedPasswordChangeResu
   if (password.length < 8) return { error: "Le mot de passe doit faire au moins 8 caractères." };
   if (password !== passwordConfirm) return { error: "Les deux mots de passe ne correspondent pas." };
 
-  setPassword(user.id, password);
-  // §7 : "temporary credential becomes invalid after password change" —
-  // le hash a de toute façon changé (donc l'ancien mot de passe temporaire
-  // ne correspond plus), mais on efface aussi explicitement le flag et
-  // l'expiration pour ne jamais laisser de trace exploitable.
-  clearMustChangePassword(user.id);
-  // Révoque les AUTRES sessions actives (ex. si le mot de passe temporaire
-  // avait été utilisé ailleurs) — jamais celle-ci, qui vient de compléter
-  // l'opération avec succès et doit pouvoir continuer normalement.
-  revokeAllSessionsForUser(user.id, user.id, session.dbSessionId);
-  const changedAt = nowIso();
-  audit({ actorUserId: user.id, actorRole: session.role ?? null, action: "forced_password_change_completed", targetType: "user", targetId: user.id, result: "success" });
+  const committed = completeForcedPasswordChange({
+    userId: session.userId,
+    dbSessionId: session.dbSessionId,
+    password,
+  });
+  if (!committed.ok) {
+    return { error: "Session expirée ou compte indisponible — reconnectez-vous." };
+  }
 
+  // Double-soumission depuis la même session encore valide : l'état est déjà
+  // conforme et la primitive transactionnelle n'a créé aucun audit dupliqué.
+  if (!committed.changed) return { success: true };
+
+  // Toute notification/résolution de contexte se fait strictement APRÈS le
+  // commit. Une panne provider ne peut donc jamais revenir en arrière sur la
+  // transition de credential ni transformer un état DB partiel en succès.
+  const { user, changedAt } = committed;
   if (user.email) {
-    const firstName = user.full_name.split(/\s+/)[0] ?? user.full_name;
+    const firstName = user.fullName.split(/\s+/)[0] ?? user.fullName;
     const tenantRow = getDb()
       .prepare(`SELECT c.id AS company_id, c.name AS company_name FROM group_members gm JOIN groups g ON g.id = gm.group_id JOIN companies c ON c.id = g.company_id WHERE gm.candidate_user_id = ? LIMIT 1`)
       .get(user.id) as { company_id: number; company_name: string } | undefined;

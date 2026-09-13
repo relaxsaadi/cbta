@@ -13,6 +13,28 @@ function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
+/**
+ * Échec explicite/fail-closed quand une finalisation de connexion tente de
+ * créer une session pour un compte qui n'est plus `active` au moment EXACT
+ * de l'INSERT. Le contrôle est dans le même statement SQLite que l'INSERT
+ * (INSERT ... SELECT ... WHERE users.status='active'), donc il est sérialisé
+ * contre une suspension/archivage concurrente :
+ *
+ * - si la création de session gagne le verrou d'écriture, le stop ultérieur
+ *   voit cette ligne et la révoque ;
+ * - si le stop gagne d'abord, l'INSERT ne crée aucune ligne.
+ *
+ * Cette garde ferme la course #52 « session créée entre le changement de
+ * statut et la révocation ». Elle ne prétend pas résoudre à elle seule la
+ * frontière cookie/audit/last_login plus large suivie séparément dans #57.
+ */
+export class SessionCreationDeniedError extends Error {
+  constructor() {
+    super("Impossible de créer une session pour un compte qui n'est pas actif.");
+    this.name = "SessionCreationDeniedError";
+  }
+}
+
 export function createDbSession(params: {
   userId: number;
   ipAddress?: string | null;
@@ -26,9 +48,23 @@ export function createDbSession(params: {
   const result = db
     .prepare(
       `INSERT INTO sessions (user_id, session_token_hash, created_at, last_seen_at, expires_at, ip_address, user_agent)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
+       SELECT ?, ?, ?, ?, ?, ?, ?
+       FROM users
+       WHERE id = ? AND status = 'active'`
     )
-    .run(params.userId, tokenHash, now.toISOString(), now.toISOString(), expiresAt, params.ipAddress ?? null, params.userAgent ?? null);
+    .run(
+      params.userId,
+      tokenHash,
+      now.toISOString(),
+      now.toISOString(),
+      expiresAt,
+      params.ipAddress ?? null,
+      params.userAgent ?? null,
+      params.userId
+    );
+  if (Number(result.changes) !== 1) {
+    throw new SessionCreationDeniedError();
+  }
   return { dbSessionId: Number(result.lastInsertRowid), token };
 }
 

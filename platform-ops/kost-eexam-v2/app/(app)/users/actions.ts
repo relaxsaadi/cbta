@@ -5,11 +5,9 @@ import { redirect } from "next/navigation";
 import { requireWriteRole } from "@/lib/rbac";
 import {
   createUserPendingActivation,
-  setUserStatus,
   findUserById,
   findUserByUsername,
   reactivateUserSafely,
-  archiveUser,
   restoreUser,
   changeUsername,
   UsernameConflictError,
@@ -22,7 +20,7 @@ import { assignFunctionToUser, removeFunctionFromUser } from "@/lib/user-functio
 import { addUserToGroup, removeUserFromGroupSafely, changeUserGroup, getPrimaryCompanyContext, provisionParticulierAccess } from "@/lib/user-affiliation";
 import { createCompany } from "@/lib/companies";
 import { createGroup, getGroup } from "@/lib/groups";
-import { revokeAllSessionsForUser } from "@/lib/sessions-registry";
+import { suspendUserAtomically, archiveUserAtomically, archiveUsersBatchAtomically } from "@/lib/direct-lifecycle-stop";
 import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
 import type { ConsoleRole } from "@/lib/session";
@@ -176,7 +174,8 @@ export async function quickCreateCompanyAction(_prev: { error?: string }, formDa
 }
 
 /** "+ Nouveau groupe" (§17) — même principe, groupe rattaché au client déjà
- * sélectionné dans l'assistant (lib/groups.ts, jamais dupliquée). */
+ * sélectionné dans l'assistant (lib/groups.ts, jamais dupliquée) et
+ * redirige vers l'assistant avec ce groupe déjà présélectionné. */
 export async function quickCreateGroupAction(_prev: { error?: string }, formData: FormData) {
   const session = await requireWriteRole("administrator");
   const companyId = Number(formData.get("companyId"));
@@ -191,16 +190,20 @@ export async function quickCreateGroupAction(_prev: { error?: string }, formData
 
 /** Suspension/réactivation directe (hors incident) — action admin simple,
  * distincte du flux "incident" (§18, qui lie l'action à un incident déclaré
- * via lib/incidents.ts). Ici : pas d'incident_id à référencer, mais la
- * même trace d'audit et la même révocation réelle de sessions. */
+ * via lib/incidents.ts). Ici la suspension, la révocation des sessions et
+ * l'audit de succès sont commités ensemble par direct-lifecycle-stop.ts ;
+ * l'email reste strictement post-commit. */
 export async function quickSuspendAction(userId: number) {
   const session = await requireWriteRole("administrator");
-  setUserStatus(userId, "suspended");
-  const n = revokeAllSessionsForUser(userId, session.userId);
-  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_suspended", targetType: "user", targetId: userId, metadata: { sessionsRevoked: n } });
-  const target = findUserById(userId);
-  if (target?.email) {
-    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
+  const result = suspendUserAtomically(userId, { id: session.userId, role: session.role });
+  if (!result.changed) {
+    revalidatePath("/users");
+    revalidatePath(`/users/${userId}`);
+    return;
+  }
+  const target = result.user;
+  if (target.email) {
+    const firstName = target.fullName.split(/\s+/)[0] ?? target.fullName;
     await notifyAccountSuspended({ userId, email: target.email, firstName, securityEventId: `quick-${Date.now()}` });
   }
   revalidatePath("/users");
@@ -257,17 +260,15 @@ export async function adminResetMfaAction(userId: number, _prev: MfaResetResult,
 }
 
 /** "Archiver" (§14-17) — décision de cycle de vie normale, jamais une
- * suppression. Révoque les sessions actives (même geste que la
- * suspension). Sans effet si déjà archivé (jamais un archivage en double). */
+ * suppression. Transition, révocation des sessions et audit de succès sont
+ * une seule frontière transactionnelle ; un replay déjà archivé est un no-op. */
 export async function archiveUserAction(userId: number) {
   const session = await requireWriteRole("administrator");
-  const { changed } = archiveUser(userId);
-  if (!changed) {
+  const result = archiveUserAtomically(userId, { id: session.userId, role: session.role });
+  if (!result.changed) {
     revalidatePath(`/users/${userId}`);
     return;
   }
-  revokeAllSessionsForUser(userId, session.userId);
-  audit({ actorUserId: session.userId, actorRole: session.role, action: "user_archived", targetType: "user", targetId: userId });
   revalidatePath("/users");
   revalidatePath(`/users/${userId}`);
 }
@@ -677,17 +678,12 @@ export async function batchAssignGroupAction(userIds: number[], groupId: number)
 export async function batchArchiveAction(userIds: number[]): Promise<BatchResult> {
   const session = await requireWriteRole("administrator");
   if (userIds.length === 0) return { error: "Sélectionnez au moins un candidat." };
-  let archived = 0;
-  for (const userId of userIds) {
-    const { changed } = archiveUser(userId);
-    if (changed) {
-      revokeAllSessionsForUser(userId, session.userId);
-      audit({ actorUserId: session.userId, actorRole: session.role, action: "user_archived", targetType: "user", targetId: userId, metadata: { batch: true } });
-      archived++;
-    }
+  const result = archiveUsersBatchAtomically(userIds, { id: session.userId, role: session.role });
+  if (!result.ok) {
+    return { error: "Archivage annulé : au moins un compte sélectionné est introuvable. Aucun compte n'a été archivé." };
   }
   revalidatePath("/users");
-  return { success: `${archived} compte(s) archivé(s).` };
+  return { success: `${result.archived} compte(s) archivé(s).` };
 }
 
 /** Lecture pure (§22) — appelée directement par la page/le composant

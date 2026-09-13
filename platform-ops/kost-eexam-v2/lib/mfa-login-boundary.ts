@@ -3,11 +3,13 @@
 // This module deliberately has no `server-only` import so the exact same
 // SQLite decision can be exercised by node:test. Callers that expose it to
 // HTTP remain server actions/routes. The security invariant is enforced by
-// BEGIN IMMEDIATE: factor-2 eligibility, recovery-code consumption and the
-// durable server-session row are decided under one SQLite writer lock.
-// This prevents an older pending-MFA cookie from reopening access after a
-// suspension/archive/login-block decision that won first, and prevents two
-// concurrent requests from consuming the same recovery code successfully.
+// BEGIN IMMEDIATE: factor-2 eligibility, credential-generation continuity,
+// recovery-code consumption and the durable server-session row are decided
+// under one SQLite writer lock. This prevents an older pending-MFA cookie
+// from reopening access after a password reset, suspension/archive/login-
+// block decision that won first, and prevents two concurrent requests from
+// consuming the same recovery code successfully.
+import { createHash, timingSafeEqual } from "node:crypto";
 import { getDb, nowIso, transaction } from "./db";
 import { findUserById, getRoleForUser } from "./users";
 import { isTemporaryPasswordExpired } from "./temp-password";
@@ -18,6 +20,7 @@ import type { ConsoleRole } from "./session";
 
 export type MfaClaimFailureReason =
   | "invalid_session"
+  | "credential_changed"
   | "account_not_active"
   | "temp_password_expired"
   | "platform_logins_blocked"
@@ -46,9 +49,33 @@ export interface MfaLoginClaimFailure {
 
 export type MfaLoginClaimResult = MfaLoginClaim | MfaLoginClaimFailure;
 
+/**
+ * Opaque version marker for the credential that completed factor 1.
+ *
+ * The iron-session cookie is encrypted/authenticated, but we still avoid
+ * placing the password hash itself in browser state. Any password-hash
+ * rotation (reset, admin change, temporary-password replacement, etc.)
+ * changes this marker and therefore invalidates pending MFA established by
+ * the previous credential.
+ */
+export function deriveMfaCredentialGeneration(passwordHash: string): string {
+  return createHash("sha256")
+    .update("kost-eexam:mfa-factor1:v1\0")
+    .update(passwordHash)
+    .digest("base64url");
+}
+
+function credentialGenerationMatches(passwordHash: string, expected: string): boolean {
+  const current = deriveMfaCredentialGeneration(passwordHash);
+  const currentBuffer = Buffer.from(current);
+  const expectedBuffer = Buffer.from(expected);
+  return currentBuffer.length === expectedBuffer.length && timingSafeEqual(currentBuffer, expectedBuffer);
+}
+
 export function claimMfaLogin(
   userId: number,
   code: string,
+  expectedCredentialGeneration: string,
   meta: { ip?: string; userAgent?: string }
 ): MfaLoginClaimResult {
   return transaction(() => {
@@ -58,6 +85,9 @@ export function claimMfaLogin(
     const role = user ? getRoleForUser(user.id) : null;
     if (!user || !role || user.mfa_enabled !== 1 || !user.mfa_secret) {
       return { ok: false, reason: "invalid_session", userId: user?.id ?? null, role };
+    }
+    if (!expectedCredentialGeneration || !credentialGenerationMatches(user.password_hash, expectedCredentialGeneration)) {
+      return { ok: false, reason: "credential_changed", userId: user.id, role };
     }
     if (user.status !== "active") {
       return { ok: false, reason: "account_not_active", userId: user.id, role };

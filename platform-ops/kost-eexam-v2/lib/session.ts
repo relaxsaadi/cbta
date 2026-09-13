@@ -25,6 +25,11 @@ export interface AppSession {
   // seul ne peut accéder à AUCUNE route protégée avant de fournir un code
   // valide.
   pendingMfaUserId?: number;
+  // Empreinte opaque de la génération du password_hash qui a validé le
+  // facteur 1. Elle n'est jamais un mot de passe ni le hash lui-même. La
+  // frontière MFA la compare à l'état DB courant sous BEGIN IMMEDIATE : tout
+  // reset/changement de mot de passe invalide ainsi un MFA encore pending.
+  pendingMfaCredentialGeneration?: string;
   // Secret TOTP généré mais PAS ENCORE activé — le temps que l'utilisateur
   // prouve qu'il l'a correctement enregistré dans son application
   // d'authentification (en soumettant un code valide). Jamais écrit en

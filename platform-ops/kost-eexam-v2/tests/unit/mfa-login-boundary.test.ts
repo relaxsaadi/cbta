@@ -3,8 +3,9 @@ import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
 import { getDb } from "../../lib/db";
 import { createUser } from "../../lib/users";
+import { hashPassword } from "../../lib/passwords";
 import { generateMfaSecret, generateRecoveryCodes, totpAt } from "../../lib/mfa";
-import { claimMfaLogin, compensateMfaLoginClaim } from "../../lib/mfa-login-boundary";
+import { claimMfaLogin, compensateMfaLoginClaim, deriveMfaCredentialGeneration } from "../../lib/mfa-login-boundary";
 import type { ConsoleRole } from "../../lib/session";
 
 before(() => setupTestDb());
@@ -28,7 +29,9 @@ function createMfaUser(role: ConsoleRole = "candidate", recovery = false) {
        WHERE id = ?`
     )
     .run(secret, recoveryCodes?.hashedJson ?? null, userId);
-  return { userId, username, secret, recoveryCodes };
+  const row = getDb().prepare(`SELECT password_hash FROM users WHERE id = ?`).get(userId) as { password_hash: string };
+  const credentialGeneration = deriveMfaCredentialGeneration(row.password_hash);
+  return { userId, username, secret, recoveryCodes, credentialGeneration };
 }
 
 function activeSessionCount(userId: number): number {
@@ -49,7 +52,7 @@ describe("MFA factor-2 authorization boundary", () => {
   test("active at factor 1 -> suspended before factor 2 is denied without a session or successful login audit", () => {
     const u = createMfaUser();
     getDb().prepare(`UPDATE users SET status = 'suspended' WHERE id = ?`).run(u.userId);
-    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), {});
+    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), u.credentialGeneration, {});
     assert.deepEqual(result.ok ? null : result.reason, "account_not_active");
     assert.equal(activeSessionCount(u.userId), 0);
     assert.equal(successfulLoginAuditCount(u.userId), 0);
@@ -58,9 +61,32 @@ describe("MFA factor-2 authorization boundary", () => {
   test("active at factor 1 -> archived before factor 2 is denied without a session", () => {
     const u = createMfaUser();
     getDb().prepare(`UPDATE users SET status = 'archived', archived_at = datetime('now') WHERE id = ?`).run(u.userId);
-    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), {});
+    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), u.credentialGeneration, {});
     assert.deepEqual(result.ok ? null : result.reason, "account_not_active");
     assert.equal(activeSessionCount(u.userId), 0);
+  });
+
+  test("password rotation between factors invalidates the pending MFA credential without consuming a recovery code", () => {
+    const u = createMfaUser("candidate", true);
+    const code = u.recoveryCodes!.plain[0]!;
+    const before = getDb()
+      .prepare(`SELECT mfa_recovery_codes_json, last_login_at FROM users WHERE id = ?`)
+      .get(u.userId) as { mfa_recovery_codes_json: string; last_login_at: string | null };
+
+    getDb()
+      .prepare(`UPDATE users SET password_hash = ? WHERE id = ?`)
+      .run(hashPassword("Rotated-After-Factor-One-Password!"), u.userId);
+
+    const result = claimMfaLogin(u.userId, code, u.credentialGeneration, {});
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.equal(result.reason, "credential_changed");
+    assert.equal(activeSessionCount(u.userId), 0);
+
+    const after = getDb()
+      .prepare(`SELECT mfa_recovery_codes_json, last_login_at FROM users WHERE id = ?`)
+      .get(u.userId) as { mfa_recovery_codes_json: string; last_login_at: string | null };
+    assert.equal(after.mfa_recovery_codes_json, before.mfa_recovery_codes_json);
+    assert.equal(after.last_login_at, before.last_login_at);
   });
 
   test("temporary password expiring between factors is denied", () => {
@@ -68,7 +94,7 @@ describe("MFA factor-2 authorization boundary", () => {
     getDb()
       .prepare(`UPDATE users SET must_change_password = 1, temp_password_expires_at = ? WHERE id = ?`)
       .run(new Date(Date.now() - 60_000).toISOString(), u.userId);
-    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), {});
+    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), u.credentialGeneration, {});
     assert.deepEqual(result.ok ? null : result.reason, "temp_password_expired");
     assert.equal(activeSessionCount(u.userId), 0);
   });
@@ -78,7 +104,7 @@ describe("MFA factor-2 authorization boundary", () => {
     getDb()
       .prepare(`INSERT INTO platform_settings (key, value) VALUES ('block_new_logins', '1') ON CONFLICT(key) DO UPDATE SET value='1'`)
       .run();
-    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), {});
+    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), u.credentialGeneration, {});
     assert.deepEqual(result.ok ? null : result.reason, "platform_logins_blocked");
     assert.equal(activeSessionCount(u.userId), 0);
     getDb().prepare(`UPDATE platform_settings SET value='0' WHERE key='block_new_logins'`).run();
@@ -89,7 +115,7 @@ describe("MFA factor-2 authorization boundary", () => {
     getDb()
       .prepare(`INSERT INTO platform_settings (key, value) VALUES ('block_new_logins', '1') ON CONFLICT(key) DO UPDATE SET value='1'`)
       .run();
-    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), {});
+    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), u.credentialGeneration, {});
     assert.equal(result.ok, true);
     assert.equal(activeSessionCount(u.userId), 1);
     getDb().prepare(`UPDATE platform_settings SET value='0' WHERE key='block_new_logins'`).run();
@@ -97,7 +123,7 @@ describe("MFA factor-2 authorization boundary", () => {
 
   test("normal active TOTP completion creates exactly one durable server session", () => {
     const u = createMfaUser();
-    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), { ip: "127.0.0.1", userAgent: "unit-test" });
+    const result = claimMfaLogin(u.userId, totpAt(u.secret, Date.now()), u.credentialGeneration, { ip: "127.0.0.1", userAgent: "unit-test" });
     assert.equal(result.ok, true);
     assert.equal(activeSessionCount(u.userId), 1);
     const lastLogin = getDb().prepare(`SELECT last_login_at FROM users WHERE id = ?`).get(u.userId) as { last_login_at: string | null };
@@ -107,9 +133,9 @@ describe("MFA factor-2 authorization boundary", () => {
   test("the same recovery code can win only once against current durable state", () => {
     const u = createMfaUser("candidate", true);
     const code = u.recoveryCodes!.plain[0]!;
-    const first = claimMfaLogin(u.userId, code, {});
+    const first = claimMfaLogin(u.userId, code, u.credentialGeneration, {});
     assert.equal(first.ok, true);
-    const second = claimMfaLogin(u.userId, code, {});
+    const second = claimMfaLogin(u.userId, code, u.credentialGeneration, {});
     assert.equal(second.ok, false);
     if (!second.ok) assert.equal(second.reason, "invalid_code");
     assert.equal(activeSessionCount(u.userId), 1);
@@ -134,7 +160,7 @@ describe("MFA factor-2 authorization boundary", () => {
        END`
     );
     try {
-      assert.throws(() => claimMfaLogin(u.userId, code, {}), /forced_mfa_session_failure/);
+      assert.throws(() => claimMfaLogin(u.userId, code, u.credentialGeneration, {}), /forced_mfa_session_failure/);
     } finally {
       getDb().exec(`DROP TRIGGER IF EXISTS ${triggerName}`);
     }
@@ -147,7 +173,7 @@ describe("MFA factor-2 authorization boundary", () => {
     assert.equal(afterFailure.last_login_at, beforeRow.last_login_at);
     assert.equal(successfulLoginAuditCount(u.userId), 0);
 
-    const retried = claimMfaLogin(u.userId, code, {});
+    const retried = claimMfaLogin(u.userId, code, u.credentialGeneration, {});
     assert.equal(retried.ok, true);
     assert.equal(activeSessionCount(u.userId), 1);
   });
@@ -155,7 +181,7 @@ describe("MFA factor-2 authorization boundary", () => {
   test("cookie-persist compensation revokes the claimed session and CAS-restores untouched recovery state", () => {
     const u = createMfaUser("candidate", true);
     const code = u.recoveryCodes!.plain[0]!;
-    const claim = claimMfaLogin(u.userId, code, {});
+    const claim = claimMfaLogin(u.userId, code, u.credentialGeneration, {});
     assert.equal(claim.ok, true);
     if (!claim.ok) return;
 
@@ -166,13 +192,13 @@ describe("MFA factor-2 authorization boundary", () => {
 
     // Because no newer MFA state intervened, the same code is valid again:
     // the failed cookie finalization did not silently burn the credential.
-    const retried = claimMfaLogin(u.userId, code, {});
+    const retried = claimMfaLogin(u.userId, code, u.credentialGeneration, {});
     assert.equal(retried.ok, true);
   });
 
   test("compensation never overwrites a newer recovery-code state", () => {
     const u = createMfaUser("candidate", true);
-    const claim = claimMfaLogin(u.userId, u.recoveryCodes!.plain[0]!, {});
+    const claim = claimMfaLogin(u.userId, u.recoveryCodes!.plain[0]!, u.credentialGeneration, {});
     assert.equal(claim.ok, true);
     if (!claim.ok) return;
 

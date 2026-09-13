@@ -7,14 +7,24 @@ import { setupTestDb } from "./test-db";
 import { getDb } from "../../lib/db";
 import { createUser } from "../../lib/users";
 import { generateMfaSecret, generateRecoveryCodes } from "../../lib/mfa";
+import { deriveMfaCredentialGeneration } from "../../lib/mfa-login-boundary";
 
 before(() => setupTestDb());
 
-function runIndependentClaim(userId: number, recoveryCode: string): Promise<{ ok: boolean; reason?: string }> {
+function runIndependentClaim(
+  userId: number,
+  recoveryCode: string,
+  credentialGeneration: string
+): Promise<{ ok: boolean; reason?: string }> {
   const moduleUrl = pathToFileURL(resolve(import.meta.dirname, "../../lib/mfa-login-boundary.ts")).href;
   const script = `
     import { claimMfaLogin } from ${JSON.stringify(moduleUrl)};
-    const result = claimMfaLogin(Number(process.env.KOST_TEST_USER_ID), process.env.KOST_TEST_RECOVERY_CODE ?? "", { ip: "127.0.0.1", userAgent: "concurrency-worker" });
+    const result = claimMfaLogin(
+      Number(process.env.KOST_TEST_USER_ID),
+      process.env.KOST_TEST_RECOVERY_CODE ?? "",
+      process.env.KOST_TEST_CREDENTIAL_GENERATION ?? "",
+      { ip: "127.0.0.1", userAgent: "concurrency-worker" }
+    );
     process.stdout.write(JSON.stringify(result.ok ? { ok: true } : { ok: false, reason: result.reason }));
   `;
 
@@ -26,6 +36,7 @@ function runIndependentClaim(userId: number, recoveryCode: string): Promise<{ ok
         DB_PATH: process.env.DB_PATH,
         KOST_TEST_USER_ID: String(userId),
         KOST_TEST_RECOVERY_CODE: recoveryCode,
+        KOST_TEST_CREDENTIAL_GENERATION: credentialGeneration,
       },
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -141,7 +152,9 @@ function createRecoveryUser(username: string) {
   getDb()
     .prepare(`UPDATE users SET mfa_enabled = 1, mfa_secret = ?, mfa_recovery_codes_json = ? WHERE id = ?`)
     .run(secret, recovery.hashedJson, userId);
-  return { userId, recovery };
+  const row = getDb().prepare(`SELECT password_hash FROM users WHERE id = ?`).get(userId) as { password_hash: string };
+  const credentialGeneration = deriveMfaCredentialGeneration(row.password_hash);
+  return { userId, recovery, credentialGeneration };
 }
 
 function activeSessionCount(userId: number): number {
@@ -152,11 +165,11 @@ function activeSessionCount(userId: number): number {
 }
 
 test("one recovery code has exactly one winner across two independent SQLite connections", async () => {
-  const { userId, recovery } = createRecoveryUser("mfa-independent-concurrency");
+  const { userId, recovery, credentialGeneration } = createRecoveryUser("mfa-independent-concurrency");
   const code = recovery.plain[0]!;
   const [left, right] = await Promise.all([
-    runIndependentClaim(userId, code),
-    runIndependentClaim(userId, code),
+    runIndependentClaim(userId, code, credentialGeneration),
+    runIndependentClaim(userId, code, credentialGeneration),
   ]);
 
   const winners = [left, right].filter((result) => result.ok);
@@ -173,13 +186,13 @@ test("one recovery code has exactly one winner across two independent SQLite con
 });
 
 test("two different recovery codes may both win concurrently without lost-update resurrection", async () => {
-  const { userId, recovery } = createRecoveryUser("mfa-independent-different-codes");
+  const { userId, recovery, credentialGeneration } = createRecoveryUser("mfa-independent-different-codes");
   const firstCode = recovery.plain[0]!;
   const secondCode = recovery.plain[1]!;
 
   const [left, right] = await Promise.all([
-    runIndependentClaim(userId, firstCode),
-    runIndependentClaim(userId, secondCode),
+    runIndependentClaim(userId, firstCode, credentialGeneration),
+    runIndependentClaim(userId, secondCode, credentialGeneration),
   ]);
 
   assert.equal(left.ok, true, JSON.stringify(left));
@@ -192,8 +205,8 @@ test("two different recovery codes may both win concurrently without lost-update
   assert.equal(JSON.parse(stored.mfa_recovery_codes_json).length, 6);
 
   const [firstReplay, secondReplay] = await Promise.all([
-    runIndependentClaim(userId, firstCode),
-    runIndependentClaim(userId, secondCode),
+    runIndependentClaim(userId, firstCode, credentialGeneration),
+    runIndependentClaim(userId, secondCode, credentialGeneration),
   ]);
   assert.equal(firstReplay.ok, false);
   assert.equal(secondReplay.ok, false);
@@ -204,12 +217,12 @@ test("two different recovery codes may both win concurrently without lost-update
 
 for (const status of ["suspended", "archived"] as const) {
   test(`${status} transition that owns the writer lock first denies recovery completion without consuming the code`, async () => {
-    const { userId, recovery } = createRecoveryUser(`mfa-race-${status}`);
+    const { userId, recovery, credentialGeneration } = createRecoveryUser(`mfa-race-${status}`);
     const code = recovery.plain[0]!;
     const transition = startIndependentLifecycleTransition(userId, status);
 
     await transition.ready;
-    const claimPromise = runIndependentClaim(userId, code);
+    const claimPromise = runIndependentClaim(userId, code, credentialGeneration);
     await transition.done;
     const claim = await claimPromise;
 

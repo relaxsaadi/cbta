@@ -7,7 +7,7 @@ import { audit } from "./audit";
 import { buildLoginRateLimitKey, checkLoginRateLimit, recordLoginFailure, resetLoginRateLimit } from "./rate-limit";
 import { isNewLoginsBlocked } from "./platform-settings";
 import { isTemporaryPasswordExpired } from "./temp-password";
-import { claimMfaLogin, compensateMfaLoginClaim } from "./mfa-login-boundary";
+import { claimMfaLogin, compensateMfaLoginClaim, deriveMfaCredentialGeneration } from "./mfa-login-boundary";
 import type { ConsoleRole } from "./session";
 import type { UserRow } from "./users";
 
@@ -34,6 +34,7 @@ async function finalizeLogin(user: UserRow, role: ConsoleRole, meta: { ip?: stri
   session.role = role;
   session.dbSessionId = dbSessionId;
   session.pendingMfaUserId = undefined;
+  session.pendingMfaCredentialGeneration = undefined;
   await session.save();
 
   audit({ actorUserId: user.id, actorRole: role, action: "login", result: "success", ipAddress: meta.ip, sessionId: dbSessionId });
@@ -120,6 +121,7 @@ export async function login(username: string, password: string, meta: { ip?: str
     const session = await getSession();
     session.isLoggedIn = false;
     session.pendingMfaUserId = user.id;
+    session.pendingMfaCredentialGeneration = deriveMfaCredentialGeneration(user.password_hash);
     await session.save();
     audit({ actorUserId: user.id, actorRole: role, action: "login_password_ok_mfa_pending", result: "success", ipAddress: meta.ip });
     return { ok: false, mfaRequired: true };
@@ -139,15 +141,20 @@ export async function login(username: string, password: string, meta: { ip?: str
  *
  * La décision d'autorisation est reprise à zéro à cette frontière : statut
  * du compte, expiration du mot de passe temporaire, blocage des nouvelles
- * connexions, rôle et configuration MFA sont relus sous BEGIN IMMEDIATE.
- * Le même verrou couvre la consommation d'un éventuel code de secours et la
- * création de la session serveur. Ainsi, une décision de suspension/archive
- * qui gagne la course ne peut pas être contournée par un ancien cookie MFA,
- * et deux requêtes ne peuvent pas dépenser le même code de secours. */
+ * connexions, rôle, configuration MFA et génération du credential facteur 1
+ * sont relus sous BEGIN IMMEDIATE. Le même verrou couvre la consommation
+ * d'un éventuel code de secours et la création de la session serveur. Ainsi,
+ * un reset de mot de passe ou une suspension/archive qui gagne la course ne
+ * peut pas être contourné par un ancien cookie MFA, et deux requêtes ne
+ * peuvent pas dépenser le même code de secours. */
 export async function completeMfaLogin(code: string, meta: { ip?: string; userAgent?: string }): Promise<LoginResult> {
   const session = await getSession();
   const pendingUserId = session.pendingMfaUserId;
-  if (!pendingUserId) {
+  const pendingCredentialGeneration = session.pendingMfaCredentialGeneration;
+  if (!pendingUserId || !pendingCredentialGeneration) {
+    // Fail closed for legacy/incomplete pending-MFA cookies created before
+    // credential-generation binding existed.
+    session.destroy();
     return { ok: false, error: "Aucune connexion en attente de vérification MFA. Reconnectez-vous." };
   }
 
@@ -169,7 +176,7 @@ export async function completeMfaLogin(code: string, meta: { ip?: string; userAg
     return { ok: false, error: `Trop de tentatives échouées. Réessayez dans ${minutes} minute${minutes > 1 ? "s" : ""}.` };
   }
 
-  const claim = claimMfaLogin(pendingUserId, code, meta);
+  const claim = claimMfaLogin(pendingUserId, code, pendingCredentialGeneration, meta);
   if (!claim.ok) {
     if (claim.reason === "invalid_code") {
       recordLoginFailure(rateLimitKey);
@@ -177,9 +184,10 @@ export async function completeMfaLogin(code: string, meta: { ip?: string; userAg
       return { ok: false, error: "Code invalide. Réessayez." };
     }
 
-    // Une modification administrative ou de politique intervenue entre les
-    // deux facteurs invalide définitivement cette tentative MFA. Ne pas
-    // laisser le cookie pending être rejoué après le refus.
+    // Une modification administrative, de credential ou de politique
+    // intervenue entre les deux facteurs invalide définitivement cette
+    // tentative MFA. Ne pas laisser le cookie pending être rejoué après le
+    // refus.
     session.destroy();
     audit({
       actorUserId: claim.userId ?? preflightUser.id,
@@ -209,6 +217,7 @@ export async function completeMfaLogin(code: string, meta: { ip?: string; userAg
   session.role = claim.role;
   session.dbSessionId = claim.dbSessionId;
   session.pendingMfaUserId = undefined;
+  session.pendingMfaCredentialGeneration = undefined;
 
   try {
     await session.save();

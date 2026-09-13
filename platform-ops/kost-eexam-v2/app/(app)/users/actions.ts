@@ -174,7 +174,8 @@ export async function quickCreateCompanyAction(_prev: { error?: string }, formDa
 }
 
 /** "+ Nouveau groupe" (§17) — même principe, groupe rattaché au client déjà
- * sélectionné dans l'assistant (lib/groups.ts, jamais dupliquée). */
+ * sélectionné dans l'assistant (lib/groups.ts, jamais dupliquée) et
+ * redirige vers l'assistant avec ce groupe déjà présélectionné. */
 export async function quickCreateGroupAction(_prev: { error?: string }, formData: FormData) {
   const session = await requireWriteRole("administrator");
   const companyId = Number(formData.get("companyId"));
@@ -183,7 +184,7 @@ export async function quickCreateGroupAction(_prev: { error?: string }, formData
   if (!companyId || !name) return { error: "Client et nom du groupe sont obligatoires." };
 
   const groupId = createGroup({ companyId, name, sessionLabel, scope: "production", pedagogicalManagerId: session.userId, createdBy: session.userId });
-  audit({ actorUserId: session.userId, actorRole: session.role, action: "company_quick_created_from_users", targetType: "group", targetId: groupId });
+  audit({ actorUserId: session.userId, actorRole: session.role, action: "group_quick_created_from_users", targetType: "group", targetId: groupId });
   redirect(`/users/nouveau?companyId=${companyId}&groupId=${groupId}`);
 }
 

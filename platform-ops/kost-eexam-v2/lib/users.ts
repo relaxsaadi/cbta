@@ -1,11 +1,29 @@
 import { randomBytes } from "node:crypto";
-import { getDb, nowIso } from "./db";
+import { getDb, nowIso, transaction } from "./db";
 import { hashPassword } from "./passwords";
 import { hasCompletedActivation } from "./activation-tokens";
 import type { ConsoleRole } from "./session";
 
 export type UserStatus = "pending_activation" | "active" | "suspended" | "archived";
 export type CandidateType = "particulier" | "entreprise";
+
+const CONSOLE_ROLES = new Set<ConsoleRole>([
+  "candidate",
+  "pedagogical_manager",
+  "administrator",
+  "auditor",
+]);
+
+export function isConsoleRole(value: unknown): value is ConsoleRole {
+  return typeof value === "string" && CONSOLE_ROLES.has(value as ConsoleRole);
+}
+
+function resolveRoleId(db: ReturnType<typeof getDb>, roleCode: unknown): number {
+  if (!isConsoleRole(roleCode)) throw new Error(`Rôle inconnu : ${String(roleCode)}`);
+  const role = db.prepare(`SELECT id FROM roles WHERE code = ?`).get(roleCode) as { id: number } | undefined;
+  if (!role) throw new Error(`Rôle inconnu : ${roleCode}`);
+  return role.id;
+}
 
 export interface UserRow {
   id: number;
@@ -54,15 +72,16 @@ export function createUser(params: {
   phone?: string;
   candidateType?: CandidateType;
 }): number {
-  const db = getDb();
-  const result = db
-    .prepare(`INSERT INTO users (username, password_hash, full_name, email, phone, candidate_type) VALUES (?, ?, ?, ?, ?, ?)`)
-    .run(params.username, hashPassword(params.password), params.fullName, params.email ?? null, params.phone ?? null, params.candidateType ?? null);
-  const userId = Number(result.lastInsertRowid);
-  const role = db.prepare(`SELECT id FROM roles WHERE code = ?`).get(params.role) as { id: number } | undefined;
-  if (!role) throw new Error(`Rôle inconnu : ${params.role}`);
-  db.prepare(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`).run(userId, role.id);
-  return userId;
+  const passwordHash = hashPassword(params.password);
+  return transaction((db) => {
+    const roleId = resolveRoleId(db, params.role);
+    const result = db
+      .prepare(`INSERT INTO users (username, password_hash, full_name, email, phone, candidate_type) VALUES (?, ?, ?, ?, ?, ?)`)
+      .run(params.username, passwordHash, params.fullName, params.email ?? null, params.phone ?? null, params.candidateType ?? null);
+    const userId = Number(result.lastInsertRowid);
+    db.prepare(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`).run(userId, roleId);
+    return userId;
+  });
 }
 
 export function setUserStatus(userId: number, status: UserStatus): void {
@@ -129,16 +148,16 @@ export function createUserPendingActivation(params: {
   phone?: string;
   candidateType?: CandidateType;
 }): number {
-  const db = getDb();
-  const unusablePassword = randomBytes(32).toString("hex");
-  const result = db
-    .prepare(`INSERT INTO users (username, password_hash, full_name, email, phone, status, candidate_type) VALUES (?, ?, ?, ?, ?, 'pending_activation', ?)`)
-    .run(params.username, hashPassword(unusablePassword), params.fullName, params.email ?? null, params.phone ?? null, params.candidateType ?? null);
-  const userId = Number(result.lastInsertRowid);
-  const role = db.prepare(`SELECT id FROM roles WHERE code = ?`).get(params.role) as { id: number } | undefined;
-  if (!role) throw new Error(`Rôle inconnu : ${params.role}`);
-  db.prepare(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`).run(userId, role.id);
-  return userId;
+  const unusablePasswordHash = hashPassword(randomBytes(32).toString("hex"));
+  return transaction((db) => {
+    const roleId = resolveRoleId(db, params.role);
+    const result = db
+      .prepare(`INSERT INTO users (username, password_hash, full_name, email, phone, status, candidate_type) VALUES (?, ?, ?, ?, ?, 'pending_activation', ?)`)
+      .run(params.username, unusablePasswordHash, params.fullName, params.email ?? null, params.phone ?? null, params.candidateType ?? null);
+    const userId = Number(result.lastInsertRowid);
+    db.prepare(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`).run(userId, roleId);
+    return userId;
+  });
 }
 
 /** Appelée UNIQUEMENT par le flux d'activation/réinitialisation par jeton

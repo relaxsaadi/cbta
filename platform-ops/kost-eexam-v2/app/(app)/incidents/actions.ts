@@ -96,11 +96,10 @@ async function actor() {
 export async function suspendAccountAction(incidentId: number, formData: FormData) {
   const userId = Number(formData.get("targetId"));
   if (!userId) return;
-  actionSuspendAccount(incidentId, userId, await actor());
-  const target = findUserById(userId);
-  if (target?.email) {
-    const firstName = target.full_name.split(/\s+/)[0] ?? target.full_name;
-    await notifyAccountSuspended({ userId, email: target.email, firstName, securityEventId: `incident-${incidentId}` });
+  const result = actionSuspendAccount(incidentId, userId, await actor());
+  if (result.changed && result.user.email) {
+    const firstName = result.user.fullName.split(/\s+/)[0] ?? result.user.fullName;
+    await notifyAccountSuspended({ userId, email: result.user.email, firstName, securityEventId: `incident-${incidentId}` });
   }
   revalidatePath(`/incidents/${incidentId}`);
 }

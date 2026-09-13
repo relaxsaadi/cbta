@@ -1,6 +1,6 @@
 import { getDb, transaction } from "./db";
 import { audit } from "./audit";
-import { setUserStatus, reactivateUserSafely } from "./users";
+import { reactivateUserSafely, type UserStatus } from "./users";
 import { revokeAllSessionsForUser } from "./sessions-registry";
 import { suspendAssessment, reopenAssessment } from "./assessments";
 import { setPlatformSetting } from "./platform-settings";
@@ -287,20 +287,79 @@ function recordAction(incidentId: number, actionType: IncidentActionType, actorU
 // (incident_actions + audit_logs) — jamais un bouton qui ne fait que du
 // texte (§18 de la mission : « une capacité réelle d'action »).
 
+type IncidentSuspensionUserRow = {
+  id: number;
+  email: string | null;
+  full_name: string;
+  status: UserStatus;
+};
+
+export type IncidentSuspendAccountResult =
+  | {
+      changed: false;
+      reason: "user_missing" | "invalid_state";
+      currentStatus: UserStatus | null;
+    }
+  | {
+      changed: true;
+      previousStatus: "active" | "pending_activation";
+      sessionsRevoked: number;
+      user: { id: number; email: string | null; fullName: string };
+    };
+
 /**
- * Suspension liée à un incident — frontière atomique (#52).
- * Le statut, la révocation set-based des sessions, l'incident_action et son
- * audit de succès doivent tous valider ensemble. Si une de ces écritures
- * SQLite échoue, BEGIN IMMEDIATE/ROLLBACK de transaction() restaure l'état
- * antérieur et aucune trace de succès partielle ne subsiste. La notification
- * email reste volontairement dans l'action serveur appelante, après le retour
- * de cette fonction, donc uniquement après COMMIT.
+ * Suspension liée à un incident — frontière atomique ET state-safe (#53/#226).
+ * Seuls `active` et `pending_activation` peuvent devenir `suspended`. Le
+ * compte est relu après BEGIN IMMEDIATE, puis la transition utilise un CAS
+ * sur l'état attendu. Un compte absent, archivé ou déjà suspendu est un
+ * no-op : aucune session n'est révoquée et aucune preuve de succès
+ * (incident_actions/audit_logs) n'est fabriquée.
+ *
+ * Le résultat changed/no-op est volontairement explicite pour permettre à
+ * l'action serveur appelante de conditionner les effets post-COMMIT (email)
+ * à une transition réellement appliquée.
  */
-export function actionSuspendAccount(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }) {
-  transaction(() => {
-    setUserStatus(targetUserId, "suspended");
-    revokeAllSessionsForUser(targetUserId, actor.id);
-    recordAction(incidentId, "suspend_account", actor.id, actor.role, "user", targetUserId, "Compte suspendu + sessions révoquées");
+export function actionSuspendAccount(
+  incidentId: number,
+  targetUserId: number,
+  actor: { id: number; role: ConsoleRole }
+): IncidentSuspendAccountResult {
+  return transaction((db) => {
+    const user = db
+      .prepare(`SELECT id, email, full_name, status FROM users WHERE id = ?`)
+      .get(targetUserId) as IncidentSuspensionUserRow | undefined;
+
+    if (!user) {
+      return { changed: false, reason: "user_missing", currentStatus: null };
+    }
+    if (user.status !== "active" && user.status !== "pending_activation") {
+      return { changed: false, reason: "invalid_state", currentStatus: user.status };
+    }
+
+    const updated = db
+      .prepare(`UPDATE users SET status = 'suspended' WHERE id = ? AND status = ?`)
+      .run(targetUserId, user.status);
+    if (Number(updated.changes) !== 1) {
+      throw new Error("Lifecycle CAS failed during incident suspension.");
+    }
+
+    const sessionsRevoked = revokeAllSessionsForUser(targetUserId, actor.id);
+    recordAction(
+      incidentId,
+      "suspend_account",
+      actor.id,
+      actor.role,
+      "user",
+      targetUserId,
+      `Compte suspendu + ${sessionsRevoked} session(s) révoquée(s)`
+    );
+
+    return {
+      changed: true,
+      previousStatus: user.status,
+      sessionsRevoked,
+      user: { id: user.id, email: user.email, fullName: user.full_name },
+    };
   });
 }
 

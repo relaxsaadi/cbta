@@ -18,8 +18,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   // La ligne DB doit en plus appartenir au même utilisateur que le cookie et
   // son compte doit encore être actif ; une suspension/archive gagne donc
   // immédiatement à cette frontière même si une ancienne ligne de session
-  // avait échappé à la révocation.
-  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId)) {
+  // avait échappé à la révocation. #245 étend cette même frontière au rôle :
+  // exactement une ligne user_roles doit exister et correspondre au rôle du
+  // cookie, sinon la session devient immédiatement invalide.
+  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId, session.role)) {
     session.destroy();
     redirect("/login");
   }

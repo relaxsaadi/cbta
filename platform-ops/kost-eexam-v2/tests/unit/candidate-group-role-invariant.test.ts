@@ -4,7 +4,7 @@ import { setupTestDb } from "./test-db";
 
 before(() => setupTestDb());
 
-describe("Group membership — candidate-role invariant (#78)", () => {
+describe("Group membership — candidate-role invariant (#78/#245)", () => {
   test("the library accepts candidates, rejects staff, and hides poisoned legacy staff rows from the candidate roster", async () => {
     const { createUser } = await import("../../lib/users");
     const { createCompany } = await import("../../lib/companies");
@@ -50,17 +50,17 @@ describe("Group membership — candidate-role invariant (#78)", () => {
 
     assert.throws(
       () => addCandidateToGroup(groupId, managerId, adminId),
-      /Seul un compte candidat peut être ajouté à un groupe/,
+      /Seul un compte candidat/,
       "a pedagogical-manager account must never be persisted as a candidate membership"
     );
     assert.throws(
       () => addCandidateToGroup(groupId, adminId, adminId),
-      /Seul un compte candidat peut être ajouté à un groupe/,
+      /Seul un compte candidat/,
       "an administrator account must never be persisted as a candidate membership"
     );
     assert.throws(
       () => addCandidateToGroup(groupId, auditorId, adminId),
-      /Seul un compte candidat peut être ajouté à un groupe/,
+      /Seul un compte candidat/,
       "an auditor account must never be persisted as a candidate membership"
     );
 
@@ -76,6 +76,57 @@ describe("Group membership — candidate-role invariant (#78)", () => {
       [candidateId],
       "the candidate roster must exclude a poisoned staff membership"
     );
+  });
+
+  test("candidate plus any staff role fails closed without deleting contradictory role evidence (#245)", async () => {
+    const { createUser } = await import("../../lib/users");
+    const { createCompany } = await import("../../lib/companies");
+    const { createGroup, addCandidateToGroup, listGroupMembers, isCandidateMemberOfGroup } = await import("../../lib/groups");
+    const { getDb } = await import("../../lib/db");
+
+    const managerId = createUser({
+      username: "role-ambiguity-manager",
+      password: "x".repeat(10),
+      fullName: "Responsable ambiguïté",
+      role: "pedagogical_manager",
+    });
+    const companyId = createCompany({ name: "Role ambiguity company", scope: "test", createdBy: managerId });
+    const groupId = createGroup({
+      companyId,
+      name: "Role ambiguity group",
+      scope: "test",
+      pedagogicalManagerId: managerId,
+      createdBy: managerId,
+    });
+
+    const staffRoles = ["administrator", "auditor", "pedagogical_manager"] as const;
+    for (const staffRole of staffRoles) {
+      const userId = createUser({
+        username: `ambiguous-candidate-${staffRole}`,
+        password: "x".repeat(10),
+        fullName: `Ambiguous ${staffRole}`,
+        role: "candidate",
+      });
+      const roleRow = getDb().prepare(`SELECT id FROM roles WHERE code = ?`).get(staffRole) as { id: number } | undefined;
+      assert.ok(roleRow);
+      getDb().prepare(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`).run(userId, roleRow.id);
+
+      assert.throws(
+        () => addCandidateToGroup(groupId, userId, managerId),
+        /Seul un compte candidat/,
+        `candidate + ${staffRole} must fail closed at the membership write boundary`
+      );
+      assert.equal(isCandidateMemberOfGroup(groupId, userId), false);
+
+      // Preserve the contradictory role rows as forensic/remediation evidence.
+      const roleCount = getDb().prepare(`SELECT COUNT(*) AS count FROM user_roles WHERE user_id = ?`).get(userId) as { count: number };
+      assert.equal(roleCount.count, 2, "the guard must never auto-delete one contradictory role row");
+
+      // Even a pre-existing poisoned group row must remain hidden from roster reads.
+      getDb().prepare(`INSERT INTO group_members (group_id, candidate_user_id, added_by) VALUES (?, ?, ?)`).run(groupId, userId, managerId);
+      assert.equal(isCandidateMemberOfGroup(groupId, userId), false);
+      assert.ok(!listGroupMembers(groupId).some((row) => row.candidate_user_id === userId));
+    }
   });
 
   test("normal multi-group candidate membership remains supported", async () => {

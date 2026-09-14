@@ -31,7 +31,8 @@ export function listGroups(scopes?: Scope[]): (GroupRow & { company_name: string
                FROM group_members gm
                JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
                JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
-               WHERE gm.group_id = g.id) AS member_count
+               WHERE gm.group_id = g.id
+                 AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = gm.candidate_user_id) = 1) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
        ${where}
        ORDER BY g.created_at DESC`
@@ -55,7 +56,8 @@ export function listGroupsForManager(userId: number): (GroupRow & { company_name
                FROM group_members gm
                JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
                JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
-               WHERE gm.group_id = g.id) AS member_count
+               WHERE gm.group_id = g.id
+                 AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = gm.candidate_user_id) = 1) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
        WHERE g.pedagogical_manager_id = ?
        ORDER BY g.created_at DESC`
@@ -134,7 +136,8 @@ export function listGroupsFiltered(filter: GroupsFilter = {}): (GroupRow & { com
                FROM group_members gm
                JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
                JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
-               WHERE gm.group_id = g.id) AS member_count
+               WHERE gm.group_id = g.id
+                 AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = gm.candidate_user_id) = 1) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
        ${where}
        ORDER BY g.created_at DESC`
@@ -182,6 +185,8 @@ export interface GroupMemberRow {
  * candidats, pas une relation staff→groupe. Les lignes historiques
  * incohérentes restent en base pour remédiation explicite mais ne sont
  * jamais réinterprétées comme des candidats par les consommateurs.
+ * #245 : la présence d'un rôle candidate ne suffit pas ; l'identité doit
+ * avoir exactement ce rôle et aucune ligne staff contradictoire.
  */
 export function listGroupMembers(groupId: number): GroupMemberRow[] {
   return getDb()
@@ -191,12 +196,14 @@ export function listGroupMembers(groupId: number): GroupMemberRow[] {
        JOIN users u ON u.id = gm.candidate_user_id
        JOIN user_roles ur ON ur.user_id = u.id
        JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
-       WHERE gm.group_id = ? ORDER BY u.full_name`
+       WHERE gm.group_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1
+       ORDER BY u.full_name`
     )
     .all(groupId) as unknown as GroupMemberRow[];
 }
 
-/** Exact group + candidate-role predicate for server/data-boundary checks. */
+/** Exact group + unambiguous candidate-only role predicate for server/data-boundary checks. */
 export function isCandidateMemberOfGroup(groupId: number, candidateUserId: number): boolean {
   return !!getDb()
     .prepare(
@@ -204,16 +211,18 @@ export function isCandidateMemberOfGroup(groupId: number, candidateUserId: numbe
        FROM group_members gm
        JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
        JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
-       WHERE gm.group_id = ? AND gm.candidate_user_id = ?`
+       WHERE gm.group_id = ? AND gm.candidate_user_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = gm.candidate_user_id) = 1`
     )
     .get(groupId, candidateUserId);
 }
 
 /**
- * Authoritative write guard for candidate membership. The role predicate and
- * insert are one SQLite statement, so a concurrent role update cannot slip
- * between a positive role check and the membership write. `INSERT OR IGNORE`
- * keeps the historical idempotent behavior for an already-member candidate.
+ * Authoritative write guard for candidate membership. The unique candidate-
+ * role predicate and insert are one SQLite statement, so a concurrent role
+ * update cannot slip between a positive role check and the membership write.
+ * `INSERT OR IGNORE` keeps the historical idempotent behavior for an already-
+ * member candidate.
  */
 export function addCandidateToGroup(groupId: number, candidateUserId: number, addedBy: number): void {
   const db = getDb();
@@ -226,16 +235,17 @@ export function addCandidateToGroup(groupId: number, candidateUserId: number, ad
          FROM user_roles ur
          JOIN roles r ON r.id = ur.role_id
          WHERE ur.user_id = ? AND r.code = 'candidate'
+           AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = ur.user_id) = 1
        )`
     )
     .run(groupId, candidateUserId, addedBy, candidateUserId);
 
-  // changes=0 is valid only for an already-present candidate membership.
-  // If the role predicate failed, or a historical poisoned staff row already
-  // occupies the UNIQUE key, the role-aware predicate below stays false and
-  // the operation fails closed without any success side effect upstream.
+  // changes=0 is valid only for an already-present unambiguous candidate
+  // membership. If the role predicate failed, or a historical poisoned row
+  // already occupies the UNIQUE key, the role-aware predicate below stays
+  // false and the operation fails closed without any success side effect.
   if (Number(result.changes) === 0 && !isCandidateMemberOfGroup(groupId, candidateUserId)) {
-    throw new Error("Seul un compte candidat peut être ajouté à un groupe.");
+    throw new Error("Seul un compte candidat non ambigu peut être ajouté à un groupe.");
   }
 }
 

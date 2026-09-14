@@ -6,6 +6,7 @@
 // n'a pas expiré naturellement (jusqu'à 8h).
 import { createHash, randomBytes } from "node:crypto";
 import { getDb, nowIso } from "./db";
+import type { ConsoleRole } from "./session";
 
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
 
@@ -82,32 +83,53 @@ export interface SessionRow {
 
 /** Revalidée à chaque requête authentifiée. La ligne de session n'est pas
  * suffisante à elle seule : elle doit appartenir au MÊME utilisateur que le
- * cookie et cet utilisateur doit encore être `active`. Ainsi un ancien cookie
- * ne reste pas autorisé si une révocation de session a été manquée après une
- * suspension/archive, et un dbSessionId valide ne peut jamais être combiné à
- * l'identité/rôle mis en cache d'un autre utilisateur.
+ * cookie et cet utilisateur doit encore être `active`. Quand `expectedRole`
+ * est fourni par la frontière protégée, le rôle persistant doit en plus être
+ * exactement unique et identique au rôle du cookie. Un état historique ou
+ * corrompu avec zéro ou plusieurs lignes `user_roles`, ou un rôle unique qui
+ * a dérivé depuis la connexion, échoue donc immédiatement fermé (#245).
  *
  * Cette défense en profondeur ne remplace pas l'atomicité de la transition
  * suspend/archive + révocation suivie dans #52 ; elle garantit simplement que
  * la frontière d'autorisation échoue fermée même devant une ligne legacy non
- * révoquée. */
-export function isDbSessionValid(dbSessionId: number, expectedUserId: number): boolean {
+ * révoquée ou un rôle persistant contradictoire. */
+export function isDbSessionValid(
+  dbSessionId: number,
+  expectedUserId: number,
+  expectedRole?: ConsoleRole
+): boolean {
   const db = getDb();
   const row = db
     .prepare(
-      `SELECT s.user_id, s.expires_at, s.revoked_at, u.status
+      `SELECT s.user_id, s.expires_at, s.revoked_at, u.status,
+              (SELECT COUNT(*) FROM user_roles ur WHERE ur.user_id = u.id) AS role_count,
+              (SELECT MIN(r.code)
+               FROM user_roles ur
+               JOIN roles r ON r.id = ur.role_id
+               WHERE ur.user_id = u.id) AS role_code
        FROM sessions s
        JOIN users u ON u.id = s.user_id
        WHERE s.id = ?`
     )
     .get(dbSessionId) as
-    | { user_id: number; expires_at: string; revoked_at: string | null; status: string }
+    | {
+        user_id: number;
+        expires_at: string;
+        revoked_at: string | null;
+        status: string;
+        role_count: number;
+        role_code: ConsoleRole | null;
+      }
     | undefined;
   if (!row) return false;
   if (row.user_id !== expectedUserId) return false;
   if (row.status !== "active") return false;
   if (row.revoked_at) return false;
   if (new Date(row.expires_at).getTime() < Date.now()) return false;
+  if (expectedRole !== undefined) {
+    if (Number(row.role_count) !== 1) return false;
+    if (row.role_code !== expectedRole) return false;
+  }
   return true;
 }
 
@@ -146,7 +168,11 @@ export function revokeAllSessionsForUser(userId: number, revokedBy: number, exce
 
 /** Frontière multi-client (lib/tenant-scope.ts) — `restrictToUserIdsOrNull`
  * vient de scopedUserIdsForSessionsOrNull(session), jamais d'un paramètre
- * client. null = pas de restriction (administrator/auditor). */
+ * client. null = pas de restriction (administrator/auditor).
+ *
+ * Le rôle présenté n'est jamais choisi arbitrairement : il vaut NULL quand
+ * l'identité n'a pas exactement une ligne user_roles. Cette anomalie reste
+ * visible comme absence de rôle canonique sans inventer le rôle survivant. */
 export function listActiveSessions(
   restrictToUserIdsOrNull: number[] | null = null
 ): (SessionRow & { username: string; full_name: string; role: string | null })[] {
@@ -156,7 +182,14 @@ export function listActiveSessions(
   return db
     .prepare(
       `SELECT s.*, u.username, u.full_name,
-              (SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id LIMIT 1) AS role
+              CASE
+                WHEN (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1
+                THEN (SELECT MIN(r.code)
+                      FROM user_roles ur
+                      JOIN roles r ON r.id = ur.role_id
+                      WHERE ur.user_id = u.id)
+                ELSE NULL
+              END AS role
        FROM sessions s
        JOIN users u ON u.id = s.user_id
        WHERE s.revoked_at IS NULL AND s.expires_at > ?
@@ -199,8 +232,14 @@ export function listActiveSessionsFiltered(
     params.push(...restrict);
   }
   if (filter.role) {
+    clauses.push(`(SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1`);
     clauses.push(
-      `(SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id LIMIT 1) = ?`
+      `EXISTS (
+         SELECT 1
+         FROM user_roles ur
+         JOIN roles r ON r.id = ur.role_id
+         WHERE ur.user_id = u.id AND r.code = ?
+       )`
     );
     params.push(filter.role);
   }
@@ -221,7 +260,14 @@ export function listActiveSessionsFiltered(
   return db
     .prepare(
       `SELECT s.*, u.username, u.full_name,
-              (SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id LIMIT 1) AS role
+              CASE
+                WHEN (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1
+                THEN (SELECT MIN(r.code)
+                      FROM user_roles ur
+                      JOIN roles r ON r.id = ur.role_id
+                      WHERE ur.user_id = u.id)
+                ELSE NULL
+              END AS role
        FROM sessions s
        JOIN users u ON u.id = s.user_id
        WHERE ${clauses.join(" AND ")}

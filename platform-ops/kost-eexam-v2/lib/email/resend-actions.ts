@@ -141,7 +141,19 @@ export async function resendExamNotification(assessmentId: number, targetUserId:
   if (!rl.allowed) throw new ResendError(`Trop de renvois récents pour ce candidat. Réessayez dans ${Math.ceil(rl.retryAfterSeconds / 60)} minute(s).`);
 
   const db = getDb();
-  const assigned = db.prepare(`SELECT 1 FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?`).get(assessmentId, targetUserId);
+  // Historical assignment rows remain evidence, but they must not grant
+  // current candidate notification authority when the identity is staff,
+  // roleless, or carries contradictory candidate + staff roles (#78/#245).
+  const assigned = db
+    .prepare(
+      `SELECT 1
+       FROM assessment_assignments aa
+       JOIN user_roles ur ON ur.user_id = aa.candidate_user_id
+       JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+       WHERE aa.assessment_id = ? AND aa.candidate_user_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = aa.candidate_user_id) = 1`
+    )
+    .get(assessmentId, targetUserId);
   if (!assigned) throw new ResendError("Ce candidat n'est pas affecté à cet examen.");
 
   const assessment = db.prepare(`SELECT name, function_code, group_id, open_at, close_at, duration_minutes, attempts_allowed FROM assessments WHERE id = ?`).get(assessmentId) as

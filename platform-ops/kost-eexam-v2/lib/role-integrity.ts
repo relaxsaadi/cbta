@@ -35,7 +35,7 @@ export function listRoleIntegrityAnomalies(): RoleIntegrityAnomaly[] {
        LEFT JOIN roles r ON r.id = ur.role_id
        ORDER BY u.id, r.code`
     )
-    .all() as RoleEvidenceRow[];
+    .all() as unknown as RoleEvidenceRow[];
 
   const evidenceByUser = new Map<number, string[]>();
   for (const row of rows) {

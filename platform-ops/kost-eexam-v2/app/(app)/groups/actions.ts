@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
-import { createGroup, addCandidateToGroup, getGroup } from "@/lib/groups";
+import { createGroup, addCandidateToGroup, getGroup, isCandidateMemberOfGroup } from "@/lib/groups";
 import { removeUserFromGroupSafely } from "@/lib/user-affiliation";
-import { createUserPendingActivation, findUserByUsername, findUserById, updateUserProfile } from "@/lib/users";
+import { createUserPendingActivation, findUserByUsername, findUserById, getRoleForUser, updateUserProfile } from "@/lib/users";
 import { hasCompanyAccess, hasGroupAccess, hasUserAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
@@ -181,7 +181,23 @@ export async function addCandidateAction(groupId: number, _prev: AddCandidateRes
   }
 
   if (user) {
-    addCandidateToGroup(groupId, user.id, session.userId);
+    // #78/#245 — an existing visible account is not automatically a
+    // candidate. Fail closed before any membership, success audit,
+    // invitation or temporary-access side effect. getRoleForUser() returns
+    // null for both missing and contradictory multi-role evidence.
+    if (getRoleForUser(user.id) !== "candidate") {
+      audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_add_denied", targetType: "user", targetId: user.id, result: "failure", metadata: { groupId, reason: "role_not_candidate_or_ambiguous" } });
+      return { error: "Ce compte existe mais n'est pas un compte candidat utilisable. Vérifiez son rôle avant de l'ajouter au groupe." };
+    }
+    try {
+      // The library repeats the canonical-role predicate atomically with the
+      // membership write. Catch that fail-closed guard as structured UX in
+      // case the persisted role changes between the read above and this write.
+      addCandidateToGroup(groupId, user.id, session.userId);
+    } catch {
+      audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_add_denied", targetType: "user", targetId: user.id, result: "failure", metadata: { groupId, reason: "candidate_role_changed_or_invalid" } });
+      return { error: "Ce compte ne peut pas être ajouté comme candidat car son rôle n'est plus valide ou est ambigu." };
+    }
     // Audit "MISSION FINALE — TRANSVERSAL STAGING AUDIT" (2026-08-30) §18 —
     // GAP réel trouvé : cette action (point d'entrée "Groupes") n'auditait
     // jamais l'ajout, contrairement à son équivalent fonctionnel côté
@@ -339,8 +355,13 @@ export async function editCandidateAction(groupId: number, candidateUserId: numb
     audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_edit_denied", targetType: "group", targetId: groupId, result: "failure" });
     return { error: "Ce groupe n'est pas dans votre périmètre." };
   }
-  const isMember = getDb().prepare(`SELECT 1 FROM group_members WHERE group_id = ? AND candidate_user_id = ?`).get(groupId, candidateUserId);
-  if (!isMember) return { error: "Ce candidat n'appartient pas à ce groupe." };
+  // #78/#245 — never trust a historical group_members row by itself as
+  // candidate authority. A poisoned staff/ambiguous membership is preserved
+  // as evidence but is not operationally editable through the candidate UI.
+  if (!isCandidateMemberOfGroup(groupId, candidateUserId)) {
+    audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_edit_denied", targetType: "user", targetId: candidateUserId, result: "failure", metadata: { groupId, reason: "not_unambiguous_candidate_member" } });
+    return { error: "Ce compte n'est pas un candidat non ambigu de ce groupe." };
+  }
 
   const fullName = String(formData.get("fullName") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim() || undefined;

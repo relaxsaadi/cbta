@@ -391,11 +391,11 @@ export function actionReopenExam(incidentId: number, assessmentId: number, actor
 }
 
 export function actionAddNote(incidentId: number, note: string, actor: { id: number; role: ConsoleRole }) {
-  recordAction(incidentId, "note", actor.id, actor.role, undefined, undefined, note);
+  transaction(() => recordAction(incidentId, "note", actor.id, actor.role, undefined, undefined, note));
 }
 
 export function actionCorrectiveMeasure(incidentId: number, measure: string, actor: { id: number; role: ConsoleRole }) {
-  recordAction(incidentId, "corrective_measure", actor.id, actor.role, undefined, undefined, measure);
+  transaction(() => recordAction(incidentId, "corrective_measure", actor.id, actor.role, undefined, undefined, measure));
 }
 
 // Actions plateforme (addendum §9-11 — actions immédiates) : mode
@@ -429,7 +429,7 @@ export function actionUnblockNewAttempts(incidentId: number, actor: { id: number
   recordAction(incidentId, "unblock_new_attempts", actor.id, actor.role);
 }
 export function actionAttachEvidence(incidentId: number, description: string, actor: { id: number; role: ConsoleRole }) {
-  recordAction(incidentId, "attach_evidence", actor.id, actor.role, undefined, undefined, description);
+  transaction(() => recordAction(incidentId, "attach_evidence", actor.id, actor.role, undefined, undefined, description));
 }
 
 export function closeIncident(incidentId: number, actor: { id: number; role: ConsoleRole }) {

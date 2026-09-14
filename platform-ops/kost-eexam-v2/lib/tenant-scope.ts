@@ -134,7 +134,10 @@ export function hasIncidentAccess(session: ScopeSession, incidentId: number): bo
 }
 
 /** Candidats membres d'au moins un groupe géré par ce responsable — base
- * du périmètre pour les sessions actives (lib/sessions-registry.ts). */
+ * du périmètre pour les sessions actives (lib/sessions-registry.ts).
+ * `group_members` pouvant contenir des lignes legacy incohérentes, la
+ * frontière RBAC revalide toujours le rôle canonique `candidate` ici : une
+ * ligne staff empoisonnée ne doit jamais élargir le périmètre utilisateur. */
 export function getManagedCandidateUserIds(userId: number): number[] {
   return (
     getDb()
@@ -142,6 +145,8 @@ export function getManagedCandidateUserIds(userId: number): number[] {
         `SELECT DISTINCT gm.candidate_user_id AS id
          FROM group_members gm
          JOIN groups g ON g.id = gm.group_id
+         JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+         JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
          WHERE g.pedagogical_manager_id = ?`
       )
       .all(userId) as { id: number }[]

@@ -210,8 +210,13 @@ export function listUsersByRole(role: ConsoleRole): UserRow[] {
   return getDb()
     .prepare(
       `SELECT u.* FROM users u
-       JOIN user_roles ur ON ur.user_id = u.id
-       JOIN roles r ON r.id = ur.role_id AND r.code = ?
+       WHERE (SELECT COUNT(*) FROM user_roles ur_all WHERE ur_all.user_id = u.id) = 1
+         AND EXISTS (
+           SELECT 1
+           FROM user_roles ur
+           JOIN roles r ON r.id = ur.role_id
+           WHERE ur.user_id = u.id AND r.code = ?
+         )
        ORDER BY u.full_name`
     )
     .all(role) as unknown as UserRow[];

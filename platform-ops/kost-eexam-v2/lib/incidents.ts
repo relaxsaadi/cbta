@@ -158,7 +158,7 @@ export function listIncidentsFiltered(filter: IncidentsFilter = {}): IncidentRow
   return db.prepare(`SELECT i.*, ${INCIDENT_ORIGIN_SUBQUERY} FROM incidents i ${where} ORDER BY i.created_at DESC`).all(...params) as unknown as IncidentRow[];
 }
 
-export function declareIncident(params: {
+type DeclareIncidentParams = {
   type: string;
   severity: IncidentSeverity;
   description: string;
@@ -172,7 +172,15 @@ export function declareIncident(params: {
   attemptId?: number;
   createdBy: number;
   createdByRole: ConsoleRole;
-}): number {
+};
+
+/**
+ * Insère l'incident ET son audit générique dans la transaction déjà ouverte
+ * par l'appelant. Ne jamais appeler ce helper hors de declareIncident() ou
+ * declareCandidateIncident() : il n'ouvre volontairement pas de transaction
+ * afin d'éviter un BEGIN imbriqué pour le parcours candidat (#223).
+ */
+function declareIncidentInCurrentTransaction(params: DeclareIncidentParams): number {
   const result = getDb()
     .prepare(
       `INSERT INTO incidents (type, severity, description, system_concerned, people_concerned, responsible_user_id, group_id, created_by, attempt_id)
@@ -190,14 +198,37 @@ export function declareIncident(params: {
       params.attemptId ?? null
     );
   const incidentId = Number(result.lastInsertRowid);
-  audit({ actorUserId: params.createdBy, actorRole: params.createdByRole, action: "incident_declare", targetType: "incident", targetId: incidentId, metadata: { type: params.type, severity: params.severity, groupId: params.groupId ?? null, attemptId: params.attemptId ?? null } });
+  audit({
+    actorUserId: params.createdBy,
+    actorRole: params.createdByRole,
+    action: "incident_declare",
+    targetType: "incident",
+    targetId: incidentId,
+    metadata: {
+      type: params.type,
+      severity: params.severity,
+      groupId: params.groupId ?? null,
+      attemptId: params.attemptId ?? null,
+    },
+  });
   return incidentId;
+}
+
+/**
+ * Déclaration standard : incident + preuve `incident_declare` sont une seule
+ * frontière BEGIN IMMEDIATE. Si l'audit échoue, l'incident est rollbacké et
+ * aucun succès partiel n'est durable (#223). Les notifications restent dans
+ * l'action serveur appelante, donc strictement post-COMMIT.
+ */
+export function declareIncident(params: DeclareIncidentParams): number {
+  return transaction(() => declareIncidentInCurrentTransaction(params));
 }
 
 export class CandidateIncidentError extends Error {}
 
-/** §24-33 — déclaration candidat, wrapper CONTRAINT autour de
- * declareIncident() (jamais un second point d'écriture divergent) :
+/** §24-33 — déclaration candidat, wrapper CONTRAINT autour de la même
+ * primitive d'insertion que declareIncident(), mais dans UNE transaction
+ * propriétaire qui englobe aussi l'audit candidat dédié (#223) :
  *   - severity JAMAIS fournie par le candidat (§25 — classification
  *     réservée à l'admin) : toujours 'low', l'admin réévalue/escalade
  *     ensuite via le workflow incident existant s'il y a lieu.
@@ -206,57 +237,54 @@ export class CandidateIncidentError extends Error {}
  *     spoof another attempt ID").
  *   - groupId dérivé SERVEUR (tentative→examen→groupe, ou 1ère
  *     affiliation du candidat si aucune tentative) — jamais fourni par le
- *     candidat, garantit que l'incident reste dans le même périmètre
- *     tenant que tout le reste (lib/tenant-scope.ts) pour la visibilité
- *     responsable/admin (§29/§33).
- *   - audit DÉDIÉ candidate_incident_declared en plus de incident_declare
- *     (déjà tiré par declareIncident ci-dessus) — §31 "au moins
- *     CANDIDATE_INCIDENT_CREATED (ou nommage existant cohérent)" : nommage
- *     snake_case aligné sur la convention déjà établie de ce fichier
- *     (incident_declare, incident_action_*, incident_status_change),
- *     jamais la casse ad-hoc suggérée littéralement par la mission. */
+ *     candidat. Le défaut de sélection no-attempt/multi-groupe reste suivi
+ *     séparément par #224 et n'est volontairement pas masqué ici.
+ *   - audit DÉDIÉ candidate_incident_declared en plus de incident_declare ;
+ *     les deux audits et la ligne incident commitent ou rollbackent ensemble.
+ */
 export function declareCandidateIncident(params: {
   type: string;
   description: string;
   attemptId?: number;
   candidateUserId: number;
 }): number {
-  const db = getDb();
-  let groupId: number | undefined;
+  return transaction((db) => {
+    let groupId: number | undefined;
 
-  if (params.attemptId !== undefined) {
-    const attempt = db
-      .prepare(`SELECT at.candidate_user_id, a.group_id FROM attempts at JOIN assessments a ON a.id = at.assessment_id WHERE at.id = ?`)
-      .get(params.attemptId) as { candidate_user_id: number; group_id: number } | undefined;
-    if (!attempt || attempt.candidate_user_id !== params.candidateUserId) {
-      throw new CandidateIncidentError("Tentative introuvable.");
+    if (params.attemptId !== undefined) {
+      const attempt = db
+        .prepare(`SELECT at.candidate_user_id, a.group_id FROM attempts at JOIN assessments a ON a.id = at.assessment_id WHERE at.id = ?`)
+        .get(params.attemptId) as { candidate_user_id: number; group_id: number } | undefined;
+      if (!attempt || attempt.candidate_user_id !== params.candidateUserId) {
+        throw new CandidateIncidentError("Tentative introuvable.");
+      }
+      groupId = attempt.group_id;
+    } else {
+      const membership = db.prepare(`SELECT group_id FROM group_members WHERE candidate_user_id = ? LIMIT 1`).get(params.candidateUserId) as { group_id: number } | undefined;
+      groupId = membership?.group_id;
     }
-    groupId = attempt.group_id;
-  } else {
-    const membership = db.prepare(`SELECT group_id FROM group_members WHERE candidate_user_id = ? LIMIT 1`).get(params.candidateUserId) as { group_id: number } | undefined;
-    groupId = membership?.group_id;
-  }
 
-  const incidentId = declareIncident({
-    type: params.type,
-    severity: "low",
-    description: params.description,
-    groupId,
-    attemptId: params.attemptId,
-    createdBy: params.candidateUserId,
-    createdByRole: "candidate",
+    const incidentId = declareIncidentInCurrentTransaction({
+      type: params.type,
+      severity: "low",
+      description: params.description,
+      groupId,
+      attemptId: params.attemptId,
+      createdBy: params.candidateUserId,
+      createdByRole: "candidate",
+    });
+
+    audit({
+      actorUserId: params.candidateUserId,
+      actorRole: "candidate",
+      action: "candidate_incident_declared",
+      targetType: "incident",
+      targetId: incidentId,
+      metadata: { type: params.type, attemptId: params.attemptId ?? null, groupId: groupId ?? null },
+    });
+
+    return incidentId;
   });
-
-  audit({
-    actorUserId: params.candidateUserId,
-    actorRole: "candidate",
-    action: "candidate_incident_declared",
-    targetType: "incident",
-    targetId: incidentId,
-    metadata: { type: params.type, attemptId: params.attemptId ?? null, groupId: groupId ?? null },
-  });
-
-  return incidentId;
 }
 
 /** §28 — le candidat voit UNIQUEMENT ses propres incidents déclarés

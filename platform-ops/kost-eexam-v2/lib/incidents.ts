@@ -235,10 +235,11 @@ export class CandidateIncidentError extends Error {}
  *   - attemptId, s'il est fourni, DOIT appartenir à ce candidat — jamais
  *     une confiance aveugle dans une valeur venue du client (§37 "cannot
  *     spoof another attempt ID").
- *   - groupId dérivé SERVEUR (tentative→examen→groupe, ou 1ère
- *     affiliation du candidat si aucune tentative) — jamais fourni par le
- *     candidat. Le défaut de sélection no-attempt/multi-groupe reste suivi
- *     séparément par #224 et n'est volontairement pas masqué ici.
+ *   - groupId dérivé SERVEUR : une tentative possédée reste autoritaire ;
+ *     sans tentative, exactement une affiliation vers un groupe actif et
+ *     un rôle candidat non ambigu doivent exister. Zéro ou plusieurs groupes
+ *     actifs échouent avant toute écriture (#224). Aucun ordre de préférence
+ *     implicite entre scopes production/demo/test n'est appliqué.
  *   - audit DÉDIÉ candidate_incident_declared en plus de incident_declare ;
  *     les deux audits et la ligne incident commitent ou rollbackent ensemble.
  */
@@ -260,8 +261,28 @@ export function declareCandidateIncident(params: {
       }
       groupId = attempt.group_id;
     } else {
-      const membership = db.prepare(`SELECT group_id FROM group_members WHERE candidate_user_id = ? LIMIT 1`).get(params.candidateUserId) as { group_id: number } | undefined;
-      groupId = membership?.group_id;
+      const memberships = db
+        .prepare(
+          `SELECT gm.group_id
+           FROM group_members gm
+           JOIN groups g ON g.id = gm.group_id
+           JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+           JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+           WHERE gm.candidate_user_id = ?
+             AND g.status = 'active'
+             AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = gm.candidate_user_id) = 1
+           ORDER BY gm.group_id
+           LIMIT 2`
+        )
+        .all(params.candidateUserId) as { group_id: number }[];
+
+      if (memberships.length === 0) {
+        throw new CandidateIncidentError("Aucun groupe actif n'est disponible pour cette déclaration.");
+      }
+      if (memberships.length > 1) {
+        throw new CandidateIncidentError("Plusieurs groupes actifs sont disponibles. Déclarez l'incident depuis l'examen concerné.");
+      }
+      groupId = memberships[0]!.group_id;
     }
 
     const incidentId = declareIncidentInCurrentTransaction({

@@ -34,6 +34,13 @@ describe("Déclaration d'incident candidat — garanties de sécurité (lib/inci
     return (getDb().prepare(`SELECT COUNT(*) AS n FROM ${table}`).get() as { n: number }).n;
   }
 
+  function assertCandidateIncidentRejectedWithoutSuccessWrites(fn: () => unknown) {
+    const before = { incidents: countRows("incidents"), audits: countRows("audit_logs") };
+    assert.throws(fn, CandidateIncidentError);
+    assert.equal(countRows("incidents"), before.incidents, "un contexte invalide ne doit persister aucun incident");
+    assert.equal(countRows("audit_logs"), before.audits, "un contexte invalide ne doit persister aucun audit de succès");
+  }
+
   function makeFixture() {
     const t = tag();
     const adminId = createUser({ username: `${t}.admin`, password: "x".repeat(10), fullName: "Admin", role: "administrator" });
@@ -55,7 +62,31 @@ describe("Déclaration d'incident candidat — garanties de sécurité (lib/inci
     return { t, adminId, managerId, candidateId, otherCandidateId, groupId, assessmentId };
   }
 
-  test("déclaration SANS tentative : severity toujours 'low' (jamais choisie par le candidat), groupId dérivé de son affiliation", () => {
+  function createAdditionalGroup(params: {
+    t: string;
+    adminId: number;
+    managerId: number;
+    candidateId: number;
+    scope: "production" | "demo" | "test";
+    suffix: string;
+    status?: "active" | "closed";
+  }): number {
+    const companyId = createCompany({ name: `Co ${params.suffix} ${params.t}`, scope: params.scope, createdBy: params.adminId });
+    const groupId = createGroup({
+      companyId,
+      name: `G ${params.suffix} ${params.t}`,
+      scope: params.scope,
+      pedagogicalManagerId: params.managerId,
+      createdBy: params.adminId,
+    });
+    addCandidateToGroup(groupId, params.candidateId, params.adminId);
+    if (params.status === "closed") {
+      getDb().prepare(`UPDATE groups SET status = 'closed' WHERE id = ?`).run(groupId);
+    }
+    return groupId;
+  }
+
+  test("déclaration SANS tentative : severity toujours 'low', groupId dérivé de l'unique groupe actif", () => {
     const { candidateId, groupId } = makeFixture();
     const incidentId = declareCandidateIncident({ type: "technical_failure", description: "Écran figé", candidateUserId: candidateId });
     const incident = getIncident(incidentId)!;
@@ -66,13 +97,71 @@ describe("Déclaration d'incident candidat — garanties de sécurité (lib/inci
     assert.equal(incident.reported_by_candidate, 1, "un incident créé par un compte candidat doit être signalé comme tel");
   });
 
-  test("déclaration AVEC tentative valide (propre au candidat) : attempt_id/group_id auto-associés depuis la tentative", () => {
+  test("#224 — zéro affiliation active : échec fermé, aucun incident ni audit de succès", () => {
+    const { candidateId } = makeFixture();
+    getDb().prepare(`DELETE FROM group_members WHERE candidate_user_id = ?`).run(candidateId);
+
+    assertCandidateIncidentRejectedWithoutSuccessWrites(() =>
+      declareCandidateIncident({ type: "technical_failure", description: "Sans contexte", candidateUserId: candidateId })
+    );
+  });
+
+  test("#224 — plusieurs groupes actifs du même scope : aucun LIMIT 1 arbitraire", () => {
+    const { t, adminId, managerId, candidateId } = makeFixture();
+    createAdditionalGroup({ t, adminId, managerId, candidateId, scope: "test", suffix: "same-scope" });
+
+    assertCandidateIncidentRejectedWithoutSuccessWrites(() =>
+      declareCandidateIncident({ type: "technical_failure", description: "Contexte ambigu", candidateUserId: candidateId })
+    );
+  });
+
+  test("#224 — plusieurs groupes actifs de scopes différents : aucun ordre implicite production/demo/test", () => {
+    const { t, adminId, managerId, candidateId } = makeFixture();
+    createAdditionalGroup({ t, adminId, managerId, candidateId, scope: "production", suffix: "production" });
+
+    assertCandidateIncidentRejectedWithoutSuccessWrites(() =>
+      declareCandidateIncident({ type: "technical_failure", description: "Scopes ambigus", candidateUserId: candidateId })
+    );
+  });
+
+  test("#224 — un groupe fermé et un seul groupe actif : seul l'actif peut être dérivé", () => {
+    const { t, adminId, managerId, candidateId, groupId } = makeFixture();
+    createAdditionalGroup({ t, adminId, managerId, candidateId, scope: "demo", suffix: "closed", status: "closed" });
+
+    const incidentId = declareCandidateIncident({ type: "technical_failure", description: "Contexte actif", candidateUserId: candidateId });
+    assert.equal(getIncident(incidentId)!.group_id, groupId);
+  });
+
+  test("#224 — affiliations uniquement fermées : échec fermé, jamais group_id NULL", () => {
+    const { candidateId, groupId } = makeFixture();
+    getDb().prepare(`UPDATE groups SET status = 'closed' WHERE id = ?`).run(groupId);
+
+    assertCandidateIncidentRejectedWithoutSuccessWrites(() =>
+      declareCandidateIncident({ type: "technical_failure", description: "Groupe fermé", candidateUserId: candidateId })
+    );
+  });
+
+  test("déclaration AVEC tentative valide : attempt_id/group_id auto-associés depuis la tentative", () => {
     const { candidateId, assessmentId, groupId } = makeFixture();
     const attempt = startAttempt(assessmentId, candidateId, {});
     const incidentId = declareCandidateIncident({ type: "timer", description: "Chronomètre incohérent", attemptId: attempt.id, candidateUserId: candidateId });
     const incident = getIncident(incidentId)!;
     assert.equal(incident.attempt_id, attempt.id);
     assert.equal(incident.group_id, groupId, "group_id doit venir de l'examen de la tentative, pas d'une affiliation générique");
+  });
+
+  test("#224 — une tentative possédée reste autoritaire même avec une autre affiliation active", () => {
+    const { t, adminId, managerId, candidateId, assessmentId, groupId } = makeFixture();
+    createAdditionalGroup({ t, adminId, managerId, candidateId, scope: "production", suffix: "unrelated" });
+    const attempt = startAttempt(assessmentId, candidateId, {});
+
+    const incidentId = declareCandidateIncident({
+      type: "timer",
+      description: "Incident lié à la tentative",
+      attemptId: attempt.id,
+      candidateUserId: candidateId,
+    });
+    assert.equal(getIncident(incidentId)!.group_id, groupId, "la tentative possédée doit rester l'autorité de scope");
   });
 
   test("§37 anti-usurpation — un candidat ne peut PAS déclarer un incident sur la tentative D'UN AUTRE candidat", () => {
@@ -107,7 +196,8 @@ describe("Déclaration d'incident candidat — garanties de sécurité (lib/inci
   });
 
   test("§28/§37 — un candidat ne voit JAMAIS les incidents d'un autre candidat via listMyIncidents", () => {
-    const { candidateId, otherCandidateId } = makeFixture();
+    const { adminId, candidateId, otherCandidateId, groupId } = makeFixture();
+    addCandidateToGroup(groupId, otherCandidateId, adminId);
     declareCandidateIncident({ type: "other", description: "Incident du candidat A", candidateUserId: candidateId });
     declareCandidateIncident({ type: "other", description: "Incident du candidat B", candidateUserId: otherCandidateId });
 
@@ -120,10 +210,8 @@ describe("Déclaration d'incident candidat — garanties de sécurité (lib/inci
     assert.equal(theirs[0]!.description, "Incident du candidat B");
   });
 
-  test("§29/§33 — un incident déclaré par le candidat reste dans le périmètre tenant du responsable pédagogique de son groupe (jamais un autre groupe)", () => {
+  test("§29/§33 — un incident déclaré par le candidat reste dans le périmètre tenant du responsable pédagogique de son groupe", () => {
     const { t, adminId, candidateId, groupId } = makeFixture();
-    // Second responsable/groupe totalement distinct — le candidat n'y
-    // appartient jamais.
     const otherManagerId = createUser({ username: `${t}.mgr2`, password: "x".repeat(10), fullName: "Autre manager", role: "pedagogical_manager" });
     const otherCompanyId = createCompany({ name: `Co2 ${t}`, scope: "test", createdBy: adminId });
     const otherGroupId = createGroup({ companyId: otherCompanyId, name: `G2 ${t}`, scope: "test", pedagogicalManagerId: otherManagerId, createdBy: adminId });

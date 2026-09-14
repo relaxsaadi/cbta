@@ -44,21 +44,26 @@ export interface IncidentRow {
   attempt_id: number | null;
   /** Calculé (jamais une colonne figée qui pourrait diverger du rôle réel
    * de created_by) — voir INCIDENT_ORIGIN_SUBQUERY plus bas. 1 = déclaré
-   * par un compte candidat, 0 sinon (y compris created_by NULL). */
+   * par une identité portant exactement le rôle candidat, 0 sinon (y
+   * compris rôle absent/ambigu et created_by NULL). */
   reported_by_candidate: number;
 }
 
 /** Sous-requête partagée (§29 "clairement labellisé « Déclaré par le
- * candidat »") — même patron déjà établi ailleurs pour résoudre un rôle
- * depuis user_roles/roles (lib/users.ts::getRoleForUser, lib/
- * sessions-registry.ts, lib/user-directory.ts) : jamais une colonne
- * dupliquée qui pourrait diverger si le rôle d'un compte changeait après
- * coup — toujours recalculé depuis la source de vérité (user_roles). */
+ * candidat »") : l'origine candidat est fail-closed comme les autres
+ * frontières RBAC (#245). La simple présence de `candidate` ne suffit pas :
+ * l'identité doit posséder exactement une ligne user_roles et cette ligne
+ * doit être le rôle candidat. Les lignes historiques contradictoires restent
+ * intactes ; elles sont seulement classées non-candidat dans cette projection
+ * de traçabilité au lieu de fabriquer une origine autoritaire. */
 const INCIDENT_ORIGIN_SUBQUERY = `
-  (EXISTS (
-    SELECT 1 FROM user_roles ur JOIN roles r ON r.id = ur.role_id
-    WHERE ur.user_id = i.created_by AND r.code = 'candidate'
-  )) AS reported_by_candidate`;
+  (
+    (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = i.created_by) = 1
+    AND EXISTS (
+      SELECT 1 FROM user_roles ur JOIN roles r ON r.id = ur.role_id
+      WHERE ur.user_id = i.created_by AND r.code = 'candidate'
+    )
+  ) AS reported_by_candidate`;
 
 /** Frontière multi-client (lib/tenant-scope.ts) — `restrictToGroupIdsOrNull`
  * vient de la session serveur, jamais d'un paramètre client. `null` = pas

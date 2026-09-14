@@ -56,11 +56,22 @@ export function findUserByEmail(email: string): UserRow | undefined {
   return getDb().prepare(`SELECT * FROM users WHERE email = ?`).get(email) as UserRow | undefined;
 }
 
+/**
+ * Resolve the single authoritative console role for an identity.
+ *
+ * The application models console roles as mutually exclusive. Historical,
+ * manual or otherwise inconsistent data can nevertheless contain zero or
+ * multiple `user_roles` rows because the persisted table does not yet enforce
+ * UNIQUE(user_id). Never turn that contradiction into authority by selecting
+ * an arbitrary row: authentication, MFA and every caller of this primitive
+ * must fail closed until the evidence is explicitly remediated (#245).
+ */
 export function getRoleForUser(userId: number): ConsoleRole | null {
-  const row = getDb()
-    .prepare(`SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = ? LIMIT 1`)
-    .get(userId) as { code: ConsoleRole } | undefined;
-  return row?.code ?? null;
+  const rows = getDb()
+    .prepare(`SELECT r.code FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = ?`)
+    .all(userId) as { code: unknown }[];
+  if (rows.length !== 1) return null;
+  return isConsoleRole(rows[0]?.code) ? rows[0].code : null;
 }
 
 export function createUser(params: {

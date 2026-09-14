@@ -2,7 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
 import { getDb } from "../../lib/db";
-import { createDbSession, isDbSessionValid } from "../../lib/sessions-registry";
+import {
+  createDbSession,
+  isDbSessionValid,
+  listActiveSessions,
+  listActiveSessionsFiltered,
+} from "../../lib/sessions-registry";
 
 setupTestDb();
 
@@ -76,6 +81,24 @@ test("protected DB-session authorization fails closed on persisted role ambiguit
     isDbSessionValid(dbSessionId, userId, "administrator"),
     false,
     "multi-role state must not become valid by choosing the other role"
+  );
+
+  const ambiguousSessions = listActiveSessions([userId]);
+  assert.equal(ambiguousSessions.length, 1);
+  assert.equal(
+    ambiguousSessions[0]?.role,
+    null,
+    "session inventory must surface a multi-role identity as having no canonical role rather than choosing one"
+  );
+  assert.equal(
+    listActiveSessionsFiltered({ role: "candidate", restrictToUserIdsOrNull: [userId] }).length,
+    0,
+    "candidate role filtering must not include a multi-role identity"
+  );
+  assert.equal(
+    listActiveSessionsFiltered({ role: "administrator", restrictToUserIdsOrNull: [userId] }).length,
+    0,
+    "administrator role filtering must not include a multi-role identity"
   );
 
   getDb().prepare(`DELETE FROM user_roles WHERE user_id = ?`).run(userId);

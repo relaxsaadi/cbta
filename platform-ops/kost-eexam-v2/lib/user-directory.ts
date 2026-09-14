@@ -48,6 +48,12 @@ export function listUsers(filters: UserListFilters): UserListRow[] {
     clauses.push(`u.status != 'archived'`);
   }
   if (filters.role) {
+    // #245 — un filtre opérationnel par rôle ne doit jamais transformer la
+    // simple présence d'une ligne user_roles en autorité. L'identité doit
+    // porter exactement un rôle persistant, et ce rôle doit être celui
+    // demandé. Les contradictions historiques restent intactes et visibles
+    // via l'inventaire role-integrity ; elles sont seulement exclues ici.
+    clauses.push(`(SELECT COUNT(*) FROM user_roles ur_all WHERE ur_all.user_id = u.id) = 1`);
     clauses.push(`EXISTS (SELECT 1 FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = u.id AND r.code = ?)`);
     args.push(filters.role);
   }

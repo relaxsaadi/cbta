@@ -27,7 +27,11 @@ export function listGroups(scopes?: Scope[]): (GroupRow & { company_name: string
   return db
     .prepare(
       `SELECT g.*, c.name AS company_name,
-              (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) AS member_count
+              (SELECT COUNT(*)
+               FROM group_members gm
+               JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+               JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+               WHERE gm.group_id = g.id) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
        ${where}
        ORDER BY g.created_at DESC`
@@ -47,7 +51,11 @@ export function listGroupsForManager(userId: number): (GroupRow & { company_name
   return getDb()
     .prepare(
       `SELECT g.*, c.name AS company_name,
-              (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) AS member_count
+              (SELECT COUNT(*)
+               FROM group_members gm
+               JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+               JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+               WHERE gm.group_id = g.id) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
        WHERE g.pedagogical_manager_id = ?
        ORDER BY g.created_at DESC`
@@ -122,7 +130,11 @@ export function listGroupsFiltered(filter: GroupsFilter = {}): (GroupRow & { com
   return db
     .prepare(
       `SELECT g.*, c.name AS company_name,
-              (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = g.id) AS member_count
+              (SELECT COUNT(*)
+               FROM group_members gm
+               JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+               JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+               WHERE gm.group_id = g.id) AS member_count
        FROM groups g JOIN companies c ON c.id = g.company_id
        ${where}
        ORDER BY g.created_at DESC`
@@ -198,25 +210,33 @@ export function isCandidateMemberOfGroup(groupId: number, candidateUserId: numbe
 }
 
 /**
- * Authoritative write guard for candidate membership. Downstream RBAC,
- * assessment assignment and familiarisation logic all trust this relation,
- * so a staff account must never be inserted merely because a privileged
- * caller supplies its user id.
+ * Authoritative write guard for candidate membership. The role predicate and
+ * insert are one SQLite statement, so a concurrent role update cannot slip
+ * between a positive role check and the membership write. `INSERT OR IGNORE`
+ * keeps the historical idempotent behavior for an already-member candidate.
  */
 export function addCandidateToGroup(groupId: number, candidateUserId: number, addedBy: number): void {
-  const isCandidate = !!getDb()
+  const db = getDb();
+  const result = db
     .prepare(
-      `SELECT 1
-       FROM user_roles ur
-       JOIN roles r ON r.id = ur.role_id
-       WHERE ur.user_id = ? AND r.code = 'candidate'`
+      `INSERT OR IGNORE INTO group_members (group_id, candidate_user_id, added_by)
+       SELECT ?, ?, ?
+       WHERE EXISTS (
+         SELECT 1
+         FROM user_roles ur
+         JOIN roles r ON r.id = ur.role_id
+         WHERE ur.user_id = ? AND r.code = 'candidate'
+       )`
     )
-    .get(candidateUserId);
-  if (!isCandidate) throw new Error("Seul un compte candidat peut être ajouté à un groupe.");
+    .run(groupId, candidateUserId, addedBy, candidateUserId);
 
-  getDb()
-    .prepare(`INSERT OR IGNORE INTO group_members (group_id, candidate_user_id, added_by) VALUES (?, ?, ?)`)
-    .run(groupId, candidateUserId, addedBy);
+  // changes=0 is valid only for an already-present candidate membership.
+  // If the role predicate failed, or a historical poisoned staff row already
+  // occupies the UNIQUE key, the role-aware predicate below stays false and
+  // the operation fails closed without any success side effect upstream.
+  if (Number(result.changes) === 0 && !isCandidateMemberOfGroup(groupId, candidateUserId)) {
+    throw new Error("Seul un compte candidat peut être ajouté à un groupe.");
+  }
 }
 
 export function removeCandidateFromGroup(groupId: number, candidateUserId: number): void {

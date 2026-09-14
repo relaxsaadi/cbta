@@ -15,13 +15,18 @@ export class UnauthorizedError extends Error {
  * Revérifie aussi la révocation server-side (§20) : le registre DB est
  * obligatoire. Un cookie authentifié sans `dbSessionId`, expiré/révoqué,
  * rattaché à un autre utilisateur ou dont le compte n'est plus `active`
- * est refusé ici, pas seulement au prochain rechargement de page. */
+ * est refusé ici, pas seulement au prochain rechargement de page.
+ *
+ * #245 : le rôle du cookie n'est pas une autorité durable. La même requête
+ * DB qui valide la session exige désormais exactement une ligne user_roles
+ * et qu'elle corresponde au rôle authentifié. Zéro rôle, plusieurs rôles ou
+ * un rôle unique différent invalident immédiatement la session protégée. */
 export async function requireRole(...allowed: ConsoleRole[]) {
   const session = await getSession();
   if (!session.isLoggedIn || !session.userId || !session.role) {
     throw new UnauthorizedError("Session expirée — reconnectez-vous.");
   }
-  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId)) {
+  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId, session.role)) {
     session.destroy();
     throw new UnauthorizedError("Session révoquée ou invalide — reconnectez-vous.");
   }

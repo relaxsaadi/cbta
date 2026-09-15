@@ -22,7 +22,7 @@ import { hasGroupAccess, hasAssessmentAccess, assertAccess } from "@/lib/tenant-
 import { audit } from "@/lib/audit";
 import type { Scope } from "@/lib/scope";
 import { getGroup } from "@/lib/groups";
-import { findUserById } from "@/lib/users";
+import { findUserById, getRoleForUser } from "@/lib/users";
 import { functionLabel } from "@/lib/questions";
 import { notifyExamAssigned, notifyExamRescheduled } from "@/lib/email/events";
 import { auditExamNotificationSent } from "@/lib/email/audit";
@@ -170,6 +170,9 @@ async function notifyExamAssignedToCandidates(assessmentId: number, candidateIds
   const group = getGroup(assessment.group_id);
   if (!group) return;
   for (const candidateId of candidateIds) {
+    // #78/#245 — une ancienne affectation ne redevient jamais une autorité
+    // candidat. getRoleForUser() échoue fermé sur zéro ou plusieurs rôles.
+    if (getRoleForUser(candidateId) !== "candidate") continue;
     const candidate = findUserById(candidateId);
     if (!candidate?.email) continue;
     const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
@@ -261,6 +264,9 @@ export async function rescheduleAssessmentAction(assessmentId: number, _prev: Re
   const group = assessment ? getGroup(assessment.group_id) : undefined;
   if (assessment && group) {
     for (const candidateId of listAssignedCandidateIds(assessmentId)) {
+      // #78/#245 — les lignes historiques staff/roleless/multi-rôle restent
+      // en base mais ne sont pas une autorité actuelle pour un email candidat.
+      if (getRoleForUser(candidateId) !== "candidate") continue;
       const candidate = findUserById(candidateId);
       if (!candidate?.email) continue;
       const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
@@ -312,6 +318,12 @@ export async function assignMoreCandidatesAction(assessmentId: number, _prev: As
 export async function unassignCandidateAction(assessmentId: number, candidateUserId: number) {
   const session = await requireWriteRole("pedagogical_manager", "administrator");
   assertAccess(hasAssessmentAccess(session, assessmentId));
+  // Préserver les affectations historiques contradictoires comme preuve :
+  // seule une identité ayant exactement un rôle persistant = candidate peut
+  // passer par la mutation opérationnelle de retrait.
+  if (getRoleForUser(candidateUserId) !== "candidate") {
+    throw new Error("Ce compte n'a pas un rôle candidat non ambigu.");
+  }
   unassignCandidateFromAssessment(assessmentId, candidateUserId, session.userId);
   revalidatePath(`/exam-preparation/${assessmentId}`);
 }

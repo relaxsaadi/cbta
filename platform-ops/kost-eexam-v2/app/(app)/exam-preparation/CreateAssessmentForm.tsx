@@ -10,6 +10,8 @@ const PRESETS: Record<string, Preset> = {
   examen: { attemptsAllowed: 1, feedbackMode: "deferred", showResult: true, showCorrectAnswers: false },
 };
 
+type AssessmentScope = "production" | "demo" | "test";
+
 export function CreateAssessmentForm({
   functions,
   groups,
@@ -22,18 +24,21 @@ export function CreateAssessmentForm({
   const [state, formAction, pending] = useActionState<CreateAssessmentResult, FormData>(createAssessmentAction, {});
   const [type, setType] = useState<"exercice" | "test" | "examen">("test");
   const [functionCode, setFunctionCode] = useState(functions[0]?.code ?? "7.1");
+  const [scope, setScope] = useState<AssessmentScope>("production");
   const [admissible, setAdmissible] = useState<number | null>(null);
   const preset = PRESETS[type]!;
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/question-bank/admissible-count?function=${functionCode}`)
+    setAdmissible(null);
+    fetch(`/api/question-bank/admissible-count?function=${encodeURIComponent(functionCode)}&scope=${encodeURIComponent(scope)}`)
       .then((r) => r.json())
-      .then((d) => !cancelled && setAdmissible(d.count ?? 0));
+      .then((d) => !cancelled && setAdmissible(d.count ?? 0))
+      .catch(() => !cancelled && setAdmissible(0));
     return () => {
       cancelled = true;
     };
-  }, [functionCode]);
+  }, [functionCode, scope]);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -78,9 +83,15 @@ export function CreateAssessmentForm({
         <input id="name" name="name" required placeholder="Ex. DGR Fonction 7.1 — Examen Septembre 2026" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
       </div>
 
-      {/* Étape 5 — Banque (information, pas un champ à remplir) */}
+      {/* Étape 5 — Banque (information, pas un champ à remplir). Le compteur
+          suit maintenant le scope sélectionné : une question PENDING peut
+          rester utilisable dans les workflows contrôlés non-production sans
+          être présentée comme admissible en production. */}
       <div className="rounded-md border border-accent-soft-border bg-accent-soft-bg px-3 py-2 text-[13px] text-accent-11">
-        5. Questions admissibles disponibles : <strong>{admissible === null ? "…" : admissible}</strong>
+        5. Questions admissibles disponibles pour ce périmètre : <strong>{admissible === null ? "…" : admissible}</strong>
+        {scope === "production" && admissible === 0 && (
+          <p className="mt-1 text-[11.5px]">Aucune question ne satisfait actuellement le gate de revue humaine requis pour la production.</p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -99,7 +110,7 @@ export function CreateAssessmentForm({
               (15) au lieu de suivre l'admissible réel, avec un risque de
               valeur incohérente si l'utilisateur (ou un test E2E) le
               remplissait pendant cette fenêtre de course. */}
-          <input id="questionCount" type="number" name="questionCount" required min={1} max={admissible ?? undefined} defaultValue={Math.min(15, admissible ?? 15)} key={`qcount-${functionCode}-${admissible}`} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          <input id="questionCount" type="number" name="questionCount" required min={1} max={admissible !== null && admissible > 0 ? admissible : undefined} defaultValue={admissible !== null && admissible > 0 ? Math.min(15, admissible) : 1} key={`qcount-${functionCode}-${scope}-${admissible}`} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         {/* Étape 7 */}
         <div>
@@ -163,7 +174,7 @@ export function CreateAssessmentForm({
 
       <div>
         <label htmlFor="scope" className="mb-1 block text-[12px] font-medium text-text-secondary">12. Périmètre</label>
-        <select id="scope" name="scope" className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
+        <select id="scope" name="scope" value={scope} onChange={(e) => setScope(e.target.value as AssessmentScope)} className="rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]">
           <option value="production">Production</option>
           <option value="demo">Démo</option>
           <option value="test">Test</option>
@@ -171,7 +182,7 @@ export function CreateAssessmentForm({
       </div>
 
       <div>
-        <button disabled={pending} type="submit" className="rounded-md bg-accent-9 px-4 py-2 text-[13.5px] font-medium text-white hover:bg-accent-10 disabled:opacity-60">
+        <button disabled={pending || admissible === 0} type="submit" className="rounded-md bg-accent-9 px-4 py-2 text-[13.5px] font-medium text-white hover:bg-accent-10 disabled:opacity-60">
           {pending ? "Création…" : "Créer le brouillon"}
         </button>
         {state.error && <p className="mt-2 text-[12.5px] text-status-critical-text">{state.error}</p>}

@@ -19,7 +19,7 @@ describe("Admin user provisioning workflow atomicity (#46)", async () => {
     role: "administrator",
   });
 
-  function scalar(sql: string, ...params: unknown[]): number {
+  function scalar(sql: string, ...params: (string | number | bigint | null)[]): number {
     return (getDb().prepare(sql).get(...params) as { n: number }).n;
   }
 

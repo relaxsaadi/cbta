@@ -10,6 +10,7 @@ describe("Fonctions DGR affectées à un candidat (mission COMPLETE USER MANAGEM
   before(() => setupTestDb());
 
   const { createUser } = await import("../../lib/users");
+  const { getDb } = await import("../../lib/db");
   const { assignFunctionToUser, removeFunctionFromUser, listUserFunctions } = await import("../../lib/user-functions");
   const { createQuestion } = await import("../../lib/questions");
   const { createAssessmentDraft, publishAssessment, getSnapshots } = await import("../../lib/assessments");
@@ -60,6 +61,70 @@ describe("Fonctions DGR affectées à un candidat (mission COMPLETE USER MANAGEM
 
     const codes = listUserFunctions(candidateId).map((f) => f.function_code).sort();
     assert.deepEqual(codes, ["7.1", "7.3", "7.5"]);
+  });
+
+  test("refuse fail-closed une nouvelle fonction sur un compte staff", () => {
+    const t = tag();
+    const adminId = createUser({ username: `${t}.admin`, password: "x".repeat(10), fullName: "Admin", role: "administrator" });
+    const staffId = createUser({ username: `${t}.staff`, password: "x".repeat(10), fullName: "Staff", role: "auditor" });
+
+    assert.throws(
+      () => assignFunctionToUser(staffId, "7.6", adminId),
+      /Affectation de fonction DGR refusée ou non confirmée/
+    );
+    const persisted = getDb()
+      .prepare(`SELECT COUNT(*) AS count FROM user_functions WHERE user_id = ? AND function_code = '7.6'`)
+      .get(staffId) as { count: number };
+    assert.equal(persisted.count, 0);
+  });
+
+  test("ne transforme pas un INSERT ignoré sans relation persistée en faux succès idempotent", () => {
+    const t = tag();
+    const adminId = createUser({ username: `${t}.admin`, password: "x".repeat(10), fullName: "Admin", role: "administrator" });
+    const candidateId = createUser({ username: `${t}.cand`, password: "x".repeat(10), fullName: "Candidat", role: "candidate" });
+    const db = getDb();
+    const triggerName = `block_user_function_${candidateId}`;
+
+    // Simule un no-op SQLite après que le prédicat candidat a été satisfait.
+    // Un simple re-check du rôle déclarerait à tort l'opération idempotente,
+    // alors qu'aucune relation `user_functions` n'existe réellement.
+    db.exec(
+      `CREATE TRIGGER ${triggerName}
+       BEFORE INSERT ON user_functions
+       WHEN NEW.user_id = ${candidateId} AND NEW.function_code = '7.10'
+       BEGIN
+         SELECT RAISE(IGNORE);
+       END;`
+    );
+
+    try {
+      assert.throws(
+        () => assignFunctionToUser(candidateId, "7.10", adminId),
+        /Affectation de fonction DGR refusée ou non confirmée/
+      );
+      const persisted = db
+        .prepare(`SELECT COUNT(*) AS count FROM user_functions WHERE user_id = ? AND function_code = '7.10'`)
+        .get(candidateId) as { count: number };
+      assert.equal(persisted.count, 0, "un no-op sans relation persistée ne doit jamais être déclaré idempotent");
+    } finally {
+      db.exec(`DROP TRIGGER IF EXISTS ${triggerName}`);
+    }
+  });
+
+  test("une relation historique empoisonnée reste conservée mais n'est plus projetée comme fonction candidat", () => {
+    const t = tag();
+    const adminId = createUser({ username: `${t}.admin`, password: "x".repeat(10), fullName: "Admin", role: "administrator" });
+    const staffId = createUser({ username: `${t}.staff`, password: "x".repeat(10), fullName: "Staff", role: "auditor" });
+
+    getDb()
+      .prepare(`INSERT INTO user_functions (user_id, function_code, assigned_by) VALUES (?, '7.7', ?)`)
+      .run(staffId, adminId);
+
+    assert.deepEqual(listUserFunctions(staffId), []);
+    const persisted = getDb()
+      .prepare(`SELECT COUNT(*) AS count FROM user_functions WHERE user_id = ? AND function_code = '7.7'`)
+      .get(staffId) as { count: number };
+    assert.equal(persisted.count, 1, "la lecture fail-closed ne doit jamais supprimer la preuve existante");
   });
 
   test("retirer une fonction supprime réellement la relation", () => {

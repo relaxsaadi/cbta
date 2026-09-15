@@ -81,7 +81,8 @@ export function listRoleIntegrityAnomalies(): RoleIntegrityAnomaly[] {
 export type CandidateRelationIntegrityRelation =
   | "group_members"
   | "assessment_assignments"
-  | "familiarization_attendance";
+  | "familiarization_attendance"
+  | "user_functions";
 
 export type CandidateRelationIntegrityCategory =
   | "missing_role"
@@ -90,7 +91,7 @@ export type CandidateRelationIntegrityCategory =
 
 export interface CandidateRelationIntegrityAnomaly {
   relation: CandidateRelationIntegrityRelation;
-  /** Stable relation key composed only of numeric database ids. */
+  /** Stable non-PII relation key composed only of numeric ids/domain codes. */
   record_key: string;
   user_id: number;
   category: CandidateRelationIntegrityCategory;
@@ -106,13 +107,18 @@ interface CandidateRelationEvidenceRow {
 }
 
 /**
- * Read-only readiness inventory for historical candidate-only relations (#78).
+ * Read-only readiness inventory for historical candidate-only relations (#78,
+ * #245).
  *
- * These relations are deliberately preserved for audit/history even if the
- * referenced identity later becomes staff, loses its role, or gains a second
- * contradictory role. Operational readers must fail closed; this inventory
- * gives an operator a non-PII record key for explicit remediation without
- * silently deleting or rewriting any historical evidence.
+ * These relations are deliberately preserved for audit/history or explicit
+ * administrative remediation even if the referenced identity later becomes
+ * staff, loses its role, or gains a contradictory role. Operational readers
+ * must fail closed; this inventory gives an operator a non-PII record key for
+ * explicit remediation without silently deleting or rewriting evidence.
+ *
+ * `user_functions` is included because the module explicitly defines that
+ * relation as candidate-only. Function codes such as `7.1` are domain codes,
+ * not account PII.
  *
  * The canonical candidate predicate mirrors `listGroupMembers()`:
  * exactly one persisted role and that role is `candidate`.
@@ -142,6 +148,14 @@ export function listCandidateRelationIntegrityAnomalies(): CandidateRelationInte
            CAST(fa.id AS TEXT) AS record_key,
            fa.candidate_user_id AS user_id
          FROM familiarization_attendance fa
+
+         UNION ALL
+
+         SELECT
+           'user_functions' AS relation,
+           CAST(uf.user_id AS TEXT) || ':' || uf.function_code AS record_key,
+           uf.user_id AS user_id
+         FROM user_functions uf
        )
        SELECT cr.relation, cr.record_key, cr.user_id, r.code AS role_code
        FROM candidate_relations cr

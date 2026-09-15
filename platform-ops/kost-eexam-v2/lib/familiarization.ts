@@ -196,25 +196,49 @@ export function createFamiliarizationSession(params: {
   });
 }
 
+/**
+ * Operational attendance roster: historical attendance rows are retained,
+ * but only an identity with exactly one persisted role and that role equal
+ * to `candidate` is exposed as a current candidate. This mirrors the
+ * fail-closed group roster invariant (#78/#245).
+ */
 export function listAttendance(sessionId: number): AttendanceRow[] {
   return getDb()
     .prepare(
       `SELECT fa.candidate_user_id, u.full_name, u.username, fa.present, fa.marked_at
        FROM familiarization_attendance fa
        JOIN users u ON u.id = fa.candidate_user_id
+       JOIN user_roles ur ON ur.user_id = u.id
+       JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
        WHERE fa.session_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1
        ORDER BY u.full_name`
     )
     .all(sessionId) as unknown as AttendanceRow[];
 }
 
+/**
+ * Mutation guard for historical attendance: role ambiguity must fail closed
+ * in the same SQLite statement as the write. A denied/no-longer-candidate
+ * target is never rewritten and never produces a success audit event.
+ */
 export function markAttendance(sessionId: number, candidateUserId: number, present: boolean, actor: { id: number; role: ConsoleRole }): void {
-  getDb()
+  const result = getDb()
     .prepare(
       `UPDATE familiarization_attendance SET present = ?, marked_at = ?, marked_by = ?
-       WHERE session_id = ? AND candidate_user_id = ?`
+       WHERE session_id = ? AND candidate_user_id = ?
+         AND EXISTS (
+           SELECT 1
+           FROM user_roles ur
+           JOIN roles r ON r.id = ur.role_id
+           WHERE ur.user_id = ? AND r.code = 'candidate'
+             AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = ur.user_id) = 1
+         )`
     )
-    .run(present ? 1 : 0, nowIso(), actor.id, sessionId, candidateUserId);
+    .run(present ? 1 : 0, nowIso(), actor.id, sessionId, candidateUserId, candidateUserId);
+  if (Number(result.changes) !== 1) {
+    throw new Error("Seul un compte candidat non ambigu peut être marqué en familiarisation.");
+  }
   audit({
     actorUserId: actor.id,
     actorRole: actor.role,

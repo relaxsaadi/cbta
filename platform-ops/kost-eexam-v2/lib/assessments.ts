@@ -178,7 +178,12 @@ export interface AssignmentStats {
  * diverger). "submittedTotal" est un cumul (awaitingCorrection +
  * resultsAvailable), pas un troisième état mutuellement exclusif — cohérent
  * avec §27 qui liste "Submitted" ET son détail "Awaiting manual
- * correction"/"Results available" côte à côte. */
+ * correction"/"Results available" côte à côte.
+ *
+ * #78/#245 : `assessment_assignments` reste une preuve historique durable,
+ * mais ses lecteurs opérationnels ne doivent rétablir l'autorité candidat
+ * que si l'identité a exactement un rôle persistant et que ce rôle est
+ * `candidate`. Les lignes historiques contradictoires restent en base. */
 export function getAssignmentStatsByAssessment(): Map<number, AssignmentStats> {
   const rows = getDb()
     .prepare(
@@ -190,9 +195,12 @@ export function getAssignmentStatsByAssessment(): Map<number, AssignmentStats> {
               SUM(CASE WHEN at.status IN ('submitted','auto_submitted') AND r.grading_state = 'AWAITING_MANUAL_REVIEW' THEN 1 ELSE 0 END) AS awaiting_correction,
               SUM(CASE WHEN at.status IN ('submitted','auto_submitted') AND r.grading_state = 'COMPLETE' THEN 1 ELSE 0 END) AS results_available
        FROM assessment_assignments aa
+       JOIN user_roles ur ON ur.user_id = aa.candidate_user_id
+       JOIN roles cr ON cr.id = ur.role_id AND cr.code = 'candidate'
        LEFT JOIN attempts at ON at.assessment_id = aa.assessment_id AND at.candidate_user_id = aa.candidate_user_id
          AND at.id = (SELECT MAX(id) FROM attempts WHERE assessment_id = aa.assessment_id AND candidate_user_id = aa.candidate_user_id)
        LEFT JOIN results r ON r.attempt_id = at.id
+       WHERE (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = aa.candidate_user_id) = 1
        GROUP BY aa.assessment_id`
     )
     .all() as {
@@ -670,6 +678,9 @@ export function listAssignedAssessmentsForCandidate(candidateUserId: number): (A
     .all(candidateUserId) as unknown as (AssessmentRow & { group_name: string })[];
 }
 
+/** Operational tracking is intentionally narrower than historical evidence:
+ * a preserved assignment row confers candidate authority only while the
+ * referenced identity remains an unambiguous sole-role candidate. */
 export function trackingForAssessment(assessmentId: number) {
   const db = getDb();
   return db
@@ -679,10 +690,13 @@ export function trackingForAssessment(assessmentId: number) {
               r.score_100, r.percentage, r.passed, r.grading_state
        FROM assessment_assignments aa
        JOIN users u ON u.id = aa.candidate_user_id
+       JOIN user_roles ur ON ur.user_id = aa.candidate_user_id
+       JOIN roles cr ON cr.id = ur.role_id AND cr.code = 'candidate'
        LEFT JOIN attempts at ON at.assessment_id = aa.assessment_id AND at.candidate_user_id = aa.candidate_user_id
          AND at.id = (SELECT MAX(id) FROM attempts WHERE assessment_id = aa.assessment_id AND candidate_user_id = aa.candidate_user_id)
        LEFT JOIN results r ON r.attempt_id = at.id
        WHERE aa.assessment_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = aa.candidate_user_id) = 1
        ORDER BY u.full_name`
     )
     .all(assessmentId);
@@ -726,7 +740,9 @@ const SMALL_SAMPLE_THRESHOLD = 5;
 /** Rapport global de session/examen (addendum §5-6) — même source que
  * trackingForAssessment(), enrichie du compte bonnes/mauvaises réponses
  * par tentative, plus les statistiques agrégées calculées ici même
- * (jamais une valeur ressaisie manuellement). */
+ * (jamais une valeur ressaisie manuellement). Historical assignment rows
+ * are retained, but only current sole-role candidates enter operational
+ * report rows or the derived report/PDF statistics (#78/#245). */
 export function getSessionReport(assessmentId: number): { rows: SessionReportRow[]; stats: SessionReportStats } {
   const db = getDb();
   const rows = db
@@ -738,10 +754,13 @@ export function getSessionReport(assessmentId: number): { rows: SessionReportRow
               r.score_100, r.percentage, r.passed
        FROM assessment_assignments aa
        JOIN users u ON u.id = aa.candidate_user_id
+       JOIN user_roles ur ON ur.user_id = aa.candidate_user_id
+       JOIN roles cr ON cr.id = ur.role_id AND cr.code = 'candidate'
        LEFT JOIN attempts at ON at.assessment_id = aa.assessment_id AND at.candidate_user_id = aa.candidate_user_id
          AND at.id = (SELECT MAX(id) FROM attempts WHERE assessment_id = aa.assessment_id AND candidate_user_id = aa.candidate_user_id)
        LEFT JOIN results r ON r.attempt_id = at.id
        WHERE aa.assessment_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = aa.candidate_user_id) = 1
        ORDER BY u.full_name`
     )
     .all(assessmentId) as unknown as SessionReportRow[];

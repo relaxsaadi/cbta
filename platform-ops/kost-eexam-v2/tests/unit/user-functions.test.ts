@@ -70,12 +70,45 @@ describe("Fonctions DGR affectées à un candidat (mission COMPLETE USER MANAGEM
 
     assert.throws(
       () => assignFunctionToUser(staffId, "7.6", adminId),
-      /Seul un compte candidat non ambigu peut recevoir une fonction DGR/
+      /Affectation de fonction DGR refusée ou non confirmée/
     );
     const persisted = getDb()
       .prepare(`SELECT COUNT(*) AS count FROM user_functions WHERE user_id = ? AND function_code = '7.6'`)
       .get(staffId) as { count: number };
     assert.equal(persisted.count, 0);
+  });
+
+  test("ne transforme pas un INSERT ignoré sans relation persistée en faux succès idempotent", () => {
+    const t = tag();
+    const adminId = createUser({ username: `${t}.admin`, password: "x".repeat(10), fullName: "Admin", role: "administrator" });
+    const candidateId = createUser({ username: `${t}.cand`, password: "x".repeat(10), fullName: "Candidat", role: "candidate" });
+    const db = getDb();
+    const triggerName = `block_user_function_${candidateId}`;
+
+    // Simule un no-op SQLite après que le prédicat candidat a été satisfait.
+    // Un simple re-check du rôle déclarerait à tort l'opération idempotente,
+    // alors qu'aucune relation `user_functions` n'existe réellement.
+    db.exec(
+      `CREATE TRIGGER ${triggerName}
+       BEFORE INSERT ON user_functions
+       WHEN NEW.user_id = ${candidateId} AND NEW.function_code = '7.10'
+       BEGIN
+         SELECT RAISE(IGNORE);
+       END;`
+    );
+
+    try {
+      assert.throws(
+        () => assignFunctionToUser(candidateId, "7.10", adminId),
+        /Affectation de fonction DGR refusée ou non confirmée/
+      );
+      const persisted = db
+        .prepare(`SELECT COUNT(*) AS count FROM user_functions WHERE user_id = ? AND function_code = '7.10'`)
+        .get(candidateId) as { count: number };
+      assert.equal(persisted.count, 0, "un no-op sans relation persistée ne doit jamais être déclaré idempotent");
+    } finally {
+      db.exec(`DROP TRIGGER IF EXISTS ${triggerName}`);
+    }
   });
 
   test("une relation historique empoisonnée reste conservée mais n'est plus projetée comme fonction candidat", () => {

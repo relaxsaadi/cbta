@@ -189,13 +189,12 @@ export async function closeIncidentAction(incidentId: number) {
   revalidatePath("/incidents");
 }
 export async function setIncidentStatusAction(incidentId: number, status: IncidentStatus) {
-  setIncidentStatus(incidentId, status, await actor());
+  const result = setIncidentStatus(incidentId, status, await actor());
 
-  // INCIDENT_RESOLVED (mission email §29) — uniquement sur la transition
-  // VERS 'resolved', jamais pour 'investigating'/'closed'/etc. Même
-  // principe que INCIDENT_DECLARED : seulement si un compte précis est
-  // concerné, jamais le détail de l'incident dans l'email.
-  if (status === "resolved") {
+  // INCIDENT_RESOLVED (mission email §29) — uniquement sur une transition
+  // RÉELLE vers 'resolved'. Un retry idempotent sur un incident déjà résolu
+  // ne doit jamais fabriquer une seconde notification de succès.
+  if (result.changed && status === "resolved") {
     const incident = getIncident(incidentId);
     if (incident?.responsible_user_id) {
       const target = findUserById(incident.responsible_user_id);

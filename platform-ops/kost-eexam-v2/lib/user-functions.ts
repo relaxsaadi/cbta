@@ -16,23 +16,30 @@ export interface UserFunctionRow {
 }
 
 /**
- * Frontière d'autorité candidat utilisée par `user_functions`.
+ * Vérification d'idempotence fail-closed pour `user_functions`.
  *
- * Même avec l'unicité de stockage de #245, une identité staff valide possède
- * elle aussi exactement un rôle. Cette relation reste donc candidate-only :
- * il faut exactement un rôle persistant ET ce rôle doit être `candidate`.
+ * Un `INSERT OR IGNORE` à zéro changement n'est un succès idempotent que si
+ * la relation exacte existe réellement ET que son propriétaire possède
+ * toujours exactement un rôle persistant, `candidate`. Vérifier seulement le
+ * rôle après le no-op permettrait sinon un faux succès si l'identité passait
+ * de staff à candidate entre l'INSERT refusé et la vérification applicative.
  */
-function hasUnambiguousCandidateRole(userId: number): boolean {
+function hasExistingUnambiguousCandidateFunction(userId: number, functionCode: string): boolean {
   return Boolean(
     getDb()
       .prepare(
         `SELECT 1
-         FROM user_roles ur
-         JOIN roles r ON r.id = ur.role_id
-         WHERE ur.user_id = ? AND r.code = 'candidate'
-           AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = ur.user_id) = 1`
+         FROM user_functions uf
+         WHERE uf.user_id = ? AND uf.function_code = ?
+           AND EXISTS (
+             SELECT 1
+             FROM user_roles ur
+             JOIN roles r ON r.id = ur.role_id
+             WHERE ur.user_id = uf.user_id AND r.code = 'candidate'
+               AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = ur.user_id) = 1
+           )`
       )
-      .get(userId)
+      .get(userId, functionCode)
   );
 }
 
@@ -87,11 +94,12 @@ export function assignFunctionToUser(userId: number, functionCode: string, assig
 
   if ((result.changes as number) > 0) return { changed: true };
 
-  // `INSERT OR IGNORE` est un no-op légitime uniquement si la même relation
+  // `INSERT OR IGNORE` est un no-op légitime uniquement si la relation exacte
   // existe déjà pour un candidat encore valide. Ne jamais transformer un
-  // échec du prédicat de rôle en faux succès/idempotence.
-  if (!hasUnambiguousCandidateRole(userId)) {
-    throw new Error("Seul un compte candidat non ambigu peut recevoir une fonction DGR.");
+  // échec du prédicat de rôle — ou tout autre no-op sans relation persistée —
+  // en faux succès/idempotence.
+  if (!hasExistingUnambiguousCandidateFunction(userId, functionCode)) {
+    throw new Error("Affectation de fonction DGR refusée ou non confirmée pour ce candidat.");
   }
   return { changed: false };
 }

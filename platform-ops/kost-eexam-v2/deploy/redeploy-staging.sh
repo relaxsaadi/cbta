@@ -17,7 +17,7 @@ HOST="root@102.206.40.221"
 REMOTE_APP_DIR="/root/kost-eexam-v2-stack/app"
 REMOTE_STACK_DIR="/root/kost-eexam-v2-stack"
 
-echo "== 1/4 rsync code (jamais .env*/node_modules/.next/.git/data/*.db) =="
+echo "== 1/5 rsync code (jamais .env*/node_modules/.next/.git/data/*.db) =="
 rsync -az --delete \
   --exclude '.env*' \
   --exclude '.moodle-extracts' \
@@ -29,17 +29,26 @@ rsync -az --delete \
   -e "ssh -i $SSH_KEY" \
   ./ "$HOST:$REMOTE_APP_DIR/"
 
-echo "== 2/4 docker build (image taggée kost-eexam-v2:latest) =="
+echo "== 2/5 docker build (image taggée kost-eexam-v2:latest) =="
 ssh -i "$SSH_KEY" "$HOST" "cd $REMOTE_APP_DIR && docker build -t kost-eexam-v2:latest ."
 
-echo "== 3/4 docker rm -f + docker run (jamais 'docker restart') =="
+echo "== 3/5 docker rm -f + docker run (jamais 'docker restart') =="
 # --log-opt max-size/max-file : rotation réelle des logs du conteneur
 # (mission §12 — trouvé SANS rotation cette session, corrigé ici ; le
 # pilote json-file de Docker n'a par défaut AUCUNE limite de taille).
 ssh -i "$SSH_KEY" "$HOST" "cd $REMOTE_STACK_DIR && docker rm -f kost-eexam-v2 && docker run -d --name kost-eexam-v2 --restart unless-stopped -p 127.0.0.1:3200:3000 --env-file .env -v $REMOTE_STACK_DIR/data:/app/data --log-opt max-size=10m --log-opt max-file=5 kost-eexam-v2:latest"
 
-echo "== 4/4 migration schéma (idempotente — ADDITIVE_COLUMNS, jamais destructive) =="
+echo "== 4/5 migration schéma + contrainte one-role fail-closed =="
 sleep 2
-ssh -i "$SSH_KEY" "$HOST" "docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/migrate.ts"
+# migrate.ts reste non destructif. Le second passage installe l'index unique
+# user_roles(user_id) UNIQUEMENT si l'inventaire persistant est déjà propre ;
+# il échoue sans choisir/supprimer/réécrire un rôle contradictoire.
+ssh -i "$SSH_KEY" "$HOST" "docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/migrate.ts && docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/enforce-role-cardinality.ts"
+
+echo "== 5/5 readiness rôles/relations candidat (read-only, fail-closed) =="
+# Couvre à la fois la cardinalité des rôles et les anciennes relations
+# candidat-only (#78). Un inventaire non vide rend le redéploiement non validé
+# sans modifier aucune preuve historique.
+ssh -i "$SSH_KEY" "$HOST" "docker exec kost-eexam-v2 node_modules/.bin/tsx scripts/check-role-integrity.ts"
 
 echo "== Terminé — vérifier manuellement (curl /login, logs, régression E2E) avant de considérer le déploiement validé =="

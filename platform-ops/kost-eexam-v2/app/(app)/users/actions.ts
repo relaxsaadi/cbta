@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireWriteRole } from "@/lib/rbac";
 import {
-  createUserPendingActivation,
   findUserById,
   findUserByUsername,
   reactivateUserSafely,
@@ -16,8 +15,9 @@ import {
   updateUserProfile,
   type CandidateType,
 } from "@/lib/users";
+import { provisionPendingUserAtomically } from "@/lib/user-provisioning";
 import { assignFunctionToUser, removeFunctionFromUser } from "@/lib/user-functions";
-import { addUserToGroup, removeUserFromGroupSafely, changeUserGroup, getPrimaryCompanyContext, provisionParticulierAccess } from "@/lib/user-affiliation";
+import { addUserToGroup, removeUserFromGroupSafely, changeUserGroup, getPrimaryCompanyContext } from "@/lib/user-affiliation";
 import { createCompany } from "@/lib/companies";
 import { createGroup, getGroup } from "@/lib/groups";
 import { suspendUserAtomically, archiveUserAtomically, archiveUsersBatchAtomically } from "@/lib/direct-lifecycle-stop";
@@ -93,46 +93,31 @@ export async function createUserAction(_prev: CreateUserResult, formData: FormDa
 
   let userId: number;
   try {
-    userId = createUserPendingActivation({
+    userId = provisionPendingUserAtomically({
       username,
       fullName,
       role,
       email: email || undefined,
       phone,
       candidateType: role === "candidate" ? candidateType : undefined,
+      groupId,
+      functionCodes,
+      actorUserId: session.userId,
+      actorRole: session.role,
+      particulierScope: "production",
     });
   } catch (err) {
     // Filet de sécurité résiduel (jamais le chemin normal — la
     // vérification proactive ci-dessus couvre déjà le cas normalisé) :
     // une vraie course entre deux requêtes simultanées peut en théorie
     // passer toutes deux la vérification avant que l'une des deux
-    // n'exécute son INSERT. Message distinct selon la colonne SQLite
-    // réellement en cause, jamais un message générique qui pointerait à
-    // tort vers l'identifiant quand c'est l'email qui est en collision.
+    // n'exécute son INSERT. Toute autre erreur de provisioning est elle
+    // aussi rollbackée par la frontière atomique avant d'arriver ici.
     const raw = err instanceof Error ? err.message : "";
     if (raw.includes("users.email")) return { error: "Un compte utilise déjà cette adresse email." };
     if (raw.includes("users.username")) return { error: "Cet identifiant est déjà utilisé." };
     return { error: raw || "Erreur lors de la création du compte." };
   }
-
-  if (groupId) addUserToGroup(userId, groupId, session.userId);
-  // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §1-4 —
-  // voir provisionParticulierAccess (lib/user-affiliation.ts) pour le
-  // diagnostic complet : sans ceci, un Particulier ne pouvait
-  // structurellement jamais se voir affecter d'examen.
-  if (role === "candidate" && candidateType === "particulier") {
-    provisionParticulierAccess(userId, fullName, session.userId, "production");
-  }
-  for (const code of functionCodes) assignFunctionToUser(userId, code, session.userId);
-
-  audit({
-    actorUserId: session.userId,
-    actorRole: session.role,
-    action: "user_created",
-    targetType: "user",
-    targetId: userId,
-    metadata: { role, candidateType: candidateType ?? null, groupId: groupId ?? null, functionCodes },
-  });
 
   if (!sendInvitation) {
     revalidatePath("/users");

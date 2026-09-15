@@ -19,11 +19,11 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Formation IATA DGR Algérie | Certificat Officiel CBTA",
+    default: "Formation IATA DGR Algérie — Seul Centre CBTA Certifié",
     template: "%s — KOST GROUP",
   },
   description:
-    "Seul centre IATA CBTA Provider certifié d'Algérie. Formations DGR 7.1 à 7.10, reconnues par 300+ compagnies. Sessions régulières, devis gratuit sous 24h.",
+    "Seul centre IATA CBTA Provider certifié d'Algérie. Formations DGR 7.1 à 7.10 reconnues par 300+ compagnies aériennes. Devis gratuit sous 24h, sans attente.",
   keywords: [
     "Formation IATA DGR",
     "CBTA",

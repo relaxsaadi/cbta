@@ -154,8 +154,9 @@ describe("Incident status lifecycle — atomic mutation/evidence boundary (#222)
 
   test("independent stale connection cannot overwrite the lifecycle winner", () => {
     const { incidentId, actor } = makeFixture("stale-cas");
-    assert.ok(process.env.DB_PATH, "test DB path must be available");
-    const secondConnection = new DatabaseSync(process.env.DB_PATH);
+    const dbPath = process.env.DB_PATH;
+    assert.ok(dbPath, "test DB path must be available");
+    const secondConnection = new DatabaseSync(dbPath);
     secondConnection.exec("PRAGMA busy_timeout = 1000");
 
     try {

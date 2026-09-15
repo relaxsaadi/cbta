@@ -150,7 +150,13 @@ export function activationDenialReason(status: UserRow["status"]): ActivationDen
  * 'pending_activation' (voir lib/auth.ts). Le candidat n'obtient un VRAI
  * mot de passe qu'en complétant lui-même le flux d'activation par jeton
  * (lib/activation-tokens.ts + app/activer/actions.ts), qui appelle
- * setPasswordAndActivate() ci-dessous. */
+ * setPasswordAndActivate() ci-dessous.
+ *
+ * #46 : `dbOverride` permet au workflow de provisioning complet d'insérer
+ * l'utilisateur + son rôle dans UNE transaction englobante avec groupe,
+ * fonctions DGR et audit de succès. Sans override, le comportement historique
+ * reste inchangé : cette primitive ouvre et commit sa propre transaction.
+ */
 export function createUserPendingActivation(params: {
   username: string;
   fullName: string;
@@ -158,9 +164,9 @@ export function createUserPendingActivation(params: {
   email?: string;
   phone?: string;
   candidateType?: CandidateType;
-}): number {
+}, dbOverride?: ReturnType<typeof getDb>): number {
   const unusablePasswordHash = hashPassword(randomBytes(32).toString("hex"));
-  return transaction((db) => {
+  const insert = (db: ReturnType<typeof getDb>): number => {
     const roleId = resolveRoleId(db, params.role);
     const result = db
       .prepare(`INSERT INTO users (username, password_hash, full_name, email, phone, status, candidate_type) VALUES (?, ?, ?, ?, ?, 'pending_activation', ?)`)
@@ -168,7 +174,8 @@ export function createUserPendingActivation(params: {
     const userId = Number(result.lastInsertRowid);
     db.prepare(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`).run(userId, roleId);
     return userId;
-  });
+  };
+  return dbOverride ? insert(dbOverride) : transaction(insert);
 }
 
 /** Appelée UNIQUEMENT par le flux d'activation/réinitialisation par jeton

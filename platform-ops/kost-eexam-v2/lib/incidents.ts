@@ -329,11 +329,27 @@ export function listIncidentActions(incidentId: number) {
     .all(incidentId);
 }
 
-function recordAction(incidentId: number, actionType: IncidentActionType, actorUserId: number, actorRole: ConsoleRole, targetType?: string, targetId?: number, detail?: string) {
+function recordAction(
+  incidentId: number,
+  actionType: IncidentActionType,
+  actorUserId: number,
+  actorRole: ConsoleRole,
+  targetType?: string,
+  targetId?: number,
+  detail?: string,
+  auditMetadata?: Record<string, unknown>
+) {
   getDb()
     .prepare(`INSERT INTO incident_actions (incident_id, action_type, target_type, target_id, actor_user_id, detail) VALUES (?, ?, ?, ?, ?, ?)`)
     .run(incidentId, actionType, targetType ?? null, targetId ?? null, actorUserId, detail ?? null);
-  audit({ actorUserId, actorRole, action: `incident_action_${actionType}`, targetType: targetType ?? "incident", targetId: targetId ?? incidentId, metadata: { incidentId } });
+  audit({
+    actorUserId,
+    actorRole,
+    action: `incident_action_${actionType}`,
+    targetType: targetType ?? "incident",
+    targetId: targetId ?? incidentId,
+    metadata: { incidentId, ...(auditMetadata ?? {}) },
+  });
 }
 
 // Chaque action ci-dessous fait DEUX choses dans le même appel : l'effet
@@ -537,7 +553,16 @@ export function closeIncident(incidentId: number, actor: { id: number; role: Con
   return transaction(() => {
     const result = transitionIncidentStatusInCurrentTransaction(incidentId, "closed");
     if (!result.changed) return result;
-    recordAction(incidentId, "close", actor.id, actor.role);
+    recordAction(
+      incidentId,
+      "close",
+      actor.id,
+      actor.role,
+      undefined,
+      undefined,
+      undefined,
+      { previousStatus: result.previousStatus, status: result.status }
+    );
     return result;
   });
 }

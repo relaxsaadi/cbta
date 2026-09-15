@@ -8,7 +8,7 @@ describe("Admin user provisioning workflow atomicity (#46)", async () => {
   const { createUser, findUserByUsername, getRoleForUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");
   const { createGroup, isCandidateMemberOfGroup } = await import("../../lib/groups");
-  const { listFunctionsForUser } = await import("../../lib/user-functions");
+  const { listUserFunctions } = await import("../../lib/user-functions");
   const { provisionPendingUserAtomically } = await import("../../lib/user-provisioning");
   const { getDb } = await import("../../lib/db");
 
@@ -39,7 +39,7 @@ describe("Admin user provisioning workflow atomicity (#46)", async () => {
     assert.equal(findUserByUsername("atomic.enterprise.candidate")?.id, userId);
     assert.equal(getRoleForUser(userId), "candidate");
     assert.equal(isCandidateMemberOfGroup(groupId, userId), true);
-    assert.deepEqual(listFunctionsForUser(userId).map((row) => row.function_code).sort(), ["7.1", "7.10"]);
+    assert.deepEqual(listUserFunctions(userId).map((row) => row.function_code).sort(), ["7.1", "7.10"]);
 
     const auditCount = getDb()
       .prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE action = 'user_created' AND target_id = ?`)

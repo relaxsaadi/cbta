@@ -486,12 +486,78 @@ export function actionAttachEvidence(incidentId: number, description: string, ac
   transaction(() => recordAction(incidentId, "attach_evidence", actor.id, actor.role, undefined, undefined, description));
 }
 
-export function closeIncident(incidentId: number, actor: { id: number; role: ConsoleRole }) {
-  getDb().prepare(`UPDATE incidents SET status = 'closed' WHERE id = ?`).run(incidentId);
-  recordAction(incidentId, "close", actor.id, actor.role);
+const INCIDENT_STATUS_TRANSITIONS: Record<IncidentStatus, readonly IncidentStatus[]> = {
+  open: ["investigating", "resolved", "closed"],
+  investigating: ["resolved", "closed"],
+  resolved: ["closed"],
+  closed: [],
+};
+
+type IncidentStatusTransitionResult =
+  | { changed: false; status: IncidentStatus }
+  | { changed: true; previousStatus: IncidentStatus; status: IncidentStatus };
+
+/**
+ * Incident lifecycle authority boundary (#222). The row is read only after
+ * BEGIN IMMEDIATE, the requested transition is checked against the explicit
+ * forward-only state machine, and the UPDATE uses a status CAS. Same-state
+ * calls are idempotent no-ops and `closed` is terminal. Evidence must be
+ * written by the caller before the transaction can commit.
+ */
+function transitionIncidentStatusInCurrentTransaction(
+  incidentId: number,
+  status: IncidentStatus
+): IncidentStatusTransitionResult {
+  const db = getDb();
+  const current = db
+    .prepare(`SELECT status FROM incidents WHERE id = ?`)
+    .get(incidentId) as { status: IncidentStatus } | undefined;
+
+  if (!current) {
+    throw new Error("Incident introuvable.");
+  }
+  if (current.status === status) {
+    return { changed: false, status };
+  }
+  if (!INCIDENT_STATUS_TRANSITIONS[current.status].includes(status)) {
+    throw new Error(`Transition d'incident non autorisée: ${current.status} → ${status}.`);
+  }
+
+  const updated = db
+    .prepare(`UPDATE incidents SET status = ? WHERE id = ? AND status = ?`)
+    .run(status, incidentId, current.status);
+  if (Number(updated.changes) !== 1) {
+    throw new Error("Incident lifecycle CAS failed.");
+  }
+
+  return { changed: true, previousStatus: current.status, status };
 }
 
-export function setIncidentStatus(incidentId: number, status: IncidentStatus, actor: { id: number; role: ConsoleRole }) {
-  getDb().prepare(`UPDATE incidents SET status = ? WHERE id = ?`).run(status, incidentId);
-  audit({ actorUserId: actor.id, actorRole: actor.role, action: "incident_status_change", targetType: "incident", targetId: incidentId, metadata: { status } });
+export function closeIncident(incidentId: number, actor: { id: number; role: ConsoleRole }): IncidentStatusTransitionResult {
+  return transaction(() => {
+    const result = transitionIncidentStatusInCurrentTransaction(incidentId, "closed");
+    if (!result.changed) return result;
+    recordAction(incidentId, "close", actor.id, actor.role);
+    return result;
+  });
+}
+
+export function setIncidentStatus(
+  incidentId: number,
+  status: IncidentStatus,
+  actor: { id: number; role: ConsoleRole }
+): IncidentStatusTransitionResult {
+  return transaction(() => {
+    const result = transitionIncidentStatusInCurrentTransaction(incidentId, status);
+    if (!result.changed) return result;
+    audit({
+      actorUserId: actor.id,
+      actorRole: actor.role,
+      action: "incident_status_change",
+      targetType: "incident",
+      targetId: incidentId,
+      metadata: { previousStatus: result.previousStatus, status },
+    });
+    return result;
+  });
 }

@@ -191,6 +191,9 @@ export function listCandidateOptions(restrictToGroupIdsOrNull: number[] | null =
       `SELECT DISTINCT u.id, u.full_name, c.name AS company_name, g.name AS group_name
        FROM group_members gm
        JOIN users u ON u.id = gm.candidate_user_id
+       JOIN user_roles ur ON ur.user_id = u.id
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1
+       JOIN roles candidate_role ON candidate_role.id = ur.role_id AND candidate_role.code = 'candidate'
        JOIN groups g ON g.id = gm.group_id
        JOIN companies c ON c.id = g.company_id
        ${where}

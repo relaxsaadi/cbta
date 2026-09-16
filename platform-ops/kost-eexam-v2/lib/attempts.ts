@@ -82,12 +82,30 @@ export function isCandidateAssignedToAssessment(assessmentId: number, candidateU
 }
 
 /**
+ * Défense locale fail-closed du chemin de démarrage (#30/#61). La validation
+ * canonique de toutes les écritures de planning reste suivie par #30, mais
+ * startAttempt() ne doit jamais transformer une date persistée invalide ou
+ * une fenêtre inversée en autorisation de démarrage.
+ */
+function hasValidAssessmentWindow(assessment: AssessmentRow): boolean {
+  const openTs = assessment.open_at === null ? null : Date.parse(assessment.open_at);
+  const closeTs = assessment.close_at === null ? null : Date.parse(assessment.close_at);
+  if (openTs !== null && !Number.isFinite(openTs)) return false;
+  if (closeTs !== null && !Number.isFinite(closeTs)) return false;
+  if (openTs !== null && closeTs !== null && closeTs <= openTs) return false;
+  return true;
+}
+
+/**
  * Démarre une tentative — ou renvoie la tentative déjà en cours si elle
- * existe (double-clic / deux onglets, §9). La garantie réelle est
- * l'index unique partiel sur `attempts` (voir lib/schema.sql) : même sous
- * accès concurrent, SQLite ne laissera jamais deux lignes 'in_progress'
- * co-exister — on rattrape ici la violation de contrainte pour renvoyer la
- * tentative existante plutôt qu'une erreur brute côté candidat.
+ * existe (double-clic / deux onglets, §9).
+ *
+ * #61 : pour une NOUVELLE tentative, toute la décision mutation-sensitive
+ * est relue après acquisition du BEGIN IMMEDIATE : stop-control plateforme,
+ * lifecycle/planning courant, affectation, limite de tentatives et snapshots.
+ * Les autres écrivains utilisant la même discipline sont ainsi ordonnés par
+ * le verrou SQLite : le gagnant commit, le suivant relit l'état gagné au lieu
+ * de créer une tentative à partir d'un pré-check périmé.
  */
 export function startAttempt(
   assessmentId: number,
@@ -109,63 +127,67 @@ export function startAttempt(
     return existing;
   }
 
-  // Addendum §9-11 — continuité d'examen : une tentative DÉJÀ en cours
-  // (retour anticipé ci-dessus) n'est JAMAIS bloquée par cette
-  // vérification, qui ne s'applique qu'au démarrage d'une NOUVELLE
-  // tentative — voir lib/platform-settings.ts.
-  if (isNewAttemptsBlocked()) {
-    throw new AttemptError("Le démarrage de nouvelles tentatives est temporairement suspendu (maintenance en cours). Les tentatives déjà commencées ne sont pas affectées.");
-  }
+  return transaction((db) => {
+    // Un autre start peut avoir gagné pendant que cette requête attendait le
+    // verrou. Ce cas n'est pas un nouveau "resume" utilisateur : on renvoie
+    // simplement le gagnant, sans fabriquer un deuxième attempt_start ni un
+    // attempt_resume trompeur.
+    const concurrentWinner = getActiveAttempt(assessmentId, candidateUserId);
+    if (concurrentWinner) return concurrentWinner;
 
-  const assessment = getAssessment(assessmentId);
-  if (!assessment) throw new AttemptError("Évaluation introuvable.");
-  if (!isAssessmentOpenNow(assessment)) throw new AttemptError("Cette évaluation n'est pas ouverte actuellement.");
+    // Addendum §9-11 — continuité d'examen : une tentative DÉJÀ en cours
+    // (retour anticipé ci-dessus, ou gagnant concurrent juste au-dessus)
+    // n'est jamais bloquée par ces contrôles. Une NOUVELLE tentative, elle,
+    // est décidée seulement après acquisition du verrou d'écriture.
+    if (isNewAttemptsBlocked()) {
+      throw new AttemptError("Le démarrage de nouvelles tentatives est temporairement suspendu (maintenance en cours). Les tentatives déjà commencées ne sont pas affectées.");
+    }
 
-  if (!isCandidateAssignedToAssessment(assessmentId, candidateUserId)) throw new AttemptError("Vous n'êtes pas affecté à cette évaluation.");
+    const assessment = getAssessment(assessmentId);
+    if (!assessment) throw new AttemptError("Évaluation introuvable.");
+    if (!hasValidAssessmentWindow(assessment) || !isAssessmentOpenNow(assessment)) {
+      throw new AttemptError("Cette évaluation n'est pas ouverte actuellement.");
+    }
 
-  const finished = countFinishedAttempts(assessmentId, candidateUserId);
-  if (assessment.attempts_allowed !== 0 && finished >= assessment.attempts_allowed) {
-    throw new AttemptError(`Nombre de tentatives autorisées atteint (${assessment.attempts_allowed}).`);
-  }
+    if (!isCandidateAssignedToAssessment(assessmentId, candidateUserId)) {
+      throw new AttemptError("Vous n'êtes pas affecté à cette évaluation.");
+    }
 
-  const snapshots = getSnapshots(assessmentId);
-  if (snapshots.length === 0) throw new AttemptError("Cette évaluation n'a pas encore été publiée correctement (aucune question figée).");
+    const finished = countFinishedAttempts(assessmentId, candidateUserId);
+    if (assessment.attempts_allowed !== 0 && finished >= assessment.attempts_allowed) {
+      throw new AttemptError(`Nombre de tentatives autorisées atteint (${assessment.attempts_allowed}).`);
+    }
 
-  try {
-    return transaction((db) => {
-      const now = new Date();
-      const expiresAt = new Date(now.getTime() + assessment.duration_minutes * 60 * 1000).toISOString();
-      const result = db
-        .prepare(
-          `INSERT INTO attempts (assessment_id, candidate_user_id, attempt_number, status, started_at, expires_at, ip_address, user_agent)
-           VALUES (?, ?, ?, 'in_progress', ?, ?, ?, ?)`
-        )
-        .run(assessmentId, candidateUserId, finished + 1, now.toISOString(), expiresAt, meta.ip ?? null, meta.userAgent ?? null);
-      const attemptId = Number(result.lastInsertRowid);
+    const snapshots = getSnapshots(assessmentId);
+    if (snapshots.length === 0) {
+      throw new AttemptError("Cette évaluation n'a pas encore été publiée correctement (aucune question figée).");
+    }
 
-      const order = assessment.shuffle_questions ? shuffleArray(snapshots) : snapshots;
-      const insertAQ = db.prepare(
-        `INSERT INTO attempt_questions (attempt_id, position, snapshot_id, choices_order_json) VALUES (?, ?, ?, ?)`
-      );
-      order.forEach((snap, idx) => {
-        const choices: { key: string }[] = JSON.parse(snap.choices_snapshot_json);
-        const keys = choices.map((c) => c.key);
-        const orderedKeys = assessment.shuffle_answers ? shuffleArray(keys) : keys;
-        insertAQ.run(attemptId, idx + 1, snap.id, JSON.stringify(orderedKeys));
-      });
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + assessment.duration_minutes * 60 * 1000).toISOString();
+    const result = db
+      .prepare(
+        `INSERT INTO attempts (assessment_id, candidate_user_id, attempt_number, status, started_at, expires_at, ip_address, user_agent)
+         VALUES (?, ?, ?, 'in_progress', ?, ?, ?, ?)`
+      )
+      .run(assessmentId, candidateUserId, finished + 1, now.toISOString(), expiresAt, meta.ip ?? null, meta.userAgent ?? null);
+    const attemptId = Number(result.lastInsertRowid);
 
-      audit({ actorUserId: candidateUserId, actorRole: "candidate", action: "attempt_start", targetType: "attempt", targetId: attemptId, ipAddress: meta.ip, metadata: { assessmentId } });
-
-      return db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as unknown as AttemptRow;
+    const order = assessment.shuffle_questions ? shuffleArray(snapshots) : snapshots;
+    const insertAQ = db.prepare(
+      `INSERT INTO attempt_questions (attempt_id, position, snapshot_id, choices_order_json) VALUES (?, ?, ?, ?)`
+    );
+    order.forEach((snap, idx) => {
+      const choices: { key: string }[] = JSON.parse(snap.choices_snapshot_json);
+      const keys = choices.map((c) => c.key);
+      const orderedKeys = assessment.shuffle_answers ? shuffleArray(keys) : keys;
+      insertAQ.run(attemptId, idx + 1, snap.id, JSON.stringify(orderedKeys));
     });
-  } catch (err) {
-    // Contrainte unique violée = une tentative concurrente a gagné la
-    // course entre notre vérification et notre INSERT — renvoyer celle-ci,
-    // jamais une deuxième ligne (§9).
-    const winner = getActiveAttempt(assessmentId, candidateUserId);
-    if (winner) return winner;
-    throw err;
-  }
+
+    audit({ actorUserId: candidateUserId, actorRole: "candidate", action: "attempt_start", targetType: "attempt", targetId: attemptId, ipAddress: meta.ip, metadata: { assessmentId } });
+
+    return db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as unknown as AttemptRow;
+  });
 }
 
 /** Sous-question d'un scénario telle qu'exposée au CANDIDAT — jamais

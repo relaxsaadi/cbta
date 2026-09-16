@@ -2,6 +2,7 @@ import { getDb, transaction, nowIso } from "./db";
 import { audit } from "./audit";
 import { listAdmissibleQuestionIds, getCurrentVersion, type QuestionRow } from "./questions";
 import { listGroupMembers } from "./groups";
+import { getRoleForUser } from "./users";
 import type { Scope } from "./scope";
 
 export type AssessmentType = "exercice" | "test" | "examen";
@@ -567,19 +568,137 @@ export function unassignCandidateFromAssessment(assessmentId: number, candidateU
   });
 }
 
+type AssessmentLifecycleOperation = "suspend" | "reopen" | "close";
+type AssessmentLifecycleAuditAction = "assessment_suspend" | "assessment_reopen" | "assessment_close";
+
+interface AssessmentLifecycleState {
+  status: AssessmentStatus;
+  open_at: string | null;
+  close_at: string | null;
+  feedback_mode: string | null;
+}
+
+const ASSESSMENT_LIFECYCLE: Record<AssessmentLifecycleOperation, {
+  from: readonly AssessmentStatus[];
+  to: AssessmentStatus;
+  action: AssessmentLifecycleAuditAction;
+}> = {
+  suspend: { from: ["published", "open"], to: "suspended", action: "assessment_suspend" },
+  reopen: { from: ["suspended"], to: "published", action: "assessment_reopen" },
+  close: { from: ["published", "open"], to: "closed", action: "assessment_close" },
+};
+
+function persistedScheduleIssue(openAt: string | null, closeAt: string | null): string | null {
+  if (openAt !== null && Number.isNaN(Date.parse(openAt))) return "invalid_open_at";
+  if (closeAt !== null && Number.isNaN(Date.parse(closeAt))) return "invalid_close_at";
+  if (openAt !== null && closeAt !== null && Date.parse(closeAt) <= Date.parse(openAt)) {
+    return "non_increasing_window";
+  }
+  return null;
+}
+
+/**
+ * #31/#61 — lifecycle status changes use the same BEGIN IMMEDIATE writer
+ * discipline as startAttempt(). The winner of the SQLite write lock therefore
+ * defines the state observed by the loser: a committed suspend/close blocks a
+ * later new attempt, while a committed attempt remains durable if the stop
+ * transition wins afterwards.
+ *
+ * Validity is enforced at this library/data boundary rather than relying on
+ * hidden React buttons. Mutation + success audit commit or roll back together.
+ */
+function applyAssessmentLifecycleTransition(
+  assessmentId: number,
+  actorUserId: number,
+  operation: AssessmentLifecycleOperation,
+  metadata?: Record<string, unknown>
+): void {
+  const spec = ASSESSMENT_LIFECYCLE[operation];
+  const actorRole = getRoleForUser(actorUserId);
+
+  const outcome = transaction((db) => {
+    const current = db
+      .prepare(`SELECT status, open_at, close_at, feedback_mode FROM assessments WHERE id = ?`)
+      .get(assessmentId) as AssessmentLifecycleState | undefined;
+
+    if (!current) return { kind: "missing" as const };
+    if (!spec.from.includes(current.status)) {
+      return { kind: "denied" as const, current, reason: "invalid_status" as const };
+    }
+
+    if (operation === "reopen") {
+      const scheduleIssue = persistedScheduleIssue(current.open_at, current.close_at);
+      if (scheduleIssue) {
+        return { kind: "denied" as const, current, reason: "invalid_schedule" as const, scheduleIssue };
+      }
+      if (!["immediate", "deferred", "none"].includes(current.feedback_mode ?? "")) {
+        return { kind: "denied" as const, current, reason: "invalid_feedback_configuration" as const };
+      }
+      if (current.feedback_mode === "deferred" && current.close_at === null) {
+        return { kind: "denied" as const, current, reason: "invalid_feedback_configuration" as const };
+      }
+    }
+
+    const changed = db
+      .prepare(`UPDATE assessments SET status = ? WHERE id = ? AND status = ?`)
+      .run(spec.to, assessmentId, current.status);
+    if (Number(changed.changes) !== 1) {
+      return { kind: "denied" as const, current, reason: "stale_status" as const };
+    }
+
+    audit({
+      actorUserId,
+      actorRole,
+      action: spec.action,
+      targetType: "assessment",
+      targetId: assessmentId,
+      metadata: {
+        ...(metadata ?? {}),
+        previousStatus: current.status,
+        status: spec.to,
+      },
+    });
+    return { kind: "changed" as const };
+  });
+
+  if (outcome.kind === "changed") return;
+  if (outcome.kind === "missing") throw new Error("Évaluation introuvable.");
+
+  audit({
+    actorUserId,
+    actorRole,
+    action: "assessment_transition_denied",
+    targetType: "assessment",
+    targetId: assessmentId,
+    result: "failure",
+    metadata: {
+      requestedAction: spec.action,
+      requestedStatus: spec.to,
+      fromStatus: outcome.current.status,
+      reason: outcome.reason,
+      ...(outcome.reason === "invalid_schedule" ? { scheduleIssue: outcome.scheduleIssue } : {}),
+    },
+  });
+
+  if (outcome.reason === "invalid_schedule") {
+    throw new Error("Transition impossible : la fenêtre de disponibilité enregistrée est invalide.");
+  }
+  if (outcome.reason === "invalid_feedback_configuration") {
+    throw new Error("Réouverture impossible : la configuration de restitution différée nécessite une date de fermeture valide.");
+  }
+  throw new Error(`Transition d'évaluation impossible depuis le statut « ${outcome.current.status} ».`);
+}
+
 export function suspendAssessment(assessmentId: number, actorUserId: number, reason?: string): void {
-  getDb().prepare(`UPDATE assessments SET status = 'suspended' WHERE id = ?`).run(assessmentId);
-  audit({ actorUserId, actorRole: null, action: "assessment_suspend", targetType: "assessment", targetId: assessmentId, metadata: { reason } });
+  applyAssessmentLifecycleTransition(assessmentId, actorUserId, "suspend", { reason });
 }
 
 export function reopenAssessment(assessmentId: number, actorUserId: number): void {
-  getDb().prepare(`UPDATE assessments SET status = 'published' WHERE id = ?`).run(assessmentId);
-  audit({ actorUserId, actorRole: null, action: "assessment_reopen", targetType: "assessment", targetId: assessmentId });
+  applyAssessmentLifecycleTransition(assessmentId, actorUserId, "reopen");
 }
 
 export function closeAssessment(assessmentId: number, actorUserId: number): void {
-  getDb().prepare(`UPDATE assessments SET status = 'closed' WHERE id = ?`).run(assessmentId);
-  audit({ actorUserId, actorRole: null, action: "assessment_close", targetType: "assessment", targetId: assessmentId });
+  applyAssessmentLifecycleTransition(assessmentId, actorUserId, "close");
 }
 
 /** Statuts depuis lesquels une reprogrammation a un sens — un brouillon

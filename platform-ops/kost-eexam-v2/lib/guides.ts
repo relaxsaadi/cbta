@@ -1,9 +1,10 @@
 // Source unique des 5 guides KOST E-EXAM (addendum §12-17) — consommée à
 // la fois par les écrans /guide/* (app/(app)/guide/) ET par le PDF
 // téléchargeable (lib/pdf/GuideDocument.tsx, app/api/reports/guide/[slug]),
-// pour qu'écran et PDF ne divergent jamais. Chaque guide décrit
-// EXCLUSIVEMENT des fonctionnalités réellement implémentées — toute
-// nouvelle capacité doit se répercuter ici, jamais l'inverse.
+// pour qu'écran et PDF ne divergent jamais. Ces guides décrivent les
+// workflows disponibles. Les garanties d'intégrité/sécurité encore sous
+// audit ne doivent pas être présentées comme clôturées ; vérifier l'état de
+// readiness avant tout usage production.
 export interface GuideSection {
   heading: string;
   steps?: string[];
@@ -78,7 +79,7 @@ export const GUIDES: Record<string, Guide> = {
           "« Préparation des examens » → choisir le type : Exercice, Test ou Examen (chacun avec des réglages par défaut différents — tentatives, correction immédiate ou différée).",
           "Choisir la fonction DGR concernée et vérifier le nombre de questions admissibles disponibles avant de fixer le nombre à tirer.",
           "Définir la durée et le seuil de réussite.",
-          "Publier — à cet instant, les questions sont figées définitivement pour cet examen (éditer la question source ensuite ne modifie jamais rétroactivement les tentatives déjà passées).",
+          "Publier — à cet instant, le contenu principal de la question (énoncé, choix, réponse correcte, explication et points) est snapshoté pour l'examen. L'immuabilité complète du type de question et de la provenance réglementaire/reviewer reste un gate de readiness avant usage production ; ne pas présenter cette garantie comme acquise tant que ces gates ne sont pas clôturés.",
         ],
       },
       {
@@ -135,7 +136,7 @@ export const GUIDES: Record<string, Guide> = {
           "« Examens » — créer, publier, suspendre, réouvrir, clôturer n'importe quelle évaluation, tous clients confondus.",
           "« Familiarisation » — déclarer des sessions et suivre la présence, tous clients confondus.",
           "« Résultats » — mêmes filtres et exports qu'un responsable, sans restriction de périmètre.",
-          "« Journal d'audit » — consultation seule, en écriture seule par conception (aucune entrée n'est jamais modifiée ni supprimée).",
+          "« Journal d'audit » — consultation seule, en écriture seule par conception (aucune entrée n'est jamais modifiée ni supprimée). La complétude transactionnelle des événements critiques reste un gate de readiness tant que les blockers d'audit ouverts ne sont pas clôturés.",
           "« Sauvegarde & restauration » — état des dernières sauvegardes et tests de restauration.",
         ],
       },
@@ -171,7 +172,7 @@ export const GUIDES: Record<string, Guide> = {
           "Résultats et réponses — mêmes filtres et exports CSV qu'un responsable/administrateur.",
           "Rapport global de session, liste officielle des résultats, rapports individuels — tous téléchargeables en PDF.",
           "Incidents — historique complet, y compris la procédure incident (PDF).",
-          "Journal d'audit — traçabilité complète de toutes les actions de la plateforme.",
+          "Journal d'audit — consultation de la traçabilité enregistrée. La complétude failure-atomic des événements critiques reste un gate de readiness avant production tant que les blockers d'audit ouverts ne sont pas clôturés.",
           "Sauvegardes / restauration — état de la politique de continuité.",
         ],
       },

@@ -445,9 +445,33 @@ export function actionReactivateAccount(incidentId: number, targetUserId: number
   return newStatus;
 }
 
-export function actionRevokeSessions(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }) {
-  const n = revokeAllSessionsForUser(targetUserId, actor.id);
-  recordAction(incidentId, "revoke_sessions", actor.id, actor.role, "user", targetUserId, `${n} session(s) révoquée(s)`);
+/**
+ * Révocation de sessions liée à un incident — frontière effet + preuve
+ * failure-atomic (#226). L'incident et la cible sont relus après
+ * BEGIN IMMEDIATE, puis la révocation set-based, incident_actions et
+ * incident_action_revoke_sessions commitent ou rollbackent ensemble.
+ * Aucun token/hash/cookie/secret n'est copié dans l'évidence.
+ */
+export function actionRevokeSessions(
+  incidentId: number,
+  targetUserId: number,
+  actor: { id: number; role: ConsoleRole }
+): number {
+  return transaction((db) => {
+    const incident = db.prepare(`SELECT id FROM incidents WHERE id = ?`).get(incidentId);
+    if (!incident) {
+      throw new Error("Incident introuvable.");
+    }
+
+    const target = db.prepare(`SELECT id FROM users WHERE id = ?`).get(targetUserId);
+    if (!target) {
+      throw new Error("Utilisateur introuvable.");
+    }
+
+    const n = revokeAllSessionsForUser(targetUserId, actor.id);
+    recordAction(incidentId, "revoke_sessions", actor.id, actor.role, "user", targetUserId, `${n} session(s) révoquée(s)`);
+    return n;
+  });
 }
 
 export function actionSuspendExam(incidentId: number, assessmentId: number, actor: { id: number; role: ConsoleRole }) {

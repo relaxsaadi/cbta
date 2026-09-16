@@ -16,6 +16,7 @@ import type { ConsoleRole } from "./session";
 export type PasswordLoginClaimFailureReason =
   | "invalid_session"
   | "credential_changed"
+  | "role_changed"
   | "account_not_active"
   | "temp_password_expired"
   | "platform_logins_blocked"
@@ -46,12 +47,14 @@ export type PasswordLoginClaimResult = PasswordLoginClaim | PasswordLoginClaimFa
  *
  * `expectedPasswordHash` is the in-process hash that was successfully
  * verified during factor 1. It is never persisted or logged here. Requiring
- * the same hash under the writer lock prevents a password reset/rotation that
- * wins after verifyPassword() from being bypassed by stale preflight state.
+ * both the same credential and the same singleton role under the writer lock
+ * prevents a password reset or authority change that wins after preflight
+ * from being bypassed by stale state.
  */
 export function claimPasswordLogin(
   userId: number,
   expectedPasswordHash: string,
+  expectedRole: ConsoleRole,
   meta: { ip?: string; userAgent?: string }
 ): PasswordLoginClaimResult {
   return transaction((db) => {
@@ -63,6 +66,9 @@ export function claimPasswordLogin(
     }
     if (!expectedPasswordHash || user.password_hash !== expectedPasswordHash) {
       return { ok: false, reason: "credential_changed", userId: user.id, role };
+    }
+    if (role !== expectedRole) {
+      return { ok: false, reason: "role_changed", userId: user.id, role };
     }
     if (user.status !== "active") {
       return { ok: false, reason: "account_not_active", userId: user.id, role };

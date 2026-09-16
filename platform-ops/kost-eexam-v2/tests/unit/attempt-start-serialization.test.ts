@@ -1,4 +1,4 @@
-import { before, test } from "node:test";
+import { before, beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { resolve } from "node:path";
@@ -6,6 +6,11 @@ import { pathToFileURL } from "node:url";
 import { setupTestDb } from "./test-db";
 
 before(() => setupTestDb());
+
+beforeEach(async () => {
+  const { getDb } = await import("../../lib/db");
+  getDb().prepare(`DELETE FROM platform_settings WHERE key IN ('maintenance_mode','block_new_attempts')`).run();
+});
 
 type StartResult = { ok: true; id: number } | { ok: false; error: string };
 

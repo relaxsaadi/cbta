@@ -433,16 +433,41 @@ export function actionSuspendAccount(
   });
 }
 
-/** Même correctif que quickReactivateAction (app/(app)/users/actions.ts,
- * mission "FIX ACCOUNT LIFECYCLE GUARDS" 2026-08-29) — jamais 'active'
- * directement pour un compte jamais réellement activé. Retourne l'état
- * restauré pour que l'appelant (reactivateAccountAction) sache s'il doit
- * notifier ACCOUNT_REACTIVATED (uniquement si redevenu 'active'). */
-export function actionReactivateAccount(incidentId: number, targetUserId: number, actor: { id: number; role: ConsoleRole }): "active" | "pending_activation" | null {
-  const { changed, newStatus } = reactivateUserSafely(targetUserId);
-  if (!changed) return null;
-  recordAction(incidentId, "reactivate_account", actor.id, actor.role, "user", targetUserId, newStatus === "active" ? undefined : "Compte jamais activé — restauré vers 'en attente d'activation', pas 'actif'.");
-  return newStatus;
+/**
+ * Réactivation liée à un incident — frontière effet + preuve failure-atomic
+ * (#226). L'incident est validé après BEGIN IMMEDIATE, puis la primitive de
+ * réactivation existante et la preuve spécifique à l'incident commitent ou
+ * rollbackent ensemble. Cette frontière ne prétend PAS résoudre #53 : le
+ * discriminateur d'historique d'activation reste à rendre autoritatif dans
+ * un correctif séparé avant toute fermeture de #53.
+ */
+export function actionReactivateAccount(
+  incidentId: number,
+  targetUserId: number,
+  actor: { id: number; role: ConsoleRole }
+): "active" | "pending_activation" | null {
+  return transaction((db) => {
+    const incident = db.prepare(`SELECT id FROM incidents WHERE id = ?`).get(incidentId);
+    if (!incident) {
+      throw new Error("Incident introuvable.");
+    }
+
+    const { changed, newStatus } = reactivateUserSafely(targetUserId);
+    if (!changed) return null;
+
+    recordAction(
+      incidentId,
+      "reactivate_account",
+      actor.id,
+      actor.role,
+      "user",
+      targetUserId,
+      newStatus === "active"
+        ? undefined
+        : "Compte jamais activé — restauré vers 'en attente d'activation', pas 'actif'."
+    );
+    return newStatus;
+  });
 }
 
 /**

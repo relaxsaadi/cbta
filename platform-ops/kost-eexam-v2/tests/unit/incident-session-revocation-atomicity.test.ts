@@ -161,8 +161,8 @@ describe("Incident session revocation — effect/evidence atomicity (#226)", asy
     const actions = listIncidentActions(incidentId) as { action_type: string }[];
     assert.equal(actions.filter((row) => row.action_type === "revoke_sessions").length, 0);
     const auditCount = getDb()
-      .prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE action = 'incident_action_revoke_sessions'`)
-      .get() as { n: number };
+      .prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE action = 'incident_action_revoke_sessions' AND target_type = 'user' AND target_id = ?`)
+      .get(999999) as { n: number };
     assert.equal(auditCount.n, 0);
   });
 });

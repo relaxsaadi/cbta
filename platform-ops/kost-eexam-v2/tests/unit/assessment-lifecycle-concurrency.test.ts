@@ -64,15 +64,15 @@ function runLifecycleWorker(
         }
         return 0;
       });
-      db.exec(`
+      db.exec(\`
         CREATE TEMP TRIGGER hold_lifecycle_cas
         BEFORE UPDATE OF status ON assessments
-        WHEN OLD.id = ${assessmentId}
-         AND NEW.status = '${targetStatus}'
+        WHEN OLD.id = \${assessmentId}
+         AND NEW.status = '\${targetStatus}'
         BEGIN
           SELECT kost_test_hold_lifecycle_cas();
         END;
-      `);
+      \`);
     }
 
     try {

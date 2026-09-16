@@ -550,15 +550,21 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
  * une tentative (retirer une affectation dont l'usage a déjà commencé
  * romprait la traçabilité de la tentative, sans la supprimer pour
  * autant) ; l'admin/responsable doit alors passer par la gestion
- * d'incident (suspendre l'examen) plutôt que par un simple retrait. */
+ * d'incident (suspendre l'examen) plutôt que par un simple retrait.
+ *
+ * #34/#61 : le test d'absence de tentative, la suppression et l'audit de
+ * succès partagent maintenant le même BEGIN IMMEDIATE que startAttempt().
+ * Le gagnant du verrou impose donc l'état relu par le perdant, sans fenêtre
+ * check-then-delete et sans suppression durable si l'audit échoue. */
 export function unassignCandidateFromAssessment(assessmentId: number, candidateUserId: number, actorUserId: number): void {
-  const db = getDb();
-  const hasAttempt = db.prepare(`SELECT 1 FROM attempts WHERE assessment_id = ? AND candidate_user_id = ?`).get(assessmentId, candidateUserId);
-  if (hasAttempt) throw new Error("Ce candidat a déjà une tentative sur cette évaluation — retrait impossible (voir la gestion d'incident si nécessaire).");
-  const result = db.prepare(`DELETE FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?`).run(assessmentId, candidateUserId);
-  if (Number(result.changes) > 0) {
-    audit({ actorUserId, actorRole: null, action: "assessment_unassign", targetType: "assessment", targetId: assessmentId, metadata: { candidateUserId } });
-  }
+  transaction((db) => {
+    const hasAttempt = db.prepare(`SELECT 1 FROM attempts WHERE assessment_id = ? AND candidate_user_id = ?`).get(assessmentId, candidateUserId);
+    if (hasAttempt) throw new Error("Ce candidat a déjà une tentative sur cette évaluation — retrait impossible (voir la gestion d'incident si nécessaire).");
+    const result = db.prepare(`DELETE FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?`).run(assessmentId, candidateUserId);
+    if (Number(result.changes) > 0) {
+      audit({ actorUserId, actorRole: null, action: "assessment_unassign", targetType: "assessment", targetId: assessmentId, metadata: { candidateUserId } });
+    }
+  });
 }
 
 export function suspendAssessment(assessmentId: number, actorUserId: number, reason?: string): void {

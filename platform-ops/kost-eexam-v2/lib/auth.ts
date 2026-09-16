@@ -8,6 +8,7 @@ import { buildLoginRateLimitKey, checkLoginRateLimit, recordLoginFailure, resetL
 import { isNewLoginsBlocked } from "./platform-settings";
 import { isTemporaryPasswordExpired } from "./temp-password";
 import { claimMfaLogin, compensateMfaLoginClaim, deriveMfaCredentialGeneration } from "./mfa-login-boundary";
+import { commitMfaLoginSuccessAudit } from "./mfa-login-finalization";
 import { claimPasswordLogin, compensatePasswordLoginClaim } from "./password-login-boundary";
 import type { UserRow } from "./users";
 
@@ -320,15 +321,23 @@ export async function completeMfaLogin(code: string, meta: { ip?: string; userAg
     return { ok: false, error: "Impossible de finaliser la connexion. Reconnectez-vous." };
   }
 
-  // Seulement un login MFA complètement finalisé remet à zéro les deux
-  // compteurs indépendants : le facteur 1 ne peut donc pas réinitialiser le
-  // facteur 2, et un prochain login légitime repart proprement après succès.
+  try {
+    // Both success records are one SQLite transaction. If either INSERT
+    // fails after the cookie was staged, roll back both audit rows and
+    // compensate the durable MFA claim so the staged cookie has no valid
+    // server-side authority.
+    commitMfaLoginSuccessAudit(claim, meta);
+  } catch (error) {
+    compensateMfaLoginClaim(claim);
+    session.destroy();
+    throw error;
+  }
+
+  // Only a fully committed MFA login resets the independent factor-1/factor-2
+  // limiter buckets. An audit-finalization failure therefore cannot erase the
+  // evidence of prior failed authentication attempts.
   resetLoginRateLimit(rateLimitKey);
   resetLoginRateLimit(buildLoginRateLimitKey(meta.ip, claim.username, "password"));
-  if (claim.usedRecoveryCode) {
-    audit({ actorUserId: claim.userId, actorRole: claim.role, action: "mfa_recovery_code_used", result: "success", ipAddress: meta.ip, sessionId: claim.dbSessionId });
-  }
-  audit({ actorUserId: claim.userId, actorRole: claim.role, action: "login", result: "success", ipAddress: meta.ip, sessionId: claim.dbSessionId });
   return { ok: true };
 }
 

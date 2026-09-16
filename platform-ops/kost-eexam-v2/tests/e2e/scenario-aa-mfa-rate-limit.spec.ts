@@ -112,6 +112,100 @@ test("#47 — rejouer le bon mot de passe ne remet jamais à zéro les échecs M
   db.close();
 });
 
+test("#57 — a final MFA success-audit failure revokes the staged session, restores the recovery code, denies the staged cookie, and a clean retry succeeds once", async ({ page }) => {
+  const u = createManager({ recoveryCodes: true });
+  const recoveryCode = u.recovery!.plain[0]!;
+  const originalRecoveryJson = u.recovery!.hashedJson;
+
+  await passwordLogin(page, u.username, u.password);
+  await page.waitForURL(/\/login\/verifier-mfa/);
+
+  // Force the SECOND success record to fail. The recovery-code success audit
+  // is written first inside commitMfaLoginSuccessAudit(), so this proves the
+  // transaction rolls that first row back instead of leaving partial success
+  // evidence after iron-session has already attempted to stage auth state.
+  const triggerName = `force_mfa_final_login_audit_failure_${u.userId}`;
+  const setupDb = openDb();
+  setupDb.exec(
+    `CREATE TRIGGER ${triggerName}
+     BEFORE INSERT ON audit_logs
+     WHEN NEW.actor_user_id = ${u.userId}
+       AND NEW.action = 'login'
+       AND NEW.result = 'success'
+     BEGIN
+       SELECT RAISE(ABORT, 'forced_mfa_final_login_audit_failure');
+     END`
+  );
+  setupDb.close();
+
+  await page.getByLabel("Code").fill(recoveryCode);
+  try {
+    const [response] = await Promise.all([
+      page.waitForResponse((r) => r.request().method() === "POST" && new URL(r.url()).pathname === "/login/verifier-mfa"),
+      page.getByRole("button", { name: /^valider$/i }).click(),
+    ]);
+    expect(response.status(), "l'échec injecté doit faire échouer la finalisation HTTP").toBeGreaterThanOrEqual(500);
+  } finally {
+    const cleanupDb = openDb();
+    cleanupDb.exec(`DROP TRIGGER IF EXISTS ${triggerName}`);
+    cleanupDb.close();
+  }
+
+  const failedDb = openDb();
+  const failedUser = failedDb
+    .prepare(`SELECT mfa_recovery_codes_json, last_login_at FROM users WHERE id = ?`)
+    .get(u.userId) as { mfa_recovery_codes_json: string; last_login_at: string | null };
+  expect(failedUser.mfa_recovery_codes_json).toBe(originalRecoveryJson);
+  expect(failedUser.last_login_at).toBeNull();
+  const failedActiveSessions = failedDb
+    .prepare(`SELECT COUNT(*) n FROM sessions WHERE user_id = ? AND revoked_at IS NULL`)
+    .get(u.userId) as { n: number };
+  expect(failedActiveSessions.n).toBe(0);
+  const failedLoginAudits = failedDb
+    .prepare(`SELECT COUNT(*) n FROM audit_logs WHERE actor_user_id = ? AND action = 'login' AND result = 'success'`)
+    .get(u.userId) as { n: number };
+  const failedRecoveryAudits = failedDb
+    .prepare(`SELECT COUNT(*) n FROM audit_logs WHERE actor_user_id = ? AND action = 'mfa_recovery_code_used' AND result = 'success'`)
+    .get(u.userId) as { n: number };
+  expect(failedLoginAudits.n).toBe(0);
+  expect(failedRecoveryAudits.n).toBe(0);
+  failedDb.close();
+
+  // Whether the browser retained the staged encrypted cookie or received the
+  // destroy header, it must not authorize a protected route because the DB
+  // session was revoked by compensation.
+  await page.goto("/overview");
+  await page.waitForURL(/\/login(?:\?|$)/);
+
+  // Failure destroyed the pending MFA state, so restart factor 1 and replay
+  // the SAME recovery code. It must remain usable because compensation
+  // restored it, then converge to exactly one durable success pair.
+  await passwordLogin(page, u.username, u.password);
+  await page.waitForURL(/\/login\/verifier-mfa/);
+  await submitMfa(page, recoveryCode);
+  await page.waitForURL(/\/overview/);
+
+  const retryDb = openDb();
+  const retryUser = retryDb
+    .prepare(`SELECT mfa_recovery_codes_json, last_login_at FROM users WHERE id = ?`)
+    .get(u.userId) as { mfa_recovery_codes_json: string; last_login_at: string | null };
+  expect(JSON.parse(retryUser.mfa_recovery_codes_json)).toHaveLength(7);
+  expect(retryUser.last_login_at).not.toBeNull();
+  const retryActiveSessions = retryDb
+    .prepare(`SELECT COUNT(*) n FROM sessions WHERE user_id = ? AND revoked_at IS NULL`)
+    .get(u.userId) as { n: number };
+  expect(retryActiveSessions.n).toBe(1);
+  const retryLoginAudits = retryDb
+    .prepare(`SELECT COUNT(*) n FROM audit_logs WHERE actor_user_id = ? AND action = 'login' AND result = 'success'`)
+    .get(u.userId) as { n: number };
+  const retryRecoveryAudits = retryDb
+    .prepare(`SELECT COUNT(*) n FROM audit_logs WHERE actor_user_id = ? AND action = 'mfa_recovery_code_used' AND result = 'success'`)
+    .get(u.userId) as { n: number };
+  expect(retryLoginAudits.n).toBe(1);
+  expect(retryRecoveryAudits.n).toBe(1);
+  retryDb.close();
+});
+
 test("#47 — un succès MFA complet remet le bucket MFA à zéro pour la prochaine connexion légitime", async ({ page }) => {
   const u = createManager();
 

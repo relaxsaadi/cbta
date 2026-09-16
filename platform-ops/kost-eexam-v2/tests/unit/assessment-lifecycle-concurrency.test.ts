@@ -9,13 +9,24 @@ before(() => setupTestDb());
 
 type LifecycleKind = "suspend" | "close" | "reopen";
 type WorkerResult = { ok: true } | { ok: false; error: string };
-type Worker = { ready: Promise<void>; done: Promise<WorkerResult> };
+type Worker = {
+  ready: Promise<void>;
+  beginAttempt: Promise<void>;
+  done: Promise<WorkerResult>;
+  release: () => void;
+};
 
-function runLifecycleWorker(kind: LifecycleKind, assessmentId: number, actorUserId: number, hold = false): Worker {
+function runLifecycleWorker(
+  kind: LifecycleKind,
+  assessmentId: number,
+  actorUserId: number,
+  hold = false,
+  signalBeginAttempt = false
+): Worker {
   const assessmentsUrl = pathToFileURL(resolve(import.meta.dirname, "../../lib/assessments.ts")).href;
   const dbUrl = pathToFileURL(resolve(import.meta.dirname, "../../lib/db.ts")).href;
   const script = `
-    import { writeSync } from "node:fs";
+    import { readSync, writeSync } from "node:fs";
     import { suspendAssessment, closeAssessment, reopenAssessment } from ${JSON.stringify(assessmentsUrl)};
     import { getDb } from ${JSON.stringify(dbUrl)};
 
@@ -23,25 +34,45 @@ function runLifecycleWorker(kind: LifecycleKind, assessmentId: number, actorUser
     const assessmentId = Number(process.env.KOST_TEST_ASSESSMENT_ID);
     const actorUserId = Number(process.env.KOST_TEST_ACTOR_ID);
     const hold = process.env.KOST_TEST_HOLD === "1";
+    const signalBeginAttempt = process.env.KOST_TEST_SIGNAL_BEGIN === "1";
     const targetStatus = kind === "suspend" ? "suspended" : kind === "close" ? "closed" : "published";
+    const db = getDb();
+
+    // Test-only boundary probe. Signal immediately before the lifecycle helper's
+    // BEGIN IMMEDIATE reaches SQLite. The parent keeps the winning writer held
+    // until this signal, so process start latency cannot silently turn the race
+    // into a sequential stale-state test.
+    if (signalBeginAttempt) {
+      const originalExec = db.exec.bind(db);
+      let beginSignalled = false;
+      db.exec = (sql) => {
+        if (!beginSignalled && sql.trim().toUpperCase() === "BEGIN IMMEDIATE") {
+          beginSignalled = true;
+          writeSync(1, "BEGIN_ATTEMPT\\n");
+        }
+        return originalExec(sql);
+      };
+    }
 
     if (hold) {
-      const db = getDb();
-      const waitCell = new Int32Array(new SharedArrayBuffer(4));
       db.function("kost_test_hold_lifecycle_cas", () => {
         writeSync(1, "LOCKED\\n");
-        Atomics.wait(waitCell, 0, 0, 400);
+        const releaseByte = Buffer.alloc(1);
+        const bytesRead = readSync(0, releaseByte, 0, 1, null);
+        if (bytesRead !== 1) {
+          throw new Error("winner release signal missing");
+        }
         return 0;
       });
-      db.exec(\`
+      db.exec(`
         CREATE TEMP TRIGGER hold_lifecycle_cas
         BEFORE UPDATE OF status ON assessments
-        WHEN OLD.id = \${assessmentId}
-         AND NEW.status = '\${targetStatus}'
+        WHEN OLD.id = ${assessmentId}
+         AND NEW.status = '${targetStatus}'
         BEGIN
           SELECT kost_test_hold_lifecycle_cas();
         END;
-      \`);
+      `);
     }
 
     try {
@@ -66,6 +97,16 @@ function runLifecycleWorker(kind: LifecycleKind, assessmentId: number, actorUser
     if (readyResolved) resolvePromise();
   });
 
+  let beginAttemptResolved = !signalBeginAttempt;
+  let resolveBeginAttempt!: () => void;
+  let rejectBeginAttempt!: (error: Error) => void;
+  const beginAttempt = new Promise<void>((resolvePromise, rejectPromise) => {
+    resolveBeginAttempt = resolvePromise;
+    rejectBeginAttempt = rejectPromise;
+    if (beginAttemptResolved) resolvePromise();
+  });
+
+  let releaseWorker: () => void = () => {};
   const done = new Promise<WorkerResult>((resolvePromise, rejectPromise) => {
     const child = spawn(process.execPath, ["--import", "tsx", "--input-type=module", "--eval", script], {
       cwd: resolve(import.meta.dirname, "../.."),
@@ -76,9 +117,18 @@ function runLifecycleWorker(kind: LifecycleKind, assessmentId: number, actorUser
         KOST_TEST_ASSESSMENT_ID: String(assessmentId),
         KOST_TEST_ACTOR_ID: String(actorUserId),
         KOST_TEST_HOLD: hold ? "1" : "0",
+        KOST_TEST_SIGNAL_BEGIN: signalBeginAttempt ? "1" : "0",
       },
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: ["pipe", "pipe", "pipe"],
     });
+
+    let released = !hold;
+    releaseWorker = () => {
+      if (released) return;
+      released = true;
+      child.stdin.write("R");
+      child.stdin.end();
+    };
 
     let stdout = "";
     let stderr = "";
@@ -90,22 +140,35 @@ function runLifecycleWorker(kind: LifecycleKind, assessmentId: number, actorUser
         readyResolved = true;
         resolveReady();
       }
+      if (!beginAttemptResolved && stdout.includes("BEGIN_ATTEMPT\n")) {
+        beginAttemptResolved = true;
+        resolveBeginAttempt();
+      }
     });
     child.stderr.on("data", (chunk) => { stderr += chunk; });
     child.on("error", (error) => {
       if (!readyResolved) rejectReady(error);
+      if (!beginAttemptResolved) rejectBeginAttempt(error);
       rejectPromise(error);
     });
     child.on("close", (exitCode) => {
       if (exitCode !== 0) {
         const error = new Error(`lifecycle worker ${kind} exited ${exitCode}: ${stdout}\n${stderr}`);
         if (!readyResolved) rejectReady(error);
+        if (!beginAttemptResolved) rejectBeginAttempt(error);
         rejectPromise(error);
         return;
       }
       if (!readyResolved) {
         const error = new Error(`lifecycle worker ${kind} never reached held writer: ${stdout}\n${stderr}`);
         rejectReady(error);
+        if (!beginAttemptResolved) rejectBeginAttempt(error);
+        rejectPromise(error);
+        return;
+      }
+      if (!beginAttemptResolved) {
+        const error = new Error(`lifecycle worker ${kind} never attempted BEGIN IMMEDIATE: ${stdout}\n${stderr}`);
+        rejectBeginAttempt(error);
         rejectPromise(error);
         return;
       }
@@ -118,7 +181,7 @@ function runLifecycleWorker(kind: LifecycleKind, assessmentId: number, actorUser
     });
   });
 
-  return { ready, done };
+  return { ready, beginAttempt, done, release: () => releaseWorker() };
 }
 
 async function fixture(suffix: string) {
@@ -204,7 +267,12 @@ for (const winnerKind of ["close", "suspend"] as const) {
     const { adminId, assessmentId } = await fixture(`${winnerKind}-wins`);
     const winner = runLifecycleWorker(winnerKind, assessmentId, adminId, true);
     await winner.ready;
-    const loser = runLifecycleWorker(loserKind, assessmentId, adminId, false);
+    const loser = runLifecycleWorker(loserKind, assessmentId, adminId, false, true);
+    try {
+      await loser.beginAttempt;
+    } finally {
+      winner.release();
+    }
     const [winnerResult, loserResult] = await Promise.all([winner.done, loser.done]);
 
     assert.equal(winnerResult.ok, true, JSON.stringify(winnerResult));
@@ -226,7 +294,12 @@ test("one of two concurrent reopens wins and the stale second reopen is denied",
 
   const winner = runLifecycleWorker("reopen", assessmentId, adminId, true);
   await winner.ready;
-  const loser = runLifecycleWorker("reopen", assessmentId, adminId, false);
+  const loser = runLifecycleWorker("reopen", assessmentId, adminId, false, true);
+  try {
+    await loser.beginAttempt;
+  } finally {
+    winner.release();
+  }
   const [winnerResult, loserResult] = await Promise.all([winner.done, loser.done]);
 
   assert.equal(winnerResult.ok, true, JSON.stringify(winnerResult));

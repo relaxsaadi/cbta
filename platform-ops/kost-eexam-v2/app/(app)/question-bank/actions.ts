@@ -18,6 +18,7 @@ import {
   type QType,
   type AnnualReviewDecision,
 } from "@/lib/questions";
+import { questionQtypeConflict } from "@/lib/published-question-qtype-integrity";
 import { audit } from "@/lib/audit";
 import type { SimpleActionResult } from "@/components/ui/ActionButton";
 
@@ -83,12 +84,29 @@ export interface EditQuestionResult {
  * pointe vers l'ancien version_id et reste donc inchangé après cet appel.
  * Réservé à l'administrateur (pas le responsable pédagogique) : modifier
  * une question déjà en banque est plus sensible que la simple saisie
- * initiale contrôlée. */
+ * initiale contrôlée.
+ *
+ * Issue #58 : le type n'est PAS un champ versionnable par ce Server Action.
+ * Le formulaire normal n'envoie pas de changement de qtype, mais une requête
+ * forgée peut ajouter/modifier ce champ. On le rejette explicitement ici au
+ * lieu de l'ignorer silencieusement ; la base applique en plus une immutabilité
+ * qtype dès qu'une question a été publiée. */
 export async function editQuestionAction(questionId: number, _prev: EditQuestionResult, formData: FormData): Promise<EditQuestionResult> {
   const session = await requireWriteRole("administrator");
 
   const question = getQuestionById(questionId);
   if (!question) return { error: "Question introuvable." };
+
+  const requestedQtype = formData.get("qtype");
+  if (requestedQtype !== null) {
+    const qtypeConflict = questionQtypeConflict(question.qtype, String(requestedQtype));
+    if (qtypeConflict) {
+      return {
+        error:
+          "Le type d’une question existante ne peut pas être modifié par cette action. Créez une nouvelle identité de question après revue si le type doit changer.",
+      };
+    }
+  }
 
   const stem = String(formData.get("stem") ?? "").trim();
   const explanation = String(formData.get("explanation") ?? "").trim() || undefined;

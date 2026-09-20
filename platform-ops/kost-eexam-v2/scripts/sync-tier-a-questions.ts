@@ -16,6 +16,12 @@
 // existante, uniquement une nouvelle ligne + un pointeur mis à jour sur
 // `questions.current_version_id`, voir lib/questions.ts).
 //
+// Issue #58 : le qtype appartient à l'identité sémantique stable d'une
+// question KOST. Un même kost_question_id qui arrive avec un qtype différent
+// est BLOCKED en DRIFT_CONFLICT — jamais SKIPPED, jamais reversionné sous le
+// type historique. La correction humaine doit alors décider d'une nouvelle
+// identité ou d'une migration explicitement gouvernée.
+//
 // Entrée : un fichier JSON "enveloppe" { meta, candidates: [...] } produit
 // par un extracteur séparé (ex. scripts/extract-tier-a-candidates.py, qui
 // documente lui-même comment il lit les sources markdown/CSV du programme
@@ -32,6 +38,7 @@
 import { readFileSync } from "node:fs";
 import { getDb, closeDb, nowIso } from "../lib/db";
 import { createQuestion, addQuestionVersion, getCurrentVersion, type Choice, type QType } from "../lib/questions";
+import { questionQtypeConflict } from "../lib/published-question-qtype-integrity";
 
 interface Candidate {
   kost_question_id: string;
@@ -138,8 +145,8 @@ function main() {
     }
 
     const existing = db
-      .prepare(`SELECT id, current_version_id FROM questions WHERE kost_question_id = ?`)
-      .get(c.kost_question_id) as { id: number; current_version_id: number | null } | undefined;
+      .prepare(`SELECT id, current_version_id, qtype FROM questions WHERE kost_question_id = ?`)
+      .get(c.kost_question_id) as { id: number; current_version_id: number | null; qtype: string } | undefined;
 
     if (!existing) {
       results.NEW.push(c.kost_question_id);
@@ -163,16 +170,24 @@ function main() {
       continue;
     }
 
+    const qtypeConflict = questionQtypeConflict(existing.qtype, c.qtype);
+    if (qtypeConflict) {
+      results.BLOCKED.push({ id: c.kost_question_id, reason: qtypeConflict });
+      console.log(`  ${c.kost_question_id} — BLOCKED (${qtypeConflict})`);
+      continue;
+    }
+
     const currentVersion = getCurrentVersion(existing.id);
     if (currentVersion && contentEquals(currentVersion, c)) {
       results.SKIPPED.push(c.kost_question_id);
-      console.log(`  ${c.kost_question_id} — SKIPPED (déjà présent, contenu identique, idempotent)`);
+      console.log(`  ${c.kost_question_id} — SKIPPED (déjà présent, contenu et qtype identiques, idempotent)`);
       continue;
     }
 
     // Contenu différent d'une version déjà existante — nouvelle version,
     // jamais un UPDATE (§4/§9 : un examen déjà publié référence l'ancien
-    // version_id, jamais réécrit).
+    // version_id, jamais réécrit). Le qtype a déjà été vérifié identique
+    // juste au-dessus ; il ne peut donc jamais être réinterprété ici.
     results.UPDATED.push(c.kost_question_id);
     console.log(`  ${c.kost_question_id} — UPDATED VERSION${COMMIT ? "" : " (preview)"} (contenu source a changé depuis la version courante)`);
     if (COMMIT) {

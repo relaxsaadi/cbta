@@ -34,6 +34,12 @@ function provisioningCounts(db: Db) {
   };
 }
 
+function bulkAudit(db: Db, groupId: number): { result: string; metadata_json: string | null } | undefined {
+  return db
+    .prepare(`SELECT result, metadata_json FROM audit_logs WHERE action = 'candidate_bulk_import' AND target_type = 'group' AND target_id = ? ORDER BY id DESC LIMIT 1`)
+    .get(groupId) as { result: string; metadata_json: string | null } | undefined;
+}
+
 async function openBulkImporter(page: import("@playwright/test").Page, groupId: number) {
   await page.goto(`/groups/${groupId}`);
   await page.getByRole("button", { name: /import csv en masse/i }).click();
@@ -42,7 +48,7 @@ async function openBulkImporter(page: import("@playwright/test").Page, groupId: 
 
 test.describe.configure({ mode: "serial" });
 
-test("#95 — email invalide : zéro user/rôle/membership/token/notification", async ({ page }) => {
+test("#95 — email invalide : zéro user/rôle/membership/token/notification et aucun audit de succès", async ({ page }) => {
   const t = uniqueTag();
   const lib = await importLib();
   const admin = lib.findUserByUsername("admin")!;
@@ -58,9 +64,12 @@ test("#95 — email invalide : zéro user/rôle/membership/token/notification", 
   await expect(page.getByText(/adresse email invalide/i)).toBeVisible();
   expect(provisioningCounts(lib.getDb())).toEqual(before);
   expect(lib.findUserByUsername(`${t}.invalid`)).toBeUndefined();
+  const audit = bulkAudit(lib.getDb(), groupId);
+  expect(audit?.result).toBe("failure");
+  expect(JSON.parse(audit!.metadata_json ?? "{}").created).toBe(0);
 });
 
-test("#95 — CSV malformé (guillemet non fermé) : zéro effet de provisioning", async ({ page }) => {
+test("#95 — CSV malformé (guillemet non fermé) : zéro effet de provisioning et zéro audit de succès", async ({ page }) => {
   const t = uniqueTag();
   const lib = await importLib();
   const admin = lib.findUserByUsername("admin")!;
@@ -76,9 +85,10 @@ test("#95 — CSV malformé (guillemet non fermé) : zéro effet de provisioning
   await expect(page.getByText(/guillemet csv non fermé/i)).toBeVisible();
   expect(provisioningCounts(lib.getDb())).toEqual(before);
   expect(lib.findUserByUsername(`${t}.broken`)).toBeUndefined();
+  expect(bulkAudit(lib.getDb(), groupId)).toBeUndefined();
 });
 
-test("#95 — nom avec virgule cité : identité exacte, membership, token et notification créés", async ({ page }) => {
+test("#95 — nom Unicode avec virgule citée : identité exacte, membership, token et notification créés", async ({ page }) => {
   const t = uniqueTag();
   const lib = await importLib();
   const admin = lib.findUserByUsername("admin")!;
@@ -87,13 +97,13 @@ test("#95 — nom avec virgule cité : identité exacte, membership, token et no
 
   await loginAs(page, "admin");
   const textarea = await openBulkImporter(page, groupId);
-  await textarea.fill(`full_name,username,email\n"Benali, Amina",${t}.quoted,${t}.quoted@example.test`);
+  await textarea.fill(`full_name,username,email\n"Élodie, O'Connor",${t}.quoted,${t}.quoted@example.test`);
   await page.getByRole("button", { name: /^importer$/i }).click();
 
   await expect(page.getByText(/créé et ajouté/i)).toBeVisible();
   const candidate = lib.findUserByUsername(`${t}.quoted`)!;
   expect(candidate).toBeTruthy();
-  expect(candidate.full_name).toBe("Benali, Amina");
+  expect(candidate.full_name).toBe("Élodie, O'Connor");
 
   const db = lib.getDb();
   const membership = db.prepare(`SELECT 1 FROM group_members WHERE group_id = ? AND candidate_user_id = ?`).get(groupId, candidate.id);
@@ -102,6 +112,37 @@ test("#95 — nom avec virgule cité : identité exacte, membership, token et no
   const notifications = (db.prepare(`SELECT COUNT(*) n FROM notification_log WHERE user_id = ? AND event_type = 'ACCOUNT_CREATED'`).get(candidate.id) as { n: number }).n;
   expect(tokens).toBe(1);
   expect(notifications).toBe(1);
+  expect(bulkAudit(db, groupId)?.result).toBe("success");
+});
+
+test("#95 — doublon username/email normalisé dans le même tenant : réutilise le compte, aucun doublon", async ({ page }) => {
+  const t = uniqueTag();
+  const lib = await importLib();
+  const admin = lib.findUserByUsername("admin")!;
+  const companyId = lib.createCompany({ name: `CSV Dup Co ${t}`, scope: "test", createdBy: admin.id });
+  const groupOrigin = lib.createGroup({ companyId, name: `CSV Dup Origin ${t}`, scope: "test", createdBy: admin.id });
+  const groupTarget = lib.createGroup({ companyId, name: `CSV Dup Target ${t}`, scope: "test", createdBy: admin.id });
+  const candidateId = lib.createUser({
+    username: `${t}.duplicate`,
+    password: "x".repeat(10),
+    fullName: `Duplicate ${t}`,
+    role: "candidate",
+    email: `${t}.duplicate@example.test`,
+  });
+  lib.addCandidateToGroup(groupOrigin, candidateId, admin.id);
+  const usersBefore = (lib.getDb().prepare(`SELECT COUNT(*) n FROM users`).get() as { n: number }).n;
+
+  await loginAs(page, "admin");
+  const textarea = await openBulkImporter(page, groupTarget);
+  await textarea.fill(`full_name,username,email\nDuplicate ${t},${t.toUpperCase()}.DUPLICATE,${t.toUpperCase()}.DUPLICATE@EXAMPLE.TEST`);
+  await page.getByRole("button", { name: /^importer$/i }).click();
+
+  await expect(page.getByText(/compte existant, ajouté au groupe/i)).toBeVisible();
+  const db = lib.getDb();
+  const usersAfter = (db.prepare(`SELECT COUNT(*) n FROM users`).get() as { n: number }).n;
+  expect(usersAfter).toBe(usersBefore);
+  const membership = db.prepare(`SELECT 1 FROM group_members WHERE group_id = ? AND candidate_user_id = ?`).get(groupTarget, candidateId);
+  expect(membership).toBeTruthy();
 });
 
 test("#95 — conflit cross-tenant via bulk : message générique, aucun rattachement ni nouveau compte", async ({ page }) => {
@@ -134,4 +175,5 @@ test("#95 — conflit cross-tenant via bulk : message générique, aucun rattach
   expect(membership).toBeFalsy();
   const usersAfter = (db.prepare(`SELECT COUNT(*) n FROM users`).get() as { n: number }).n;
   expect(usersAfter).toBe(usersBefore);
+  expect(bulkAudit(db, groupB)?.result).toBe("failure");
 });

@@ -203,7 +203,7 @@ export async function bulkImportCandidatesAction(
         report.push({ line: row.line, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
         continue;
       }
-      let user = duplicate ? findUserById(duplicate.userId) : undefined;
+      const user = duplicate ? findUserById(duplicate.userId) : undefined;
 
       if (user && !hasUserAccess(session, user.id)) {
         report.push({ line: row.line, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
@@ -287,16 +287,18 @@ export async function bulkImportCandidatesAction(
   }
 
   const created = report.filter((row) => row.status === "created").length;
+  const errors = report.filter((row) => row.status === "error").length;
   audit({
     actorUserId: session.userId,
     actorRole: session.role,
     action: "candidate_bulk_import",
     targetType: "group",
     targetId: groupId,
+    result: errors > 0 ? "failure" : "success",
     metadata: {
       totalLines: rows.length - 1,
       created,
-      errors: report.filter((row) => row.status === "error").length,
+      errors,
       parser: "comma_utf8_quote_aware",
     },
   });

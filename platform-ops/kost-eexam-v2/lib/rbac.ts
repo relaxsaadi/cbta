@@ -1,7 +1,7 @@
 import "server-only";
 import { redirect } from "next/navigation";
 import { getSession, type ConsoleRole } from "./session";
-import { isDbSessionValid } from "./sessions-registry";
+import { evaluateProtectedSessionAuthorization } from "./protected-session-authorization";
 
 export class UnauthorizedError extends Error {
   constructor(message = "Non autorisé.") {
@@ -12,23 +12,40 @@ export class UnauthorizedError extends Error {
 
 /** Garde à appeler en TÊTE de chaque server action / route mutante — jamais
  * une vérification côté UI seule (§19 de la mission : « RBAC serveur »).
- * Revérifie aussi la révocation server-side (§20) : le registre DB est
- * obligatoire. Un cookie authentifié sans `dbSessionId`, expiré/révoqué,
- * rattaché à un autre utilisateur ou dont le compte n'est plus `active`
- * est refusé ici, pas seulement au prochain rechargement de page.
+ * Revérifie aussi la source DB autoritative à CHAQUE opération protégée :
+ * révocation/expiration, statut courant du compte (#52), rôle persistant
+ * exactement unique et cohérent (#245), et changement de mot de passe
+ * obligatoire (#56). Un cookie authentifié ne suffit jamais à autoriser une
+ * opération métier.
  *
- * #245 : le rôle du cookie n'est pas une autorité durable. La même requête
- * DB qui valide la session exige désormais exactement une ligne user_roles
- * et qu'elle corresponde au rôle authentifié. Zéro rôle, plusieurs rôles ou
- * un rôle unique différent invalident immédiatement la session protégée. */
+ * `password_change_required` est volontairement distinct de `invalid` : on
+ * refuse l'opération protégée SANS détruire la session. Le titulaire conserve
+ * ainsi uniquement la surface minimale nécessaire pour terminer le changement
+ * obligatoire de mot de passe ou se déconnecter. Les sessions réellement
+ * invalides restent détruites fail-closed comme auparavant. */
 export async function requireRole(...allowed: ConsoleRole[]) {
   const session = await getSession();
   if (!session.isLoggedIn || !session.userId || !session.role) {
     throw new UnauthorizedError("Session expirée — reconnectez-vous.");
   }
-  if (!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId, session.role)) {
+  if (!session.dbSessionId) {
     session.destroy();
     throw new UnauthorizedError("Session révoquée ou invalide — reconnectez-vous.");
+  }
+
+  const decision = evaluateProtectedSessionAuthorization(
+    session.dbSessionId,
+    session.userId,
+    session.role
+  );
+  if (decision === "invalid") {
+    session.destroy();
+    throw new UnauthorizedError("Session révoquée ou invalide — reconnectez-vous.");
+  }
+  if (decision === "password_change_required") {
+    throw new UnauthorizedError(
+      "Changement de mot de passe obligatoire avant toute autre opération."
+    );
   }
   if (!allowed.includes(session.role)) {
     throw new UnauthorizedError(`Rôle "${session.role}" non autorisé pour cette action.`);

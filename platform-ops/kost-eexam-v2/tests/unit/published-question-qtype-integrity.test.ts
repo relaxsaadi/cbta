@@ -120,20 +120,14 @@ function assertBaseline(
   assert.equal(baseline.first_snapshot_id, expected.firstSnapshotId);
 }
 
-const TRUE_FALSE_CHOICES = [
-  { key: "true", text: "Vrai" },
-  { key: "false", text: "Faux" },
-];
-
 test("#58 migration backfills only a durably provable legacy qtype and then blocks direct drift", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-qtype-published-"));
   const db = openFreshDb(join(dir, "db.sqlite"));
   try {
     const { questionId, snapshotId } = seedQuestion(db, {
       kostId: "QTYPE-PUBLISHED-1",
-      qtype: "true_false",
-      choices: TRUE_FALSE_CHOICES,
-      correctAnswer: ["true"],
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
     });
     const result = enforcePublishedQuestionQtypeIntegrity(db);
 
@@ -143,17 +137,17 @@ test("#58 migration backfills only a durably provable legacy qtype and then bloc
       db
         .prepare(`SELECT question_id, qtype, first_snapshot_id FROM published_question_qtype_baselines`)
         .get(),
-      { questionId, qtype: "true_false", firstSnapshotId: snapshotId }
+      { questionId, qtype: "mcq_multi", firstSnapshotId: snapshotId }
     );
 
     assert.throws(
       () => db.prepare(`UPDATE questions SET qtype = 'mcq_single' WHERE id = ?`).run(questionId),
       new RegExp(PUBLISHED_QTYPE_IMMUTABLE_ERROR, "i")
     );
-    assert.equal(qtypeFor(db, questionId), "true_false");
+    assert.equal(qtypeFor(db, questionId), "mcq_multi");
 
-    db.prepare(`UPDATE questions SET qtype = 'true_false' WHERE id = ?`).run(questionId);
-    assert.equal(qtypeFor(db, questionId), "true_false");
+    db.prepare(`UPDATE questions SET qtype = 'mcq_multi' WHERE id = ?`).run(questionId);
+    assert.equal(qtypeFor(db, questionId), "mcq_multi");
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });
@@ -168,7 +162,7 @@ test("#58 ambiguous legacy one-answer MCQ is never silently backfilled from toda
 
     assert.throws(
       () => enforcePublishedQuestionQtypeIntegrity(db),
-      new RegExp(`${LEGACY_QTYPE_UNKNOWN_CODE}.*does not durably prove`, "i")
+      new RegExp(`${LEGACY_QTYPE_UNKNOWN_CODE}.*compatible with multiple`, "i")
     );
     assert.equal(
       (db.prepare(`SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name = 'published_question_qtype_baselines'`).get() as { n: number }).n,
@@ -219,23 +213,19 @@ test("#58 a snapshot inserted after migration captures the qtype baseline before
   }
 });
 
-test("#58 migration fails loud on a legacy snapshot structurally incompatible with current qtype", () => {
+test("#58 migration fails loud when durable legacy payload contradicts current qtype", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-qtype-conflict-"));
   const db = openFreshDb(join(dir, "db.sqlite"));
   try {
     seedQuestion(db, {
       kostId: "QTYPE-LEGACY-CONFLICT-1",
       qtype: "numeric",
-      choices: [
-        { key: "A", text: "Alpha" },
-        { key: "B", text: "Bravo" },
-      ],
-      correctAnswer: ["A"],
+      correctAnswer: ["A", "B"],
     });
 
     assert.throws(
       () => enforcePublishedQuestionQtypeIntegrity(db),
-      new RegExp(`${PUBLISHED_QTYPE_CONFLICT_CODE}.*structurally incompatible`, "i")
+      new RegExp(`${PUBLISHED_QTYPE_CONFLICT_CODE}.*durably proves qtype 'mcq_multi'`, "i")
     );
     assert.equal(
       (db.prepare(`SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name = 'published_question_qtype_baselines'`).get() as { n: number }).n,
@@ -257,9 +247,8 @@ test("#58 baseline itself is append-only and survives SQLite backup/restore", ()
   try {
     ({ questionId } = seedQuestion(db, {
       kostId: "QTYPE-BACKUP-1",
-      qtype: "true_false",
-      choices: TRUE_FALSE_CHOICES,
-      correctAnswer: ["false"],
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
     }));
     enforcePublishedQuestionQtypeIntegrity(db);
 
@@ -285,7 +274,7 @@ test("#58 baseline itself is append-only and survives SQLite backup/restore", ()
       () => restored.prepare(`UPDATE questions SET qtype = 'mcq_single' WHERE id = ?`).run(questionId),
       /published question qtype is immutable/i
     );
-    assert.equal(qtypeFor(restored, questionId), "true_false");
+    assert.equal(qtypeFor(restored, questionId), "mcq_multi");
   } finally {
     restored.close();
     rmSync(dir, { recursive: true, force: true });

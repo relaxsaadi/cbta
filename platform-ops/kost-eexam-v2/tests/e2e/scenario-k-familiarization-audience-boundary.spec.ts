@@ -28,10 +28,10 @@ function snapshotSideEffects() {
 }
 
 async function fillRequiredSessionFields(page: Page) {
-  await page.getByLabel("Groupe / session").selectOption({ index: 1 });
-  await page.getByLabel("Fonction DGR").selectOption("7.1");
-  await page.getByLabel("Date / heure de début").fill("2026-09-20T09:30");
-  await page.getByLabel("Lieu / mode").fill("Salle E2E — audience boundary");
+  await page.locator("#groupId").selectOption({ index: 1 });
+  await page.locator("#functionCode").selectOption("7.1");
+  await page.locator("#heldAt").fill("2026-09-20T09:30");
+  await page.locator("#location").fill("Salle E2E — audience boundary");
 }
 
 test.describe.serial("Familiarisation — real Server Action audience boundary (#10)", () => {
@@ -41,7 +41,7 @@ test.describe.serial("Familiarisation — real Server Action audience boundary (
     await fillRequiredSessionFields(page);
 
     const before = snapshotSideEffects();
-    const audience = page.getByLabel("Public visé");
+    const audience = page.locator("#audience");
     await audience.evaluate((select) => {
       const option = document.createElement("option");
       option.value = "forged-external-audience";
@@ -62,7 +62,7 @@ test.describe.serial("Familiarisation — real Server Action audience boundary (
     await loginAs(page, "responsable.demo");
     await page.goto("/familiarisation");
     await fillRequiredSessionFields(page);
-    await page.getByLabel("Public visé").selectOption("personnel");
+    await page.locator("#audience").selectOption("personnel");
 
     const before = snapshotSideEffects();
     await page.getByRole("button", { name: "Créer la session de familiarisation" }).click();

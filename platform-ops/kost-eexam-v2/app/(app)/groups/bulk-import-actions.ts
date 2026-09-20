@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireWriteRole } from "@/lib/rbac";
 import { addCandidateToGroup, getGroup, isCandidateMemberOfGroup } from "@/lib/groups";
-import { createUserPendingActivation, findUserById, findUserByUsername, getRoleForUser } from "@/lib/users";
+import { createUserPendingActivation, findUserById, getRoleForUser } from "@/lib/users";
 import { hasGroupAccess, hasUserAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
 import { createActivationToken } from "@/lib/activation-tokens";
@@ -179,17 +179,31 @@ export async function bulkImportCandidatesAction(
     const phone = idxPhone >= 0 ? row.cells[idxPhone]!.trim() || undefined : undefined;
 
     try {
-      let user = findUserByUsername(username);
-      if (!user) {
-        const duplicate = findDuplicateAccount(session, undefined, email);
-        if (duplicate) {
-          if (!duplicate.visible) {
-            report.push({ line: row.line, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
-            continue;
-          }
-          user = findUserById(duplicate.userId);
-        }
+      // Résolution séparée username/email : si les deux colonnes pointent
+      // vers deux comptes différents, ne jamais choisir arbitrairement un
+      // des deux. Cela protège l'identité importée même sur une base qui
+      // contient déjà des doublons historiques/casse différente.
+      const duplicateByUsername = findDuplicateAccount(session, username, undefined);
+      const duplicateByEmail = findDuplicateAccount(session, undefined, email);
+      if (duplicateByUsername && duplicateByEmail && duplicateByUsername.userId !== duplicateByEmail.userId) {
+        const hidden = !duplicateByUsername.visible || !duplicateByEmail.visible;
+        report.push({
+          line: row.line,
+          identifier: username,
+          status: "error",
+          detail: hidden
+            ? CROSS_TENANT_DUPLICATE_MESSAGE
+            : "L'identifiant et l'email correspondent à deux comptes différents. Corrigez la ligne avant import.",
+        });
+        continue;
       }
+
+      const duplicate = duplicateByUsername ?? duplicateByEmail;
+      if (duplicate && !duplicate.visible) {
+        report.push({ line: row.line, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
+        continue;
+      }
+      let user = duplicate ? findUserById(duplicate.userId) : undefined;
 
       if (user && !hasUserAccess(session, user.id)) {
         report.push({ line: row.line, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });

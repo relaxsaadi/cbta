@@ -109,6 +109,16 @@ function qtypeFor(db: DatabaseSync, questionId: number): string {
   return (db.prepare(`SELECT qtype FROM questions WHERE id = ?`).get(questionId) as { qtype: string }).qtype;
 }
 
+function assertBaseline(
+  row: unknown,
+  expected: { questionId: number; qtype: string; firstSnapshotId: number | null }
+): void {
+  const baseline = row as { question_id: number; qtype: string; first_snapshot_id: number | null };
+  assert.equal(baseline.question_id, expected.questionId);
+  assert.equal(baseline.qtype, expected.qtype);
+  assert.equal(baseline.first_snapshot_id, expected.firstSnapshotId);
+}
+
 test("#58 migration backfills a baseline and blocks direct qtype drift for an already-published question", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-qtype-published-"));
   const db = openFreshDb(join(dir, "db.sqlite"));
@@ -118,11 +128,11 @@ test("#58 migration backfills a baseline and blocks direct qtype drift for an al
 
     assert.equal(result.publishedQuestions, 1);
     assert.equal(result.baselinesAdded, 1);
-    assert.deepEqual(
+    assertBaseline(
       db
         .prepare(`SELECT question_id, qtype, first_snapshot_id FROM published_question_qtype_baselines`)
         .get(),
-      { question_id: questionId, qtype: "mcq_single", first_snapshot_id: snapshotId }
+      { questionId, qtype: "mcq_single", firstSnapshotId: snapshotId }
     );
 
     assert.throws(
@@ -161,11 +171,11 @@ test("#58 a snapshot inserted after migration captures the qtype baseline before
     enforcePublishedQuestionQtypeIntegrity(db);
     const { questionId, snapshotId } = seedQuestion(db, { kostId: "QTYPE-FUTURE-1" });
 
-    assert.deepEqual(
+    assertBaseline(
       db
         .prepare(`SELECT question_id, qtype, first_snapshot_id FROM published_question_qtype_baselines WHERE question_id = ?`)
         .get(questionId),
-      { question_id: questionId, qtype: "mcq_single", first_snapshot_id: snapshotId }
+      { questionId, qtype: "mcq_single", firstSnapshotId: snapshotId }
     );
     assert.throws(
       () => db.prepare(`UPDATE questions SET qtype = 'true_false' WHERE id = ?`).run(questionId),

@@ -27,7 +27,7 @@ export async function addCandidateAction(
     username: String(formData.get("username") ?? ""),
     email: String(formData.get("email") ?? ""),
   });
-  if (identity.error) return { error: identity.error };
+  if (!identity.value) return { error: identity.error ?? "Identité candidat invalide." };
 
   formData.set("fullName", identity.value.fullName);
   formData.set("username", identity.value.username);

@@ -13,6 +13,15 @@ export interface NormalizedCandidateIdentity {
   email: string;
 }
 
+export function normalizeEmailAddress(input: string): { value?: string; error?: string } {
+  const email = input.trim().toLowerCase();
+  if (!email) return { value: "" };
+  if (CONTROL_CHARS.test(email) || email.length > 254 || !EMAIL_SHAPE.test(email)) {
+    return { error: "Adresse email invalide." };
+  }
+  return { value: email };
+}
+
 /**
  * Canonical server-side identity validation for candidate provisioning.
  * Browser input types are UX only and are never treated as an integrity
@@ -25,17 +34,15 @@ export function normalizeCandidateIdentity(input: CandidateIdentityInput):
   | { value?: never; error: string } {
   const fullName = input.fullName.trim();
   const username = input.username.trim();
-  const email = input.email.trim().toLowerCase();
+  const emailResult = normalizeEmailAddress(input.email);
 
-  if (!fullName || !username || !email) {
+  if (!fullName || !username || !emailResult.value) {
     return { error: "Champs obligatoires manquants (full_name, username, email)." };
   }
-  if (CONTROL_CHARS.test(fullName) || CONTROL_CHARS.test(username) || CONTROL_CHARS.test(email)) {
+  if (CONTROL_CHARS.test(fullName) || CONTROL_CHARS.test(username)) {
     return { error: "Nom, identifiant ou email contient un caractère de contrôle interdit." };
   }
-  if (email.length > 254 || !EMAIL_SHAPE.test(email)) {
-    return { error: "Adresse email invalide." };
-  }
+  if (emailResult.error) return { error: emailResult.error };
 
-  return { value: { fullName, username, email } };
+  return { value: { fullName, username, email: emailResult.value } };
 }

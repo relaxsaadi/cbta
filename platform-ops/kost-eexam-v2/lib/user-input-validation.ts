@@ -36,13 +36,13 @@ export function normalizeCandidateIdentity(input: CandidateIdentityInput):
   const username = input.username.trim();
   const emailResult = normalizeEmailAddress(input.email);
 
+  if (emailResult.error) return { error: emailResult.error };
   if (!fullName || !username || !emailResult.value) {
     return { error: "Champs obligatoires manquants (full_name, username, email)." };
   }
   if (CONTROL_CHARS.test(fullName) || CONTROL_CHARS.test(username)) {
     return { error: "Nom, identifiant ou email contient un caractère de contrôle interdit." };
   }
-  if (emailResult.error) return { error: emailResult.error };
 
   return { value: { fullName, username, email: emailResult.value } };
 }

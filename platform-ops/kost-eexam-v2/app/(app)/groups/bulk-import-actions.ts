@@ -165,7 +165,7 @@ export async function bulkImportCandidatesAction(
       username: row.cells[idxUsername] ?? "",
       email: row.cells[idxEmail] ?? "",
     });
-    if (identity.error) {
+    if (!identity.value) {
       report.push({
         line: row.line,
         identifier: row.cells[idxUsername]?.trim() || row.cells[idxFullName]?.trim() || "?",

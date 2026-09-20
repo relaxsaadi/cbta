@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useMemo, useState } from "react";
-import { createUserAction, type CreateUserResult } from "../actions";
+import { createUserAction, type CreateUserResult } from "../create-user-actions";
 import { QuickCreateCompany, QuickCreateGroup } from "./QuickCreate";
 // Import TYPE-ONLY de lib/session.ts (jamais la valeur ROLE_LABELS) — ce
 // module porte `import "server-only"` + `next/headers` et NE PEUT PAS être

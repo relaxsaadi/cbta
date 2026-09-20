@@ -57,7 +57,7 @@ describe("Group Server Actions — canonical candidate role guard (#78/#245)", (
 
   test("editCandidateAction uses the authoritative role-aware membership predicate", () => {
     const editStart = actionsSource.indexOf("export async function editCandidateAction");
-    const bulkStart = actionsSource.indexOf("export interface BulkImportResult", editStart);
+    const bulkStart = actionsSource.indexOf("export async function bulkImportCandidatesAction", editStart);
     assert.ok(editStart >= 0 && bulkStart > editStart);
 
     const editPath = actionsSource.slice(editStart, bulkStart);

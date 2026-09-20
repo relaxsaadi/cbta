@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useActionState } from "react";
-import { addCandidateAction, type AddCandidateResult } from "../actions";
+import { addCandidateAction, type AddCandidateResult } from "../candidate-actions";
 import { formatAlgeriaDateTime } from "@/lib/timezone";
 
 // Mission "ADMIN/CLIENT/CANDIDATE UX IMPROVEMENTS" (2026-08-30) §5-9 —
@@ -97,7 +97,7 @@ export function AddCandidateForm({ groupId }: { groupId: number }) {
         {accessMethod === "temporary" && !confirmedTemporary && (
           <div className="mt-2 rounded-md border border-status-warning-border bg-status-warning-bg px-3 py-2">
             <p className="mb-2 text-[12px] text-status-warning-text">
-              Un mot de passe temporaire sera généré et envoyé au candidat. Il devra être remplacé lors de la première connexion.
+              Un mot de passe temporaire sera généré et envoyé au candidat. Il devra être remplacé lors de sa première connexion.
             </p>
             <button type="button" onClick={() => setConfirmedTemporary(true)} className="rounded-md border border-status-warning-border px-2.5 py-1 text-[11.5px] font-medium text-status-warning-text hover:bg-status-warning-border/20">
               Confirmer cette méthode

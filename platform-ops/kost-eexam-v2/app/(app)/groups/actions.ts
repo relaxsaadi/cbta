@@ -7,7 +7,6 @@ import { removeUserFromGroupSafely } from "@/lib/user-affiliation";
 import { createUserPendingActivation, findUserByUsername, findUserById, getRoleForUser, updateUserProfile } from "@/lib/users";
 import { hasCompanyAccess, hasGroupAccess, hasUserAccess } from "@/lib/tenant-scope";
 import { audit } from "@/lib/audit";
-import { getDb } from "@/lib/db";
 import type { Scope } from "@/lib/scope";
 import { createActivationToken } from "@/lib/activation-tokens";
 import { notifyAccountCreated, notifyTemporaryAccessCreated } from "@/lib/email/events";
@@ -15,6 +14,10 @@ import { auditEmailInvitationSent } from "@/lib/email/audit";
 import { createTemporaryAccess } from "@/lib/temp-password";
 import { findDuplicateAccount, CROSS_TENANT_DUPLICATE_MESSAGE } from "@/lib/duplicate-check";
 import { resendInvitation, ResendError } from "@/lib/email/resend-actions";
+import {
+  bulkImportCandidatesAction as bulkImportCandidatesCanonicalAction,
+  type BulkImportResult,
+} from "./bulk-import-actions";
 
 // Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §12 — un statut
 // "SUPPRESSED" (staging : hors EMAIL_ALLOWED_RECIPIENTS, ou EMAIL_MODE=log)
@@ -374,137 +377,19 @@ export async function editCandidateAction(groupId: number, candidateUserId: numb
   return { success: "Fiche candidat mise à jour." };
 }
 
-export interface BulkImportResult {
-  error?: string;
-  report?: { line: number; identifier: string; status: "created" | "existing_added" | "duplicate_in_group" | "error"; detail?: string }[];
-}
+export type { BulkImportResult };
 
-/** Mission "PRODUCTION READINESS" §3 — import CSV en masse. Format attendu
- * (en-tête obligatoire) : full_name,username,email[,phone] — un candidat
- * par ligne. Mission email §8 CRITIQUE : plus de colonne password — email
- * devient obligatoire (invitation sécurisée, jamais de mot de passe
- * communiqué). Jamais de doublon silencieux : chaque ligne produit une
- * entrée de rapport explicite (créé / déjà existant-ajouté / déjà membre
- * de CE groupe / erreur), jamais une réussite supposée. */
-export async function bulkImportCandidatesAction(groupId: number, _prev: BulkImportResult, formData: FormData): Promise<BulkImportResult> {
-  const session = await requireWriteRole("pedagogical_manager", "administrator");
-  if (!hasGroupAccess(session, groupId)) {
-    audit({ actorUserId: session.userId, actorRole: session.role, action: "candidate_bulk_import_denied", targetType: "group", targetId: groupId, result: "failure" });
-    return { error: "Ce groupe n'est pas dans votre périmètre." };
-  }
-  const csvText = String(formData.get("csv") ?? "").trim();
-  if (!csvText) return { error: "Collez le contenu CSV (full_name,username,email)." };
-
-  const group = getGroup(groupId);
-  if (!group) return { error: "Groupe introuvable." };
-
-  const lines = csvText.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  if (lines.length < 2) return { error: "Au moins une ligne d'en-tête et une ligne de donnée sont requises." };
-  const header = lines[0]!.split(",").map((h) => h.trim().toLowerCase());
-  const idxFullName = header.indexOf("full_name");
-  const idxUsername = header.indexOf("username");
-  const idxEmail = header.indexOf("email");
-  const idxPhone = header.indexOf("phone");
-  if (idxFullName === -1 || idxUsername === -1 || idxEmail === -1) {
-    return { error: "En-tête CSV invalide — colonnes minimum requises : full_name,username,email." };
-  }
-
-  const report: BulkImportResult["report"] = [];
-  const existingMembers = new Set(
-    (getDb().prepare(`SELECT candidate_user_id FROM group_members WHERE group_id = ?`).all(groupId) as { candidate_user_id: number }[]).map((r) => r.candidate_user_id)
-  );
-
-  for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i]!.split(",").map((c) => c.trim());
-    const fullName = cols[idxFullName] ?? "";
-    const username = cols[idxUsername] ?? "";
-    const email = cols[idxEmail] ?? "";
-    const phone = idxPhone >= 0 ? cols[idxPhone] || undefined : undefined;
-
-    if (!fullName || !username || !email) {
-      report.push({ line: i + 1, identifier: username || fullName || "?", status: "error", detail: "Champs obligatoires manquants (full_name, username, email)." });
-      continue;
-    }
-    try {
-      // Mission "FIX NESRINE/FETHI STAGING DELIVERY + PREVENT DUPLICATE
-      // CANDIDATE CREATION" (2026-08-30) §8-9 — même correspondance
-      // normalisée username OU email, même garde tenant, que
-      // addCandidateAction ci-dessus (jamais une divergence entre les
-      // deux points d'entrée qui créent des candidats côté groupe).
-      let user = findUserByUsername(username);
-      if (!user) {
-        const dup = findDuplicateAccount(session, undefined, email);
-        if (dup) {
-          if (!dup.visible) {
-            report.push({ line: i + 1, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
-            continue;
-          }
-          user = findUserById(dup.userId);
-        }
-      }
-      if (user && !hasUserAccess(session, user.id)) {
-        report.push({ line: i + 1, identifier: username, status: "error", detail: CROSS_TENANT_DUPLICATE_MESSAGE });
-        continue;
-      }
-      if (user && existingMembers.has(user.id)) {
-        report.push({ line: i + 1, identifier: username, status: "duplicate_in_group", detail: "Déjà membre de ce groupe — ignoré." });
-        continue;
-      }
-      const isNew = !user;
-      const userId = user ? user.id : createUserPendingActivation({ username, fullName, role: "candidate", email, phone });
-      addCandidateToGroup(groupId, userId, session.userId);
-      existingMembers.add(userId);
-      let importDetail: string | undefined;
-      if (isNew) {
-        importDetail = await inviteNewCandidate({
-          userId,
-          username,
-          email,
-          fullName,
-          companyId: group.company_id,
-          companyName: group.company_name,
-          groupName: group.name,
-          actorUserId: session.userId,
-          actorRole: session.role as "pedagogical_manager" | "administrator",
-        });
-      } else if (user!.status === "pending_activation") {
-        // Mission "FIX EMPLOYEE TESTING ISSUES" (2026-08-31) §10/§14 — même
-        // bug/même correctif que addCandidateAction ci-dessus, présent ici
-        // aussi (chemin d'import CSV, même écran "Groupes") : un candidat
-        // existant réimporté restait sans invitation renvoyée, quel que
-        // soit son statut. Un compte déjà 'active' n'a jamais besoin de ce
-        // renvoi (§13) — aucune action supplémentaire dans ce cas.
-        try {
-          const status = await resendInvitation(userId, { id: session.userId, role: session.role as "pedagogical_manager" | "administrator" });
-          importDetail = deliveryPhrase(status, user!.email ?? email);
-        } catch (err) {
-          importDetail = `invitation non renvoyée : ${err instanceof ResendError ? err.message : "erreur d'envoi"}`;
-        }
-      }
-      report.push({ line: i + 1, identifier: username, status: isNew ? "created" : "existing_added", detail: importDetail });
-    } catch (e) {
-      // Filet de sécurité résiduel — jamais le message SQLite brut si on
-      // peut le traduire (même discipline que createUserAction/
-      // addCandidateAction ci-dessus).
-      const raw = e instanceof Error ? e.message : "";
-      const detail = raw.includes("users.email")
-        ? "Un compte utilise déjà cette adresse email."
-        : raw.includes("users.username")
-          ? "Cet identifiant est déjà utilisé."
-          : raw || "Erreur inconnue.";
-      report.push({ line: i + 1, identifier: username, status: "error", detail });
-    }
-  }
-
-  const created = report.filter((r) => r.status === "created").length;
-  audit({
-    actorUserId: session.userId,
-    actorRole: session.role,
-    action: "candidate_bulk_import",
-    targetType: "group",
-    targetId: groupId,
-    metadata: { totalLines: lines.length - 1, created, errors: report.filter((r) => r.status === "error").length },
-  });
-  revalidatePath(`/groups/${groupId}`);
-  return { report };
+/**
+ * Issue #95 — compatibility entry point.
+ *
+ * Keep existing imports from `groups/actions` stable, but delegate every
+ * bulk CSV request to the single quote-aware, fail-closed implementation in
+ * `bulk-import-actions.ts`. There is intentionally no second parser here.
+ */
+export async function bulkImportCandidatesAction(
+  groupId: number,
+  _prev: BulkImportResult,
+  formData: FormData
+): Promise<BulkImportResult> {
+  return bulkImportCandidatesCanonicalAction(groupId, _prev, formData);
 }

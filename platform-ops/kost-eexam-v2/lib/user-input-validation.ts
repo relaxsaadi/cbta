@@ -34,7 +34,7 @@ export function normalizeAccountIdentity(
   const username = input.username.trim();
   const emailResult = normalizeEmailAddress(input.email);
 
-  if (emailResult.error) return { value: null, error: emailResult.error };
+  if (emailResult.value === null) return { value: null, error: emailResult.error };
   if (!fullName || !username) {
     return { value: null, error: "Nom complet et identifiant sont obligatoires." };
   }

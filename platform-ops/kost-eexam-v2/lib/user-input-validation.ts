@@ -13,37 +13,39 @@ export interface NormalizedCandidateIdentity {
   email: string;
 }
 
-export function normalizeEmailAddress(input: string): { value?: string; error?: string } {
+type ValidationResult<T> =
+  | { value: T; error: null }
+  | { value: null; error: string };
+
+export function normalizeEmailAddress(input: string): ValidationResult<string> {
   const email = input.trim().toLowerCase();
-  if (!email) return { value: "" };
+  if (!email) return { value: "", error: null };
   if (CONTROL_CHARS.test(email) || email.length > 254 || !EMAIL_SHAPE.test(email)) {
-    return { error: "Adresse email invalide." };
+    return { value: null, error: "Adresse email invalide." };
   }
-  return { value: email };
+  return { value: email, error: null };
 }
 
 export function normalizeAccountIdentity(
   input: CandidateIdentityInput,
   options: { emailRequired: boolean }
-):
-  | { value: NormalizedCandidateIdentity; error?: never }
-  | { value?: never; error: string } {
+): ValidationResult<NormalizedCandidateIdentity> {
   const fullName = input.fullName.trim();
   const username = input.username.trim();
   const emailResult = normalizeEmailAddress(input.email);
 
-  if (emailResult.error) return { error: emailResult.error };
+  if (emailResult.error) return { value: null, error: emailResult.error };
   if (!fullName || !username) {
-    return { error: "Nom complet et identifiant sont obligatoires." };
+    return { value: null, error: "Nom complet et identifiant sont obligatoires." };
   }
   if (options.emailRequired && !emailResult.value) {
-    return { error: "L'email est obligatoire." };
+    return { value: null, error: "L'email est obligatoire." };
   }
   if (CONTROL_CHARS.test(fullName) || CONTROL_CHARS.test(username)) {
-    return { error: "Nom, identifiant ou email contient un caractère de contrôle interdit." };
+    return { value: null, error: "Nom, identifiant ou email contient un caractère de contrôle interdit." };
   }
 
-  return { value: { fullName, username, email: emailResult.value ?? "" } };
+  return { value: { fullName, username, email: emailResult.value }, error: null };
 }
 
 /**
@@ -53,15 +55,13 @@ export function normalizeAccountIdentity(
  * identifiers while rejecting empty/control-character values and obviously
  * malformed email addresses.
  */
-export function normalizeCandidateIdentity(input: CandidateIdentityInput):
-  | { value: NormalizedCandidateIdentity; error?: never }
-  | { value?: never; error: string } {
+export function normalizeCandidateIdentity(input: CandidateIdentityInput): ValidationResult<NormalizedCandidateIdentity> {
   const result = normalizeAccountIdentity(input, { emailRequired: true });
   if (result.error) {
     if (result.error === "Nom complet et identifiant sont obligatoires." || result.error === "L'email est obligatoire.") {
-      return { error: "Champs obligatoires manquants (full_name, username, email)." };
+      return { value: null, error: "Champs obligatoires manquants (full_name, username, email)." };
     }
-    return { error: result.error };
+    return result;
   }
   return result;
 }

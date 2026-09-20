@@ -4,11 +4,15 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireWriteRole } from "@/lib/rbac";
 import { hasGroupAccess, hasFamiliarizationSessionAccess, assertAccess } from "@/lib/tenant-scope";
-import { createFamiliarizationSession, markAttendance, addFamiliarizationEvidence } from "@/lib/familiarization";
+import {
+  createFamiliarizationSession,
+  markAttendance,
+  addFamiliarizationEvidence,
+  listFamiliarizationInvitationRecipients,
+} from "@/lib/familiarization";
 import { familiarizationAudienceIncludesCandidates, parseFamiliarizationAudience } from "@/lib/familiarization-audience";
 import { audit } from "@/lib/audit";
-import { listGroupMembers, getGroup } from "@/lib/groups";
-import { findUserById } from "@/lib/users";
+import { getGroup } from "@/lib/groups";
 import { functionLabel } from "@/lib/questions";
 import { notifyFamiliarizationInvitation } from "@/lib/email/events";
 
@@ -58,21 +62,23 @@ export async function createFamiliarizationSessionAction(_prev: CreateSessionRes
     organizerRole: session.role,
   });
 
-  // FAMILIARIZATION_INVITATION (mission email §26) — après coup, jamais
-  // dans la transaction de création elle-même (§35 — outbox). Un candidat
-  // sans email au dossier est silencieusement ignoré. Une session destinée
-  // uniquement au personnel ne déclenche aucune communication candidat.
+  // FAMILIARIZATION_INVITATION (mission email §26) — après commit, jamais
+  // dans la transaction de création elle-même (§35 — outbox). Les
+  // destinataires proviennent du roster candidat DURABLE de cette session,
+  // pas d'une deuxième lecture live de group_members qui pourrait diverger
+  // si le groupe change entre le commit et la notification. Le helper
+  // fail-close aussi une identité dont le rôle courant est devenu ambigu.
+  // Une session destinée uniquement au personnel ne déclenche aucune
+  // communication candidat.
   if (familiarizationAudienceIncludesCandidates(audience)) {
     const group = getGroup(groupId);
     if (group) {
-      const members = listGroupMembers(groupId);
+      const recipients = listFamiliarizationInvitationRecipients(id);
       const label = functionLabel(functionCode);
-      for (const m of members) {
-        const candidate = findUserById(m.candidate_user_id);
-        if (!candidate?.email) continue;
+      for (const candidate of recipients) {
         const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
         await notifyFamiliarizationInvitation({
-          userId: candidate.id,
+          userId: candidate.candidate_user_id,
           email: candidate.email,
           firstName,
           sessionId: id,

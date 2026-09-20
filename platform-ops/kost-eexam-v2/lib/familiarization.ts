@@ -4,7 +4,6 @@
 // sessions qui incluent effectivement les candidats.
 import { getDb, transaction, nowIso } from "./db";
 import { audit } from "./audit";
-import { listGroupMembers } from "./groups";
 import type { ConsoleRole } from "./session";
 import {
   familiarizationAudienceIncludesCandidates,
@@ -40,6 +39,12 @@ export interface AttendanceRow {
   username: string;
   present: number;
   marked_at: string | null;
+}
+
+export interface FamiliarizationInvitationRecipient {
+  candidate_user_id: number;
+  full_name: string;
+  email: string;
 }
 
 export function listFamiliarizationSessions(restrictToGroupIdsOrNull: number[] | null = null): FamiliarizationSessionWithContext[] {
@@ -151,9 +156,14 @@ export function getFamiliarizationSession(id: number): FamiliarizationSessionWit
 }
 
 /** Crée la session et, uniquement quand l'audience inclut les candidats,
- * une ligne de présence (absent par défaut) pour chaque membre actuel du
- * groupe. Une audience NULL est traitée comme l'ancien comportement
- * candidat-facing afin de préserver les appels/données historiques. */
+ * une ligne de présence (absent par défaut) pour chaque membre candidat
+ * canonique au moment où CE writer BEGIN IMMEDIATE possède le verrou.
+ *
+ * Le roster est donc défini à la même frontière de commit que la session,
+ * les présences et l'audit : un changement de groupe qui commit avant est
+ * visible ici ; un changement qui arrive après attend puis ne réécrit
+ * jamais le roster historique. Une audience NULL conserve l'ancien
+ * comportement candidat-facing pour les appels/données historiques. */
 export function createFamiliarizationSession(params: {
   groupId: number;
   functionCode: string;
@@ -167,8 +177,21 @@ export function createFamiliarizationSession(params: {
 }): number {
   const includesCandidates =
     params.audience == null || familiarizationAudienceIncludesCandidates(params.audience);
-  const members = includesCandidates ? listGroupMembers(params.groupId) : [];
   return transaction((db) => {
+    const members = includesCandidates
+      ? (db
+          .prepare(
+            `SELECT gm.candidate_user_id
+             FROM group_members gm
+             JOIN user_roles ur ON ur.user_id = gm.candidate_user_id
+             JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+             WHERE gm.group_id = ?
+               AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = gm.candidate_user_id) = 1
+             ORDER BY gm.candidate_user_id`
+          )
+          .all(params.groupId) as unknown as Array<{ candidate_user_id: number }>)
+      : [];
+
     const result = db
       .prepare(
         `INSERT INTO familiarization_sessions (group_id, function_code, held_at, location, notes, organized_by, audience, ended_at)
@@ -210,6 +233,31 @@ export function createFamiliarizationSession(params: {
 }
 
 /**
+ * Destinataires candidat d'une invitation : dérivés du roster DURABLE de
+ * la session, jamais d'une deuxième lecture live de `group_members`.
+ *
+ * Une identité qui n'est plus aujourd'hui un candidat canonique unique est
+ * exclue fail-closed de l'effet de notification, mais sa ligne de présence
+ * historique reste intacte pour l'audit. Aucun email vide n'est retourné.
+ */
+export function listFamiliarizationInvitationRecipients(sessionId: number): FamiliarizationInvitationRecipient[] {
+  return getDb()
+    .prepare(
+      `SELECT fa.candidate_user_id, u.full_name, u.email
+       FROM familiarization_attendance fa
+       JOIN users u ON u.id = fa.candidate_user_id
+       JOIN user_roles ur ON ur.user_id = u.id
+       JOIN roles r ON r.id = ur.role_id AND r.code = 'candidate'
+       WHERE fa.session_id = ?
+         AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = u.id) = 1
+         AND u.email IS NOT NULL
+         AND TRIM(u.email) <> ''
+       ORDER BY fa.candidate_user_id`
+    )
+    .all(sessionId) as unknown as FamiliarizationInvitationRecipient[];
+}
+
+/**
  * Operational attendance roster: historical attendance rows are retained,
  * but only an identity with exactly one persisted role and that role equal
  * to `candidate` is exposed as a current candidate. This mirrors the
@@ -232,33 +280,36 @@ export function listAttendance(sessionId: number): AttendanceRow[] {
 
 /**
  * Mutation guard for historical attendance: role ambiguity must fail closed
- * in the same SQLite statement as the write. A denied/no-longer-candidate
- * target is never rewritten and never produces a success audit event.
+ * in the same SQLite statement as the write. The attendance change and its
+ * required success audit share one BEGIN IMMEDIATE transaction, so an audit
+ * failure cannot leave durable attendance state without evidence.
  */
 export function markAttendance(sessionId: number, candidateUserId: number, present: boolean, actor: { id: number; role: ConsoleRole }): void {
-  const result = getDb()
-    .prepare(
-      `UPDATE familiarization_attendance SET present = ?, marked_at = ?, marked_by = ?
-       WHERE session_id = ? AND candidate_user_id = ?
-         AND EXISTS (
-           SELECT 1
-           FROM user_roles ur
-           JOIN roles r ON r.id = ur.role_id
-           WHERE ur.user_id = ? AND r.code = 'candidate'
-             AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = ur.user_id) = 1
-         )`
-    )
-    .run(present ? 1 : 0, nowIso(), actor.id, sessionId, candidateUserId, candidateUserId);
-  if (Number(result.changes) !== 1) {
-    throw new Error("Seul un compte candidat non ambigu peut être marqué en familiarisation.");
-  }
-  audit({
-    actorUserId: actor.id,
-    actorRole: actor.role,
-    action: present ? "familiarization_attendance_present" : "familiarization_attendance_absent",
-    targetType: "familiarization_session",
-    targetId: sessionId,
-    metadata: { candidateUserId },
+  transaction((db) => {
+    const result = db
+      .prepare(
+        `UPDATE familiarization_attendance SET present = ?, marked_at = ?, marked_by = ?
+         WHERE session_id = ? AND candidate_user_id = ?
+           AND EXISTS (
+             SELECT 1
+             FROM user_roles ur
+             JOIN roles r ON r.id = ur.role_id
+             WHERE ur.user_id = ? AND r.code = 'candidate'
+               AND (SELECT COUNT(*) FROM user_roles urc WHERE urc.user_id = ur.user_id) = 1
+           )`
+      )
+      .run(present ? 1 : 0, nowIso(), actor.id, sessionId, candidateUserId, candidateUserId);
+    if (Number(result.changes) !== 1) {
+      throw new Error("Seul un compte candidat non ambigu peut être marqué en familiarisation.");
+    }
+    audit({
+      actorUserId: actor.id,
+      actorRole: actor.role,
+      action: present ? "familiarization_attendance_present" : "familiarization_attendance_absent",
+      targetType: "familiarization_session",
+      targetId: sessionId,
+      metadata: { candidateUserId },
+    });
   });
 }
 
@@ -306,18 +357,23 @@ export interface FamiliarizationEvidenceRow {
   created_at: string;
 }
 
+/** L'insertion de la référence de preuve et son succès d'audit sont
+ * failure-atomic : aucun "succès" applicatif ne peut survivre sans la
+ * preuve d'audit correspondante si cet INSERT d'audit échoue. */
 export function addFamiliarizationEvidence(sessionId: number, description: string, actor: { id: number; role: ConsoleRole }): number {
-  const result = getDb()
-    .prepare(`INSERT INTO familiarization_evidence (session_id, description, recorded_by) VALUES (?, ?, ?)`)
-    .run(sessionId, description, actor.id);
-  audit({
-    actorUserId: actor.id,
-    actorRole: actor.role,
-    action: "familiarization_evidence_attached",
-    targetType: "familiarization_session",
-    targetId: sessionId,
+  return transaction((db) => {
+    const result = db
+      .prepare(`INSERT INTO familiarization_evidence (session_id, description, recorded_by) VALUES (?, ?, ?)`)
+      .run(sessionId, description, actor.id);
+    audit({
+      actorUserId: actor.id,
+      actorRole: actor.role,
+      action: "familiarization_evidence_attached",
+      targetType: "familiarization_session",
+      targetId: sessionId,
+    });
+    return Number(result.lastInsertRowid);
   });
-  return Number(result.lastInsertRowid);
 }
 
 export function listFamiliarizationEvidence(sessionId: number): FamiliarizationEvidenceRow[] {

@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { DatabaseSync } from "node:sqlite";
 import {
+  LEGACY_QTYPE_UNKNOWN_CODE,
   PUBLISHED_QTYPE_CONFLICT_CODE,
   PUBLISHED_QTYPE_IMMUTABLE_ERROR,
   enforcePublishedQuestionQtypeIntegrity,
@@ -119,11 +120,21 @@ function assertBaseline(
   assert.equal(baseline.first_snapshot_id, expected.firstSnapshotId);
 }
 
-test("#58 migration backfills a baseline and blocks direct qtype drift for an already-published question", () => {
+const TRUE_FALSE_CHOICES = [
+  { key: "true", text: "Vrai" },
+  { key: "false", text: "Faux" },
+];
+
+test("#58 migration backfills only a durably provable legacy qtype and then blocks direct drift", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-qtype-published-"));
   const db = openFreshDb(join(dir, "db.sqlite"));
   try {
-    const { questionId, snapshotId } = seedQuestion(db, { kostId: "QTYPE-PUBLISHED-1" });
+    const { questionId, snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-PUBLISHED-1",
+      qtype: "true_false",
+      choices: TRUE_FALSE_CHOICES,
+      correctAnswer: ["true"],
+    });
     const result = enforcePublishedQuestionQtypeIntegrity(db);
 
     assert.equal(result.publishedQuestions, 1);
@@ -132,18 +143,38 @@ test("#58 migration backfills a baseline and blocks direct qtype drift for an al
       db
         .prepare(`SELECT question_id, qtype, first_snapshot_id FROM published_question_qtype_baselines`)
         .get(),
-      { questionId, qtype: "mcq_single", firstSnapshotId: snapshotId }
+      { questionId, qtype: "true_false", firstSnapshotId: snapshotId }
     );
 
     assert.throws(
-      () => db.prepare(`UPDATE questions SET qtype = 'mcq_multi' WHERE id = ?`).run(questionId),
+      () => db.prepare(`UPDATE questions SET qtype = 'mcq_single' WHERE id = ?`).run(questionId),
       new RegExp(PUBLISHED_QTYPE_IMMUTABLE_ERROR, "i")
     );
-    assert.equal(qtypeFor(db, questionId), "mcq_single");
+    assert.equal(qtypeFor(db, questionId), "true_false");
 
-    // A no-op write does not create false failures.
-    db.prepare(`UPDATE questions SET qtype = 'mcq_single' WHERE id = ?`).run(questionId);
-    assert.equal(qtypeFor(db, questionId), "mcq_single");
+    db.prepare(`UPDATE questions SET qtype = 'true_false' WHERE id = ?`).run(questionId);
+    assert.equal(qtypeFor(db, questionId), "true_false");
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 ambiguous legacy one-answer MCQ is never silently backfilled from today's qtype", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-legacy-unknown-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    seedQuestion(db, { kostId: "QTYPE-LEGACY-UNKNOWN-1", qtype: "mcq_single" });
+
+    assert.throws(
+      () => enforcePublishedQuestionQtypeIntegrity(db),
+      new RegExp(`${LEGACY_QTYPE_UNKNOWN_CODE}.*does not durably prove`, "i")
+    );
+    assert.equal(
+      (db.prepare(`SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name = 'published_question_qtype_baselines'`).get() as { n: number }).n,
+      0,
+      "unknown legacy history leaves no silently asserted baseline behind"
+    );
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });
@@ -224,11 +255,16 @@ test("#58 baseline itself is append-only and survives SQLite backup/restore", ()
   const db = openFreshDb(sourcePath);
   let questionId = 0;
   try {
-    ({ questionId } = seedQuestion(db, { kostId: "QTYPE-BACKUP-1" }));
+    ({ questionId } = seedQuestion(db, {
+      kostId: "QTYPE-BACKUP-1",
+      qtype: "true_false",
+      choices: TRUE_FALSE_CHOICES,
+      correctAnswer: ["false"],
+    }));
     enforcePublishedQuestionQtypeIntegrity(db);
 
     assert.throws(
-      () => db.prepare(`UPDATE published_question_qtype_baselines SET qtype = 'mcq_multi' WHERE question_id = ?`).run(questionId),
+      () => db.prepare(`UPDATE published_question_qtype_baselines SET qtype = 'mcq_single' WHERE question_id = ?`).run(questionId),
       /append-only/i
     );
     assert.throws(
@@ -246,10 +282,10 @@ test("#58 baseline itself is append-only and survives SQLite backup/restore", ()
   restored.exec("PRAGMA foreign_keys = ON;");
   try {
     assert.throws(
-      () => restored.prepare(`UPDATE questions SET qtype = 'mcq_multi' WHERE id = ?`).run(questionId),
+      () => restored.prepare(`UPDATE questions SET qtype = 'mcq_single' WHERE id = ?`).run(questionId),
       /published question qtype is immutable/i
     );
-    assert.equal(qtypeFor(restored, questionId), "mcq_single");
+    assert.equal(qtypeFor(restored, questionId), "true_false");
   } finally {
     restored.close();
     rmSync(dir, { recursive: true, force: true });

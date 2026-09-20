@@ -4,17 +4,19 @@ import type { DatabaseSync } from "node:sqlite";
  * Issue #58 — published question type integrity.
  *
  * Design choice: once a question has been snapshotted by a published
- * assessment, its qtype becomes immutable forever. This is deliberately
- * stricter than versioning qtype metadata: candidate rendering/grading may
- * continue reading questions.qtype only because SQLite now guarantees that
- * value can no longer diverge after first publication.
+ * assessment, its qtype becomes immutable forever. Candidate rendering,
+ * grading and manual-routing may continue reading questions.qtype only after
+ * this gate has proved or captured the historical baseline and SQLite has
+ * made that value immutable.
  *
- * A durable baseline row is captured for every published question. It is
- * both migration evidence and a second fail-closed signal if a trigger is
- * ever removed/recreated. No regulatory/reviewer status is changed here.
+ * Legacy rule: never claim that today's current qtype was necessarily the
+ * publication-time qtype when the old schema did not store enough durable
+ * evidence to prove it. Ambiguous legacy MCQ snapshots therefore fail closed
+ * as LEGACY_QTYPE_UNKNOWN instead of being silently backfilled.
  */
 
 export const PUBLISHED_QTYPE_CONFLICT_CODE = "DRIFT_CONFLICT";
+export const LEGACY_QTYPE_UNKNOWN_CODE = "LEGACY_QTYPE_UNKNOWN";
 export const PUBLISHED_QTYPE_IMMUTABLE_ERROR = "published question qtype is immutable";
 
 export interface PublishedQtypeIntegrityResult {
@@ -35,6 +37,11 @@ interface BaselineConflictRow {
   baseline_qtype: string;
   current_qtype: string;
 }
+
+type LegacyInference =
+  | { kind: "proven"; qtype: string }
+  | { kind: "ambiguous"; candidates: string[] }
+  | { kind: "invalid" };
 
 function tableExists(db: DatabaseSync, name: string): boolean {
   return Boolean(
@@ -68,12 +75,7 @@ function answerShapeMatches(qtype: string, choices: unknown, correct: unknown): 
     if (!Array.isArray(correct) || !correct.every((k) => typeof k === "string" && keys.has(k))) return false;
     if (qtype === "mcq_single") return keys.size >= 2 && correct.length === 1;
     if (qtype === "mcq_multi") return keys.size >= 2 && correct.length >= 1;
-    return (
-      keys.size === 2 &&
-      keys.has("true") &&
-      keys.has("false") &&
-      correct.length === 1
-    );
+    return keys.size === 2 && keys.has("true") && keys.has("false") && correct.length === 1;
   }
 
   const spec = objectRecord(correct);
@@ -103,11 +105,13 @@ function answerShapeMatches(qtype: string, choices: unknown, correct: unknown): 
   if (qtype === "matching") {
     if (spec.mode !== "matching" || !Array.isArray(spec.pairs) || spec.pairs.length < 2) return false;
     const leftSeen = new Set<string>();
+    const rightSeen = new Set<string>();
     for (const pairValue of spec.pairs) {
       const pair = objectRecord(pairValue);
       if (!pair || typeof pair.left !== "string" || typeof pair.right !== "string") return false;
-      if (!keys.has(pair.left) || !keys.has(pair.right) || leftSeen.has(pair.left)) return false;
+      if (!keys.has(pair.left) || !keys.has(pair.right) || leftSeen.has(pair.left) || rightSeen.has(pair.right)) return false;
       leftSeen.add(pair.left);
+      rightSeen.add(pair.right);
     }
     return true;
   }
@@ -145,26 +149,93 @@ function answerShapeMatches(qtype: string, choices: unknown, correct: unknown): 
   return false;
 }
 
-function findSnapshotShapeConflicts(db: DatabaseSync): SnapshotIntegrityRow[] {
+/**
+ * Infer only when the legacy snapshot payload itself proves the top-level
+ * type. One-answer generic MCQs are intentionally ambiguous between
+ * mcq_single and mcq_multi; today's parent qtype is not treated as proof.
+ */
+function inferLegacyQtype(choices: unknown, correct: unknown): LegacyInference {
+  const keys = choiceKeys(choices);
+  if (!keys) return { kind: "invalid" };
+
+  if (Array.isArray(correct)) {
+    if (!correct.every((k) => typeof k === "string" && keys.has(k))) return { kind: "invalid" };
+    if (keys.size === 2 && keys.has("true") && keys.has("false") && correct.length === 1) {
+      return { kind: "proven", qtype: "true_false" };
+    }
+    if (keys.size < 2 || correct.length < 1) return { kind: "invalid" };
+    if (correct.length >= 2) return { kind: "proven", qtype: "mcq_multi" };
+    return { kind: "ambiguous", candidates: ["mcq_single", "mcq_multi"] };
+  }
+
+  const spec = objectRecord(correct);
+  if (!spec || typeof spec.mode !== "string") return { kind: "invalid" };
+  const modeToQtype: Record<string, string> = {
+    numeric: "numeric",
+    exact: "short_answer",
+    manual: "short_answer",
+    matching: "matching",
+    ordering: "ordering",
+    scenario: "scenario",
+  };
+  const inferred = modeToQtype[spec.mode];
+  if (!inferred || !answerShapeMatches(inferred, choices, correct)) return { kind: "invalid" };
+  return { kind: "proven", qtype: inferred };
+}
+
+/**
+ * Validates only questions that do not already have a durable baseline.
+ * Questions published after this enforcement was installed already captured
+ * qtype at publication time, so their snapshot payload does not need legacy
+ * inference on later migration reruns.
+ */
+function assertLegacySnapshotsProvable(db: DatabaseSync): void {
   const rows = db
     .prepare(
       `SELECT s.id AS snapshot_id, s.question_id, q.qtype,
               s.choices_snapshot_json, s.correct_answer_snapshot
        FROM assessment_question_snapshots s
        JOIN questions q ON q.id = s.question_id
+       LEFT JOIN published_question_qtype_baselines b ON b.question_id = s.question_id
+       WHERE b.question_id IS NULL
        ORDER BY s.id`
     )
     .all() as unknown as SnapshotIntegrityRow[];
 
-  return rows.filter((row) => {
+  for (const row of rows) {
+    let choices: unknown;
+    let correct: unknown;
     try {
-      const choices = JSON.parse(row.choices_snapshot_json) as unknown;
-      const correct = JSON.parse(row.correct_answer_snapshot) as unknown;
-      return !answerShapeMatches(row.qtype, choices, correct);
+      choices = JSON.parse(row.choices_snapshot_json) as unknown;
+      correct = JSON.parse(row.correct_answer_snapshot) as unknown;
     } catch {
-      return true;
+      throw new Error(
+        `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} contains invalid JSON`
+      );
     }
-  });
+
+    const inference = inferLegacyQtype(choices, correct);
+    if (inference.kind === "invalid") {
+      throw new Error(
+        `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} is structurally incompatible with current qtype '${row.qtype}'`
+      );
+    }
+    if (inference.kind === "ambiguous") {
+      if (!inference.candidates.includes(row.qtype)) {
+        throw new Error(
+          `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} is compatible only with ${inference.candidates.join("/")}, not current qtype '${row.qtype}'`
+        );
+      }
+      throw new Error(
+        `${LEGACY_QTYPE_UNKNOWN_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} does not durably prove whether publication-time qtype was ${inference.candidates.join(" or ")}; current qtype '${row.qtype}' is not accepted as historical proof`
+      );
+    }
+    if (inference.qtype !== row.qtype) {
+      throw new Error(
+        `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} durably proves qtype '${inference.qtype}', but current qtype is '${row.qtype}'`
+      );
+    }
+  }
 }
 
 /**
@@ -182,15 +253,12 @@ export function questionQtypeConflict(currentQtype: string, incomingQtype: strin
  *
  * Migration behavior is intentionally fail-loud:
  *  1. an existing durable baseline that differs from questions.qtype aborts;
- *  2. a legacy published snapshot whose payload is structurally incompatible
- *     with the current qtype aborts;
- *  3. only after those checks pass are missing baselines backfilled and the
+ *  2. a legacy published snapshot is backfilled only when its durable payload
+ *     uniquely proves the current top-level qtype;
+ *  3. an ambiguous legacy one-answer generic MCQ aborts as
+ *     LEGACY_QTYPE_UNKNOWN rather than silently using today's qtype;
+ *  4. only after those checks pass are missing baselines backfilled and the
  *     immutable/capture triggers installed.
- *
- * Some historical mcq_single vs mcq_multi changes with exactly one correct
- * answer are mathematically indistinguishable from payload alone. The durable
- * baseline created here closes that ambiguity for every subsequent run/change;
- * the migration never invents an older qtype that the database did not store.
  */
 export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): PublishedQtypeIntegrityResult {
   if (!tableExists(db, "questions") || !tableExists(db, "assessment_question_snapshots")) {
@@ -224,13 +292,7 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       );
     }
 
-    const shapeConflicts = findSnapshotShapeConflicts(db);
-    if (shapeConflicts.length > 0) {
-      const first = shapeConflicts[0]!;
-      throw new Error(
-        `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${first.snapshot_id} for question ${first.question_id} is structurally incompatible with current qtype '${first.qtype}'`
-      );
-    }
+    assertLegacySnapshotsProvable(db);
 
     const before = (
       db.prepare(`SELECT COUNT(*) AS n FROM published_question_qtype_baselines`).get() as { n: number }
@@ -241,6 +303,8 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       SELECT q.id, q.qtype, MIN(s.id)
       FROM questions q
       JOIN assessment_question_snapshots s ON s.question_id = q.id
+      LEFT JOIN published_question_qtype_baselines b ON b.question_id = q.id
+      WHERE b.question_id IS NULL
       GROUP BY q.id, q.qtype;
     `);
 

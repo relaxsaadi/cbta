@@ -29,7 +29,7 @@ export async function createUserAction(
     },
     { emailRequired: sendInvitation }
   );
-  if (identity.error) return { error: identity.error };
+  if (!identity.value) return { error: identity.error ?? "Identité de compte invalide." };
 
   formData.set("fullName", identity.value.fullName);
   formData.set("username", identity.value.username);

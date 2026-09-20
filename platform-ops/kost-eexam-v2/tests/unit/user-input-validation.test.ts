@@ -15,6 +15,7 @@ describe("candidate identity validation (#95)", () => {
         username: "elodie.oc",
         email: "elodie.oc@example.com",
       },
+      error: null,
     });
   });
 
@@ -49,5 +50,6 @@ describe("candidate identity validation (#95)", () => {
     });
     assert.ok(result.value);
     assert.equal(result.value.fullName, "محمد أمين");
+    assert.equal(result.error, null);
   });
 });

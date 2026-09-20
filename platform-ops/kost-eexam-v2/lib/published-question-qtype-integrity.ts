@@ -11,8 +11,8 @@ import type { DatabaseSync } from "node:sqlite";
  *
  * Legacy rule: never claim that today's current qtype was necessarily the
  * publication-time qtype when the old schema did not store enough durable
- * evidence to prove it. Ambiguous legacy MCQ snapshots therefore fail closed
- * as LEGACY_QTYPE_UNKNOWN instead of being silently backfilled.
+ * evidence to prove it. Any legacy payload compatible with more than one
+ * supported top-level qtype fails closed as LEGACY_QTYPE_UNKNOWN.
  */
 
 export const PUBLISHED_QTYPE_CONFLICT_CODE = "DRIFT_CONFLICT";
@@ -42,6 +42,17 @@ type LegacyInference =
   | { kind: "proven"; qtype: string }
   | { kind: "ambiguous"; candidates: string[] }
   | { kind: "invalid" };
+
+const SUPPORTED_QTYPES = [
+  "mcq_single",
+  "mcq_multi",
+  "true_false",
+  "numeric",
+  "short_answer",
+  "matching",
+  "ordering",
+  "scenario",
+] as const;
 
 function tableExists(db: DatabaseSync, name: string): boolean {
   return Boolean(
@@ -150,37 +161,16 @@ function answerShapeMatches(qtype: string, choices: unknown, correct: unknown): 
 }
 
 /**
- * Infer only when the legacy snapshot payload itself proves the top-level
- * type. One-answer generic MCQs are intentionally ambiguous between
- * mcq_single and mcq_multi; today's parent qtype is not treated as proof.
+ * The durable legacy payload proves a type only when exactly one supported
+ * top-level qtype can validly interpret that payload. This intentionally
+ * treats Vrai/Faux-like one-answer arrays as ambiguous too: key naming is a
+ * convention, not a historical schema constraint.
  */
 function inferLegacyQtype(choices: unknown, correct: unknown): LegacyInference {
-  const keys = choiceKeys(choices);
-  if (!keys) return { kind: "invalid" };
-
-  if (Array.isArray(correct)) {
-    if (!correct.every((k) => typeof k === "string" && keys.has(k))) return { kind: "invalid" };
-    if (keys.size === 2 && keys.has("true") && keys.has("false") && correct.length === 1) {
-      return { kind: "proven", qtype: "true_false" };
-    }
-    if (keys.size < 2 || correct.length < 1) return { kind: "invalid" };
-    if (correct.length >= 2) return { kind: "proven", qtype: "mcq_multi" };
-    return { kind: "ambiguous", candidates: ["mcq_single", "mcq_multi"] };
-  }
-
-  const spec = objectRecord(correct);
-  if (!spec || typeof spec.mode !== "string") return { kind: "invalid" };
-  const modeToQtype: Record<string, string> = {
-    numeric: "numeric",
-    exact: "short_answer",
-    manual: "short_answer",
-    matching: "matching",
-    ordering: "ordering",
-    scenario: "scenario",
-  };
-  const inferred = modeToQtype[spec.mode];
-  if (!inferred || !answerShapeMatches(inferred, choices, correct)) return { kind: "invalid" };
-  return { kind: "proven", qtype: inferred };
+  const compatible = SUPPORTED_QTYPES.filter((qtype) => answerShapeMatches(qtype, choices, correct));
+  if (compatible.length === 0) return { kind: "invalid" };
+  if (compatible.length === 1) return { kind: "proven", qtype: compatible[0]! };
+  return { kind: "ambiguous", candidates: [...compatible] };
 }
 
 /**
@@ -217,7 +207,7 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
     const inference = inferLegacyQtype(choices, correct);
     if (inference.kind === "invalid") {
       throw new Error(
-        `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} is structurally incompatible with current qtype '${row.qtype}'`
+        `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} is not compatible with any supported qtype`
       );
     }
     if (inference.kind === "ambiguous") {
@@ -227,7 +217,7 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
         );
       }
       throw new Error(
-        `${LEGACY_QTYPE_UNKNOWN_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} does not durably prove whether publication-time qtype was ${inference.candidates.join(" or ")}; current qtype '${row.qtype}' is not accepted as historical proof`
+        `${LEGACY_QTYPE_UNKNOWN_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} is compatible with multiple publication-time qtypes (${inference.candidates.join(", ")}); current qtype '${row.qtype}' is not accepted as historical proof`
       );
     }
     if (inference.qtype !== row.qtype) {
@@ -254,9 +244,8 @@ export function questionQtypeConflict(currentQtype: string, incomingQtype: strin
  * Migration behavior is intentionally fail-loud:
  *  1. an existing durable baseline that differs from questions.qtype aborts;
  *  2. a legacy published snapshot is backfilled only when its durable payload
- *     uniquely proves the current top-level qtype;
- *  3. an ambiguous legacy one-answer generic MCQ aborts as
- *     LEGACY_QTYPE_UNKNOWN rather than silently using today's qtype;
+ *     is compatible with exactly one supported qtype and that type matches;
+ *  3. any multi-compatible legacy payload aborts as LEGACY_QTYPE_UNKNOWN;
  *  4. only after those checks pass are missing baselines backfilled and the
  *     immutable/capture triggers installed.
  */

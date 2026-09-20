@@ -5,11 +5,11 @@ import { fileURLToPath } from "node:url";
 
 // lib/rbac.ts imports `server-only`, so these regressions deliberately inspect
 // the two authorization boundaries as source invariants rather than importing
-// the Next.js guard into the Node unit-test runtime. The important contract is
-// that server-side registry validation is mandatory once a cookie claims to be
-// authenticated: absence of dbSessionId must fail closed, the registry lookup
-// must be bound to the same cookie user, and #245 additionally requires the
-// current unique persisted role to match the authenticated cookie role.
+// the Next.js guard into the Node unit-test runtime. The app layout still uses
+// low-level DB-session validity for navigation. The Server Action boundary is
+// intentionally stronger (#56): one authoritative DB decision must bind the
+// session to the current user/role AND enforce current account status plus
+// `must_change_password` before business role authorization.
 const readRelative = (relative: string) =>
   readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8");
 
@@ -22,12 +22,27 @@ test("protected app layout fails closed and binds dbSessionId to cookie user + r
   assert.doesNotMatch(source, optionalRegistryGuard);
 });
 
-test("requireRole validates bound DB session and unique persisted role before role authorization", () => {
+test("requireRole evaluates authoritative DB session/user/role/password state before business-role authorization", () => {
   const source = readRelative("../../lib/rbac.ts");
-  assert.match(source, mandatoryRegistryGuard);
-  assert.doesNotMatch(source, optionalRegistryGuard);
 
-  const registryCheck = source.indexOf("!session.dbSessionId || !isDbSessionValid(session.dbSessionId, session.userId, session.role)");
+  assert.match(source, /if\s*\(\s*!session\.dbSessionId\s*\)/);
+  assert.match(
+    source,
+    /evaluateProtectedSessionAuthorization\(\s*session\.dbSessionId,\s*session\.userId,\s*session\.role\s*\)/
+  );
+  assert.match(source, /decision === "invalid"/);
+  assert.match(source, /decision === "password_change_required"/);
+  assert.doesNotMatch(source, /isDbSessionValid/);
+
+  const registryCheck = source.indexOf("evaluateProtectedSessionAuthorization(");
+  const passwordGate = source.indexOf('decision === "password_change_required"');
   const roleCheck = source.indexOf("!allowed.includes(session.role)");
-  assert.ok(registryCheck >= 0 && roleCheck >= 0 && registryCheck < roleCheck, "DB-session + persisted-role validation must happen before role authorization");
+  assert.ok(
+    registryCheck >= 0 &&
+      passwordGate >= 0 &&
+      roleCheck >= 0 &&
+      registryCheck < passwordGate &&
+      passwordGate < roleCheck,
+    "current DB session/user/role/password state must be enforced before business-role authorization"
+  );
 });

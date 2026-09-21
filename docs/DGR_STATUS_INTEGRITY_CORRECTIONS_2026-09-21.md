@@ -22,6 +22,12 @@ The EN package is prepared for review; that is not completed bilingual review.
 
 The FR Tier-A cells for 7.4–7.10 still show `Not started` or older blocker wording even though the Notes in those same rows contain later partial Tier-A passes. Until the table is rebuilt from per-item evidence, those cells must not be treated as live readiness status.
 
+## Function 7.4 — Batch-2 zero-item leaf-count conflict
+
+The Function 7.4 Batch-2 narrative says that **“only 4 leaves have zero items”**, but the same sentence enumerates three non-gap zero-item leaves (`4.2.4`, `0.6.2`, `6.3.2`) **plus** three confirmed `SOURCE_GAP` leaves (`4.2.5`, `6.1.1`, `6.3.4`). At that Batch-2 point, the narrative therefore identifies **six** zero-item leaves, not four.
+
+This is a prose/counting defect only. Do not change any underlying leaf evidence or question status merely to make the sentence balance. The later Batch-3 narrative is separately consistent with its own point in time: `4.2.4` and `0.6.2` were subsequently drafted, leaving `6.3.2` plus the three confirmed `SOURCE_GAP` leaves as the four still-undrafted leaves.
+
 ### Status-accounting conflicts requiring per-item recount
 
 Four rows contain arithmetic inconsistencies in their own later Tier-A narrative. These are `STATUS_CONFLICT` findings, not regulatory-source conflicts, and **must not be resolved by inference**:

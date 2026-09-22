@@ -2,7 +2,7 @@
 
 This addendum records **documentation/status-accounting defects only** in `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`. It does not promote any question, change a source decision, complete bilingual review, or imply ANAC/IATA approval.
 
-The per-item production-bank/source evidence remains authoritative. Where this addendum identifies an arithmetic or column conflict, the correct next action is a per-item recount/reconciliation — **not** choosing the number that makes the table look complete.
+The per-item production-bank/source evidence remains authoritative. Where this addendum identifies a column or narrative conflict, the correct next action is to reconcile from durable per-item evidence — **not** choose numbers that make the dashboard look complete.
 
 ## Non-negotiable approval rule
 
@@ -28,20 +28,24 @@ The Function 7.4 Batch-2 narrative says that **“only 4 leaves have zero items�
 
 This is a prose/counting defect only. Do not change any underlying leaf evidence or question status merely to make the sentence balance. The later Batch-3 narrative is separately consistent with its own point in time: `4.2.4` and `0.6.2` were subsequently drafted, leaving `6.3.2` plus the three confirmed `SOURCE_GAP` leaves as the four still-undrafted leaves.
 
-### Status-accounting conflicts requiring per-item recount
+## Correction of the prior 7.4–7.7 arithmetic finding
 
-Four rows contain arithmetic inconsistencies in their own later Tier-A narrative. These are `STATUS_CONFLICT` findings, not regulatory-source conflicts, and **must not be resolved by inference**:
+A previous version of this addendum incorrectly classified Functions 7.4–7.7 as `STATUS_CONFLICT`. That finding was itself an accounting error and is withdrawn.
 
-| Function | Narrative counts currently written | Arithmetic vs bank total | Required treatment |
-|---|---|---|---|
-| 7.4 | 11 verified + 1 source gap + 3 partial + 39 not attempted | 54 categories for a 53-item bank | `STATUS_CONFLICT` — recount per item before correcting the dashboard |
-| 7.5 | 13 verified + 1 source gap + 4 partial + 27 not attempted | 45 categories for a 44-item bank | `STATUS_CONFLICT` — recount per item before correcting the dashboard |
-| 7.6 | 16 verified + 1 source gap + 3 partial + 37 not attempted | 57 categories for a 56-item bank | `STATUS_CONFLICT` — recount per item before correcting the dashboard |
-| 7.7 | 16 verified + 1 source gap + 3 partial + 34 not attempted | 54 categories for a 53-item bank | `STATUS_CONFLICT` — recount per item before correcting the dashboard |
+The production-bank consolidated Tier-A notes already partition each bank consistently:
 
-Do not guess whether the over-count sits in `partial`, `not attempted`, or another category. Reconcile against the per-item bank/source records first.
+| Function | Authoritative consolidated note | Bank total | Result |
+|---|---|---:|---|
+| 7.4 | 11 verified + 3 partially confirmed/flagged + 39 not attempted | 53 | 53/53 — internally consistent |
+| 7.5 | 13 verified + 4 partially confirmed/flagged + 27 not attempted | 44 | 44/44 — internally consistent |
+| 7.6 | 16 verified + 3 partially confirmed/flagged + 37 not attempted | 56 | 56/56 — internally consistent |
+| 7.7 | 16 verified + 3 partially confirmed/flagged + 34 not attempted | 53 | 53/53 — internally consistent |
 
-### Rows whose displayed later-pass arithmetic is internally consistent
+The false +1 in each earlier calculation came from counting the `danger/risque` silence item twice: once correctly inside the production bank's **partially confirmed / flagged** bucket (`Q-7.4-027`, `Q-7.5-018`, `Q-7.6-018`, `Q-7.7-019`) and then incorrectly a second time as a separate question-level `SOURCE GAP` bucket.
+
+Do not confuse **source-gap task leaves with zero drafted questions** with an additional question-status count. A zero-question source-gap leaf is a coverage/source state, not another question to add to the bank total. No per-item question status is changed by this correction, and no regulatory claim is promoted.
+
+### Other displayed later-pass arithmetic that is internally consistent
 
 - 7.8: 12 verified + 2 source gaps + 1 partial + 36 not attempted = 51/51.
 - 7.9: 15 verified + 2 source gaps + 22 not attempted = 39/39.
@@ -56,7 +60,7 @@ The sentence `This closes the Tier A verification pass for all ten functions in 
 ## Required follow-up before this status file can become a live dashboard
 
 1. Rebuild each FR Tier-A cell from per-item durable evidence rather than narrative/session summaries.
-2. Resolve the 7.4–7.7 `STATUS_CONFLICT` arithmetic by per-item recount without changing underlying statuses merely to balance totals.
+2. Preserve the corrected 7.4–7.7 arithmetic above; do not reintroduce a separate question count for zero-question source-gap leaves.
 3. Keep explicit `SOURCE_GAP` / `SOURCE_CONFLICT` / unresolved states in the underlying regulatory artifacts.
 4. Keep EN draft-package preparation distinct from completed EN bilingual review.
 5. Keep every function non-`APPROVED` until named qualified reviewer + date + evidence are present.

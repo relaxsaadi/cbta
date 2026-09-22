@@ -75,6 +75,29 @@ This is a **stale-copy defect in the EN review package, not a reason to promote 
 
 Do not mechanically change the 33 EN-review fields to `FROZEN`: only the 11 named items have that later FR source-verification state, and FR verification still does not satisfy bilingual review or final approval.
 
+## Functions 7.2–7.10 — EN review packages carry historical FR-status mirrors
+
+The 7.6 defect above is **systemic, not isolated**. The EN review packages for Functions **7.2, 7.3, 7.4, 7.5, 7.7, 7.8, 7.9, and 7.10** also retain package-level and repeated per-item statements saying that every covered FR item remains `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`. Those statements were true when each EN package was drafted, but later Tier-A work recorded in the corresponding production banks supersedes them.
+
+Confirmed examples proving the duplicated FR-status mirrors are stale:
+
+- **7.2:** the EN package says all 28 covered items remain Tier-B-only, while the production bank already records `Q-7.2-001`, `004`, `005`, `009`, `010`, and `011` as Tier-A confirmed in Batch 1, and `Q-7.2-002` as `FR SOURCE GAP CONFIRMED`.
+- **7.3:** the EN package says all 32 covered items remain Tier-B-only, while the later consolidated production-bank pass records 20 verified items overall, including covered IDs such as `Q-7.3-001`, `005`, `006`, `008`, `011`, `013`, `014`, `015`, `016`, `018`, `022`, `026`, `027`, `028`, and `030`.
+- **7.4:** the EN package says all 53 items remain Tier-B-only, while the production bank later records 11 `FROZEN FR / SOURCE VERIFIED`, 3 partially confirmed/flagged, and 39 not attempted.
+- **7.5:** the EN package says all 29 covered items remain Tier-B-only, while the production bank later records 13 verified items overall and 4 partially confirmed/flagged; several verified IDs fall inside the package range, including `Q-7.5-002`, `006`, `007`, `010`, `015`, `016`, `017`, `020`, `028`, and `029`.
+- **7.6:** use the dedicated reconciliation immediately above.
+- **7.7:** the EN package says all 33 covered items remain Tier-B-only, while the production bank later records 16 verified items overall and 3 partially confirmed/flagged; covered verified IDs include `Q-7.7-003`, `005`, `013`, `014`, `015`, `016`, `017`, `018`, `022`, `024`, `026`, and `Q-7.7-006`/`019` are among the covered flagged items.
+- **7.8:** the EN package says all 32 covered items remain Tier-B-only, while the production bank later records 12 verified items overall plus later cross-applied findings; covered verified IDs include `Q-7.8-007`, `008`, `009`, `011`, `016`, `017`, and `021`, with covered `Q-7.8-010` and `018` also carrying later cross-applied findings.
+- **7.9:** the EN package says all 31 covered items remain Tier-B-only, while the production bank later records 15 verified items overall plus two cross-applied danger/risque findings; covered verified IDs include `Q-7.9-004`, `007`, `011`, `014`, `015`, `016`, `017`, `019`, `020`, `021`, `025`, `027`, and `029`.
+- **7.10:** the EN package says all 32 covered items remain Tier-B-only, while the production bank later records 12 verified items overall plus two cross-applied findings; the verified IDs are all inside the package range (`Q-7.10-005`, `007`, `013`, `014`, `015`, `016`, `017`, `018`, `020`, `024`, `026`, `030`).
+
+This correction is intentionally **one-way and status-preserving**:
+
+1. The production-bank/per-item Tier-A evidence is authoritative for FR source status.
+2. The EN packages remain authoritative only for the drafted EN text/review work they actually contain, not for duplicated FR source-status snapshots that predate later Tier-A work.
+3. **No EN item is promoted.** `BILINGUAL TECHNICAL REVIEW REQUIRED` and `PENDING REVIEWER + DATE` remain unchanged until a named qualified bilingual reviewer completes and dates the review with durable evidence.
+4. Regeneration must be per item. Do not bulk-change every duplicated FR-status field to `FROZEN`; verified, partial, `SOURCE_GAP`, `SOURCE_CONFLICT`, and unattempted states must remain distinct.
+
 ## Function 7.10 wording correction
 
 The sentence `This closes the Tier A verification pass for all ten functions in this session` must not be read as full Tier-A completion. The same 7.10 row records 30/44 items as not attempted. The only defensible interpretation is that the session's **partial cross-function pass ended**, not that all ten functions achieved complete Tier-A verification.
@@ -84,7 +107,7 @@ The sentence `This closes the Tier A verification pass for all ten functions in 
 1. Rebuild each FR Tier-A cell from per-item durable evidence rather than narrative/session summaries.
 2. Preserve the corrected 7.4–7.7 arithmetic above; do not reintroduce a separate question count for zero-question source-gap leaves.
 3. Reconcile Function 7.5 `0.5.1` so uncovered slide-88 evidence cannot be mistaken for drafting headroom unless the blueprint ceiling is explicitly revised from source yield.
-4. Regenerate Function 7.6 EN-review package FR-status mirrors from current per-item evidence, without changing EN review state.
+4. Regenerate the duplicated FR-status mirrors in **every EN review package from 7.2 through 7.10** from current per-item evidence, without changing EN review state.
 5. Keep explicit `SOURCE_GAP` / `SOURCE_CONFLICT` / unresolved states in the underlying regulatory artifacts.
 6. Keep EN draft-package preparation distinct from completed EN bilingual review.
 7. Keep every function non-`APPROVED` until named qualified reviewer + date + evidence are present.

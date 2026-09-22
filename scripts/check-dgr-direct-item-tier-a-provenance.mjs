@@ -7,7 +7,7 @@ const TARGET = 'docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv';
 
 // A row cannot claim direct Tier-A closure — including a confirmed current-DGR
 // absence/source-gap conclusion — if its own durable text admits that the
-// item's specific current-DGR citation was not independently read.
+// item's specific current-DGR citation/search was not independently performed.
 // Keep these predicates intentionally one-way: they only detect explicit
 // admissions of missing direct evidence; they never infer approval, a source
 // gap, or regulatory correctness from a citation or batch/sample statement.
@@ -18,6 +18,9 @@ const MISSING_DIRECT_EVIDENCE_PATTERNS = [
   /specific current-dgr citation was not independently read/i,
   /own specific citation was not independently re-read/i,
   /own specific citation was not independently read/i,
+  /not independently re-searched/i,
+  /not independently searched/i,
+  /not re-searched from scratch/i,
 ];
 
 function rowsFromCsvText(text) {
@@ -59,12 +62,14 @@ function runSelfTest() {
   const sampled = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.8-047,7.8,FROZEN,"FROZEN FR / SOURCE VERIFIED. A representative sample of this citation pattern was independently spot-verified. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
   const missingRepresentativeWording = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.9-004,7.9,FROZEN,"FROZEN FR / SOURCE VERIFIED. This item's own specific citation was not independently re-read during this pass.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
   const sampledConfirmedGap = `KOST_Question_ID,Function,Subtask,Status,Reason,Next_Action\r\nQ-7.3-017,7.3,0.1.4,GAP,"FR SOURCE GAP CONFIRMED (cross-applied). A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern.",Retain Tier B only\r\n`;
+  const crossAppliedWithoutSearch = `KOST_Question_ID,Function,Subtask,Status,Reason,Next_Action\r\nQ-7.2-002,7.2,0.1.4,GAP,"FR SOURCE GAP CONFIRMED. Prior Tier-A research from another item is cross-applied here; this item was not re-searched from scratch.",Retain Tier B only\r\n`;
   const direct = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.8-048,7.8,FROZEN,"FROZEN FR / SOURCE VERIFIED. Live Bookshelf check performed directly for this item's tested claim.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
   const directConfirmedGap = `KOST_Question_ID,Function,Subtask,Status,Reason,Next_Action\r\nQ-7.2-008,7.2,3.4.2,GAP,"FR SOURCE GAP CONFIRMED. This item's tested claim was searched directly in the current DGR 67th Edition 2026 text and no supporting provision was located; searched sections are recorded item-by-item.",Retain Tier B only\r\n`;
 
   const sampledViolations = findViolations(sampled);
   const missingRepresentativeWordingViolations = findViolations(missingRepresentativeWording);
   const sampledConfirmedGapViolations = findViolations(sampledConfirmedGap);
+  const crossAppliedWithoutSearchViolations = findViolations(crossAppliedWithoutSearch);
   const directViolations = findViolations(direct);
   const directConfirmedGapViolations = findViolations(directConfirmedGap);
 
@@ -83,6 +88,13 @@ function runSelfTest() {
     || !sampledConfirmedGapViolations[0].claimsConfirmedGap
   ) {
     throw new Error('Regression fixture failed: sampled-only confirmed SOURCE GAP row was not rejected.');
+  }
+  if (
+    crossAppliedWithoutSearchViolations.length !== 1
+    || crossAppliedWithoutSearchViolations[0].id !== 'Q-7.2-002'
+    || !crossAppliedWithoutSearchViolations[0].claimsConfirmedGap
+  ) {
+    throw new Error('Regression fixture failed: cross-applied confirmed SOURCE GAP without an item-specific search was not rejected.');
   }
   if (directViolations.length !== 0) {
     throw new Error('Regression fixture failed: direct item-specific evidence was incorrectly rejected.');

@@ -133,13 +133,27 @@ function findViolations(reconciliationText, importText) {
     reconciliationText,
     RECONCILIATION,
     'kost_question_id',
-    ['function', 'final_reconciled_status'],
+    [
+      'function',
+      'dgr_reference',
+      'full_text_recoverable',
+      'correct_answer_recoverable',
+      'final_reconciled_status',
+    ],
   );
   const imports = tableFromCsv(
     importText,
     IMPORT_CANDIDATES,
     'kost_id',
-    ['function', 'fr_status', 'import_eligible', 'blocker'],
+    [
+      'function',
+      'fr_status',
+      'source_reference',
+      'full_text_recoverable',
+      'correct_answer_recoverable',
+      'import_eligible',
+      'blocker',
+    ],
   );
   const violations = [];
 
@@ -178,6 +192,27 @@ function findViolations(reconciliationText, importText) {
       violations.push({ id: importRow.id, reason: 'IMPORT_ELIGIBLE=YES while BLOCKER is non-empty' });
     }
 
+    const sourceReference = valueFor(imports, importRow, 'source_reference');
+    if (!sourceReference) {
+      violations.push({ id: importRow.id, reason: 'IMPORT_ELIGIBLE=YES without SOURCE_REFERENCE' });
+    }
+
+    const importFullTextRecoverable = valueFor(imports, importRow, 'full_text_recoverable').toUpperCase();
+    if (importFullTextRecoverable !== 'YES') {
+      violations.push({
+        id: importRow.id,
+        reason: `IMPORT_ELIGIBLE=YES while FULL_TEXT_RECOVERABLE is ${importFullTextRecoverable || 'missing'}`,
+      });
+    }
+
+    const importCorrectAnswerRecoverable = valueFor(imports, importRow, 'correct_answer_recoverable').toUpperCase();
+    if (importCorrectAnswerRecoverable !== 'YES') {
+      violations.push({
+        id: importRow.id,
+        reason: `IMPORT_ELIGIBLE=YES while CORRECT_ANSWER_RECOVERABLE is ${importCorrectAnswerRecoverable || 'missing'}`,
+      });
+    }
+
     const importFrStatus = valueFor(imports, importRow, 'fr_status');
     if (!/^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(importFrStatus)) {
       violations.push({
@@ -197,6 +232,35 @@ function findViolations(reconciliationText, importText) {
       violations.push({
         id: importRow.id,
         reason: `reconciliation FUNCTION ${reconciliationFunction || '(missing)'} does not match question ID function ${expectedFunction}`,
+      });
+    }
+
+    const reconciliationReference = valueFor(reconciliation, reconciliationRow, 'dgr_reference');
+    if (!reconciliationReference) {
+      violations.push({ id: importRow.id, reason: 'IMPORT_ELIGIBLE=YES but reconciliation DGR_Reference is missing' });
+    }
+
+    const reconciliationFullTextRecoverable = valueFor(
+      reconciliation,
+      reconciliationRow,
+      'full_text_recoverable',
+    ).toUpperCase();
+    if (reconciliationFullTextRecoverable !== 'YES') {
+      violations.push({
+        id: importRow.id,
+        reason: `IMPORT_ELIGIBLE=YES but reconciliation Full_Text_Recoverable is ${reconciliationFullTextRecoverable || 'missing'}`,
+      });
+    }
+
+    const reconciliationCorrectAnswerRecoverable = valueFor(
+      reconciliation,
+      reconciliationRow,
+      'correct_answer_recoverable',
+    ).toUpperCase();
+    if (reconciliationCorrectAnswerRecoverable !== 'YES') {
+      violations.push({
+        id: importRow.id,
+        reason: `IMPORT_ELIGIBLE=YES but reconciliation Correct_Answer_Recoverable is ${reconciliationCorrectAnswerRecoverable || 'missing'}`,
       });
     }
 
@@ -229,7 +293,7 @@ function findViolations(reconciliationText, importText) {
 }
 
 function runSelfTest() {
-  const sampledReconciliation = `KOST_Question_ID,Function,Final_Reconciled_Status,Reason,Next_Action\r\nQ-7.3-040,7.3,FROZEN,"FROZEN FR / SOURCE VERIFIED. A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass.",Import-eligible for V2\r\n`;
+  const sampledReconciliation = `KOST_Question_ID,Function,DGR_Reference,Full_Text_Recoverable,Correct_Answer_Recoverable,Final_Reconciled_Status,Reason,Next_Action\r\nQ-7.3-040,7.3,§9.6.1,YES,YES,FROZEN,"FROZEN FR / SOURCE VERIFIED. A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass.",Import-eligible for V2\r\n`;
   const eligibleImport = `KOST_ID,FUNCTION,FR_STATUS,SOURCE_REFERENCE,FULL_TEXT_RECOVERABLE,CORRECT_ANSWER_RECOVERABLE,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,"FROZEN FR / SOURCE VERIFIED.\nMultiline evidence with a doubled ""quote"" and comma, retained.",§9.6.1,YES,YES,YES,\r\n`;
   const ineligibleImport = eligibleImport.replace(',YES,YES,YES,', ',YES,YES,NO,"direct evidence hold"');
   const directReconciliation = sampledReconciliation.replace(
@@ -237,7 +301,7 @@ function runSelfTest() {
     "Live Bookshelf DGR 67th Edition 2026 check performed directly for this item's tested claim.",
   );
   const unknownImport = eligibleImport.replace(/Q-7\.3-040/g, 'Q-7.3-041');
-  const missingStatusReconciliation = directReconciliation.replace(',7.3,FROZEN,', ',7.3,,');
+  const missingStatusReconciliation = directReconciliation.replace(',YES,YES,FROZEN,', ',YES,YES,,');
   const staleImportStatus = eligibleImport.replace(
     '"FROZEN FR / SOURCE VERIFIED.\nMultiline evidence with a doubled ""quote"" and comma, retained."',
     '"DRAFT — historical note later mentions FROZEN FR / SOURCE VERIFIED."',
@@ -245,6 +309,18 @@ function runSelfTest() {
   const wrongFunctionImport = eligibleImport.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.4,');
   const wrongFunctionReconciliation = directReconciliation.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.4,');
   const legacyStatusHeader = directReconciliation.replace('Final_Reconciled_Status', 'Status');
+  const missingSourceReferenceImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',,YES,YES,YES,');
+  const unrecoverableTextImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',§9.6.1,NO,YES,YES,');
+  const unrecoverableAnswerImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',§9.6.1,YES,NO,YES,');
+  const unrecoverableTextReconciliation = directReconciliation.replace(
+    ',§9.6.1,YES,YES,FROZEN,',
+    ',§9.6.1,NO,YES,FROZEN,',
+  );
+  const unrecoverableAnswerReconciliation = directReconciliation.replace(
+    ',§9.6.1,YES,YES,FROZEN,',
+    ',§9.6.1,YES,NO,FROZEN,',
+  );
+  const missingReconciliationReference = directReconciliation.replace(',§9.6.1,YES,YES,FROZEN,', ',,YES,YES,FROZEN,');
 
   const sampled = findViolations(sampledReconciliation, eligibleImport);
   if (!sampled.some((v) => v.id === 'Q-7.3-040' && /missing item-specific/i.test(v.reason))) {
@@ -284,6 +360,36 @@ function runSelfTest() {
   const wrongReconciliationFunction = findViolations(wrongFunctionReconciliation, eligibleImport);
   if (!wrongReconciliationFunction.some((v) => v.id === 'Q-7.3-040' && /reconciliation FUNCTION 7\.4/i.test(v.reason))) {
     throw new Error('Regression fixture failed: reconciliation function/ID mismatch was not rejected.');
+  }
+
+  const missingSourceReference = findViolations(directReconciliation, missingSourceReferenceImport);
+  if (!missingSourceReference.some((v) => v.id === 'Q-7.3-040' && /without SOURCE_REFERENCE/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: import-eligible row without source reference was not rejected.');
+  }
+
+  const unrecoverableText = findViolations(directReconciliation, unrecoverableTextImport);
+  if (!unrecoverableText.some((v) => v.id === 'Q-7.3-040' && /FULL_TEXT_RECOVERABLE is NO/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: import-eligible row with unrecoverable text was not rejected.');
+  }
+
+  const unrecoverableAnswer = findViolations(directReconciliation, unrecoverableAnswerImport);
+  if (!unrecoverableAnswer.some((v) => v.id === 'Q-7.3-040' && /CORRECT_ANSWER_RECOVERABLE is NO/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: import-eligible row with unrecoverable answer was not rejected.');
+  }
+
+  const reconciliationTextHold = findViolations(unrecoverableTextReconciliation, eligibleImport);
+  if (!reconciliationTextHold.some((v) => v.id === 'Q-7.3-040' && /reconciliation Full_Text_Recoverable is NO/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: reconciliation text-recoverability hold was not enforced.');
+  }
+
+  const reconciliationAnswerHold = findViolations(unrecoverableAnswerReconciliation, eligibleImport);
+  if (!reconciliationAnswerHold.some((v) => v.id === 'Q-7.3-040' && /reconciliation Correct_Answer_Recoverable is NO/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: reconciliation answer-recoverability hold was not enforced.');
+  }
+
+  const missingReconciliationRef = findViolations(missingReconciliationReference, eligibleImport);
+  if (!missingReconciliationRef.some((v) => v.id === 'Q-7.3-040' && /DGR_Reference is missing/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: reconciliation row without DGR reference was not rejected.');
   }
 
   let schemaRejected = false;
@@ -336,4 +442,4 @@ if (violations.length > 0) {
   process.exit(1);
 }
 
-console.log('PASS: every V2 import-eligible row is consistent with direct per-item provenance evidence.');
+console.log('PASS: every V2 import-eligible row is consistent with direct per-item provenance and recoverability evidence.');

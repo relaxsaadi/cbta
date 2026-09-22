@@ -60,7 +60,11 @@ This correction does not promote any question. In particular:
 
 ## CI enforcement
 
-`scripts/check-dgr-production-bank-status-precedence.mjs` is a negative consistency gate. For production banks that contain a consolidated all-batches Tier-A pass, it rejects an unlabelled later statement that no item has been Tier-A verified. It accepts the same drafting-time statement when the nearby text explicitly marks it as original/historical/superseded.
+`scripts/check-dgr-production-bank-status-precedence.mjs` is a negative consistency gate. For production banks that contain a consolidated all-batches Tier-A pass, it rejects an unlabelled later statement that no item has been Tier-A verified. It accepts the same drafting-time statement when the statement's own local Markdown section explicitly marks it as original/historical/superseded.
+
+The detector deliberately does **not** assume a three-batch structure. A function may have a different number of drafting batches because each Function 7.1–7.10 must follow its own task table/source set. The consolidated-pass detector therefore accepts any declared all-batches count rather than hard-coding `three`.
+
+The local historical-marker check is section-scoped rather than a loose byte-window search. A `historical`/`superseded` word in an unrelated preceding section must not suppress a genuine current-sounding contradiction in a later `Status of this batch` section. Regression fixtures cover both the non-three-batch case and the unrelated-marker false-negative case.
 
 The detector does not infer regulatory correctness, Tier-A completion, reviewer completion, or approval from the absence of a contradiction. Its purpose is only to prevent stale drafting narrative from masquerading as current bank status.
 

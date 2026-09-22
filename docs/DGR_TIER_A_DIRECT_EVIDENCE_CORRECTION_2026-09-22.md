@@ -12,6 +12,12 @@ Concrete examples are present in the reconciliation for items such as `Q-7.2-044
 
 A second symptom of the same provenance weakness is that some sampled rows carry generic locator bundles (for example a recurring group of Part 1 / Part 3 sections) that are not obviously item-specific to the tested claim. Those locator bundles must not substitute for a direct per-item current-DGR citation.
 
+### Confirmed SOURCE GAP claims are subject to the same evidence bar
+
+A fresh re-audit found the same sampled-only provenance wording on rows already labelled `FR SOURCE GAP CONFIRMED`, including examples such as `Q-7.2-031`, `Q-7.2-045`, `Q-7.3-017`, and `Q-7.4-027`. Those rows state that the item's own specific citation was not independently re-read during the pass while also presenting a confirmed current-DGR absence/silence conclusion.
+
+A confirmed source gap is itself a current-regulatory evidence conclusion: it says the tested claim is absent from, unsupported by, or outside the current DGR text after an adequate search. That conclusion cannot be treated as directly established for an individual item when the row itself admits that the item-specific current-DGR check was not performed. Cross-applied or representative evidence can remain a research lead, but the durable item state must remain unresolved until the item-specific current-text search is recorded.
+
 ## Correct readiness interpretation
 
 For readiness/import purposes, any item whose only Tier-A closure rationale relies on representative/sample verification **and explicitly says its own specific citation was not independently read/re-read** must be treated as:
@@ -27,6 +33,12 @@ until all of the following are satisfied for that item:
 5. `SOURCE_GAP` or `SOURCE_CONFLICT` is recorded instead of `FROZEN` when the current source does not support the tested claim as written; and
 6. the per-item artifact is updated so the direct evidence, result, verifier/date, and next action are durable and auditable.
 
+For a row currently claiming `FR SOURCE GAP CONFIRMED` while also admitting no item-specific read/re-read, the truthful interim interpretation is:
+
+`SOURCE_GAP_UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED`
+
+The row may return to `FR SOURCE GAP CONFIRMED` only after a direct item-specific current-DGR search is durably recorded and supports that conclusion. This is a provenance correction, not a finding that the gap conclusion is necessarily wrong.
+
 This correction applies only where direct item-specific evidence is missing. Items that already contain an explicit item-specific live-Bookshelf/current-DGR verification remain governed by their own durable evidence and are **not** demoted by this addendum.
 
 ## Import and approval gate
@@ -34,6 +46,7 @@ This correction applies only where direct item-specific evidence is missing. Ite
 Until direct item-specific Tier-A provenance is closed:
 
 - sampled-only rows must **not** be treated as production-import-eligible on the strength of the representative sample alone;
+- sampled-only `FR SOURCE GAP CONFIRMED` rows must not be counted as a directly established current-DGR gap until the item-specific search is recorded;
 - they must not be counted as direct Tier-A-complete in a readiness dashboard;
 - they must not be upgraded to `APPROVED`;
 - EN bilingual review remains a separate gate and must still be completed by a named qualified reviewer with a review date and durable evidence;
@@ -48,7 +61,7 @@ The enforcement rule itself applies to the **entire Functions 7.1–7.10 program
 The required pass is deterministic:
 
 1. identify every reconciliation row whose own rationale admits sample-only or otherwise explicitly missing direct item verification;
-2. place that row on direct-evidence hold;
+2. place that row on direct-evidence hold when it claims `FROZEN`, import eligibility, or a confirmed current-DGR gap;
 3. perform and record the item-specific current-DGR check;
 4. resolve to `FROZEN FR / SOURCE VERIFIED`, `PARTIALLY CONFIRMED`, `SOURCE_GAP`, or `SOURCE_CONFLICT` based only on the item-specific evidence;
 5. regenerate downstream FR status mirrors and import eligibility from the reconciled per-item state; and
@@ -56,9 +69,11 @@ The required pass is deterministic:
 
 ## CI hardening — 2026-09-22
 
-`scripts/check-dgr-direct-item-tier-a-provenance.mjs` now fails on the decisive evidence defect itself — an explicit statement that the item's own specific current-DGR citation was **not independently read/re-read** — rather than requiring that statement to appear together with one particular "representative sample" phrase. This prevents a wording change in the rationale from bypassing the gate while the same evidence deficiency remains.
+`scripts/check-dgr-direct-item-tier-a-provenance.mjs` fails on the decisive evidence defect itself — an explicit statement that the item's own specific current-DGR citation was **not independently read/re-read** — rather than requiring that statement to appear together with one particular "representative sample" phrase. This prevents a wording change in the rationale from bypassing the gate while the same evidence deficiency remains.
 
-The regression fixture covers both the original representative-sample wording and a variant that omits that phrase but still admits the missing direct read. A genuine item-specific direct Bookshelf/current-DGR verification remains accepted by the detector. This is a negative safety gate only: it does not infer `APPROVED`, reviewer completion, or regulatory correctness from the absence of a violation phrase.
+The gate now applies that same rule to sampled-only rows claiming `FR SOURCE GAP CONFIRMED`, because a confirmed absence/silence finding is also a direct current-DGR evidence conclusion. The regression fixture covers both a sampled-only FROZEN/import-eligible row and a sampled-only confirmed-gap row. A genuine item-specific direct Bookshelf/current-DGR verification — including a directly established source gap — remains accepted by the detector.
+
+This is intentionally a negative safety gate only. It does not infer `APPROVED`, reviewer completion, a source gap, or regulatory correctness from the absence of a violation phrase. Truthful `DRAFT`/`PARTIAL`/otherwise unresolved rows may retain reconciliation leads without being promoted merely to make the gate pass.
 
 ## Readiness impact
 

@@ -53,6 +53,14 @@ Do not confuse **source-gap task leaves with zero drafted questions** with an ad
 
 These arithmetic checks do **not** mean those functions are regulatory-ready. Human EN review and qualified-reviewer approval remain open.
 
+## Function 7.5 — blueprint ceiling vs. uncovered-evidence wording conflict
+
+The Function 7.5 production bank's Batch-3 ceiling table records leaf `0.5.1` at **3/3 (at ceiling)** and states that no further item may be drafted against that leaf without new source evidence expanding its pool. The Stage 2A blueprint likewise sets `0.5.1` to a provisional **count/ceiling of 3**.
+
+Later in the same production-bank narrative, however, slide 88's second material-code table is described as **“real remaining headroom”** for a possible Batch 4, and `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` repeats that wording. Those statements are incompatible with the current blueprint ceiling: the slide may be **unallocated, genuinely distinct evidence**, but it is **not available drafting headroom under the current 3-item ceiling**.
+
+Until the Function 7.5 blueprint is deliberately re-evaluated from source yield, treat the slide-88 material-code table as `UNALLOCATED_EVIDENCE / CEILING_REVIEW_REQUIRED`, not as permission to draft `Q-7.5-045` (or any fourth `0.5.1` item). A future ceiling increase, if justified, must be an explicit blueprint revision with traceable evidence; it must not be inferred from the production-bank prose. This correction changes no existing question, Tier-A state, EN-review state, reviewer state, or approval status.
+
 ## Function 7.10 wording correction
 
 The sentence `This closes the Tier A verification pass for all ten functions in this session` must not be read as full Tier-A completion. The same 7.10 row records 30/44 items as not attempted. The only defensible interpretation is that the session's **partial cross-function pass ended**, not that all ten functions achieved complete Tier-A verification.
@@ -61,8 +69,9 @@ The sentence `This closes the Tier A verification pass for all ten functions in 
 
 1. Rebuild each FR Tier-A cell from per-item durable evidence rather than narrative/session summaries.
 2. Preserve the corrected 7.4–7.7 arithmetic above; do not reintroduce a separate question count for zero-question source-gap leaves.
-3. Keep explicit `SOURCE_GAP` / `SOURCE_CONFLICT` / unresolved states in the underlying regulatory artifacts.
-4. Keep EN draft-package preparation distinct from completed EN bilingual review.
-5. Keep every function non-`APPROVED` until named qualified reviewer + date + evidence are present.
+3. Reconcile Function 7.5 `0.5.1` so uncovered slide-88 evidence cannot be mistaken for drafting headroom unless the blueprint ceiling is explicitly revised from source yield.
+4. Keep explicit `SOURCE_GAP` / `SOURCE_CONFLICT` / unresolved states in the underlying regulatory artifacts.
+5. Keep EN draft-package preparation distinct from completed EN bilingual review.
+6. Keep every function non-`APPROVED` until named qualified reviewer + date + evidence are present.
 
 Until those steps are complete, `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` remains a historical/session log, not a column-accurate production-readiness dashboard.

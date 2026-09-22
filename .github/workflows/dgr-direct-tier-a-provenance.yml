@@ -1,0 +1,41 @@
+name: DGR direct Tier-A provenance
+
+on:
+  push:
+    branches:
+      - main
+      - ai/dgr-stage2b-handoff
+    paths:
+      - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
+      - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - ".github/workflows/dgr-direct-tier-a-provenance.yml"
+  pull_request:
+    paths:
+      - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
+      - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - ".github/workflows/dgr-direct-tier-a-provenance.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  direct-item-tier-a-provenance:
+    name: Direct item Tier-A provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Direct-provenance regression fixtures
+        run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs --test
+
+      - name: Reject sampled-only Tier-A promotions
+        run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs

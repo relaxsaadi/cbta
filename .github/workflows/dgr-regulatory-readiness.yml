@@ -225,6 +225,14 @@ jobs:
         if: always()
         run: node scripts/check-dgr-production-bank-status-precedence.mjs
 
+      - name: Import-candidate provenance regression fixtures
+        if: always()
+        run: node scripts/check-dgr-import-candidate-provenance.mjs --test
+
+      - name: V2 import-candidate provenance consistency gate
+        if: always()
+        run: node scripts/check-dgr-import-candidate-provenance.mjs
+
       - name: Strict Tier-A matrix cross-field gate
         if: always()
         run: node scripts/check-dgr-matrix-tier-a-evidence.mjs

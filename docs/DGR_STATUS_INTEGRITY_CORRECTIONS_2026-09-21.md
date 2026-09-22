@@ -1,6 +1,6 @@
 # DGR 7.1–7.10 status-integrity corrections — 2026-09-21
 
-This addendum records **documentation/status-accounting defects only** in `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`. It does not promote any question, change a source decision, complete bilingual review, or imply ANAC/IATA approval.
+This addendum records **documentation/status-accounting defects only** across the DGR program status and review artifacts. It does not promote any question, change a source decision, complete bilingual review, or imply ANAC/IATA approval.
 
 The per-item production-bank/source evidence remains authoritative. Where this addendum identifies a column or narrative conflict, the correct next action is to reconcile from durable per-item evidence — **not** choose numbers that make the dashboard look complete.
 
@@ -61,17 +61,32 @@ Later in the same production-bank narrative, however, slide 88's second material
 
 Until the Function 7.5 blueprint is deliberately re-evaluated from source yield, treat the slide-88 material-code table as `UNALLOCATED_EVIDENCE / CEILING_REVIEW_REQUIRED`, not as permission to draft `Q-7.5-045` (or any fourth `0.5.1` item). A future ceiling increase, if justified, must be an explicit blueprint revision with traceable evidence; it must not be inferred from the production-bank prose. This correction changes no existing question, Tier-A state, EN-review state, reviewer state, or approval status.
 
+## Function 7.6 — EN review package carries stale FR Tier-A statuses
+
+`docs/DGR_EN_REVIEW_PACKAGE_7.6.md` was prepared when the first 33 Function 7.6 questions were still Tier-B-only. Its package-level status block still says **all 33 items remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`**, and the repeated per-item `FR status` fields mirror that historical state.
+
+The later consolidated Tier-A pass recorded in `docs/DGR_PRODUCTION_BANK_7.6.md` supersedes that FR-side snapshot. Within the 33 items covered by the EN package:
+
+- **11 items are now `FROZEN FR / SOURCE VERIFIED`:** `Q-7.6-005`, `007`, `011`, `012`, `013`, `015`, `016`, `017`, `020`, `023`, `025`;
+- **2 items are partially confirmed / flagged:** `Q-7.6-008`, `Q-7.6-018`;
+- **20 items remain without a completed Tier-A verification attempt** in that consolidated pass.
+
+This is a **stale-copy defect in the EN review package, not a reason to promote EN status**. Every EN translation in that package still remains `BILINGUAL TECHNICAL REVIEW REQUIRED`, and every approval field remains `PENDING REVIEWER + DATE`. Until the package is regenerated from current per-item FR state, reviewers must take FR source status from the production bank/per-item reconciliation, not from the duplicated `FR status` labels inside the EN package.
+
+Do not mechanically change the 33 EN-review fields to `FROZEN`: only the 11 named items have that later FR source-verification state, and FR verification still does not satisfy bilingual review or final approval.
+
 ## Function 7.10 wording correction
 
 The sentence `This closes the Tier A verification pass for all ten functions in this session` must not be read as full Tier-A completion. The same 7.10 row records 30/44 items as not attempted. The only defensible interpretation is that the session's **partial cross-function pass ended**, not that all ten functions achieved complete Tier-A verification.
 
-## Required follow-up before this status file can become a live dashboard
+## Required follow-up before these status artifacts can become a live dashboard/reviewer view
 
 1. Rebuild each FR Tier-A cell from per-item durable evidence rather than narrative/session summaries.
 2. Preserve the corrected 7.4–7.7 arithmetic above; do not reintroduce a separate question count for zero-question source-gap leaves.
 3. Reconcile Function 7.5 `0.5.1` so uncovered slide-88 evidence cannot be mistaken for drafting headroom unless the blueprint ceiling is explicitly revised from source yield.
-4. Keep explicit `SOURCE_GAP` / `SOURCE_CONFLICT` / unresolved states in the underlying regulatory artifacts.
-5. Keep EN draft-package preparation distinct from completed EN bilingual review.
-6. Keep every function non-`APPROVED` until named qualified reviewer + date + evidence are present.
+4. Regenerate Function 7.6 EN-review package FR-status mirrors from current per-item evidence, without changing EN review state.
+5. Keep explicit `SOURCE_GAP` / `SOURCE_CONFLICT` / unresolved states in the underlying regulatory artifacts.
+6. Keep EN draft-package preparation distinct from completed EN bilingual review.
+7. Keep every function non-`APPROVED` until named qualified reviewer + date + evidence are present.
 
-Until those steps are complete, `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` remains a historical/session log, not a column-accurate production-readiness dashboard.
+Until those steps are complete, `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` remains a historical/session log, and stale duplicated FR-status fields in review packages must not be treated as production-readiness authority.

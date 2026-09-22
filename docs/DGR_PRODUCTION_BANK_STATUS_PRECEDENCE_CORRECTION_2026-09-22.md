@@ -13,6 +13,20 @@ Those statements cannot both be interpreted as the current status of the same it
 
 The contradiction is especially clear in Functions 7.7–7.10, where the file header records a consolidated 2026-08-25 Tier-A pass and enumerates verified/partial outcomes, while later batch-introduction blocks still state that no item in that batch has been Tier-A verified. Similar preserved drafting-time sections must be treated consistently wherever they occur in Functions 7.1–7.10.
 
+## Exact-head CI observation
+
+On exact head `52691a5eda49a9810abe2d2ba35d07776dac491f`, the regression fixtures passed and the real consistency gate failed, identifying **18 unlabelled stale status statements** across these production banks:
+
+- Function 7.3: 2 occurrences (near lines 967 and 1998);
+- Function 7.4: 2 occurrences (near lines 1048 and 2218);
+- Function 7.6: 2 occurrences (near lines 960 and 1991);
+- Function 7.7: 3 occurrences (near lines 44, 950 and 1901);
+- Function 7.8: 3 occurrences (near lines 41, 1081 and 2208);
+- Function 7.9: 3 occurrences (near lines 39, 1019 and 1967);
+- Function 7.10: 3 occurrences (near lines 44, 1152 and 2241).
+
+Functions 7.1, 7.2 and 7.5 did not produce this specific detector violation on that exact head. That does **not** certify their regulatory correctness or overall current-status accuracy; it only means they did not match this narrowly defined contradiction condition.
+
 ## Controlling precedence
 
 When status statements disagree, use this order of authority:

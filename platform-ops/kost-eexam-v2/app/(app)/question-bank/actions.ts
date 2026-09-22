@@ -18,6 +18,7 @@ import {
   type QType,
   type AnnualReviewDecision,
 } from "@/lib/questions";
+import { parseQuestionLanguage, trueFalseChoicesForLanguage } from "@/lib/question-language";
 import { audit } from "@/lib/audit";
 import type { SimpleActionResult } from "@/components/ui/ActionButton";
 
@@ -44,12 +45,33 @@ export async function createQuestionAction(_prev: CreateQuestionResult, formData
 
   if (!kostQuestionId || !functionCode || !stem) return { error: "ID KOST, fonction et texte de la question sont obligatoires." };
 
+  // #19 — langue = champ d'intégrité contrôlé. L'UI historique ne soumet pas
+  // encore ce champ, donc absence => FR pour conserver les créations legacy.
+  // Toute valeur EXPLICITE hors allowlist échoue en revanche côté serveur.
+  // Ce fallback est temporaire : la PR ne prétend pas fermer #19 tant que le
+  // sélecteur UI + la langue d'évaluation/pool/snapshot ne sont pas livrés.
+  let language: "fr" | "en";
+  try {
+    language = parseQuestionLanguage(formData.get("language"), "fr");
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Langue de question invalide." };
+  }
+
   // Mission "COMPLETE CANDIDATE EXAM LIFECYCLE" (2026-08-29) §41-53 —
   // parsing + validations d'auteurage désormais partagés par TYPE
   // (lib/questions.ts), jamais une seconde implémentation ici pour les
   // nouveaux types (numeric/short_answer) alors que mcq_single/mcq_multi
   // gardaient l'ancien chemin.
-  const { choices, correctAnswer } = parseAuthoringFormData(qtype, formData);
+  const parsed = parseAuthoringFormData(qtype, formData);
+  let choices = parsed.choices;
+  const correctAnswer = parsed.correctAnswer;
+
+  // #19 — parseAuthoringFormData conserve les libellés FR historiques.
+  // Pour une question explicitement EN, localiser UNIQUEMENT le texte
+  // candidat ; les clés sémantiques true/false restent inchangées pour la
+  // notation et la compatibilité des snapshots/réponses.
+  if (qtype === "true_false") choices = trueFalseChoicesForLanguage(language);
+
   const validationError = validateQuestionAuthoring(qtype, choices, correctAnswer);
   if (validationError) return { error: validationError };
 
@@ -58,6 +80,7 @@ export async function createQuestionAction(_prev: CreateQuestionResult, formData
       kostQuestionId,
       functionCode,
       qtype,
+      language,
       sourceStatus,
       stem,
       choices,
@@ -94,7 +117,21 @@ export async function editQuestionAction(questionId: number, _prev: EditQuestion
   const explanation = String(formData.get("explanation") ?? "").trim() || undefined;
   if (!stem) return { error: "Le texte de la question est obligatoire." };
 
-  const { choices, correctAnswer } = parseAuthoringFormData(question.qtype, formData);
+  // Ne jamais propager silencieusement une valeur de langue legacy/forgée
+  // lors de la création d'une nouvelle version. Une ligne historique hors
+  // allowlist doit être explicitement remédiée, pas réinterprétée.
+  let language: "fr" | "en";
+  try {
+    language = parseQuestionLanguage(question.language);
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Langue de question invalide." };
+  }
+
+  const parsed = parseAuthoringFormData(question.qtype, formData);
+  let choices = parsed.choices;
+  const correctAnswer = parsed.correctAnswer;
+  if (question.qtype === "true_false") choices = trueFalseChoicesForLanguage(language);
+
   const validationError = validateQuestionAuthoring(question.qtype, choices, correctAnswer);
   if (validationError) return { error: validationError };
 

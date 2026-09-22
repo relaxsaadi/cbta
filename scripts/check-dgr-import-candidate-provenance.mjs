@@ -150,10 +150,10 @@ function findViolations(reconciliationText, importText) {
     }
 
     const importFrStatus = valueFor(imports, importRow, 'fr_status');
-    if (!/FROZEN FR\s*\/\s*SOURCE VERIFIED/i.test(importFrStatus)) {
+    if (!/^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(importFrStatus)) {
       violations.push({
         id: importRow.id,
-        reason: `IMPORT_ELIGIBLE=YES without FROZEN FR / SOURCE VERIFIED import status (${importFrStatus || 'missing'})`,
+        reason: `IMPORT_ELIGIBLE=YES without current FROZEN FR / SOURCE VERIFIED import status (${importFrStatus || 'missing'})`,
       });
     }
 
@@ -164,10 +164,10 @@ function findViolations(reconciliationText, importText) {
     }
 
     const reconciliationStatus = valueFor(reconciliation, reconciliationRow, 'status');
-    if (reconciliationStatus && !/\bFROZEN\b/i.test(reconciliationStatus)) {
+    if (!/^FROZEN\b/i.test(reconciliationStatus)) {
       violations.push({
         id: importRow.id,
-        reason: `IMPORT_ELIGIBLE=YES but reconciliation status is ${reconciliationStatus}`,
+        reason: `IMPORT_ELIGIBLE=YES but reconciliation status is ${reconciliationStatus || 'missing'}`,
       });
     }
 
@@ -196,6 +196,11 @@ function runSelfTest() {
     "Live Bookshelf DGR 67th Edition 2026 check performed directly for this item's tested claim.",
   );
   const unknownImport = eligibleImport.replace(/Q-7\.3-040/g, 'Q-7.3-041');
+  const missingStatusReconciliation = directReconciliation.replace(',7.3,FROZEN,', ',7.3,,');
+  const staleImportStatus = eligibleImport.replace(
+    '"FROZEN FR / SOURCE VERIFIED.\nMultiline evidence with a doubled ""quote"" and comma, retained."',
+    '"DRAFT — historical note later mentions FROZEN FR / SOURCE VERIFIED."',
+  );
 
   const sampled = findViolations(sampledReconciliation, eligibleImport);
   if (!sampled.some((v) => v.id === 'Q-7.3-040' && /missing item-specific/i.test(v.reason))) {
@@ -215,6 +220,16 @@ function runSelfTest() {
   const unknown = findViolations(directReconciliation, unknownImport);
   if (!unknown.some((v) => v.id === 'Q-7.3-041' && /no per-item reconciliation row/i.test(v.reason))) {
     throw new Error('Regression fixture failed: import-eligible row without reconciliation evidence was not rejected.');
+  }
+
+  const missingStatus = findViolations(missingStatusReconciliation, eligibleImport);
+  if (!missingStatus.some((v) => v.id === 'Q-7.3-040' && /reconciliation status is missing/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: import-eligible row with missing reconciliation status was not rejected.');
+  }
+
+  const staleStatus = findViolations(directReconciliation, staleImportStatus);
+  if (!staleStatus.some((v) => v.id === 'Q-7.3-040' && /without current FROZEN FR/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: stale/non-current import FR status containing a later FROZEN mention was not rejected.');
   }
 
   console.log('PASS: V2 import-candidate provenance regression fixtures');

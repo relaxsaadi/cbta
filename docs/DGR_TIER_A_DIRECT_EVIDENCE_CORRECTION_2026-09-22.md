@@ -16,11 +16,13 @@ A second symptom of the same provenance weakness is that some sampled rows carry
 
 A fresh re-audit found the same sampled-only provenance wording on rows already labelled `FR SOURCE GAP CONFIRMED`, including examples such as `Q-7.2-031`, `Q-7.2-045`, `Q-7.3-017`, and `Q-7.4-027`. Those rows state that the item's own specific citation was not independently re-read during the pass while also presenting a confirmed current-DGR absence/silence conclusion.
 
+The re-audit also found an equivalent wording variant that the first detector version did not catch: `Q-7.2-002` says the Function 7.1 research is **"not re-searched from scratch, cross-applied"** while the row is still labelled `FR SOURCE GAP CONFIRMED`. Under this program's item-specific production bar, that is the same unresolved provenance condition: prior research may remain a valid lead, but the 7.2 item cannot carry a terminal confirmed-gap state until its own current-DGR search is durably recorded.
+
 A confirmed source gap is itself a current-regulatory evidence conclusion: it says the tested claim is absent from, unsupported by, or outside the current DGR text after an adequate search. That conclusion cannot be treated as directly established for an individual item when the row itself admits that the item-specific current-DGR check was not performed. Cross-applied or representative evidence can remain a research lead, but the durable item state must remain unresolved until the item-specific current-text search is recorded.
 
 ## Correct readiness interpretation
 
-For readiness/import purposes, any item whose only Tier-A closure rationale relies on representative/sample verification **and explicitly says its own specific citation was not independently read/re-read** must be treated as:
+For readiness/import purposes, any item whose only Tier-A closure rationale relies on representative/sample verification **and explicitly says its own specific citation was not independently read/re-read or its own search was not independently performed** must be treated as:
 
 `TIER_A_PROVENANCE_UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED`
 
@@ -33,7 +35,7 @@ until all of the following are satisfied for that item:
 5. `SOURCE_GAP` or `SOURCE_CONFLICT` is recorded instead of `FROZEN` when the current source does not support the tested claim as written; and
 6. the per-item artifact is updated so the direct evidence, result, verifier/date, and next action are durable and auditable.
 
-For a row currently claiming `FR SOURCE GAP CONFIRMED` while also admitting no item-specific read/re-read, the truthful interim interpretation is:
+For a row currently claiming `FR SOURCE GAP CONFIRMED` while also admitting no item-specific read/re-read/search, the truthful interim interpretation is:
 
 `SOURCE_GAP_UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED`
 
@@ -46,7 +48,7 @@ This correction applies only where direct item-specific evidence is missing. Ite
 Until direct item-specific Tier-A provenance is closed:
 
 - sampled-only rows must **not** be treated as production-import-eligible on the strength of the representative sample alone;
-- sampled-only `FR SOURCE GAP CONFIRMED` rows must not be counted as a directly established current-DGR gap until the item-specific search is recorded;
+- sampled-only or cross-applied `FR SOURCE GAP CONFIRMED` rows must not be counted as a directly established current-DGR gap until the item-specific search is recorded;
 - they must not be counted as direct Tier-A-complete in a readiness dashboard;
 - they must not be upgraded to `APPROVED`;
 - EN bilingual review remains a separate gate and must still be completed by a named qualified reviewer with a review date and durable evidence;
@@ -56,11 +58,11 @@ Until direct item-specific Tier-A provenance is closed:
 
 The currently observed sampled-only pattern is present across Functions 7.2 through 7.10, and it must be reconciled independently for each of those functions from that function's own CBTA task table, source set, source/competency matrix, blueprint, and production bank. Do **not** infer that the same question count, subtask structure, or evidence map applies across functions, and do not copy Function 7.1 question structures into other functions.
 
-The enforcement rule itself applies to the **entire Functions 7.1–7.10 program**. Function 7.1 is not exempt from the direct-evidence requirement; however, no 7.1 item is demoted merely because the observed sampled-only examples above are from 7.2–7.10. A 7.1 item remains governed by its own durable per-item/source-register evidence and must be held if that evidence explicitly admits that the item's own current-DGR citation was not independently read.
+The enforcement rule itself applies to the **entire Functions 7.1–7.10 program**. Function 7.1 is not exempt from the direct-evidence requirement; however, no 7.1 item is demoted merely because the observed sampled-only examples above are from 7.2–7.10. A 7.1 item remains governed by its own durable per-item/source-register evidence and must be held if that evidence explicitly admits that the item's own current-DGR citation was not independently read or that its own required current-DGR search was not independently performed.
 
 The required pass is deterministic:
 
-1. identify every reconciliation row whose own rationale admits sample-only or otherwise explicitly missing direct item verification;
+1. identify every reconciliation row whose own rationale admits sample-only, cross-applied-only, or otherwise explicitly missing direct item verification;
 2. place that row on direct-evidence hold when it claims `FROZEN`, import eligibility, or a confirmed current-DGR gap;
 3. perform and record the item-specific current-DGR check;
 4. resolve to `FROZEN FR / SOURCE VERIFIED`, `PARTIALLY CONFIRMED`, `SOURCE_GAP`, or `SOURCE_CONFLICT` based only on the item-specific evidence;
@@ -69,9 +71,9 @@ The required pass is deterministic:
 
 ## CI hardening — 2026-09-22
 
-`scripts/check-dgr-direct-item-tier-a-provenance.mjs` fails on the decisive evidence defect itself — an explicit statement that the item's own specific current-DGR citation was **not independently read/re-read** — rather than requiring that statement to appear together with one particular "representative sample" phrase. This prevents a wording change in the rationale from bypassing the gate while the same evidence deficiency remains.
+`scripts/check-dgr-direct-item-tier-a-provenance.mjs` fails on the decisive evidence defect itself — an explicit statement that the item's own specific current-DGR citation was **not independently read/re-read** or that the item was **not independently searched/re-searched** — rather than requiring that statement to appear together with one particular "representative sample" phrase. This prevents a wording change in the rationale from bypassing the gate while the same evidence deficiency remains.
 
-The gate now applies that same rule to sampled-only rows claiming `FR SOURCE GAP CONFIRMED`, because a confirmed absence/silence finding is also a direct current-DGR evidence conclusion. The regression fixture covers both a sampled-only FROZEN/import-eligible row and a sampled-only confirmed-gap row. A genuine item-specific direct Bookshelf/current-DGR verification — including a directly established source gap — remains accepted by the detector.
+The gate now applies that same rule to sampled-only/cross-applied rows claiming `FR SOURCE GAP CONFIRMED`, because a confirmed absence/silence finding is also a direct current-DGR evidence conclusion. The regression fixtures cover a sampled-only FROZEN/import-eligible row, a sampled-only confirmed-gap row, and a cross-applied confirmed-gap row using the `not re-searched from scratch` wording observed on `Q-7.2-002`. A genuine item-specific direct Bookshelf/current-DGR verification — including a directly established source gap — remains accepted by the detector.
 
 This is intentionally a negative safety gate only. It does not infer `APPROVED`, reviewer completion, a source gap, or regulatory correctness from the absence of a violation phrase. Truthful `DRAFT`/`PARTIAL`/otherwise unresolved rows may retain reconciliation leads without being promoted merely to make the gate pass.
 

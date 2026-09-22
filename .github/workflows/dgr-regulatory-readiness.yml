@@ -217,6 +217,14 @@ jobs:
         if: always()
         run: node scripts/check-dgr-cross-artifact-approval.mjs
 
+      - name: Production-bank status precedence regression fixtures
+        if: always()
+        run: node scripts/check-dgr-production-bank-status-precedence.mjs --test
+
+      - name: Production-bank status precedence consistency gate
+        if: always()
+        run: node scripts/check-dgr-production-bank-status-precedence.mjs
+
       - name: Strict Tier-A matrix cross-field gate
         if: always()
         run: node scripts/check-dgr-matrix-tier-a-evidence.mjs

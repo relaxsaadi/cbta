@@ -41,16 +41,24 @@ Until direct item-specific Tier-A provenance is closed:
 
 ## Function-by-function follow-up
 
-The correction must be reconciled independently for each Function 7.2 through 7.10 from that function's own CBTA task table, source set, source/competency matrix, blueprint, and production bank. Do **not** infer that the same question count, subtask structure, or evidence map applies across functions, and do not copy Function 7.1 question structures into other functions.
+The currently observed sampled-only pattern is present across Functions 7.2 through 7.10, and it must be reconciled independently for each of those functions from that function's own CBTA task table, source set, source/competency matrix, blueprint, and production bank. Do **not** infer that the same question count, subtask structure, or evidence map applies across functions, and do not copy Function 7.1 question structures into other functions.
+
+The enforcement rule itself applies to the **entire Functions 7.1–7.10 program**. Function 7.1 is not exempt from the direct-evidence requirement; however, no 7.1 item is demoted merely because the observed sampled-only examples above are from 7.2–7.10. A 7.1 item remains governed by its own durable per-item/source-register evidence and must be held if that evidence explicitly admits that the item's own current-DGR citation was not independently read.
 
 The required pass is deterministic:
 
-1. identify every reconciliation row whose own rationale admits sample-only verification;
+1. identify every reconciliation row whose own rationale admits sample-only or otherwise explicitly missing direct item verification;
 2. place that row on direct-evidence hold;
 3. perform and record the item-specific current-DGR check;
 4. resolve to `FROZEN FR / SOURCE VERIFIED`, `PARTIALLY CONFIRMED`, `SOURCE_GAP`, or `SOURCE_CONFLICT` based only on the item-specific evidence;
 5. regenerate downstream FR status mirrors and import eligibility from the reconciled per-item state; and
 6. keep EN review and qualified-reviewer approval separate.
+
+## CI hardening — 2026-09-22
+
+`scripts/check-dgr-direct-item-tier-a-provenance.mjs` now fails on the decisive evidence defect itself — an explicit statement that the item's own specific current-DGR citation was **not independently read/re-read** — rather than requiring that statement to appear together with one particular "representative sample" phrase. This prevents a wording change in the rationale from bypassing the gate while the same evidence deficiency remains.
+
+The regression fixture covers both the original representative-sample wording and a variant that omits that phrase but still admits the missing direct read. A genuine item-specific direct Bookshelf/current-DGR verification remains accepted by the detector. This is a negative safety gate only: it does not infer `APPROVED`, reviewer completion, or regulatory correctness from the absence of a violation phrase.
 
 ## Readiness impact
 

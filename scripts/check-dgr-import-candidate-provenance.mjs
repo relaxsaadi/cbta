@@ -75,15 +75,24 @@ function normalizeHeader(value) {
   return value.trim().toLowerCase();
 }
 
-function tableFromCsv(text, label, idHeader) {
+function tableFromCsv(text, label, idHeader, requiredHeaders = []) {
   const parsed = parseCsv(text, label);
   if (parsed.length === 0) throw new Error(`${label}: empty CSV`);
 
   const headers = parsed[0].map(normalizeHeader);
-  const indexByHeader = new Map(headers.map((header, index) => [header, index]));
-  const idIndex = indexByHeader.get(idHeader);
-  if (idIndex === undefined) throw new Error(`${label}: missing required header ${idHeader}`);
+  const duplicateHeaders = headers.filter((header, index) => headers.indexOf(header) !== index);
+  if (duplicateHeaders.length > 0) {
+    throw new Error(`${label}: duplicate header(s): ${[...new Set(duplicateHeaders)].join(', ')}`);
+  }
 
+  const indexByHeader = new Map(headers.map((header, index) => [header, index]));
+  for (const requiredHeader of [idHeader, ...requiredHeaders]) {
+    if (!indexByHeader.has(requiredHeader)) {
+      throw new Error(`${label}: missing required header ${requiredHeader}`);
+    }
+  }
+
+  const idIndex = indexByHeader.get(idHeader);
   const rows = [];
   const byId = new Map();
   const duplicateIds = [];
@@ -110,6 +119,11 @@ function valueFor(table, record, header) {
   return index === undefined ? '' : (record.values[index] ?? '').trim();
 }
 
+function functionFromQuestionId(id) {
+  const match = /^Q-(7\.(?:10|[1-9]))-\d{3}$/i.exec(id);
+  return match?.[1] ?? '';
+}
+
 function hasMissingDirectEvidence(text) {
   return MISSING_DIRECT_EVIDENCE_PATTERNS.some((pattern) => pattern.test(text));
 }
@@ -119,8 +133,14 @@ function findViolations(reconciliationText, importText) {
     reconciliationText,
     RECONCILIATION,
     'kost_question_id',
+    ['function', 'final_reconciled_status'],
   );
-  const imports = tableFromCsv(importText, IMPORT_CANDIDATES, 'kost_id');
+  const imports = tableFromCsv(
+    importText,
+    IMPORT_CANDIDATES,
+    'kost_id',
+    ['function', 'fr_status', 'import_eligible', 'blocker'],
+  );
   const violations = [];
 
   if (reconciliation.duplicateIds.length > 0) {
@@ -137,6 +157,15 @@ function findViolations(reconciliationText, importText) {
   }
 
   for (const importRow of imports.rows) {
+    const expectedFunction = functionFromQuestionId(importRow.id);
+    const importFunction = valueFor(imports, importRow, 'function');
+    if (importFunction !== expectedFunction) {
+      violations.push({
+        id: importRow.id,
+        reason: `FUNCTION ${importFunction || '(missing)'} does not match question ID function ${expectedFunction}`,
+      });
+    }
+
     const eligibility = valueFor(imports, importRow, 'import_eligible').toUpperCase();
     if (eligibility !== 'YES' && eligibility !== 'NO') {
       violations.push({ id: importRow.id, reason: `invalid IMPORT_ELIGIBLE value: ${eligibility || '(empty)'}` });
@@ -163,11 +192,23 @@ function findViolations(reconciliationText, importText) {
       continue;
     }
 
-    const reconciliationStatus = valueFor(reconciliation, reconciliationRow, 'status');
+    const reconciliationFunction = valueFor(reconciliation, reconciliationRow, 'function');
+    if (reconciliationFunction !== expectedFunction) {
+      violations.push({
+        id: importRow.id,
+        reason: `reconciliation FUNCTION ${reconciliationFunction || '(missing)'} does not match question ID function ${expectedFunction}`,
+      });
+    }
+
+    // The controlled artifact's live terminal status column is
+    // Final_Reconciled_Status. Do not read a generic/nonexistent "Status"
+    // column: doing so makes every import-eligible row look status-less and
+    // masks the actual per-item provenance failures this gate is meant to show.
+    const reconciliationStatus = valueFor(reconciliation, reconciliationRow, 'final_reconciled_status');
     if (!/^FROZEN\b/i.test(reconciliationStatus)) {
       violations.push({
         id: importRow.id,
-        reason: `IMPORT_ELIGIBLE=YES but reconciliation status is ${reconciliationStatus || 'missing'}`,
+        reason: `IMPORT_ELIGIBLE=YES but final reconciliation status is ${reconciliationStatus || 'missing'}`,
       });
     }
 
@@ -188,7 +229,7 @@ function findViolations(reconciliationText, importText) {
 }
 
 function runSelfTest() {
-  const sampledReconciliation = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.3-040,7.3,FROZEN,"FROZEN FR / SOURCE VERIFIED. A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass.",Import-eligible for V2\r\n`;
+  const sampledReconciliation = `KOST_Question_ID,Function,Final_Reconciled_Status,Reason,Next_Action\r\nQ-7.3-040,7.3,FROZEN,"FROZEN FR / SOURCE VERIFIED. A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass.",Import-eligible for V2\r\n`;
   const eligibleImport = `KOST_ID,FUNCTION,FR_STATUS,SOURCE_REFERENCE,FULL_TEXT_RECOVERABLE,CORRECT_ANSWER_RECOVERABLE,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,"FROZEN FR / SOURCE VERIFIED.\nMultiline evidence with a doubled ""quote"" and comma, retained.",§9.6.1,YES,YES,YES,\r\n`;
   const ineligibleImport = eligibleImport.replace(',YES,YES,YES,', ',YES,YES,NO,"direct evidence hold"');
   const directReconciliation = sampledReconciliation.replace(
@@ -201,6 +242,9 @@ function runSelfTest() {
     '"FROZEN FR / SOURCE VERIFIED.\nMultiline evidence with a doubled ""quote"" and comma, retained."',
     '"DRAFT — historical note later mentions FROZEN FR / SOURCE VERIFIED."',
   );
+  const wrongFunctionImport = eligibleImport.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.4,');
+  const wrongFunctionReconciliation = directReconciliation.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.4,');
+  const legacyStatusHeader = directReconciliation.replace('Final_Reconciled_Status', 'Status');
 
   const sampled = findViolations(sampledReconciliation, eligibleImport);
   if (!sampled.some((v) => v.id === 'Q-7.3-040' && /missing item-specific/i.test(v.reason))) {
@@ -223,13 +267,33 @@ function runSelfTest() {
   }
 
   const missingStatus = findViolations(missingStatusReconciliation, eligibleImport);
-  if (!missingStatus.some((v) => v.id === 'Q-7.3-040' && /reconciliation status is missing/i.test(v.reason))) {
-    throw new Error('Regression fixture failed: import-eligible row with missing reconciliation status was not rejected.');
+  if (!missingStatus.some((v) => v.id === 'Q-7.3-040' && /final reconciliation status is missing/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: import-eligible row with missing final reconciliation status was not rejected.');
   }
 
   const staleStatus = findViolations(directReconciliation, staleImportStatus);
   if (!staleStatus.some((v) => v.id === 'Q-7.3-040' && /without current FROZEN FR/i.test(v.reason))) {
     throw new Error('Regression fixture failed: stale/non-current import FR status containing a later FROZEN mention was not rejected.');
+  }
+
+  const wrongImportFunction = findViolations(directReconciliation, wrongFunctionImport);
+  if (!wrongImportFunction.some((v) => v.id === 'Q-7.3-040' && /does not match question ID function 7\.3/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: import artifact function/ID mismatch was not rejected.');
+  }
+
+  const wrongReconciliationFunction = findViolations(wrongFunctionReconciliation, eligibleImport);
+  if (!wrongReconciliationFunction.some((v) => v.id === 'Q-7.3-040' && /reconciliation FUNCTION 7\.4/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: reconciliation function/ID mismatch was not rejected.');
+  }
+
+  let schemaRejected = false;
+  try {
+    findViolations(legacyStatusHeader, eligibleImport);
+  } catch (error) {
+    schemaRejected = /missing required header final_reconciled_status/i.test(error.message);
+  }
+  if (!schemaRejected) {
+    throw new Error('Regression fixture failed: reconciliation schema without Final_Reconciled_Status was not rejected.');
   }
 
   console.log('PASS: V2 import-candidate provenance regression fixtures');

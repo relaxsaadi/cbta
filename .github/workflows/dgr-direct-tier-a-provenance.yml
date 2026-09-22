@@ -7,14 +7,20 @@ on:
       - ai/dgr-stage2b-handoff
     paths:
       - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv"
       - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
+      - "docs/DGR_IMPORT_CANDIDATE_PROVENANCE_CORRECTION_2026-09-22.md"
       - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - "scripts/check-dgr-import-candidate-provenance.mjs"
       - ".github/workflows/dgr-direct-tier-a-provenance.yml"
   pull_request:
     paths:
       - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv"
       - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
+      - "docs/DGR_IMPORT_CANDIDATE_PROVENANCE_CORRECTION_2026-09-22.md"
       - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - "scripts/check-dgr-import-candidate-provenance.mjs"
       - ".github/workflows/dgr-direct-tier-a-provenance.yml"
 
 permissions:
@@ -39,3 +45,11 @@ jobs:
 
       - name: Reject sampled-only Tier-A promotions
         run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs
+
+      - name: Import-candidate provenance regression fixtures
+        if: always()
+        run: node scripts/check-dgr-import-candidate-provenance.mjs --test
+
+      - name: Reject stale V2 import eligibility
+        if: always()
+        run: node scripts/check-dgr-import-candidate-provenance.mjs

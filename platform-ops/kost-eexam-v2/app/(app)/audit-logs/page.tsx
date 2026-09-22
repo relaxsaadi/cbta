@@ -91,7 +91,7 @@ export default async function AuditLogsPage({ searchParams }: { searchParams: Pr
       </Card>
 
       <Card>
-        <CardHeader title={`${logs.length} événement(s)`} description="Insert-only — aucune modification possible, même par un administrateur" />
+        <CardHeader title={`${logs.length} événement(s)`} description="Journal alimenté en insertion seule par l’application — protection SQLite contre UPDATE/DELETE encore à finaliser" />
         {logs.length === 0 ? (
           <EmptyState icon={FileSearch} title="Aucun événement" description="Aucun événement ne correspond à ces filtres." />
         ) : (

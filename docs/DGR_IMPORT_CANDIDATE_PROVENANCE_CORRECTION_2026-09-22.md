@@ -10,6 +10,8 @@ Concrete examples currently include `Q-7.3-040`, `Q-7.3-041`, `Q-7.3-042`, `Q-7.
 
 These examples are sufficient to prove a downstream synchronization defect; they are **not** an exhaustive list of every affected row.
 
+A second guard audit on 2026-09-23 found an independent fail-open in the checker contract: the import artifact already carries `SOURCE_REFERENCE`, `FULL_TEXT_RECOVERABLE`, and `CORRECT_ANSWER_RECOVERABLE`, but the gate did not require those fields to be present/usable for an `IMPORT_ELIGIBLE=YES` row and did not require the matching reconciliation record to say that the full text and correct answer were recoverable. A malformed or stale derivative could therefore have advertised an item as import-eligible even when the material required to import the item safely was missing.
+
 ## Correct interpretation
 
 An item must not be treated as production-import-eligible merely because an earlier reconciliation or generated derivative says `FROZEN` when its durable evidence explicitly records missing item-specific current IATA DGR 67th Edition 2026 verification/search.
@@ -20,7 +22,9 @@ For import-readiness purposes, such a row remains:
 
 until the item's own tested claim is checked directly against the current controlled source and the per-item reconciliation is updated consistently.
 
-The downstream import file must then be regenerated from the reconciled source of truth. Do not hand-edit a sampled-only row to `YES` merely to make a gate pass.
+Separately, `IMPORT_ELIGIBLE=YES` is not valid when the importable question material itself is incomplete. The operational import authority must have a non-empty source reference and must truthfully record both full administered text and correct answer as recoverable in the import artifact **and** in the matching reconciliation source of truth.
+
+The downstream import file must then be regenerated from the reconciled source of truth. Do not hand-edit a sampled-only or unrecoverable row to `YES` merely to make a gate pass.
 
 ## Fail-closed consistency rules
 
@@ -30,25 +34,35 @@ The V2 import-candidate artifact is safe to use as production import authority o
 2. the import row has `FROZEN FR / SOURCE VERIFIED` as its current FR status;
 3. the reconciliation row is still in a FROZEN state;
 4. no durable reconciliation/import text explicitly admits that the item's own current-DGR citation/search was not independently performed;
-5. the import row has no non-empty blocker field.
+5. the import row has no non-empty blocker field;
+6. the import row has a non-empty `SOURCE_REFERENCE`;
+7. the import row has `FULL_TEXT_RECOVERABLE=YES` and `CORRECT_ANSWER_RECOVERABLE=YES`;
+8. the matching reconciliation row has a non-empty `DGR_Reference`, `Full_Text_Recoverable=YES`, and `Correct_Answer_Recoverable=YES`;
+9. the function declared by each artifact agrees with the function encoded in the `Q-7.x-###` identifier.
 
 These are negative integrity checks only. Passing them does **not** prove the regulatory answer is correct, does not complete EN bilingual review, and does not constitute final approval.
 
 ## CI enforcement
 
-`scripts/check-dgr-import-candidate-provenance.mjs` parses both controlled CSV artifacts with quoted/multiline-field support and fails closed when an import-eligible row conflicts with the per-item provenance record. Regression fixtures cover:
+`scripts/check-dgr-import-candidate-provenance.mjs` parses both controlled CSV artifacts with quoted/multiline-field support and fails closed when an import-eligible row conflicts with the per-item provenance or recoverability record. Regression fixtures cover:
 
 - sampled-only FROZEN evidence advertised as import-eligible — rejected;
 - the same sampled-only evidence truthfully held at `IMPORT_ELIGIBLE=NO` — accepted by this narrow gate;
 - direct item-specific evidence with import eligibility — accepted by this narrow gate;
 - an import-eligible row with no matching reconciliation record — rejected;
+- missing/non-current reconciliation terminal status — rejected;
+- missing import `SOURCE_REFERENCE` — rejected;
+- `FULL_TEXT_RECOVERABLE!=YES` or `CORRECT_ANSWER_RECOVERABLE!=YES` on an import-eligible row — rejected;
+- matching reconciliation text/answer recoverability not equal to `YES` — rejected;
+- missing reconciliation `DGR_Reference` — rejected;
+- function/ID mismatches in either controlled artifact — rejected;
 - quoted multiline CSV fields and doubled quotes.
 
 The gate intentionally does not rewrite either CSV and does not promote/demote regulatory content automatically.
 
 ## Relationship to the existing direct-provenance blocker
 
-`docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md` controls the upstream per-item evidence rule. This correction controls the downstream operational mirror so that a stale generated import list cannot bypass the upstream hold.
+`docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md` controls the upstream per-item evidence rule. This correction controls the downstream operational mirror so that a stale generated import list cannot bypass the upstream hold or advertise incomplete question material as safely importable.
 
 After direct per-item evidence is reconciled function-by-function, regenerate `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv` from that current state and rerun both gates.
 
@@ -56,4 +70,4 @@ After direct per-item evidence is reconciled function-by-function, regenerate `d
 
 Until the import-candidate artifact is reconciled, it must **not** be used as an authoritative production import list. This is an additional regulatory/data-integrity blocker alongside the existing direct Tier-A provenance, production-bank status-precedence, independent EN review, named qualified reviewer/date, and technical platform gates.
 
-Overall status remains **PRE-PRODUCTION**. Do not describe the platform as `platform ready to use` on the strength of a stale import-candidate derivative.
+Overall status remains **PRE-PRODUCTION**. Do not describe the platform as `platform ready to use` on the strength of a stale or incomplete import-candidate derivative.

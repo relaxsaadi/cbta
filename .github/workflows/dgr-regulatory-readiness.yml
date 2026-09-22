@@ -246,5 +246,11 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Direct-provenance regression fixtures
+        run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs --test
+
+      - name: Direct item Tier-A provenance gate
+        run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs
+
       - name: Full DGR readiness artifact gate
         run: node scripts/check-dgr-readiness-artifacts.mjs

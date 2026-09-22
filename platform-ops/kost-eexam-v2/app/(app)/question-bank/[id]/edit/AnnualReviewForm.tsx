@@ -12,12 +12,14 @@ export function AnnualReviewForm({ questionId }: { questionId: number }) {
   const action = recordAnnualReviewAction.bind(null, questionId);
   const [state, formAction, pending] = useActionState<RecordAnnualReviewResult, FormData>(action, {});
   const currentYear = new Date().getFullYear();
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <p className="text-[11.5px] text-text-tertiary">
-        Enregistre une revue annuelle RÉELLEMENT menée par un instructeur habilité — ne cochez « Revue annuelle terminée » que si cette revue a
-        effectivement eu lieu. Chaque enregistrement crée une nouvelle ligne d&apos;historique, jamais un écrasement de la précédente.
+        Enregistre une revue annuelle RÉELLEMENT menée par un instructeur habilité — ne choisissez « Revue annuelle terminée » que si cette revue a
+        effectivement eu lieu et si la qualification / autorité du réviseur est documentée. Chaque enregistrement crée une nouvelle ligne
+        d&apos;historique, jamais un écrasement de la précédente.
       </p>
       <div className="grid gap-3 sm:grid-cols-3">
         <div>
@@ -29,16 +31,16 @@ export function AnnualReviewForm({ questionId }: { questionId: number }) {
           <input id="applicableEdition" name="applicableEdition" placeholder="ex. IATA DGR 67e édition 2026 + Addendum 1" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         <div>
-          <label htmlFor="reviewerName" className="mb-1 block text-[12px] font-medium text-text-secondary">Nom du réviseur (instructeur habilité)</label>
+          <label htmlFor="reviewerName" className="mb-1 block text-[12px] font-medium text-text-secondary">Nom du réviseur</label>
           <input id="reviewerName" name="reviewerName" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         <div>
-          <label htmlFor="reviewerQualification" className="mb-1 block text-[12px] font-medium text-text-secondary">Qualification / rôle</label>
-          <input id="reviewerQualification" name="reviewerQualification" placeholder="ex. Instructeur DGR habilité IATA" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          <label htmlFor="reviewerQualification" className="mb-1 block text-[12px] font-medium text-text-secondary">Qualification / autorité (obligatoire si terminée)</label>
+          <input id="reviewerQualification" name="reviewerQualification" placeholder="ex. Instructeur DGR — autorité documentée" className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         <div>
           <label htmlFor="reviewDate" className="mb-1 block text-[12px] font-medium text-text-secondary">Date de revue</label>
-          <input id="reviewDate" name="reviewDate" type="date" required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
+          <input id="reviewDate" name="reviewDate" type="date" max={today} required className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
         <div>
           <label htmlFor="decision" className="mb-1 block text-[12px] font-medium text-text-secondary">Décision</label>
@@ -58,6 +60,10 @@ export function AnnualReviewForm({ questionId }: { questionId: number }) {
           <textarea id="comment" name="comment" rows={2} className="w-full rounded-md border border-border-default bg-surface-base px-3 py-1.5 text-[13px]" />
         </div>
       </div>
+      <p className="text-[11.5px] text-text-tertiary">
+        Contrôles serveur : aucune date future ; l&apos;année applicable doit correspondre à l&apos;année de la date de revue. Une référence durable de
+        preuve de revue reste un gate séparé avant clôture du blocker readiness #16.
+      </p>
       <div>
         <button disabled={pending} type="submit" className="rounded-md bg-accent-9 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-accent-10 disabled:opacity-60">
           {pending ? "Enregistrement…" : "Enregistrer la revue annuelle"}

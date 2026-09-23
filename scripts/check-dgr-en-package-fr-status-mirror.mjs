@@ -22,33 +22,52 @@ function parseCsv(text, label) {
   let row = [];
   let field = '';
   let inQuotes = false;
+  let quotedFieldClosed = false;
 
   for (let i = 0; i < text.length; i += 1) {
     const ch = text[i];
+
     if (inQuotes) {
       if (ch === '"') {
         if (text[i + 1] === '"') {
           field += '"';
           i += 1;
-        } else inQuotes = false;
-      } else field += ch;
+        } else {
+          inQuotes = false;
+          quotedFieldClosed = true;
+        }
+      } else {
+        field += ch;
+      }
       continue;
     }
-    if (ch === '"') inQuotes = true;
-    else if (ch === ',') {
+
+    if (ch === '"') {
+      if (field.length > 0 || quotedFieldClosed) {
+        throw new Error(`${label}: unexpected quote inside unquoted CSV field at character ${i + 1}`);
+      }
+      inQuotes = true;
+    } else if (ch === ',') {
       row.push(field);
       field = '';
+      quotedFieldClosed = false;
     } else if (ch === '\r' || ch === '\n') {
       if (ch === '\r' && text[i + 1] === '\n') i += 1;
       row.push(field);
       field = '';
+      quotedFieldClosed = false;
       if (row.some((value) => value.length > 0)) rows.push(row);
       row = [];
-    } else field += ch;
+    } else {
+      if (quotedFieldClosed) {
+        throw new Error(`${label}: unexpected character after closing CSV quote at character ${i + 1}`);
+      }
+      field += ch;
+    }
   }
 
   if (inQuotes) throw new Error(`${label}: unterminated quoted CSV field`);
-  if (field.length > 0 || row.length > 0) {
+  if (field.length > 0 || row.length > 0 || quotedFieldClosed) {
     row.push(field);
     if (row.some((value) => value.length > 0)) rows.push(row);
   }
@@ -63,6 +82,10 @@ function reconciliationMap(text, label = RECONCILIATION) {
   const parsed = parseCsv(text, label);
   if (parsed.length < 2) throw new Error(`${label}: empty reconciliation CSV`);
   const headers = parsed[0].map((value) => String(value).trim().toLowerCase());
+  const duplicateHeaders = headers.filter((header, index) => headers.indexOf(header) !== index);
+  if (duplicateHeaders.length > 0) {
+    throw new Error(`${label}: duplicate header(s): ${[...new Set(duplicateHeaders)].join(', ')}`);
+  }
   const required = [
     'kost_question_id',
     'function',
@@ -79,10 +102,14 @@ function reconciliationMap(text, label = RECONCILIATION) {
   const byId = new Map();
   for (let i = 1; i < parsed.length; i += 1) {
     const values = parsed[i];
+    const csvRow = i + 1;
+    if (values.length !== headers.length) {
+      throw new Error(`${label}: CSV row ${csvRow} has ${values.length} columns; expected ${headers.length}`);
+    }
     const id = normalize(values[index.get('kost_question_id')] ?? '').toUpperCase();
-    if (!id) continue;
+    if (!id) throw new Error(`${label}: CSV row ${csvRow} is non-empty but kost_question_id is blank`);
     if (!/^Q-7\.(?:10|[1-9])-\d{3}$/.test(id)) {
-      throw new Error(`${label}: invalid question id at CSV row ${i + 1}: ${id}`);
+      throw new Error(`${label}: invalid question id at CSV row ${csvRow}: ${id}`);
     }
     if (byId.has(id)) throw new Error(`${label}: duplicate question id ${id}`);
     byId.set(id, {
@@ -213,7 +240,49 @@ function expect(name, errors, shouldFail) {
   }
 }
 
+function expectReconciliationFailure(name, csv, pattern) {
+  let rejected = false;
+  try {
+    reconciliationMap(csv, `${name}.csv`);
+  } catch (error) {
+    rejected = pattern.test(error.message);
+  }
+  if (!rejected) throw new Error(`${name}: malformed reconciliation CSV was not rejected as expected`);
+}
+
 function fixtures() {
+  const fixtureHeader = 'KOST_Question_ID,Function,Current_Individual_FR_Status_Bucket,Current_Individual_FR_Status_Full_Text,Reason,Next_Action';
+  expectReconciliationFailure(
+    'quote-inside-unquoted-field-fails',
+    `${fixtureHeader}\nQ-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct evid"ence,Next action`,
+    /unexpected quote inside unquoted csv field/i,
+  );
+  expectReconciliationFailure(
+    'trailing-text-after-quoted-field-fails',
+    `${fixtureHeader}\nQ-7.2-001,7.2,FROZEN,"FROZEN FR / SOURCE VERIFIED"BROKEN,Direct evidence,Next action`,
+    /unexpected character after closing csv quote/i,
+  );
+  expectReconciliationFailure(
+    'duplicate-header-fails',
+    `${fixtureHeader},Reason\nQ-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct evidence,Next action,Duplicate`,
+    /duplicate header/i,
+  );
+  expectReconciliationFailure(
+    'blank-id-row-fails',
+    `${fixtureHeader}\n,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct evidence,Next action`,
+    /kost_question_id is blank/i,
+  );
+  expectReconciliationFailure(
+    'short-row-fails',
+    `${fixtureHeader}\nQ-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct evidence`,
+    /has 5 columns; expected 6/i,
+  );
+  expectReconciliationFailure(
+    'long-row-fails',
+    `${fixtureHeader}\nQ-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct evidence,Next action,EXTRA`,
+    /has 7 columns; expected 6/i,
+  );
+
   const reconciliation = reconciliationMap(
     fixtureCsv([
       'Q-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct item-specific Bookshelf check performed,Import-eligible after reviewer sign-off',

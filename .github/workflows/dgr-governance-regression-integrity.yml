@@ -13,15 +13,10 @@ on:
       - "scripts/lib/dgr-matrix-tier-a-policy.mjs"
       - ".github/workflows/dgr-governance-regression-integrity.yml"
       - ".github/workflows/dgr-regulatory-readiness.yml"
+  # This check is intended to become a required branch-protection context.
+  # Required PR checks must not be path-filtered: a non-DGR PR could otherwise
+  # leave the required context skipped/expected and deadlock legitimate merges.
   pull_request:
-    paths:
-      - "docs/DGR_**"
-      - "docs/RECOVERED_STAGE2A_CONTEXT.md"
-      - "scripts/check-dgr-**"
-      - "scripts/test-dgr-**"
-      - "scripts/lib/dgr-matrix-tier-a-policy.mjs"
-      - ".github/workflows/dgr-governance-regression-integrity.yml"
-      - ".github/workflows/dgr-regulatory-readiness.yml"
 
 permissions:
   contents: read

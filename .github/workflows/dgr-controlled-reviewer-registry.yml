@@ -50,22 +50,29 @@ jobs:
         run: node scripts/check-dgr-controlled-reviewer-registry.mjs --test
 
       - name: Controlled reviewer-reference consistency gate
+        if: always()
         run: node scripts/check-dgr-controlled-reviewer-registry.mjs
 
       - name: Active reviewer qualification-evidence regression fixtures
+        if: always()
         run: node scripts/check-dgr-reviewer-qualification-evidence.mjs --test
 
       - name: Active reviewer qualification-evidence consistency gate
+        if: always()
         run: node scripts/check-dgr-reviewer-qualification-evidence.mjs
 
       - name: Reviewer qualification evidence-reference regression fixtures
+        if: always()
         run: node scripts/check-dgr-reviewer-qualification-evidence-reference.mjs --test
 
       - name: Reviewer qualification evidence-reference consistency gate
+        if: always()
         run: node scripts/check-dgr-reviewer-qualification-evidence-reference.mjs
 
       - name: Reviewer bilingual evidence-reference regression fixtures
+        if: always()
         run: node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs --test
 
       - name: Reviewer bilingual evidence-reference consistency gate
+        if: always()
         run: node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs

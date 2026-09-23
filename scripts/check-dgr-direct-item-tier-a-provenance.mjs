@@ -32,6 +32,7 @@ function parseCsv(text, label) {
   let row = [];
   let field = '';
   let inQuotes = false;
+  let quotedFieldClosed = false;
 
   for (let i = 0; i < text.length; i += 1) {
     const ch = text[i];
@@ -43,6 +44,7 @@ function parseCsv(text, label) {
           i += 1;
         } else {
           inQuotes = false;
+          quotedFieldClosed = true;
         }
       } else {
         field += ch;
@@ -51,23 +53,31 @@ function parseCsv(text, label) {
     }
 
     if (ch === '"') {
+      if (field.length > 0 || quotedFieldClosed) {
+        throw new Error(`${label}: unexpected quote inside unquoted CSV field at character ${i + 1}`);
+      }
       inQuotes = true;
     } else if (ch === ',') {
       row.push(field);
       field = '';
+      quotedFieldClosed = false;
     } else if (ch === '\r' || ch === '\n') {
       if (ch === '\r' && text[i + 1] === '\n') i += 1;
       row.push(field);
       field = '';
+      quotedFieldClosed = false;
       if (row.some((value) => value.length > 0)) rows.push(row);
       row = [];
     } else {
+      if (quotedFieldClosed) {
+        throw new Error(`${label}: unexpected character after closing CSV quote at character ${i + 1}`);
+      }
       field += ch;
     }
   }
 
   if (inQuotes) throw new Error(`${label}: unterminated quoted CSV field`);
-  if (field.length > 0 || row.length > 0) {
+  if (field.length > 0 || row.length > 0 || quotedFieldClosed) {
     row.push(field);
     if (row.some((value) => value.length > 0)) rows.push(row);
   }
@@ -183,6 +193,8 @@ function runSelfTest() {
   const direct = `${header}\r\nQ-7.8-048,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"Live Bookshelf check performed directly for this item's tested claim.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
   const directConfirmedGap = `${header}\r\nQ-7.2-008,7.2,3.4.2,GAP,"FR SOURCE GAP CONFIRMED",,YES,§1.0,bank.md,N/A,YES,YES,"FR SOURCE GAP CONFIRMED","This item's tested claim was searched directly in the current DGR 67th Edition 2026 text and no supporting provision was located; searched sections are recorded item-by-item.",Retain Tier B only\r\n`;
   const quotedMultilineFakeBoundary = `${header}\r\nQ-7.8-048,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"Live Bookshelf check performed directly. Embedded audit note follows:\nQ-7.9-999,not-a-real-row\nStill the same quoted Reason field.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
+  const quoteInsideUnquoted = `${header}\r\nQ-7.8-048,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YE"S",§9.6.1,bank.md,YES,YES,YES,FROZEN,"Live Bookshelf check performed directly.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
+  const trailingAfterQuoted = `${header}\r\nQ-7.8-048,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED"NO,,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"Live Bookshelf check performed directly.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
 
   const sampledViolations = findViolations(sampled);
   const missingRepresentativeWordingViolations = findViolations(missingRepresentativeWording);
@@ -223,6 +235,26 @@ function runSelfTest() {
   }
   if (quotedBoundaryViolations.length !== 0) {
     throw new Error('Regression fixture failed: quoted multiline field containing Q-like text was misparsed as a new CSV row.');
+  }
+
+  let malformedQuoteRejected = false;
+  try {
+    findViolations(quoteInsideUnquoted);
+  } catch (error) {
+    malformedQuoteRejected = /unexpected quote inside unquoted csv field/i.test(error.message);
+  }
+  if (!malformedQuoteRejected) {
+    throw new Error('Regression fixture failed: quote inside an unquoted field was not rejected by the direct-provenance parser.');
+  }
+
+  let trailingAfterQuoteRejected = false;
+  try {
+    findViolations(trailingAfterQuoted);
+  } catch (error) {
+    trailingAfterQuoteRejected = /unexpected character after closing csv quote/i.test(error.message);
+  }
+  if (!trailingAfterQuoteRejected) {
+    throw new Error('Regression fixture failed: trailing text after a closing quote was not rejected by the direct-provenance parser.');
   }
 
   console.log('PASS: direct Tier-A provenance regression fixtures');

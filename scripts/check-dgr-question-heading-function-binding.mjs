@@ -6,8 +6,9 @@
  *
  * The full readiness checker intentionally derives per-function populations
  * from structural Markdown headings. A canonical question heading that names
- * another function must therefore be rejected rather than silently falling
- * outside the expected-function set.
+ * another function, is malformed, duplicated, or is moved outside the
+ * canonical H2–H4 question-heading range must therefore be rejected rather
+ * than silently falling outside the readiness population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -21,10 +22,17 @@ import path from "node:path";
 const root = process.cwd();
 const functions = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
-function structuralQuestionHeadingToken(line) {
-  const heading = line.match(/^#{2,4}\s+(.+)$/)?.[1]?.trim() ?? "";
-  if (!/^Q-7\./i.test(heading)) return "";
-  return heading.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "";
+function structuralQuestionHeading(line) {
+  const match = line.match(/^(#{1,6})\s+(.+)$/);
+  if (!match) return null;
+
+  const heading = match[2].trim();
+  if (!/^Q-7\./i.test(heading)) return null;
+
+  return {
+    level: match[1].length,
+    token: heading.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "",
+  };
 }
 
 function canonicalQuestionId(token) {
@@ -51,12 +59,18 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
   const lines = text.split(/\r?\n/);
 
   for (let index = 0; index < lines.length; index += 1) {
-    const token = structuralQuestionHeadingToken(lines[index]);
-    if (!token) continue;
+    const structural = structuralQuestionHeading(lines[index]);
+    if (!structural) continue;
 
-    const parsed = canonicalQuestionId(token);
+    if (structural.level < 2 || structural.level > 4) {
+      errors.push(
+        `line ${index + 1}: structural question heading uses H${structural.level}; canonical readiness headings must use H2–H4`,
+      );
+    }
+
+    const parsed = canonicalQuestionId(structural.token);
     if (!parsed) {
-      errors.push(`line ${index + 1}: malformed structural question ID heading "${token}"`);
+      errors.push(`line ${index + 1}: malformed structural question ID heading "${structural.token}"`);
       continue;
     }
 
@@ -116,6 +130,13 @@ function runRegressionFixtures() {
     "malformed heading",
     malformedHeading.errors.some((error) => error.includes("malformed structural")),
     "malformed structural question ID did not fail closed",
+  );
+
+  const unsupportedHeadingLevel = inspectArtifact("##### Q-7.6-001 — hidden by readiness H2-H4 parser", "7.6", "heading-level");
+  assertFixture(
+    "unsupported question heading level",
+    unsupportedHeadingLevel.errors.some((error) => error.includes("canonical readiness headings must use H2–H4")),
+    "H5 question heading could disappear from readiness population without failing closed",
   );
 
   const narrativeForeign = inspectArtifact([

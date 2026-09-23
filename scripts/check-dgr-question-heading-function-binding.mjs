@@ -7,9 +7,9 @@
  * The full readiness checker intentionally derives per-function populations
  * from structural Markdown headings. A canonical question heading that names
  * another function, is malformed, duplicated, is moved outside the canonical
- * H2–H4 question-heading range, or is hidden behind Markdown decoration must
- * therefore be rejected rather than silently falling outside the readiness
- * population.
+ * H2–H4 question-heading range, is indented away from the readiness parser's
+ * column-1 contract, or is hidden behind Markdown decoration must therefore be
+ * rejected rather than silently falling outside the readiness population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -24,10 +24,15 @@ const root = process.cwd();
 const functions = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
 function structuralQuestionHeading(line) {
-  const match = line.match(/^(#{1,6})\s+(.+)$/);
+  // CommonMark ATX headings may be indented by up to three spaces. The
+  // canonical readiness population parser intentionally requires the heading
+  // marker at column 1, so detect legal 1–3-space indentation here and reject
+  // it explicitly instead of allowing a rendered question heading to vanish
+  // from the machine-readiness population.
+  const match = line.match(/^( {0,3})(#{1,6})\s+(.+)$/);
   if (!match) return null;
 
-  const heading = match[2].trim();
+  const heading = match[3].trim();
   let candidate = heading;
 
   // The canonical readiness population parser requires the question ID to be
@@ -42,7 +47,8 @@ function structuralQuestionHeading(line) {
   }
 
   return {
-    level: match[1].length,
+    indent: match[1].length,
+    level: match[2].length,
     token: candidate.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "",
   };
 }
@@ -73,6 +79,12 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
   for (let index = 0; index < lines.length; index += 1) {
     const structural = structuralQuestionHeading(lines[index]);
     if (!structural) continue;
+
+    if (structural.indent > 0) {
+      errors.push(
+        `line ${index + 1}: structural question heading is indented by ${structural.indent} space(s); canonical readiness headings must start at column 1`,
+      );
+    }
 
     if (structural.level < 2 || structural.level > 4) {
       errors.push(
@@ -163,6 +175,13 @@ function runRegressionFixtures() {
     "linked structural question heading",
     linkedHeading.errors.some((error) => error.includes("malformed structural")),
     "Markdown link decoration around a leading question ID could make the item disappear from readiness without failing closed",
+  );
+
+  const indentedHeading = inspectArtifact("  ## Q-7.9-001 — valid Markdown heading hidden by readiness column-1 parser", "7.9", "indented-heading");
+  assertFixture(
+    "indented structural question heading",
+    indentedHeading.errors.some((error) => error.includes("must start at column 1")),
+    "1–3-space-indented Markdown question heading could disappear from readiness without failing closed",
   );
 
   const narrativeForeign = inspectArtifact([

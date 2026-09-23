@@ -263,25 +263,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Require regulatory governance integrity
-        if: needs.regulatory-governance-integrity.result != 'success'
-        run: |
-          echo "::error::Regulatory governance integrity concluded '${{ needs.regulatory-governance-integrity.result }}'; Full DGR readiness cannot pass."
-          exit 1
-
       - name: Checkout repository
+        if: always()
         uses: actions/checkout@v4
 
       - name: Set up Node.js
+        if: always()
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
       - name: Direct-provenance regression fixtures
+        if: always()
         run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs --test
 
       - name: Direct item Tier-A provenance gate
+        if: always()
         run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs
 
       - name: Full DGR readiness artifact gate
+        if: always()
         run: node scripts/check-dgr-readiness-artifacts.mjs
+
+      - name: Require regulatory governance integrity
+        if: always() && needs.regulatory-governance-integrity.result != 'success'
+        run: |
+          echo "::error::Regulatory governance integrity concluded '${{ needs.regulatory-governance-integrity.result }}'; Full DGR readiness cannot pass."
+          exit 1

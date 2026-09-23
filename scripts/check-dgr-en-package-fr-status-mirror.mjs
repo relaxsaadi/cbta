@@ -154,6 +154,13 @@ function parsePackage(text, artifact) {
 export function validatePackageAgainstReconciliation(packageText, functionId, reconciliation, artifact = `package-${functionId}.md`) {
   const { items, errors } = parsePackage(packageText, artifact);
   const expectedPrefix = `Q-${functionId}-`;
+  const packageIds = new Set(items.map((item) => item.id));
+
+  for (const id of reconciliation.keys()) {
+    if (id.startsWith(expectedPrefix) && !packageIds.has(id)) {
+      errors.push(`${artifact}: missing current reconciliation item ${id}`);
+    }
+  }
 
   for (const item of items) {
     if (!item.id.startsWith(expectedPrefix)) {
@@ -216,20 +223,27 @@ function fixtures() {
     ]),
     'fixture.csv',
   );
-  expect('current-mixed-statuses-pass', validatePackageAgainstReconciliation(fixturePackage('7.2', [
+  const completePackage = [
     ['Q-7.2-001', 'FROZEN FR / SOURCE VERIFIED'],
     ['Q-7.2-002', 'FR SOURCE GAP CONFIRMED — DGR silent by design'],
     ['Q-7.2-003', 'DRAFT — Tier B only'],
-  ]), '7.2', reconciliation, 'fixture.md'), false);
+    ['Q-7.2-004', 'TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED'],
+  ];
+  expect('current-mixed-statuses-pass', validatePackageAgainstReconciliation(
+    fixturePackage('7.2', completePackage), '7.2', reconciliation, 'fixture.md'), false);
+  expect('omitted-current-item-fails', validatePackageAgainstReconciliation(fixturePackage('7.2', [
+    ['Q-7.2-001', 'FROZEN FR / SOURCE VERIFIED'],
+    ['Q-7.2-002', 'FR SOURCE GAP CONFIRMED — DGR silent by design'],
+    ['Q-7.2-003', 'DRAFT — Tier B only'],
+  ]), '7.2', reconciliation, 'fixture.md'), true);
   expect('stale-draft-over-frozen-fails', validatePackageAgainstReconciliation(fixturePackage('7.2', [
     ['Q-7.2-001', 'DRAFT — Tier B only, SOURCE REQUIRED for Tier A'],
   ]), '7.2', reconciliation, 'fixture.md'), true);
   expect('stale-draft-over-gap-fails', validatePackageAgainstReconciliation(fixturePackage('7.2', [
     ['Q-7.2-002', 'DRAFT — Tier B only'],
   ]), '7.2', reconciliation, 'fixture.md'), true);
-  expect('missing-direct-evidence-requires-unresolved-mirror', validatePackageAgainstReconciliation(fixturePackage('7.2', [
-    ['Q-7.2-004', 'TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED'],
-  ]), '7.2', reconciliation, 'fixture.md'), false);
+  expect('missing-direct-evidence-requires-unresolved-mirror', validatePackageAgainstReconciliation(
+    fixturePackage('7.2', completePackage), '7.2', reconciliation, 'fixture.md'), false);
   expect('missing-direct-evidence-rejects-frozen-mirror', validatePackageAgainstReconciliation(fixturePackage('7.2', [
     ['Q-7.2-004', 'FROZEN FR / SOURCE VERIFIED'],
   ]), '7.2', reconciliation, 'fixture.md'), true);
@@ -270,11 +284,11 @@ function repositoryCheck() {
   if (errors.length) {
     errors.forEach((error) => console.error(`ERROR: ${error}`));
     console.error(`\nDGR EN-PACKAGE FR-STATUS MIRROR CHECK: FAIL (${errors.length} issue(s))`);
-    console.error('EN review packages may preserve independent EN-review states, but duplicated FR status must mirror the effective current per-item state. Explicit admissions of missing direct current-DGR evidence force an UNRESOLVED mirror rather than a terminal FROZEN/GAP label. This gate never promotes EN review or regulatory approval.');
+    console.error('EN review packages must include every current per-item reconciliation ID for their function and may preserve independent EN-review states, but duplicated FR status must mirror the effective current per-item state. Explicit admissions of missing direct current-DGR evidence force an UNRESOLVED mirror rather than a terminal FROZEN/GAP label. This gate never promotes EN review or regulatory approval.');
     process.exit(1);
   }
   console.log('DGR EN-PACKAGE FR-STATUS MIRROR CHECK: PASS');
-  console.log('PASS means duplicated FR status labels in EN packages match the effective current per-item state only; it does not prove Tier-A correctness, bilingual equivalence, reviewer qualification, or approval.');
+  console.log('PASS means every current per-item reconciliation ID is represented and duplicated FR status labels in EN packages match the effective current per-item state only; it does not prove Tier-A correctness, bilingual equivalence, reviewer qualification, or approval.');
 }
 
 if (process.argv.includes('--test')) fixtures();

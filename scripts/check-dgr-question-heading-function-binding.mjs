@@ -8,8 +8,9 @@
  * from structural Markdown headings. A canonical question heading that names
  * another function, is malformed, duplicated, is moved outside the canonical
  * H2–H4 question-heading range, is indented away from the readiness parser's
- * column-1 contract, or is hidden behind Markdown decoration must therefore be
- * rejected rather than silently falling outside the readiness population.
+ * column-1 contract, is expressed with Setext heading syntax, or is hidden
+ * behind Markdown decoration must therefore be rejected rather than silently
+ * falling outside the readiness population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -23,17 +24,8 @@ import path from "node:path";
 const root = process.cwd();
 const functions = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
-function structuralQuestionHeading(line) {
-  // CommonMark ATX headings may be indented by up to three spaces. The
-  // canonical readiness population parser intentionally requires the heading
-  // marker at column 1, so detect legal 1–3-space indentation here and reject
-  // it explicitly instead of allowing a rendered question heading to vanish
-  // from the machine-readiness population.
-  const match = line.match(/^( {0,3})(#{1,6})\s+(.+)$/);
-  if (!match) return null;
-
-  const heading = match[3].trim();
-  let candidate = heading;
+function leadingQuestionToken(text) {
+  let candidate = String(text ?? "").trim();
 
   // The canonical readiness population parser requires the question ID to be
   // the first plain-text token in the heading. Detect common Markdown wrappers
@@ -43,13 +35,50 @@ function structuralQuestionHeading(line) {
   // as malformed instead of normalizing a non-canonical heading into acceptance.
   if (!/^Q-7\./i.test(candidate)) {
     candidate = candidate.replace(/^(?:(?:\*\*|__|~~|`|\[)\s*)+/, "");
-    if (!/^Q-7\./i.test(candidate)) return null;
+    if (!/^Q-7\./i.test(candidate)) return "";
   }
 
+  return candidate.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "";
+}
+
+function structuralQuestionHeading(line) {
+  // CommonMark ATX headings may be indented by up to three spaces. The
+  // canonical readiness population parser intentionally requires the heading
+  // marker at column 1, so detect legal 1–3-space indentation here and reject
+  // it explicitly instead of allowing a rendered question heading to vanish
+  // from the machine-readiness population.
+  const match = line.match(/^( {0,3})(#{1,6})\s+(.+)$/);
+  if (!match) return null;
+
+  const token = leadingQuestionToken(match[3]);
+  if (!token) return null;
+
   return {
+    syntax: "atx",
     indent: match[1].length,
     level: match[2].length,
-    token: candidate.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "",
+    token,
+  };
+}
+
+function structuralSetextQuestionHeading(line, underlineLine) {
+  // CommonMark Setext headings render a paragraph followed by an = or -
+  // underline as H1/H2. The readiness population parser deliberately accepts
+  // only canonical ATX H2–H4 question headings. Detect a Q-7.* Setext heading
+  // explicitly so it cannot render as a heading to a human while disappearing
+  // from the machine-readiness population.
+  const content = line.match(/^( {0,3})(.+?)\s*$/);
+  const underline = String(underlineLine ?? "").match(/^ {0,3}(=+|-+)\s*$/);
+  if (!content || !underline) return null;
+
+  const token = leadingQuestionToken(content[2]);
+  if (!token) return null;
+
+  return {
+    syntax: "setext",
+    indent: content[1].length,
+    level: underline[1].startsWith("=") ? 1 : 2,
+    token,
   };
 }
 
@@ -71,39 +100,54 @@ function duplicateValues(values) {
     .sort();
 }
 
+function recordStructuralQuestion({ structural, index, expectedFn, errors, ids }) {
+  if (structural.syntax === "setext") {
+    errors.push(
+      `line ${index + 1}: structural question heading uses Setext Markdown heading syntax; canonical readiness questions must use column-1 ATX H2–H4 headings`,
+    );
+  }
+
+  if (structural.indent > 0) {
+    errors.push(
+      `line ${index + 1}: structural question heading is indented by ${structural.indent} space(s); canonical readiness headings must start at column 1`,
+    );
+  }
+
+  if (structural.level < 2 || structural.level > 4) {
+    errors.push(
+      `line ${index + 1}: structural question heading uses H${structural.level}; canonical readiness headings must use H2–H4`,
+    );
+  }
+
+  const parsed = canonicalQuestionId(structural.token);
+  if (!parsed) {
+    errors.push(`line ${index + 1}: malformed structural question ID heading "${structural.token}"`);
+    return;
+  }
+
+  ids.push(parsed.id);
+  if (parsed.fn !== expectedFn) {
+    errors.push(
+      `line ${index + 1}: foreign-function structural question heading ${parsed.id} appears in Function ${expectedFn} artifact`,
+    );
+  }
+}
+
 function inspectArtifact(text, expectedFn, artifactLabel) {
   const errors = [];
   const ids = [];
   const lines = text.split(/\r?\n/);
 
   for (let index = 0; index < lines.length; index += 1) {
-    const structural = structuralQuestionHeading(lines[index]);
-    if (!structural) continue;
-
-    if (structural.indent > 0) {
-      errors.push(
-        `line ${index + 1}: structural question heading is indented by ${structural.indent} space(s); canonical readiness headings must start at column 1`,
-      );
-    }
-
-    if (structural.level < 2 || structural.level > 4) {
-      errors.push(
-        `line ${index + 1}: structural question heading uses H${structural.level}; canonical readiness headings must use H2–H4`,
-      );
-    }
-
-    const parsed = canonicalQuestionId(structural.token);
-    if (!parsed) {
-      errors.push(`line ${index + 1}: malformed structural question ID heading "${structural.token}"`);
+    const setext = structuralSetextQuestionHeading(lines[index], lines[index + 1]);
+    if (setext) {
+      recordStructuralQuestion({ structural: setext, index, expectedFn, errors, ids });
       continue;
     }
 
-    ids.push(parsed.id);
-    if (parsed.fn !== expectedFn) {
-      errors.push(
-        `line ${index + 1}: foreign-function structural question heading ${parsed.id} appears in Function ${expectedFn} artifact`,
-      );
-    }
+    const structural = structuralQuestionHeading(lines[index]);
+    if (!structural) continue;
+    recordStructuralQuestion({ structural, index, expectedFn, errors, ids });
   }
 
   const duplicates = duplicateValues(ids);
@@ -182,6 +226,26 @@ function runRegressionFixtures() {
     "indented structural question heading",
     indentedHeading.errors.some((error) => error.includes("must start at column 1")),
     "1–3-space-indented Markdown question heading could disappear from readiness without failing closed",
+  );
+
+  const setextHeading = inspectArtifact([
+    "Q-7.10-001 — rendered Markdown H2 hidden by readiness ATX parser",
+    "------------------------------------------------------------",
+  ].join("\n"), "7.10", "setext-heading");
+  assertFixture(
+    "Setext structural question heading",
+    setextHeading.errors.some((error) => error.includes("Setext Markdown heading syntax")),
+    "Setext H2 question heading could disappear from readiness population without failing closed",
+  );
+
+  const decoratedSetextHeading = inspectArtifact([
+    "**Q-7.8-002** — decorated rendered Markdown H2 hidden by readiness parser",
+    "--------------------------------------------------------------------",
+  ].join("\n"), "7.8", "decorated-setext-heading");
+  assertFixture(
+    "decorated Setext structural question heading",
+    decoratedSetextHeading.errors.some((error) => error.includes("Setext Markdown heading syntax")),
+    "decorated Setext question heading could disappear from readiness population without failing closed",
   );
 
   const narrativeForeign = inspectArtifact([

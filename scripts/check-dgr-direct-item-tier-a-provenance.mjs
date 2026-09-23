@@ -23,35 +23,151 @@ const MISSING_DIRECT_EVIDENCE_PATTERNS = [
   /not re-searched from scratch/i,
 ];
 
-function rowsFromCsvText(text) {
-  const starts = [...text.matchAll(/(?:^|\r?\n)(Q-7\.\d+-\d{3}),/gm)].map((m) => ({
-    id: m[1],
-    index: m.index + (m[0].startsWith('\n') || m[0].startsWith('\r\n') ? m[0].length - m[1].length - 1 : 0),
-  }));
+function normalizeHeader(value) {
+  return value.trim().toLowerCase();
+}
 
-  // Use the question-ID matches only as durable row boundaries. The CSV contains
-  // quoted multiline fields, so a naive split on newlines is not safe.
-  return starts.map((entry, i) => {
-    const start = text.indexOf(entry.id + ',', entry.index);
-    const end = i + 1 < starts.length
-      ? text.indexOf(starts[i + 1].id + ',', start + entry.id.length + 1)
-      : text.length;
-    return { id: entry.id, raw: text.slice(start, end) };
-  });
+function parseCsv(text, label) {
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i += 1;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += ch;
+      }
+      continue;
+    }
+
+    if (ch === '"') {
+      inQuotes = true;
+    } else if (ch === ',') {
+      row.push(field);
+      field = '';
+    } else if (ch === '\r' || ch === '\n') {
+      if (ch === '\r' && text[i + 1] === '\n') i += 1;
+      row.push(field);
+      field = '';
+      if (row.some((value) => value.length > 0)) rows.push(row);
+      row = [];
+    } else {
+      field += ch;
+    }
+  }
+
+  if (inQuotes) throw new Error(`${label}: unterminated quoted CSV field`);
+  if (field.length > 0 || row.length > 0) {
+    row.push(field);
+    if (row.some((value) => value.length > 0)) rows.push(row);
+  }
+
+  return rows;
+}
+
+function reconciliationTable(text) {
+  const parsed = parseCsv(text, TARGET);
+  if (parsed.length === 0) throw new Error(`${TARGET}: empty CSV`);
+
+  const headers = parsed[0].map(normalizeHeader);
+  const duplicateHeaders = headers.filter((header, index) => headers.indexOf(header) !== index);
+  if (duplicateHeaders.length > 0) {
+    throw new Error(`${TARGET}: duplicate header(s): ${[...new Set(duplicateHeaders)].join(', ')}`);
+  }
+
+  const indexByHeader = new Map(headers.map((header, index) => [header, index]));
+  const requiredHeaders = [
+    'kost_question_id',
+    'function',
+    'current_individual_fr_status_bucket',
+    'current_individual_fr_status_full_text',
+    'final_reconciled_status',
+    'reason',
+    'next_action',
+  ];
+  for (const header of requiredHeaders) {
+    if (!indexByHeader.has(header)) throw new Error(`${TARGET}: missing required header ${header}`);
+  }
+
+  const idIndex = indexByHeader.get('kost_question_id');
+  const rows = [];
+  const seen = new Set();
+
+  for (let i = 1; i < parsed.length; i += 1) {
+    const values = parsed[i];
+    if (values.length !== headers.length) {
+      throw new Error(`${TARGET}: CSV row ${i + 1} has ${values.length} column(s), expected ${headers.length}`);
+    }
+
+    const id = (values[idIndex] ?? '').trim();
+    if (!id) throw new Error(`${TARGET}: non-empty CSV row ${i + 1} is missing KOST_Question_ID`);
+    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/i.test(id)) {
+      throw new Error(`${TARGET}: invalid question id at CSV row ${i + 1}: ${id}`);
+    }
+    if (seen.has(id)) throw new Error(`${TARGET}: duplicate question id: ${id}`);
+    seen.add(id);
+
+    rows.push({ id, values, rowNumber: i + 1 });
+  }
+
+  return { rows, indexByHeader };
+}
+
+function valueFor(table, record, header) {
+  const index = table.indexByHeader.get(header);
+  return index === undefined ? '' : (record.values[index] ?? '').trim();
+}
+
+function functionFromQuestionId(id) {
+  const match = /^Q-(7\.(?:10|[1-9]))-\d{3}$/i.exec(id);
+  return match?.[1] ?? '';
 }
 
 function findViolations(text) {
-  const rows = rowsFromCsvText(text);
+  const table = reconciliationTable(text);
   const violations = [];
 
-  for (const { id, raw } of rows) {
-    const missingDirectEvidence = MISSING_DIRECT_EVIDENCE_PATTERNS.some((pattern) => pattern.test(raw));
-    const claimsFrozen = /,FROZEN,/.test(raw) || /FROZEN FR \/ SOURCE VERIFIED/i.test(raw);
-    const claimsImportEligible = /Import-eligible for V2/i.test(raw);
-    const claimsConfirmedGap = /,GAP,/.test(raw) && /FR SOURCE GAP CONFIRMED/i.test(raw);
+  for (const row of table.rows) {
+    const declaredFunction = valueFor(table, row, 'function');
+    const expectedFunction = functionFromQuestionId(row.id);
+    if (declaredFunction !== expectedFunction) {
+      violations.push({
+        id: row.id,
+        structural: true,
+        reason: `FUNCTION ${declaredFunction || '(missing)'} does not match question ID function ${expectedFunction}`,
+      });
+      continue;
+    }
+
+    const evidenceText = row.values.join('\n');
+    const missingDirectEvidence = MISSING_DIRECT_EVIDENCE_PATTERNS.some((pattern) => pattern.test(evidenceText));
+    const statusBucket = valueFor(table, row, 'current_individual_fr_status_bucket');
+    const statusFull = valueFor(table, row, 'current_individual_fr_status_full_text');
+    const finalStatus = valueFor(table, row, 'final_reconciled_status');
+    const reason = valueFor(table, row, 'reason');
+    const nextAction = valueFor(table, row, 'next_action');
+
+    const claimsFrozen =
+      /^FROZEN\b/i.test(statusBucket)
+      || /^FROZEN\b/i.test(finalStatus)
+      || /FROZEN FR \/ SOURCE VERIFIED/i.test(statusFull);
+    const claimsImportEligible = /Import-eligible for V2/i.test(nextAction);
+    const claimsConfirmedGap =
+      /^GAP\b/i.test(statusBucket)
+      && /FR SOURCE GAP CONFIRMED/i.test([statusFull, finalStatus, reason].join('\n'));
 
     if (missingDirectEvidence && (claimsFrozen || claimsImportEligible || claimsConfirmedGap)) {
-      violations.push({ id, claimsFrozen, claimsImportEligible, claimsConfirmedGap });
+      violations.push({ id: row.id, claimsFrozen, claimsImportEligible, claimsConfirmedGap });
     }
   }
 
@@ -59,12 +175,14 @@ function findViolations(text) {
 }
 
 function runSelfTest() {
-  const sampled = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.8-047,7.8,FROZEN,"FROZEN FR / SOURCE VERIFIED. A representative sample of this citation pattern was independently spot-verified. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
-  const missingRepresentativeWording = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.9-004,7.9,FROZEN,"FROZEN FR / SOURCE VERIFIED. This item's own specific citation was not independently re-read during this pass.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
-  const sampledConfirmedGap = `KOST_Question_ID,Function,Subtask,Status,Reason,Next_Action\r\nQ-7.3-017,7.3,0.1.4,GAP,"FR SOURCE GAP CONFIRMED (cross-applied). A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern.",Retain Tier B only\r\n`;
-  const crossAppliedWithoutSearch = `KOST_Question_ID,Function,Subtask,Status,Reason,Next_Action\r\nQ-7.2-002,7.2,0.1.4,GAP,"FR SOURCE GAP CONFIRMED. Prior Tier-A research from another item is cross-applied here; this item was not re-searched from scratch.",Retain Tier B only\r\n`;
-  const direct = `KOST_Question_ID,Function,Status,Reason,Next_Action\r\nQ-7.8-048,7.8,FROZEN,"FROZEN FR / SOURCE VERIFIED. Live Bookshelf check performed directly for this item's tested claim.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
-  const directConfirmedGap = `KOST_Question_ID,Function,Subtask,Status,Reason,Next_Action\r\nQ-7.2-008,7.2,3.4.2,GAP,"FR SOURCE GAP CONFIRMED. This item's tested claim was searched directly in the current DGR 67th Edition 2026 text and no supporting provision was located; searched sections are recorded item-by-item.",Retain Tier B only\r\n`;
+  const header = 'KOST_Question_ID,Function,CBTA_Subtask,Current_Individual_FR_Status_Bucket,Current_Individual_FR_Status_Full_Text,Historical_Topic_Analysis_Conclusion,Bookshelf_Evidence_Found,DGR_Reference,Evidence_Location_File,Tested_Claim_Supported,Full_Text_Recoverable,Correct_Answer_Recoverable,Final_Reconciled_Status,Reason,Next_Action';
+  const sampled = `${header}\r\nQ-7.8-047,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"A representative sample of this citation pattern was independently spot-verified. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
+  const missingRepresentativeWording = `${header}\r\nQ-7.9-004,7.9,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"This item's own specific citation was not independently re-read during this pass.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
+  const sampledConfirmedGap = `${header}\r\nQ-7.3-017,7.3,0.1.4,GAP,"FR SOURCE GAP CONFIRMED (cross-applied)",,YES,§1.0,bank.md,N/A,YES,YES,"FR SOURCE GAP CONFIRMED","A representative sample was spot-verified. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern.",Retain Tier B only\r\n`;
+  const crossAppliedWithoutSearch = `${header}\r\nQ-7.2-002,7.2,0.1.4,GAP,"FR SOURCE GAP CONFIRMED",,YES,§1.0,bank.md,N/A,YES,YES,"FR SOURCE GAP CONFIRMED","Prior Tier-A research from another item is cross-applied here; this item was not re-searched from scratch.",Retain Tier B only\r\n`;
+  const direct = `${header}\r\nQ-7.8-048,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"Live Bookshelf check performed directly for this item's tested claim.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
+  const directConfirmedGap = `${header}\r\nQ-7.2-008,7.2,3.4.2,GAP,"FR SOURCE GAP CONFIRMED",,YES,§1.0,bank.md,N/A,YES,YES,"FR SOURCE GAP CONFIRMED","This item's tested claim was searched directly in the current DGR 67th Edition 2026 text and no supporting provision was located; searched sections are recorded item-by-item.",Retain Tier B only\r\n`;
+  const quotedMultilineFakeBoundary = `${header}\r\nQ-7.8-048,7.8,,FROZEN,"FROZEN FR / SOURCE VERIFIED",,YES,§9.6.1,bank.md,YES,YES,YES,FROZEN,"Live Bookshelf check performed directly. Embedded audit note follows:\nQ-7.9-999,not-a-real-row\nStill the same quoted Reason field.",Import-eligible for V2 (pending reviewer sign-off)\r\n`;
 
   const sampledViolations = findViolations(sampled);
   const missingRepresentativeWordingViolations = findViolations(missingRepresentativeWording);
@@ -72,6 +190,7 @@ function runSelfTest() {
   const crossAppliedWithoutSearchViolations = findViolations(crossAppliedWithoutSearch);
   const directViolations = findViolations(direct);
   const directConfirmedGapViolations = findViolations(directConfirmedGap);
+  const quotedBoundaryViolations = findViolations(quotedMultilineFakeBoundary);
 
   if (sampledViolations.length !== 1 || sampledViolations[0].id !== 'Q-7.8-047') {
     throw new Error('Regression fixture failed: sampled-only FROZEN row was not rejected.');
@@ -102,6 +221,9 @@ function runSelfTest() {
   if (directConfirmedGapViolations.length !== 0) {
     throw new Error('Regression fixture failed: directly established SOURCE GAP was incorrectly rejected.');
   }
+  if (quotedBoundaryViolations.length !== 0) {
+    throw new Error('Regression fixture failed: quoted multiline field containing Q-like text was misparsed as a new CSV row.');
+  }
 
   console.log('PASS: direct Tier-A provenance regression fixtures');
 }
@@ -118,21 +240,36 @@ if (!fs.existsSync(targetPath)) {
   process.exit(1);
 }
 
-const text = fs.readFileSync(targetPath, 'utf8');
-const violations = findViolations(text);
+try {
+  const text = fs.readFileSync(targetPath, 'utf8');
+  const violations = findViolations(text);
 
-if (violations.length > 0) {
-  console.error('ERROR: direct Tier-A provenance is missing while the row is treated as source-verified/import-eligible/confirmed-gap.');
-  for (const v of violations) {
-    const claimedStates = [
-      v.claimsFrozen ? 'FROZEN/source-verified' : null,
-      v.claimsImportEligible ? 'import-eligible' : null,
-      v.claimsConfirmedGap ? 'FR SOURCE GAP CONFIRMED' : null,
-    ].filter(Boolean).join(', ');
-    console.error(` - ${v.id}: direct item-specific current-DGR evidence required before ${claimedStates} readiness status.`);
+  if (violations.length > 0) {
+    const structural = violations.filter((v) => v.structural);
+    if (structural.length > 0) {
+      console.error('ERROR: direct Tier-A provenance gate found reconciliation identity/function structural inconsistencies.');
+      for (const v of structural) console.error(` - ${v.id}: ${v.reason}`);
+    }
+
+    const provenance = violations.filter((v) => !v.structural);
+    if (provenance.length > 0) {
+      console.error('ERROR: direct Tier-A provenance is missing while the row is treated as source-verified/import-eligible/confirmed-gap.');
+      for (const v of provenance) {
+        const claimedStates = [
+          v.claimsFrozen ? 'FROZEN/source-verified' : null,
+          v.claimsImportEligible ? 'import-eligible' : null,
+          v.claimsConfirmedGap ? 'FR SOURCE GAP CONFIRMED' : null,
+        ].filter(Boolean).join(', ');
+        console.error(` - ${v.id}: direct item-specific current-DGR evidence required before ${claimedStates} readiness status.`);
+      }
+    }
+
+    console.error('See docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md.');
+    process.exit(1);
   }
-  console.error('See docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md.');
+
+  console.log('PASS: no explicit missing-direct-evidence terminal promotions detected in per-item reconciliation.');
+} catch (error) {
+  console.error(`ERROR: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);
 }
-
-console.log('PASS: no explicit missing-direct-evidence terminal promotions detected in per-item reconciliation.');

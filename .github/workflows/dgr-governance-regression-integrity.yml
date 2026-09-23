@@ -32,6 +32,11 @@ jobs:
         # change the code behind a branch-protection security context.
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
+          # pull_request events otherwise checkout GitHub's synthetic merge ref.
+          # The readiness evidence contract is exact-head, so select the PR head
+          # explicitly (and its repository for fork-safe read-only checkout).
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           # This workflow only reads the checkout. Do not persist the GITHUB_TOKEN
           # in local git configuration where repository-controlled scripts could reach it.
           persist-credentials: false

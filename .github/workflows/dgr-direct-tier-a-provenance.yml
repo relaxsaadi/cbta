@@ -37,6 +37,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
+          # pull_request events otherwise checkout GitHub's synthetic merge ref;
+          # readiness evidence is intentionally scoped to the exact PR head.
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
       - name: Set up Node.js

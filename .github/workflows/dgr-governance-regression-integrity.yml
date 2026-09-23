@@ -28,10 +28,17 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        # Pin the action implementation so a movable upstream tag cannot silently
+        # change the code behind a branch-protection security context.
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # This workflow only reads the checkout. Do not persist the GITHUB_TOKEN
+          # in local git configuration where repository-controlled scripts could reach it.
+          persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        # Same supply-chain rule for the runtime bootstrap action.
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "22"
 

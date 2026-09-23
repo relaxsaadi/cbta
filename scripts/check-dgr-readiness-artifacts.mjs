@@ -9,6 +9,14 @@
  * metadata fields without a list marker. Normalize only the parser-visible
  * metadata prefix in memory, then execute the unchanged core checker.
  *
+ * Before the full artifact pass, normal readiness execution also runs the
+ * canonical matrix review-evidence checker. This keeps standalone use of this
+ * entrypoint fail-closed on the same EN bilingual-review semantics as the
+ * canonical workflow: generic APPROVED / COMPLETE / COMPLETED / REVIEWED /
+ * EN REVIEWED values cannot stand in for an explicit completed bilingual
+ * review. The dedicated core fixture mode is left isolated so its own
+ * regression fixtures can still be exercised deterministically.
+ *
  * This shim does not mutate repository files, regulatory content, source
  * evidence, reviewer evidence, or approval states. It exists only so the
  * fail-closed readiness checker measures the states that are actually written
@@ -59,5 +67,13 @@ fs.readFileSync = function patchedReadFileSync(file, ...rest) {
 
   return normalizeReadinessItemFieldSyntax(value);
 };
+
+const reviewStateFixtureMode = process.argv.includes("--test-review-state-policy");
+if (!reviewStateFixtureMode) {
+  // Keep direct/manual invocation of the readiness artifact guard aligned with
+  // the stricter canonical EN bilingual-review semantics. This checker exits
+  // non-zero on generic completion labels or invalid reviewer evidence.
+  await import("./check-dgr-matrix-review-evidence.mjs");
+}
 
 await import("./check-dgr-readiness-artifacts-core.mjs");

@@ -44,4 +44,5 @@ jobs:
         run: node scripts/check-dgr-import-candidate-csv-structure.mjs --test
 
       - name: Controlled-artifact row-structure gate
+        if: always()
         run: node scripts/check-dgr-import-candidate-csv-structure.mjs

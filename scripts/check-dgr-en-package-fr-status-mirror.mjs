@@ -5,6 +5,17 @@ import path from 'node:path';
 
 const RECONCILIATION = 'docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv';
 const FUNCTIONS = ['7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7', '7.8', '7.9', '7.10'];
+const MISSING_DIRECT_EVIDENCE_PATTERNS = [
+  /this item's own specific citation was not independently re-read/i,
+  /this item's own specific citation was not independently read/i,
+  /specific current-dgr citation was not independently re-read/i,
+  /specific current-dgr citation was not independently read/i,
+  /own specific citation was not independently re-read/i,
+  /own specific citation was not independently read/i,
+  /not independently re-searched/i,
+  /not independently searched/i,
+  /not re-searched from scratch/i,
+];
 
 function parseCsv(text, label) {
   const rows = [];
@@ -57,6 +68,8 @@ function reconciliationMap(text, label = RECONCILIATION) {
     'function',
     'current_individual_fr_status_bucket',
     'current_individual_fr_status_full_text',
+    'reason',
+    'next_action',
   ];
   const index = new Map(headers.map((header, i) => [header, i]));
   for (const header of required) {
@@ -76,6 +89,7 @@ function reconciliationMap(text, label = RECONCILIATION) {
       function: normalize(values[index.get('function')] ?? ''),
       bucket: normalize(values[index.get('current_individual_fr_status_bucket')] ?? '').toUpperCase(),
       full: normalize(values[index.get('current_individual_fr_status_full_text')] ?? ''),
+      evidenceText: values.map((value) => String(value ?? '')).join('\n'),
     });
   }
   return byId;
@@ -84,6 +98,7 @@ function reconciliationMap(text, label = RECONCILIATION) {
 function classifyStatus(text) {
   const status = normalize(text).toUpperCase();
   if (!status) return 'MISSING';
+  if (/\b(?:TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED|SOURCE[ _]GAP[ _]UNRESOLVED|DIRECT[ _]ITEM[ _]EVIDENCE[ _]REQUIRED)\b/.test(status)) return 'UNRESOLVED';
   if (/^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/.test(status)) return 'FROZEN';
   if (/\bSOURCE GAP\b/.test(status)) return 'GAP';
   if (/\bCONFLICT\b/.test(status)) return 'CONFLICT';
@@ -92,6 +107,13 @@ function classifyStatus(text) {
 }
 
 function expectedClass(row) {
+  const terminal = row.bucket === 'FROZEN' || row.bucket === 'GAP'
+    || /^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(row.full)
+    || /FR SOURCE GAP CONFIRMED/i.test(row.full);
+  const missingDirectEvidence = MISSING_DIRECT_EVIDENCE_PATTERNS.some(
+    (pattern) => pattern.test(row.evidenceText ?? ''),
+  );
+  if (terminal && missingDirectEvidence) return 'UNRESOLVED';
   if (row.bucket === 'FROZEN') return 'FROZEN';
   if (row.bucket === 'GAP') return 'GAP';
   if (row.bucket.includes('CONFLICT')) return 'CONFLICT';
@@ -146,7 +168,6 @@ export function validatePackageAgainstReconciliation(packageText, functionId, re
     if (row.function !== functionId) {
       errors.push(`${artifact}: ${item.id}: reconciliation Function ${row.function || '(missing)'} does not match ${functionId}`);
     }
-
     const expected = expectedClass(row);
     const actual = classifyStatus(item.status);
     if (expected.startsWith('UNKNOWN:')) {
@@ -154,7 +175,7 @@ export function validatePackageAgainstReconciliation(packageText, functionId, re
       continue;
     }
     if (actual !== expected) {
-      errors.push(`${artifact}: ${item.id}: stale FR status mirror — package=${actual} (${item.status}); reconciliation=${expected} (${row.full || row.bucket})`);
+      errors.push(`${artifact}: ${item.id}: stale FR status mirror — package=${actual} (${item.status}); effective reconciliation=${expected} (${row.full || row.bucket})`);
     }
   }
   return errors;
@@ -162,7 +183,7 @@ export function validatePackageAgainstReconciliation(packageText, functionId, re
 
 function fixtureCsv(rows) {
   return [
-    'KOST_Question_ID,Function,Current_Individual_FR_Status_Bucket,Current_Individual_FR_Status_Full_Text',
+    'KOST_Question_ID,Function,Current_Individual_FR_Status_Bucket,Current_Individual_FR_Status_Full_Text,Reason,Next_Action',
     ...rows,
   ].join('\n');
 }
@@ -188,9 +209,10 @@ function expect(name, errors, shouldFail) {
 function fixtures() {
   const reconciliation = reconciliationMap(
     fixtureCsv([
-      'Q-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED',
-      'Q-7.2-002,7.2,GAP,FR SOURCE GAP CONFIRMED — DGR silent by design',
-      'Q-7.2-003,7.2,DRAFT,DRAFT — Tier B only',
+      'Q-7.2-001,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,Direct item-specific Bookshelf check performed,Import-eligible after reviewer sign-off',
+      'Q-7.2-002,7.2,GAP,FR SOURCE GAP CONFIRMED — DGR silent by design,Direct item-specific current-DGR search performed,Retain Tier B only',
+      'Q-7.2-003,7.2,DRAFT,DRAFT — Tier B only,Direct evidence pending,Obtain direct evidence',
+      "Q-7.2-004,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,This item's own specific citation was not independently re-read this pass,Direct item evidence required",
     ]),
     'fixture.csv',
   );
@@ -204,6 +226,12 @@ function fixtures() {
   ]), '7.2', reconciliation, 'fixture.md'), true);
   expect('stale-draft-over-gap-fails', validatePackageAgainstReconciliation(fixturePackage('7.2', [
     ['Q-7.2-002', 'DRAFT — Tier B only'],
+  ]), '7.2', reconciliation, 'fixture.md'), true);
+  expect('missing-direct-evidence-requires-unresolved-mirror', validatePackageAgainstReconciliation(fixturePackage('7.2', [
+    ['Q-7.2-004', 'TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED'],
+  ]), '7.2', reconciliation, 'fixture.md'), false);
+  expect('missing-direct-evidence-rejects-frozen-mirror', validatePackageAgainstReconciliation(fixturePackage('7.2', [
+    ['Q-7.2-004', 'FROZEN FR / SOURCE VERIFIED'],
   ]), '7.2', reconciliation, 'fixture.md'), true);
   expect('missing-fr-status-fails', validatePackageAgainstReconciliation(
     '### Q-7.2-001 — fixture\n- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`',
@@ -221,7 +249,6 @@ function repositoryCheck() {
     console.error(`ERROR: missing ${RECONCILIATION}`);
     process.exit(1);
   }
-
   let reconciliation;
   try {
     reconciliation = reconciliationMap(fs.readFileSync(reconciliationPath, 'utf8'));
@@ -229,7 +256,6 @@ function repositoryCheck() {
     console.error(`ERROR: ${error.message}`);
     process.exit(1);
   }
-
   const errors = [];
   for (const functionId of FUNCTIONS) {
     const artifact = `docs/DGR_EN_REVIEW_PACKAGE_${functionId}.md`;
@@ -241,16 +267,14 @@ function repositoryCheck() {
     errors.push(...validatePackageAgainstReconciliation(
       fs.readFileSync(absolute, 'utf8'), functionId, reconciliation, artifact));
   }
-
   if (errors.length) {
     errors.forEach((error) => console.error(`ERROR: ${error}`));
     console.error(`\nDGR EN-PACKAGE FR-STATUS MIRROR CHECK: FAIL (${errors.length} issue(s))`);
-    console.error('EN review packages may preserve independent EN-review states, but any duplicated FR status must mirror the current per-item reconciliation. This gate never promotes EN review or regulatory approval.');
+    console.error('EN review packages may preserve independent EN-review states, but duplicated FR status must mirror the effective current per-item state. Explicit admissions of missing direct current-DGR evidence force an UNRESOLVED mirror rather than a terminal FROZEN/GAP label. This gate never promotes EN review or regulatory approval.');
     process.exit(1);
   }
-
   console.log('DGR EN-PACKAGE FR-STATUS MIRROR CHECK: PASS');
-  console.log('PASS means duplicated FR status labels in EN packages match current reconciliation buckets only; it does not prove Tier-A correctness, bilingual equivalence, reviewer qualification, or approval.');
+  console.log('PASS means duplicated FR status labels in EN packages match the effective current per-item state only; it does not prove Tier-A correctness, bilingual equivalence, reviewer qualification, or approval.');
 }
 
 if (process.argv.includes('--test')) fixtures();

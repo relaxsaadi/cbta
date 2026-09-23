@@ -11,6 +11,7 @@ on:
       - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
       - "docs/DGR_IMPORT_CANDIDATE_PROVENANCE_CORRECTION_2026-09-22.md"
       - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - "scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs"
       - "scripts/check-dgr-import-candidate-csv-structure.mjs"
       - "scripts/check-dgr-import-candidate-provenance.mjs"
       - ".github/workflows/dgr-direct-tier-a-provenance.yml"
@@ -21,6 +22,7 @@ on:
       - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
       - "docs/DGR_IMPORT_CANDIDATE_PROVENANCE_CORRECTION_2026-09-22.md"
       - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - "scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs"
       - "scripts/check-dgr-import-candidate-csv-structure.mjs"
       - "scripts/check-dgr-import-candidate-provenance.mjs"
       - ".github/workflows/dgr-direct-tier-a-provenance.yml"
@@ -54,6 +56,14 @@ jobs:
       - name: Reject sampled-only Tier-A promotions
         if: always()
         run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs
+
+      - name: Affirmative direct-evidence regression fixtures
+        if: always()
+        run: node scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs --test
+
+      - name: Require affirmative current-edition per-item evidence
+        if: always()
+        run: node scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs
 
       - name: Import/reconciliation CSV row-structure regression fixtures
         if: always()

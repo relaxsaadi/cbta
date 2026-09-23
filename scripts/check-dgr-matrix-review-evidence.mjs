@@ -6,8 +6,10 @@
  *
  * This checker validates only governance evidence attached to states that
  * claim FR source verification or completed EN bilingual review. A terminal
- * EN review requires a terminal FR source-verification state on the same row,
- * and EN review chronology may not predate FR verification. Explicit DRAFT /
+ * EN review requires an explicit bilingual-review completion state, a terminal
+ * FR source-verification state on the same row, and chronology that does not
+ * predate FR verification. Generic APPROVED / COMPLETE / REVIEWED labels do
+ * not satisfy the separate EN bilingual-review gate. Explicit DRAFT /
  * SOURCE GAP / SOURCE CONFLICT / PENDING states remain representable.
  * It never validates licensed IATA text, changes review state, or infers
  * ANAC/IATA approval.
@@ -53,12 +55,15 @@ function claimsEnComplete(value) {
   const text = normalize(value);
   if (!text || nonCompleteEnRe.test(text)) return false;
   return Boolean(
-    /BILINGUAL(?: TECHNICAL)? REVIEW (?:COMPLETE|COMPLETED)/i.test(text) ||
-      /EN BILINGUAL REVIEW (?:COMPLETE|COMPLETED)/i.test(text) ||
-      /\bEN REVIEWED\b/i.test(text) ||
-      /^REVIEWED\b/i.test(text) ||
-      /^(?:COMPLETE|COMPLETED|APPROVED)\b/i.test(text),
+    /^BILINGUAL(?: TECHNICAL)? REVIEW (?:COMPLETE|COMPLETED)\b/i.test(text) ||
+      /^EN BILINGUAL(?: TECHNICAL)? REVIEW (?:COMPLETE|COMPLETED)\b/i.test(text),
   );
+}
+
+function isGenericEnCompletion(value) {
+  const text = normalize(value);
+  if (!text || nonCompleteEnRe.test(text) || claimsEnComplete(text)) return false;
+  return /^(?:EN\s+)?REVIEWED\b|^(?:COMPLETE|COMPLETED|APPROVED)\b/i.test(text);
 }
 
 function strictCivilDate(value) {
@@ -232,6 +237,10 @@ function validateMatrixText(text, fn, artifact) {
       const frVerified = claimsFrVerified(frState);
       const enComplete = claimsEnComplete(enState);
 
+      if (isGenericEnCompletion(enState)) {
+        errors.push(`${artifact}: task ${taskId}: generic EN review state "${normalize(enState)}" cannot satisfy or stand in for the separate bilingual-review gate; use an explicit BILINGUAL ... REVIEW COMPLETE state only after that human review is actually complete`);
+      }
+
       if (frVerified) {
         errors.push(
           ...reviewerEvidenceErrors(frReviewer, `${artifact}: task ${taskId} FR verification`, {
@@ -289,6 +298,10 @@ function runFixtures() {
   };
 
   expectFixture("valid-complete", valid, false);
+  expectFixture("valid-explicit-en-bilingual-complete", {
+    ...valid,
+    enState: "EN BILINGUAL REVIEW COMPLETED",
+  }, false);
   expectFixture("pending-states-remain-representable", {
     frState: "DRAFT / NOT YET VERIFIED",
     frReviewer: "pending",
@@ -325,6 +338,13 @@ function runFixtures() {
   expectFixture("en-no-bilingual-evidence", { ...valid, enReviewer: "John Smith — DGR/CBTA Reviewer — 2026-09-06" }, true);
   expectFixture("en-pending-reviewer", { ...valid, enReviewer: "pending DGR bilingual reviewer — 2026-09-06" }, true);
   expectFixture("fr-not-full-name", { ...valid, frReviewer: "Reviewer — DGR Instructor — 2026-09-06" }, true);
+
+  for (const genericEnState of ["APPROVED", "COMPLETE", "COMPLETED", "REVIEWED", "EN REVIEWED"]) {
+    expectFixture(`generic-en-state-rejected:${genericEnState}`, {
+      ...valid,
+      enState: genericEnState,
+    }, true);
+  }
 
   const firstTaskMasqueradingAsSeparator = [
     "| Function | Official task ID | FR source-verification state | FR verifier + date | EN bilingual-review state | EN reviewer + date |",
@@ -364,7 +384,7 @@ function repositoryCheck() {
   }
 
   console.log("DGR MATRIX REVIEW-EVIDENCE CHECK: PASS");
-  console.log("PASS does not promote any pending FR/EN state and does not imply ANAC/IATA approval.");
+  console.log("PASS requires explicit bilingual completion semantics for terminal EN matrix states; it does not promote any pending FR/EN state and does not imply ANAC/IATA approval.");
 }
 
 if (process.argv.includes("--test")) runFixtures();

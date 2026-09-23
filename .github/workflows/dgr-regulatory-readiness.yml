@@ -52,6 +52,7 @@ jobs:
         run: node scripts/check-dgr-import-candidate-csv-structure.mjs
 
       - name: Tier-A matrix policy regression fixtures
+        if: always()
         run: node scripts/test-dgr-matrix-tier-a-policy.mjs
 
       - name: Official-task coverage regression fixtures

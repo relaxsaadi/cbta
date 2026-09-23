@@ -52,6 +52,7 @@ jobs:
         run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs --test
 
       - name: Reject sampled-only Tier-A promotions
+        if: always()
         run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs
 
       - name: Import/reconciliation CSV row-structure regression fixtures

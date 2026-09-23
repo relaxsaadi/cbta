@@ -153,6 +153,14 @@ jobs:
         if: always()
         run: node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs
 
+      - name: EN-package FR-status mirror regression fixtures
+        if: always()
+        run: node scripts/check-dgr-en-package-fr-status-mirror.mjs --test
+
+      - name: EN-package FR-status mirror consistency gate
+        if: always()
+        run: node scripts/check-dgr-en-package-fr-status-mirror.mjs
+
       - name: Reviewer identity-evidence regression fixtures
         if: always()
         run: node scripts/check-dgr-reviewer-identity-evidence.mjs --test

@@ -38,6 +38,13 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Import/reconciliation CSV row-structure regression fixtures
+        run: node scripts/check-dgr-import-candidate-csv-structure.mjs --test
+
+      - name: Import/reconciliation CSV row-structure consistency gate
+        if: always()
+        run: node scripts/check-dgr-import-candidate-csv-structure.mjs
+
       - name: Tier-A matrix policy regression fixtures
         run: node scripts/test-dgr-matrix-tier-a-policy.mjs
 

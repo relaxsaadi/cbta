@@ -6,9 +6,10 @@
  *
  * The full readiness checker intentionally derives per-function populations
  * from structural Markdown headings. A canonical question heading that names
- * another function, is malformed, duplicated, or is moved outside the
- * canonical H2–H4 question-heading range must therefore be rejected rather
- * than silently falling outside the readiness population.
+ * another function, is malformed, duplicated, is moved outside the canonical
+ * H2–H4 question-heading range, or is hidden behind Markdown decoration must
+ * therefore be rejected rather than silently falling outside the readiness
+ * population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -27,11 +28,22 @@ function structuralQuestionHeading(line) {
   if (!match) return null;
 
   const heading = match[2].trim();
-  if (!/^Q-7\./i.test(heading)) return null;
+  let candidate = heading;
+
+  // The canonical readiness population parser requires the question ID to be
+  // the first plain-text token in the heading. Detect common Markdown wrappers
+  // around a leading Q-7.* token as question-like too so decoration cannot make
+  // an item silently disappear from readiness. The wrapper remains on the
+  // extracted token's trailing edge, causing canonicalQuestionId() to reject it
+  // as malformed instead of normalizing a non-canonical heading into acceptance.
+  if (!/^Q-7\./i.test(candidate)) {
+    candidate = candidate.replace(/^(?:(?:\*\*|__|~~|`|\[)\s*)+/, "");
+    if (!/^Q-7\./i.test(candidate)) return null;
+  }
 
   return {
     level: match[1].length,
-    token: heading.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "",
+    token: candidate.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "",
   };
 }
 
@@ -137,6 +149,20 @@ function runRegressionFixtures() {
     "unsupported question heading level",
     unsupportedHeadingLevel.errors.some((error) => error.includes("canonical readiness headings must use H2–H4")),
     "H5 question heading could disappear from readiness population without failing closed",
+  );
+
+  const decoratedHeading = inspectArtifact("## **Q-7.7-001** — hidden by readiness plain-ID parser", "7.7", "decorated-heading");
+  assertFixture(
+    "decorated structural question heading",
+    decoratedHeading.errors.some((error) => error.includes("malformed structural")),
+    "Markdown decoration around a leading question ID could make the item disappear from readiness without failing closed",
+  );
+
+  const linkedHeading = inspectArtifact("## [Q-7.8-001](https://example.invalid/item) — hidden by readiness plain-ID parser", "7.8", "linked-heading");
+  assertFixture(
+    "linked structural question heading",
+    linkedHeading.errors.some((error) => error.includes("malformed structural")),
+    "Markdown link decoration around a leading question ID could make the item disappear from readiness without failing closed",
   );
 
   const narrativeForeign = inspectArtifact([

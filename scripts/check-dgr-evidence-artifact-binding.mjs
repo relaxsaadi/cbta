@@ -163,11 +163,34 @@ function artifactNamesExactQuestionId(text, id) {
   return new RegExp(`(?:^|[^A-Z0-9.-])${escaped}(?![A-Z0-9.-])`, 'im').test(text);
 }
 
+function isStrictlyInside(parentDir, candidatePath) {
+  const relative = path.relative(parentDir, candidatePath);
+  return relative !== '' && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+}
+
+function firstSymlinkInPath(parentDir, candidatePath) {
+  const relative = path.relative(parentDir, candidatePath);
+  if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) return null;
+
+  let current = parentDir;
+  for (const segment of relative.split(path.sep).filter(Boolean)) {
+    current = path.join(current, segment);
+    const stat = fs.lstatSync(current);
+    if (stat.isSymbolicLink()) return current;
+  }
+  return null;
+}
+
 function validate(text, { rootDir = root } = {}) {
   const table = tableFromCsv(text, TARGET);
   const violations = [];
   const docsDir = path.resolve(rootDir, 'docs');
   const reconciliationPath = path.resolve(rootDir, TARGET);
+
+  if (!fs.existsSync(docsDir) || !fs.lstatSync(docsDir).isDirectory() || fs.lstatSync(docsDir).isSymbolicLink()) {
+    throw new Error('docs/: expected a real in-repository directory, not a missing path or symlink');
+  }
+  const realDocsDir = fs.realpathSync(docsDir);
 
   for (const row of table.rows) {
     const expectedFunction = functionFromQuestionId(row.id);
@@ -191,9 +214,7 @@ function validate(text, { rootDir = root } = {}) {
     }
 
     const candidatePath = path.resolve(rootDir, path.normalize(evidenceLocation));
-    const relativeToDocs = path.relative(docsDir, candidatePath);
-    const insideDocs = relativeToDocs !== '' && !relativeToDocs.startsWith(`..${path.sep}`) && relativeToDocs !== '..' && !path.isAbsolute(relativeToDocs);
-    if (!insideDocs) {
+    if (!isStrictlyInside(docsDir, candidatePath)) {
       violations.push({ id: row.id, reason: `Evidence_Location_File escapes or does not identify a docs artifact: ${evidenceLocation}` });
       continue;
     }
@@ -205,6 +226,30 @@ function validate(text, { rootDir = root } = {}) {
 
     if (!fs.existsSync(candidatePath)) {
       violations.push({ id: row.id, reason: `Evidence_Location_File does not exist: ${evidenceLocation}` });
+      continue;
+    }
+
+    let symlinkPath;
+    try {
+      symlinkPath = firstSymlinkInPath(docsDir, candidatePath);
+    } catch (error) {
+      violations.push({ id: row.id, reason: `Evidence_Location_File path cannot be safely inspected: ${evidenceLocation} (${error instanceof Error ? error.message : String(error)})` });
+      continue;
+    }
+    if (symlinkPath) {
+      violations.push({ id: row.id, reason: `Evidence_Location_File must not traverse a symlink: ${evidenceLocation}` });
+      continue;
+    }
+
+    let realCandidatePath;
+    try {
+      realCandidatePath = fs.realpathSync(candidatePath);
+    } catch (error) {
+      violations.push({ id: row.id, reason: `Evidence_Location_File real path cannot be resolved: ${evidenceLocation} (${error instanceof Error ? error.message : String(error)})` });
+      continue;
+    }
+    if (!isStrictlyInside(realDocsDir, realCandidatePath)) {
+      violations.push({ id: row.id, reason: `Evidence_Location_File resolves outside the real docs directory: ${evidenceLocation}` });
       continue;
     }
 
@@ -259,6 +304,17 @@ function runSelfTest() {
     const outsideViolations = validate(outside, { rootDir: tempRoot });
     if (!outsideViolations.some((violation) => /escapes|docs artifact/i.test(violation.reason))) {
       throw new Error('Regression fixture failed: evidence outside docs/ was not rejected.');
+    }
+
+    const externalDir = path.join(tempRoot, 'external-evidence');
+    fs.mkdirSync(externalDir, { recursive: true });
+    fs.writeFileSync(path.join(externalDir, 'bound-outside.md'), '# Q-7.8-048\nOutside evidence reached through a symlinked docs subdirectory.\n', 'utf8');
+    const symlinkDir = path.join(docsDir, 'escape-link');
+    fs.symlinkSync(externalDir, symlinkDir, 'dir');
+    const symlinkTraversal = row('Q-7.8-048', '7.8', 'FROZEN', 'docs/escape-link/bound-outside.md');
+    const symlinkViolations = validate(symlinkTraversal, { rootDir: tempRoot });
+    if (!symlinkViolations.some((violation) => /symlink|real docs directory/i.test(violation.reason))) {
+      throw new Error('Regression fixture failed: intermediate symlink traversal outside docs/ was accepted as in-repo evidence.');
     }
 
     fs.writeFileSync(path.join(docsDir, path.basename(TARGET)), valid, 'utf8');

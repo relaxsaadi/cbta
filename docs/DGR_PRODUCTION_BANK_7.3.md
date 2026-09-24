@@ -964,9 +964,7 @@ this batch continues the same question-ID sequence from `Q-7.3-015`.
 
 ## Status of this batch — read before using any item below
 
-**All 18 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**Historical drafting status (superseded for current-state decisions):** all 18 items in this batch were originally `DRAFT`, Tier B basis only, and at that drafting point none had been Tier A-verified against the current IATA DGR 67th Edition (2026, French, Addendum 1) text. Current per-item status is governed by the later reconciliation and direct-evidence gates.
 
 - **Bookshelf re-checked this session, per the task's instruction — still not
   authenticated.** `mcp__chrome-devtools__evaluate` returned
@@ -1995,9 +1993,7 @@ maximum across 33 sub-tasks). Batch 1 + Batch 2 drafted 32 items
 
 ## Status of this batch — read before using any item below
 
-**All 13 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**Historical drafting status (superseded for current-state decisions):** all 13 items in this batch were originally `DRAFT`, Tier B basis only, and at that drafting point none had been Tier A-verified against the current IATA DGR 67th Edition (2026, French, Addendum 1) text. Current per-item status is governed by the later reconciliation and direct-evidence gates.
 
 - Per the task's binding instruction, **Tier A verification was not
   attempted this session.** The Bookshelf blocker is unchanged from Batch

@@ -6,7 +6,9 @@
  * An operational V2 import row must never be IMPORT_ELIGIBLE=YES while its
  * current FR/import or reconciliation status still carries an explicit
  * unresolved source state such as SOURCE GAP or SOURCE CONFLICT. Historical
- * OLD STATUS prose is deliberately excluded from the current-state decision.
+ * OLD STATUS prose is excluded, but the latest explicit NEW STATUS in a
+ * reconciliation block is authoritative and must not be ignored.
+ *
  * This guard checks status semantics only; it does not decide regulatory
  * correctness, reproduce licensed IATA text, or approve any question.
  */
@@ -19,6 +21,8 @@ const IMPORT_CANDIDATES = 'docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.cs
 
 const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED|DRAFT)\b/i;
 const UNRESOLVED_BUCKET = /^(?:GAP|CONFLICT|SOURCE\s+GAP|SOURCE\s+CONFLICT)\b/i;
+const RECONCILIATION_MARKER_RE = /(?:^|\r?\n)\s*\*\*Reconciliation\b/gi;
+const NEW_STATUS_RE = /\bNEW\s+STATUS\s*:\s*([^\r\n]*?)(?=\b(?:OLD|NEW)\s+STATUS\s*:|$)/gi;
 
 function parseCsv(text, label) {
   const rows = [];
@@ -121,10 +125,24 @@ function valueFor(table, row, header) {
 }
 
 function currentStatusSegment(value) {
-  const text = value.trim();
+  const text = String(value ?? '').trim();
   if (!text) return '';
-  const marker = /(?:\r?\n)\s*\*\*Reconciliation\b/i.exec(text);
-  return marker ? text.slice(0, marker.index).trim() : text;
+
+  const markers = [...text.matchAll(RECONCILIATION_MARKER_RE)];
+  if (markers.length === 0) return text;
+
+  const latestMarker = markers[markers.length - 1];
+  const latestBlock = text.slice(latestMarker.index ?? 0);
+  const newStatuses = [...latestBlock.matchAll(NEW_STATUS_RE)];
+  if (newStatuses.length > 0) {
+    return String(newStatuses[newStatuses.length - 1][1] ?? '').trim();
+  }
+
+  // A reconciliation block with no explicit NEW STATUS is ambiguous. Inspect
+  // the block itself rather than blindly trusting the pre-reconciliation text.
+  // This is fail-closed for import promotion while still excluding OLD STATUS
+  // whenever a later authoritative NEW STATUS is actually recorded.
+  return latestBlock.trim();
 }
 
 function unresolvedCurrentState(value) {
@@ -232,6 +250,22 @@ function runSelfTest() {
   const historicalResolvedImport = `${importHeader}\r\nQ-7.10-001,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-08-29):** OLD STATUS: STALE CITATION / SOURCE CONFLICT. NEW STATUS: FROZEN FR / SOURCE VERIFIED",YES\r\n`;
   if (findViolations(historicalResolvedReconciliation, historicalResolvedImport).length !== 0) {
     throw new Error('Regression fixture failed: resolved historical OLD STATUS prose was misclassified as current unresolved state.');
+  }
+
+  const latestConflictReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** OLD STATUS: FROZEN FR / SOURCE VERIFIED. NEW STATUS: SOURCE CONFLICT — direct Tier-A evidence requires re-check",FROZEN\r\n`;
+  const latestConflictViolations = findViolations(latestConflictReconciliation, safeImport);
+  if (!latestConflictViolations.some((v) => /reconciliation current FR status is unresolved/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: latest NEW STATUS=SOURCE CONFLICT was hidden by stale pre-reconciliation FROZEN prose.');
+  }
+
+  const multiReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-22):** OLD STATUS: FROZEN. NEW STATUS: SOURCE CONFLICT.\n\n**Reconciliation (2026-09-24):** OLD STATUS: SOURCE CONFLICT. NEW STATUS: FROZEN FR / SOURCE VERIFIED",FROZEN\r\n`;
+  if (findViolations(multiReconciliation, safeImport).length !== 0) {
+    throw new Error('Regression fixture failed: the latest resolved NEW STATUS did not supersede an older reconciliation conflict.');
+  }
+
+  const ambiguousReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** SOURCE CONFLICT requires owner review before a NEW STATUS is recorded",FROZEN\r\n`;
+  if (!findViolations(ambiguousReconciliation, safeImport).some((v) => /reconciliation current FR status is unresolved/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: reconciliation block without NEW STATUS was treated as safely resolved.');
   }
 
   const supersededStaleCitation = safeImport.replace(

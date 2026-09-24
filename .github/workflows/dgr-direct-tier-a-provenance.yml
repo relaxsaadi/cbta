@@ -16,6 +16,7 @@ on:
       - "scripts/check-dgr-evidence-artifact-binding.mjs"
       - "scripts/check-dgr-import-candidate-csv-structure.mjs"
       - "scripts/check-dgr-import-candidate-provenance.mjs"
+      - "scripts/check-dgr-unresolved-source-state-import.mjs"
       - ".github/workflows/dgr-direct-tier-a-provenance.yml"
   pull_request:
     paths:
@@ -29,6 +30,7 @@ on:
       - "scripts/check-dgr-evidence-artifact-binding.mjs"
       - "scripts/check-dgr-import-candidate-csv-structure.mjs"
       - "scripts/check-dgr-import-candidate-provenance.mjs"
+      - "scripts/check-dgr-unresolved-source-state-import.mjs"
       - ".github/workflows/dgr-direct-tier-a-provenance.yml"
 
 permissions:
@@ -84,6 +86,14 @@ jobs:
       - name: Import/reconciliation CSV row-structure consistency gate
         if: always()
         run: node scripts/check-dgr-import-candidate-csv-structure.mjs
+
+      - name: Unresolved source-state import regression fixtures
+        if: always()
+        run: node scripts/check-dgr-unresolved-source-state-import.mjs --test
+
+      - name: Reject SOURCE GAP/CONFLICT promotion to V2 import
+        if: always()
+        run: node scripts/check-dgr-unresolved-source-state-import.mjs
 
       - name: Import-candidate provenance regression fixtures
         if: always()

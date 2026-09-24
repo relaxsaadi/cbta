@@ -9,16 +9,16 @@ import { WHATSAPP_LINK } from "@/lib/formations";
 import { trackWhatsApp } from "@/lib/tracking";
 
 const FORMATIONS_NAV = [
-  { href: "/dgr-7-1", label: "DGR 7.1 — Expéditeurs" },
-  { href: "/dgr-7-2", label: "DGR 7.2 — Agents cargo" },
-  { href: "/dgr-7-3", label: "DGR 7.3 — Acceptation" },
-  { href: "/dgr-7-4", label: "DGR 7.4 — Personnel piste" },
-  { href: "/dgr-7-5", label: "DGR 7.5 — Sûreté passagers" },
-  { href: "/dgr-7-6", label: "DGR 7.6 — Tri postal" },
-  { href: "/dgr-7-7", label: "DGR 7.7 — Équipage cabine" },
-  { href: "/dgr-7-8", label: "DGR 7.8 — Dispatch & Ops" },
-  { href: "/dgr-7-9", label: "DGR 7.9 — Sécurité aéroport" },
-  { href: "/dgr-7-10", label: "DGR 7.10 — Responsables DGR" },
+  { href: "/dgr-7-1", label: "DGR 7.1 — Préparation des envois DG" },
+  { href: "/dgr-7-2", label: "DGR 7.2 — Fret général" },
+  { href: "/dgr-7-3", label: "DGR 7.3 — Acceptation / traitement DG" },
+  { href: "/dgr-7-4", label: "DGR 7.4 — Manutention / chargement" },
+  { href: "/dgr-7-5", label: "DGR 7.5 — Passagers & bagages" },
+  { href: "/dgr-7-6", label: "DGR 7.6 — Planification du chargement" },
+  { href: "/dgr-7-7", label: "DGR 7.7 — Équipage de conduite" },
+  { href: "/dgr-7-8", label: "DGR 7.8 — Opérations vol / dispatch" },
+  { href: "/dgr-7-9", label: "DGR 7.9 — Équipage cabine" },
+  { href: "/dgr-7-10", label: "DGR 7.10 — Contrôle de sûreté" },
 ];
 
 export default function Navbar() {
@@ -97,7 +97,7 @@ export default function Navbar() {
                     className="animate-dropdown absolute top-full left-0 mt-1 w-64 bg-[#001f45] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
                   >
                     <div className="px-3 py-2 border-b border-white/[0.07]">
-                      <p className="text-xs font-bold text-white/30 uppercase tracking-wider">10 Formations IATA DGR</p>
+                      <p className="text-xs font-bold text-white/30 uppercase tracking-wider">Fonctions CBTA 7.1–7.10</p>
                     </div>
                     <div className="py-1">
                       {FORMATIONS_NAV.map((f) => (
@@ -125,7 +125,7 @@ export default function Navbar() {
 
             <NavLink href="/promos" active={isActive("/promos")}>
               <Tag size={14} />
-              Promos
+              Offres
             </NavLink>
 
             <NavLink href="/a-propos" active={isActive("/a-propos")}>
@@ -195,7 +195,7 @@ export default function Navbar() {
                 <Calendar size={16} /> Planning 2026
               </MobileNavLink>
               <MobileNavLink href="/promos" active={isActive("/promos")}>
-                <Tag size={16} /> Promos
+                <Tag size={16} /> Offres
               </MobileNavLink>
               <MobileNavLink href="/a-propos" active={isActive("/a-propos")}>
                 <Info size={16} /> À propos
@@ -213,7 +213,7 @@ export default function Navbar() {
                   className="flex items-center justify-center gap-2 bg-green-500 text-black font-black text-sm px-6 py-3 rounded-full w-full"
                 >
                   <MessageCircle size={16} />
-                  Réserver via WhatsApp
+                  Contacter KOST
                 </a>
               </div>
             </div>

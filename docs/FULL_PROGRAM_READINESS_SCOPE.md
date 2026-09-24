@@ -4,9 +4,11 @@ Effective 2026-08-25. This file clarifies the end condition for the user's expan
 
 ## Scope correction
 
-The current `docs/PLATFORM_READINESS_REPORT.md` label `TECHNICALLY READY / PRE-PRODUCTION READY — HUMAN REGULATORY REVIEW PENDING` applies to the **core platform/runtime evidence gathered so far**, not to completion of the full DGR/CBTA production-question program.
+**Superseding readiness correction — 2026-09-24:** the historical `CORE PLATFORM TECHNICALLY READY` / `TECHNICALLY READY` wording in `docs/PLATFORM_READINESS_REPORT.md` must **not** be treated as the current Track-A readiness state. On the current branch, the authoritative `docs/PLATFORM_READY_CHECKLIST.md` still contains unchecked critical gates across exam-workflow immutability, candidate data isolation / attributable admin actions, audit trail and historical-attempt integrity, bilingual behavior, Moodle↔console write-boundary / retry controls, CSRF/XSS/injection and export controls, clean install/build/lint/type/dependency-security evidence, health/monitoring, and related release evidence. In addition, open E-EXAM issue #58 / draft PR #284 confirms that published rendering, automatic grading, and manual-grading semantics are not yet fully bound to immutable historical `qtype` evidence.
 
-The user explicitly expanded the final project scope to cover **all Functions 7.1 through 7.10**. Therefore, do not interpret the core-platform label as a final project-completion label.
+Therefore the current Track-A status is **PRE-PRODUCTION / NOT READY**. Any older core-platform-ready label is retained only as historical evidence of the narrower August black-box/runtime pass and is superseded for present readiness decisions.
+
+The user explicitly expanded the final project scope to cover **all Functions 7.1 through 7.10**. Therefore, do not interpret any prior narrower-scope core-platform label as a final project-completion label.
 
 ## Final project end condition
 
@@ -60,7 +62,7 @@ Do not stop at Function 7.3. Continue autonomously in this order unless a source
 6. Derive and complete the same pipeline for Functions 7.4 → 7.10, one function at a time.
 7. Build EN review packages and reviewer sign-off packages, but do not self-approve them.
 8. Update the final readiness report to distinguish:
-   - core platform technically ready;
+   - current core platform readiness state;
    - full 7.1–7.10 content-program completion;
    - EN/human regulatory review status.
 
@@ -71,5 +73,7 @@ Use these labels precisely:
 - `CORE PLATFORM TECHNICALLY READY` — only when Track A critical gates are passed, even if DGR program expansion is incomplete.
 - `FULL PROGRAM PRE-PRODUCTION READY — HUMAN REGULATORY REVIEW PENDING` — only when Track A is passed and Track B is complete except EN/named-reviewer human gates.
 - `PLATFORM READY TO USE` — only when the user-defined deployment/readiness checklist is satisfied for the intended operational use and no critical unresolved technical/content gate remains. Do not imply ANAC/IATA approval unless separately evidenced.
+
+**Current status as of the 2026-09-24 correction:** neither of the first two readiness labels above is currently earned; Track A remains pre-production/not-ready and Track B remains incomplete with direct Tier-A, FR→EN, import-provenance, and qualified-human-review gates open.
 
 Do not allow a prior narrower-scope readiness label to terminate work on Functions 7.4–7.10.

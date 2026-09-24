@@ -718,7 +718,7 @@ Batch 3 section (`Q-7.2-029`–`049`), not reconstructed or paraphrased from
 a separate source-basis note. The Tier A regulatory-verification risk is
 unchanged and still entirely open for every item below.
 
-## Q-7.2-029 — Distinction terminologique « Article » / « Substance »
+### Q-7.2-029 — Distinction terminologique « Article » / « Substance »
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -735,7 +735,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-030 — Le DGR de l'IATA comme document « terrain » (DGR — Base Réglementaire)
+### Q-7.2-030 — Le DGR de l'IATA comme document « terrain » (DGR — Base Réglementaire)
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -754,7 +754,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-031 — Exemple travaillé : danger et risque du liquide inflammable
+### Q-7.2-031 — Exemple travaillé : danger et risque du liquide inflammable
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -768,7 +768,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-032 — Raisons de la non-déclaration des marchandises dangereuses
+### Q-7.2-032 — Raisons de la non-déclaration des marchandises dangereuses
 
 - **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -782,7 +782,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-033 — COMAT : pièces d'avion et articles courants pouvant contenir des MD cachées
+### Q-7.2-033 — COMAT : pièces d'avion et articles courants pouvant contenir des MD cachées
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -802,7 +802,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-034 — Batteries au lithium : dispositions spéciales selon le type et l'état de charge
+### Q-7.2-034 — Batteries au lithium : dispositions spéciales selon le type et l'état de charge
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -816,7 +816,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-035 — Conformité de l'expéditeur et sanctions légales (DGR 1.3.1)
+### Q-7.2-035 — Conformité de l'expéditeur et sanctions légales (DGR 1.3.1)
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -830,7 +830,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-036 — Programme de formation de l'exploitant (DGR 1.5)
+### Q-7.2-036 — Programme de formation de l'exploitant (DGR 1.5)
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -844,7 +844,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-037 — Divergence d'État : États concernés (DGR 2.8.1)
+### Q-7.2-037 — Divergence d'État : États concernés (DGR 2.8.1)
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -858,7 +858,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-038 — Niveaux de restrictions applicables au transport aérien des MD
+### Q-7.2-038 — Niveaux de restrictions applicables au transport aérien des MD
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -872,7 +872,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-039 — Division 1.1 : risque d'explosion massive (Classe 1)
+### Q-7.2-039 — Division 1.1 : risque d'explosion massive (Classe 1)
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -889,7 +889,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-040 — Division 6.2 : substance infectieuse
+### Q-7.2-040 — Division 6.2 : substance infectieuse
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -903,7 +903,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-041 — Étiquette de danger de la Classe 6 (« Toxiques infectieuses »)
+### Q-7.2-041 — Étiquette de danger de la Classe 6 (« Toxiques infectieuses »)
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -922,7 +922,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-042 — UN 3245 : matières biologiques de Catégorie B
+### Q-7.2-042 — UN 3245 : matières biologiques de Catégorie B
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -936,7 +936,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-043 — Obligation de la Déclaration de l'expéditeur (DGD) pour chaque envoi (DGR 8.0.1)
+### Q-7.2-043 — Obligation de la Déclaration de l'expéditeur (DGD) pour chaque envoi (DGR 8.0.1)
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -950,7 +950,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-044 — Conservation des documents : période minimale de 3 mois
+### Q-7.2-044 — Conservation des documents : période minimale de 3 mois
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -964,7 +964,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-045 — Procédure en cas de contact corporel avec le contenu d'un colis de MD
+### Q-7.2-045 — Procédure en cas de contact corporel avec le contenu d'un colis de MD
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -978,7 +978,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-046 — En cas de doute sur un envoi : refus et traçabilité (vérifier la cohérence)
+### Q-7.2-046 — En cas de doute sur un envoi : refus et traçabilité (vérifier la cohérence)
 
 - **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -992,7 +992,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-047 — Vérification de l'envoi contre les définitions de classes (DGR 2.2.4, première instruction)
+### Q-7.2-047 — Vérification de l'envoi contre les définitions de classes (DGR 2.2.4, première instruction)
 
 - **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -1006,7 +1006,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-048 — Caractéristiques physiques d'un emballage suspect
+### Q-7.2-048 — Caractéristiques physiques d'un emballage suspect
 
 - **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
@@ -1020,7 +1020,7 @@ unchanged and still entirely open for every item below.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 
-## Q-7.2-049 — Pictogrammes SGH (losange) et présence de marchandises dangereuses
+### Q-7.2-049 — Pictogrammes SGH (losange) et présence de marchandises dangereuses
 
 - **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
 - **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)

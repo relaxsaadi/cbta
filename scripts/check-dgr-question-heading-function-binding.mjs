@@ -8,10 +8,11 @@
  * from structural Markdown headings. A canonical question heading that names
  * another function, is malformed, duplicated, is moved outside the canonical
  * H2–H4 question-heading range, is indented away from the readiness parser's
- * column-1 contract, is expressed with Setext or raw HTML heading syntax, or is
- * hidden behind Markdown/inline-HTML decoration, CommonMark escapes, or HTML
- * character references must therefore be rejected rather than silently falling
- * outside the readiness population.
+ * column-1 contract, is nested inside a Markdown blockquote/list container, is
+ * expressed with Setext or raw HTML heading syntax, or is hidden behind
+ * Markdown/inline-HTML decoration, CommonMark escapes, or HTML character
+ * references must therefore be rejected rather than silently falling outside
+ * the readiness population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -75,21 +76,23 @@ function leadingQuestionToken(text) {
 }
 
 function structuralQuestionHeading(line) {
-  // CommonMark ATX headings may be indented by up to three spaces. The
-  // canonical readiness population parser intentionally requires the heading
-  // marker at column 1, so detect legal 1–3-space indentation here and reject
-  // it explicitly instead of allowing a rendered question heading to vanish
-  // from the machine-readiness population.
-  const match = line.match(/^( {0,3})(#{1,6})\s+(.+)$/);
+  // CommonMark ATX headings may be indented by up to three spaces and may also
+  // be nested inside blockquote/list containers. The canonical readiness
+  // population parser intentionally requires the heading marker at column 1
+  // with no container prefix, so detect these rendered-but-noncanonical forms
+  // explicitly instead of allowing them to vanish from machine readiness.
+  const match = line.match(
+    /^( {0,3})((?:(?:>\s*)|(?:(?:[-+*]|\d{1,9}[.)])\s+))*)(#{1,6})\s+(.+)$/,
+  );
   if (!match) return null;
 
-  const token = leadingQuestionToken(match[3]);
+  const token = leadingQuestionToken(match[4]);
   if (!token) return null;
 
   return {
-    syntax: "atx",
+    syntax: match[2] ? "container-atx" : "atx",
     indent: match[1].length,
-    level: match[2].length,
+    level: match[3].length,
     token,
   };
 }
@@ -172,6 +175,12 @@ function recordStructuralQuestion({ structural, index, expectedFn, errors, ids }
   if (structural.syntax === "html") {
     errors.push(
       `line ${index + 1}: structural question heading uses raw HTML heading syntax; canonical readiness questions must use column-1 ATX H2–H4 headings`,
+    );
+  }
+
+  if (structural.syntax === "container-atx") {
+    errors.push(
+      `line ${index + 1}: structural question heading is nested inside a Markdown blockquote/list container; canonical readiness questions must use bare column-1 ATX H2–H4 headings`,
     );
   }
 
@@ -320,6 +329,28 @@ function runRegressionFixtures() {
     "indented structural question heading",
     indentedHeading.errors.some((error) => error.includes("must start at column 1")),
     "1–3-space-indented Markdown question heading could disappear from readiness without failing closed",
+  );
+
+  const blockquoteHeading = inspectArtifact(
+    "> ## Q-7.9-003 — rendered blockquote ATX heading hidden by readiness column-1 parser",
+    "7.9",
+    "blockquote-heading",
+  );
+  assertFixture(
+    "blockquote-nested structural question heading",
+    blockquoteHeading.errors.some((error) => error.includes("blockquote/list container")),
+    "blockquote-nested Markdown question heading could disappear from readiness population without failing closed",
+  );
+
+  const listNestedHeading = inspectArtifact(
+    "> - ### Q-7.10-003 — rendered nested list ATX heading hidden by readiness column-1 parser",
+    "7.10",
+    "list-nested-heading",
+  );
+  assertFixture(
+    "list-nested structural question heading",
+    listNestedHeading.errors.some((error) => error.includes("blockquote/list container")),
+    "list/blockquote-nested Markdown question heading could disappear from readiness population without failing closed",
   );
 
   const setextHeading = inspectArtifact([

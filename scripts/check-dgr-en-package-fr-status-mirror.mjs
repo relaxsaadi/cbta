@@ -144,6 +144,10 @@ function expectedClass(row) {
   if (row.bucket === 'FROZEN') return 'FROZEN';
   if (row.bucket === 'GAP') return 'GAP';
   if (row.bucket.includes('CONFLICT')) return 'CONFLICT';
+  // PARTIAL / PARTIALLY CONFIRMED is deliberately non-terminal. Mirror it as
+  // UNRESOLVED rather than forcing the EN package to invent a stronger state
+  // or leaving this gate impossible to satisfy for a valid conservative FR hold.
+  if (row.bucket === 'PARTIAL' || /^PARTIALLY CONFIRMED\b/i.test(row.full)) return 'UNRESOLVED';
   if (row.bucket === 'DRAFT') return 'DRAFT';
   const fromFull = classifyStatus(row.full);
   if (fromFull !== 'OTHER' && fromFull !== 'MISSING') return fromFull;
@@ -289,6 +293,7 @@ function fixtures() {
       'Q-7.2-002,7.2,GAP,FR SOURCE GAP CONFIRMED — DGR silent by design,Direct item-specific current-DGR search performed,Retain Tier B only',
       'Q-7.2-003,7.2,DRAFT,DRAFT — Tier B only,Direct evidence pending,Obtain direct evidence',
       "Q-7.2-004,7.2,FROZEN,FROZEN FR / SOURCE VERIFIED,This item's own specific citation was not independently re-read this pass,Direct item evidence required",
+      'Q-7.2-005,7.2,PARTIAL,PARTIALLY CONFIRMED — underlying duty verified; item wording still needs targeted evidence,Partial evidence only,Targeted direct evidence required',
     ]),
     'fixture.csv',
   );
@@ -297,6 +302,7 @@ function fixtures() {
     ['Q-7.2-002', 'FR SOURCE GAP CONFIRMED — DGR silent by design'],
     ['Q-7.2-003', 'DRAFT — Tier B only'],
     ['Q-7.2-004', 'TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED'],
+    ['Q-7.2-005', 'TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED'],
   ];
   expect('current-mixed-statuses-pass', validatePackageAgainstReconciliation(
     fixturePackage('7.2', completePackage), '7.2', reconciliation, 'fixture.md'), false);
@@ -315,6 +321,9 @@ function fixtures() {
     fixturePackage('7.2', completePackage), '7.2', reconciliation, 'fixture.md'), false);
   expect('missing-direct-evidence-rejects-frozen-mirror', validatePackageAgainstReconciliation(fixturePackage('7.2', [
     ['Q-7.2-004', 'FROZEN FR / SOURCE VERIFIED'],
+  ]), '7.2', reconciliation, 'fixture.md'), true);
+  expect('partial-fr-state-requires-unresolved-mirror', validatePackageAgainstReconciliation(fixturePackage('7.2', [
+    ['Q-7.2-005', 'TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED'],
   ]), '7.2', reconciliation, 'fixture.md'), true);
   expect('missing-fr-status-fails', validatePackageAgainstReconciliation(
     '### Q-7.2-001 — fixture\n- **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`',

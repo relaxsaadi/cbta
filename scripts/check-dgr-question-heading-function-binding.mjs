@@ -61,7 +61,7 @@ function leadingQuestionToken(text) {
     ) {
       previous = candidate;
       candidate = candidate
-        .replace(/^(?:(?:\*\*|__|~~|`|\[)\s*)+/, "")
+        .replace(/^(?:(?:\*\*|\*|__|_|~~|`|\[)\s*)+/, "")
         .replace(/^(?:<[^>\r\n]+>\s*)+/, "");
     }
     if (!plainQuestionPrefix(candidate) && !renderedQuestionPrefix(candidate)) return "";
@@ -284,6 +284,28 @@ function runRegressionFixtures() {
     "decorated structural question heading",
     decoratedHeading.errors.some((error) => error.includes("malformed structural")),
     "Markdown decoration around a leading question ID could make the item disappear from readiness without failing closed",
+  );
+
+  const singleAsteriskEmphasisHeading = inspectArtifact(
+    "## *Q-7.7-002* — rendered italic ATX heading hidden by readiness plain-ID parser",
+    "7.7",
+    "single-asterisk-emphasis-heading",
+  );
+  assertFixture(
+    "single-asterisk-emphasized structural question heading",
+    singleAsteriskEmphasisHeading.errors.some((error) => error.includes("malformed structural")),
+    "single-asterisk Markdown emphasis around a leading question ID could make the item disappear from readiness without failing closed",
+  );
+
+  const singleUnderscoreEmphasisHeading = inspectArtifact(
+    "## _Q-7.8-002_ — rendered italic ATX heading hidden by readiness plain-ID parser",
+    "7.8",
+    "single-underscore-emphasis-heading",
+  );
+  assertFixture(
+    "single-underscore-emphasized structural question heading",
+    singleUnderscoreEmphasisHeading.errors.some((error) => error.includes("malformed structural")),
+    "single-underscore Markdown emphasis around a leading question ID could make the item disappear from readiness without failing closed",
   );
 
   const linkedHeading = inspectArtifact("## [Q-7.8-001](https://example.invalid/item) — hidden by readiness plain-ID parser", "7.8", "linked-heading");

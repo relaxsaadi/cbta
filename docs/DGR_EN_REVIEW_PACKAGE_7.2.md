@@ -73,7 +73,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-001 — Portée du Sous-comité d'experts (SCoETDG) dans la hiérarchie réglementaire
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim from production bank):**
   - Stem: *"Selon le cours (Cadre juridique — Fondements de la Réglementation DGR 1.1), quel organisme élabore des procédures recommandées pour le transport de toutes les marchandises dangereuses, applicables à tous les modes de transport, à l'exception des matières radioactives ?"*
@@ -92,7 +92,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-002 — Définition du terme « Risque » (par opposition à « Danger »)
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours, laquelle des affirmations suivantes correspond à la définition du terme « Risque », telle que distinguée de celle de « Danger » ?"*
@@ -114,7 +114,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-003 — Indice de reconnaissance d'une marchandise dangereuse cachée
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"D'après le cours (« Comment reconnaître les marchandises dangereuses cachées ? »), lequel des éléments suivants est cité comme un indice physique permettant de repérer un colis contenant potentiellement des marchandises dangereuses cachées ?"*
@@ -128,7 +128,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-004 — Division 5.1 : exemples de matières comburantes
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses DGR 3.0.2), à quelle division appartiennent le nitrate d'ammonium, le chlorate de calcium et l'eau de Javel ?"*
@@ -146,7 +146,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-005 — Deux types d'étiquettes (DGR 7.2.2.2)
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Étiquetage DGR 7.2.2.2), il existe deux types d'étiquettes pour un colis contenant des marchandises dangereuses : les étiquettes de danger et les étiquettes de manutention."*
@@ -160,7 +160,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-006 — Indications recherchées dans la documentation d'un envoi de fret général
 
 - **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Traitement/Acceptation de la cargaison), que doit rechercher le personnel d'acceptation dans la documentation d'un envoi de fret général afin de détecter d'éventuelles marchandises dangereuses non déclarées ?"*
@@ -174,7 +174,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-007 — Endossement de la LTA : confirmation de l'expéditeur (DGR 9.1.1 / DGR 2.2.4)
 
 - **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures d'acceptation de la cargaison — DGR 9.1.1), lorsqu'un expéditeur propose un colis correspondant aux descriptions génériques visées en DGR 2.2.4 (susceptibles de contenir des marchandises dangereuses), que doit-il confirmer par l'endossement de la lettre de transport aérien (LTA) ?"*
@@ -188,7 +188,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-008 — Conduite à tenir face à un colis suspect détecté par inspection physique
 
 - **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FR SOURCE GAP CONFIRMED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (inspection physique des colis — Séparation et isolement / Actions en cas de détection), quelle est la conduite à tenir lorsqu'un colis suspect est identifié lors de l'inspection physique d'un envoi de fret général ?"*
@@ -207,7 +207,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-009 — Signalement des marchandises dangereuses non déclarées ou mal déclarées
 
 - **Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Signaler les marchandises dangereuses non déclarées/mal déclarées), qui doit signaler la découverte de marchandises dangereuses non déclarées ou mal déclarées dans le fret ou le courrier, et à qui ?"*
@@ -221,7 +221,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-010 — Autorité algérienne destinataire des comptes rendus (DGR 9.6.5)
 
 - **Sub-task:** 7.4 Signaler les situations mettant en cause des marchandises dangereuses
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Procédures générales — Compte rendu accidents et incidents), pour l'Algérie, tous les comptes rendus d'accidents et d'incidents de marchandises dangereuses sont adressés à l'Agence Nationale de l'Aviation Civile (ANAC)."*
@@ -240,7 +240,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-011 — Signalement des accidents/incidents impliquant des MD partiellement exemptées (combined 7.1/7.2 pool)
 
 - **Sub-task:** 7.1 + 7.2 (combined, dual-tagged pool)
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Signaler les accidents et incidents impliquant des marchandises dangereuses), l'obligation de signalement de l'exploitant s'applique également aux marchandises dangereuses qui ne sont pas soumises à tout ou partie de la réglementation en raison d'une exception ou d'une disposition spéciale."*
@@ -268,7 +268,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-013 — Champ d'application du DGR de l'IATA (DGR 1.2.1)
 
 - **Sub-task:** 0.1.3 Déterminer l'application et la portée
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Applicabilité — Champ d'application DGR 1.2.1), à qui le DGR de l'IATA est-il applicable ?"*
@@ -282,7 +282,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-014 — Critère de marchandise dangereuse interdite en toute circonstance (DGR 4.2)
 
 - **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Marchandises dangereuses interdite en toute circonstance — DGR 4.2), lequel des éléments suivants est cité comme un critère d'interdiction absolue au transport aérien ?"*
@@ -296,7 +296,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-015 — Dispositions relatives aux passagers (Table 2.3.A)
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Limites — Dispositions relatives aux passagers et au fret), les marchandises dangereuses sont généralement interdites au transport par les passagers ou l'équipage, sous réserve de limitations décrites en 2.3 (résumées dans le tableau 2.3.A), et seuls les articles spécifiés aux points 2.3.2 à 2.3.5 sont autorisés, uniquement pour un usage personnel."*
@@ -310,7 +310,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-016 — Responsabilités de l'exploitant (DGR 1.4)
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Rôle et responsabilité — Responsabilités Exploitant DGR 1.4), laquelle des listes suivantes correspond aux responsabilités attribuées à l'exploitant ?"*
@@ -324,7 +324,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-017 — Divergences de l'exploitant (DGR 2.8.3)
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Divergences d'État et d'Exploitant — DGR 2.8.3), quelle règle s'applique aux divergences notifiées par un exploitant ?"*
@@ -338,7 +338,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-018 — Groupes d'emballage et degré de danger (DGR 3.0.3)
 
 - **Sub-task:** 0.4.2 Comprendre les principes généraux des groupes d'emballage
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Groupes d'emballage DGR 3.0.3), à quel groupe d'emballage correspondent les matières moyennement dangereuses ?"*
@@ -352,7 +352,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-019 — Critères de marquage des colis (marquage à spécification)
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Marquage à spécification des emballages), tout colis de marchandises dangereuses doit être marqué de façon visible, lisible, durable, et pouvant résister aux intempéries."*
@@ -366,7 +366,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-020 — Contenu de la case « Renseignements sur la manutention » de la LTA (DGR 8.2)
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Lettre de transport aérien — LTA — DGR 8.2), que doit comprendre la case « Renseignements sur la manutention » de la LTA accompagnant un envoi de marchandises dangereuses, selon le cas ?"*
@@ -380,7 +380,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-021 — Première action en cas de colis endommagé suspecté de MD (procédures d'urgence générales)
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FR SOURCE GAP CONFIRMED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures d'urgence générales), quelle est la toute première action à entreprendre face à un colis endommagé suspecté de contenir une marchandise dangereuse ?"*
@@ -394,7 +394,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-022 — Responsabilité de l'exploitant pour l'information des employés (DGR 9.5.1.2)
 
 - **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FR SOURCE GAP CONFIRMED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Information sur l'intervention d'urgence — DGR 9.5.1.2), il incombe à l'exploitant d'informer tous ses employés de la procédure d'intervention d'urgence applicable partout où des marchandises dangereuses sont manipulées, une procédure qui doit également être établie par les autorités aéroportuaires."*
@@ -408,7 +408,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-023 — Demande de preuves documentaires (SDS) pour une description générique sur la LTA (DGR 9.1.1)
 
 - **Sub-task:** 3.4.1 Vérifier la documentation pour indications de MD cachées/non déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures d'acceptation de la cargaison — DGR 9.1.1), lorsque le personnel d'acceptation vérifie une description générique du contenu figurant sur la lettre de transport aérien et soupçonne qu'elle puisse dissimuler des marchandises dangereuses, que doit-il demander à l'expéditeur, si nécessaire ?"*
@@ -422,7 +422,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-024 — Avertissements relatifs aux produits de consommation (DGR 9.1.7)
 
 - **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False (correct answer is **Faux**, not Vrai — flagged so
   the reviewer does not miscode the answer key)
 - **FR text (verbatim):**
@@ -443,7 +443,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-025 — Qui signale un accident/incident de MD, et à qui (combined 7.1/7.2 pool)
 
 - **Sub-task:** 7.1 + 7.2 (combined, dual-tagged pool)
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Signaler les accidents et incidents impliquant des marchandises dangereuses), qui doit signaler un accident ou un incident de marchandises dangereuses, et aux autorités compétentes de quel(s) État(s) ?"*
@@ -457,7 +457,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-026 — Exemple de MD cachée dans le fret général : appareils dentaires (DGR 2.2.4)
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Exemples de DG cachées DGR 2.2.4), lequel des articles suivants est cité par le cours comme un exemple typique de marchandise dangereuse potentiellement cachée dans le fret général ?"*
@@ -471,7 +471,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-027 — Les trois divisions de la Classe 2 (DGR 3.0.2)
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Les classes des marchandises dangereuses DGR 3.0.2), la Classe 2 des marchandises dangereuses comprend trois divisions : Gaz inflammable (2.1), Gaz non inflammable et non toxique (2.2), et Gaz toxique (2.3)."*
@@ -485,7 +485,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-028 — Étiquette de danger chimique : clarification avant acceptation ("Autre étiquetage")
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (« Autre étiquetage »), que doit faire le personnel d'acceptation avant d'accepter un colis portant une étiquette de danger chimique, sachant que l'article qu'elle accompagne ne répond pas forcément à la classification des marchandises dangereuses du règlement ?"*
@@ -757,7 +757,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-031 — Exemple travaillé : danger et risque du liquide inflammable
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (exemple travaillé — Liquide inflammable), dans cet exemple précis, qu'est-ce qui illustre concrètement le « risque », par opposition au « danger » ?"*
@@ -805,7 +805,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-034 — Batteries au lithium : dispositions spéciales selon le type et l'état de charge
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Batteries lithium-ion et métal), à quoi sont soumises les batteries au lithium transportées par avion, et qu'est-ce qui fait varier ce traitement réglementaire ?"*
@@ -819,7 +819,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-035 — Conformité de l'expéditeur et sanctions légales (DGR 1.3.1)
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Responsabilités de l'expéditeur — Conformité DGR 1.3.1), à quelles réglementations l'expéditeur doit-il se conformer, et que risque-t-il en cas de violation ?"*
@@ -847,7 +847,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-037 — Divergence d'État : États concernés (DGR 2.8.1)
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Divergence d'État — DGR 2.8.1), à quels États une divergence d'État notifiée peut-elle s'appliquer ?"*
@@ -875,7 +875,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-039 — Division 1.1 : risque d'explosion massive (Classe 1)
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (classes des marchandises dangereuses — DGR 3.0.2), quelle division de la Classe 1 (Explosifs) correspond à un « risque d'explosion massive » (code IMP : REX) ?"*
@@ -892,7 +892,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-040 — Division 6.2 : substance infectieuse
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (classes des marchandises dangereuses — DGR 3.0.2), quelle division couvre les substances infectieuses (par ex. virus, bactéries, déchets d'hôpitaux, sang contaminé) ?"*
@@ -906,7 +906,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-041 — Étiquette de danger de la Classe 6 (« Toxiques infectieuses »)
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Les étiquettes de danger), à quelle classe de marchandises dangereuses correspond l'étiquette de danger catégorisée « Toxiques infectieuses » ?"*
@@ -925,7 +925,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-042 — UN 3245 : matières biologiques de Catégorie B
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `SOURCE CONFLICT` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Autre étiquetage), quel numéro ONU est associé à l'étiquette des matières biologiques de Catégorie B ?"*
@@ -939,7 +939,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-043 — Obligation de la Déclaration de l'expéditeur (DGD) pour chaque envoi (DGR 8.0.1)
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Identifier la documentation requise — DGR 8.0.1), une Déclaration de l'expéditeur pour les marchandises dangereuses (DGD) doit être remplie par l'expéditeur pour chaque envoi de marchandises dangereuses, sauf dans les cas prévus au DGR 8.0.1.2."*
@@ -953,7 +953,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-044 — Conservation des documents : période minimale de 3 mois
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Conserver les documents), la lettre de transport aérien (LTA) et les autres documents de transport doivent être conservés pendant une période minimale de 3 mois."*
@@ -967,7 +967,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-045 — Procédure en cas de contact corporel avec le contenu d'un colis de MD
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures d'urgence générales — étape 5), que doit faire une personne dont le corps ou les vêtements sont entrés en contact avec le contenu d'un colis de marchandises dangereuses ?"*
@@ -1023,7 +1023,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-049 — Pictogrammes SGH (losange) et présence de marchandises dangereuses
 
 - **Sub-task:** 3.4.2 Vérifier les colis pour indications de MD cachées/non déclarées
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Type:** True/False
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Procédures d'acceptation de la cargaison — DGR 9.1.1), les pictogrammes SGH en forme de losange apposés sur les emballages peuvent indiquer la présence de marchandises dangereuses — certains n'indiquant un danger que pour la fourniture et l'utilisation, tandis que d'autres contiennent des symboles largement équivalents à ceux des étiquettes de danger utilisées dans le transport (voir Annexe B, tableau B.4.A)."*

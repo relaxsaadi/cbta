@@ -19,7 +19,12 @@ import path from 'node:path';
 const RECONCILIATION = 'docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv';
 const IMPORT_CANDIDATES = 'docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv';
 
-const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED|DRAFT)\b/i;
+// These phrases are specific enough to be meaningful wherever they occur in
+// the current status segment. DRAFT is deliberately handled separately: the
+// ordinary English word "draft" can appear in provenance/rationale prose and
+// must not by itself turn a FROZEN item into an unresolved status.
+const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED)\b/i;
+const DRAFT_STATUS_STATE = /(?:^DRAFT\b|\b(?:OLD|NEW|CURRENT)\s+STATUS\s*:\s*DRAFT\b)/i;
 const UNRESOLVED_BUCKET = /^(?:GAP|CONFLICT|SOURCE\s+GAP|SOURCE\s+CONFLICT)\b/i;
 const RECONCILIATION_MARKER_RE = /(?:^|\r?\n)\s*\*\*Reconciliation\b/gi;
 const NEW_STATUS_RE = /\bNEW\s+STATUS\s*:\s*([^\r\n]*?)(?=(?:[.;]\s*(?:SOURCE|RATIONALE|EVIDENCE|BASIS|NOTE)\s*:)|\b(?:OLD|NEW)\s+STATUS\s*:|$)/gi;
@@ -138,15 +143,16 @@ function currentStatusSegment(value) {
     return String(newStatuses[newStatuses.length - 1][1] ?? '').trim();
   }
 
-  // A reconciliation block with no explicit NEW STATUS is ambiguous. Inspect
-  // the block itself rather than blindly trusting the pre-reconciliation text.
-  // This is fail-closed for import promotion while still excluding OLD STATUS
-  // whenever a later authoritative NEW STATUS is actually recorded.
+  // A reconciliation block with no explicit NEW STATUS is inspected as-is.
+  // This catches explicit unresolved states in that latest block, but the
+  // DRAFT status matcher below is intentionally status-shaped so ordinary
+  // prose such as "the Stage 1 draft's sub-task enumeration" does not fail.
   return latestBlock.trim();
 }
 
 function unresolvedCurrentState(value) {
-  return UNRESOLVED_SOURCE_STATE.test(currentStatusSegment(value));
+  const segment = currentStatusSegment(value);
+  return UNRESOLVED_SOURCE_STATE.test(segment) || DRAFT_STATUS_STATE.test(segment);
 }
 
 function findViolations(reconciliationText, importText) {
@@ -270,7 +276,12 @@ function runSelfTest() {
 
   const ambiguousReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** SOURCE CONFLICT requires owner review before a NEW STATUS is recorded",FROZEN\r\n`;
   if (!findViolations(ambiguousReconciliation, safeImport).some((v) => /reconciliation current FR status is unresolved/i.test(v.reason))) {
-    throw new Error('Regression fixture failed: reconciliation block without NEW STATUS was treated as safely resolved.');
+    throw new Error('Regression fixture failed: reconciliation block with an explicit unresolved source state was treated as safely resolved.');
+  }
+
+  const harmlessDraftProse = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** FROZEN FR / SOURCE VERIFIED. SOURCE: Tier B course trace from the Stage 1 draft's sub-task enumeration. RATIONALE: current source status remains FROZEN.",FROZEN\r\n`;
+  if (findViolations(harmlessDraftProse, safeImport).length !== 0) {
+    throw new Error('Regression fixture failed: ordinary provenance prose containing the word draft was misclassified as DRAFT status.');
   }
 
   const supersededStaleCitation = safeImport.replace(

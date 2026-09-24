@@ -1045,9 +1045,11 @@ sequence from `Q-7.4-017`.
 
 ## Status of this batch — read before using any item below
 
-**All 19 items in this batch are `DRAFT`, Tier B basis only. None has been
+**HISTORICAL DRAFTING STATUS — SUPERSEDED for current decision-making by the consolidated 2026-08-25 Tier A verification/reconciliation note at the top of this bank.** The text below is retained only as provenance for what was true when Batch 2 was drafted; current per-item evidence/reconciliation takes precedence and no item is promoted by this historical label.
+
+**All 19 items in this batch were originally `DRAFT`, Tier B basis only. None had been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+Addendum 1) text at the time of drafting.**
 
 - A quick, cautious check of the `chrome-devtools` Bookshelf session was made
   at the start of this batch, per standing instruction. Result: **no page was
@@ -2215,9 +2217,11 @@ batch continues the ID sequence from `Q-7.4-036`.
 
 ## Status of this batch — read before using any item below
 
-**All 18 items in this batch are `DRAFT`, Tier B basis only. None has been
+**HISTORICAL DRAFTING STATUS — SUPERSEDED for current decision-making by the consolidated 2026-08-25 Tier A verification/reconciliation note at the top of this bank.** The text below is retained only as provenance for what was true when Batch 3 was drafted; current per-item evidence/reconciliation takes precedence and no item is promoted by this historical label.
+
+**All 18 items in this batch were originally `DRAFT`, Tier B basis only. None had been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+Addendum 1) text at the time of drafting.**
 
 - Per this task's explicit instruction, **no attempt was made this session
   to reach the `chrome-devtools` Bookshelf session** — the "Tier A retry #2"

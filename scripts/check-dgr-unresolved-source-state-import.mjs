@@ -5,9 +5,10 @@
  *
  * An operational V2 import row must never be IMPORT_ELIGIBLE=YES while its
  * current FR/import or reconciliation status still carries an explicit
- * unresolved source state such as SOURCE GAP or SOURCE CONFLICT. This guard
- * checks status semantics only; it does not decide regulatory correctness,
- * reproduce licensed IATA text, or approve any question.
+ * unresolved source state such as SOURCE GAP or SOURCE CONFLICT. Historical
+ * OLD STATUS prose is deliberately excluded from the current-state decision.
+ * This guard checks status semantics only; it does not decide regulatory
+ * correctness, reproduce licensed IATA text, or approve any question.
  */
 
 import fs from 'node:fs';
@@ -16,7 +17,7 @@ import path from 'node:path';
 const RECONCILIATION = 'docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv';
 const IMPORT_CANDIDATES = 'docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv';
 
-const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|STALE\s+CITATION|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED|DRAFT)\b/i;
+const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED|DRAFT)\b/i;
 const UNRESOLVED_BUCKET = /^(?:GAP|CONFLICT|SOURCE\s+GAP|SOURCE\s+CONFLICT)\b/i;
 
 function parseCsv(text, label) {
@@ -119,8 +120,15 @@ function valueFor(table, row, header) {
   return index === undefined ? '' : (row.values[index] ?? '').trim();
 }
 
-function unresolvedState(value) {
-  return UNRESOLVED_SOURCE_STATE.test(value);
+function currentStatusSegment(value) {
+  const text = value.trim();
+  if (!text) return '';
+  const marker = /(?:\r?\n)\s*\*\*Reconciliation\b/i.exec(text);
+  return marker ? text.slice(0, marker.index).trim() : text;
+}
+
+function unresolvedCurrentState(value) {
+  return UNRESOLVED_SOURCE_STATE.test(currentStatusSegment(value));
 }
 
 function findViolations(reconciliationText, importText) {
@@ -151,10 +159,10 @@ function findViolations(reconciliationText, importText) {
     if (eligibility !== 'YES') continue;
 
     const importFrStatus = valueFor(imports, importRow, 'fr_status');
-    if (unresolvedState(importFrStatus)) {
+    if (unresolvedCurrentState(importFrStatus)) {
       violations.push({
         id: importRow.id,
-        reason: `IMPORT_ELIGIBLE=YES while import FR_STATUS carries an unresolved source state: ${importFrStatus}`,
+        reason: `IMPORT_ELIGIBLE=YES while current import FR_STATUS is unresolved: ${currentStatusSegment(importFrStatus)}`,
       });
     }
 
@@ -168,22 +176,22 @@ function findViolations(reconciliationText, importText) {
     const currentFull = valueFor(reconciliation, reconciliationRow, 'current_individual_fr_status_full_text');
     const finalStatus = valueFor(reconciliation, reconciliationRow, 'final_reconciled_status');
 
-    if (UNRESOLVED_BUCKET.test(bucket) || unresolvedState(bucket)) {
+    if (UNRESOLVED_BUCKET.test(bucket) || unresolvedCurrentState(bucket)) {
       violations.push({
         id: importRow.id,
         reason: `IMPORT_ELIGIBLE=YES while reconciliation FR status bucket is unresolved: ${bucket || '(missing)'}`,
       });
     }
-    if (unresolvedState(currentFull)) {
+    if (unresolvedCurrentState(currentFull)) {
       violations.push({
         id: importRow.id,
-        reason: `IMPORT_ELIGIBLE=YES while reconciliation current FR status carries an unresolved source state: ${currentFull}`,
+        reason: `IMPORT_ELIGIBLE=YES while reconciliation current FR status is unresolved: ${currentStatusSegment(currentFull)}`,
       });
     }
-    if (unresolvedState(finalStatus)) {
+    if (unresolvedCurrentState(finalStatus)) {
       violations.push({
         id: importRow.id,
-        reason: `IMPORT_ELIGIBLE=YES while final reconciliation status carries an unresolved source state: ${finalStatus}`,
+        reason: `IMPORT_ELIGIBLE=YES while final reconciliation status is unresolved: ${currentStatusSegment(finalStatus)}`,
       });
     }
   }
@@ -205,12 +213,12 @@ function runSelfTest() {
     '"FROZEN FR / SOURCE VERIFIED"',
     '"FROZEN FR / SOURCE VERIFIED — SOURCE CONFLICT"',
   );
-  if (!findViolations(safeReconciliation, conflictImport).some((v) => /import FR_STATUS carries an unresolved source state/i.test(v.reason))) {
+  if (!findViolations(safeReconciliation, conflictImport).some((v) => /current import FR_STATUS is unresolved/i.test(v.reason))) {
     throw new Error('Regression fixture failed: SOURCE CONFLICT hidden behind a FROZEN import prefix was accepted.');
   }
 
   const conflictFinal = safeReconciliation.replace(',FROZEN\r\n', ',"FROZEN — SOURCE CONFLICT"\r\n');
-  if (!findViolations(conflictFinal, safeImport).some((v) => /final reconciliation status carries an unresolved source state/i.test(v.reason))) {
+  if (!findViolations(conflictFinal, safeImport).some((v) => /final reconciliation status is unresolved/i.test(v.reason))) {
     throw new Error('Regression fixture failed: SOURCE CONFLICT hidden behind a FROZEN final-status prefix was accepted.');
   }
 
@@ -220,12 +228,26 @@ function runSelfTest() {
     throw new Error('Regression fixture failed: GAP reconciliation bucket was accepted for an import-eligible row.');
   }
 
+  const historicalResolvedReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED",FROZEN\r\n`;
+  const historicalResolvedImport = `${importHeader}\r\nQ-7.10-001,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-08-29):** OLD STATUS: STALE CITATION / SOURCE CONFLICT. NEW STATUS: FROZEN FR / SOURCE VERIFIED",YES\r\n`;
+  if (findViolations(historicalResolvedReconciliation, historicalResolvedImport).length !== 0) {
+    throw new Error('Regression fixture failed: resolved historical OLD STATUS prose was misclassified as current unresolved state.');
+  }
+
+  const supersededStaleCitation = safeImport.replace(
+    '"FROZEN FR / SOURCE VERIFIED"',
+    '"FROZEN FR / SOURCE VERIFIED — wording corrected, stale KOST citation superseded"',
+  );
+  if (findViolations(safeReconciliation, supersededStaleCitation).length !== 0) {
+    throw new Error('Regression fixture failed: explicitly superseded stale citation was misclassified as unresolved.');
+  }
+
   const heldImport = conflictImport.replace(',YES\r\n', ',NO\r\n');
   if (findViolations(safeReconciliation, heldImport).length !== 0) {
     throw new Error('Regression fixture failed: truthful non-importable SOURCE CONFLICT state was rejected.');
   }
 
-  console.log('PASS: unresolved SOURCE GAP/CONFLICT import-state regression fixtures');
+  console.log('PASS: unresolved SOURCE GAP/CONFLICT current-state import regression fixtures');
 }
 
 if (process.argv.includes('--test')) {
@@ -255,10 +277,10 @@ try {
 }
 
 if (violations.length > 0) {
-  console.error('ERROR: unresolved DGR source states are not eligible for V2 import.');
+  console.error('ERROR: unresolved current DGR source states are not eligible for V2 import.');
   for (const violation of violations) console.error(` - ${violation.id}: ${violation.reason}`);
   console.error('Keep SOURCE GAP/SOURCE CONFLICT items on explicit hold until the conflict/gap is genuinely resolved and current-source evidence supports promotion.');
   process.exit(1);
 }
 
-console.log('PASS: no V2 import-eligible row carries an explicit unresolved SOURCE GAP/CONFLICT state.');
+console.log('PASS: no V2 import-eligible row carries an explicit unresolved current SOURCE GAP/CONFLICT state.');

@@ -22,7 +22,7 @@ const IMPORT_CANDIDATES = 'docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.cs
 const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED|DRAFT)\b/i;
 const UNRESOLVED_BUCKET = /^(?:GAP|CONFLICT|SOURCE\s+GAP|SOURCE\s+CONFLICT)\b/i;
 const RECONCILIATION_MARKER_RE = /(?:^|\r?\n)\s*\*\*Reconciliation\b/gi;
-const NEW_STATUS_RE = /\bNEW\s+STATUS\s*:\s*([^\r\n]*?)(?=\b(?:OLD|NEW)\s+STATUS\s*:|$)/gi;
+const NEW_STATUS_RE = /\bNEW\s+STATUS\s*:\s*([^\r\n]*?)(?=(?:[.;]\s*(?:SOURCE|RATIONALE|EVIDENCE|BASIS|NOTE)\s*:)|\b(?:OLD|NEW)\s+STATUS\s*:|$)/gi;
 
 function parseCsv(text, label) {
   const rows = [];
@@ -252,7 +252,12 @@ function runSelfTest() {
     throw new Error('Regression fixture failed: resolved historical OLD STATUS prose was misclassified as current unresolved state.');
   }
 
-  const latestConflictReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** OLD STATUS: FROZEN FR / SOURCE VERIFIED. NEW STATUS: SOURCE CONFLICT — direct Tier-A evidence requires re-check",FROZEN\r\n`;
+  const resolvedWithHistoricalRationale = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** OLD STATUS: SOURCE CONFLICT. NEW STATUS: FROZEN FR / SOURCE VERIFIED. SOURCE: direct current-edition evidence. RATIONALE: prior SOURCE CONFLICT resolved by the new check.",FROZEN\r\n`;
+  if (findViolations(resolvedWithHistoricalRationale, safeImport).length !== 0) {
+    throw new Error('Regression fixture failed: metadata after a resolved NEW STATUS was misclassified as the current status.');
+  }
+
+  const latestConflictReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-09-24):** OLD STATUS: FROZEN FR / SOURCE VERIFIED. NEW STATUS: SOURCE CONFLICT — direct Tier-A evidence requires re-check. SOURCE: current reconciliation pass.",FROZEN\r\n`;
   const latestConflictViolations = findViolations(latestConflictReconciliation, safeImport);
   if (!latestConflictViolations.some((v) => /reconciliation current FR status is unresolved/i.test(v.reason))) {
     throw new Error('Regression fixture failed: latest NEW STATUS=SOURCE CONFLICT was hidden by stale pre-reconciliation FROZEN prose.');

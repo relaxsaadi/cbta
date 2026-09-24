@@ -9,8 +9,9 @@
  * another function, is malformed, duplicated, is moved outside the canonical
  * H2–H4 question-heading range, is indented away from the readiness parser's
  * column-1 contract, is expressed with Setext or raw HTML heading syntax, or is
- * hidden behind Markdown/inline-HTML decoration must therefore be rejected
- * rather than silently falling outside the readiness population.
+ * hidden behind Markdown/inline-HTML decoration, CommonMark escapes, or HTML
+ * character references must therefore be rejected rather than silently falling
+ * outside the readiness population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -24,25 +25,50 @@ import path from "node:path";
 const root = process.cwd();
 const functions = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
+function decodeAsciiCharacterReferences(text) {
+  return String(text ?? "")
+    .replace(/&#([0-9]{1,7});|&#x([0-9a-f]{1,6});/gi, (match, decimal, hex) => {
+      const codePoint = Number.parseInt(decimal ?? hex, hex ? 16 : 10);
+      if (!Number.isInteger(codePoint) || codePoint < 0x20 || codePoint > 0x7e) return match;
+      return String.fromCodePoint(codePoint);
+    })
+    .replace(/&period;/gi, ".");
+}
+
+function renderedQuestionPrefix(text) {
+  const renderedProbe = decodeAsciiCharacterReferences(text).replace(/\\([!-/:-@[-`{-~])/g, "$1");
+  return /^Q-7\./i.test(renderedProbe);
+}
+
 function leadingQuestionToken(text) {
   let candidate = String(text ?? "").trim();
+  const plainQuestionPrefix = (value) => /^Q-7\./i.test(value);
 
   // The canonical readiness population parser requires the question ID to be
-  // the first plain-text token in the heading. Detect common Markdown wrappers
-  // and leading inline-HTML wrappers around a Q-7.* token as question-like too
-  // so decoration cannot make an item silently disappear from readiness. The
-  // trailing wrapper remains on the extracted token, causing
-  // canonicalQuestionId() to reject the non-canonical heading rather than
-  // normalizing it into acceptance.
-  if (!/^Q-7\./i.test(candidate)) {
+  // the first plain-text token in the heading. Detect common Markdown wrappers,
+  // leading inline-HTML wrappers, CommonMark backslash escapes, and ASCII HTML
+  // character references around a rendered Q-7.* token as question-like too so
+  // decoration/encoding cannot make an item silently disappear from readiness.
+  // Non-canonical source spelling is deliberately kept in the extracted token,
+  // causing canonicalQuestionId() to reject it rather than normalizing it into
+  // acceptance.
+  if (!plainQuestionPrefix(candidate) && !renderedQuestionPrefix(candidate)) {
     let previous = "";
-    while (candidate !== previous && !/^Q-7\./i.test(candidate)) {
+    while (
+      candidate !== previous &&
+      !plainQuestionPrefix(candidate) &&
+      !renderedQuestionPrefix(candidate)
+    ) {
       previous = candidate;
       candidate = candidate
         .replace(/^(?:(?:\*\*|__|~~|`|\[)\s*)+/, "")
         .replace(/^(?:<[^>\r\n]+>\s*)+/, "");
     }
-    if (!/^Q-7\./i.test(candidate)) return "";
+    if (!plainQuestionPrefix(candidate) && !renderedQuestionPrefix(candidate)) return "";
+  }
+
+  if (!plainQuestionPrefix(candidate)) {
+    return candidate.match(/^([^\s—–]+)/)?.[1] ?? "";
   }
 
   return candidate.match(/^(Q-7\.[^\s—–]+)/i)?.[1] ?? "";
@@ -325,6 +351,28 @@ function runRegressionFixtures() {
     "inline-HTML-decorated ATX question heading",
     inlineHtmlDecoratedAtxHeading.errors.some((error) => error.includes("malformed structural")),
     "inline HTML decoration around a leading question ID could make an ATX item disappear from readiness without failing closed",
+  );
+
+  const escapedPunctuationAtxHeading = inspectArtifact(
+    "## Q\\-7.7-003 — rendered ATX heading hidden by plain-ID readiness parser",
+    "7.7",
+    "escaped-punctuation-atx-heading",
+  );
+  assertFixture(
+    "CommonMark-escaped ATX question heading",
+    escapedPunctuationAtxHeading.errors.some((error) => error.includes("malformed structural")),
+    "CommonMark backslash escaping inside a rendered leading question ID could make an ATX item disappear from readiness without failing closed",
+  );
+
+  const characterReferenceAtxHeading = inspectArtifact(
+    "## Q&#45;7.8-003 — rendered ATX heading hidden by plain-ID readiness parser",
+    "7.8",
+    "character-reference-atx-heading",
+  );
+  assertFixture(
+    "HTML-character-reference ATX question heading",
+    characterReferenceAtxHeading.errors.some((error) => error.includes("malformed structural")),
+    "HTML character references inside a rendered leading question ID could make an ATX item disappear from readiness without failing closed",
   );
 
   const narrativeForeign = inspectArtifact([

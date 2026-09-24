@@ -9,8 +9,8 @@
  * another function, is malformed, duplicated, is moved outside the canonical
  * H2–H4 question-heading range, is indented away from the readiness parser's
  * column-1 contract, is expressed with Setext or raw HTML heading syntax, or is
- * hidden behind Markdown decoration must therefore be rejected rather than
- * silently falling outside the readiness population.
+ * hidden behind Markdown/inline-HTML decoration must therefore be rejected
+ * rather than silently falling outside the readiness population.
  *
  * This guard is structural only. It does not validate IATA DGR content,
  * source correctness, translation quality, human review, or ANAC/IATA
@@ -29,12 +29,19 @@ function leadingQuestionToken(text) {
 
   // The canonical readiness population parser requires the question ID to be
   // the first plain-text token in the heading. Detect common Markdown wrappers
-  // around a leading Q-7.* token as question-like too so decoration cannot make
-  // an item silently disappear from readiness. The wrapper remains on the
-  // extracted token's trailing edge, causing canonicalQuestionId() to reject it
-  // as malformed instead of normalizing a non-canonical heading into acceptance.
+  // and leading inline-HTML wrappers around a Q-7.* token as question-like too
+  // so decoration cannot make an item silently disappear from readiness. The
+  // trailing wrapper remains on the extracted token, causing
+  // canonicalQuestionId() to reject the non-canonical heading rather than
+  // normalizing it into acceptance.
   if (!/^Q-7\./i.test(candidate)) {
-    candidate = candidate.replace(/^(?:(?:\*\*|__|~~|`|\[)\s*)+/, "");
+    let previous = "";
+    while (candidate !== previous && !/^Q-7\./i.test(candidate)) {
+      previous = candidate;
+      candidate = candidate
+        .replace(/^(?:(?:\*\*|__|~~|`|\[)\s*)+/, "")
+        .replace(/^(?:<[^>\r\n]+>\s*)+/, "");
+    }
     if (!/^Q-7\./i.test(candidate)) return "";
   }
 
@@ -307,6 +314,17 @@ function runRegressionFixtures() {
     "wrapped multiline HTML structural question heading",
     wrappedMultilineHtmlHeading.errors.some((error) => error.includes("raw HTML heading syntax")),
     "wrapped multiline raw HTML question heading could disappear from readiness population without failing closed",
+  );
+
+  const inlineHtmlDecoratedAtxHeading = inspectArtifact(
+    "## <strong>Q-7.6-002</strong> — rendered ATX heading hidden by plain-ID readiness parser",
+    "7.6",
+    "inline-html-decorated-atx-heading",
+  );
+  assertFixture(
+    "inline-HTML-decorated ATX question heading",
+    inlineHtmlDecoratedAtxHeading.errors.some((error) => error.includes("malformed structural")),
+    "inline HTML decoration around a leading question ID could make an ATX item disappear from readiness without failing closed",
   );
 
   const narrativeForeign = inspectArtifact([

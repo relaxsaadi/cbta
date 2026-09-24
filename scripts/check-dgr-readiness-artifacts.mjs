@@ -10,9 +10,11 @@
  * metadata prefix in memory, then execute the unchanged core checker.
  *
  * Before the full artifact pass, normal readiness execution also runs the
- * canonical matrix review-evidence checker. This keeps standalone use of this
- * entrypoint fail-closed on the same EN bilingual-review semantics as the
- * canonical workflow: generic APPROVED / COMPLETE / COMPLETED / REVIEWED /
+ * canonical evidence-artifact binding and matrix review-evidence checkers.
+ * This keeps standalone use of this entrypoint fail-closed on both per-item
+ * Tier-A traceability and the same EN bilingual-review semantics as the
+ * canonical workflow: a terminal reconciliation row cannot point at an
+ * unrelated docs file, and generic APPROVED / COMPLETE / COMPLETED / REVIEWED /
  * EN REVIEWED values cannot stand in for an explicit completed bilingual
  * review. The dedicated core fixture mode is left isolated so its own
  * regression fixtures can still be exercised deterministically.
@@ -70,6 +72,11 @@ fs.readFileSync = function patchedReadFileSync(file, ...rest) {
 
 const reviewStateFixtureMode = process.argv.includes("--test-review-state-policy");
 if (!reviewStateFixtureMode) {
+  // Standalone/manual readiness must prove that every terminal per-item state
+  // actually points to a durable artifact naming that item, not merely an
+  // arbitrary existing file under docs/.
+  await import("./check-dgr-evidence-artifact-binding.mjs");
+
   // Keep direct/manual invocation of the readiness artifact guard aligned with
   // the stricter canonical EN bilingual-review semantics. This checker exits
   // non-zero on generic completion labels or invalid reviewer evidence.

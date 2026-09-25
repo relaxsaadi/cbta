@@ -1,10 +1,6 @@
-# DGR EN Review Package — Function 7.10 (Q-7.10-001 – Q-7.10-032)
+# DGR EN Review Package — Function 7.10 (Q-7.10-001 – Q-7.10-044)
 
-Prepared as bilingual (FR→EN) draft translation material for all 32
-currently-drafted Function 7.10 items (`docs/DGR_PRODUCTION_BANK_7.10.md`,
-Batch 1: `Q-7.10-001`–`015`; Batch 2: `Q-7.10-016`–`032`). This is
-**preparatory drafting work for a human reviewer to check — it is not a
-substitute for that review.**
+Prepared as bilingual (FR→EN) draft translation material for all 44 current Function 7.10 items (`Q-7.10-001`–`Q-7.10-044`) across Batches 1–3 in `docs/DGR_PRODUCTION_BANK_7.10.md`. This is **preparatory drafting work for a human reviewer to check — it is not a substitute for that review.**
 
 Function 7.10 is *"Personnel chargé du contrôle de sécurité (bagages, fret
 et courrier des passagers et des membres d'équipage)"* — security/screening
@@ -20,11 +16,7 @@ aérien, screening" audience. **This is the tenth and final function in the
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** All 32 items
-  remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
-  recorded in `docs/DGR_PRODUCTION_BANK_7.10.md`. Per `.claude/rules/
-  dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
-  review are **separate gates** — closing neither gate for any item here.
+- **This package does not change any item's FR status.** It mirrors the current conservative reconciliation state only. Effective mirror counts for Function 7.10 are **19 DRAFT, 11 FROZEN, 13 TIER_A_PROVENANCE_UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED, and 1 SOURCE CONFLICT**. FR source verification and EN bilingual technical review are **separate gates** — this package closes neither gate and does not convert any FR evidence state into approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -161,7 +153,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Marchandises dangereuses transportées par les passagers et l'équipage, DGR 2.3.A), les armes électriques telles que les Tasers, lorsqu'elles contiennent des éléments dangereux (explosifs, gaz comprimés, piles au lithium, etc.), sont interdites uniquement en bagage enregistré, mais restent autorisées en bagage cabine ou sur la personne du passager."*
   - Correct answer: **Faux**
@@ -176,7 +168,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses DGR 4.2), quelle colonne de la liste indique les étiquettes de danger applicables à une marchandise dangereuse ?"*
   - Options: **(Correct)** *"Colonne D."* / *"Colonne A."* / *"Colonne C."* / *"Colonne E."*
@@ -190,7 +182,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le tableau de classification des batteries au lithium du cours (Batteries lithium-ion et métal), quel numéro ONU s'applique à une batterie au lithium-ion emballée avec un équipement ou contenue dans un équipement ?"*
   - Options: **(Correct)** *"UN 3481."* / *"UN 3480."* / *"UN 3090."* / *"UN 3091."*
@@ -204,7 +196,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.5.2 Reconnaître les différentes prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text (identical to Function 7.7's Q-7.7-005 — same FR stem/options,
   independently drawn from Function 7.10's own course copy):**
   - Stem: *"Selon le cours (Étiquetage DGR 7.2.2.2), laquelle des affirmations suivantes décrit correctement la classification des étiquettes que doit porter un colis de marchandises dangereuses ?"*
@@ -219,7 +211,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.5.2 Reconnaître les différentes prescriptions de base concernant l'étiquetage
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text (identical to Function 7.7's Q-7.7-006):**
   - Statement: *"Vrai ou Faux : selon le cours (Autres étiquettes), un colis portant une étiquette de danger chimique doit systématiquement être classé et traité comme une marchandise dangereuse au sens de la Réglementation, sans qu'aucune clarification supplémentaire ne soit nécessaire auprès de l'expéditeur."*
   - Correct answer: **Faux**
@@ -284,7 +276,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 5.1.2 Appliquer les prescriptions d'approbation
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Restriction carried over from the production bank:** this item tests
   only the specific AEP/battery-quantity threshold fact — the EN
   translation must not introduce a fabricated worked approval-application
@@ -303,7 +295,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 7.1 + 7.2 (combined pool) Signaler les accidents / les incidents de marchandises dangereuses
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Compte rendu accidents et incidents DGR 1.8), lesquelles des entités suivantes, autres que l'exploitant, sont explicitement citées par le cours comme pouvant devoir se conformer aux exigences de compte rendu en cas d'accident, d'incident, ou de découverte de marchandises dangereuses non déclarées ou mal déclarées ?"*
   - Options: **(Correct)** *"Les transitaires, les autorités douanières et les fournisseurs de service de sûreté, entre autres."* / *"Uniquement l'exploitant lui-même — aucune autre entité n'a d'obligation de compte rendu selon le cours."* / *"Uniquement l'Agence Nationale de l'Aviation Civile (ANAC), en tant que destinataire exclusif de toute obligation de signalement."* / *"Uniquement les passagers ayant eux-mêmes découvert la marchandise dangereuse concernée."*
@@ -317,7 +309,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Compte rendu DG non déclarées), l'obligation du personnel chargé du contrôle de sécurité de signaler des marchandises dangereuses non déclarées ou mal déclarées s'applique uniquement à celles découvertes dans le fret ou le courrier, et non à celles découvertes dans les bagages ou sur la personne des voyageurs ou des membres d'équipage."*
   - Correct answer: **Faux**
@@ -332,7 +324,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text (identical to Function 7.7's Q-7.7-015):**
   - Statement: *"Vrai ou Faux : selon le cours (Compte rendu accidents et incidents), pour l'Algérie, tous les comptes rendus sont adressés à l'Agence Nationale de l'Aviation Civile (ANAC), dont le siège social est situé Lot 225, Route Nationale N°5, Rouiba, Alger."*
   - Correct answer: **Vrai**
@@ -354,7 +346,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Généralités, DGR 1.0), quelle est la définition d'une marchandise dangereuse ?"*
   - Options: **(Correct)** *"Un produit, un article ou une substance susceptible de présenter un danger pour la santé, la sécurité, la propriété ou l'environnement, et qui figure dans la liste des marchandises dangereuses du règlement ou qui est classé conformément à celui-ci."* / *"Uniquement un produit chimique sous forme liquide ou gazeuse, jamais un solide ni un article complet dans sa forme finie."* / *"Une marchandise dont le transport aérien est rigoureusement interdit en toute circonstance, sans aucune exception possible."* / *"Une marchandise que l'expéditeur choisit librement de déclarer comme telle au moment de la remise à l'exploitant."*
@@ -368,7 +360,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Cadre juridique, Fondements de la Réglementation DGR 1.1), quel organisme a élaboré la Réglementation pour le transport sécuritaire des marchandises dangereuses par voie aérienne, codifiée dans l'annexe 18 et dans les Instructions techniques (IT) ?"*
   - Options: **(Correct)** *"L'Organisation de l'Aviation Civile Internationale (OACI)."* / *"Le Sous-comité d'experts du Conseil économique et social des Nations-Unies (SCoETDG)."* / *"L'Agence internationale de l'énergie atomique (AIEA)."* / *"L'IATA."*
@@ -383,7 +375,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.1.3 Déterminer l'application et la portée
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Applicabilité DGR 1.2.1), le DGR de l'IATA s'applique uniquement aux exploitants membres ou membres associés de l'IATA, à l'exclusion de tout expéditeur ou agent de fret."*
   - Correct answer: **Faux**
@@ -397,7 +389,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque, exemple du liquide inflammable), laquelle des affirmations suivantes applique correctement les définitions du cours à l'exemple de l'essence ?"*
   - Options: **(Correct)** *"Le danger est l'inflammabilité de l'essence elle-même (le fait qu'elle puisse s'enflammer facilement) ; le risque est la probabilité qu'elle s'enflamme réellement pendant le transport aérien, par exemple si le contenant est mal fermé ou exposé à une source de chaleur."* / *"Le risque est l'inflammabilité de l'essence elle-même ; le danger est la probabilité qu'elle s'enflamme pendant le transport."* / *"Le danger et le risque désignent exactement la même notion et sont interchangeables dans cet exemple."* / *"Le danger de l'essence ne concerne que son transport par voie maritime, jamais son transport par voie aérienne."*
@@ -412,7 +404,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Marchandises dangereuses interdites en toute circonstance, DGR 2.1), lesquelles des caractéristiques suivantes définissent une marchandise dangereuse dont le transport aérien est rigoureusement interdit en toute circonstance ?"*
   - Options: **(Correct)** *"Celles susceptibles d'exploser ou de réagir dangereusement, de produire une flamme ou un dégagement dangereux de chaleur, un dégagement de gaz ou de vapeur toxique, ou de produire un gaz inflammable ou corrosif dans des conditions normales de transport."* / *"Celles dont le transport est interdit uniquement en bagage cabine, mais autorisé en bagage de soute."* / *"Celles dont le transport nécessite uniquement l'approbation préalable de l'exploitant pour être autorisées."* / *"Celles listées uniquement au tableau 2.3.A relatif aux passagers et à l'équipage."*
@@ -441,7 +433,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Divergences d'États et d'Exploitant, DGR 2.8.3), laquelle des affirmations suivantes concernant une divergence d'exploitant est correcte ?"*
   - Options: **(Correct)** *"Une divergence d'exploitant ne doit jamais être moins restrictive que la Réglementation, et elle s'applique à tous les transports effectués par les exploitants concernés."* / *"Une divergence d'exploitant peut être plus permissive que la Réglementation, à condition que le passager en soit informé au moment de l'embarquement."* / *"Une divergence d'exploitant s'applique uniquement à l'État d'origine du vol, jamais aux autres exploitants du même groupe."* / *"L'exemple donné par le cours, AH (Air Algérie), illustre une divergence d'État plutôt qu'une divergence d'exploitant."*
@@ -456,7 +448,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.5.1 Reconnaître les différentes prescriptions de base concernant le marquage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Marquage des emballages à spécifications, DGR 6.0.3), dans l'exemple de marquage « UN/4G/Y/30/S/13/CH/2176/CG », que signifie la lettre « Y » ?"*
   - Options: **(Correct)** *"Le groupe d'emballage (groupe II)."* / *"Le code de l'emballage, indiquant qu'il s'agit d'une caisse en carton."* / *"La masse brute maximale autorisée pour l'emballage."* / *"L'État d'origine de l'emballage."*
@@ -471,7 +463,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Documentation DGR 8.0.1, exercice p.103), le NOTOC est le document qui doit obligatoirement accompagner tout envoi de marchandises dangereuses, sauf exemptions spécifiques prévues au point 8.0.1.2."*
   - Correct answer: **Faux**
@@ -499,7 +491,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.6.2 Comprendre les mesures d'intervention d'urgence prescrites par l'employeur
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **Restriction carried over from the production bank:** this item tests
   only the bare fact that this obligation is named among the operator's
   eight duties — the EN translation must not fabricate any specific
@@ -531,7 +523,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Marchandises dangereuses dans la propriété de l'exploitant, DGR 2.5), aucun article appartenant à l'exploitant (équipement de bord, produits de consommation, glace carbonique, équipement électronique alimenté par batterie, pièces pour avions) ne peut jamais bénéficier d'une exemption aux exigences relatives aux marchandises dangereuses."*
   - Correct answer: **Faux**
@@ -560,7 +552,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses, DGR 3.0.2), combien de classes de marchandises dangereuses existe-t-il, et certaines d'entre elles sont-elles subdivisées ?"*
   - Options: **(Correct)** *"Il existe 9 classes de marchandises dangereuses ; certaines sont subdivisées en divisions selon le type et le niveau de danger qu'elles présentent (par exemple les divisions 1.1 à 1.6, 2.1 à 2.3, 4.1 à 4.3, 5.1/5.2 et 6.1/6.2)."* / *"Il existe 9 classes, mais aucune n'est subdivisée en divisions."* / *"Il existe 13 classes, correspondant aux 13 lettres de colonnes A à N de la liste des marchandises dangereuses."* / *"Il existe 3 classes principales, chacune subdivisée en un nombre variable de divisions."*
@@ -574,7 +566,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le tableau de classification des batteries au lithium du cours (Batteries lithium-ion et métal), quel numéro ONU s'applique à une batterie au lithium métal transportée seule (non emballée avec un équipement ni contenue dans un équipement) ?"*
   - Options: **(Correct)** *"UN 3090."* / *"UN 3091."* / *"UN 3480."* / *"UN 3481."*
@@ -588,7 +580,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.5.2 Reconnaître les différentes prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `SOURCE CONFLICT` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Étiquetage, p.90), à quel type de matière correspond l'étiquette portant la mention « UN 3245 » présentée en exemple ?"*
   - Options: **(Correct)** *"Aux matières biologiques de Catégorie B."* / *"Aux matières dangereuses pour l'environnement."* / *"Aux organismes génétiquement modifiés (OGM)."* / *"À un produit radioactif."*
@@ -1038,7 +1030,7 @@ unchanged, to every item below:
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text (verbatim from production bank):**
   - Stem: *"Selon le cours (Divergences d'États et d'Exploitant — Divergence d'État DGR 2.8.1), à quels trois États une divergence d'État peut-elle s'appliquer, selon l'exemple ITG (Italie) cité par le cours ?"*
   - Options: **(Correct)** *"L'État d'Origine/État de Départ, l'État de Destination, et tous les États des escales de Transit."* / *"Uniquement l'État d'origine du vol, à l'exclusion de tout autre État."* / *"Uniquement les exploitants opérant depuis cet État, jamais les États eux-mêmes."* / *"Uniquement l'État de destination finale, à l'exclusion de l'État d'origine et des États de transit."*
@@ -1053,7 +1045,7 @@ unchanged, to every item below:
 
 - **Sub-task:** 0.5.1 Reconnaître les différentes prescriptions de base concernant le marquage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text (verbatim from production bank):**
   - Stem: *"Selon le cours (Emballage — Code de type d'emballage DGR 6.0.3.1), que signifie le chiffre « 4 » dans le code de type d'emballage ?"*
   - Options: **(Correct)** *"Caisse."* / *"Fût."* / *"Jerrican."* / *"Sac."*
@@ -1068,7 +1060,7 @@ unchanged, to every item below:
 
 - **Sub-task:** 0.5.2 Reconnaître les différentes prescriptions de base concernant l'étiquetage
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text (verbatim from production bank):**
   - Statement: *"Vrai ou Faux : selon le cours (Glace carbonique), il est impératif de marquer les bagages de soute des passagers et des équipages contenant du dioxyde de carbone solide (glace carbonique), en indiquant la quantité transportée."*
   - Correct answer: **Vrai**
@@ -1108,9 +1100,7 @@ unchanged, to every item below:
   `docs/DGR_PRODUCTION_BANK_7.10.md`'s own Batch 3 section, itself sourced
   verbatim (with printed slide/practice-book citations) from the actual
   KOST Function 7.10 course/practice-book PDFs.
-- All 12 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this section, per `.claude/rules/dgr-stage2b.md`
-  rule 5.
+- Batch 3 FR status mirrors remain fail-closed and are derived from the current reconciliation/direct-evidence policy; this section does not promote or approve any item.
 - Terminology consistency approach: this section reuses this package's own
   established Batch 1/2 candidates wherever the same concept recurs
   ("security screening personnel"/"security screening agent," "State

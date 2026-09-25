@@ -41,6 +41,8 @@ available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
 
 ## Status of this batch — read before using any item below
 
+> **HISTORICAL / SUPERSEDED batch drafting status:** The paragraph below records this batch's status at drafting time only. Current item status is governed by the later per-item reconciliation/source-evidence fields and current readiness gates; do not treat this paragraph as current regulatory authority.
+
 **All 15 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
 Addendum 1) text.**
@@ -946,6 +948,8 @@ Batch 1 drew 2) and **6.2.2** (Interpréter la NOTOC, ceiling 8, Batch 1 drew
 2), per the task's explicit instruction.
 
 ## Status of this batch — read before using any item below
+
+> **HISTORICAL / SUPERSEDED batch drafting status:** The paragraph below records this batch's status at drafting time only. Current item status is governed by the later per-item reconciliation/source-evidence fields and current readiness gates; do not treat this paragraph as current regulatory authority.
 
 **All 18 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
@@ -1897,6 +1901,8 @@ prior item — for genuinely new, distinct, non-duplicate facts, rather than
 re-testing an already-drawn fact from a different angle.
 
 ## Status of this batch — read before using any item below
+
+> **HISTORICAL / SUPERSEDED batch drafting status:** The paragraph below records this batch's status at drafting time only. Current item status is governed by the later per-item reconciliation/source-evidence fields and current readiness gates; do not treat this paragraph as current regulatory authority.
 
 **All 20 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,

@@ -93,7 +93,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slides 19–22 (DGR 1.1)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Cadre juridique — Fondements de la Réglementation DGR 1.1), quel organisme élabore les recommandations pour le transport sécuritaire des matières radioactives, recommandations qui, telles qu'applicables au transport aérien, sont reflétées dans la partie 10 du manuel de l'IATA ?"*
@@ -124,7 +124,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 80 (DGR 4.2)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses DGR 4.2), quelle colonne de la liste indique le groupe d'emballage applicable à une marchandise dangereuse ?"*
@@ -154,7 +154,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 85 (DGR 7.2.2.2), cross-checked against slides 86–88
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Étiquetage DGR 7.2.2.2), laquelle des affirmations suivantes décrit correctement la classification des étiquettes que doit porter un colis de marchandises dangereuses ?"*
@@ -184,7 +184,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 4.1.2 Déterminer les restrictions de tri et de séparation
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `STALE CITATION / SOURCE CONFLICT`
 - **Source (production bank):** KOST F7.4 course, slide 108 (DGR 9.3.2.1)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Base de la séparation des marchandises dangereuses — Tableau 9.3.A), pourquoi la division 4.1 et les classes 6, 7 et 9 n'apparaissent-elles PAS dans le Tableau 9.3.A ?"*
@@ -215,7 +215,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 4.2.3 Appliquer les prescriptions de rangement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 119 (DGR 9.3.13)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Animaux vivants DGR 9.3.13), quelle distance minimale de séparation est exigée entre les animaux vivants et les colis, suremballages ou conteneurs de fret des catégories II-Jaune et III-Jaune, pour un voyage de plus de 24 heures ?"*
@@ -245,7 +245,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slides 137–138 (DGR 9.5.1.1.3)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Notification des pilotes — DGR 9.5.1.1.3), laquelle des informations suivantes ne fait PAS partie des renseignements que la NOTOC doit obligatoirement comprendre pour une marchandise dangereuse classique ?"*
@@ -260,7 +260,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 139
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Notification des pilotes), il est acceptable que la NOTOC diffère légèrement de la cargaison réellement embarquée, tant que l'écart concerne uniquement des marchandises non dangereuses."*
@@ -275,7 +275,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 7.1 + 7.2 (combined pool) Signaler les accidents / les incidents de marchandises dangereuses
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 150 (DGR 9.6.1)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Accidents et incidents de marchandises dangereuses DGR 9.6.1), à qui l'exploitant doit-il signaler un accident ou un incident de marchandises dangereuses ?"*
@@ -290,7 +290,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 149 (DGR 9.6.2)
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Compte rendu DG non déclarées DGR 9.6.2), l'obligation de signalement des marchandises dangereuses non déclarées ou mal déclarées s'applique uniquement à celles découvertes dans le fret ou le courrier, et non à celles découvertes dans les bagages ou sur la personne des voyageurs ou des membres d'équipage."*
@@ -305,7 +305,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 7.4 Signaler les situations mettant en cause des marchandises dangereuses
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slides 151–152 (DGR 9.6.5)
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Compte rendu accidents et incidents, DGR 9.6.5), pour l'Algérie, tous les comptes rendus sont adressés à l'Agence Nationale de l'Aviation Civile (ANAC), dont le siège social est situé Lot 225, Route Nationale N°5, Rouiba, Alger."*
@@ -381,7 +381,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 4.2.2 Vérifier s'il y a des dommages et/ou des fuites (checkpoint entrepôt/pré-chargement)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 101, first paragraph, plus Practice Q17 (F-KOST 09)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures de stockage et de chargement — Inspection), avant qu'un colis ou un suremballage de marchandises dangereuses ne soit chargé dans un avion ou placé dans une unité de chargement, que doivent s'assurer les exploitants ?"*
@@ -457,7 +457,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.1.3 Déterminer l'application et la portée
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 30 (DGR 1.2.1)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Applicabilité DGR 1.2.1), à qui la Réglementation IATA sur les marchandises dangereuses (DGR) s'applique-t-elle ?"*
@@ -473,7 +473,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slides 31–33
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque — exemple du liquide inflammable), laquelle des affirmations suivantes illustre correctement la différence entre le danger et le risque ?"*
@@ -489,7 +489,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises potentiellement dangereuses
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `STALE CITATION / SOURCE CONFLICT`
 - **Source (production bank):** KOST F7.4 course, slides 43–44 (DGR 2.5)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Limites — Marchandises dangereuses de l'exploitant DGR 2.5), laquelle des affirmations suivantes est correcte ?"*
@@ -504,7 +504,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 54 (DGR 1.4), cross-checked against slide 53
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Rôle et responsabilité — Responsabilités Exploitant DGR 1.4), laquelle des listes suivantes correspond aux responsabilités attribuées à l'exploitant (et non à l'expéditeur) ?"*
@@ -519,7 +519,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 59 (DGR 2.8.3), cross-checked against slides 56–58
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Divergences d'État et d'Exploitant DGR 2.8.3), laquelle des affirmations suivantes est correcte concernant les divergences propres à un exploitant ?"*
@@ -535,7 +535,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.4.2 Comprendre les principes généraux des groupes d'emballage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 72 (DGR 3.0.3)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Emballage — Groupes d'emballage DGR 3.0.3), à quel degré de danger correspond le Groupe d'emballage I ?"*
@@ -551,7 +551,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 90, cross-checked against slides 92–93
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Marquage des emballages à spécifications), dans le marquage « UN 4G/Y/30/S/13/CH/2176/CG », que signifie la lettre « Y » ?"*
@@ -582,7 +582,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.4.3 Envisager de multiples dangers — restricted framing: operational-stage awareness fact only, never a classification-stage "determine the primary hazard" procedure
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slides 106 and 110 (DGR 9.3.2.1)
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Base de la séparation des marchandises dangereuses, DGR 9.3.2.1), les prescriptions de séparation s'appliquent à toutes les étiquettes de danger apposées sur un colis, qu'il s'agisse d'un risque primaire ou d'un risque subsidiaire."*
@@ -599,7 +599,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 6.1.6 Informer le commandant de bord et l'agent des opérations aériennes ou le régulateur de vols — restricted framing: captain-notification obligation only
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slides 135–136 (DGR 9.5.1.1.3)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Notification des pilotes), qui l'exploitant doit-il informer, avant le départ, au moyen de renseignements écrits ou imprimés précis concernant les marchandises dangereuses transportées comme fret ?"*
@@ -642,7 +642,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 4.2.4 Apposer des étiquettes pour UC, le cas échéant
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 112, cross-checked against slide 114 (DGR 9.3.8.2) and its own closing sentence
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Identification des unités de chargement), pour toute ULD contenant des marchandises dangereuses, que doit-on avoir ?"*
@@ -657,7 +657,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 4.2.4 Apposer des étiquettes pour UC, le cas échéant
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 114 (DGR 9.3.8.2)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (DGR 9.3.8.2), quelle est la dimension minimale de l'étiquette à large bordure hachurée de rouge attachée à l'UC pour indiquer les marchandises dangereuses qu'elle contient ?"*
@@ -673,7 +673,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 4.2.4 Apposer des étiquettes pour UC, le cas échéant
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 112 (closing sentence)
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Identification des unités de chargement), dans tous les cas, on procède au retrait des étiquettes de l'ULD après son déchargement."*
@@ -688,7 +688,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 15 (DGR 1.0), cross-checked against slides 13–14 and 16
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Généralités, DGR 1.0), quelle est la définition d'une marchandise dangereuse ?"*
@@ -733,7 +733,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 58 (DGR 2.8.1), cross-checked against slide 59 (DGR 2.8.3) and slide 20 (AIEA role)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Divergence d'État DGR 2.8.1), à quels États une divergence d'État peut-elle s'appliquer ?"*
@@ -749,7 +749,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slides 95–96 (lithium metal vs. lithium-ion table)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Batteries lithium-ion et métal), quel numéro ONU correspond aux piles et batteries au lithium métal transportées seules (non emballées avec ni contenues dans un équipement) ?"*
@@ -779,7 +779,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **Source (production bank):** KOST F7.4 course, slide 89
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Marquage à spécification des emballages), tout colis de marchandises dangereuses doit être marqué, et les marquages doivent être visibles, lisibles, durables, et pouvoir être exposés aux intempéries."*
@@ -809,7 +809,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur — restricted framing per blueprint binding caveat 7: generic-awareness-only, no specific employer procedure content may be invented
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 143
 - **FR text (verbatim):**
   - Statement: *"Vrai ou Faux : selon le cours (Information sur l'intervention d'urgence — Responsabilités de l'exploitant), pour toute expédition avec déclaration de marchandises dangereuses exigée, l'exploitant doit s'assurer que les renseignements appropriés sont immédiatement disponibles en tout temps pour une intervention d'urgence, et que ces renseignements sont à la disposition du commandant de bord."*
@@ -825,7 +825,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 4.2.3 Appliquer les prescriptions de rangement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slides 117–118
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures de stockage et de chargement — colis de MD liquides), que doit-on respecter lors du stockage, de la manutention et du chargement d'un colis de marchandises dangereuses liquides portant l'étiquette « This Way Up » (sens de chargement) ?"*
@@ -870,7 +870,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 136 (DGR 9.5.1.1.3)
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Notification des pilotes, DGR 9.5.1.1.3), sur quel type de document les renseignements destinés au commandant de bord doivent-ils être présentés ?"*
@@ -885,7 +885,7 @@ package, per the same rule-5 separate-gates principle explained above).
 
 - **Sub-task:** 6.1.5 Vérifier que la NOTOC reflète la cargaison de l'aéronef
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`
+- **FR status:** `FROZEN FR / SOURCE VERIFIED`
 - **Source (production bank):** KOST F7.4 course, slide 141, cross-checked against slides 137–138
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Notification des pilotes), laquelle des catégories suivantes de marchandises dangereuses la NOTOC n'est-elle PAS exigée pour ?"*

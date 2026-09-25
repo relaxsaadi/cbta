@@ -1,8 +1,9 @@
-# DGR EN Review Package — Function 7.8 (Q-7.8-001 – Q-7.8-032)
+# DGR EN Review Package — Function 7.8 (Q-7.8-001 – Q-7.8-051)
 
-Prepared as bilingual (FR→EN) draft translation material for all 32
-currently-drafted Function 7.8 items (`docs/DGR_PRODUCTION_BANK_7.8.md`,
-Batch 1: `Q-7.8-001`–`015`; Batch 2: `Q-7.8-016`–`032`). This is
+Prepared as bilingual (FR→EN) draft translation material for all 51
+currently-recorded Function 7.8 items (`docs/DGR_PRODUCTION_BANK_7.8.md`:
+Batch 1 `Q-7.8-001`–`015`, Batch 2 `Q-7.8-016`–`032`, Batch 3
+`Q-7.8-033`–`051`). This is
 **preparatory drafting work for a human reviewer to check — it is not a
 substitute for that review.**
 
@@ -14,11 +15,13 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** All 32 items
-  remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
-  recorded in `docs/DGR_PRODUCTION_BANK_7.8.md`. Per `.claude/rules/
-  dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
-  review are **separate gates** — closing neither gate for any item here.
+- **This package does not change any item's FR source-of-record status.** The
+  per-item `FR status` fields below mirror the current reconciliation
+  conservatively: direct current-edition evidence may remain `FROZEN`,
+  partial or explicitly non-direct evidence is held `UNRESOLVED`, and
+  source-required items remain `DRAFT`. Per `.claude/rules/dgr-stage2b.md`
+  rule 5, FR source verification and EN bilingual technical review are
+  **separate gates**; this package does not promote EN review or approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -50,11 +53,11 @@ repository — only the regulatory source basis and validation conclusions
 were. That gloss was explicitly flagged as *not* a verbatim transcription.
 
 **Function 7.8 does not have this problem**, exactly like Functions 7.3 and
-7.7 before it. The FR question text for every one of these 32 items — stem,
-every answer option, the marked correct answer, and its source citation —
-is already stored **verbatim** in `docs/DGR_PRODUCTION_BANK_7.8.md` (Batch 1
-and Batch 2, both drafted from the actual KOST Function 7.8 course PDF plus
-its companion exam and practice-book PDFs, page/question-cited). This
+7.7 before it. The FR question text for all 51 items — stem, every answer
+option, the marked correct answer, and its source citation — is already
+stored **verbatim** in `docs/DGR_PRODUCTION_BANK_7.8.md` across Batches 1–3,
+drafted from the actual KOST Function 7.8 course PDF plus its companion
+exam and practice-book PDFs, page/question-cited. This
 package translates that **actual, already-written FR text directly** — no
 reconstruction, no gloss, no working-approximation step. The FR text quoted
 below is copied verbatim (stem + options, or statement for True/False
@@ -62,13 +65,13 @@ items) from `docs/DGR_PRODUCTION_BANK_7.8.md`; if any doubt arises about an
 exact wording, that file — not this package — is the authoritative FR
 source of record.
 
-This removes one entire category of reviewer work that Function 7.1's
-package required (provenance cross-checking against a live external
-system). It does **not** remove the FR Tier A verification task — every
-item's FR text is still Tier B only (KOST course/exam/practice-book
-material, not yet checked against the current IATA DGR 67th Edition/
-Addendum 1 text) — nor does it remove the EN bilingual technical review
-task this package exists to prepare for.
+This removes one category of reviewer work that Function 7.1's package
+required (provenance cross-checking against a live external system). It does
+**not** remove the FR Tier A evidence gate: the current reconciliation now
+contains a mixture of directly source-verified, unresolved/partial, and
+Tier-B-only items, and each per-item mirror below must remain conservative.
+It also does not remove the separate EN bilingual technical review task this
+package exists to prepare for.
 
 Several Function 7.8 items are anchored not to a course slide directly but
 to the function's own exam (`12_KOST_DGR_CBTA_Exam_Function_7.8_FR_2025.pdf`,
@@ -97,7 +100,7 @@ Q-7.8-032).
 
 ---
 
-## The 32 items
+## Batches 1–2 — Q-7.8-001–032 (historical 32-item build)
 
 ### Batch 1 items (Q-7.8-001 – Q-7.8-015)
 
@@ -105,7 +108,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text (verbatim from production bank):**
   - Stem: *"Selon le cours (Notification des pilotes — marchandises
     dangereuses classiques), laquelle des informations suivantes ne fait
@@ -130,7 +133,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon les données de l'exercice de complétion de la NOTOC de
     l'examen (Question 20) — expédition de batteries au lithium-ion (ONU
@@ -165,7 +168,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le NOTOC reçu pour le vol AFR 512 (Paris CDG–Nairobi)
     présenté dans le practice book (Question 30) — listant ONU 1202
@@ -199,7 +202,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.1 S'occuper des marchandises dangereuses non permises dans les bagages
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass — "binding caveat 5"):** this item is framed
   strictly around the reporting-obligation fact practice Q29 tests and the
@@ -233,7 +236,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.3 Appliquer les procédures en cas d'urgence
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass — "binding caveat 4"):** this item tests *applied*
   execution of a specific procedure step (correctly ordering the response)
@@ -274,7 +277,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.4 Informer l'agent des opérations aériennes/le régulateur de vols/le contrôle de la circulation aérienne en cas d'urgence
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass — "binding caveat 2"; read carefully before
   reusing this item):** this item tests **only** the routine, non-emergency
@@ -312,7 +315,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses DGR 4.2),
     quelle colonne de la liste indique les étiquettes de danger
@@ -332,7 +335,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses DGR
     3.0.2), laquelle des classes suivantes est explicitement citée par le
@@ -354,7 +357,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Étiquetage DGR 7.2.2.2), laquelle des
     affirmations suivantes décrit correctement les types d'étiquettes que
@@ -386,7 +389,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Autres étiquettes), un
     colis portant une étiquette de danger chimique doit systématiquement
@@ -407,7 +410,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (MD transportées par les
     passagers ou l'équipage, DGR 2.3), les marchandises dangereuses, y
@@ -432,7 +435,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Limites — Marchandises dangereuses de
     l'exploitant, DGR 2.5), lequel des articles suivants est cité par le
@@ -456,7 +459,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon la réglementation OACI/IATA (practice book, Question
     10), l'agent des opérations est responsable de :"*
@@ -479,7 +482,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Généralités — « Pourquoi Réglementer ? »), à
     quel accident historique le cours associe-t-il la perte de 2 membres
@@ -505,7 +508,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses non déclarées potentiellement cachées
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Reconnaissance des marchandises dangereuses
     non déclarées — Exemples de DG cachées, DGR 2.2.4), lequel des
@@ -531,7 +534,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Cadre juridique — Fondements de la
     Réglementation DGR 1.1), quel organisme élabore des procédures
@@ -565,7 +568,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.1.3 Déterminer l'application et la portée
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Applicabilité — Champ d'application DGR
     1.2.1), à qui le Règlement DGR de l'IATA est-il applicable ?"*
@@ -599,7 +602,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un
     risque), quelle est la définition correcte du terme « Risque » ?"*
@@ -636,7 +639,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Marchandises dangereuses interdites en toute
     circonstance, DGR 4.2), lequel des éléments suivants est cité par le
@@ -670,7 +673,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Divergences d'États et d'Exploitant DGR 2.8),
     quel exemple de divergence d'État (par opposition à une divergence
@@ -702,7 +705,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.4.2 Comprendre les principes généraux des groupes d'emballage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Groupes d'emballage DGR 3.0.3), quel groupe
     d'emballage correspond aux matières très dangereuses ?"*
@@ -723,7 +726,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Marquage des emballages à spécifications),
     dans le marquage d'emballage « 4G/Y30/S/13/CH/2176/CG », que signifie
@@ -747,7 +750,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Quantités exceptées DGR
     2.6), pour un envoi de marchandises dangereuses en quantités
@@ -765,7 +768,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Notification des pilotes — exemptions), pour
     laquelle des situations suivantes la NOTOC n'est-elle PAS exigée ?"*
@@ -790,7 +793,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Notification des pilotes — Quand ? Qui ?
     Quoi ?), qui est chargé de fournir au commandant de bord les
@@ -814,7 +817,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon l'examen (Question 9) et le Tableau 2.3.A (Dispositions
     pour les marchandises dangereuses transportées par les passagers ou
@@ -841,7 +844,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses DGR 4.2 —
     Symboles), que signifie le symbole « * » apposé à côté d'une
@@ -869,7 +872,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon l'examen (Question 15) et le practice book (Question
     20), quelle est la forme des étiquettes de danger DGR ?"*
@@ -887,7 +890,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon l'examen (Question 4, matrice des responsabilités) et
     les roues de responsabilités du cours (DGR 1.3 / DGR 1.4), à qui
@@ -910,7 +913,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.1 S'occuper des marchandises dangereuses non permises dans les bagages
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass — "binding caveat 5"):** this item tests the
   pre-loading contaminated-baggage **decision procedure** itself, genuinely
@@ -943,7 +946,7 @@ Q-7.8-032).
 
 - **Sub-task:** 6.2.3 Appliquer les procédures en cas d'urgence
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass — "binding caveat 4"):** this item tests applied
   execution of a procedure step within a scenario genuinely distinct from
@@ -973,7 +976,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass — "binding caveat 4"):** this item tests only the
   generic-awareness fact that the course organizes its emergency-response
@@ -1212,10 +1215,10 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
   above is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.8.md`, itself
   sourced verbatim (with slide/exam-question/practice-question citations)
   from the actual KOST Function 7.8 course, exam, and practice-book PDFs.
-- All 32 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5 (FR source verification and EN bilingual review are separate
-  gates).
+- The original 32-item build pre-dated later per-item reconciliation. The
+  per-item `FR status` fields above now mirror the current conservative
+  reconciliation; this translation package itself does not change FR source
+  status or complete the separate EN bilingual-review gate.
 - 5 terminology points are explicitly flagged unverified for the reviewer:
   the "agent des opérations (aériennes)"→"flight operations officer"
   candidate (Q-7.8-005/006/013/029); the "accord multilatéral de trafic
@@ -1257,11 +1260,12 @@ file remains the authoritative FR source of record for any wording
 question.
 
 Per `.claude/rules/dgr-stage2b.md` rule 5, this batch's translation work
-changes no item's FR status and closes no gate — all 19 items remain
-`DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as recorded in
-the production bank. Per rule 4, no item below may be marked `BILINGUAL
-TECHNICAL REVIEW COMPLETE` or `APPROVED`; every item carries `BILINGUAL
-TECHNICAL REVIEW REQUIRED` and `PENDING REVIEWER + DATE`.
+changes no item's FR source-of-record status and closes no gate. The
+per-item `FR status` fields below mirror the current reconciliation
+conservatively; unresolved or partial evidence is not promoted. Per rule 4,
+no item below may be marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or
+`APPROVED`; every item carries `BILINGUAL TECHNICAL REVIEW REQUIRED` and
+`PENDING REVIEWER + DATE`.
 
 Three items in this batch (Q-7.8-048, Q-7.8-049, Q-7.8-051) carry a
 distinct-framing note in the production bank, in the same spirit as
@@ -1274,7 +1278,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Généralités, DGR 1.0), quelle est la définition
     d'une marchandise dangereuse ?"*
@@ -1307,7 +1311,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Généralités), une voiture
     est citée comme exemple de Substance, et le carburant qu'elle contient
@@ -1325,7 +1329,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Cadre juridique, Fondements de la
     Réglementation DGR 1.1), quel organisme s'est fondé sur les
@@ -1361,7 +1365,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un
     risque), quelle est la définition correcte du terme « Danger » ?"*
@@ -1393,7 +1397,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.2.1 Développer un flair pour les marchandises dangereuses interdites
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (MD interdites sauf dérogation, interdites sauf
     approbation, DGR 1.2.6), qu'est-ce qu'une Dérogation ?"*
@@ -1434,7 +1438,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses non déclarées potentiellement cachées
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Exemples de DG cachées DGR 2.2.4, COMAT),
     lequel des éléments suivants est cité par le cours comme pouvant être
@@ -1461,7 +1465,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon les roues de responsabilités du cours (DGR 1.3 / DGR
     1.4), à qui incombe la responsabilité de l'« Acceptation » des
@@ -1480,7 +1484,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Formation DGR 1.5), à quelle fréquence
     l'actualisation des connaissances (formation continue) sur les
@@ -1504,7 +1508,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Divergence de l'Exploitant DGR 2.8.3), laquelle
     des affirmations suivantes est correcte ?"*
@@ -1543,7 +1547,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses DGR 4.2),
     quelle colonne de la liste indique le Code Urgences ?"*
@@ -1567,7 +1571,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Marquage à spécification
     des emballages), les marquages apposés sur un colis de marchandises
@@ -1587,7 +1591,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon l'examen (Question 18) et le practice book (Question
     21), pour quelle raison les colis DGR doivent-ils être marqués et
@@ -1609,7 +1613,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon l'examen (Question 19), chaque colis contenant des
     marchandises dangereuses doit être marqué, de manière durable et
@@ -1640,7 +1644,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le practice book (Question 23), l'étiquette « Cargo
     Aircraft Only » (CAO) doit être apposée :"*
@@ -1673,7 +1677,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Documentation DGR 8.0.1, Lettre de transport
     aérien DGR 8.2), pour un envoi de marchandises dangereuses classiques
@@ -1705,7 +1709,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Distinct-framing note carried over from the production bank:** this
   item tests only the generic-awareness fact that this operator duty
   exists — it does not test any specific emergency procedure's own content
@@ -1735,7 +1739,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (current reconciliation mirror; EN review unchanged)
 - **Distinct-framing note carried over from the production bank:** this
   item tests a fact genuinely distinct from Q-7.8-006, which already drew
   on this same slide for its own routine NOTOC-accessibility fact; this
@@ -1760,7 +1764,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Notification des pilotes), quel principe
     fondamental justifie l'existence de la NOTOC ?"*
@@ -1788,7 +1792,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 6.2.3 Appliquer les procédures en cas d'urgence
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (current reconciliation mirror; EN review unchanged)
 - **Binding restriction carried over from the production bank (binding
   caveat 4):** this item tests the applied procedural step that follows
   **confirmation** that contamination is DG-related — genuinely distinct
@@ -1836,9 +1840,9 @@ are repeated in condensed form at each item below.
 - As with Batches 1 and 2, no FR "working gloss" reconstruction was
   needed — every FR stem, option set, and statement above is copied
   verbatim from `docs/DGR_PRODUCTION_BANK_7.8.md`'s own "Batch 3" section.
-- All 19 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5.
+- Batch 3 per-item FR mirrors now reflect the current conservative
+  reconciliation without changing the FR source-of-record or the separate
+  EN bilingual-review status.
 - New terminology points introduced this batch and flagged unverified for
   the reviewer: "Dérogation"→"Exemption" (Q-7.8-037, a strong IATA-glossary
   pattern match but not this-session-verified); "Instructions techniques

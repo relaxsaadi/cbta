@@ -9,13 +9,13 @@ export default function Guarantee() {
             <ShieldCheck className="h-10 w-10" aria-hidden />
           </div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-[#0f1c2e] mb-4">
-            Garantie KOST GROUP
+            Engagement de transparence
           </h2>
           <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto">
-            Si vous ne réussissez pas l'examen IATA du premier coup, nous vous offrons une <strong className="text-[#003D7A]">session de rattrapage gratuite</strong>.
+            Les conditions de rattrapage, d'examen, de certification ou de remboursement ne sont pas supposées. Elles doivent être indiquées explicitement dans l'offre applicable et correspondre aux modalités réellement disponibles.
           </p>
           <p className="text-sm text-gray-500 mt-4">
-            Notre taux de réussite à l'examen IATA dépasse 95%. Cette garantie reflète notre engagement à votre certification.
+            Aucun taux de réussite n'est publié ici sans données vérifiées et méthode de calcul documentée.
           </p>
         </div>
       </div>

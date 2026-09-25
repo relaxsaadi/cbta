@@ -7,7 +7,9 @@ import { Resend } from 'resend'
 
 export const maxDuration = 300
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Preview/build environments are not required to carry an outbound-email
+// credential. Avoid constructing Resend at module import time.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
@@ -98,7 +100,7 @@ async function scoreLead(lead: { company_name: string; country: string; intent_s
     const { text } = await generateText({
       model: anthropic('claude-haiku-4-5-20251001'),
       maxOutputTokens: 5,
-      prompt: `Tu prospectes pour KOST GROUP, 1er centre IATA CBTA certifié d'Algérie.
+      prompt: `Tu prospectes pour KOST GROUP, organisme proposant des formations DGR selon une approche CBTA en Algérie.
 Score ce signal d'intention de 1 à 10.
 
 Source: ${lead.source}
@@ -121,7 +123,7 @@ async function generateMessage(lead: { company_name: string; country: string; in
     return await generateText({
       model: anthropic('claude-haiku-4-5-20251001'),
       maxOutputTokens: 300,
-      prompt: `Tu es le directeur commercial de KOST GROUP, 1er centre IATA CBTA certifié d'Algérie.
+      prompt: `Tu es le directeur commercial de KOST GROUP, organisme proposant des formations DGR selon une approche CBTA en Algérie.
 
 Rédige un message de prospection court (max 200 mots) en français pour:
 - Entreprise: ${lead.company_name}
@@ -130,8 +132,9 @@ Rédige un message de prospection court (max 200 mots) en français pour:
 - Canal: ${lead.source === 'linkedin_jobs' ? 'LinkedIn (message direct)' : 'Email professionnel'}
 
 Le message doit:
-- Mentionner leur besoin précis (formation DGR, certification IATA)
-- Positionner KOST comme LA solution (1er CBTA certifié Algérie, Agrément N°537)
+- Mentionner leur besoin précis en formation DGR lorsque le signal le justifie
+- Présenter factuellement KOST comme une solution de formation DGR/CBTA en Algérie
+- Ne revendiquer aucune certification, exclusivité, reconnaissance ou approbation ANAC/IATA non étayée
 - CTA clair: WhatsApp +213 542 30 53 83 ou dgr.kostacademy.com
 - Ton professionnel mais humain, pas de spam
 
@@ -139,12 +142,14 @@ Le message doit:
     })
   } catch {
     return {
-      text: `Bonjour,\n\nNous avons identifié votre besoin en formation DGR IATA. KOST GROUP, 1er centre IATA CBTA certifié d'Algérie (Agrément N°537), propose des formations sur site adaptées à votre secteur.\n\nContactez-nous : +213 542 30 53 83 | dgr.kostacademy.com\n\nCordialement,\nKOST GROUP`,
+      text: `Bonjour,\n\nNous avons identifié un besoin potentiel en formation DGR. KOST GROUP propose des formations DGR selon une approche CBTA, avec des formats adaptés aux équipes et aux opérations.\n\nContactez-nous : +213 542 30 53 83 | dgr.kostacademy.com\n\nCordialement,\nKOST GROUP`,
     }
   }
 }
 
 async function sendApprovalEmail(leads: Array<{ company_name: string; country: string; score: number; intent_signal: string; source: string; message_draft: string; source_url: string }>) {
+  if (!resend) throw new Error('Email service not configured')
+
   const leadsHtml = leads.map((l, i) => `
     <div style="border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:16px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -169,13 +174,13 @@ async function sendApprovalEmail(leads: Array<{ company_name: string; country: s
       <div style="font-family:sans-serif;max-width:680px;margin:0 auto;">
         <div style="background:#0f2557;color:white;padding:24px;border-radius:12px 12px 0 0;">
           <h1 style="margin:0;font-size:20px;">🎯 ${leads.length} lead(s) chaud(s) trouvés</h1>
-          <p style="margin:8px 0 0;opacity:0.8;font-size:14px;">Agent KOST — Prospection CBTA IATA Afrique</p>
+          <p style="margin:8px 0 0;opacity:0.8;font-size:14px;">Agent KOST — Prospection DGR/CBTA Afrique</p>
         </div>
         <div style="padding:24px;background:white;">
           <p style="color:#374151;margin-bottom:20px;">Les messages suivants ont été générés par l'agent Claude. <strong>Approuvez avant envoi :</strong></p>
           ${leadsHtml}
           <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;">
-          <p style="font-size:12px;color:#9ca3af;text-align:center;">KOST GROUP — Agent autonome DGR IATA | dgr.kostacademy.com</p>
+          <p style="font-size:12px;color:#9ca3af;text-align:center;">KOST GROUP — Agent autonome DGR/CBTA | dgr.kostacademy.com</p>
         </div>
       </div>
     `,

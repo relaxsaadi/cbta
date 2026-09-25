@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabase } from '@/lib/supabase'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Preview/build environments are not required to carry an outbound-email
+// credential. Construct the client only when a key is actually configured so
+// importing this route during `next build` cannot throw.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function POST(req: NextRequest) {
   const { lead_id, email_override } = await req.json()
@@ -17,6 +20,7 @@ export async function POST(req: NextRequest) {
 
   const toEmail = email_override || lead.email
   if (!toEmail) return NextResponse.json({ error: 'Pas d\'email pour ce lead' }, { status: 400 })
+  if (!resend) return NextResponse.json({ error: 'Service email non configuré' }, { status: 503 })
 
   const msgHtml = lead.message_draft
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -25,11 +29,11 @@ export async function POST(req: NextRequest) {
   const { error: sendError } = await resend.emails.send({
     from: 'KOST GROUP <cbta@dgr.kostacademy.com>',
     to: toEmail,
-    subject: `Formation DGR IATA — KOST GROUP, 1er centre CBTA certifié d'Algérie`,
+    subject: 'Formation DGR / approche CBTA — KOST GROUP',
     html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;">
       <div style="background:#0f2557;padding:16px 20px;border-radius:10px 10px 0 0;">
         <span style="color:white;font-weight:bold;font-size:16px;">KOST GROUP</span>
-        <span style="color:#93c5fd;font-size:12px;display:block;margin-top:2px;">1er Centre IATA CBTA certifié d'Algérie — Agrément N°537</span>
+        <span style="color:#93c5fd;font-size:12px;display:block;margin-top:2px;">Formation DGR — approche CBTA en Algérie</span>
       </div>
       <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;">
         <p style="font-size:14px;line-height:1.7;color:#374151;">${msgHtml}</p>

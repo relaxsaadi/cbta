@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { assertSafeDgrMarketingCopy, SAFE_DGR_MARKETING_RULES } from '@/lib/dgr-marketing-claims'
 
 export const dynamic = 'force-dynamic'
 
-// Green API — free tier: https://green-api.com
-// Set GREENAPI_INSTANCE_ID + GREENAPI_API_TOKEN in Vercel env vars
 const GREENAPI_BASE = 'https://api.green-api.com'
 
 function getSupabase() {
@@ -21,10 +20,8 @@ function greenApiUrl(method: string) {
   return `${GREENAPI_BASE}/waInstance${id}/${method}/${token}`
 }
 
-// Format phone for Green API — must be 213XXXXXXXXX@c.us (no +, with country code)
 function formatPhone(raw: string): string {
   const digits = raw.replace(/[^0-9]/g, '')
-  // If starts with 00213 or 213, keep. If 0XXXXXXXXX, prepend 213
   if (digits.startsWith('00213')) return digits.slice(2) + '@c.us'
   if (digits.startsWith('213')) return digits + '@c.us'
   if (digits.startsWith('0')) return '213' + digits.slice(1) + '@c.us'
@@ -32,6 +29,7 @@ function formatPhone(raw: string): string {
 }
 
 async function sendWhatsApp(phone: string, message: string): Promise<boolean> {
+  assertSafeDgrMarketingCopy(message)
   const chatId = formatPhone(phone)
   const res = await fetch(greenApiUrl('sendMessage'), {
     method: 'POST',
@@ -47,8 +45,6 @@ async function sendWhatsApp(phone: string, message: string): Promise<boolean> {
 }
 
 async function generateMessage(prospect: Record<string, unknown>): Promise<string> {
-  const daysLeft = Math.max(0, Math.ceil((new Date('2026-09-30').getTime() - Date.now()) / 86400000))
-
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -61,31 +57,32 @@ async function generateMessage(prospect: Record<string, unknown>): Promise<strin
       max_tokens: 300,
       messages: [{
         role: 'user',
-        content: `Tu es Karim Saadi, fondateur de KOST GROUP, 1er centre IATA CBTA certifié d'Algérie.
-Écris un message WhatsApp de prospection pour ${prospect.decision_maker_name || 'le responsable'} chez ${prospect.company_name} (secteur: ${prospect.sector}).
+        content: `Tu es Karim Saadi de KOST GROUP, organisme de formation DGR/CBTA.
+Écris un message WhatsApp de prospection pour ${prospect.decision_maker_name || 'le responsable'} chez ${prospect.company_name} (secteur : ${prospect.sector}).
 
 Contraintes :
 - 80 mots MAXIMUM
-- Conversationnel et direct, pas commercial
-- Mentionne : deadline IATA ${daysLeft}j, session août 18-22, places limitées
+- Conversationnel et direct, pas agressivement commercial
+- Ne mentionne aucune deadline, ancienne session, sanction ou approbation IATA/ANAC non vérifiée
+- Présente le besoin DGR/CBTA comme à qualifier avec le prospect
 - 1-2 émojis max
-- Pas de formule "Bonjour" classique, attaque direct sur la valeur
 - Finir par une question ouverte simple
 - Ne pas mettre de lien URL
 - Signe : Karim, KOST GROUP (+213 542 30 53 83)
-
+${SAFE_DGR_MARKETING_RULES}
 Message :`,
       }],
     }),
   })
   const data = await res.json()
-  return data.content?.[0]?.text?.trim() || ''
+  const message = data.content?.[0]?.text?.trim() || ''
+  assertSafeDgrMarketingCopy(message)
+  return message
 }
 
 async function runWhatsAppBlast(prospectIds?: string[]) {
   const supabase = getSupabase()
 
-  // Find prospects with phone numbers not yet contacted via WhatsApp
   let query = supabase
     .from('company_prospects')
     .select('id,company_name,sector,decision_maker_name,decision_maker_phone,contact_phone,status,country')
@@ -124,25 +121,29 @@ async function runWhatsAppBlast(prospectIds?: string[]) {
       console.error('[whatsapp] error for', p.company_name, err)
     }
 
-    // Delay between messages to avoid spam detection (2-3s)
     await new Promise(r => setTimeout(r, 2500))
   }
 
   return { sent: results.length, results }
 }
 
-// POST /api/agents/whatsapp — manual trigger with optional prospect IDs
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}))
   const { prospectIds, phone, message } = body
 
-  // Direct send mode: send a specific message to a specific number
   if (phone && message) {
     if (!process.env.GREENAPI_INSTANCE_ID) {
       return NextResponse.json({ error: 'GREENAPI not configured. Add GREENAPI_INSTANCE_ID + GREENAPI_API_TOKEN to Vercel env vars.' }, { status: 503 })
     }
-    const sent = await sendWhatsApp(phone, message)
-    return NextResponse.json({ sent, chatId: formatPhone(phone) })
+    try {
+      const sent = await sendWhatsApp(phone, message)
+      return NextResponse.json({ sent, chatId: formatPhone(phone) })
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Message bloqué par le garde de conformité', detail: String(error) },
+        { status: 422 }
+      )
+    }
   }
 
   if (!process.env.GREENAPI_INSTANCE_ID) {
@@ -156,13 +157,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ status: 'started', message: `Agent WhatsApp lancé pour ${prospectIds?.length || 'tous les prospects'} contacts` })
 }
 
-// GET — check Green API instance status
 export async function GET() {
   if (!process.env.GREENAPI_INSTANCE_ID) {
     return NextResponse.json({
       configured: false,
       instructions: [
-        '1. Créer un compte sur https://green-api.com (gratuit, 1500 messages/mois)',
+        '1. Créer un compte sur https://green-api.com',
         '2. Créer une instance WhatsApp et noter Instance ID + API Token',
         '3. Scanner le QR code avec votre WhatsApp',
         '4. Ajouter dans Vercel: GREENAPI_INSTANCE_ID et GREENAPI_API_TOKEN',

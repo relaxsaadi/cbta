@@ -1,0 +1,48 @@
+name: DGR import CSV structure
+
+on:
+  push:
+    branches:
+      - main
+      - ai/dgr-stage2b-handoff
+    paths:
+      - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv"
+      - "scripts/check-dgr-import-candidate-csv-structure.mjs"
+      - ".github/workflows/dgr-import-candidate-csv-structure.yml"
+  pull_request:
+    paths:
+      - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv"
+      - "scripts/check-dgr-import-candidate-csv-structure.mjs"
+      - ".github/workflows/dgr-import-candidate-csv-structure.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  import-csv-structure:
+    name: DGR import CSV row structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # pull_request events otherwise checkout GitHub's synthetic merge ref;
+          # readiness evidence is intentionally scoped to the exact PR head.
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Structural regression fixtures
+        run: node scripts/check-dgr-import-candidate-csv-structure.mjs --test
+
+      - name: Controlled-artifact row-structure gate
+        if: always()
+        run: node scripts/check-dgr-import-candidate-csv-structure.mjs

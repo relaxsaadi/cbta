@@ -17,88 +17,142 @@ export type CountryLocalContext = {
 export type CountryData = {
   slug: string;
   pays: string;
-  paysPreposition: string; // "en" Algérie, "au" Maroc, "au" Sénégal
+  paysPreposition: string;
   capitale: string;
-  autoriteRegionale: string; // ANAC, DGAC, AACM...
+  autoriteRegionale: string;
   codeIso: string;
   langue: "fr" | "en";
-  savingsVsParis: number; // % moins cher
+  savingsVsParis: number;
   currency?: string;
   testimonialName?: string;
   testimonialPoste?: string;
   testimonialVille?: string;
   testimonialText?: string;
-  keyFeature?: string; // point fort spécifique pour ce pays
-  localContext?: CountryLocalContext; // contenu spécifique pays pour éviter thin content
+  keyFeature?: string;
+  localContext?: CountryLocalContext;
 };
 
-const FORMATIONS_SUMMARY = [
-  { code: "DGR 7.1 Initial", poste: "Expéditeurs, transitaires", duree: "4j / 32h", prix: "1 800 €" },
-  { code: "DGR 7.1 Recurrent", poste: "Renouvellement 7.1", duree: "3j / 24h", prix: "1 400 €" },
-  { code: "DGR 7.2 + 7.4", poste: "Agents cargo & manutention", duree: "2j / 16h", prix: "900 €" },
-  { code: "DGR 7.3 Initial", poste: "Acceptation cargo compagnies", duree: "5j / 40h", prix: "2 100 €" },
-  { code: "DGR 7.3 Recurrent", poste: "Renouvellement 7.3", duree: "3j / 18h", prix: "1 500 €" },
-  { code: "DGR 7.5 + 7.6", poste: "Agents embarquement & pilotes", duree: "2j / 16h", prix: "850 €" },
-  { code: "DGR 7.7 + 7.8 + 7.9", poste: "PNC, dispatchers, sûreté", duree: "2j / 16h", prix: "650 €" },
-  { code: "DGR 7.10", poste: "Agents de fret aérien", duree: "Sur devis", prix: "650 €" },
-];
+const DGR_FUNCTIONS = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
 export default function CountryLandingPage({ data }: { data: CountryData }) {
   const isEnglish = data.langue === "en";
 
   const t = isEnglish
     ? {
-        heroTitle: `IATA DGR Training in ${data.pays}`,
-        heroSub: `IATA CBTA-certified training for dangerous goods by air — delivered locally in Africa`,
-        whyTitle: `Why train in ${data.pays} with KOST GROUP?`,
-        obligTitle: `Regulatory obligation — ${data.autoriteRegionale}`,
-        obligText: `Under ICAO Annex 18 and the regulations of ${data.autoriteRegionale}, all personnel involved in the air transport of dangerous goods must be trained and certified before taking up their duties. Certification is valid for 24 months.`,
-        formationsTitle: "Available IATA DGR Formations",
-        savingsLabel: `${data.savingsVsParis}% less expensive than Paris or Brussels`,
-        ctaTitle: "Get a free quote in 24 hours",
-        ctaBtn: "Request a quote",
+        heroTitle: `DGR / CBTA training in ${data.pays}`,
+        heroSub:
+          "Training scope is confirmed from the participant's actual tasks, the applicable current source set and the required review path. No job title is mapped automatically to a DGR function.",
+        whyTitle: `How KOST GROUP scopes DGR training in ${data.pays}`,
+        noticeTitle: `Regulatory scope — ${data.autoriteRegionale}`,
+        noticeText:
+          "Applicable training, recurrent-training, certification and recognition requirements must be confirmed against the current authoritative rules and the participant's duties before enrolment or issuance. This page does not claim universal regulator, airline or IATA approval.",
+        functionsTitle: "DGR / CBTA functions 7.1–7.10",
+        functionsIntro:
+          "Each function is treated independently. Scope, duration, assessment design, source evidence and reviewer sign-off are validated per function before use.",
+        ctaTitle: "Request a scoped training proposal",
+        ctaBtn: "Request information",
         faqTitle: "Frequently asked questions",
+        resources: "More DGR resources",
       }
     : {
-        heroTitle: `Formation IATA DGR ${data.paysPreposition} ${data.pays}`,
-        heroSub: `Premier centre IATA CBTA Provider certifié en Algérie — formations marchandises dangereuses pour toute l'Afrique`,
-        whyTitle: `Pourquoi choisir KOST GROUP pour votre formation DGR ${data.paysPreposition} ${data.pays} ?`,
-        obligTitle: `Obligation réglementaire — ${data.autoriteRegionale}`,
-        obligText: `Conformément à l'Annexe 18 de l'OACI et à la réglementation de ${data.autoriteRegionale}, tout personnel impliqué dans le transport aérien de marchandises dangereuses doit être formé et certifié avant d'exercer ses fonctions. La certification est valide 24 mois.`,
-        formationsTitle: "Formations IATA DGR disponibles",
-        savingsLabel: `${data.savingsVsParis}% moins cher qu'à Paris ou Bruxelles`,
-        ctaTitle: "Obtenez un devis gratuit en 24h",
-        ctaBtn: "Demander un devis",
+        heroTitle: `Formation DGR / CBTA ${data.paysPreposition} ${data.pays}`,
+        heroSub:
+          "Le périmètre de formation est déterminé à partir des tâches réellement exercées, des sources courantes applicables et du circuit de revue requis. Aucun intitulé de poste n'est associé automatiquement à une fonction DGR.",
+        whyTitle: `Comment KOST GROUP détermine le périmètre DGR ${data.paysPreposition} ${data.pays}`,
+        noticeTitle: `Périmètre réglementaire — ${data.autoriteRegionale}`,
+        noticeText:
+          "Les obligations de formation, de recyclage, de certification et de reconnaissance doivent être confirmées à partir des textes faisant autorité en vigueur et des tâches réelles du participant avant inscription ou délivrance. Cette page ne revendique aucune approbation universelle d'une autorité, d'une compagnie aérienne ou de l'IATA.",
+        functionsTitle: "Fonctions DGR / CBTA 7.1–7.10",
+        functionsIntro:
+          "Chaque fonction est traitée indépendamment. Le périmètre, la durée, l'évaluation, les preuves de source et la revue qualifiée sont validés fonction par fonction avant utilisation.",
+        ctaTitle: "Demander une proposition de formation cadrée",
+        ctaBtn: "Demander des informations",
         faqTitle: "Questions fréquentes",
+        resources: "Autres ressources DGR",
       };
 
   const reasons = isEnglish
     ? [
-        { icon: "🏆", title: "First CBTA Provider in Algeria", text: "KOST GROUP is the first and only IATA CBTA Provider certified training center in Algeria. Your certificates are identical to those issued in Paris or Dubai." },
-        { icon: "💰", title: `Save ${data.savingsVsParis}% vs. Europe`, text: "Same IATA certification. Same passing rate. At a fraction of the cost of sending staff to Belgium or France." },
-        { icon: "🌍", title: "We come to you", text: `On-site training in ${data.pays} from 6 participants. No travel required. Our certified trainers travel across Africa.` },
-        { icon: "📄", title: "Local invoicing", text: `Invoice in EUR, USD or local currency. Compatible with your accounting requirements in ${data.pays}.` },
+        {
+          icon: "🧭",
+          title: "Task-based scoping",
+          text: "The required function is determined from actual duties and the applicable task table, not from a generic job-title shortcut.",
+        },
+        {
+          icon: "📚",
+          title: "Source traceability",
+          text: "Regulatory claims and assessment content require current source evidence, with gaps or conflicts kept explicit until resolved.",
+        },
+        {
+          icon: "👥",
+          title: "Qualified review",
+          text: "Production approval requires a named qualified reviewer and date; bilingual review is handled separately where applicable.",
+        },
+        {
+          icon: "🏢",
+          title: "Organisation options",
+          text: `Delivery arrangements in ${data.pays} are confirmed in the proposal after the scope and operational constraints are reviewed.`,
+        },
       ]
     : [
-        { icon: "🏆", title: "1er centre CBTA Provider d'Algérie", text: `KOST GROUP est le premier et unique centre IATA CBTA Provider certifié en Algérie. Vos certificats sont identiques à ceux délivrés à Paris ou Dubaï — reconnus par ${data.autoriteRegionale}.` },
-        { icon: "💰", title: `${data.savingsVsParis}% moins cher qu'en Europe`, text: "Même certification IATA. Même taux de réussite. À une fraction du coût d'un déplacement en Belgique ou en France." },
-        { icon: "🌍", title: "Formation intra possible", text: `Nous venons dans votre entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Pas de déplacement requis pour vos équipes.` },
-        { icon: "📄", title: "Facturation adaptée", text: `Facture en EUR, USD ou monnaie locale. Compatible avec vos exigences comptables ${data.paysPreposition} ${data.pays}.` },
+        {
+          icon: "🧭",
+          title: "Périmètre fondé sur les tâches",
+          text: "La fonction requise est déterminée à partir des tâches réelles et de la table de tâches applicable, jamais par un raccourci basé uniquement sur l'intitulé du poste.",
+        },
+        {
+          icon: "📚",
+          title: "Traçabilité des sources",
+          text: "Les affirmations réglementaires et le contenu d'évaluation exigent des preuves de source courantes ; les écarts ou conflits restent explicitement ouverts jusqu'à résolution.",
+        },
+        {
+          icon: "👥",
+          title: "Revue qualifiée",
+          text: "Une approbation de production exige un reviewer qualifié nommé et daté ; la revue bilingue est traitée séparément lorsqu'elle s'applique.",
+        },
+        {
+          icon: "🏢",
+          title: "Organisation sur mesure",
+          text: `Les modalités de formation ${data.paysPreposition} ${data.pays} sont confirmées dans la proposition après revue du périmètre et des contraintes opérationnelles.`,
+        },
       ];
 
   const faqItems = isEnglish
     ? [
-        { q: `Is the IATA DGR certificate recognized in ${data.pays}?`, a: `Yes. The IATA CBTA certificate is internationally recognized and accepted by ${data.autoriteRegionale} and all IATA member airlines (300+ carriers worldwide). Our CBTA Provider number is verifiable on iata.org.` },
-        { q: "How long is the certificate valid?", a: "24 months from the date of successful examination. A Recurrent (renewal) training is mandatory before expiry to maintain the qualification." },
-        { q: `Can you deliver training in ${data.pays}?`, a: `Yes. We organize intra-company training sessions in ${data.pays} from 6 participants. Our IATA-certified trainers travel to your site. Contact us for a quote.` },
-        { q: "What is the examination pass rate?", a: "Over 90% on first attempt for our participants. Our CBTA-based approach focuses on practical skill demonstration, not just theory." },
+        {
+          q: `Is a DGR / CBTA certificate automatically recognized in ${data.pays}?`,
+          a: "No universal recognition is claimed on this page. Recognition depends on the issuing route, the applicable regulator/operator requirements and the current validated scope. These points must be checked before enrolment.",
+        },
+        {
+          q: "How is the correct DGR function selected?",
+          a: "From the participant's actual duties and the current function-specific CBTA task table/source set. Function 7.1 is not used as a template for the other functions.",
+        },
+        {
+          q: "How is regulatory content approved?",
+          a: "A regulatory claim remains non-production if direct current authoritative evidence is missing or conflicting. Production approval also requires the required FR verification, separate EN bilingual review where applicable, and a named qualified reviewer with a review date.",
+        },
+        {
+          q: `Can training be organised in ${data.pays}?`,
+          a: "Delivery options are confirmed case by case after the training scope, participants and operational requirements have been reviewed.",
+        },
       ]
     : [
-        { q: `Le certificat IATA DGR est-il reconnu ${data.paysPreposition} ${data.pays} ?`, a: `Oui. Le certificat IATA CBTA est reconnu internationalement par ${data.autoriteRegionale} et par les 300+ compagnies aériennes membres de l'IATA. Notre numéro CBTA Provider est vérifiable sur iata.org.` },
-        { q: "Combien de temps dure la certification ?", a: "24 mois à compter de la date de réussite à l'examen. Un recyclage (Recurrent) est obligatoire avant l'expiration pour maintenir la qualification." },
-        { q: `Pouvez-vous former ${data.paysPreposition} ${data.pays} ?`, a: `Oui. Nous organisons des sessions intra-entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Nos formateurs IATA certifiés se déplacent sur votre site. Contactez-nous pour un devis.` },
-        { q: "Quel est le taux de réussite à l'examen ?", a: "Plus de 90% à la première tentative pour nos stagiaires. Notre approche CBTA axée sur la démonstration de compétences garantit une préparation optimale." },
-        { q: `Y a-t-il une session prochainement ${data.paysPreposition} ${data.pays} ?`, a: `Des sessions inter-entreprises ont lieu régulièrement à Alger. Pour ${data.pays}, nous organisons des sessions intra à partir de 6 participants. Consultez le planning ou contactez-nous.` },
+        {
+          q: `Un certificat DGR / CBTA est-il automatiquement reconnu ${data.paysPreposition} ${data.pays} ?`,
+          a: "Aucune reconnaissance universelle n'est revendiquée sur cette page. La reconnaissance dépend de la voie de délivrance, des exigences de l'autorité ou de l'opérateur applicable et du périmètre validé au moment concerné. Ces points doivent être vérifiés avant l'inscription.",
+        },
+        {
+          q: "Comment la bonne fonction DGR est-elle déterminée ?",
+          a: "À partir des tâches réellement exercées et de la table de tâches / du jeu de sources CBTA courant propre à la fonction. La fonction 7.1 n'est pas utilisée comme modèle automatique pour les autres fonctions.",
+        },
+        {
+          q: "Comment le contenu réglementaire est-il approuvé ?",
+          a: "Une affirmation réglementaire reste hors production si la preuve directe courante faisant autorité manque ou est contradictoire. L'approbation de production exige également la vérification FR requise, une revue EN bilingue distincte lorsqu'elle s'applique, ainsi qu'un reviewer qualifié nommé avec date de revue.",
+        },
+        {
+          q: `Peut-on organiser une formation ${data.paysPreposition} ${data.pays} ?`,
+          a: "Les modalités sont confirmées au cas par cas après revue du périmètre de formation, des participants et des contraintes opérationnelles.",
+        },
       ];
 
   return (
@@ -106,7 +160,6 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
       <Navbar />
       <WhatsAppSticky />
 
-      {/* HERO */}
       <section
         style={{
           background: "linear-gradient(160deg, #001832 0%, #003D7A 100%)",
@@ -131,37 +184,12 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
               marginBottom: 20,
             }}
           >
-            IATA CBTA Provider Certifié · {t.savingsLabel}
+            DGR / CBTA · {isEnglish ? "scope validated per function" : "périmètre validé par fonction"}
           </div>
-          <h1
-            style={{
-              fontSize: "clamp(26px, 5vw, 44px)",
-              fontWeight: 800,
-              lineHeight: 1.15,
-              marginBottom: 16,
-            }}
-          >
+          <h1 style={{ fontSize: "clamp(26px, 5vw, 44px)", fontWeight: 800, lineHeight: 1.15, marginBottom: 16 }}>
             {t.heroTitle}
           </h1>
-          <p style={{ fontSize: 16, opacity: 0.65, lineHeight: 1.7, marginBottom: data.keyFeature ? 12 : 32 }}>
-            {t.heroSub}
-          </p>
-          {data.keyFeature && (
-            <p
-              style={{
-                fontSize: 14,
-                fontWeight: 600,
-                color: "#FFD700",
-                lineHeight: 1.6,
-                marginBottom: 32,
-                maxWidth: 620,
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              ✓ {data.keyFeature}
-            </p>
-          )}
+          <p style={{ fontSize: 16, opacity: 0.75, lineHeight: 1.7, marginBottom: 28 }}>{t.heroSub}</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
               href="#devis"
@@ -178,7 +206,11 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
               {t.ctaBtn}
             </a>
             <a
-              href={`https://wa.me/213542305383?text=Bonjour, je veux une formation DGR IATA ${data.paysPreposition} ${data.pays}`}
+              href={`https://wa.me/213542305383?text=${encodeURIComponent(
+                isEnglish
+                  ? `Hello, I would like information about DGR / CBTA training in ${data.pays}`
+                  : `Bonjour, je souhaite des informations sur une formation DGR / CBTA ${data.paysPreposition} ${data.pays}`,
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackWhatsApp(`country-${data.slug}`)}
@@ -198,162 +230,71 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         </div>
       </section>
 
-      {/* OBLIGATION RÉGLEMENTAIRE */}
       <section style={{ background: "#FFF8E1", borderBottom: "2px solid #F59E0B", padding: "24px 20px" }}>
         <div style={{ maxWidth: 860, margin: "0 auto", display: "flex", gap: 14, alignItems: "flex-start" }}>
           <span style={{ fontSize: 24, flexShrink: 0 }}>⚠️</span>
           <div>
-            <strong style={{ color: "#92400E", display: "block", marginBottom: 4 }}>{t.obligTitle}</strong>
-            <p style={{ color: "#78350F", fontSize: 14, lineHeight: 1.7, margin: 0 }}>{t.obligText}</p>
+            <strong style={{ color: "#92400E", display: "block", marginBottom: 4 }}>{t.noticeTitle}</strong>
+            <p style={{ color: "#78350F", fontSize: 14, lineHeight: 1.7, margin: 0 }}>{t.noticeText}</p>
           </div>
         </div>
       </section>
 
-      {/* WHY KOST */}
       <section style={{ padding: "60px 20px", background: "#fff" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <h2 style={{ fontSize: 26, fontWeight: 800, color: "#003D7A", marginBottom: 32, textAlign: "center" }}>
             {t.whyTitle}
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
-            {reasons.map((r, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "#F8FAFC",
-                  border: "1px solid #E5E7EB",
-                  borderRadius: 12,
-                  padding: "20px 16px",
-                }}
-              >
-                <div style={{ fontSize: 28, marginBottom: 10 }}>{r.icon}</div>
-                <h3 style={{ fontSize: 14, fontWeight: 700, color: "#003D7A", marginBottom: 6 }}>{r.title}</h3>
-                <p style={{ fontSize: 12.5, color: "#6B7280", lineHeight: 1.65, margin: 0 }}>{r.text}</p>
+            {reasons.map((reason) => (
+              <div key={reason.title} style={{ background: "#F8FAFC", border: "1px solid #E5E7EB", borderRadius: 12, padding: "20px 16px" }}>
+                <div style={{ fontSize: 28, marginBottom: 10 }}>{reason.icon}</div>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: "#003D7A", marginBottom: 6 }}>{reason.title}</h3>
+                <p style={{ fontSize: 12.5, color: "#6B7280", lineHeight: 1.65, margin: 0 }}>{reason.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FORMATIONS TABLE */}
       <section style={{ padding: "40px 20px", background: "#F8FAFC" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: "#003D7A", marginBottom: 24 }}>
-            {t.formationsTitle}
-          </h2>
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-              <thead>
-                <tr style={{ background: "#003D7A", color: "white" }}>
-                  <th style={{ padding: "10px 12px", textAlign: "left", fontWeight: 600 }}>Formation</th>
-                  <th style={{ padding: "10px 12px", textAlign: "left", fontWeight: 600 }}>Personnel concerné</th>
-                  <th style={{ padding: "10px 12px", textAlign: "center", fontWeight: 600 }}>Durée</th>
-                  <th style={{ padding: "10px 12px", textAlign: "right", fontWeight: 600 }}>Tarif HT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {FORMATIONS_SUMMARY.map((f, i) => (
-                  <tr key={i} style={{ background: i % 2 === 0 ? "#fff" : "#F8FAFC", borderBottom: "1px solid #E5E7EB" }}>
-                    <td style={{ padding: "10px 12px", fontWeight: 700, color: "#003D7A" }}>{f.code}</td>
-                    <td style={{ padding: "10px 12px", color: "#374151" }}>{f.poste}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "center", color: "#6B7280" }}>{f.duree}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: "#003D7A" }}>{f.prix}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: "#003D7A", marginBottom: 8 }}>{t.functionsTitle}</h2>
+          <p style={{ color: "#6B7280", fontSize: 13, lineHeight: 1.7, marginBottom: 24 }}>{t.functionsIntro}</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 10 }}>
+            {DGR_FUNCTIONS.map((fn) => (
+              <div key={fn} style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 10, padding: "14px 12px" }}>
+                <div style={{ fontWeight: 800, color: "#003D7A", marginBottom: 6 }}>DGR {fn}</div>
+                <div style={{ fontSize: 11.5, color: "#6B7280", lineHeight: 1.5 }}>
+                  {isEnglish ? "Independent task/source set · scope on review" : "Tâches/sources indépendantes · périmètre après revue"}
+                </div>
+              </div>
+            ))}
           </div>
-          <p style={{ fontSize: 12, color: "#9CA3AF", marginTop: 10 }}>
-            * Formation intra-entreprise disponible {isEnglish ? `in ${data.pays}` : `${data.paysPreposition} ${data.pays}`} · Min. 6 participants · Devis personnalisé sous 24h
-          </p>
         </div>
       </section>
 
-      {/* TESTIMONIAL */}
-      {data.testimonialText && (
-        <section style={{ padding: "40px 20px", background: "#EFF6FF" }}>
-          <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-            <div style={{ fontSize: 36, marginBottom: 12 }}>⭐⭐⭐⭐⭐</div>
-            <p style={{ fontSize: 16, fontStyle: "italic", color: "#1E3A5F", lineHeight: 1.75, marginBottom: 16 }}>
-              &ldquo;{data.testimonialText}&rdquo;
-            </p>
-            <div style={{ fontWeight: 700, color: "#003D7A", fontSize: 14 }}>{data.testimonialName}</div>
-            <div style={{ color: "#6B7280", fontSize: 12 }}>{data.testimonialPoste} · {data.testimonialVille}</div>
-          </div>
-        </section>
-      )}
-
-      {/* LOCAL CONTEXT — contenu spécifique pays */}
-      {data.localContext && (
-        <section style={{ padding: "60px 20px", background: "#F0F7FF" }}>
-          <div style={{ maxWidth: 860, margin: "0 auto" }}>
-            <h2 style={{ fontSize: 22, fontWeight: 800, color: "#003D7A", marginBottom: 24 }}>
-              {data.localContext.title}
-            </h2>
-            {data.localContext.paragraphs.map((p, i) => (
-              <p key={i} style={{ color: "#374151", fontSize: 14, lineHeight: 1.8, marginBottom: 16 }}>
-                {p}
-              </p>
-            ))}
-            {data.localContext.aeroports && data.localContext.aeroports.length > 0 && (
-              <div style={{ marginTop: 24 }}>
-                <p style={{ fontWeight: 700, color: "#003D7A", fontSize: 13, marginBottom: 10 }}>
-                  Principaux aéroports concernés par la réglementation DGR :
-                </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {data.localContext.aeroports.map((a, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        background: "#DBEAFE",
-                        color: "#1E40AF",
-                        fontSize: 12,
-                        fontWeight: 600,
-                        padding: "4px 12px",
-                        borderRadius: 20,
-                        border: "1px solid #BFDBFE",
-                      }}
-                    >
-                      {a}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* FAQ */}
       <section style={{ padding: "60px 20px", background: "#fff" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: "#003D7A", marginBottom: 28 }}>{t.faqTitle}</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {faqItems.map((f, i) => (
-              <div
-                key={i}
-                style={{ border: "1px solid #E5E7EB", borderRadius: 10, padding: "16px 18px", background: "#F8FAFC" }}
-              >
-                <div style={{ fontWeight: 700, color: "#003D7A", marginBottom: 6, fontSize: 14 }}>
-                  {f.q}
-                </div>
-                <div style={{ color: "#374151", fontSize: 13, lineHeight: 1.7 }}>{f.a}</div>
+            {faqItems.map((item) => (
+              <div key={item.q} style={{ border: "1px solid #E5E7EB", borderRadius: 10, padding: "16px 18px", background: "#F8FAFC" }}>
+                <div style={{ fontWeight: 700, color: "#003D7A", marginBottom: 6, fontSize: 14 }}>{item.q}</div>
+                <div style={{ color: "#374151", fontSize: 13, lineHeight: 1.7 }}>{item.a}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* DEVIS FORM */}
       <section id="devis" style={{ padding: "60px 20px", background: "#F8FAFC" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: "#003D7A", marginBottom: 8, textAlign: "center" }}>
-            {t.ctaTitle}
-          </h2>
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: "#003D7A", marginBottom: 8, textAlign: "center" }}>{t.ctaTitle}</h2>
           <p style={{ textAlign: "center", color: "#6B7280", fontSize: 14, marginBottom: 28 }}>
             {isEnglish
-              ? "Fill in the form. Our team responds within 24 hours with a personalized quote."
-              : "Remplissez le formulaire. Notre équipe vous répond sous 24h avec un devis personnalisé."}
+              ? "Send the participants' duties and operational context so the appropriate training scope can be reviewed before a proposal is issued."
+              : "Indiquez les tâches des participants et le contexte opérationnel afin que le périmètre de formation soit revu avant émission de la proposition."}
           </p>
           <Suspense fallback={null}>
             <LeadForm />
@@ -361,23 +302,20 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         </div>
       </section>
 
-      {/* LINKS TO OTHER PAGES */}
       <section style={{ padding: "40px 20px", background: "#003D7A", color: "white" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <p style={{ fontSize: 14, opacity: 0.6, marginBottom: 16 }}>
-            {isEnglish ? "More IATA DGR resources" : "Autres ressources IATA DGR"}
-          </p>
+          <p style={{ fontSize: 14, opacity: 0.6, marginBottom: 16 }}>{t.resources}</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             {[
               { href: "/", label: isEnglish ? "Home" : "Accueil" },
               { href: "/planning", label: "Planning" },
               { href: "/dgr-7-1", label: "DGR 7.1" },
               { href: "/dgr-7-3", label: "DGR 7.3" },
-              { href: "/contact", label: isEnglish ? "Contact" : "Contact" },
-            ].map((l) => (
+              { href: "/contact", label: "Contact" },
+            ].map((link) => (
               <Link
-                key={l.href}
-                href={l.href}
+                key={link.href}
+                href={link.href}
                 style={{
                   color: "rgba(255,255,255,0.6)",
                   textDecoration: "none",
@@ -387,7 +325,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
                   borderRadius: 8,
                 }}
               >
-                {l.label}
+                {link.label}
               </Link>
             ))}
           </div>

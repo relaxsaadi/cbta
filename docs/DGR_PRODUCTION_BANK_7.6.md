@@ -957,6 +957,8 @@ deliberately left at 0.
 
 ### Status of this batch — read before using any item below
 
+**HISTORICAL / SUPERSEDED — preserved drafting-time status only; current per-item status is governed by the consolidated Tier-A reconciliation above.**
+
 **All 18 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
 Addendum 1) text.**
@@ -1987,6 +1989,8 @@ confirmed exhausted or unanswerable (see "What this batch does NOT do"
 below).
 
 ### Status of this batch — read before using any item below
+
+**HISTORICAL / SUPERSEDED — preserved drafting-time status only; current per-item status is governed by the consolidated Tier-A reconciliation above.**
 
 **All 23 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,

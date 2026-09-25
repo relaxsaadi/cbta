@@ -1,8 +1,6 @@
-# DGR EN Review Package — Function 7.7 (Q-7.7-001 – Q-7.7-033)
+# DGR EN Review Package — Function 7.7 (Q-7.7-001 – Q-7.7-053)
 
-Prepared as bilingual (FR→EN) draft translation material for all 33
-currently-drafted Function 7.7 items (`docs/DGR_PRODUCTION_BANK_7.7.md`,
-Batch 1: `Q-7.7-001`–`015`; Batch 2: `Q-7.7-016`–`033`). This is
+Prepared as bilingual (FR→EN) draft translation material for all 53 current Function 7.7 items (`docs/DGR_PRODUCTION_BANK_7.7.md`, `Q-7.7-001`–`053`). This is
 **preparatory drafting work for a human reviewer to check — it is not a
 substitute for that review.**
 
@@ -14,9 +12,7 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** All 33 items
-  remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
-  recorded in `docs/DGR_PRODUCTION_BANK_7.7.md`. Per `.claude/rules/
+- **This package does not change any item's FR status.** Its per-item FR-status fields mirror the current conservative reconciliation state only; they do not promote Tier-A evidence, bilingual review, or approval. Per `.claude/rules/
   dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
   review are **separate gates** — closing neither gate for any item here.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
@@ -84,7 +80,7 @@ record behind each item.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text (verbatim from production bank):**
   - Statement: *"Vrai ou Faux : selon le cours (Notification des pilotes), avant le départ, l'exploitant d'un avion transportant des marchandises dangereuses doit fournir au commandant de bord des renseignements écrits ou imprimés précis concernant les marchandises dangereuses à transporter comme fret, généralement sous la forme d'une NOTOC."*
   - Correct answer: **Vrai**
@@ -98,7 +94,7 @@ record behind each item.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Transport de Matières Radioactives), quelle catégorie de colis de matières radioactives n'a PAS d'indice de transport (T.I.) et peut être chargée en quantités illimitées, sans séparation requise ?"*
   - Options: **(Correct)** *"Catégorie I-Blanc."* / *"Catégorie II-Jaune."* / *"Catégorie III-Jaune."* / *"Toutes les catégories de matières radioactives doivent obligatoirement porter un indice de transport, sans exception."*
@@ -113,7 +109,7 @@ record behind each item.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses DGR 4.2), quelle colonne de la liste indique les étiquettes de danger applicables à une marchandise dangereuse ?"*
   - Options: **(Correct)** *"Colonne D."* / *"Colonne A."* / *"Colonne C."* / *"Colonne F."*
@@ -142,7 +138,7 @@ record behind each item.
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Étiquetage DGR 7.2.2.2), laquelle des affirmations suivantes décrit correctement la classification des étiquettes que doit porter un colis de marchandises dangereuses ?"*
   - Options: **(Correct)** *"Il existe deux types d'étiquettes : les étiquettes de danger et les étiquettes de manutention."* / *"Il existe trois types distincts : les étiquettes de danger, de manutention, et une catégorie séparée pour les matières biologiques de Catégorie B (UN 3245)."* / *"Seules les étiquettes de danger sont obligatoires ; les étiquettes de manutention sont facultatives."* / *"Les étiquettes de danger chimique (« autres étiquettes ») suffisent à elles seules à classifier une marchandise comme dangereuse selon la Réglementation."*
@@ -156,7 +152,7 @@ record behind each item.
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Autres étiquettes), un colis portant une étiquette de danger chimique doit systématiquement être classé et traité comme une marchandise dangereuse au sens de la Réglementation, sans qu'aucune clarification supplémentaire ne soit nécessaire auprès de l'expéditeur."*
   - Correct answer: **Faux**
@@ -252,7 +248,7 @@ record behind each item.
 
 - **Sub-task:** 0.4.3 Envisager de multiples dangers
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **Binding restriction carried over from the production bank (unchanged by
   this translation pass):** this item tests **only** the operational-
   awareness fact that a NOTOC entry's class/division field may also carry
@@ -273,7 +269,7 @@ record behind each item.
 
 - **Sub-task:** 7.1 + 7.2 (combined pool) Signaler les accidents / les incidents de marchandises dangereuses
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Compte rendu accidents et incidents), à qui l'exploitant doit-il signaler un accident ou un incident de marchandises dangereuses ?"*
   - Options: **(Correct)** *"Aux autorités compétentes de l'État de l'exploitant ainsi qu'à celles de l'État dans lequel l'accident ou l'incident s'est produit, y compris pour des marchandises dangereuses partiellement ou totalement exemptées de la réglementation."* / *"Uniquement aux autorités compétentes de l'État de l'exploitant, jamais à celles de l'État où l'événement s'est produit."* / *"Uniquement si la marchandise dangereuse concernée est pleinement soumise à la Réglementation, jamais si elle bénéficie d'une exception ou d'une disposition spéciale."* / *"Aux services de la circulation aérienne, jamais aux autorités compétentes de l'État."*
@@ -287,7 +283,7 @@ record behind each item.
 
 - **Sub-task:** 7.3 Signaler les marchandises dangereuses non déclarées ou mal déclarées
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Compte rendu DG non déclarées), l'obligation de l'exploitant de signaler des marchandises dangereuses non déclarées ou mal déclarées s'applique uniquement à celles découvertes dans le fret ou le courrier, et non à celles découvertes dans les bagages ou sur la personne des voyageurs ou des membres d'équipage."*
   - Correct answer: **Faux**
@@ -301,7 +297,7 @@ record behind each item.
 
 - **Sub-task:** 7.4 Signaler les situations mettant en cause des marchandises dangereuses
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Compte rendu accidents et incidents), pour l'Algérie, tous les comptes rendus sont adressés à l'Agence Nationale de l'Aviation Civile (ANAC), dont le siège social est situé Lot 225, Route Nationale N°5, Rouiba, Alger."*
   - Correct answer: **Vrai**
@@ -323,7 +319,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.1 Comprendre la définition
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (DGR 1.0, Généralités), une marchandise dangereuse est un produit, un article ou une substance susceptible de présenter un danger pour la santé, la sécurité, la propriété ou l'environnement, et qui figure dans la liste des marchandises dangereuses de la Réglementation ou qui est classée conformément à celle-ci."*
   - Correct answer: **Vrai**
@@ -337,7 +333,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.2 Reconnaître le cadre juridique (mondial, national)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Fondements de la Réglementation DGR 1.1), quel organisme élabore des recommandations pour le transport sécuritaire des matières radioactives ?"*
   - Options: **(Correct)** *"L'Agence internationale de l'énergie atomique (AIEA)."* / *"Le Sous-comité d'experts du Conseil économique et social des Nations-Unies (SCoETDG)."* / *"L'Organisation de l'Aviation Civile Internationale (OACI)."* / *"L'Association Internationale du Transport Aérien (IATA)."*
@@ -352,7 +348,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.3 Déterminer l'application et la portée
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Champ d'application DGR 1.2.1), à qui la Réglementation DGR de l'IATA est-elle applicable ?"*
   - Options: **(Correct)** *"Aux exploitants membres ou membres associés de l'IATA, aux parties à l'accord multilatéral de trafic intercompagnies de l'IATA-fret, ainsi qu'aux expéditeurs et agents de fret."* / *"Uniquement aux exploitants membres ou membres associés de l'IATA, sans les parties à l'accord multilatéral de trafic intercompagnies ni les expéditeurs et agents de fret."* / *"Uniquement aux expéditeurs et agents de fret, à l'exclusion des exploitants."* / *"À tous les exploitants aériens dans le monde, sans condition d'affiliation à l'IATA."*
@@ -367,7 +363,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque), comment le cours définit-il le terme « Risque » ?"*
   - Options: **(Correct)** *"Le degré de probabilité (forte ou faible chance) qu'un danger quelconque cause réellement un dommage."* / *"Quelque chose qui pourrait potentiellement causer des dommages."* / *"Toute forme de liquide, de vapeur, de poussière, de fumées ou de gaz qui pourrait se déverser, fuir ou être mal utilisé."* / *"Un virus, une bactérie ou un champignon transmissible par morsure, coupure, ou par contamination au contact d'une personne infectée."*
@@ -396,7 +392,7 @@ record behind each item.
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Marchandises dangereuses transportées par les passagers et l'équipage, DGR 2.3.A), les armes électriques (par exemple les Tasers) contenant des éléments dangereux tels que des explosifs, des gaz comprimés ou des piles au lithium, sont interdites dans les bagages de cabine, les bagages enregistrés, et sur la personne du passager."*
   - Correct answer: **Vrai**
@@ -410,7 +406,7 @@ record behind each item.
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Formation DGR 1.5), à quelle fréquence l'exploitant doit-il assurer l'actualisation des connaissances (formation continue) du personnel formé aux marchandises dangereuses ?"*
   - Options: **(Correct)** *"Tous les 2 ans."* / *"Tous les ans."* / *"Tous les 3 ans."* / *"Une seule fois, lors de l'embauche, sans actualisation périodique par la suite."*
@@ -424,7 +420,7 @@ record behind each item.
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Divergences d'États et d'Exploitant DGR 2.8), quel exemple le cours donne-t-il pour illustrer une divergence de l'exploitant (par opposition à une divergence d'État) ?"*
   - Options: **(Correct)** *"AH – Air Algérie."* / *"ITG – Italie."* / *"OACI – Organisation de l'Aviation Civile Internationale."* / *"IATA – Association Internationale du Transport Aérien."*
@@ -439,7 +435,7 @@ record behind each item.
 
 - **Sub-task:** 0.4.2 Comprendre les principes généraux des groupes d'emballage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Groupes d'emballage DGR 3.0.3), quel groupe d'emballage correspond au degré de danger le plus élevé ?"*
   - Options: **(Correct)** *"Groupe d'emballage I."* / *"Groupe d'emballage II."* / *"Groupe d'emballage III."* / *"Il n'existe pas de hiérarchie entre les groupes d'emballage ; chacun présente un degré de danger équivalent."*
@@ -453,7 +449,7 @@ record behind each item.
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Code de matériau d'emballage DGR 6.0.3.2), quelle lettre désigne un emballage en acier ?"*
   - Options: **(Correct)** *"A."* / *"B."* / *"C."* / *"H."*
@@ -467,7 +463,7 @@ record behind each item.
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Documentation DGR 8.0.1, Exercice), quel document accompagne obligatoirement un envoi de marchandises dangereuses, sauf exemptions spécifiques ?"*
   - Options: **(Correct)** *"La déclaration de l'expéditeur (Shipper's Declaration)."* / *"La NOTOC."* / *"Le rapport de vol."* / *"La fiche de données de sécurité (SDS) uniquement, sans déclaration de l'expéditeur."*
@@ -496,7 +492,7 @@ record behind each item.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Quantités limitées DGR 2.7), comme pour les marchandises dangereuses en quantités exceptées (DGR 2.6), la déclaration de l'expéditeur, la liste de contrôle d'acceptation et la NOTOC ne sont pas requises pour les marchandises dangereuses en quantités limitées."*
   - Correct answer: **Faux**
@@ -511,7 +507,7 @@ record behind each item.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste des marchandises dangereuses — Symboles), que signifie le symbole « * » associé à une entrée de la Liste des marchandises dangereuses ?"*
   - Options: **(Correct)** *"Un ou plusieurs noms techniques sont requis (voir 4.1.2.1(d))."* / *"Des informations supplémentaires figurent à l'annexe A."* / *"Le nom doit être classé en ordre alphabétique strict, comme s'il s'agissait d'un seul mot."* / *"Le symbole fait partie intégrante de la désignation exacte d'expédition (PSN)."*
@@ -525,7 +521,7 @@ record behind each item.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Liste numérique des marchandises dangereuses DGR 4.3), selon quel critère les marchandises y sont-elles classées ?"*
   - Options: **(Correct)** *"L'ordre numérique croissant des numéros ONU/ID."* / *"L'ordre alphabétique strict de la désignation exacte d'expédition en français."* / *"Le numéro de page associé dans la liste alphabétique."* / *"L'ordre croissant du groupe d'emballage (I, II, III)."*
@@ -539,7 +535,7 @@ record behind each item.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Notification des pilotes — Exemptions), laquelle des catégories suivantes n'est PAS exemptée de figurer sur la NOTOC ?"*
   - Options: **(Correct)** *"Une marchandise dangereuse classique soumise à une déclaration complète de l'expéditeur."* / *"Les marchandises dangereuses en quantités exceptées."* / *"Les masses magnétisées."* / *"Les organismes génétiquement modifiés (OGM)."*
@@ -553,7 +549,7 @@ record behind each item.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Notification des pilotes — marchandises dangereuses classiques), la NOTOC doit indiquer, le cas échéant, l'aéroport de déchargement du colis ainsi que les dérogations d'État applicables."*
   - Correct answer: **Vrai**
@@ -568,7 +564,7 @@ record behind each item.
 
 - **Sub-task:** 6.2.2 Interpréter la NOTOC
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Notification des pilotes), outre les langues que peut exiger l'État de l'exploitant, l'anglais devrait être utilisé pour les renseignements écrits fournis au commandant de bord."*
   - Correct answer: **Vrai**
@@ -1036,7 +1032,7 @@ currently-drafted production-bank items translated to EN draft status
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (MD transportées par les
     passagers ou l'équipage, DGR 2.3), les marchandises dangereuses, y
@@ -1080,7 +1076,7 @@ currently-drafted production-bank items translated to EN draft status
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Divergences d'États et
     d'Exploitant, DGR 2.8), tout État ou exploitant peut marquer sa
@@ -1104,7 +1100,7 @@ currently-drafted production-bank items translated to EN draft status
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses, DGR
     3.0.2), combien de classes de marchandises dangereuses existe-t-il ?"*
@@ -1120,7 +1116,7 @@ currently-drafted production-bank items translated to EN draft status
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses, DGR
     3.0.2), selon quel critère les classes de marchandises dangereuses
@@ -1152,7 +1148,7 @@ currently-drafted production-bank items translated to EN draft status
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses —
     étiquettes de danger), à quelle classe de marchandises dangereuses
@@ -1198,7 +1194,7 @@ currently-drafted production-bank items translated to EN draft status
 
 - **Sub-task:** 0.5.3 Déterminer les documents exigés
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Documentation DGR 8.0.1 — Lettre de transport
     aérien, DGR 8.2), que doit comprendre la case « Renseignements sur la

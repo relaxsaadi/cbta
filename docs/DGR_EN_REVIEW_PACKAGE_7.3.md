@@ -91,7 +91,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.2.3 Être au courant des dispositions s'appliquant aux passagers
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.4(f) (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (DGR 2.3.A — Marchandises dangereuses transportées par les passagers et l'équipage), un bagage contenant une batterie au lithium installée et non amovible est interdit au transport lorsque cette batterie dépasse quel seuil ?"*
   - Options: **(Correct)** *"0,3 g de lithium métal, ou 2,7 Wh."* / *"Aucun seuil n'est fixé : toute batterie au lithium installée dans un bagage, quelle que soit sa capacité, est interdite au transport."* / *"Le seuil ne concerne que la teneur en lithium métal (0,3 g) ; la capacité énergétique en Wh n'entre pas en compte."* / *"Le seuil ne s'applique qu'aux batteries amovibles ; une batterie installée non amovible n'est jamais soumise à une limite."*
@@ -105,7 +105,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.4.1 Trouver de l'information générale sur les classes et les divisions
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Les classes des marchandises dangereuses DGR 3.0.2), lorsqu'un gaz ou un mélange de gaz présente des dangers relevant de plusieurs divisions de la Classe 2, quelle règle de priorité s'applique ?"*
   - Options: **(Correct)** *"La Division 2.3 a priorité sur toutes les autres divisions ; à défaut, la Division 2.1 a priorité sur la Division 2.2."* / *"La Division 2.1 a systématiquement priorité sur toutes les autres divisions, y compris la 2.3."* / *"La priorité est déterminée par le Tableau 3.10.A, de la même façon que pour les dangers relevant des Classes 3, 4 ou 8 et des Divisions 5.1 ou 6.1."* / *"Le groupe d'emballage applicable est déterminé uniquement par le point d'éclair et le point d'ébullition, comme pour la Classe 3."*
@@ -119,7 +119,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.4.3 Envisager de multiples dangers
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED. Reconciliation (2026-08-29): OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §3.10.2(a) RATIONALE: Live Bookshelf check 2026-08-29: DGR §3.10.2 lists "Classes 1, 2 et 7" as the first exception excluded from Table 3.10.A because these classes/divisions are always priority — confirming Class 1 (Explosives) is indeed one of the classes excluded from the table's own scope, exactly as tested.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Classification des matières présentant des dangers multiples, DGR 3.10), laquelle des classes suivantes est explicitement exclue de l'application du Tableau 3.10.A pour la détermination du danger principal (elle conserve toujours la priorité, sans recours au tableau) ?"*
   - Options: **(Correct)** *"Classe 1 (Explosifs)."* / *"Classe 8 (Matières corrosives)."* / *"Classe 3 (Liquides inflammables)."* / *"Division 5.1 (Comburants)."*
@@ -161,7 +161,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.1.1 Vérifier la Déclaration de l'expéditeur
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (liste de contrôle recommandée pour vérifier l'exactitude d'une DGD — points 8 à 12), laquelle des divergences suivantes, relevée dans la désignation officielle de transport (PSN) figurant sur la déclaration de l'expéditeur, n'est PAS considérée comme une erreur si elle ne compromet pas la sécurité ?"*
   - Options: **(Correct)** *"L'omission de points et de virgules dans la PSN."* / *"L'utilisation d'un numéro ONU incorrect ne correspondant à aucune entrée de la section 4.2."* / *"L'omission totale de la désignation officielle de transport sur la déclaration."* / *"Le remplacement du préfixe « ONU » par le préfixe « ID » pour un même article."*
@@ -191,7 +191,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.2.1 Vérifier les marques
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Élément 35 de la liste de contrôle recommandée — points 32 à 41, vérification des marques), laquelle des situations suivantes n'est PAS exemptée de l'exigence d'indiquer la quantité nette sur le marquage du colis ?"*
   - Options: **(Correct)** *"Un envoi de plusieurs colis contenant des marchandises dangereuses différentes (numéros ONU distincts)."* / *"Un envoi d'un seul colis contenant des marchandises dangereuses."* / *"Un envoi de plusieurs colis identiques (même numéro ONU, même désignation officielle de transport, même groupe d'emballage, même quantité)."* / *"Un colis relevant de l'ID 8000 (Biens de consommation)."*
@@ -233,7 +233,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.3.2 Fournir les renseignements sur l'expédition pour la planification du chargement
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.3.2.1.3 (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Fournir les renseignements sur l'expédition pour la planification du chargement — DGR 9.3.2.1.3), les colis de batteries au lithium relevant de l'instruction d'emballage PI 965 ou PI 968 (Sections IA et IB) ne doivent PAS être chargés avec lesquelles des marchandises dangereuses suivantes ?"*
   - Options: **(Correct)** *"Des explosifs (à l'exception de la Division 1.4S), la Division 2.1, la Classe 3, la Division 4.1 et la Division 5.1."* / *"La Division 6.1 (matières toxiques) et la Classe 8 (matières corrosives) uniquement."* / *"Toutes les autres marchandises dangereuses sans exception, y compris les autres colis de batteries au lithium relevant de PI 965/968."* / *"La Division 5.2 (peroxydes organiques) et la Classe 9 (divers) uniquement."*
@@ -339,7 +339,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.2.2 Reconnaître les marchandises dangereuses potentiellement cachées
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Reconnaissance des marchandises dangereuses non déclarées — DGR 2.2/2.2.4), laquelle des mesures suivantes n'est PAS citée par le cours parmi les recommandations pour éviter la découverte de marchandises dangereuses cachées non déclarées ?"*
   - Options: **(Correct)** *"Exiger un dépôt de garantie financière de l'expéditeur avant l'acceptation de tout envoi de fret."* / *"Former le personnel."* / *"Appliquer les affiches et le questionnaire verbal avec les passagers."* / *"Demander la fiche de données de sécurité (SDS)."*
@@ -354,7 +354,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.3.1 Clarifier le rôle individuel et collectif des parties prenantes dans la chaîne d'approvisionnement
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Rôle et responsabilité — Formation DGR 1.5), tous les exploitants doivent établir un programme de formation sur les marchandises dangereuses, même ceux qui ne sont pas agréés pour transporter des marchandises dangereuses en tant que fret."*
   - Correct answer: **Vrai**
@@ -368,7 +368,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.3.3 Reconnaître l'impact des divergences des États et des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.8.3.1 (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Divergences d'États et d'Exploitant — DGR 2.8), laquelle des affirmations suivantes concernant les divergences d'exploitant (DGR 2.8.3) est correcte ?"*
   - Options: **(Correct)** *"Les divergences de l'exploitant ne doivent pas être moins restrictives que le Règlement, et sont applicables à tous les transports effectués par les exploitants concernés."* / *"Les divergences de l'exploitant peuvent être moins restrictives que le Règlement si l'État de destination les approuve."* / *"Les divergences de l'exploitant ne s'appliquent qu'aux transports internationaux, jamais aux vols intérieurs de l'exploitant concerné."* / *"Les divergences de l'exploitant remplacent automatiquement les divergences de l'État applicables au même vol."*
@@ -398,7 +398,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.1.1 Vérifier la Déclaration de l'expéditeur
 - **Type:** True/False
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (liste de contrôle recommandée pour vérifier l'exactitude d'une DGD — points 1 à 7, Point n°6), l'indication du nom complet de la ville ou de l'aéroport de départ/de destination sur la déclaration de l'expéditeur est une mention obligatoire ; son absence doit systématiquement entraîner le rejet de l'envoi."*
   - Correct answer: **Faux**
@@ -412,7 +412,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.1.3 Vérifier les autres documents (dérogations, approbations, etc.)
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Vérification des autres documents : exemptions, approbations, etc. — DGR 8.3), lorsqu'un envoi est autorisé par la disposition particulière (DP) A2, quel document supplémentaire doit accompagner la DGD pour indiquer, entre autres, les exigences d'étiquetage applicables ?"*
   - Options: **(Correct)** *"Une copie du document d'approbation autorisé par la DP A2, indiquant les limites de quantité, les exigences d'emballage et, dans le cas de A2 spécifiquement, les exigences d'étiquetage."* / *"Une copie du document d'approbation pour le transport en citernes mobiles, délivré par une autorité nationale appropriée."* / *"Une copie du document d'approbation requis pour les peroxydes organiques de la Division 5.2, selon les dispositions du 3.5.2.3.1."* / *"Une copie du document de dérogation de tous les États applicables (voir DGR 1.2.6)."*
@@ -427,7 +427,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.1.4 Vérifier les divergences des États et des exploitants (étape de vérification documentaire)
 - **Type:** MCQ, single-answer
-- **FR status:** `STALE CITATION / SOURCE CONFLICT — STALE CITATION: correct answer's own "2.8.3.4 et 2.8.4" reference does not match current DGR (§2.8.3.4 is "Calendrier"/ deadlines, unrelated; actual cross-ref is §2.8.4 alone, per §2.8.3.1). Reconciliation (2026-08-26): OLD STATUS: DRAFT (topic-analysis conclusion had been reached but never stamped in this field before this reconciliation pass). NEW STATUS: STALE CITATION / SOURCE CONFLICT. SOURCE: this item's own previously-recorded Tier A finding (see text above), now materialized. RATIONALE: promoting to the canonical status label; the underlying finding (own citation does not match current DGR structure) was already fully documented.` (unchanged)
+- **FR status:** `STALE CITATION / SOURCE CONFLICT` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Vérifier les divergences de l'État/Exploitant — étape de vérification documentaire), une fois l'origine, la destination, les éventuels arrêts de transit et l'exploitant (compagnie aérienne) connus pour un envoi de marchandises dangereuses, à quels points les divergences d'exploitant applicables sont-elles énumérées ?"*
   - Options: **(Correct)** *"Aux points DGR 2.8.3.4 et 2.8.4."* / *"Aux points DGR 2.8.1.3 et 2.8.2."* / *"Au Tableau 9.3.A (Séparation entre colis)."* / *"À la section DGR 9.1.3.1 (a) à (i), la liste de contrôle d'acceptation."*
@@ -484,7 +484,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.2.5 Vérifier les divergences des États et des exploitants (étape de vérification physique du colis)
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1, Divergence PKG-02 (Pakistan) (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Vérifier les divergences de l'État/exploitant — étape de vérification physique du colis), quelle est la teneur de la divergence d'État PKG-02 du Pakistan citée en exemple par le cours ?"*
   - Options: **(Correct)** *"Toutes les étiquettes de danger doivent comprendre un texte assez court, rédigé en anglais, indiquant la nature du danger."* / *"Les marques et étiquettes de danger et de manutention doivent être placées sur les côtés du colis, jamais sur la face supérieure ni sur la face inférieure."* / *"Les matières de la Classe 7, catégorie II-jaune et catégorie III-jaune, ne sont pas acceptées au transport."* / *"Le nom et l'adresse complets de l'expéditeur et du destinataire doivent obligatoirement figurer sur chaque colis, sans exception permise."*
@@ -499,7 +499,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.3.1 Remplir la liste de contrôle pour l'acceptation
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED. Reconciliation (2026-08-29): OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.1.3.1 Note 1. RATIONALE: Live Bookshelf check 2026-08-29 independently reconfirms this item's own existing table citation (DGR 67e §9.1.3.1 Note 1): the ULD/consumer-goods/dry-ice/magnetized-materials acceptance-checklist exemption is stated verbatim in the current text, exactly as tested.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Remplir la liste de contrôle pour l'acceptation — 9.1.3.1 Notes), lorsqu'un dispositif de chargement unitaire (ULD) contenant des biens de consommation, de la glace sèche ou des matières magnétisées est accepté conformément au 9.1.4.1(b), (c) ou (d), que devient l'exigence de la liste de contrôle d'acceptation prévue au 9.1.3 (c), (e) ou (g) ?"*
   - Options: **(Correct)** *"Elle n'est pas requise."* / *"Elle devient obligatoire pour chaque colis individuel à l'intérieur de l'ULD."* / *"Elle est remplacée par une inspection physique renforcée de chaque colis."* / *"Elle reste requise, mais uniquement pour la glace sèche, pas pour les biens de consommation ni les matières magnétisées."*
@@ -514,7 +514,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.3.2 Fournir les renseignements sur l'expédition pour la planification du chargement
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Fournir les renseignements sur l'expédition pour la planification du chargement — DGR 9.3.2.1), lequel des éléments suivants ne fait PAS partie de la liste des colis dont le personnel de l'entrepôt et de la planification du chargement doit être informé ?"*
   - Options: **(Correct)** *"Colis portant uniquement l'étiquette « Quantité limitée » (LQ), sans autre étiquette de danger."* / *"Colis contenant du dioxyde de carbone solide (glace sèche)."* / *"Colis contenant du liquide cryogénique."* / *"Colis contenant des billes de polymère expansible et des composés de moulage en plastique (UN 2211 et UN 3314)."*
@@ -529,7 +529,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.3.3 Conserver les documents
 - **Type:** True/False
-- **FR status:** `FROZEN FR / SOURCE VERIFIED. Reconciliation (2026-08-29): OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.8.1 (minimum 3-month retention) + USG-13(b) (US divergence: minimum 1 year/12 months). RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.8 lists USG-13 among its own "DIVERGENCES DES ÉTATS," and USG-13(b) states US operators must retain the transport document at least one year — a real, current, national divergence from the 3-month baseline, confirming the stem's "sans aucune divergence nationale" framing is false.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Conserver les documents — DGR 9.8), la période minimale de conservation de la DGD, de la LTA et des autres documents de transport, de la liste de contrôle de l'acceptation et du NOTOC est de 3 mois pour tous les États, sans aucune divergence nationale."*
   - Correct answer: **Faux**
@@ -701,7 +701,7 @@ Tier A`).
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** True/False
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §6.0.4.0.1 (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Marquage des emballages de spécification ONU — DGR 6.0.4.0.1), les marques de spécification ONU apposées sur un emballage confirment que cet emballage peut être utilisé pour transporter n'importe quelle marchandise dangereuse déterminée."*
   - Correct answer: **Faux**
@@ -715,7 +715,7 @@ Tier A`).
 
 - **Sub-task:** 0.5.1 Reconnaître les prescriptions de base concernant le marquage
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §7.1.5.5.2(b), §7.1.5.5.3 (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Piles au lithium — DGR 7.1.5.5), quelle est la taille de la marque illustrée à la figure 7.1.C, apposée sur un colis de piles ou batteries au lithium préparé conformément à la Section II des PI 966, 967, 969 et 970, ou à la Section IB des PI 965 et 968 ?"*
   - Options: **(Correct)** *"100 mm x 100 mm."* / *"12 mm x 12 mm."* / *"120 mm x 120 mm."* / *"Aucune taille minimale n'est spécifiée ; seule la présence du numéro ONU est requise."*
@@ -730,7 +730,7 @@ Tier A`).
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED. Reconciliation (2026-08-29): OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §7.2.6.1(a)(c) + §7.2.6.2.1 + §7.2.6.2.3 RATIONALE: Live Bookshelf check 2026-08-29: DGR §7.2.6.2.1 states labels must be affixed on the SAME surface as the PSN marking ("apposées sur la même surface du colis, près de la marque indiquant la désignation exacte d'expédition") — the opposite of the tested "different face" claim, confirming it as the correct "NOT a real rule" answer. The three distractor rules were each independently confirmed as real: visible/not obscured (§7.2.6.1(a)), not folded across faces (§7.2.6.1(c)), and primary/subsidiary hazard labels placed adjacent on the same surface (§7.2.6.2.3).` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Apposition des étiquettes — DGR 7.2.6), laquelle des règles suivantes ne fait PAS partie des exigences relatives à l'apposition d'une étiquette sur un colis de marchandises dangereuses ?"*
   - Options: **(Correct)** *"Elle doit être apposée sur une face du colis différente de celle portant la marque de désignation officielle de transport (PSN), afin d'éviter toute confusion visuelle."* / *"Elle doit être visible et lisible, et ne pas être masquée par une autre marque ou étiquette."* / *"Elle ne doit pas être pliée de façon à ce que des parties apparaissent sur différentes faces de l'emballage."* / *"Les risques principaux, subsidiaires ou multiples doivent être apposés de manière adjacente sur la même surface du colis."*
@@ -745,7 +745,7 @@ Tier A`).
 
 - **Sub-task:** 0.5.2 Reconnaître les prescriptions de base concernant l'étiquetage
 - **Type:** True/False
-- **FR status:** `FROZEN FR / SOURCE VERIFIED. Reconciliation (2026-08-29): OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.1.7 RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.1.7 "Avertissement au consommateur" states verbatim "Un article ou un colis peut être porteur d'une étiquette ou d'un symbole de danger adressé au consommateur du produit. Cela ne signifie pas nécessairement que l'article ou la matière contenus dans le colis correspondent aux critères de classification indiqués dans la partie 3. Dans un tel cas et avant d'accepter le colis comme «marchandise non réglementée», des assurances devraient être obtenues de l'expéditeur" — directly confirms the tested claim that a chemical/consumer hazard label does not by itself confirm DG classification and that shipper clarification should be sought.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Autre étiquetage), la présence d'une étiquette de danger chimique sur un colis signifie automatiquement que son contenu répond à la classification des marchandises dangereuses selon la Réglementation ; aucune clarification supplémentaire auprès de l'expéditeur n'est nécessaire avant l'acceptation."*
   - Correct answer: **Faux**
@@ -760,7 +760,7 @@ Tier A`).
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
 - **Type:** MCQ, single-answer
-- **FR status:** `DRAFT — Tier B only. SOURCE REQUIRED for Tier A.` (unchanged)
+- **FR status:** `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` (unchanged)
 - **FR text:**
   - Stem: *"Selon le cours (Procédures d'urgence générales), si un colis de marchandises dangereuses est endommagé et que cela peut se faire sans danger, laquelle des actions suivantes n'est PAS recommandée par le cours ?"*
   - Options: **(Correct)** *"Nettoyer immédiatement la matière déversée à l'aide de l'équipement disponible sur place, avant l'arrivée de tout spécialiste."* / *"Identifier la marchandise dangereuse en se référant au DGD ou aux marques et étiquettes des emballages."* / *"Si possible, isoler le colis endommagé en retirant les marchandises avoisinantes."* / *"Isoler la zone et prévenir les services d'urgence conformément aux procédures locales."*
@@ -774,7 +774,7 @@ Tier A`).
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
 - **Type:** True/False
-- **FR status:** `FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §9.5.1.1.6 (Tier A), 2026-08-25.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Notification au commandant de bord — DGR 9.5.1.1), les renseignements sur les marchandises dangereuses transportées comme fret doivent être fournis au commandant de bord sur la lettre de transport aérien (LTA) ou sur la déclaration de l'expéditeur elle-même, et non sur un document distinct."*
   - Correct answer: **Faux**
@@ -788,7 +788,7 @@ Tier A`).
 
 - **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
 - **Type:** True/False
-- **FR status:** `FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25): same finding as Q-7.2-022 — current §9.5.1.2, read in full this session, covers only the operator's duty to keep ICAO Doc 9481 emergency-response guidance available to the pilot-in-command, not this item's "inform all employees" / "available wherever handled" claim. Genuine SOURCE GAP — retained Tier B, not fabricated.` (unchanged)
+- **FR status:** `FR SOURCE GAP CONFIRMED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Information sur l'intervention d'urgence — DGR 9.5.1.2), il incombe à l'exploitant d'informer tous ses employés des procédures d'intervention d'urgence, lesquelles doivent être disponibles partout où des marchandises dangereuses sont manipulées."*
   - Correct answer: **Vrai**
@@ -873,7 +873,7 @@ Tier A`).
 
 - **Sub-task:** 3.3.2 Fournir les renseignements sur l'expédition pour la planification du chargement
 - **Type:** True/False
-- **FR status:** `FROZEN FR / SOURCE VERIFIED. Reconciliation (2026-08-29): OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A.... NEW STATUS: FROZEN FR / SOURCE VERIFIED SOURCE: §9.3.2.1.1 + its Note RATIONALE: Live Bookshelf check 2026-08-29: DGR §9.3.2.1.1 confirms separation requirements apply based on all hazard labels on a package, whether primary or subsidiary risk ("dangers primaires ou subsidiaires"), and its own Note states packages containing incompatible dangerous goods should be separated during acceptance, handling, and loading ("devraient être séparés durant l'acceptation, la manutention et le chargement") — directly supporting the tested claim's persistence-of-separation framing.` (unchanged)
+- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (DGR 9.3.2.1), la séparation entre marchandises dangereuses, une fois établie sur la base des étiquettes de danger de l'emballage, doit être maintenue tout au long de l'acceptation, de la manutention et du chargement."*
   - Correct answer: **Vrai**

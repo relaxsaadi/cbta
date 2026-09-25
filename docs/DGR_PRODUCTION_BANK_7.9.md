@@ -36,9 +36,7 @@ available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
 
 ## Status of this batch — read before using any item below
 
-**All 16 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**Historical drafting status (SUPERSEDED by the consolidated Tier A reconciliation above):** at the time this batch was drafted, all 16 items were `DRAFT`, Tier B basis only, and none had yet been Tier A-verified against the current IATA DGR 67th Edition (2026, French, Addendum 1) text. The current per-item reconciliation, not this preserved drafting-time statement, governs readiness.
 
 - Per `.claude/rules/dgr-stage2b.md` and the readiness reporting already on
   record for every prior function's Batch 1, the IATA Digital Publications
@@ -1016,9 +1014,7 @@ confirmed `SOURCE GAP` at 0).
 
 ## Status of this batch — read before using any item below
 
-**All 15 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**Historical drafting status (SUPERSEDED by the consolidated Tier A reconciliation above):** at the time this batch was drafted, all 15 items were `DRAFT`, Tier B basis only, and none had yet been Tier A-verified against the current IATA DGR 67th Edition (2026, French, Addendum 1) text. The current per-item reconciliation, not this preserved drafting-time statement, governs readiness.
 
 - Per the orchestrating session's explicit confirmation ahead of this batch,
   the `chrome-devtools` MCP browser tab/session for the IATA Digital
@@ -1964,9 +1960,7 @@ genuinely exhausted rather than under-drawn for lack of effort.
 
 ## Status of this batch — read before using any item below
 
-**All 8 items in this batch are `DRAFT`, Tier B basis only. None has been
-Tier A-verified against the current IATA DGR 67th Edition (2026, French,
-Addendum 1) text.**
+**Historical drafting status (SUPERSEDED by the consolidated Tier A reconciliation above):** at the time this batch was drafted, all 8 items were `DRAFT`, Tier B basis only, and none had yet been Tier A-verified against the current IATA DGR 67th Edition (2026, French, Addendum 1) text. The current per-item reconciliation, not this preserved drafting-time statement, governs readiness.
 
 - Per the task's own explicit confirmation ahead of this batch, Tier A
   verification remains blocked this session for a **different, more

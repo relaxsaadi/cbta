@@ -1,23 +1,6 @@
 # DGR/CBTA Question-Bank Program — Functions 7.1 → 7.10 Status
 
-> ✅ **2026-08-29 — KOST E-EXAM V2 operational with 244 confirmed
-> questions (owner decision):** per the reconciliation CSV
-> (`docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`, 244/453
-> `IMPORT_ELIGIBLE=YES`), Claude Code synced the 152 not-yet-imported
-> eligible questions into KOST E-EXAM V2 staging (was 92, now 244; exact
-> per-function counts: 7.1:13, 7.2:27, 7.3:31, 7.4:25, 7.5:21, 7.6:31,
-> 7.7:25, 7.8:27, 7.9:23, 7.10:21). `reviewer_status` stays `PENDING` on
-> all 244 — not a regulatory-approval event. Full report, including a
-> data-quality bug found in the reconciliation CSVs (see next paragraph)
-> and a new reusable incremental-sync architecture, is in
-> `platform-ops/kost-eexam-v2/docs/KOST_EEXAM_V2_TIER_A_244_MIGRATION_REPORT.md`
-> (on branch `feature/kost-eexam-v2-native`, commit `06456db`). This does
-> **not** supersede the "97 stamped FROZEN" reconciliation note below —
-> the 244 count reflects a *later*, larger reconciliation pass (dated
-> 2026-08-29 in the CSVs' own `FR_STATUS`/`Final_Reconciled_Status`
-> fields, presumably run by the other coordinating session) that is not
-> yet narrated in this file's own per-function sections; Tier A
-> verification of the remaining ~209 items continues separately.
+> ⚠️ **HISTORICAL / SUPERSEDED — 2026-08-29 staging/import milestone; not current regulatory-readiness evidence:** the reconciliation CSV at that time listed 244/453 rows as `IMPORT_ELIGIBLE=YES`, and 152 not-yet-imported rows were synced into KOST E-EXAM V2 staging (92 → 244; per-function staging counts recorded then: 7.1:13, 7.2:27, 7.3:31, 7.4:25, 7.5:21, 7.6:31, 7.7:25, 7.8:27, 7.9:23, 7.10:21). Those values are preserved here only as an audit trail. They must **not** be read as 244 current-edition verified, production-eligible, approved, or regulator/IATA-approved questions. Subsequent exact-head gates identified provenance/readiness defects in the older reconciliation/import-candidate state, including sampled/non-item-specific Tier-A evidence and stale import eligibility. Current authority is the per-item source/evidence state plus the exact-head DGR direct Tier-A and regulatory-readiness gates. `reviewer_status` remained `PENDING`; no named-qualified-reviewer + date approval event occurred. The historical migration report remains at `platform-ops/kost-eexam-v2/docs/KOST_EEXAM_V2_TIER_A_244_MIGRATION_REPORT.md` (branch `feature/kost-eexam-v2-native`, commit `06456db`).
 >
 > **CSV data-quality bug found (flag for whoever owns the reconciliation
 > generator):** 127 of the 152 newly-promoted rows carry an identical,

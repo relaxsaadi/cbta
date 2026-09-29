@@ -602,20 +602,26 @@ own separate sign-off process (see `docs/DGR_SOURCE_REGISTER.md` /
 `docs/DGR_STAGE_2B_STATUS.md` conventions). Per `.claude/rules/dgr-stage2b.md`
 rule 4, no item may be marked `APPROVED` without this completed sign-off.
 
-## Summary
+## Historical Batch 1–2 summary — superseded by Batch 3
 
-- 29/29 Function 7.5 items translated to EN draft status (Batch 1:
-  `Q-7.5-001`–`016`, 16 items; Batch 2: `Q-7.5-017`–`029`, 13 items). 0/29
-  reviewed.
+> **Historical snapshot only.** The current Function 7.5 package contains 44
+> items (`Q-7.5-001`–`044`). Current readiness must be taken from the
+> per-item FR status fields, the current reconciliation artifacts, and the
+> exact-head gates — not from this preserved 29-item Batch 1–2 snapshot.
+
+- At the end of Batch 2, 29/29 Function 7.5 items had EN drafts (Batch 1:
+  `Q-7.5-001`–`016`, 16 items; Batch 2: `Q-7.5-017`–`029`, 13 items).
+  At that historical point, 0/29 had completed bilingual technical review.
 - Unlike Function 7.1's package, no FR "working gloss" reconstruction was
   needed — every FR stem, option set, and statement above is copied verbatim
   from `docs/DGR_PRODUCTION_BANK_7.5.md`, itself sourced verbatim (with
   printed slide citations) from the actual KOST Function 7.5 course PDF,
   exactly as already established for Function 7.3's package.
-- All 29 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5 (FR source verification and EN bilingual review are separate
-  gates).
+- At that historical Batch 1–2 point, all 29 items were recorded as
+  `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`. That statement is
+  superseded by the current per-item FR status fields and must not be used
+  as current regulatory-readiness evidence. FR source verification and EN
+  bilingual review remain separate gates.
 - Terminology continuity was maintained with the earlier EN review packages
   (Functions 7.1/7.3) wherever the same DGR concept recurs: "dérogation"→
   "Exemption," "divergence d'État/d'exploitant"→"State/Operator Variation,"

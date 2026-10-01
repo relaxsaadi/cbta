@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDb, nowIso } from "@/lib/db";
 import { latestOfType, BACKUP_POLICY } from "@/lib/backup";
+import { isOperationalHealthHealthy } from "@/lib/health-status";
 
 // Mission "PRODUCTION READINESS" §12 — endpoint de santé public (aucune
 // session requise, exempté du proxy — voir proxy.ts). Il expose uniquement
@@ -37,7 +38,16 @@ export async function GET() {
   const backupStale = backupAgeHours === null || backupAgeHours > BACKUP_POLICY.rpoHours + 2;
   const restoreTestStale = restoreTestAgeHours === null || restoreTestAgeHours > 7 * 24 + 24;
 
-  const healthy = dbOk && !backupStale && !restoreTestStale && (lastBackup?.status ?? "failure") === "success";
+  // Une preuve de restauration récente mais échouée ne peut jamais être
+  // considérée comme saine. La fraîcheur et le résultat sont deux gates
+  // indépendants, tous deux fail-closed.
+  const healthy = isOperationalHealthHealthy({
+    dbOk,
+    backupStale,
+    restoreTestStale,
+    backupStatus: lastBackup?.status,
+    restoreTestStatus: lastRestoreTest?.status,
+  });
 
   return NextResponse.json(
     {

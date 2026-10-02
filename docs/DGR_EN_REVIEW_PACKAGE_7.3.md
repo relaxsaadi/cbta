@@ -1,8 +1,9 @@
-# DGR EN Review Package — Function 7.3 (Q-7.3-001 – Q-7.3-032)
+# DGR EN Review Package — Function 7.3 (Q-7.3-001 – Q-7.3-045)
 
-Prepared as bilingual (FR→EN) draft translation material for all 32
+Prepared as bilingual (FR→EN) draft translation material for all 45
 currently-drafted Function 7.3 items (`docs/DGR_PRODUCTION_BANK_7.3.md`,
-Batch 1: `Q-7.3-001`–`014`; Batch 2: `Q-7.3-015`–`032`). This is
+Batch 1: `Q-7.3-001`–`014`; Batch 2: `Q-7.3-015`–`032`; Batch 3:
+`Q-7.3-033`–`045`). This is
 **preparatory drafting work for a human reviewer to check — it is not a
 substitute for that review.**
 
@@ -14,9 +15,11 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** All 32 items
-  remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
-  recorded in `docs/DGR_PRODUCTION_BANK_7.3.md`. Per `.claude/rules/
+- **This package does not change any item's FR status.** Function 7.3 now
+  has mixed per-item FR evidence states in the production bank (including
+  source-verified, unresolved/direct-evidence-required, draft, and explicit
+  gap/conflict states where applicable). Those per-item fields are the
+  authority; this EN package mirrors them only. Per `.claude/rules/
   dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
   review are **separate gates** — closing neither gate for any item here.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
@@ -42,10 +45,10 @@ and the reviewer was told to cross-check it against the live-administered
 FR text before treating either as final.
 
 **Function 7.3 does not have this problem.** The FR question text for every
-one of these 32 items — stem, every answer option, the marked correct
+one of these 45 items — stem, every answer option, the marked correct
 answer, and its source citation — is already stored **verbatim** in
-`docs/DGR_PRODUCTION_BANK_7.3.md` (Batch 1 and Batch 2, both drafted this
-session, from the actual KOST Function 7.3 course PDF, slide-cited). This
+`docs/DGR_PRODUCTION_BANK_7.3.md` (Batches 1–3, drafted from the actual KOST
+Function 7.3 course PDF and recorded with slide-level sourcing). This
 package translates that **actual, already-written FR text directly** — no
 reconstruction, no gloss, no working-approximation step. The FR text quoted
 below is copied verbatim (stem + options, or statement for True/False items)
@@ -62,7 +65,7 @@ bilingual technical review task this package exists to prepare for.
 
 ---
 
-## The 32 items
+## The 45 items
 
 Each item cross-references its full rationale, distractor sourcing, and
 exact slide citations in `docs/DGR_PRODUCTION_BANK_7.3.md`. This package
@@ -655,19 +658,19 @@ own separate sign-off process (see `docs/DGR_SOURCE_REGISTER.md` /
 `docs/DGR_STAGE_2B_STATUS.md` conventions). Per `.claude/rules/dgr-stage2b.md`
 rule 4, no item may be marked `APPROVED` without this completed sign-off.
 
-## Summary
+## Batch 1+2 historical summary
 
-- 32/32 Function 7.3 items translated to EN draft status (Batch 1:
+- At the end of Batch 2, 32/32 Function 7.3 items had been translated to EN draft status (Batch 1:
   `Q-7.3-001`–`014`, 14 items; Batch 2: `Q-7.3-015`–`032`, 18 items). 0/32
   reviewed.
 - Unlike Function 7.1's package, no FR "working gloss" reconstruction was
   needed — every FR stem, option set, and statement above is copied verbatim
   from `docs/DGR_PRODUCTION_BANK_7.3.md`, itself sourced verbatim (with
   printed slide citations) from the actual KOST Function 7.3 course PDF.
-- All 32 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5 (FR source verification and EN bilingual review are separate
-  gates).
+- At that Batch 1+2 drafting point, the section recorded all 32 items as
+  `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`. That blanket state is
+  historical and superseded by the current per-item FR evidence fields in
+  the production bank; EN drafting itself changes none of those fields.
 - 6 terminology points are explicitly flagged unverified for the reviewer
   spanning multiple items each (the "dérogation"→"Exemption" candidate,
   4 items; the "divergence"→"State/Operator Variation" candidate, 4 items;
@@ -895,10 +898,10 @@ Tier A`).
 - Combined Batch 1 + Batch 2 + Batch 3 total: **45/45** Function 7.3 items
   now have an EN draft translation (`Q-7.3-001`–`Q-7.3-045`), matching the
   full current production bank (`docs/DGR_PRODUCTION_BANK_7.3.md`).
-- All 13 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5 (FR source verification and EN bilingual review are separate
-  gates).
+- Batch 3 EN drafting did not change any FR evidence state. Use the current
+  per-item FR status fields in the production bank rather than a blanket
+  Batch 3 status; FR source verification and EN bilingual review remain
+  separate gates.
 - 3 new terminology points introduced by Batch 3 and flagged for the
   reviewer, added to the terminology table above: "apposer/apposition" →
   "affix/affixing" (Q-7.3-035, standard but unverified); "étiquette de

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDb, nowIso } from "@/lib/db";
-import { latestOfType, BACKUP_POLICY } from "@/lib/backup";
+import { latestOfType, BACKUP_POLICY, evaluateBackupRecordHealth } from "@/lib/backup";
 
 // Mission "PRODUCTION READINESS" §12 — endpoint de santé public (aucune
 // session requise, exempté du proxy — voir proxy.ts). Il expose uniquement
@@ -28,16 +28,32 @@ export async function GET() {
   const lastRestoreTest = dbOk ? latestOfType("restore_test") : undefined;
 
   const now = Date.now();
-  const backupAgeHours = lastBackup ? (now - new Date(lastBackup.created_at).getTime()) / 3_600_000 : null;
-  const restoreTestAgeHours = lastRestoreTest ? (now - new Date(lastRestoreTest.created_at).getTime()) / 3_600_000 : null;
 
   // Marge de grâce sur les cibles de politique (§10) : cron backup à 2h,
   // cron restore-test hebdomadaire — un léger retard d'exécution cron ne
   // doit pas déclencher une fausse alerte au moment exact du seuil.
-  const backupStale = backupAgeHours === null || backupAgeHours > BACKUP_POLICY.rpoHours + 2;
-  const restoreTestStale = restoreTestAgeHours === null || restoreTestAgeHours > 7 * 24 + 24;
+  //
+  // Important : fraîcheur et succès sont deux invariants indépendants.
+  // Un restore-test récent en échec, ou un timestamp durable invalide/futur,
+  // doit dégrader la santé au lieu de passer implicitement pour une preuve
+  // de reprise valide.
+  const backupHealth = evaluateBackupRecordHealth(
+    lastBackup,
+    BACKUP_POLICY.rpoHours + 2,
+    now,
+  );
+  const restoreTestHealth = evaluateBackupRecordHealth(
+    lastRestoreTest,
+    7 * 24 + 24,
+    now,
+  );
 
-  const healthy = dbOk && !backupStale && !restoreTestStale && (lastBackup?.status ?? "failure") === "success";
+  const healthy =
+    dbOk &&
+    backupHealth.successful &&
+    !backupHealth.stale &&
+    restoreTestHealth.successful &&
+    !restoreTestHealth.stale;
 
   return NextResponse.json(
     {
@@ -47,13 +63,13 @@ export async function GET() {
       db: { ok: dbOk, latencyMs: dbLatencyMs },
       backup: {
         lastStatus: lastBackup?.status ?? "never_run",
-        ageHours: backupAgeHours !== null ? Math.round(backupAgeHours * 10) / 10 : null,
-        stale: backupStale,
+        ageHours: backupHealth.ageHours !== null ? Math.round(backupHealth.ageHours * 10) / 10 : null,
+        stale: backupHealth.stale,
       },
       restoreTest: {
         lastStatus: lastRestoreTest?.status ?? "never_run",
-        ageHours: restoreTestAgeHours !== null ? Math.round(restoreTestAgeHours * 10) / 10 : null,
-        stale: restoreTestStale,
+        ageHours: restoreTestHealth.ageHours !== null ? Math.round(restoreTestHealth.ageHours * 10) / 10 : null,
+        stale: restoreTestHealth.stale,
       },
       uptimeSeconds: Math.round(process.uptime()),
     },

@@ -1,8 +1,8 @@
-# DGR EN Review Package — Function 7.2 (Q-7.2-001 – Q-7.2-028)
+# DGR EN Review Package — Function 7.2 (Q-7.2-001 – Q-7.2-049)
 
-Prepared as bilingual (FR→EN) draft translation material for all 28
+Prepared as bilingual (FR→EN) draft translation material for all 49
 currently-drafted Function 7.2 production-bank items (Batch 1:
-`Q-7.2-001`–`011`; Batch 2: `Q-7.2-012`–`028`). This is **preparatory
+`Q-7.2-001`–`011`; Batch 2: `Q-7.2-012`–`028`; Batch 3: `Q-7.2-029`–`049`). This is **preparatory
 drafting work for a human reviewer to check — it is not a substitute for
 that review.**
 
@@ -14,16 +14,16 @@ that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- This package does **not** change any item's FR status. Every item's FR
-  status remains exactly what `docs/DGR_PRODUCTION_BANK_7.2.md` records:
-  **`DRAFT — Tier B only, SOURCE REQUIRED for Tier A`** (current IATA DGR
-  67th Edition/Addendum 1 verification is a separate, still-pending gate,
-  blocked on the owner's Bookshelf re-authentication — see that file's
-  "Status of this batch" sections for both batches). Per
-  `.claude/rules/dgr-stage2b.md` rule 5, FR source verification and EN
-  bilingual technical review are **separate gates**; this package advances
-  only the EN gate's drafting stage, and does not imply the FR items have
-  moved past `DRAFT`.
+- This package does **not** change any item's FR status. The per-item FR
+  status in this package must mirror the current conservative state in
+  `docs/DGR_PRODUCTION_BANK_7.2.md` and
+  `docs/DGR_SOURCE_COMPETENCY_MATRIX_7.2.md`: current-edition direct evidence
+  may support `FROZEN FR / SOURCE VERIFIED`, while sampled/partial evidence
+  remains unresolved and explicit `SOURCE GAP` / `SOURCE CONFLICT` states
+  remain blocked. Per `.claude/rules/dgr-stage2b.md` rule 5, FR source
+  verification and EN bilingual technical review are **separate gates**;
+  this package advances only EN drafting/review preparation and does not
+  promote any FR item or approval state.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -38,21 +38,20 @@ reconstructed from documented source-basis conclusions
 (`docs/DGR_EN_REVIEW_PACKAGE_7.1.md`'s Critical Provenance Note explains
 this in detail).
 
-**Function 7.2 is different, and better-positioned:** all 28 items'
+**Function 7.2 is different, and better-positioned:** all 49 items'
 complete FR question text — stem and every answer option, exactly as
 drafted — is already stored verbatim in `docs/DGR_PRODUCTION_BANK_7.2.md`
-(Batch 1 and Batch 2, both drafted this session). The FR text quoted in
+(Batches 1–3, all stored in the production bank). The FR text quoted in
 every item below is copied directly from that file, not reconstructed or
 paraphrased from a separate source-basis note. The EN column is therefore a
 direct translation of the actual, already-written FR item, not of a working
 gloss standing in for a missing live copy.
 
 **What this does and does not resolve:** this removes the *reconstruction*
-risk that affected the 7.1 pilot package. It does **not** remove the
-underlying **Tier A regulatory verification** risk — every item's FR text
-is still Tier B only (KOST Function 7.2 course material), not yet checked
-against the current IATA DGR 67th Edition/Addendum 1 text, exactly as
-`docs/DGR_PRODUCTION_BANK_7.2.md` already documents. A human reviewer doing
+risk that affected the 7.1 pilot package. It does **not** remove the underlying **Tier A regulatory verification**
+gate. Tier-A status is item-specific and must follow the current
+production-bank/source-matrix record; this EN package is not Tier-A evidence
+and does not promote any FR state. A human reviewer doing
 the bilingual technical review pass on this package is reviewing
 meaning-equivalence and EN terminology for the *actual drafted FR item* —
 a narrower and more reliable task than 7.1's two-part
@@ -63,11 +62,11 @@ or advanced by this package.
 
 ---
 
-## The 28 items
+## The 49 items
 
 Each item cross-references its authoritative record in
 `docs/DGR_PRODUCTION_BANK_7.2.md` (Batch 1 = `Q-7.2-001`–`011`; Batch 2 =
-`Q-7.2-012`–`028`). FR text is copied verbatim from that file. Do not treat
+`Q-7.2-012`–`028`; Batch 3 = `Q-7.2-029`–`049`). FR text is copied verbatim from that file. Do not treat
 the EN draft here as replacing or overriding the FR item of record.
 
 ### Q-7.2-001 — Portée du Sous-comité d'experts (SCoETDG) dans la hiérarchie réglementaire
@@ -624,7 +623,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    overlapping facts in both languages, per the production bank's own
    non-duplication note).
 4. **Terminology consistency:** confirm EN terms match the terminology
-   table and are used consistently across all 28 items (e.g., "Packing
+   table and are used consistently across all 49 items (e.g., "Packing
    Group" not "packaging group"; "Operator" not "carrier" or "airline";
    "Shipper" not "consignor").
 5. **No item drifts from its FR source citation:** cross-check each item's
@@ -674,12 +673,12 @@ verification gate.
 
 ## Summary
 
-- 28/28 Function 7.2 production-bank items (`Q-7.2-001`–`028`, Batch 1 +
-  Batch 2) translated to EN draft status. 0/28 reviewed.
-- All 28 items carry unchanged FR status `DRAFT — Tier B only, SOURCE
-  REQUIRED for Tier A` — this package does not advance or alter FR status,
-  per `.claude/rules/dgr-stage2b.md` rule 5's separation of the FR
-  verification gate from the EN bilingual review gate.
+- 49/49 Function 7.2 production-bank items (`Q-7.2-001`–`049`, Batches 1–3)
+  have EN draft coverage. 0/49 have completed qualified bilingual review.
+- Per-item FR status is mirrored conservatively from the current production
+  bank/source matrix; this package does not advance or alter FR status, per
+  `.claude/rules/dgr-stage2b.md` rule 5's separation of the FR verification
+  gate from the EN bilingual-review gate.
 - Unlike Function 7.1's pilot package, no FR "working gloss" reconstruction
   was needed: every FR stem/option pair above is copied verbatim from
   `docs/DGR_PRODUCTION_BANK_7.2.md`, the actual, already-written source of

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { assertSafeDgrMarketingCopy, SAFE_DGR_MARKETING_RULES } from '@/lib/dgr-marketing-claims'
 
 export const dynamic = 'force-dynamic'
-
-const DAYS_LEFT = Math.max(0, Math.ceil((new Date('2026-09-30').getTime() - Date.now()) / 86400000))
 
 function getSupabase() {
   return createClient(
@@ -13,14 +12,14 @@ function getSupabase() {
 }
 
 async function generateLinkedInMessage(prospect: Record<string, unknown>): Promise<string> {
-  const SECTOR_PAIN: Record<string, string> = {
-    airline:           'tout agent cargo ou dispatcher non certifié DGR IATA expose votre compagnie à une suspension de vol',
-    ground_handler:    'chaque agent piste manipulant des DGR sans certification IATA engage votre responsabilité pénale',
-    freight_forwarder: 'tout transitaire expédiant des marchandises dangereuses par avion sans certification IATA risque une amende et suspension',
-    oil_gas:           'les équipements et produits pétroliers classés DGR nécessitent une certification IATA obligatoire pour le transport aérien',
-    courier:           'batteries lithium, marchandises réglementées : sans certification DGR IATA, votre licence express est en danger',
-    pharma:            'produits biologiques et cryogéniques : l\'expédition aérienne sans certification DGR IATA engage votre conformité réglementaire',
-    airport_authority: 'l\'autorité aéroportuaire est légalement responsable de toute DGR non conforme en escale',
+  const SECTOR_CONTEXT: Record<string, string> = {
+    airline:           'opérations cargo et transport aérien',
+    ground_handler:    'opérations de handling, piste et rampe',
+    freight_forwarder: 'organisation d’expéditions aériennes',
+    oil_gas:           'expéditions aériennes d’équipements et produits réglementés',
+    courier:           'batteries lithium et marchandises réglementées',
+    pharma:            'produits biologiques, cryogéniques et réglementés',
+    airport_authority: 'opérations aéroportuaires et sécurité du fret',
   }
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -36,29 +35,29 @@ async function generateLinkedInMessage(prospect: Record<string, unknown>): Promi
       messages: [{
         role: 'user',
         content: `Message LinkedIn InMail pour ${prospect.decision_maker_name}, ${prospect.decision_maker_title} chez ${prospect.company_name}.
-Contexte: ${SECTOR_PAIN[prospect.sector as string] || 'obligation IATA DGR'}.
-Il reste ${DAYS_LEFT} jours. KOST = seul centre CBTA IATA certifié Algérie.
+Contexte métier : ${SECTOR_CONTEXT[prospect.sector as string] || 'besoin potentiel de formation DGR/CBTA'}.
 
-Règles ABSOLUES:
-- 280 caractères MAX (compte exactement)
+Règles ABSOLUES :
+- 280 caractères MAX
 - Commence par le prénom uniquement
-- 1 phrase obligation légale spécifique à leur secteur
-- 1 phrase KOST = solution + session août
-- CTA: "Disponible cette semaine?"
-- Zéro générique, zéro spam
-
-Message:`,
+- 1 phrase personnalisée au métier
+- 1 phrase proposant de vérifier le besoin DGR/CBTA avec KOST
+- CTA : "Disponible cette semaine ?"
+- Ne prétends pas qu'une obligation, sanction, date limite, fonction CBTA ou approbation IATA/ANAC s'applique sans preuve fournie
+${SAFE_DGR_MARKETING_RULES}
+Message :`,
       }],
     }),
   })
   const data = await res.json()
-  return (data.content?.[0]?.text || '').slice(0, 280)
+  const text = (data.content?.[0]?.text || '').slice(0, 280)
+  assertSafeDgrMarketingCopy(text)
+  return text
 }
 
 async function runLinkedInBlitz(limit = 10) {
   const supabase = getSupabase()
 
-  // Priority: airlines first, then ground handlers, freight, oil — sectors with real DGR obligations
   const { data: prospects } = await supabase
     .from('company_prospects')
     .select('*')
@@ -69,7 +68,6 @@ async function runLinkedInBlitz(limit = 10) {
     .limit(limit)
 
   if (!prospects?.length) {
-    // Fallback: any sector with LinkedIn
     const { data: fallback } = await supabase
       .from('company_prospects')
       .select('*')
@@ -78,15 +76,14 @@ async function runLinkedInBlitz(limit = 10) {
       .order('score', { ascending: false })
       .limit(limit)
 
-    if (!fallback?.length) return { messaged: 0, prospects: [] }
-
-    return processLinkedIn(fallback, supabase)
+    if (!fallback?.length) return { generated: 0, prospects: [] }
+    return processLinkedIn(fallback)
   }
 
-  return processLinkedIn(prospects, supabase)
+  return processLinkedIn(prospects)
 }
 
-async function processLinkedIn(prospects: Record<string, unknown>[], supabase: ReturnType<typeof getSupabase>) {
+async function processLinkedIn(prospects: Record<string, unknown>[]) {
   const results = []
 
   for (const p of prospects) {
@@ -98,37 +95,41 @@ async function processLinkedIn(prospects: Record<string, unknown>[], supabase: R
       linkedin: p.decision_maker_linkedin,
       message,
     })
-    // Mark as contacted
-    await supabase.from('company_prospects')
-      .update({ status: 'contacted', notes: `LinkedIn message envoyé ${new Date().toLocaleDateString('fr-FR')}`, updated_at: new Date().toISOString() })
-      .eq('id', p.id as string)
   }
 
-  return { messaged: results.length, prospects: results }
+  // Draft generation is not contact. Do not mutate CRM status or write an
+  // "envoyé" note until a real outbound send is confirmed by the sending path.
+  return { generated: results.length, prospects: results }
 }
 
-// POST — generate messages for a batch (returns results, doesn't auto-send — user copies+sends)
+// POST — generate messages for a batch (returns results, does not auto-send)
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}))
   const limit = body.limit || 10
 
-  // Single prospect
-  if (body.prospect) {
-    const message = await generateLinkedInMessage(body.prospect)
-    return NextResponse.json({ message, linkedin: body.prospect.decision_maker_linkedin })
-  }
+  try {
+    if (body.prospect) {
+      const message = await generateLinkedInMessage(body.prospect)
+      return NextResponse.json({ message, linkedin: body.prospect.decision_maker_linkedin })
+    }
 
-  // Batch — generate messages, return them for manual sending
-  const result = await runLinkedInBlitz(limit)
-  return NextResponse.json(result)
+    const result = await runLinkedInBlitz(limit)
+    return NextResponse.json(result)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Copie commerciale bloquée par le garde de conformité', detail: String(error) },
+      { status: 422 }
+    )
+  }
 }
 
-// GET — background daily run
+// GET — background draft generation only; no message is sent and no CRM
+// contact status is changed by this route.
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret')
   if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   after(() => runLinkedInBlitz(15))
-  return NextResponse.json({ status: 'started' })
+  return NextResponse.json({ status: 'started', mode: 'draft-only' })
 }

@@ -90,8 +90,8 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         },
         {
           icon: "🏢",
-          title: "Organisation options",
-          text: `Delivery arrangements in ${data.pays} are confirmed in the proposal after the scope and operational constraints are reviewed.`,
+          title: "Delivery options",
+          text: "French-language virtual classrooms are delivered from our accredited center in Algeria. Physical training outside Algeria is subject to prior written IATA authorization and applicable local requirements.",
         },
       ]
     : [
@@ -112,8 +112,8 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         },
         {
           icon: "🏢",
-          title: "Organisation sur mesure",
-          text: `Les modalités de formation ${data.paysPreposition} ${data.pays} sont confirmées dans la proposition après revue du périmètre et des contraintes opérationnelles.`,
+          title: "Modalités de formation",
+          text: "Des classes virtuelles en français sont organisées depuis notre centre accrédité en Algérie. Toute formation en présentiel hors Algérie est soumise à une autorisation écrite préalable d'IATA et aux exigences locales applicables.",
         },
       ];
 
@@ -132,8 +132,8 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
           a: "A regulatory claim remains non-production if direct current authoritative evidence is missing or conflicting. Production approval also requires the required FR verification, separate EN bilingual review where applicable, and a named qualified reviewer with a review date.",
         },
         {
-          q: `Can training be organised in ${data.pays}?`,
-          a: "Delivery options are confirmed case by case after the training scope, participants and operational requirements have been reviewed.",
+          q: `Can training be organised for participants in ${data.pays}?`,
+          a: "French-language virtual classrooms are delivered from our accredited center in Algeria. Physical training outside Algeria can only be considered after prior written IATA authorization and confirmation of applicable local requirements.",
         },
       ]
     : [
@@ -150,8 +150,8 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
           a: "Une affirmation réglementaire reste hors production si la preuve directe courante faisant autorité manque ou est contradictoire. L'approbation de production exige également la vérification FR requise, une revue EN bilingue distincte lorsqu'elle s'applique, ainsi qu'un reviewer qualifié nommé avec date de revue.",
         },
         {
-          q: `Peut-on organiser une formation ${data.paysPreposition} ${data.pays} ?`,
-          a: "Les modalités sont confirmées au cas par cas après revue du périmètre de formation, des participants et des contraintes opérationnelles.",
+          q: `Peut-on former des participants ${data.paysPreposition} ${data.pays} ?`,
+          a: "Des classes virtuelles en français sont organisées depuis notre centre accrédité en Algérie. Toute formation en présentiel hors Algérie ne peut être étudiée qu'après autorisation écrite préalable d'IATA et confirmation des exigences locales applicables.",
         },
       ];
 

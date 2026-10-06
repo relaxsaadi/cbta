@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CountryLandingPage from "@/components/CountryLandingPage";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR au Sénégal — Centre CBTA Afrique",
+  title: "Formation IATA DGR au Sénégal — Sessions à Dakar",
   description:
-    "Formation IATA DGR-CBTA certifiée pour les professionnels du Sénégal. Sessions à Dakar ou intra-entreprise. Conforme ANAC Sénégal & OACI. Certificat reconnu mondialement.",
+    "Formation IATA DGR-CBTA pour les professionnels du Sénégal, à Dakar ou en intra-entreprise. Conforme ANAC Sénégal & OACI, certificat reconnu mondialement.",
   alternates: { canonical: "/formation-dgr-senegal" },
   keywords: [
     "formation IATA DGR Sénégal",

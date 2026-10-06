@@ -487,7 +487,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 3.2.5 Vérifier les divergences des États et des exploitants (étape de vérification physique du colis)
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
 - **FR text:**
   - Stem: *"Selon le cours (Vérifier les divergences de l'État/exploitant — étape de vérification physique du colis), quelle est la teneur de la divergence d'État PKG-02 du Pakistan citée en exemple par le cours ?"*
   - Options: **(Correct)** *"Toutes les étiquettes de danger doivent comprendre un texte assez court, rédigé en anglais, indiquant la nature du danger."* / *"Les marques et étiquettes de danger et de manutention doivent être placées sur les côtés du colis, jamais sur la face supérieure ni sur la face inférieure."* / *"Les matières de la Classe 7, catégorie II-jaune et catégorie III-jaune, ne sont pas acceptées au transport."* / *"Le nom et l'adresse complets de l'expéditeur et du destinataire doivent obligatoirement figurer sur chaque colis, sans exception permise."*

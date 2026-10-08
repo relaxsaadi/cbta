@@ -14,10 +14,10 @@
  *    and every production-bank question maps to at least one matrix row;
  * 3. every drafted production-bank question ID has exactly one EN review
  *    package entry, with no extra EN-only IDs;
- * 4. a currently FROZEN item fails readiness when its durable provenance says
- *    only a representative sample was checked or its own citation was not
- *    independently re-read; historical notes on truthfully downgraded items
- *    remain auditable without blocking readiness merely by existing;
+ * 4. terminal regulatory conclusions (FROZEN SOURCE VERIFIED, SOURCE GAP
+ *    CONFIRMED, SOURCE CONFLICT CONFIRMED) fail when their own provenance says
+ *    only a representative sample or another item's citation was checked.
+ *    Nonterminal UNRESOLVED/DRAFT/PARTIAL states remain non-positive;
  * 5. overlapping FR-bank / EN-package items must mirror the same current FR
  *    governance state (FROZEN/GAP/PARTIAL/CONFLICT/DRAFT/etc.); presence of an
  *    EN draft must never preserve a stale blanket FR status;
@@ -174,7 +174,9 @@ function assertTableApprovalsHaveReviewerAndDate(text, artifactLabel) {
 function hasRepresentativeEvidenceCaveat(text) {
   return (
     /(?:item['’]s\s+)?own specific citation was not independently re-read/i.test(text) ||
-    /representative sample(?: of this citation pattern)?/i.test(text)
+    /representative sample(?: of this citation pattern)?/i.test(text) ||
+    /not re-searched from scratch/i.test(text) ||
+    /\bcross[- ]applied\b/i.test(text)
   );
 }
 
@@ -191,6 +193,7 @@ function frStatusClass(value) {
     .toUpperCase();
 
   if (!normalized) return "";
+  if (/\bUNRESOLVED\b|DIRECT_ITEM_EVIDENCE_REQUIRED/.test(normalized)) return "UNRESOLVED";
   if (/FROZEN FR\s*\/\s*SOURCE VERIFIED/.test(normalized)) return "FROZEN FR / SOURCE VERIFIED";
   if (/SOURCE CONFLICT/.test(normalized)) return "SOURCE CONFLICT";
   if (/SOURCE GAP/.test(normalized)) return "SOURCE GAP";
@@ -234,9 +237,16 @@ function frStatusDriftItems(bankText, enText, fn) {
   return drift;
 }
 
-function frozenRepresentativeEvidenceItems(text, fn) {
+function terminalIndirectEvidenceItems(text, fn) {
   return itemBlocks(text, fn)
-    .filter((block) => /^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(latestFrStatus(block.text)))
+    .filter((block) => {
+      const state = latestFrStatus(block.text);
+      return (
+        /^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(state) ||
+        /\b(?:FR\s+)?SOURCE GAP CONFIRMED\b/i.test(state) ||
+        /\b(?:FR\s+)?SOURCE CONFLICT CONFIRMED\b/i.test(state)
+      );
+    })
     .filter((block) => hasRepresentativeEvidenceCaveat(block.text))
     .map((block) => block.id);
 }
@@ -367,6 +377,7 @@ function runReviewStateRegressionFixtures() {
     "SOURCE REQUIRED",
     "SOURCE GAP",
     "SOURCE CONFLICT",
+    "TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED",
     "STALE CITATION",
     "PARTIALLY CONFIRMED",
   ];
@@ -412,11 +423,29 @@ function runReviewStateRegressionFixtures() {
     }
   }
 
-  console.log("DGR review-state semantic regression fixtures: PASS");
+  const fixtureCases = [
+    ["FROZEN FR / SOURCE VERIFIED", "representative sample", true],
+    ["FR SOURCE GAP CONFIRMED (cross-applied)", "not re-searched from scratch", true],
+    ["FR SOURCE CONFLICT CONFIRMED", "own specific citation was not independently re-read", true],
+    ["TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED", "representative sample", false],
+    ["DRAFT — SOURCE REQUIRED", "representative sample", false],
+    ["FR SOURCE GAP CONFIRMED", "direct item-specific evidence independently re-read", false],
+  ];
+  for (const [state, provenanceNote, mustBlock] of fixtureCases) {
+    const sample = `## Q-7.2-002 — fixture\n**FR status:** ${state}\n**Reconciliation:** ${provenanceNote}\n`;
+    const actual = terminalIndirectEvidenceItems(sample, "7.2").length > 0;
+    if (actual !== mustBlock) {
+      throw new Error(`terminal provenance fixture failed for: ${state}, note: ${provenanceNote}`);
+    }
+  }
+  if (frStatusClass("TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED") !== "UNRESOLVED") {
+    throw new Error("UNRESOLVED must classify as a nonterminal canonical FR state");
+  }
+  console.log("DGR review-state and terminal-provenance regression fixtures: PASS");
 }
 
 function isExplicitNonVerifiedEvidence(value) {
-  return /SOURCE GAP|SOURCE CONFLICT|NOT YET VERIFIED|STALE CITATION|PARTIALLY CONFIRMED|\bDRAFT\b|SOURCE REQUIRED/i.test(value);
+  return /SOURCE GAP|SOURCE CONFLICT|NOT YET VERIFIED|STALE CITATION|PARTIALLY CONFIRMED|\bDRAFT\b|SOURCE REQUIRED|UNRESOLVED|DIRECT_ITEM_EVIDENCE_REQUIRED/i.test(value);
 }
 
 function looksLikeCurrentTierAEvidence(value) {
@@ -622,7 +651,7 @@ for (const fn of functions) {
   const enDupes = duplicates(enHeadingList);
   const missing = difference(canonicalBankIds, enIds);
   const extra = difference(enIds, canonicalBankIds);
-  const provenanceBlockers = frozenRepresentativeEvidenceItems(bank, fn);
+  const provenanceBlockers = terminalIndirectEvidenceItems(bank, fn);
   const frStatusDrift = frStatusDriftItems(bank, en, fn);
 
   if (bankDupes.length) fail(`${bankPath}: duplicate question headings: ${bankDupes.join(", ")}`);
@@ -638,12 +667,10 @@ for (const fn of functions) {
   }
 
   if (provenanceBlockers.length > 0) {
-    // This is intentionally a readiness failure, not an automatic downgrade.
-    // A FROZEN state must be backed by direct item-specific current Tier-A
-    // evidence. If the item is truthfully downgraded to GAP/PARTIAL/DRAFT/
-    // CONFLICT, its historical representative-sample note may remain for audit
-    // history without creating a false permanent blocker.
-    fail(`${fn}: ${provenanceBlockers.length} FROZEN item(s) still rely on representative/non-item-specific evidence: ${provenanceBlockers.join(", ")}`);
+    // Readiness fails for any terminal conclusion resting on a representative
+    // or cross-applied citation. Downgrade to UNRESOLVED until directly checked;
+    // do not silently fabricate a regulatory SOURCE GAP or CONFLICT finding.
+    fail(`${fn}: ${provenanceBlockers.length} terminal FR item(s) lack item-specific provenance: ${provenanceBlockers.join(", ")}`);
   }
 
   if (frStatusDrift.length > 0) {
@@ -679,7 +706,7 @@ for (const fn of functions) {
 }
 
 console.log("\nDGR/CBTA readiness artifact summary");
-console.log("Function | Bank | EN | Missing EN | Extra EN | Matrix tasks | Missing matrix links | Extra matrix IDs | Frozen provenance | FR↔EN drift");
+console.log("Function | Bank | EN | Missing EN | Extra EN | Matrix tasks | Missing matrix links | Extra matrix IDs | Terminal provenance | FR↔EN drift");
 console.log("---------|------|----|------------|----------|--------------|----------------------|------------------|-------------------|------------");
 for (const row of rows) {
   console.log(

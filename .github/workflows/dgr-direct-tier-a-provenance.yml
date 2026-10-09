@@ -1,0 +1,104 @@
+name: DGR direct Tier-A provenance
+
+on:
+  push:
+    branches:
+      - main
+      - ai/dgr-stage2b-handoff
+    paths:
+      - "docs/DGR_**"
+      - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv"
+      - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
+      - "docs/DGR_IMPORT_CANDIDATE_PROVENANCE_CORRECTION_2026-09-22.md"
+      - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - "scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs"
+      - "scripts/check-dgr-evidence-artifact-binding.mjs"
+      - "scripts/check-dgr-import-candidate-csv-structure.mjs"
+      - "scripts/check-dgr-import-candidate-provenance.mjs"
+      - "scripts/check-dgr-unresolved-source-state-import.mjs"
+      - ".github/workflows/dgr-direct-tier-a-provenance.yml"
+  pull_request:
+    paths:
+      - "docs/DGR_**"
+      - "docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv"
+      - "docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv"
+      - "docs/DGR_TIER_A_DIRECT_EVIDENCE_CORRECTION_2026-09-22.md"
+      - "docs/DGR_IMPORT_CANDIDATE_PROVENANCE_CORRECTION_2026-09-22.md"
+      - "scripts/check-dgr-direct-item-tier-a-provenance.mjs"
+      - "scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs"
+      - "scripts/check-dgr-evidence-artifact-binding.mjs"
+      - "scripts/check-dgr-import-candidate-csv-structure.mjs"
+      - "scripts/check-dgr-import-candidate-provenance.mjs"
+      - "scripts/check-dgr-unresolved-source-state-import.mjs"
+      - ".github/workflows/dgr-direct-tier-a-provenance.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  direct-item-tier-a-provenance:
+    name: Direct item Tier-A provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # pull_request events otherwise checkout GitHub's synthetic merge ref;
+          # readiness evidence is intentionally scoped to the exact PR head.
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Direct-provenance regression fixtures
+        run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs --test
+
+      - name: Reject sampled-only Tier-A promotions
+        if: always()
+        run: node scripts/check-dgr-direct-item-tier-a-provenance.mjs
+
+      - name: Affirmative direct-evidence regression fixtures
+        if: always()
+        run: node scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs --test
+
+      - name: Require affirmative current-edition per-item evidence
+        if: always()
+        run: node scripts/check-dgr-affirmative-direct-tier-a-evidence.mjs
+
+      - name: Evidence-artifact binding regression fixtures
+        if: always()
+        run: node scripts/check-dgr-evidence-artifact-binding.mjs --test
+
+      - name: Require terminal rows to bind their evidence artifacts
+        if: always()
+        run: node scripts/check-dgr-evidence-artifact-binding.mjs
+
+      - name: Import/reconciliation CSV row-structure regression fixtures
+        if: always()
+        run: node scripts/check-dgr-import-candidate-csv-structure.mjs --test
+
+      - name: Import/reconciliation CSV row-structure consistency gate
+        if: always()
+        run: node scripts/check-dgr-import-candidate-csv-structure.mjs
+
+      - name: Unresolved source-state import regression fixtures
+        if: always()
+        run: node scripts/check-dgr-unresolved-source-state-import.mjs --test
+
+      - name: Reject SOURCE GAP/CONFLICT promotion to V2 import
+        if: always()
+        run: node scripts/check-dgr-unresolved-source-state-import.mjs
+
+      - name: Import-candidate provenance regression fixtures
+        if: always()
+        run: node scripts/check-dgr-import-candidate-provenance.mjs --test
+
+      - name: Reject stale V2 import eligibility
+        if: always()
+        run: node scripts/check-dgr-import-candidate-provenance.mjs

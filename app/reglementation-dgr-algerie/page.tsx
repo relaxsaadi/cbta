@@ -7,87 +7,50 @@ import WhatsAppSticky from "@/components/WhatsAppSticky";
 import LeadForm from "@/components/LeadForm";
 
 export const metadata: Metadata = {
-  title: "Réglementation DGR Algérie — Décret 21-253 & ANAC",
+  title: "Réglementation DGR Algérie — Méthode de Vérification des Sources",
   description:
-    "Le Décret 21-253 impose à l'ANAC le contrôle des formations DGR en Algérie. Cadre légal complet, sources officielles, et solution CBTA certifiée IATA.",
+    "Guide de vérification pour le cadre DGR en Algérie : distinguer les textes nationaux, les sources OACI/IATA, les exigences opérateur et les preuves nécessaires avant toute affirmation réglementaire.",
   alternates: { canonical: "/reglementation-dgr-algerie" },
   keywords: [
-    "décret 21-253 marchandises dangereuses",
-    "obligation formation DGR ANAC",
-    "inspecteur marchandises dangereuses Algérie",
-    "réglementation transport aérien marchandises dangereuses Algérie",
-    "ANAC contrôle DGR",
-    "annexe 18 OACI marchandises dangereuses",
+    "réglementation DGR Algérie",
+    "ANAC marchandises dangereuses",
+    "transport aérien marchandises dangereuses Algérie",
+    "sources DGR Algérie",
+    "CBTA Algérie",
   ],
   openGraph: {
-    title: "Réglementation DGR en Algérie — Décret 21-253 & ANAC",
+    title: "Réglementation DGR Algérie — Vérifier les Sources",
     description:
-      "Le cadre légal complet, sourcé au Journal Officiel : obligation de contrôle ANAC des formations marchandises dangereuses (Décret 21-253, Art. 14).",
+      "Méthode conservatrice pour vérifier les textes nationaux, les sources OACI/IATA et les exigences opérateur avant toute conclusion DGR.",
     url: "https://dgr.kostacademy.com/reglementation-dgr-algerie",
   },
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dgr.kostacademy.com";
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Accueil", item: siteUrl },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Réglementation DGR Algérie",
-      item: `${siteUrl}/reglementation-dgr-algerie`,
-    },
-  ],
-};
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Existe-t-il une obligation légale de formation DGR en Algérie ?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Oui. Le Décret exécutif n°21-253 du 6 juin 2021 (Journal Officiel n°46) impose à l'ANAC, dans son article 14, « l'examen et l'évaluation des procédures et des programmes de formation des exploitants des services aériens pour le transport de marchandises dangereuses ». L'Annexe 1 du même décret exige que l'inspecteur en exploitation technique maîtrise la « réglementation de transport aérien de marchandises dangereuses ».",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Qu'est-ce qu'un « Inspecteur marchandises dangereuses » pour l'ANAC ?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "C'est une fonction officiellement reconnue par l'État algérien : l'Annexe 2 du Décret 21-253 (modèle-type de la carte d'inspecteur de l'aviation civile) liste explicitement le rôle « Inspecteur marchandises dangereuses (Dangerous goods inspector) » parmi les habilitations que peut détenir un inspecteur ANAC.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Le format CBTA est-il obligatoire pour les formations DGR ?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Le CBTA (Competency-Based Training and Assessment) est le format défini par l'OACI (Annexe 18, Décision DGP/27) et repris par la réglementation IATA DGR (section 1.5) comme standard international de référence pour la formation aux marchandises dangereuses. KOST GROUP est le premier centre CBTA Provider certifié IATA en Algérie.",
-      },
-    },
-  ],
-};
+const SOURCE_LAYERS = [
+  {
+    title: "Textes nationaux algériens",
+    text: "Identifier le texte officiel applicable, sa version, sa date d'effet et l'autorité compétente. Une référence à un décret ou arrêté ne doit pas être transformée en conclusion plus large que ce que le texte dit réellement.",
+  },
+  {
+    title: "Sources OACI / IATA courantes",
+    text: "Pour les affirmations réglementaires liées au DGR / CBTA, utiliser la version courante faisant autorité. Pour le programme 2026, une affirmation destinée à la banque de production doit être rattachée à la preuve Tier A requise de l'IATA DGR 67e édition 2026 lorsqu'elle relève de cette source.",
+  },
+  {
+    title: "Exigences opérateur / compagnie",
+    text: "Une politique interne d'opérateur ou de compagnie ne doit pas être présentée comme une règle universelle. Elle doit être identifiée séparément et datée.",
+  },
+  {
+    title: "État de preuve",
+    text: "Si la preuve manque : SOURCE GAP. Si deux sources pertinentes se contredisent : SOURCE CONFLICT. Aucun de ces états ne peut être promu en APPROVED.",
+  },
+];
 
 export default function ReglementationPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <Navbar />
+      <WhatsAppSticky />
       <main className="bg-white">
-        {/* Hero */}
         <section className="bg-gradient-to-br from-[#002A56] to-[#003D7A] text-white">
           <div className="container-x max-w-4xl py-14 md:py-20">
             <nav className="text-sm text-white/40 mb-6 flex items-center gap-2">
@@ -96,145 +59,62 @@ export default function ReglementationPage() {
               <span className="text-white/70">Réglementation DGR</span>
             </nav>
             <span className="inline-block text-sm uppercase tracking-wider text-[#F39C12] font-bold mb-3">
-              Cadre légal — sources officielles
+              Cadre de vérification — pas une déclaration d'agrément
             </span>
             <h1 className="text-3xl md:text-4xl font-extrabold leading-tight mb-4">
-              Réglementation du transport de marchandises dangereuses en Algérie
+              Vérifier le cadre DGR applicable en Algérie
             </h1>
-            <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
-              Le Décret exécutif n°21-253 impose à l'ANAC une obligation légale de contrôle des
-              formations DGR. Voici les textes exacts, sourcés au Journal Officiel — vérifiables
-              par vous-même.
+            <p className="text-white/80 text-lg max-w-3xl leading-relaxed">
+              Cette page décrit la méthode de preuve à suivre avant d'affirmer qu'une obligation, une fonction, une validité, une reconnaissance ou une approbation s'applique. Elle ne revendique pas de statut ANAC/IATA pour KOST GROUP.
             </p>
           </div>
         </section>
 
-        {/* Décret 21-253 */}
-        <section className="container-x max-w-3xl py-14">
-          <h2 className="text-2xl font-extrabold text-[#0f1c2e] mb-4">
-            1. Le Décret exécutif n°21-253 du 6 juin 2021
-          </h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Publié au{" "}
-            <a
-              href="https://www.anac.dz/wp-content/uploads/2025/01/21-253.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#003D7A] underline font-semibold"
-            >
-              Journal Officiel n°46 du 13 juin 2021
-            </a>
-            , ce décret fixe les modalités de contrôle des services aéronautiques et de leurs
-            prestataires par l'ANAC (Agence Nationale de l'Aviation Civile).
-          </p>
-
-          <div className="bg-[#f7f9fc] border-l-4 border-[#F39C12] rounded-r-xl p-6 my-6">
-            <p className="text-xs font-bold text-[#003D7A] uppercase tracking-wide mb-2">
-              Article 14 — Section 2, contrôle de l'exploitation technique
-            </p>
-            <p className="text-gray-800 italic leading-relaxed">
-              « Les missions de contrôle de l'inspecteur de l'exploitation technique des aéronefs
-              portent, notamment sur […] l'examen et l'évaluation des procédures et des
-              programmes de formation des exploitants des services aériens{" "}
-              <strong>pour le transport de marchandises dangereuses</strong>. »
-            </p>
-          </div>
-
-          <div className="bg-[#f7f9fc] border-l-4 border-[#F39C12] rounded-r-xl p-6 my-6">
-            <p className="text-xs font-bold text-[#003D7A] uppercase tracking-wide mb-2">
-              Annexe 1 — Qualification des inspecteurs de l'aviation civile
-            </p>
-            <p className="text-gray-800 italic leading-relaxed">
-              Parmi les compétences exigées de l'inspecteur en exploitation technique des
-              aéronefs : «{" "}
-              <strong>réglementation de transport aérien de marchandises dangereuses</strong>. »
-            </p>
-          </div>
-
-          <div className="bg-[#f7f9fc] border-l-4 border-[#F39C12] rounded-r-xl p-6 my-6">
-            <p className="text-xs font-bold text-[#003D7A] uppercase tracking-wide mb-2">
-              Annexe 2 — Modèle-type de la carte d'inspecteur ANAC
-            </p>
-            <p className="text-gray-800 leading-relaxed">
-              La carte officielle d'inspecteur de l'aviation civile liste, parmi les habilitations
-              possibles : <strong>« Inspecteur marchandises dangereuses (Dangerous goods
-              inspector) »</strong> — une fonction de contrôle formellement reconnue par l'État
-              algérien.
-            </p>
-          </div>
-
-          <p className="text-sm text-gray-500 mt-6">
-            Source primaire consultable intégralement :{" "}
-            <a
-              href="https://www.anac.dz/wp-content/uploads/2025/01/21-253.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              anac.dz — Décret exécutif n°21-253 (PDF)
-            </a>
-          </p>
-        </section>
-
-        {/* OACI / IATA */}
-        <section className="bg-gray-50 py-14">
-          <div className="container-x max-w-3xl">
-            <h2 className="text-2xl font-extrabold text-[#0f1c2e] mb-4">
-              2. L'exigence internationale : Annexe 18 OACI et standard IATA CBTA
-            </h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              Le CBTA (Competency-Based Training and Assessment — formation et évaluation axées
-              sur les compétences) est le format défini au niveau international par l'OACI
-              (Décision DGP/27, s'inscrivant dans le cadre de l'Annexe 18 de la Convention relative
-              à l'aviation civile internationale) et repris par la réglementation IATA DGR (section
-              1.5) comme standard de référence pour la formation au transport aérien de
-              marchandises dangereuses.
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              Concrètement : un certificat DGR délivré selon l'ancien modèle par catégories (1 à
-              12) et un certificat CBTA ne couvrent pas la même reconnaissance internationale.
-              Vérifiez toujours le format exact de la certification proposée par un centre de
-              formation avant de vous engager.
-            </p>
+        <section className="container-x max-w-4xl py-14">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A] mb-8">Quatre couches à vérifier</h2>
+          <div className="grid md:grid-cols-2 gap-5">
+            {SOURCE_LAYERS.map((source) => (
+              <div key={source.title} className="rounded-xl border border-gray-200 bg-[#f7f9fc] p-6">
+                <h3 className="font-extrabold text-[#003D7A] mb-2">{source.title}</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">{source.text}</p>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Positionnement KOST */}
-        <section className="container-x max-w-3xl py-14">
-          <h2 className="text-2xl font-extrabold text-[#0f1c2e] mb-4">
-            3. KOST GROUP — Premier centre CBTA Provider certifié IATA en Algérie
-          </h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Face à cette double obligation — contrôle ANAC (Décret 21-253) et standard
-            international CBTA (OACI/IATA) — KOST GROUP est le premier centre de formation en
-            Algérie certifié IATA CBTA Provider, permettant à vos équipes d'obtenir une
-            certification reconnue sans déplacement à l'étranger.
-          </p>
-          <p className="text-sm text-gray-500">
-            Vérifiez notre statut directement sur le{" "}
-            <a
-              href="https://www.iata.org/en/training/cbta-center-registry/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              registre officiel IATA CBTA Center Registry
-            </a>
-            .
-          </p>
+        <section className="bg-[#f7f9fc]">
+          <div className="container-x max-w-4xl py-14">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A] mb-6">Règles pour les fonctions 7.1–7.10</h2>
+            <div className="space-y-4 text-gray-700 leading-relaxed">
+              <p>
+                Chaque fonction est dérivée de sa propre table de tâches et de son propre jeu de sources. La structure ou le nombre de sous-tâches de la fonction 7.1 ne doit jamais être copié mécaniquement vers 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9 ou 7.10.
+              </p>
+              <p>
+                Les sources françaises sont vérifiées dans leur circuit propre. La revue technique bilingue anglaise est une étape distincte lorsqu'elle est requise. Une traduction ou un miroir de statut ne remplace pas une revue bilingue réelle.
+              </p>
+              <p>
+                Aucun item ou état de banque ne doit être présenté comme APPROVED sans reviewer qualifié nommé et date de revue. Les preuves de qualification du reviewer et la chaîne d'approbation doivent rester auditables.
+              </p>
+            </div>
+          </div>
         </section>
 
-        {/* CTA / Formulaire */}
-        <section id="contact" className="bg-[#0f1c2e] py-14">
-          <div className="container-x max-w-xl text-center text-white mb-8">
-            <h2 className="text-2xl font-extrabold mb-3">
-              Votre formation DGR est-elle conforme ?
-            </h2>
-            <p className="text-white/70 leading-relaxed">
-              Demandez un audit gratuit de vos obligations réglementaires — réponse sous 24h.
+        <section className="container-x max-w-4xl py-14">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A] mb-5">Ce qu'il faut éviter</h2>
+          <ul className="space-y-3 text-gray-700 list-disc pl-6">
+            <li>Présenter une référence réglementaire comme preuve d'une conclusion qu'elle ne formule pas directement.</li>
+            <li>Présenter une exigence d'un opérateur comme une obligation universelle.</li>
+            <li>Affirmer une durée, une reconnaissance, une sanction ou une approbation sans source actuelle et directement applicable.</li>
+            <li>Utiliser un statut commercial ou marketing comme preuve réglementaire.</li>
+          </ul>
+        </section>
+
+        <section id="contact" className="bg-[#002A56] text-white">
+          <div className="container-x max-w-3xl py-14">
+            <h2 className="text-2xl font-extrabold mb-3">Demander une analyse de périmètre</h2>
+            <p className="text-white/75 mb-8">
+              Indiquez les tâches réelles, l'activité concernée et les sources ou exigences déjà disponibles. Le périmètre sera traité comme une question à vérifier, pas comme une conclusion automatique.
             </p>
-          </div>
-          <div className="container-x max-w-xl">
             <Suspense fallback={null}>
               <LeadForm sourcePage="/reglementation-dgr-algerie" />
             </Suspense>
@@ -242,7 +122,6 @@ export default function ReglementationPage() {
         </section>
       </main>
       <Footer />
-      <WhatsAppSticky />
     </>
   );
 }

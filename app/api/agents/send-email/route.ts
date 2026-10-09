@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { assertSafeDgrMarketingCopy, SAFE_DGR_MARKETING_RULES } from '@/lib/dgr-marketing-claims'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,18 +12,17 @@ function getSupabase() {
 }
 
 async function generateEmail(prospect: Record<string, unknown>): Promise<string> {
-  const daysLeft = Math.max(0, Math.ceil((new Date('2026-09-30').getTime() - Date.now()) / 86400000))
   const SECTOR_CONTEXT: Record<string, string> = {
-    airline: 'compagnie aérienne — agents cargo, dispatchers, loadmasters obligés IATA',
-    ground_handler: 'société de handling — agents piste manipulant des DGR quotidiennement',
-    freight_forwarder: 'transitaire — tout personnel traitant des expéditions aériennes DGR',
-    oil_gas: 'entreprise pétrolière — expéditions d\'équipements DGR par avion',
-    courier: 'courrier express — batteries lithium, marchandises réglementées',
-    pharma: 'laboratoire — produits biologiques, cryogéniques, réglementés IATA',
-    airport_authority: 'autorité aéroportuaire — responsabilité juridique sur les DGR',
-    chemical: 'entreprise chimique — transport aérien matières dangereuses',
+    airline: 'compagnie aérienne — opérations cargo et transport aérien',
+    ground_handler: 'société de handling — opérations piste, rampe et cargo',
+    freight_forwarder: 'transitaire — organisation d’expéditions aériennes',
+    oil_gas: 'entreprise pétrolière — expéditions aériennes d’équipements et produits réglementés',
+    courier: 'courrier express — batteries lithium et marchandises réglementées',
+    pharma: 'laboratoire — produits biologiques, cryogéniques et réglementés',
+    airport_authority: 'autorité aéroportuaire — opérations et conformité liées aux marchandises dangereuses',
+    chemical: 'entreprise chimique — transport aérien de matières dangereuses',
   }
-  const ctx = SECTOR_CONTEXT[prospect.sector as string] || 'secteur réglementé IATA'
+  const ctx = SECTOR_CONTEXT[prospect.sector as string] || 'activité pouvant être concernée par des exigences DGR'
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -36,27 +36,28 @@ async function generateEmail(prospect: Record<string, unknown>): Promise<string>
       max_tokens: 600,
       messages: [{
         role: 'user',
-        content: `Tu es Karim Saadi, directeur commercial de KOST GROUP, premier centre IATA CBTA certifié d'Algérie.
+        content: `Tu es Karim Saadi, directeur commercial de KOST GROUP, organisme de formation DGR/CBTA.
 Rédige un email HTML professionnel pour :
 - ${prospect.decision_maker_name}, ${prospect.decision_maker_title} chez ${prospect.company_name}
 - Secteur : ${ctx}
-- Il reste ${daysLeft} jours avant le renforcement des contrôles IATA (deadline septembre 2026)
 
 Corps de l'email HTML (sans les balises html/body) :
 - Objet intégré dans le corps comme titre H2
 - 3 paragraphes courts (120 mots max au total)
-- Urgence réglementaire IATA spécifique à leur secteur
-- KOST = seul centre CBTA certifié Algérie, session août disponible
-- CTA bouton vert : "Réserver ma place — Session Août 2026" → https://dgr.kostacademy.com
+- Parle uniquement de leurs besoins potentiels de formation DGR/CBTA et de la possibilité de vérifier ensemble la fonction pertinente
+- Ne cite une session, un prix, une date, une obligation ou une conséquence réglementaire que si cette donnée figure explicitement dans les informations du prospect
+- CTA neutre : proposer un échange court ou une réponse par email/WhatsApp
 - Signature : Karim Saadi | KOST GROUP | +213 542 30 53 83 | dgr.kostacademy.com
 - Style inline CSS, fond blanc, police sans-serif
-
+${SAFE_DGR_MARKETING_RULES}
 Réponds uniquement avec le HTML du corps (pas de markdown).`,
       }],
     }),
   })
   const data = await res.json()
-  return data.content?.[0]?.text || ''
+  const html = data.content?.[0]?.text || ''
+  assertSafeDgrMarketingCopy(html)
+  return html
 }
 
 async function sendViaResend(to: string, subject: string, html: string): Promise<boolean> {
@@ -83,7 +84,6 @@ async function sendViaResend(to: string, subject: string, html: string): Promise
 async function runDailyBlitz() {
   const supabase = getSupabase()
 
-  // Pick top 10 uncontacted prospects with verified email, ordered by score
   const { data: prospects } = await supabase
     .from('company_prospects')
     .select('*')
@@ -98,7 +98,7 @@ async function runDailyBlitz() {
   for (const p of prospects) {
     try {
       const emailHtml = await generateEmail(p)
-      const subject = `Formation DGR IATA — Obligation réglementaire avant septembre 2026`
+      const subject = 'Formation DGR/CBTA — échange sur vos besoins'
       const ok = await sendViaResend(p.contact_email, subject, emailHtml)
 
       if (ok) {
@@ -107,8 +107,8 @@ async function runDailyBlitz() {
           .eq('id', p.id)
         sent++
       }
-    } catch {
-      // continue with next prospect
+    } catch (error) {
+      console.error('[send-email] generated copy rejected or send failed', error)
     }
   }
   return { sent }
@@ -118,32 +118,36 @@ async function runDailyBlitz() {
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}))
 
-  // Single email to one prospect
   if (body.prospect && body.prospect.contact_email) {
-    const emailHtml = await generateEmail(body.prospect)
-    const subject = 'Formation DGR IATA — Obligation réglementaire avant septembre 2026'
-    const ok = await sendViaResend(body.prospect.contact_email, subject, emailHtml)
+    try {
+      const emailHtml = await generateEmail(body.prospect)
+      const subject = 'Formation DGR/CBTA — échange sur vos besoins'
+      const ok = await sendViaResend(body.prospect.contact_email, subject, emailHtml)
 
-    if (ok) {
-      const supabase = getSupabase()
-      await supabase.from('company_prospects')
-        .update({ status: 'contacted', updated_at: new Date().toISOString() })
-        .eq('id', body.prospect.id)
+      if (ok) {
+        const supabase = getSupabase()
+        await supabase.from('company_prospects')
+          .update({ status: 'contacted', updated_at: new Date().toISOString() })
+          .eq('id', body.prospect.id)
+      }
+
+      return NextResponse.json({
+        sent: ok,
+        preview: emailHtml.slice(0, 300),
+        note: ok ? 'Email envoyé' : 'RESEND_API_KEY manquante — ajoutez-la dans Vercel env vars',
+      })
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Copie commerciale bloquée par le garde de conformité', detail: String(error) },
+        { status: 422 }
+      )
     }
-
-    return NextResponse.json({
-      sent: ok,
-      preview: emailHtml.slice(0, 300),
-      note: ok ? 'Email envoyé' : 'RESEND_API_KEY manquante — ajoutez-la dans Vercel env vars',
-    })
   }
 
-  // Batch daily blitz — fire and forget
   after(runDailyBlitz)
   return NextResponse.json({ status: 'started', message: 'Blitz email lancé en arrière-plan' })
 }
 
-// GET — cron quotidien 8h du matin
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret')
   if (secret !== process.env.CRON_SECRET) {

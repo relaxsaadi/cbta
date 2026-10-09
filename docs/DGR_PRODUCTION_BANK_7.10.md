@@ -41,6 +41,8 @@ available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
 
 ## Status of this batch — read before using any item below
 
+**Original drafting-time status — HISTORICAL / SUPERSEDED:** The statement immediately below records this batch's initial Tier B-only drafting state before the subsequent consolidated IATA DGR 67th Edition review. It is not a current per-question verification claim. Consult each item's latest FR status, evidence and separate EN review; no item is APPROVED without a qualified named reviewer and dated sign-off.
+
 **All 15 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
 Addendum 1) text.**
@@ -1149,6 +1151,8 @@ Block 5: 2 of 4, Block 7: 3 of 6) for a future batch.
 
 ## Status of this batch — read before using any item below
 
+**Original drafting-time status — HISTORICAL / SUPERSEDED:** The statement immediately below records this batch's initial Tier B-only drafting state before the subsequent consolidated IATA DGR 67th Edition review. It is not a current per-question verification claim. Consult each item's latest FR status, evidence and separate EN review; no item is APPROVED without a qualified named reviewer and dated sign-off.
+
 **All 17 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,
 Addendum 1) text.**
@@ -2237,6 +2241,8 @@ is treated as the expected, correct outcome of a third drafting pass, not
 a shortfall.
 
 ## Status of this batch — read before using any item below
+
+**Original drafting-time status — HISTORICAL / SUPERSEDED:** The statement immediately below records this batch's initial Tier B-only drafting state before the subsequent consolidated IATA DGR 67th Edition review. It is not a current per-question verification claim. Consult each item's latest FR status, evidence and separate EN review; no item is APPROVED without a qualified named reviewer and dated sign-off.
 
 **All 12 items in this batch are `DRAFT`, Tier B basis only. None has been
 Tier A-verified against the current IATA DGR 67th Edition (2026, French,

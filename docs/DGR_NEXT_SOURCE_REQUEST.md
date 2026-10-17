@@ -1,5 +1,7 @@
 # DGR Stage 2B.1 — Consolidated Source Request
 
+> **HISTORICAL REQUEST — SUPERSEDED (2026-10-17; documentation status only).** This is the original retrieval plan and its "SOURCE REQUIRED" entries are **not** current item-level states. For current recorded evidence see `docs/DGR_STAGE_2B_STATUS.md` and `docs/DGR_SOURCE_REGISTER.md`: Q-7.1-001 is a confirmed **SOURCE GAP** for a DGR-native danger/risk glossary definition (Tier B/C teaching context is not DGR regulatory authority), while Q-7.1-006, Q-7.1-007 and Q-7.1-008 have subsequent FR Tier-A source investigations recorded. Q-7.1-008's documented distractor correction must still be reconciled with the administered/live question; a documentation correction is not a Moodle update. No regulatory production release, EN technical review or qualified human approval is implied. The checklists and exact-head gates remain controlling. The historical body below is preserved for audit provenance.
+
 Batch retrieval plan for the four remaining pending pilot items: Q-7.1-001, Q-7.1-006, Q-7.1-007, Q-7.1-008.
 
 Regulatory baseline: IATA DGR 67th Edition — 2026, French, Addendum 1 integrated.

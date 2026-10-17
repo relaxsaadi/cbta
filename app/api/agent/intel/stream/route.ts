@@ -7,7 +7,9 @@ import { Resend } from 'resend'
 
 export const maxDuration = 300
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Preview/build environments are not required to carry an outbound-email
+// credential. Avoid constructing Resend at module import time.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function GET(req: NextRequest) {
   const auth = req.nextUrl.searchParams.get('secret')
@@ -119,7 +121,7 @@ async function scoreLead(lead: ApifyLead): Promise<number> {
     const { text } = await generateText({
       model: anthropic('claude-haiku-4-5-20251001'),
       maxOutputTokens: 5,
-      prompt: `Tu prospectes pour KOST GROUP, 1er centre IATA CBTA certifié d'Algérie.
+      prompt: `Tu prospectes pour KOST GROUP, organisme proposant des formations DGR selon une approche CBTA en Algérie.
 Score ce signal d'ACHAT potentiel de 1 à 10.
 
 Entreprise: ${lead.company_name} | Pays: ${lead.country}
@@ -127,7 +129,7 @@ Source: ${lead.source} | URL: ${lead.source_url}
 Signal: ${lead.intent_signal}
 Extrait: ${lead.raw_snippet.slice(0, 200)}
 
-SCORE ÉLEVÉ (7-10) si: offre emploi requérant certification DGR/IATA, entreprise cargo/transitaire/handling cherchant à former son équipe, forum où quelqu'un cherche un prestataire de formation.
+SCORE ÉLEVÉ (7-10) si: offre emploi requérant des compétences DGR/IATA, entreprise cargo/transitaire/handling cherchant à former son équipe, forum où quelqu'un cherche un prestataire de formation.
 SCORE MOYEN (4-6) si: entreprise cargo/fret sans signal clair de besoin formation.
 SCORE 1 si: c'est un centre de formation concurrent, un prestataire qui OFFRE des formations DGR/CBTA, ou un contenu non pertinent.
 
@@ -142,20 +144,22 @@ async function generateMessage(lead: ApifyLead): Promise<string> {
     const { text } = await generateText({
       model: anthropic('claude-haiku-4-5-20251001'),
       maxOutputTokens: 250,
-      prompt: `Tu es directeur commercial KOST GROUP, 1er centre IATA CBTA certifié d'Algérie.
+      prompt: `Tu es directeur commercial KOST GROUP, organisme proposant des formations DGR selon une approche CBTA en Algérie.
 Rédige un message de prospection (150 mots max) en français pour:
 - Entreprise: ${lead.company_name} (${lead.country})
 - Contexte: ${lead.intent_signal}
-Inclure: besoin DGR identifié, KOST = solution (Agrément N°537), CTA WhatsApp +213 542 30 53 83.
+Inclure le besoin DGR identifié et présenter KOST comme une solution de formation DGR/CBTA. Ne revendiquer aucune certification, exclusivité, reconnaissance ou approbation ANAC/IATA non étayée. CTA WhatsApp +213 542 30 53 83.
 Écris UNIQUEMENT le message.`,
     })
     return text.trim()
   } catch {
-    return `Bonjour,\n\nNous avons identifié votre besoin en formation DGR IATA. KOST GROUP, 1er centre IATA CBTA certifié d'Algérie (Agrément N°537), propose des formations sur site adaptées à votre secteur.\n\nContact : +213 542 30 53 83 | dgr.kostacademy.com\n\nCordialement,\nKOST GROUP`
+    return `Bonjour,\n\nNous avons identifié un besoin potentiel en formation DGR. KOST GROUP propose des formations DGR selon une approche CBTA, avec des formats adaptés aux équipes et aux opérations.\n\nContact : +213 542 30 53 83 | dgr.kostacademy.com\n\nCordialement,\nKOST GROUP`
   }
 }
 
 async function sendApprovalEmail(leads: (ApifyLead & { score: number; message_draft: string })[]) {
+  if (!resend) throw new Error('Email service not configured')
+
   const html = leads.map(l => `
     <div style="border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:12px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
@@ -177,7 +181,7 @@ async function sendApprovalEmail(leads: (ApifyLead & { score: number; message_dr
     html: `<div style="font-family:sans-serif;max-width:660px;margin:0 auto;">
       <div style="background:#0f2557;color:white;padding:20px;border-radius:10px 10px 0 0;">
         <h2 style="margin:0;">🔥 ${leads.length} nouveau(x) lead(s) chaud(s)</h2>
-        <p style="margin:6px 0 0;opacity:.8;font-size:13px;">Agent KOST — Prospection CBTA IATA Afrique</p>
+        <p style="margin:6px 0 0;opacity:.8;font-size:13px;">Agent KOST — Prospection DGR/CBTA Afrique</p>
       </div>
       <div style="padding:20px;background:#fff;">${html}
         <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:16px;">KOST GROUP — dgr.kostacademy.com</p>

@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import PromosPage from "@/components/PromosPage";
 
 export const metadata: Metadata = {
-  title: "Offres Spéciales Formation IATA DGR 2026",
+  title: "Offres Formation DGR / CBTA — KOST GROUP",
   description:
-    "Offres promotionnelles formations IATA DGR CBTA. Pack Groupe, Early Bird, Intra-entreprise. Économisez jusqu'à 25% sur votre certification IATA.",
+    "Demandez une proposition écrite pour une formation DGR / CBTA. Prix, remises, dates, durée, modalités et documents délivrés sont confirmés pour l'offre concernée.",
   alternates: { canonical: "/promos" },
   openGraph: {
-    title: "Offres Spéciales Formation IATA DGR 2026",
-    description: "Pack Groupe · Early Bird · Intra-entreprise · Économisez jusqu'à 25% sur votre certification IATA.",
+    title: "Offres Formation DGR / CBTA — KOST GROUP",
+    description:
+      "Conditions commerciales sur devis, séparées de la validation réglementaire et du choix de la fonction CBTA.",
     url: "/promos",
   },
 };

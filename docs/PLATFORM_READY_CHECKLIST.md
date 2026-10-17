@@ -17,16 +17,16 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 
 - [x] Candidate can authenticate and reach only their authorized exam. — verified 2026-08-25, live, `test_candidate` restricted to course 4
 - [x] Start/resume rules are deterministic and tested. — verified 2026-08-25 (this quiz always labels its button "Démarrer...", resuming an in-progress attempt transparently)
-- [x] Timer behavior is tested for refresh, reconnect, expiry, and server/client clock mismatch. — refresh/reconnect and a real observed auto-timeout-at-limit verified 2026-08-25; clock-mismatch scenario not separately tested
+- [ ] Timer behavior is tested for refresh, reconnect, expiry, and server/client clock mismatch. — historical 2026-08-25 refresh/reconnect and auto-timeout evidence exists; **server/client clock mismatch remains untested**, so the full gate is PENDING.
 - [x] Autosave/manual save behavior is verified. — verified 2026-08-25: answers persist via the real "Page suivante" POST, confirmed by direct DOM/DB inspection
 - [x] Final submission is idempotent and cannot double-submit. — verified 2026-08-25 via DB state check (`finished` does not revert to `inprogress`, no further "next" control after finishing)
 - [ ] Post-submission state is immutable except through authorized review/regrade workflow. — not separately tested this pass
 - [x] Navigation, unanswered-question handling, review flags, and completion confirmation are tested. — verified 2026-08-25 (question flagging, mixed MCQ/free-text navigation, finish-confirmation modal)
-- [x] Browser refresh/back-button/network-loss scenarios are tested. — refresh verified 2026-08-25; back-button/network-loss not separately tested
+- [ ] Browser refresh/back-button/network-loss scenarios are tested. — refresh was verified 2026-08-25; **back-button and network-loss recovery remain untested**, so the full gate is PENDING.
 
 ## C. Roles / RBAC
 
-- [x] Candidate, instructor/reviewer, exam admin, and system admin permissions are explicitly documented and tested. — candidate/admin/auditor tested and enforced 2026-08-25; "instructor"/"exam manager" tiers are advertised by the login page but **not currently implemented** (see `docs/PLATFORM_READINESS_REPORT.md` Gate C) — documented as an open product gap, not silently assumed passing
+- [ ] Candidate, instructor/reviewer, exam admin, and system admin permissions are explicitly documented and tested. — 2026-08-25 candidate/admin/auditor tests are historical partial evidence; **instructor/exam-manager roles are not implemented**, and the full role matrix is not tested (see `docs/PLATFORM_READINESS_REPORT.md` Gate C).
 - [x] Least-privilege rules are enforced server-side, not only hidden in UI. — verified 2026-08-25 at both login-level (two-gate model: console role + external-service whitelist) and mutation-level (`/identity-verification` correctly refuses auditor server-side with no form rendered at all; `/feedback` is open to all authenticated roles by what appears to be design — see readiness report Gate C for the full mixed result)
 - [x] Direct URL/API access cannot bypass role restrictions. — verified 2026-08-25: unauthenticated/unauthorized direct navigation redirects to login without leaking content
 - [ ] Candidate cannot view answer keys, other candidates, reviewer-only data, or source notes. — not separately tested this pass
@@ -60,7 +60,7 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 - [x] HTTPS is enforced; HTTP redirects to HTTPS. — verified (Certbot-managed 301 redirect on both domains)
 - [x] HSTS and required security headers are verified in deployed environment. — console had them already; Nginx-layer gap on `exam.kostacademy.com` closed 2026-08-25 (HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, scoped CSP)
 - [x] Debug mode is off in production. — confirmed 2026-08-25 via `mdl_config` (`debug=0`)
-- [x] No secret/API key/password/token is committed or exposed to browser bundles/logs. — **one historical exception, self-disclosed 2026-08-25 and resolved same day:** a diagnostic command briefly printed the live Moodle DB password into this session's own tool output (never committed/transmitted elsewhere); the exposed password was rotated with a tested backup/restart/verify path (see readiness report Gate G)
+- [ ] No secret/API key/password/token is committed or exposed to browser bundles/logs. — the 2026-08-25 Moodle DB diagnostic exposure was reportedly remediated through rotation (see readiness report Gate G), **but four dashboard components currently reference `NEXT_PUBLIC_CRON_SECRET`**, which is eligible for inclusion in browser JavaScript when configured. Prove production environment values and bundle contents are safe; remove client-side shared-secret use and verify server-side authentication before marking PASS. Do not assume `NEXT_PUBLIC_CRON_SECRET` equals `CRON_SECRET` without configuration evidence.
 - [x] MySQL is not publicly exposed. — re-confirmed 2026-08-25, bound to container-internal only, no host port mapping
 - [x] Authentication/session expiry/logout behavior is tested. — verified 2026-08-24 (cookie audit) and 2026-08-25 (full smoke suite)
 - [ ] CSRF/XSS/injection-sensitive paths are reviewed for the actual stack. — not separately reviewed this pass (console source unavailable, see below)
@@ -96,6 +96,10 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 4. remaining non-critical limitations are listed explicitly.
 
 If any critical gate is open, final status must be `NOT READY — <exact blockers>` rather than a partial or optimistic readiness claim.
+
+## Gate reassessment (2026-10-17)
+
+The four gates above were corrected from `PASS` to `PENDING` because their own evidence records untested cases, missing roles, or unverified browser-secret isolation. These are documentation-state corrections **only**; they do not claim a new live test, a remediated code path, or production authorization. The `NEXT_PUBLIC_CRON_SECRET` references occur in `app/dashboard/{agent,intel,linkedin,instructors}/page.tsx` on this branch. `PLATFORM READY TO USE` remains blocked pending direct technical and regulatory evidence for Functions 7.1–7.10.
 
 ## Current Stage 2B.1 snapshot (2026-08-24)
 

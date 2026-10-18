@@ -91,7 +91,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-002 — Définition du terme « Risque » (par opposition à « Danger »)
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `FR SOURCE GAP CONFIRMED` — Tier B KOST-course distinction only; the current DGR glossary does not supply the tested definitions (mirrors `docs/DGR_PRODUCTION_BANK_7.2.md`, Q-7.2-002). No Tier-A regulatory promotion or approval.
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours, laquelle des affirmations suivantes correspond à la définition du terme « Risque », telle que distinguée de celle de « Danger » ?"*
@@ -99,14 +99,15 @@ the EN draft here as replacing or overriding the FR item of record.
 - **EN draft translation:**
   - Stem: *"Per the course, which of the following statements corresponds to the definition of the term 'Risk,' as distinguished from that of 'Hazard'?"*
   - Options: **(Correct)** *"The degree of probability (high or low likelihood) that any hazard will actually cause harm."* / *"Something that could potentially cause harm."* / *"Any form of liquid, vapor, dust, fume, or gas that could spill, leak, or be misused."* / *"A virus, bacteria, or fungus transmissible by bite, cut, or contact with an infected person."*
-- **Terminology decision:** "Danger" → **"Hazard"** (also "danger"), matching
-  the terminology decision already made for Function 7.1's Q-7.1-001, for
-  consistency across the whole KOST DGR/CBTA program. Unlike 7.1's
-  Q-7.1-001, this item's underlying content is a straightforward Tier B
-  KOST-course definition pair with no DGR-glossary-silence caveat attached
-  in the production bank — the EN/FR hazard-risk pairing choice is carried
-  over for cross-function consistency only, not because the same Tier A
-  caveat applies here.
+- **Terminology decision / SOURCE GAP:** "Danger" → **"Hazard"** (also
+  "danger") and "Risque" → **"Risk"** remain unreviewed working EN choices,
+  consistent with Function 7.1's Q-7.1-001. The same confirmed DGR-wide
+  glossary silence applies to **Q-7.2-002**: current-edition Appendix A and
+  §1.0 Note do not define the drafted danger/risk pair. The definitions
+  are Tier B KOST-course content, **not** current IATA DGR definitions.
+  See Q-7.2-002 in the production bank and matrix 0.1.4. The EN reviewer
+  must verify translation/terminology separately; do not treat this
+  source-gap note as direct affirmative Tier-A proof or an approval.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 

@@ -91,7 +91,7 @@ the EN draft here as replacing or overriding the FR item of record.
 ### Q-7.2-002 — Définition du terme « Risque » (par opposition à « Danger »)
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
-- **FR status:** `FR SOURCE GAP CONFIRMED` — Tier B KOST-course distinction only; the current DGR glossary does not supply the tested definitions (mirrors `docs/DGR_PRODUCTION_BANK_7.2.md`, Q-7.2-002). No Tier-A regulatory promotion or approval.
+- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` — effective current per-item reconciliation hold because the DGR-wide glossary finding was cross-applied from Function 7.1 rather than directly re-checked for this question. The production bank separately records `FR SOURCE GAP CONFIRMED` for the Tier B KOST-course danger/risk definitions; this source-gap finding is retained as a limitation, **not** a terminal per-item Tier-A validation or approval. Independent direct IATA DGR 67th Edition 2026 evidence, FR verification, separate EN review, and named qualified reviewer/date remain pending.
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours, laquelle des affirmations suivantes correspond à la définition du terme « Risque », telle que distinguée de celle de « Danger » ?"*

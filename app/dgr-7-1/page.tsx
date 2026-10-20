@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `/${formation.slug}` },
   openGraph: {
     title: "Formation DGR 7.1 en Algérie — KOST Academy",
-    description: formation.description,
+    description: "Programme DGR 7.1 à définir selon les tâches exercées et les sources réglementaires vérifiées.",
     url: `/${formation.slug}`,
   },
 };

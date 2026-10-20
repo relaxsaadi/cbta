@@ -5,12 +5,12 @@ import { courseSchema } from "@/lib/page-meta";
 
 const formation = getFormationBySlug("dgr-7-1")!;
 export const metadata: Metadata = {
-  title: "Formation DGR 7.1 IATA Algérie — Expéditeurs & Fret",
+  title: "Formation DGR 7.1 en Algérie — KOST Academy",
   description:
-    "Formation IATA DGR 7.1 : préparez vos expéditions de marchandises dangereuses. CBTA certifié, reconnu par 300+ compagnies IATA. Devis gratuit sous 24h.",
+    "Programme DGR 7.1 en Algérie. Contenu adapté aux tâches réelles et aux exigences réglementaires vérifiées. Contactez KOST pour définir vos besoins.",
   alternates: { canonical: `/${formation.slug}` },
   openGraph: {
-    title: "Formation DGR 7.1 IATA Algérie — Expéditeurs & Fret",
+    title: "Formation DGR 7.1 en Algérie — KOST Academy",
     description: formation.description,
     url: `/${formation.slug}`,
   },

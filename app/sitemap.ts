@@ -1,18 +1,11 @@
 import type { MetadataRoute } from "next";
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { FORMATIONS } from "@/lib/formations";
 
-const dgrSlugs = [
-  "dgr-7-1",
-  "dgr-7-2",
-  "dgr-7-3",
-  "dgr-7-4",
-  "dgr-7-5",
-  "dgr-7-6",
-  "dgr-7-7",
-  "dgr-7-8",
-  "dgr-7-9",
-  "dgr-7-10",
-];
+function hasAppPage(slug: string): boolean {
+  return existsSync(path.join(process.cwd(), "app", slug, "page.tsx"));
+}
 
 const countryUrls = [
   "formation-dgr-algerie",
@@ -32,16 +25,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://dgr.kostacademy.com";
   const now = new Date();
 
-  const dgrUrls = dgrSlugs
-    .filter((s) => FORMATIONS.find((f) => f.slug === s))
-    .map((slug) => ({
-      url: `${base}/${slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    }));
+  const dgrUrls = FORMATIONS.filter((f) => hasAppPage(f.slug)).map((f) => ({
+    url: `${base}/${f.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
 
-  const countryPages = countryUrls.map((slug) => ({
+  const countryPages = countryUrls.filter(hasAppPage).map((slug) => ({
     url: `${base}/${slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,

@@ -1,0 +1,124 @@
+name: DGR governance regression integrity
+
+on:
+  push:
+    branches:
+      - main
+      - ai/dgr-stage2b-handoff
+    paths:
+      - "docs/DGR_**"
+      - "docs/RECOVERED_STAGE2A_CONTEXT.md"
+      - "scripts/check-dgr-**"
+      - "scripts/test-dgr-**"
+      - "scripts/lib/dgr-matrix-tier-a-policy.mjs"
+      - ".github/workflows/dgr-governance-regression-integrity.yml"
+      - ".github/workflows/dgr-regulatory-readiness.yml"
+  # This check is intended to become a required branch-protection context.
+  # Required PR checks must not be path-filtered: a non-DGR PR could otherwise
+  # leave the required context skipped/expected and deadlock legitimate merges.
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  governance-regression-integrity:
+    name: DGR governance regression integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        # Pin the action implementation so a movable upstream tag cannot silently
+        # change the code behind a branch-protection security context.
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # pull_request events otherwise checkout GitHub's synthetic merge ref.
+          # The readiness evidence contract is exact-head, so select the PR head
+          # explicitly (and its repository for fork-safe read-only checkout).
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          # This workflow only reads the checkout. Do not persist the GITHUB_TOKEN
+          # in local git configuration where repository-controlled scripts could reach it.
+          persist-credentials: false
+
+      - name: Set up Node.js
+        # Same supply-chain rule for the runtime bootstrap action.
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Run merge-safe governance regression suite
+        shell: bash
+        run: |
+          status=0
+          run_gate() {
+            label="$1"
+            shift
+            echo "::group::$label"
+            "$@" || status=1
+            echo "::endgroup::"
+          }
+
+          # Structural and parser integrity. These must stay green during remediation.
+          run_gate "Import/reconciliation CSV structure fixtures" node scripts/check-dgr-import-candidate-csv-structure.mjs --test
+          run_gate "Import/reconciliation CSV structure gate" node scripts/check-dgr-import-candidate-csv-structure.mjs
+          run_gate "Tier-A matrix policy fixtures" node scripts/test-dgr-matrix-tier-a-policy.mjs
+          run_gate "Official-task coverage fixtures" node scripts/test-dgr-official-task-coverage.mjs
+          run_gate "Official-task table structure fixtures" node scripts/check-dgr-official-task-table-structure.mjs --test
+          run_gate "Official-task table structure gate" node scripts/check-dgr-official-task-table-structure.mjs
+          run_gate "Official-task source-locator fixtures" node scripts/check-dgr-task-source-locators.mjs --test
+          run_gate "Official-task source-locator gate" node scripts/check-dgr-task-source-locators.mjs
+          run_gate "Function 7.1 bank-ID structure fixtures" node scripts/check-dgr-stage71-question-id-structure.mjs --test
+          run_gate "Function 7.1 bank-ID structure gate" node scripts/check-dgr-stage71-question-id-structure.mjs
+          run_gate "All-function question-heading binding fixtures" node scripts/check-dgr-question-heading-function-binding.mjs --test
+          run_gate "All-function question-heading binding gate" node scripts/check-dgr-question-heading-function-binding.mjs
+          run_gate "Stage 2A blueprint coverage fixtures" node scripts/check-dgr-blueprint-coverage.mjs --test
+          run_gate "Stage 2A blueprint coverage gate" node scripts/check-dgr-blueprint-coverage.mjs
+          run_gate "Stage 2A blueprint-table structure fixtures" node scripts/check-dgr-blueprint-table-structure.mjs --test
+          run_gate "Stage 2A blueprint-table structure gate" node scripts/check-dgr-blueprint-table-structure.mjs
+
+          # Review / approval governance that is expected to remain internally consistent.
+          run_gate "Review-state semantic fixtures" node scripts/check-dgr-readiness-artifacts.mjs --test-review-state-policy
+          run_gate "Matrix review-evidence fixtures" node scripts/check-dgr-matrix-review-evidence.mjs --test
+          run_gate "Matrix review-evidence gate" node scripts/check-dgr-matrix-review-evidence.mjs
+          run_gate "Matrix-table structure fixtures" node scripts/check-dgr-matrix-table-structure.mjs --test
+          run_gate "Matrix-table structure gate" node scripts/check-dgr-matrix-table-structure.mjs
+          run_gate "Controlled reviewer registry fixtures" node scripts/check-dgr-controlled-reviewer-registry.mjs --test
+          run_gate "Controlled reviewer registry gate" node scripts/check-dgr-controlled-reviewer-registry.mjs
+          run_gate "Reviewer admission chronology fixtures" node scripts/check-dgr-reviewer-admission-chronology.mjs --test
+          run_gate "Reviewer admission chronology gate" node scripts/check-dgr-reviewer-admission-chronology.mjs
+          run_gate "Active reviewer qualification-evidence fixtures" node scripts/check-dgr-reviewer-qualification-evidence.mjs --test
+          run_gate "Active reviewer qualification-evidence gate" node scripts/check-dgr-reviewer-qualification-evidence.mjs
+          run_gate "Reviewer qualification evidence-reference fixtures" node scripts/check-dgr-reviewer-qualification-evidence-reference.mjs --test
+          run_gate "Reviewer qualification evidence-reference gate" node scripts/check-dgr-reviewer-qualification-evidence-reference.mjs
+          run_gate "Reviewer bilingual evidence-reference fixtures" node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs --test
+          run_gate "Reviewer bilingual evidence-reference gate" node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs
+          run_gate "Reviewer identity-evidence fixtures" node scripts/check-dgr-reviewer-identity-evidence.mjs --test
+          run_gate "Reviewer identity-evidence gate" node scripts/check-dgr-reviewer-identity-evidence.mjs
+          run_gate "Review-evidence semantics fixtures" node scripts/check-dgr-review-evidence-semantics.mjs --test
+          run_gate "Review-evidence semantics gate" node scripts/check-dgr-review-evidence-semantics.mjs
+          run_gate "Item-metadata structure fixtures" node scripts/check-dgr-item-metadata-structure.mjs --test
+          run_gate "Item-metadata structure gate" node scripts/check-dgr-item-metadata-structure.mjs
+          run_gate "Durable list-status review semantics fixtures" node scripts/check-dgr-durable-review-status-semantics.mjs --test
+          run_gate "Durable list-status review semantics gate" node scripts/check-dgr-durable-review-status-semantics.mjs
+          run_gate "Terminal review-evidence fixtures" node scripts/check-dgr-terminal-review-evidence.mjs --test
+          run_gate "Terminal review-evidence gate" node scripts/check-dgr-terminal-review-evidence.mjs
+          run_gate "Approval-table structure fixtures" node scripts/check-dgr-approval-table-structure.mjs --test
+          run_gate "Approval-table structure gate" node scripts/check-dgr-approval-table-structure.mjs
+          run_gate "Approval-chain fixtures" node scripts/check-dgr-approval-chain.mjs --test
+          run_gate "Approval-chain gate" node scripts/check-dgr-approval-chain.mjs
+          run_gate "Cross-artifact approval fixtures" node scripts/check-dgr-cross-artifact-approval.mjs --test
+          run_gate "Cross-artifact approval gate" node scripts/check-dgr-cross-artifact-approval.mjs
+
+          # Regression fixtures for currently-red readiness blockers. Run the checker tests,
+          # but do not require the known-incomplete real artifacts to be green here.
+          run_gate "EN-package FR-status mirror fixtures" node scripts/check-dgr-en-package-fr-status-mirror.mjs --test
+          run_gate "Production-bank status precedence fixtures" node scripts/check-dgr-production-bank-status-precedence.mjs --test
+          run_gate "Import-candidate provenance fixtures" node scripts/check-dgr-import-candidate-provenance.mjs --test
+          run_gate "Direct item Tier-A provenance fixtures" node scripts/check-dgr-direct-item-tier-a-provenance.mjs --test
+
+          # Independent live consistency gates that are green and must not regress.
+          run_gate "Strict Tier-A matrix cross-field gate" node scripts/check-dgr-matrix-tier-a-evidence.mjs
+          run_gate "Independent official-task coverage gate" node scripts/check-dgr-official-task-coverage.mjs
+
+          exit "$status"

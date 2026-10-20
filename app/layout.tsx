@@ -108,7 +108,7 @@ const orgSchema = {
     addressCountry: "DZ",
   },
   telephone: "+213542305383",
-  email: "kostgroupe@gmail.com",
+  email: "cbta@kostacademy.com",
   geo: {
     "@type": "GeoCoordinates",
     latitude: 36.71942,

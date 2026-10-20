@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { faqPageJsonLd } from "@/lib/jsonld";
 
 const ITEMS = [
   {
@@ -43,6 +44,10 @@ export default function FAQ() {
 
   return (
     <section className="section bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: faqPageJsonLd(ITEMS) }}
+      />
       <div className="container-x">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
@@ -71,11 +76,13 @@ export default function FAQ() {
                       aria-hidden
                     />
                   </button>
-                  {isOpen && (
-                    <div id={`faq-${i}`} className="px-5 pb-5 text-gray-600 leading-relaxed">
-                      {item.a}
-                    </div>
-                  )}
+                  <div
+                    id={`faq-${i}`}
+                    hidden={!isOpen}
+                    className="px-5 pb-5 text-gray-600 leading-relaxed"
+                  >
+                    {item.a}
+                  </div>
                 </div>
               );
             })}

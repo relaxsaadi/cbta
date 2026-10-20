@@ -99,6 +99,19 @@ export default function DGRPage({ formation }: { formation: Formation }) {
           </div>
         </section>
 
+        {(formation.slug === "dgr-7-1" || formation.slug === "dgr-7-3") && (
+          <section id="recyclage" className="section bg-[#F8FAFC] border-y border-gray-100">
+            <div className="container-x max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A] mb-5">
+                Recyclage de la fonction {formation.slug === "dgr-7-1" ? "7.1" : "7.3"}
+              </h2>
+              <p className="text-gray-700 leading-relaxed">
+                Le renouvellement de la fonction {formation.slug === "dgr-7-1" ? "7.1" : "7.3"} suit le même cadrage que la formation initiale : tâches réellement exercées, sources courantes applicables et circuit de revue requis. Les modalités de session sont confirmées dans la proposition à jour.
+              </p>
+            </div>
+          </section>
+        )}
+
         <section className="section bg-white">
           <div className="container-x max-w-3xl">
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A] mb-6 text-center">

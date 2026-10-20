@@ -7,6 +7,7 @@ import WhatsAppSticky from "./WhatsAppSticky";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { trackWhatsApp } from "@/lib/tracking";
+import { faqPageJsonLd } from "@/lib/jsonld";
 
 export type CountryLocalContext = {
   title: string;
@@ -157,6 +158,10 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: faqPageJsonLd(faqItems) }}
+      />
       <Navbar />
       <WhatsAppSticky />
 

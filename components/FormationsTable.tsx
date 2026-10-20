@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { FORMATIONS } from "@/lib/formations";
+import { FORMATIONS, getFormationHref } from "@/lib/formations";
 import { trackPricingCta } from "@/lib/tracking";
 
 export default function FormationsTable() {
@@ -31,7 +31,7 @@ export default function FormationsTable() {
               </p>
               <div className="flex gap-2">
                 <Link
-                  href={`/${f.slug}`}
+                  href={getFormationHref(f.slug)}
                   className="flex-1 text-center text-sm py-2 px-3 rounded-lg border border-[#003D7A] text-[#003D7A] font-semibold"
                 >
                   Voir le cadrage

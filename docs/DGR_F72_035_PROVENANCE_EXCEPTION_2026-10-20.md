@@ -1,6 +1,6 @@
 # Function 7.2 — Q-7.2-035 provenance exception (2026-10-20)
 
-**Disposition: UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED — NOT APPROVED; import eligibility unproven.**
+**Disposition: UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED — NOT APPROVED; operational import blocked (`IMPORT_ELIGIBLE=NO`).**
 
 The Stage 2B.1 reconciliation register currently labels Q-7.2-035 `FROZEN FR / SOURCE VERIFIED`, `Bookshelf_Evidence_Found=YES`, `Tested_Claim_Supported=YES`, and `Import-eligible for V2 (pending reviewer sign-off)`.
 

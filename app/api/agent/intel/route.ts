@@ -7,9 +7,7 @@ import { Resend } from 'resend'
 
 export const maxDuration = 300
 
-// Preview/build environments are not required to carry an outbound-email
-// credential. Avoid constructing Resend at module import time.
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
@@ -147,8 +145,6 @@ Le message doit:
 }
 
 async function sendApprovalEmail(leads: Array<{ company_name: string; country: string; score: number; intent_signal: string; source: string; message_draft: string; source_url: string }>) {
-  if (!resend) throw new Error('Email service not configured')
-
   const leadsHtml = leads.map((l, i) => `
     <div style="border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:16px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">

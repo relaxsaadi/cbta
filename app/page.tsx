@@ -25,7 +25,7 @@ const faqSchema = {
       name: "Est-ce reconnu dans mon pays (Maroc, Sénégal, Tunisie, Côte d'Ivoire) ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par l'autorité de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
+        text: "La reconnaissance d'une formation ou d'un certificat DGR dépend du programme, des exigences applicables et des organismes concernés. Vérifiez les conditions auprès de l'autorité et des exploitants pertinents ; aucune reconnaissance universelle n'est présumée.",
       },
     },
     {

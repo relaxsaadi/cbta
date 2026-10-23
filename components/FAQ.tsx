@@ -18,11 +18,11 @@ const ITEMS = [
   },
   {
     q: "Le certificat est-il valable combien de temps ?",
-    a: "24 mois (2 ans) à compter de la date de réussite à l'examen IATA. Un recyclage CBTA (recurrent) est obligatoire avant cette échéance pour maintenir la qualification.",
+    a: "Les exigences de maintien des compétences et les éventuelles échéances doivent être vérifiées pour la fonction exercée, le programme suivi et les règles applicables. Une validité universelle de 24 mois ou un examen officiel IATA ne peuvent pas être présumés pour chaque parcours.",
   },
   {
     q: "Peut-on commencer sans expérience préalable en marchandises dangereuses ?",
-    a: "Oui pour les formations Initial (7.1, 7.3 Initial). La formation est conçue pour amener un participant sans prérequis au niveau d'expert opérationnel. Les sessions Recurrent supposent en revanche une certification active arrivant à échéance.",
+    a: "Cela dépend des prérequis du parcours et des tâches visées. Une évaluation préalable permet d'orienter le participant vers la formation initiale ou de maintien des compétences adaptée, sans garantir un niveau expert ni attribuer automatiquement une fonction 7.1 à 7.10.",
   },
   {
     q: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",

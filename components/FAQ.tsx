@@ -26,7 +26,7 @@ const ITEMS = [
   },
   {
     q: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",
-    a: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard obligatoire pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion — c'est la seule reconnue par les 300+ compagnies aériennes membres de l'IATA et exigée par l'ANAC en Algérie. Si votre activité touche au transport aérien, c'est cette certification qu'il vous faut, pas une formation HSE générique.",
+    a: "Les formations généralistes HSE, stockage ou ADR et les formations DGR pour le fret aérien n'ont pas le même périmètre. Les besoins de formation DGR/CBTA sont déterminés à partir des tâches réellement exercées et des exigences applicables ; le seul intitulé de poste ne suffit pas pour sélectionner une fonction 7.1 à 7.10. Les conditions d'examen et la reconnaissance éventuelle d'un certificat doivent être vérifiées selon le parcours concerné.",
   },
   {
     q: "Vous déplacez-vous pour les formations intra-entreprise ?",

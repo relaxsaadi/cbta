@@ -177,10 +177,10 @@ export default function Page() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
-                { icon: "🏅", t: "1er CBTA Provider d'Algérie", d: "Seul centre IATA CBTA accrédité en Algérie — vos certificats sont reconnus par toutes les compagnies aériennes." },
+                { icon: "📋", t: "Parcours adaptés aux tâches", d: "Les fonctions CBTA sont définies selon les activités réellement exercées, sans reconnaissance universelle présumée." },
                 { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
-                { icon: "🏢", t: "Intra-entreprise possible", d: "Formateur IATA déplacé dans vos locaux pour former tout votre pôle export DGR en une session." },
-                { icon: "💶", t: "50% moins cher qu'en Europe", d: "Même certification IATA, même formateur accrédité, moitié prix par rapport à Paris ou Bruxelles." },
+                { icon: "🏢", t: "Formation en entreprise à étudier", d: "Modalités, intervenants et disponibilité à confirmer selon le programme demandé." },
+                { icon: "📝", t: "Offre sur devis", d: "Durée, tarifs et modalités de formation établis après analyse des tâches et du besoin." },
               ].map((r) => (
                 <div key={r.t} style={{ background: "white", borderRadius: 10, padding: "20px" }}>
                   <div style={{ fontSize: 30, marginBottom: 10 }}>{r.icon}</div>
@@ -197,10 +197,10 @@ export default function Page() {
           <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Questions fréquentes — Transitaires</h2>
           {[
             { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "Oui. Tout agent qui prépare, classe, emballe ou documente des envois DGR doit détenir un certificat DGR 7.1 en cours de validité (OACI Annexe 18, IATA DGR Section 1)." },
-            { q: "Quelle est la validité de la certification ?", a: "24 mois. À l'échéance, votre agent doit suivre la formation DGR 7.1 Recurrent pour renouveler son certificat." },
+            { q: "Quelle est la validité de la formation ?", a: "La périodicité et les modalités d'actualisation sont à confirmer selon les exigences applicables et les tâches de la personne concernée." },
             { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
-            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Oui. KOST GROUP est un IATA CBTA Provider officiel. Le certificat émis est un certificat IATA reconnu par toutes les compagnies aériennes mondiales." },
-            { q: "Y a-t-il un examen à la fin ?", a: "Oui. L'examen CBTA est basé sur des compétences (Competency-Based Training and Assessment). Le taux de réussite de nos stagiaires dépasse 95 %." },
+            { q: "Le certificat est-il reconnu par les exploitants aériens ?", a: "La reconnaissance dépend du programme, de l'exploitant et des exigences applicables. Elle doit être vérifiée auprès des organismes concernés avant tout engagement." },
+            { q: "Y a-t-il une évaluation ?", a: "Le dispositif d'évaluation et ses modalités sont précisés pour chaque parcours CBTA après définition des compétences visées." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#003087" }}>{faq.q}</summary>

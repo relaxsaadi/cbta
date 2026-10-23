@@ -73,7 +73,7 @@ const faqSchema = {
       name: "KOST GROUP se déplace-t-il pour les formations intra-entreprise ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. Nous prenons en charge le formateur, les supports, l'examen IATA officiel. Vous fournissez la salle et la logistique locale.",
+        text: "Les formations intra-entreprise sont étudiées selon le pays, les effectifs, les tâches visées et les conditions logistiques. Les modalités d'évaluation et les documents remis sont précisés dans la proposition ; aucun examen ou certificat IATA officiel n'est présumé.",
       },
     },
     {
@@ -81,7 +81,7 @@ const faqSchema = {
       name: "Quels sont les délais d'inscription à la formation IATA DGR ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Les sessions ouvrent toutes les 4 à 6 semaines. Le délai conseillé entre inscription et formation est de 2 semaines pour valider le paiement et l'émission de la facture. Sessions urgentes possibles sur demande.",
+        text: "Les dates de session, les délais d'inscription et les éventuelles demandes urgentes sont confirmés lors de l'étude de votre dossier. Aucune périodicité fixe n'est garantie.",
       },
     },
     {

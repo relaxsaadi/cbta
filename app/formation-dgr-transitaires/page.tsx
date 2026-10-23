@@ -196,9 +196,9 @@ export default function Page() {
         <section style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px" }}>
           <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Questions fréquentes — Transitaires</h2>
           {[
-            { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "Oui. Tout agent qui prépare, classe, emballe ou documente des envois DGR doit détenir un certificat DGR 7.1 en cours de validité (OACI Annexe 18, IATA DGR Section 1)." },
+            { q: "Tous mes agents export ont-ils besoin de la même formation ?", a: "Les besoins de formation et d'évaluation dépendent des tâches confiées à chaque personne et des exigences applicables. Une fonction CBTA ne se déduit pas automatiquement du poste occupé." },
             { q: "Quelle est la validité de la formation ?", a: "La périodicité et les modalités d'actualisation sont à confirmer selon les exigences applicables et les tâches de la personne concernée." },
-            { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
+            { q: "Peut-on organiser une formation pour toute l'équipe ?", a: "Une formation en groupe peut être étudiée après analyse des tâches, des effectifs et des disponibilités. La durée et les modalités sont confirmées dans l'offre." },
             { q: "Le certificat est-il reconnu par les exploitants aériens ?", a: "La reconnaissance dépend du programme, de l'exploitant et des exigences applicables. Elle doit être vérifiée auprès des organismes concernés avant tout engagement." },
             { q: "Y a-t-il une évaluation ?", a: "Le dispositif d'évaluation et ses modalités sont précisés pour chaque parcours CBTA après définition des compétences visées." },
           ].map((faq) => (

@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabase } from '@/lib/supabase'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Preview/build environments are not required to carry an outbound-email
+// credential. Construct the client only when a key is actually configured so
+// importing this route during `next build` cannot throw.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function POST(req: NextRequest) {
   const { lead_id, email_override } = await req.json()
@@ -17,6 +20,7 @@ export async function POST(req: NextRequest) {
 
   const toEmail = email_override || lead.email
   if (!toEmail) return NextResponse.json({ error: 'Pas d\'email pour ce lead' }, { status: 400 })
+  if (!resend) return NextResponse.json({ error: 'Service email non configuré' }, { status: 503 })
 
   const msgHtml = lead.message_draft
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')

@@ -43,48 +43,48 @@ const JSON_LD = {
 
 const RISKS = [
   {
-    icon: "⚠️",
-    title: "Amende & suspension",
-    text: "Un transitaire qui expédie des marchandises dangereuses sans personnel certifié DGR risque une suspension d'accréditation cargo et des amendes DGAC/ANAC.",
+    icon: "📋",
+    title: "Compétences à déterminer",
+    text: "Identifier les tâches exercées permet de définir les compétences DGR pertinentes sans attribuer automatiquement une fonction à un poste.",
   },
   {
     icon: "✈️",
-    title: "Refus en compagnie",
-    text: "Les compagnies aériennes refusent systématiquement les envois DGR dont le transitaire n'a pas de personnel certifié DGR 7.1 en poste.",
+    title: "Exigences des exploitants",
+    text: "Les obligations de formation et les conditions d'acceptation du fret doivent être vérifiées dans les référentiels et procédures applicables.",
   },
   {
-    icon: "📋",
-    title: "Responsabilité pénale",
-    text: "En cas d'incident DGR, la responsabilité civile et pénale de l'expéditeur — et donc du transitaire signataire — est directement engagée.",
+    icon: "🗂️",
+    title: "Preuves et traçabilité",
+    text: "Conserver les éléments d'évaluation, les décisions de compétence et les justificatifs pertinents facilite la revue de conformité.",
   },
 ];
 
 const FORMATIONS = [
   {
-    code: "DGR 7.1 Initial",
-    titre: "Expéditeurs & Transitaires",
-    desc: "Formation complète pour toute personne qui prépare, classe, emballe, étiquette et documente des envois de marchandises dangereuses. La formation de référence pour les transitaires.",
-    duree: "4 jours / 32h",
-    prix: "1 800 €",
-    badge: "Essentielle transitaires",
+    code: "Analyse des tâches",
+    titre: "Diagnostic DGR/CBTA",
+    desc: "Identification des activités effectivement exercées, puis sélection des fonctions pertinentes à partir des tableaux CBTA applicables.",
+    duree: "À définir",
+    prix: "Sur devis",
+    badge: "Étape préalable",
     color: "#003087",
   },
   {
-    code: "DGR 7.1 Recurrent",
-    titre: "Renouvellement 7.1 (24 mois)",
-    desc: "Renouvellement obligatoire tous les 24 mois pour maintenir la certification 7.1 active. Mise à jour DGR dernière édition incluse.",
-    duree: "3 jours / 24h",
-    prix: "1 400 €",
-    badge: "Renouvellement",
+    code: "Parcours initial",
+    titre: "Fonctions 7.1 à 7.10 selon les tâches",
+    desc: "Programme et évaluations propres aux compétences visées. Aucun parcours n'est attribué sur le seul intitulé de poste.",
+    duree: "Selon programme",
+    prix: "Sur devis",
+    badge: "Selon fonction",
     color: "#0052cc",
   },
   {
-    code: "DGR 7.2 + 7.4",
-    titre: "Agents cargo & manutention",
-    desc: "Pour les agents de fret en station cargo : acceptation, manutention et stockage des envois DGR. Complémentaire au 7.1 pour les équipes cargo.",
-    duree: "2 jours / 16h",
-    prix: "900 €",
-    badge: "Cargo & handling",
+    code: "Actualisation des compétences",
+    titre: "Revue et formation complémentaire",
+    desc: "Périodicité et contenu adaptés aux exigences applicables, aux tâches et aux résultats de l'évaluation.",
+    duree: "À confirmer",
+    prix: "Sur devis",
+    badge: "Selon besoin",
     color: "#0066cc",
   },
 ];
@@ -106,10 +106,10 @@ export default function Page() {
             Formation IATA DGR<br />pour Transitaires
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 580, margin: "0 auto 12px" }}>
-            Catégories <strong>7.1 & 7.2</strong> — Certifiez vos équipes pour expédier légalement des marchandises dangereuses par avion.
+            Déterminez les fonctions <strong>7.1 à 7.10</strong> pertinentes selon les tâches réellement exercées dans votre activité de fret aérien.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            Obligation OACI Annexe 18 · CBTA Provider certifié · Certificat valable 24 mois
+            Référentiels OACI et IATA à vérifier · Formation et évaluation adaptées aux tâches
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#formations" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -125,7 +125,7 @@ export default function Page() {
         <section style={{ background: "#FFF3CD", borderBottom: "1px solid #FBBF24", padding: "32px 24px" }}>
           <div style={{ maxWidth: 900, margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", fontSize: 20, fontWeight: 700, marginBottom: 24, color: "#92400E" }}>
-              Sans certification DGR, votre activité de transitaire est en danger
+              Identifier les exigences DGR liées à votre activité
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
               {RISKS.map((r) => (
@@ -145,7 +145,7 @@ export default function Page() {
             Formations DGR pour transitaires
           </h2>
           <p style={{ textAlign: "center", color: "#666", marginBottom: 40 }}>
-            Inter-entreprises (Alger) ou intra-entreprise (vos locaux, toute l&apos;Afrique)
+            Modalités inter-entreprises et intra-entreprise à confirmer selon les besoins
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {FORMATIONS.map((f) => (
@@ -178,7 +178,7 @@ export default function Page() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
                 { icon: "📋", t: "Parcours adaptés aux tâches", d: "Les fonctions CBTA sont définies selon les activités réellement exercées, sans reconnaissance universelle présumée." },
-                { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
+                { icon: "📅", t: "Sessions sur demande", d: "Calendrier et capacité à confirmer avant toute inscription." },
                 { icon: "🏢", t: "Formation en entreprise à étudier", d: "Modalités, intervenants et disponibilité à confirmer selon le programme demandé." },
                 { icon: "📝", t: "Offre sur devis", d: "Durée, tarifs et modalités de formation établis après analyse des tâches et du besoin." },
               ].map((r) => (
@@ -213,7 +213,7 @@ export default function Page() {
         <section style={{ background: "#003087", padding: "60px 24px" }}>
           <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", color: "white", marginBottom: 32 }}>
             <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>Devis gratuit pour votre entreprise</h2>
-            <p style={{ opacity: 0.9, fontSize: 15 }}>Indiquez le nombre d&apos;agents à certifier — nous vous envoyons un devis sous 24h.</p>
+            <p style={{ opacity: 0.9, fontSize: 15 }}>Indiquez les tâches et le nombre de personnes à former pour obtenir une proposition adaptée.</p>
           </div>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>
             <Suspense fallback={null}>

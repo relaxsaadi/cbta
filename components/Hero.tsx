@@ -28,7 +28,7 @@ export default function Hero() {
           </h1>
 
           <p className="text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl">
-            Certificat IATA officiel reconnu par <strong className="text-white">300+ compagnies aériennes</strong> · Valide <strong className="text-white">24 mois</strong> · Formateurs internationaux certifiés.
+            Parcours DGR/CBTA adaptés aux tâches exercées. Modalités de formation, d'évaluation et de reconnaissance à confirmer pour chaque programme.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto pt-2">

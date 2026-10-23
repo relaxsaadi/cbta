@@ -8,9 +8,9 @@ import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR Transitaires & Agents de Fret — 7.1/7.2",
+  title: "Formation DGR Transitaires Algérie – Fret Aérien 7.1/7.2",
   description:
-    "Formation IATA DGR 7.1 & 7.2 pour transitaires et agents de fret aérien en Algérie et Afrique francophone. CBTA Provider certifié, devis gratuit en 24h.",
+    "Formation DGR en Algérie pour transitaires et agents de fret, méthode CBTA, couvrant les catégories 7.1 & 7.2. Sessions intra-entreprise possibles.",
   alternates: { canonical: "/formation-dgr-transitaires" },
   keywords: [
     "formation DGR transitaires",

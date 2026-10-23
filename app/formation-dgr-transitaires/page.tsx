@@ -8,9 +8,9 @@ import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR Transitaires Algérie — Cat. 7.1 & 7.2",
+  title: "Formation DGR pour transitaires en Algérie | KOST",
   description:
-    "Formation IATA DGR pour transitaires et agents de fret en Algérie. Catégories 7.1 & 7.2, CBTA Provider certifié, reconnu par 300+ compagnies. Devis sous 24h.",
+    "Formations DGR/CBTA pour les activités de transit et de fret aérien. Les fonctions pertinentes sont déterminées selon les tâches réellement exercées.",
   alternates: { canonical: "/formation-dgr-transitaires" },
   keywords: [
     "formation DGR transitaires",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR pour Transitaires — KOST GROUP",
     description:
-      "DGR 7.1 & 7.2 certifiés CBTA pour transitaires, commissionnaires en douane et agents de fret aérien.",
+      "Parcours DGR/CBTA pour transitaires et agents de fret aérien, à préciser selon les tâches réellement exercées.",
     url: "https://dgr.kostacademy.com/formation-dgr-transitaires",
   },
 };
@@ -30,23 +30,15 @@ export const metadata: Metadata = {
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "Formation IATA DGR pour Transitaires (Catégories 7.1 & 7.2)",
+  name: "Formation DGR/CBTA pour les activités de transit et de fret aérien",
   description:
-    "Formation obligatoire IATA DGR pour les transitaires, commissionnaires en douane et agents de fret aérien. Couvre les catégories 7.1 (expéditeurs) et 7.2 (agents cargo).",
+    "Programme DGR/CBTA orienté fret aérien. Le périmètre de formation est déterminé par les tâches réellement exercées, sans attribution automatique de fonctions.",
   provider: {
     "@type": "EducationalOrganization",
     name: "KOST GROUP",
     url: "https://dgr.kostacademy.com",
   },
-  courseCode: "DGR-7.1-7.2",
   availableLanguage: "fr",
-  occupationalCredentialAwarded: "Certificat IATA DGR-CBTA",
-  offers: {
-    "@type": "Offer",
-    price: "900",
-    priceCurrency: "EUR",
-    availability: "https://schema.org/InStock",
-  },
 };
 
 const RISKS = [

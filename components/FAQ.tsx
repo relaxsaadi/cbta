@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 const ITEMS = [
   {
     q: "Est-ce reconnu dans mon pays (Maroc, Sénégal, Tunisie, Côte d'Ivoire) ?",
-    a: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par l'autorité de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
+    a: "La reconnaissance d'une formation ou d'un certificat DGR dépend du programme, des exigences applicables et des organismes concernés. Vérifiez les conditions auprès de l'autorité et des exploitants pertinents ; aucune reconnaissance universelle n'est présumée.",
   },
   {
     q: "Comment payer depuis l'Afrique ?",
@@ -18,23 +18,23 @@ const ITEMS = [
   },
   {
     q: "Le certificat est-il valable combien de temps ?",
-    a: "24 mois (2 ans) à compter de la date de réussite à l'examen IATA. Un recyclage CBTA (recurrent) est obligatoire avant cette échéance pour maintenir la qualification.",
+    a: "Les exigences de maintien des compétences et les éventuelles échéances doivent être vérifiées pour la fonction exercée, le programme suivi et les règles applicables. Une validité universelle de 24 mois ou un examen officiel IATA ne peuvent pas être présumés pour chaque parcours.",
   },
   {
     q: "Peut-on commencer sans expérience préalable en marchandises dangereuses ?",
-    a: "Oui pour les formations Initial (7.1, 7.3 Initial). La formation est conçue pour amener un participant sans prérequis au niveau d'expert opérationnel. Les sessions Recurrent supposent en revanche une certification active arrivant à échéance.",
+    a: "Cela dépend des prérequis du parcours et des tâches visées. Une évaluation préalable permet d'orienter le participant vers la formation initiale ou de maintien des compétences adaptée, sans garantir un niveau expert ni attribuer automatiquement une fonction 7.1 à 7.10.",
   },
   {
     q: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",
-    a: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard obligatoire pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion — c'est la seule reconnue par les 300+ compagnies aériennes membres de l'IATA et exigée par l'ANAC en Algérie. Si votre activité touche au transport aérien, c'est cette certification qu'il vous faut, pas une formation HSE générique.",
+    a: "Les formations généralistes HSE, stockage ou ADR et les formations DGR pour le fret aérien n'ont pas le même périmètre. Les besoins de formation DGR/CBTA sont déterminés à partir des tâches réellement exercées et des exigences applicables ; le seul intitulé de poste ne suffit pas pour sélectionner une fonction 7.1 à 7.10. Les conditions d'examen et la reconnaissance éventuelle d'un certificat doivent être vérifiées selon le parcours concerné.",
   },
   {
     q: "Vous déplacez-vous pour les formations intra-entreprise ?",
-    a: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. Nous prenons en charge le formateur, les supports, l'examen IATA officiel. Vous fournissez la salle et la logistique locale.",
+    a: "Les formations intra-entreprise sont étudiées selon le pays, les effectifs, les tâches visées et les conditions logistiques. Les modalités d'évaluation et les documents remis sont précisés dans la proposition ; aucun examen ou certificat IATA officiel n'est présumé.",
   },
   {
     q: "Quels sont les délais d'inscription ?",
-    a: "Les sessions ouvrent toutes les 4 à 6 semaines. Le délai conseillé entre inscription et formation est de 2 semaines pour valider le paiement et l'émission de la facture. Sessions urgentes possibles sur demande.",
+    a: "Les dates de session, les délais d'inscription et les éventuelles demandes urgentes sont confirmés lors de l'étude de votre dossier. Aucune périodicité fixe n'est garantie.",
   },
   {
     q: "La formation est en français ou en anglais ?",

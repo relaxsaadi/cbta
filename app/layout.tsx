@@ -19,11 +19,11 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Formation IATA DGR Algérie | Certificat Officiel CBTA",
+    default: "Formation DGR / CBTA en Algérie | KOST GROUP",
     template: "%s — KOST GROUP",
   },
   description:
-    "Seul centre IATA CBTA Provider certifié d'Algérie. Formations DGR 7.1 à 7.10, reconnues par 300+ compagnies. Sessions régulières, devis gratuit sous 24h.",
+    "Formations DGR/CBTA pour le fret aérien en Algérie. Le périmètre des fonctions 7.1 à 7.10 se détermine selon les tâches exercées et les exigences applicables.",
   keywords: [
     "Formation IATA DGR",
     "CBTA",
@@ -58,15 +58,15 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: siteUrl,
     siteName: "KOST GROUP",
-    title: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié",
+    title: "Formation DGR / CBTA Algérie — KOST GROUP",
     description:
-      "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Reconnu par 300+ compagnies. Sessions mensuelles, places limitées.",
+      "Formations DGR/CBTA adaptées aux tâches exercées dans le transport aérien de marchandises dangereuses. Programmes et conditions à vérifier selon la fonction.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "KOST GROUP — 1er Centre CBTA Provider Certifié IATA en Algérie",
+        alt: "KOST GROUP — Formations DGR / CBTA en Algérie",
       },
     ],
   },
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Formation IATA DGR-CBTA — KOST GROUP",
     description:
-      "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel.",
+      "Formations DGR/CBTA pour les professionnels du fret aérien en Algérie. Fonction définie selon les tâches et exigences applicables.",
     images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
@@ -99,7 +99,7 @@ const orgSchema = {
   },
   image: `${siteUrl}/og-image.jpg`,
   description:
-    "1er Centre CBTA Provider Certifié IATA en Algérie. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
+    "Formations DGR/CBTA pour le transport aérien de marchandises dangereuses. Les fonctions 7.1 à 7.10 sont étudiées au regard des tâches et des exigences applicables.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki, Bab Ezzouar",
@@ -125,13 +125,6 @@ const orgSchema = {
   priceRange: "€€",
   currenciesAccepted: "DZD, EUR",
   paymentAccepted: "Cash, Bank Transfer",
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.3",
-    bestRating: "5",
-    worstRating: "1",
-    ratingCount: "12",
-  },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Formations IATA DGR — Marchandises Dangereuses",
@@ -140,9 +133,9 @@ const orgSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Course",
-          name: "Formation IATA DGR Catégorie 7 — Initial",
+          name: "Formation initiale DGR/CBTA — fonction selon les tâches",
           description:
-            "Formation initiale aux marchandises dangereuses IATA DGR en 3 jours. Catégories 7.1 à 7.5. Certification officielle IATA.",
+            "Formation initiale DGR/CBTA pour le fret aérien ; fonctions, durée, modalités d'évaluation et documents remis à confirmer selon le programme.",
           provider: { "@type": "Organization", name: "KOST GROUP" },
         },
       },
@@ -150,9 +143,9 @@ const orgSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Course",
-          name: "Formation IATA DGR Recyclage — Recurrent",
+          name: "Formation de maintien des compétences DGR/CBTA",
           description:
-            "Recyclage biennal IATA DGR pour maintenir la certification. Catégories 7.1 à 7.10. Format CBTA accrédité.",
+            "Maintien des compétences DGR/CBTA selon les tâches et exigences applicables ; périodicité, évaluation et documents remis à confirmer pour chaque parcours.",
           provider: { "@type": "Organization", name: "KOST GROUP" },
         },
       },

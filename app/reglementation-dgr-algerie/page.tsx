@@ -7,9 +7,9 @@ import WhatsAppSticky from "@/components/WhatsAppSticky";
 import LeadForm from "@/components/LeadForm";
 
 export const metadata: Metadata = {
-  title: "DGR Algérie : Obligation ANAC (Décret 21-253)",
+  title: "Réglementation DGR Algérie — Décret 21-253 & ANAC",
   description:
-    "Formation DGR obligatoire en Algérie : Décret 21-253, contrôle ANAC, textes officiels. Centre CBTA référencé IATA, agréé ANAC.",
+    "Présentation des textes et référentiels relatifs au transport aérien des marchandises dangereuses en Algérie. Vérifiez la version et la portée de chaque source.",
   alternates: { canonical: "/reglementation-dgr-algerie" },
   keywords: [
     "décret 21-253 marchandises dangereuses",

@@ -7,12 +7,12 @@ const formation = getFormationBySlug("dgr-7-1")!;
 export const metadata: Metadata = {
   title: "Formation DGR 7.1 en Algérie — KOST Academy",
   description:
-    "Formation DGR 7.1 en Algérie : préparation des expéditions, adaptée aux tâches réelles. Centre CBTA référencé IATA, agréé ANAC.",
+    "Formation DGR 7.1 en Algérie : préparation des expéditions, programme et évaluation à préciser selon les tâches réellement exercées.",
   alternates: { canonical: `/${formation.slug}` },
   openGraph: {
     title: "Formation DGR 7.1 en Algérie — KOST Academy",
     description:
-      "Formation DGR 7.1 en Algérie : préparation des expéditions, adaptée aux tâches réelles. Centre CBTA référencé IATA, agréé ANAC.",
+      "Programme DGR 7.1 pour le fret aérien en Algérie, à préciser selon les tâches réellement exercées.",
     url: `/${formation.slug}`,
   },
 };

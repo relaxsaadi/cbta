@@ -190,7 +190,14 @@ function validate(text, { checkFiles = true } = {}) {
     const claims = claimsTerminalRegulatoryState(table, row);
     if (!claims.any) continue;
 
-    // Require a completed direct check in the item's CURRENT source-state or\n    // evidence rationale. NEXT_ACTION is an instruction, not an attestation.\n    // Retain whole-row scanning only for conservative non-direct-evidence vetoes.\n    const attestationText = [\n      valueFor(table, row, 'current_individual_fr_status_full_text'),\n      valueFor(table, row, 'reason'),\n    ].join('\n');\n    const evidenceText = row.values.join('\n');
+    // Require a completed direct check in the item's CURRENT source-state or
+    // evidence rationale. NEXT_ACTION is an instruction, not an attestation.
+    // Retain whole-row scanning only for conservative non-direct-evidence vetoes.
+    const attestationText = [
+      valueFor(table, row, 'current_individual_fr_status_full_text'),
+      valueFor(table, row, 'reason'),
+    ].join('\n');
+    const evidenceText = row.values.join('\n');
     const bookshelf = valueFor(table, row, 'bookshelf_evidence_found').toUpperCase();
     const dgrReference = valueFor(table, row, 'dgr_reference');
     const evidenceLocation = valueFor(table, row, 'evidence_location_file');

@@ -80,3 +80,37 @@ test('RELEASE HOLD: browser EventSource URLs must not carry cron tokens', () => 
     'Protect SSE with authenticated same-origin dashboard sessions, never a URL cron token: ' + offenders.join(', ')
   )
 })
+
+const manualDashboardPostRoutes = [
+  'app/api/agent/run/route.ts',
+  'app/api/agent/intel/route.ts',
+  'app/api/instructors/scan/route.ts',
+  'app/api/instructors/scan-sales-nav/route.ts',
+]
+
+test('RELEASE HOLD: browser-triggered POST must not demand the cron-only Bearer token', () => {
+  const middleware = source('middleware.ts')
+  assert.match(middleware, /req\.method\s*===\s*['"]GET['"]/, 'cron middleware exception must remain GET-only')
+  for (const filename of manualDashboardPostRoutes) {
+    const code = source(filename)
+    const match = code.match(/export async function POST\([^)]*\)\s*\{([\s\S]{0,550})/)
+    assert.ok(match, filename + ': expected a dashboard POST handler')
+    assert.doesNotMatch(
+      match[1],
+      /process\.env\.CRON_SECRET|\`Bearer \$\{cronSecret\}\`/,
+      filename + ': POST currently demands a Bearer cron token that the protected middleware refuses for POST; use independent authenticated human actions'
+    )
+  }
+})
+
+test('RELEASE HOLD: the dashboard follow-up button needs a separate human POST, not a cron GET', () => {
+  const page = source('app/dashboard/agent/page.tsx')
+  const handler = source('app/api/agent/followup/route.ts')
+  assert.match(handler, /export async function GET\(/, 'preserve server-only Vercel cron GET')
+  assert.match(handler, /export async function POST\(/, 'add a separate Basic/session-authorized manual POST')
+  assert.match(
+    page,
+    /fetch\(['"]\/api\/agent\/followup['"],\s*\{\s*method:\s*['"]POST['"]/,
+    'manual follow-up must never invoke the cron-only GET from browser'
+  )
+})

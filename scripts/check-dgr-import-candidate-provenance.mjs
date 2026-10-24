@@ -148,6 +148,23 @@ function normalizedSourceReference(value) {
   return String(value ?? '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
+// Compare the *effective leading* governance state rather than searching for
+// historical words anywhere in a narrative. A held import row is not allowed
+// to retain a headline FROZEN claim after the authoritative reconciliation
+// has downgraded that very question to DRAFT or SOURCE CONFLICT.
+// This checks ledger consistency, never regulatory truth or human approval.
+function leadingGovernanceState(value) {
+  const text = String(value ?? '').trim().toUpperCase();
+  if (/^FROZEN FR\\s*\\/\\s*SOURCE VERIFIED\\b/.test(text)) return 'FROZEN';
+  if (/^DRAFT\\b/.test(text) || /^TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED\\b/.test(text)) return 'DRAFT';
+  if (/^FR SOURCE GAP CONFIRMED\\b/.test(text) || /^SOURCE GAP\\b/.test(text)) return 'SOURCE GAP';
+  if (/^STALE CITATION\\s*\\/\\s*SOURCE CONFLICT\\b/.test(text) || /^SOURCE CONFLICT\\b/.test(text)) return 'SOURCE CONFLICT';
+  if (/^PARTIALLY CONFIRMED\\b/.test(text)) return 'PARTIAL';
+  if (/^APPROVED\\b/.test(text)) return 'APPROVED';
+  if (/^SOURCE VERIFIED\\b/.test(text)) return 'SOURCE VERIFIED';
+  return '';
+}
+
 function findViolations(reconciliationText, importText) {
   const reconciliation = tableFromCsv(
     reconciliationText,
@@ -210,6 +227,24 @@ function findViolations(reconciliationText, importText) {
   for (const importRow of imports.rows) {
     if (!reconciliation.byId.has(importRow.id)) {
       violations.push({ id: importRow.id, reason: 'import-candidate question has no controlled reconciliation row (including held rows)' });
+    }
+  }
+
+  // Full-ledger status alignment is required even while IMPORT_ELIGIBLE=NO.
+  // Otherwise an operationally held question can continue to advertise
+  // obsolete FROZEN provenance after its authoritative evidence was revoked.
+  for (const reconciliationRow of reconciliation.rows) {
+    const importRow = imports.byId.get(reconciliationRow.id);
+    if (!importRow) continue; // missing-row violation is recorded above
+    const current = valueFor(reconciliation, reconciliationRow, 'final_reconciled_status');
+    const mirrored = valueFor(imports, importRow, 'fr_status');
+    const currentState = leadingGovernanceState(current);
+    const mirroredState = leadingGovernanceState(mirrored);
+    if (!currentState || !mirroredState || currentState !== mirroredState) {
+      violations.push({
+        id: reconciliationRow.id,
+        reason: `import FR_STATUS ${mirroredState || '(unclassified)'} does not mirror authoritative final reconciliation status ${currentState || '(unclassified)'} (including held rows)`,
+      });
     }
   }
 
@@ -408,6 +443,30 @@ function runSelfTest() {
   const wrongHeldFunction = findViolations(wrongFunctionReconciliation, ineligibleImport);
   if (!wrongHeldFunction.some((v) => v.id === 'Q-7.3-040' && /reconciliation FUNCTION 7\.4/i.test(v.reason))) {
     throw new Error('Regression fixture failed: a held question concealed a reconciliation FUNCTION mismatch.');
+  }
+
+  // A held question can be downgraded independently of its historical
+  // original bank label, but the operational FR_STATUS must lead with the
+  // authoritative current state. Historical provenance stays in the narrative.
+  const heldDraftReconciliation = directReconciliation.replace(',YES,YES,FROZEN,', ',YES,YES,DRAFT — TIER_A_PROVENANCE_UNRESOLVED,');
+  const staleHeldFrStatus = findViolations(heldDraftReconciliation, ineligibleImport);
+  if (!staleHeldFrStatus.some((v) => v.id === 'Q-7.3-040' && /FR_STATUS FROZEN does not mirror.*DRAFT/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: held import row advertised revoked FROZEN status.');
+  }
+  const correctedHeldImport = ineligibleImport.replace(
+    'FROZEN FR / SOURCE VERIFIED.',
+    'DRAFT — TIER_A_PROVENANCE_UNRESOLVED (current); HISTORICAL: FROZEN FR / SOURCE VERIFIED.',
+  );
+  if (findViolations(heldDraftReconciliation, correctedHeldImport).length !== 0) {
+    throw new Error('Regression fixture failed: corrected held FR status with historical text was rejected.');
+  }
+  const missingHeldFrStatus = ineligibleImport.replace(
+    'FROZEN FR / SOURCE VERIFIED.',
+    'UNKNOWN',
+  );
+  if (!findViolations(directReconciliation, missingHeldFrStatus).some((v) =>
+    v.id === 'Q-7.3-040' && /FR_STATUS \\(unclassified\\)/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: unclassified held FR status evaded mirror enforcement.');
   }
 
   const noImportRows = ineligibleImport.slice(0, ineligibleImport.indexOf('\r\n') + 2);

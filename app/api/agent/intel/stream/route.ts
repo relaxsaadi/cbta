@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { requireDashboardRequest } from '@/lib/dashboard-auth'
 import { getSupabase } from '@/lib/supabase'
 import { scrapeGoogleIntents, scrapeGoogleMapsLeads, scrapeJobBoards, type ApifyLead } from '@/lib/apify'
 import { anthropic } from '@ai-sdk/anthropic'
@@ -10,10 +11,8 @@ export const maxDuration = 300
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function GET(req: NextRequest) {
-  const auth = req.nextUrl.searchParams.get('secret')
-  if (auth !== process.env.CRON_SECRET) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+  const denied = requireDashboardRequest(req)
+  if (denied) return denied
 
   const countriesParam = req.nextUrl.searchParams.get('countries')
   const targetCountries = countriesParam ? countriesParam.split(',').map(c => c.trim()).filter(Boolean) : undefined

@@ -35,7 +35,7 @@ export default function AgentPage() {
     try {
       const res = await fetch('/api/agent/run', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'local'}` },
+        headers: { 'Content-Type': 'application/json' },
       })
       const data = await res.json()
       if (data.ok) {
@@ -55,7 +55,8 @@ export default function AgentPage() {
     setError('')
     try {
       const res = await fetch('/api/agent/followup', {
-        headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'local'}` },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
       })
       const data = await res.json()
       if (data.ok) {

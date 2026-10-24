@@ -96,10 +96,9 @@ export default function InstructorsPage() {
     const sourceLabel = scanSource === 'salesnav' ? 'Sales Navigator' : 'Web'
     setEvents(p => [...p, { type: 'status', msg: `━━━ Cycle ${cycleRef.current} · ${sourceLabel} · ${label} ━━━` }])
 
-    const secret = process.env.NEXT_PUBLIC_CRON_SECRET || ''
     const countriesParam = scanCountry === 'all' ? '' : encodeURIComponent(scanCountry)
     const endpoint = scanSource === 'salesnav' ? '/api/instructors/scan-sales-nav/stream' : '/api/instructors/scan/stream'
-    const es = new EventSource(`${endpoint}?secret=${secret}&countries=${countriesParam}`)
+    const es = new EventSource(`${endpoint}?countries=${countriesParam}`)
     esRef.current = es
 
     es.addEventListener('status', e => { const d = JSON.parse(e.data); setEvents(p => [...p, { type: 'status', msg: d.msg }]) })
@@ -145,7 +144,7 @@ export default function InstructorsPage() {
       const endpoint = scanSource === 'salesnav' ? '/api/instructors/scan-sales-nav' : '/api/instructors/scan'
       await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ countries: scanCountry === 'all' ? undefined : [scanCountry] }),
       })
     } finally { setBgRunning(false); fetch_() }

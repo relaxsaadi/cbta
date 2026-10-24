@@ -25,7 +25,8 @@ const root = process.cwd();
 
 const NON_DIRECT_EVIDENCE_RE = /\brepresentative\s+(?:sample|evidence|spot[- ]?check)\b|\bspot[- ]?verified\s+batch\s+(?:citation|evidence|pattern)\b|\bbatch\s+(?:citation|evidence|pattern)\b|\bcross[- ]?appl(?:ied|y)\b|\bnot\s+independently\s+(?:re[- ]?read|read|verified|checked|searched|re[- ]?searched)\b|\bnot\s+re[- ]?searched\s+from\s+scratch\b|\bfollows?\s+(?:the\s+)?same\s+verified\s+(?:batch\s+)?pattern\b/i;
 
-const DIRECT_ITEM_SIGNAL_RE = /\b(?:live\s+(?:authenticated\s+)?(?:iata\s+)?(?:digital\s+publications\s+)?bookshelf\s+(?:check|read|search)|(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched)\s+directly|direct(?:ly)?\s+(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched)|individually\s+verified|item[- ]specific\s+(?:check|read|search|verification|evidence)|this\s+item(?:'s)?\s+(?:own\s+)?(?:tested\s+claim\s+)?(?:was\s+)?(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched))\b/i;
+const DIRECT_ITEM_SIGNAL_RE = /\b(?:live\s+(?:authenticated\s+)?(?:iata\s+)?(?:digital\s+publications\s+)?bookshelf\s+(?:check|read|search)\s+(?:performed|completed|conducted|carried\s+out)|(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched)\s+directly|direct(?:ly)?\s+(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched)|individually\s+verified|this\s+item(?:'s)?\s+(?:own\s+)?(?:tested\s+claim\s+)?(?:was\s+)?(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched))\b/i;
+const NEGATED_DIRECT_ITEM_SIGNAL_RE = /\b(?:not|never)\s+(?:yet\s+)?(?:directly\s+)?(?:checked|read|searched|verified)(?:\s+directly)?\b|\b(?:no|without)\s+(?:completed\s+)?(?:live\s+)?bookshelf\s+(?:check|read|search)\b/i;
 
 function normalizeHeader(value) {
   return value.trim().toLowerCase();
@@ -190,6 +191,13 @@ function validate(text, { checkFiles = true } = {}) {
     const claims = claimsTerminalRegulatoryState(table, row);
     if (!claims.any) continue;
 
+    // Require a completed direct check in the item's CURRENT source-state or
+    // evidence rationale. NEXT_ACTION is an instruction, not an attestation.
+    // Retain whole-row scanning only for conservative non-direct-evidence vetoes.
+    const attestationText = [
+      valueFor(table, row, 'current_individual_fr_status_full_text'),
+      valueFor(table, row, 'reason'),
+    ].join('\n');
     const evidenceText = row.values.join('\n');
     const bookshelf = valueFor(table, row, 'bookshelf_evidence_found').toUpperCase();
     const dgrReference = valueFor(table, row, 'dgr_reference');
@@ -210,12 +218,12 @@ function validate(text, { checkFiles = true } = {}) {
         violations.push({ id: row.id, reason: `Evidence_Location_File is not a present in-repo docs artifact: ${evidenceLocation}` });
       }
     }
-    if (!hasCurrentDgr67Edition2026(evidenceText)) {
+    if (!hasCurrentDgr67Edition2026(attestationText)) {
       violations.push({ id: row.id, reason: 'terminal regulatory state lacks explicit per-item IATA DGR 67th Edition 2026 binding' });
     }
-    if (NON_DIRECT_EVIDENCE_RE.test(evidenceText)) {
+    if (NON_DIRECT_EVIDENCE_RE.test(evidenceText) || NEGATED_DIRECT_ITEM_SIGNAL_RE.test(attestationText)) {
       violations.push({ id: row.id, reason: 'terminal regulatory state contains representative/batch/cross-applied or otherwise non-direct evidence wording' });
-    } else if (!DIRECT_ITEM_SIGNAL_RE.test(evidenceText)) {
+    } else if (!DIRECT_ITEM_SIGNAL_RE.test(attestationText)) {
       violations.push({ id: row.id, reason: 'terminal regulatory state lacks an affirmative item-specific direct read/search/verification signal' });
     }
   }
@@ -234,6 +242,39 @@ function runSelfTest() {
   if (validate(direct, { checkFiles: false }).length !== 0) {
     throw new Error('Regression fixture failed: affirmative direct current-edition evidence was rejected.');
   }
+
+  // A planned check, a generic "item-specific check" noun, or a future
+  // NEXT_ACTION cannot satisfy affirmative 2026 Tier-A evidence.
+  const pendingOnly = direct.replace(
+    "Live Bookshelf check performed directly for this item's tested claim.",
+    "Item-specific check scheduled; verification has not yet been performed."
+  );
+  if (!validate(pendingOnly, { checkFiles: false }).some((v) => /affirmative item-specific/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: planned item-specific check was accepted as affirmative evidence.');
+  }
+
+  const plannedInNextAction = direct
+    .replace("Live Bookshelf check performed directly for this item's tested claim.", "Current source not yet reviewed.")
+    .replace("Import-eligible for V2 (pending reviewer sign-off)", "Live Bookshelf check performed directly for this item in a later phase");
+  if (!validate(plannedInNextAction, { checkFiles: false }).some((v) => /affirmative item-specific/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: NEXT_ACTION was incorrectly accepted as completed evidence.');
+  }
+
+  const negatedCheck = direct.replace(
+    "Live Bookshelf check performed directly for this item's tested claim.",
+    "This item was not checked directly against the current DGR."
+  );
+  if (!validate(negatedCheck, { checkFiles: false }).some((v) => /non-direct/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: negated direct check was mistaken for completion.');
+  }
+
+  const editionOnlyInNextAction = direct
+    .replace("DGR 67th Edition 2026 §9.6.1", "DGR citation §9.6.1")
+    .replace("Import-eligible for V2 (pending reviewer sign-off)", "Recheck against IATA DGR 67th Edition 2026");
+  if (!validate(editionOnlyInNextAction, { checkFiles: false }).some((v) => /67th Edition 2026 binding/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: NEXT_ACTION alone supplied the current-edition binding.');
+  }
+
   const ambiguous = validate(ambiguousBatch, { checkFiles: false });
   if (!ambiguous.some((v) => /batch|non-direct/i.test(v.reason))) {
     throw new Error('Regression fixture failed: ambiguous direct-or-batch evidence was not rejected.');

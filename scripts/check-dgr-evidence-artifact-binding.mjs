@@ -148,10 +148,15 @@ function claimsTerminalRegulatoryState(table, row) {
   const nextAction = valueFor(table, row, 'next_action');
 
   const frozen = /^FROZEN\b/i.test(bucket) || /^FROZEN\b/i.test(final) || /FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(full);
+  // Standalone approval or source-verification labels must not avoid
+  // the Tier-A checks merely because a historical FROZEN prefix was removed.
+  const approved = /^APPROVED\b/i.test(bucket) || /^APPROVED\b/i.test(final) || /^APPROVED\b/i.test(full);
+  const sourceVerified = /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(bucket) || /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(final) || /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(full);
   const importEligible = /Import-eligible for V2/i.test(nextAction);
-  const confirmedGap = /^GAP\b/i.test(bucket) && /FR SOURCE GAP CONFIRMED/i.test([full, final, reason].join('\n'));
+  const confirmedGap = /^FR SOURCE GAP CONFIRMED\b/i.test(full) || /^FR SOURCE GAP CONFIRMED\b/i.test(final)
+    || (/^GAP\b/i.test(bucket) && /FR SOURCE GAP CONFIRMED/i.test([full, final, reason].join('\n')));
 
-  return frozen || importEligible || confirmedGap;
+  return frozen || approved || sourceVerified || importEligible || confirmedGap;
 }
 
 function escapeRegExp(value) {
@@ -327,6 +332,15 @@ function runSelfTest() {
     const draft = `${header}\r\nQ-7.3-001,7.3,DRAFT,"DRAFT — SOURCE REQUIRED",docs/missing.md,DRAFT,"No terminal source claim.",Hold\r\n`;
     if (validate(draft, { rootDir: tempRoot }).length !== 0) {
       throw new Error('Regression fixture failed: non-terminal DRAFT row was incorrectly forced through evidence-artifact binding.');
+    }
+
+    // Terminal approval, verified source, and confirmed source gaps each
+    // require bound per-item evidence even without a FROZEN/eligible prefix.
+    for (const state of ['APPROVED', 'SOURCE VERIFIED', 'FR SOURCE GAP CONFIRMED']) {
+      const altered = draft.replace('docs/missing.md,DRAFT,', 'docs/missing.md,' + state + ',');
+      if (!validate(altered, { rootDir: tempRoot }).some((v) => /does not exist/i.test(v.reason))) {
+        throw new Error('Regression fixture failed: standalone ' + state + ' escaped artifact-binding gate.');
+      }
     }
 
     console.log('PASS: per-item evidence-artifact binding regression fixtures');

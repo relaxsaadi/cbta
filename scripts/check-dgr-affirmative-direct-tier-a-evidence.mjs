@@ -157,10 +157,15 @@ function claimsTerminalRegulatoryState(table, row) {
   const nextAction = valueFor(table, row, 'next_action');
 
   const frozen = /^FROZEN\b/i.test(bucket) || /^FROZEN\b/i.test(final) || /FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(full);
+  // Standalone approval or source-verification labels must not avoid
+  // the Tier-A checks merely because a historical FROZEN prefix was removed.
+  const approved = /^APPROVED\b/i.test(bucket) || /^APPROVED\b/i.test(final) || /^APPROVED\b/i.test(full);
+  const sourceVerified = /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(bucket) || /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(final) || /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(full);
   const importEligible = /Import-eligible for V2/i.test(nextAction);
-  const confirmedGap = /^GAP\b/i.test(bucket) && /FR SOURCE GAP CONFIRMED/i.test([full, final, reason].join('\n'));
+  const confirmedGap = /^FR SOURCE GAP CONFIRMED\b/i.test(full) || /^FR SOURCE GAP CONFIRMED\b/i.test(final)
+    || (/^GAP\b/i.test(bucket) && /FR SOURCE GAP CONFIRMED/i.test([full, final, reason].join('\n')));
 
-  return { frozen, importEligible, confirmedGap, any: frozen || importEligible || confirmedGap };
+  return { frozen, approved, sourceVerified, importEligible, confirmedGap, any: frozen || approved || sourceVerified || importEligible || confirmedGap };
 }
 
 function hasCurrentDgr67Edition2026(text) {
@@ -307,6 +312,19 @@ function runSelfTest() {
   }
   if (validate(draft, { checkFiles: false }).length !== 0) {
     throw new Error('Regression fixture failed: non-terminal DRAFT row was incorrectly promoted into the affirmative-evidence gate.');
+  }
+
+  // Standalone terminal labels cannot evade affirmative Tier-A verification.
+  const strippedTerminal = direct
+    .replace(',FROZEN,"FROZEN FR / SOURCE VERIFIED — DGR 67th Edition 2026 §9.6.1"', ',DRAFT,"DRAFT — DGR 67th Edition 2026 §9.6.1"')
+    .replace(',YES,§9.6.1,docs/example.md', ',NO,§9.6.1,docs/example.md')
+    .replace(',FROZEN,"Live Bookshelf check performed directly for this item\'s tested claim."', ',PLACEHOLDER,"Source evidence still pending."')
+    .replace('Import-eligible for V2 (pending reviewer sign-off)', 'Hold');
+  for (const state of ['APPROVED', 'SOURCE VERIFIED', 'FR SOURCE GAP CONFIRMED']) {
+    const candidate = strippedTerminal.replace(',PLACEHOLDER,"Source evidence still pending."', ',' + state + ',"Source evidence still pending."');
+    if (!validate(candidate, { checkFiles: false }).some((v) => /Bookshelf_Evidence_Found=YES/i.test(v.reason))) {
+      throw new Error('Regression fixture failed: standalone ' + state + ' evaded direct Tier-A evidence gate.');
+    }
   }
 
   console.log('PASS: affirmative per-item Tier-A evidence regression fixtures');

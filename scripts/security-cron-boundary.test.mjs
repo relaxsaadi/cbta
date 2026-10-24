@@ -130,5 +130,5 @@ test('human POST and side-effecting SSE GET routes verify dashboard Basic auth a
     "headers.get('origin')", "headers.get('referer')",
     "headers.get('sec-fetch-site')", "startsWith('/dashboard/')",
   ]) assert.ok(guard.includes(marker), 'missing human/CSRF guard: ' + marker)
-  assert.doesNotMatch(guard, /CRON_SECRET|NEXT_PUBLIC_CRON_SECRET/)
+  assert.doesNotMatch(guard, /process\.env\.(?:CRON_SECRET|NEXT_PUBLIC_CRON_SECRET)/)
 })

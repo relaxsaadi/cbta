@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { requireDashboardRequest } from '@/lib/dashboard-auth'
 import { getSupabase } from '@/lib/supabase'
 import { scanLinkedInProspects } from '@/lib/linkedin-scanner'
 
@@ -6,10 +7,8 @@ export const maxDuration = 300
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== process.env.CRON_SECRET) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+  const denied = requireDashboardRequest(req)
+  if (denied) return denied
 
   const country = req.nextUrl.searchParams.get('country') || 'all'
   const sectors = req.nextUrl.searchParams.get('sectors')?.split(',').filter(Boolean)

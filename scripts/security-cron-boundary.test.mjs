@@ -113,3 +113,22 @@ test('RELEASE HOLD: the dashboard follow-up button needs a separate human POST, 
     'manual follow-up must never invoke the cron-only GET from browser'
   )
 })
+
+test('human POST and side-effecting SSE GET routes verify dashboard Basic auth and same-origin', () => {
+  const targets = [
+    ...manualDashboardPostRoutes,
+    'app/api/agent/followup/route.ts',
+    ...streamRoutes,
+  ]
+  for (const filename of targets) {
+    assert.ok(source(filename).includes('requireDashboardRequest(req)'), filename + ' lacks independent human auth')
+  }
+  const guard = source('lib/dashboard-auth.ts')
+  for (const marker of [
+    'process.env.DASHBOARD_USER', 'process.env.DASHBOARD_PASSWORD',
+    "headers.get('authorization')", "startsWith('Basic ')",
+    "headers.get('origin')", "headers.get('referer')",
+    "headers.get('sec-fetch-site')", "startsWith('/dashboard/')",
+  ]) assert.ok(guard.includes(marker), 'missing human/CSRF guard: ' + marker)
+  assert.doesNotMatch(guard, /CRON_SECRET|NEXT_PUBLIC_CRON_SECRET/)
+})

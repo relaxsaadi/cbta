@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { requireDashboardRequest } from '@/lib/dashboard-auth'
 import { getSupabase } from '@/lib/supabase'
 import { scanCbtaInstructors } from '@/lib/instructor-scanner'
 
 export const maxDuration = 300
 
 export async function POST(req: NextRequest) {
-  if (req.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const denied = requireDashboardRequest(req)
+  if (denied) return denied
   let targetCountries: string[] | undefined
   try { const b = await req.json(); targetCountries = b.countries } catch {}
 

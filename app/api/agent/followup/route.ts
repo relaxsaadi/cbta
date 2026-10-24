@@ -4,8 +4,8 @@ import { processFollowups } from '@/lib/agent'
 export const maxDuration = 60
 
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get('authorization')
-  if (secret !== `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

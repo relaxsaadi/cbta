@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Only the exact Vercel schedule targets may use the server-only cron bearer.
+// A cron credential must never unlock dashboards, streams or arbitrary POSTs.
+const SCHEDULED_CRON_GET_PATHS = new Set([
+  '/api/agent/run',
+  '/api/agent/followup',
+  '/api/agent/intel',
+  '/api/prospects/scan',
+  '/api/agents/africa-scan',
+  '/api/agents/send-email',
+  '/api/agents/followup',
+])
+
 // Routes exposant le CRM interne / capables de déclencher de vrais envois
 // (email, WhatsApp, scraping LinkedIn...) — jamais destinées au public.
 const PROTECTED_PREFIXES = [
@@ -16,16 +28,21 @@ function isProtected(pathname: string): boolean {
 }
 
 export function middleware(req: NextRequest) {
-  const { pathname, searchParams } = req.nextUrl
+  const { pathname } = req.nextUrl
 
   if (!isProtected(pathname)) {
     return NextResponse.next()
   }
 
-  // Laisse passer les appels cron légitimes (Vercel Cron n'envoie pas de Basic Auth)
-  // déjà protégés par leur propre secret partagé (voir CRON_SECRET dans les routes).
+  // Vercel Cron sends Authorization: Bearer CRON_SECRET to scheduled GET paths.
+  // Never accept cron secrets from URLs or as authentication on other routes.
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && searchParams.get('secret') === cronSecret) {
+  if (
+    cronSecret &&
+    req.method === 'GET' &&
+    SCHEDULED_CRON_GET_PATHS.has(pathname) &&
+    req.headers.get('authorization') === `Bearer ${cronSecret}`
+  ) {
     return NextResponse.next()
   }
 

@@ -190,6 +190,29 @@ function findViolations(reconciliationText, importText) {
     });
   }
 
+  // Reconciliation and the operational import ledger must describe exactly
+  // the same questions, including held (IMPORT_ELIGIBLE=NO) records. Without
+  // this invariant an omitted hold or a mislabeled reconciliation row can
+  // disappear from the independent gate while all remaining rows pass.
+  for (const reconciliationRow of reconciliation.rows) {
+    const expectedFunction = functionFromQuestionId(reconciliationRow.id);
+    const reconciliationFunction = valueFor(reconciliation, reconciliationRow, 'function');
+    if (reconciliationFunction !== expectedFunction) {
+      violations.push({
+        id: reconciliationRow.id,
+        reason: `reconciliation FUNCTION ${reconciliationFunction || '(missing)'} does not match question ID function ${expectedFunction}`,
+      });
+    }
+    if (!imports.byId.has(reconciliationRow.id)) {
+      violations.push({ id: reconciliationRow.id, reason: 'reconciliation question has no controlled import-candidate row (including held rows)' });
+    }
+  }
+  for (const importRow of imports.rows) {
+    if (!reconciliation.byId.has(importRow.id)) {
+      violations.push({ id: importRow.id, reason: 'import-candidate question has no controlled reconciliation row (including held rows)' });
+    }
+  }
+
   for (const importRow of imports.rows) {
     const expectedFunction = functionFromQuestionId(importRow.id);
     const importFunction = valueFor(imports, importRow, 'function');
@@ -245,14 +268,6 @@ function findViolations(reconciliationText, importText) {
     if (!reconciliationRow) {
       violations.push({ id: importRow.id, reason: 'IMPORT_ELIGIBLE=YES but no per-item reconciliation row exists' });
       continue;
-    }
-
-    const reconciliationFunction = valueFor(reconciliation, reconciliationRow, 'function');
-    if (reconciliationFunction !== expectedFunction) {
-      violations.push({
-        id: importRow.id,
-        reason: `reconciliation FUNCTION ${reconciliationFunction || '(missing)'} does not match question ID function ${expectedFunction}`,
-      });
     }
 
     const reconciliationReference = valueFor(reconciliation, reconciliationRow, 'dgr_reference');
@@ -387,6 +402,27 @@ function runSelfTest() {
   const wrongReconciliationFunction = findViolations(wrongFunctionReconciliation, eligibleImport);
   if (!wrongReconciliationFunction.some((v) => v.id === 'Q-7.3-040' && /reconciliation FUNCTION 7\.4/i.test(v.reason))) {
     throw new Error('Regression fixture failed: reconciliation function/ID mismatch was not rejected.');
+  }
+
+  // Held records must not disappear from either authoritative register.
+  const wrongHeldFunction = findViolations(wrongFunctionReconciliation, ineligibleImport);
+  if (!wrongHeldFunction.some((v) => v.id === 'Q-7.3-040' && /reconciliation FUNCTION 7\.4/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: a held question concealed a reconciliation FUNCTION mismatch.');
+  }
+
+  const noImportRows = ineligibleImport.slice(0, ineligibleImport.indexOf('\r\n') + 2);
+  const missingHeldImport = findViolations(directReconciliation, noImportRows);
+  if (!missingHeldImport.some((v) => v.id === 'Q-7.3-040' && /no controlled import-candidate row/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: a reconciliation question was silently omitted from the import ledger.');
+  }
+
+  const orphanHeldImport = findViolations(
+    directReconciliation,
+    ineligibleImport.replace('Q-7.3-040,7.3,', 'Q-7.3-041,7.3,'),
+  );
+  if (!orphanHeldImport.some((v) => v.id === 'Q-7.3-041' && /no controlled reconciliation row/i.test(v.reason)) ||
+      !orphanHeldImport.some((v) => v.id === 'Q-7.3-040' && /no controlled import-candidate row/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: a held import ID drift escaped full-ledger coverage checks.');
   }
 
   const missingSourceReference = findViolations(directReconciliation, missingSourceReferenceImport);

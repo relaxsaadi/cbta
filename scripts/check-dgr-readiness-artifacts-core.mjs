@@ -18,9 +18,12 @@
  *    only a representative sample was checked or its own citation was not
  *    independently re-read; historical notes on truthfully downgraded items
  *    remain auditable without blocking readiness merely by existing;
- * 5. overlapping FR-bank / EN-package items must mirror the same current FR
- *    governance state (FROZEN/GAP/PARTIAL/CONFLICT/DRAFT/etc.); presence of an
- *    EN draft must never preserve a stale blanket FR status;
+ * 5. overlapping FR-bank / EN-package items must mirror the effective FR
+ *    governance state. An EN package may conservatively mirror UNRESOLVED
+ *    instead of a historically FROZEN/GAP bank label only when the same bank
+ *    item itself admits non-item-specific evidence; that bank item still fails
+ *    the separate provenance gate. Partial states likewise mirror UNRESOLVED;
+ *    absence of such evidence never permits a silent status downgrade;
  * 6. an APPROVED item must carry a non-pending named reviewer and an ISO
  *    review date in the same item block, and table-based status registers may
  *    not bypass that requirement.
@@ -174,6 +177,10 @@ function assertTableApprovalsHaveReviewerAndDate(text, artifactLabel) {
 function hasRepresentativeEvidenceCaveat(text) {
   return (
     /(?:item['’]s\s+)?own specific citation was not independently re-read/i.test(text) ||
+    /(?:item['’]s\s+)?own specific citation was not independently read/i.test(text) ||
+    /specific current-dgr citation was not independently (?:re-)?read/i.test(text) ||
+    /not independently (?:re-)?searched/i.test(text) ||
+    /not re-searched from scratch/i.test(text) ||
     /representative sample(?: of this citation pattern)?/i.test(text)
   );
 }
@@ -191,6 +198,9 @@ function frStatusClass(value) {
     .toUpperCase();
 
   if (!normalized) return "";
+  // The current EN packages use an explicit conservative provenance hold.
+  // Classify that before matching historical FR source-gap/frozen wording.
+  if (/\b(?:TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED|SOURCE[ _]GAP[ _]UNRESOLVED|DIRECT[ _]ITEM[ _]EVIDENCE[ _]REQUIRED)\b/.test(normalized)) return "UNRESOLVED";
   if (/FROZEN FR\s*\/\s*SOURCE VERIFIED/.test(normalized)) return "FROZEN FR / SOURCE VERIFIED";
   if (/SOURCE CONFLICT/.test(normalized)) return "SOURCE CONFLICT";
   if (/SOURCE GAP/.test(normalized)) return "SOURCE GAP";
@@ -212,6 +222,7 @@ function frStatusById(text, fn) {
 function frStatusDriftItems(bankText, enText, fn) {
   const bankStatuses = frStatusById(bankText, fn);
   const enStatuses = frStatusById(enText, fn);
+  const bankBlocks = new Map(itemBlocks(bankText, fn).map((block) => [block.id, block.text]));
   const drift = [];
 
   for (const [id, bankStatus] of bankStatuses) {
@@ -226,9 +237,21 @@ function frStatusDriftItems(bankText, enText, fn) {
       drift.push(`${id} (EN package FR status unclassified/missing; bank=${bankStatus})`);
       continue;
     }
-    if (bankStatus !== enStatus) {
-      drift.push(`${id} (bank=${bankStatus}; EN=${enStatus})`);
-    }
+    if (bankStatus === enStatus) continue;
+
+    // A conservative EN provenance hold is correct for an explicitly partial
+    // FR bank item. It is also correct for a historically terminal bank item
+    // whose own record admits sampling/non-independent citation checking.
+    // IMPORTANT: frozenRepresentativeEvidenceItems still FAILS those FROZEN
+    // records; this exception only prevents a second, misleading drift error.
+    const admittedUnresolved =
+      enStatus === "UNRESOLVED" &&
+      (bankStatus === "PARTIALLY CONFIRMED" ||
+        ((bankStatus === "FROZEN FR / SOURCE VERIFIED" || bankStatus === "SOURCE GAP") &&
+          hasRepresentativeEvidenceCaveat(bankBlocks.get(id) ?? "")));
+    if (admittedUnresolved) continue;
+
+    drift.push(`${id} (bank=${bankStatus}; EN=${enStatus})`);
   }
 
   return drift;
@@ -359,6 +382,42 @@ function isPositiveEnReviewState(value) {
   );
 }
 
+function runFrStatusMirrorRegressionFixtures() {
+  const block = (id, status, note = "") =>
+    `### ${id} — fixture\n**FR status:** ${status}\n${note}\n`;
+  const strictFrozen = block("Q-7.2-001", "FROZEN FR / SOURCE VERIFIED");
+  const sampledFrozen = block("Q-7.2-002", "FROZEN FR / SOURCE VERIFIED",
+    "This item's own specific citation was not independently re-read.");
+  const sampledGap = block("Q-7.2-003", "FR SOURCE GAP CONFIRMED",
+    "The item was not re-searched from scratch.");
+  const partial = block("Q-7.2-004", "PARTIALLY CONFIRMED — citation pending");
+  const conservative = (id) => block(id,
+    "TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED");
+
+  const assertNoDrift = (name, bank, en) => {
+    const drift = frStatusDriftItems(bank, en, "7.2");
+    if (drift.length) throw new Error(`${name}: unexpected FR mirror drift: ${drift.join("; ")}`);
+  };
+  const assertDrift = (name, bank, en) => {
+    if (!frStatusDriftItems(bank, en, "7.2").length) {
+      throw new Error(`${name}: unsafe FR mirror drift not rejected`);
+    }
+  };
+  assertNoDrift("verified-frozen-mirror", strictFrozen, strictFrozen);
+  assertNoDrift("sampled-frozen-has-unresolved-en-mirror", sampledFrozen, conservative("Q-7.2-002"));
+  assertNoDrift("unsearched-gap-has-unresolved-en-mirror", sampledGap, conservative("Q-7.2-003"));
+  assertNoDrift("partially-confirmed-has-unresolved-en-mirror", partial, conservative("Q-7.2-004"));
+  assertDrift("frozen-without-caveat-cannot-downgrade", strictFrozen, conservative("Q-7.2-001"));
+  assertDrift("draft-cannot-claim-frozen", block("Q-7.2-005", "DRAFT — Tier B only"),
+    block("Q-7.2-005", "FROZEN FR / SOURCE VERIFIED"));
+  assertDrift("frozen-with-caveat-cannot-be-draft", sampledFrozen,
+    block("Q-7.2-002", "DRAFT — Tier B only"));
+  if (frozenRepresentativeEvidenceItems(sampledFrozen, "7.2").join() !== "Q-7.2-002") {
+    throw new Error("sampled FROZEN item must retain its independent provenance blocker");
+  }
+  console.log("DGR effective FR-status mirror regression fixtures: PASS");
+}
+
 function runReviewStateRegressionFixtures() {
   const frNegative = [
     "DRAFT",
@@ -412,6 +471,7 @@ function runReviewStateRegressionFixtures() {
     }
   }
 
+  runFrStatusMirrorRegressionFixtures();
   console.log("DGR review-state semantic regression fixtures: PASS");
 }
 

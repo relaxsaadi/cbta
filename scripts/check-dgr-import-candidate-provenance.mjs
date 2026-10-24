@@ -444,8 +444,8 @@ function runSelfTest() {
   const malformedCases = [
     ['unquoted import quote', directReconciliation, eligibleImport.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.3"BAD",'), /unexpected quote inside unquoted CSV field/i],
     ['characters after import quote', directReconciliation, eligibleImport.replace('retained."', 'retained."BAD'), /unexpected character after closing CSV quote/i],
-    ['import row with extra column', directReconciliation, ineligibleImport.replace('NO,"direct evidence hold"', 'NO,"direct evidence hold",EXTRA'), /column\\(s\\), expected/i],
-    ['import row with missing column', directReconciliation, ineligibleImport.replace('NO,"direct evidence hold"', 'NO'), /column\\(s\\), expected/i],
+    ['import row with extra column', directReconciliation, ineligibleImport.replace('NO,"direct evidence hold"', 'NO,"direct evidence hold",EXTRA'), /column.*expected/i],
+    ['import row with missing column', directReconciliation, ineligibleImport.replace('NO,"direct evidence hold"', 'NO'), /column.*expected/i],
     ['non-empty held import row missing ID', directReconciliation, ineligibleImport.replace('Q-7.3-040,7.3,', ',7.3,'), /missing kost_id/i],
     ['unquoted reconciliation quote', directReconciliation.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.3"BAD",'), eligibleImport, /unexpected quote inside unquoted CSV field/i],
     ['non-empty reconciliation row missing ID', directReconciliation.replace('Q-7.3-040,7.3,', ',7.3,'), eligibleImport, /missing kost_question_id/i],

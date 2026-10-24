@@ -257,6 +257,45 @@ function frStatusDriftItems(bankText, enText, fn) {
   return drift;
 }
 
+
+// The first 12 Function 7.1 pilot items have no production-bank headings.
+// Their authoritative FR status is recorded in the Stage 2B status table,
+// while the EN package has per-item headings. Check that source-of-record
+// explicitly rather than allowing Q001–Q012 to escape the mirror gate.
+function pilot71StatusRecord(statusTable) {
+  const lines = statusTable.split(/\r?\n/);
+  const found = new Map();
+  const errors = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const headers = markdownTableCells(lines[i]).map(normalizedHeader);
+    const idIndex = headers.indexOf("id");
+    const statusIndex = headers.indexOf("fr status");
+    if (idIndex < 0 || statusIndex < 0) continue;
+    if (!markdownTableCells(lines[i + 1] ?? "").length) {
+      errors.push("pilot source table lacks a Markdown separator");
+      continue;
+    }
+    for (let j = i + 2; j < lines.length; j += 1) {
+      const cells = markdownTableCells(lines[j]);
+      if (!cells.length) break;
+      const id = (cells[idIndex] ?? "").trim();
+      if (!/^Q-7\.1-(?:00[1-9]|01[0-2])$/.test(id)) continue;
+      const status = (cells[statusIndex] ?? "").trim();
+      if (found.has(id)) errors.push(id + " has duplicate FR pilot status rows");
+      if (!status || !frStatusClass(status)) errors.push(id + " has missing/unclassified FR pilot status");
+      found.set(id, status);
+    }
+  }
+  for (let n = 1; n <= 12; n += 1) {
+    const id = "Q-7.1-" + String(n).padStart(3, "0");
+    if (!found.has(id)) errors.push(id + " missing from authoritative pilot status table");
+  }
+  const blocks = [...found.entries()]
+    .map(([id, status]) => "### " + id + " — pilot\n**FR status:** " + status + "\n")
+    .join("\n");
+  return { blocks, errors };
+}
+
 function frozenRepresentativeEvidenceItems(text, fn) {
   return itemBlocks(text, fn)
     .filter((block) => /^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/i.test(latestFrStatus(block.text)))
@@ -415,6 +454,37 @@ function runFrStatusMirrorRegressionFixtures() {
   if (frozenRepresentativeEvidenceItems(sampledFrozen, "7.2").join() !== "Q-7.2-002") {
     throw new Error("sampled FROZEN item must retain its independent provenance blocker");
   }
+  // The pilot 7.1 source-of-record is a TABLE, not a production-bank item.
+  // A changed EN mirror or a missing pilot row must not disappear behind
+  // otherwise complete 19/19 ID coverage.
+  const pilotIds = Array.from({ length: 12 }, (_unused, n) =>
+    "Q-7.1-" + String(n + 1).padStart(3, "0"));
+  const pilotTable = [
+    "| ID | FR status |",
+    "| --- | --- |",
+    ...pilotIds.map((id, n) => "| " + id + " | " +
+      (n === 0 ? "FR SOURCE GAP CONFIRMED" : "FROZEN FR / SOURCE VERIFIED") + " |"),
+  ].join("\n");
+  const pilotRecord = pilot71StatusRecord(pilotTable);
+  if (pilotRecord.errors.length) throw new Error("valid pilot table rejected: " + pilotRecord.errors.join("; "));
+  const pilotEn = pilotIds.map((id, n) => "### " + id + " — EN fixture\n**FR status:** " +
+    (n === 0 ? "FR SOURCE GAP CONFIRMED" : "FROZEN FR / SOURCE VERIFIED") + "\n").join("\n");
+  if (frStatusDriftItems(pilotRecord.blocks, pilotEn, "7.1").length) {
+    throw new Error("matching Function 7.1 pilot source/EN statuses rejected");
+  }
+  const changedEn = pilotEn.replace(
+    "### Q-7.1-002 — EN fixture\n**FR status:** FROZEN FR / SOURCE VERIFIED",
+    "### Q-7.1-002 — EN fixture\n**FR status:** DRAFT",
+  );
+  if (!frStatusDriftItems(pilotRecord.blocks, changedEn, "7.1").length) {
+    throw new Error("Function 7.1 pilot EN status drift was not detected");
+  }
+  const missingPilot = pilot71StatusRecord(
+    pilotTable.replace("| Q-7.1-003 | FROZEN FR / SOURCE VERIFIED |\n", ""));
+  if (!missingPilot.errors.some((error) => error.includes("Q-7.1-003 missing"))) {
+    throw new Error("missing Function 7.1 pilot source row was not detected");
+  }
+
   console.log("DGR effective FR-status mirror regression fixtures: PASS");
 }
 
@@ -683,7 +753,12 @@ for (const fn of functions) {
   const missing = difference(canonicalBankIds, enIds);
   const extra = difference(enIds, canonicalBankIds);
   const provenanceBlockers = frozenRepresentativeEvidenceItems(bank, fn);
-  const frStatusDrift = frStatusDriftItems(bank, en, fn);
+  const pilotRecord = fn === "7.1" ? pilot71StatusRecord(stage71) : null;
+  for (const issue of pilotRecord?.errors ?? []) fail("7.1 pilot status: " + issue);
+  const frStatusDrift = [
+    ...frStatusDriftItems(bank, en, fn),
+    ...(pilotRecord ? frStatusDriftItems(pilotRecord.blocks, en, fn) : []),
+  ];
 
   if (bankDupes.length) fail(`${bankPath}: duplicate question headings: ${bankDupes.join(", ")}`);
   if (enDupes.length) fail(`${enPath}: duplicate EN question headings: ${enDupes.join(", ")}`);

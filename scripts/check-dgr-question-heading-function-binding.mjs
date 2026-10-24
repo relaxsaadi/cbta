@@ -148,7 +148,7 @@ function structuralHtmlQuestionHeadings(text) {
 }
 
 function canonicalQuestionId(token) {
-  const match = token.match(/^Q-(7\.(?:10|[1-9]))-(\d{3})$/i);
+  const match = token.match(/^Q-(7\.(?:10|[1-9]))-(\d{3})$/);
   if (!match) return null;
   return {
     id: `Q-${match[1]}-${match[2]}`.toUpperCase(),
@@ -280,6 +280,21 @@ function runRegressionFixtures() {
     malformedHeading.errors.some((error) => error.includes("malformed structural")),
     "malformed structural question ID did not fail closed",
   );
+
+  // CSV provenance requires uppercase Q IDs. Do not silently uppercase Markdown
+  // question headings: that accepts an alias in bank/EN artifacts and can
+  // misalign source/approval joins despite the controlled-ledger ID contract.
+  for (const [label, heading] of [
+    ["lowercase-prefix", "## q-7.5-001 — lowercase Q alias"],
+    ["lowercase-id-and-heading", "### q-7.10-001 — lowercase Q alias"],
+  ]) {
+    const alias = inspectArtifact(heading, heading.includes("7.10") ? "7.10" : "7.5", label);
+    assertFixture(
+      label,
+      alias.errors.some((error) => error.includes("malformed structural question ID heading")),
+      "lowercase Markdown question-ID alias was silently normalized instead of rejected",
+    );
+  }
 
   const unsupportedHeadingLevel = inspectArtifact("##### Q-7.6-001 — hidden by readiness H2-H4 parser", "7.6", "heading-level");
   assertFixture(

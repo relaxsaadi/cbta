@@ -91,16 +91,15 @@ const manualDashboardPostRoutes = [
 test('RELEASE HOLD: browser-triggered POST must not demand the cron-only Bearer token', () => {
   const middleware = source('middleware.ts')
   assert.match(middleware, /req\.method\s*===\s*['"]GET['"]/, 'cron middleware exception must remain GET-only')
+  const offenders = []
   for (const filename of manualDashboardPostRoutes) {
     const code = source(filename)
     const match = code.match(/export async function POST\([^)]*\)\s*\{([\s\S]{0,550})/)
-    assert.ok(match, filename + ': expected a dashboard POST handler')
-    assert.doesNotMatch(
-      match[1],
-      /process\.env\.CRON_SECRET|\`Bearer \$\{cronSecret\}\`/,
-      filename + ': POST currently demands a Bearer cron token that the protected middleware refuses for POST; use independent authenticated human actions'
-    )
+    if (!match || /process\.env\.CRON_SECRET|\`Bearer \$\{cronSecret\}\`/.test(match[1])) {
+      offenders.push(filename)
+    }
   }
+  assert.deepEqual(offenders, [], 'Dashboard POST auth conflicts with GET-only cron middleware: ' + offenders.join(', '))
 })
 
 test('RELEASE HOLD: the dashboard follow-up button needs a separate human POST, not a cron GET', () => {

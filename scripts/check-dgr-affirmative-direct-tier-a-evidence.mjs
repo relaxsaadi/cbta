@@ -26,6 +26,7 @@ const root = process.cwd();
 const NON_DIRECT_EVIDENCE_RE = /\brepresentative\s+(?:sample|evidence|spot[- ]?check)\b|\bspot[- ]?verified\s+batch\s+(?:citation|evidence|pattern)\b|\bbatch\s+(?:citation|evidence|pattern)\b|\bcross[- ]?appl(?:ied|y)\b|\bnot\s+independently\s+(?:re[- ]?read|read|verified|checked|searched|re[- ]?searched)\b|\bnot\s+re[- ]?searched\s+from\s+scratch\b|\bfollows?\s+(?:the\s+)?same\s+verified\s+(?:batch\s+)?pattern\b/i;
 
 const DIRECT_ITEM_SIGNAL_RE = /\b(?:live\s+(?:authenticated\s+)?(?:iata\s+)?(?:digital\s+publications\s+)?bookshelf\s+(?:check|read|search)\s+(?:performed|completed|conducted|carried\s+out)|(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched)\s+directly|direct(?:ly)?\s+(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched)|individually\s+verified|this\s+item(?:'s)?\s+(?:own\s+)?(?:tested\s+claim\s+)?(?:was\s+)?(?:checked|read|searched|verified|re[- ]?checked|re[- ]?read|re[- ]?searched))\b/i;
+const NEGATED_DIRECT_ITEM_SIGNAL_RE = /\b(?:not|never)\s+(?:yet\s+)?(?:directly\s+)?(?:checked|read|searched|verified)(?:\s+directly)?\b|\b(?:no|without)\s+(?:completed\s+)?(?:live\s+)?bookshelf\s+(?:check|read|search)\b/i;
 
 function normalizeHeader(value) {
   return value.trim().toLowerCase();
@@ -220,7 +221,7 @@ function validate(text, { checkFiles = true } = {}) {
     if (!hasCurrentDgr67Edition2026(attestationText)) {
       violations.push({ id: row.id, reason: 'terminal regulatory state lacks explicit per-item IATA DGR 67th Edition 2026 binding' });
     }
-    if (NON_DIRECT_EVIDENCE_RE.test(evidenceText)) {
+    if (NON_DIRECT_EVIDENCE_RE.test(evidenceText) || NEGATED_DIRECT_ITEM_SIGNAL_RE.test(attestationText)) {
       violations.push({ id: row.id, reason: 'terminal regulatory state contains representative/batch/cross-applied or otherwise non-direct evidence wording' });
     } else if (!DIRECT_ITEM_SIGNAL_RE.test(attestationText)) {
       violations.push({ id: row.id, reason: 'terminal regulatory state lacks an affirmative item-specific direct read/search/verification signal' });
@@ -257,6 +258,14 @@ function runSelfTest() {
     .replace("Import-eligible for V2 (pending reviewer sign-off)", "Live Bookshelf check performed directly for this item in a later phase");
   if (!validate(plannedInNextAction, { checkFiles: false }).some((v) => /affirmative item-specific/i.test(v.reason))) {
     throw new Error('Regression fixture failed: NEXT_ACTION was incorrectly accepted as completed evidence.');
+  }
+
+  const negatedCheck = direct.replace(
+    "Live Bookshelf check performed directly for this item's tested claim.",
+    "This item was not checked directly against the current DGR."
+  );
+  if (!validate(negatedCheck, { checkFiles: false }).some((v) => /non-direct/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: negated direct check was mistaken for completion.');
   }
 
   const editionOnlyInNextAction = direct

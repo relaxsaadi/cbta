@@ -23,7 +23,7 @@ const IMPORT_CANDIDATES = 'docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.cs
 // the current status segment. DRAFT is deliberately handled separately: the
 // ordinary English word "draft" can appear in provenance/rationale prose and
 // must not by itself turn a FROZEN item into an unresolved status.
-const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED)\b/i;
+const UNRESOLVED_SOURCE_STATE = /\b(?:SOURCE\s+GAP|SOURCE\s+CONFLICT|PARTIALLY\s+CONFIRMED|SOURCE\s+REQUIRED|NOT\s+YET\s+VERIFIED|TIER[_ -]?A[_ -]?PROVENANCE[_ -]?UNRESOLVED|SOURCE[_ -]?GAP[_ -]?UNRESOLVED|DIRECT[_ -]?ITEM[_ -]?EVIDENCE[_ -]?REQUIRED)\b/i;
 const DRAFT_STATUS_STATE = /(?:^DRAFT\b|\b(?:OLD|NEW|CURRENT)\s+STATUS\s*:\s*DRAFT\b)/i;
 const UNRESOLVED_BUCKET = /^(?:GAP|CONFLICT|SOURCE\s+GAP|SOURCE\s+CONFLICT)\b/i;
 const RECONCILIATION_MARKER_RE = /(?:^|\r?\n)\s*\*\*Reconciliation\b/gi;
@@ -170,7 +170,7 @@ function findViolations(reconciliationText, importText) {
     importText,
     IMPORT_CANDIDATES,
     'kost_id',
-    ['fr_status', 'import_eligible'],
+    ['fr_status', 'import_eligible', 'blocker'],
   );
 
   const violations = [];
@@ -181,6 +181,14 @@ function findViolations(reconciliationText, importText) {
       continue;
     }
     if (eligibility !== 'YES') continue;
+
+    // A durable import BLOCKER is authoritative regardless of older FROZEN
+    // wording in FR_STATUS or the reconciliation CSV. Never promote by flipping
+    // IMPORT_ELIGIBLE alone while the blocker remains unresolved.
+    const blocker = valueFor(imports, importRow, 'blocker');
+    if (blocker) {
+      violations.push({ id: importRow.id, reason: 'IMPORT_ELIGIBLE=YES while import BLOCKER is non-empty' });
+    }
 
     const importFrStatus = valueFor(imports, importRow, 'fr_status');
     if (unresolvedCurrentState(importFrStatus)) {
@@ -225,12 +233,46 @@ function findViolations(reconciliationText, importText) {
 
 function runSelfTest() {
   const reconciliationHeader = 'KOST_Question_ID,Current_Individual_FR_Status_Bucket,Current_Individual_FR_Status_Full_Text,Final_Reconciled_Status';
-  const importHeader = 'KOST_ID,FR_STATUS,IMPORT_ELIGIBLE';
+  const importHeader = 'KOST_ID,FR_STATUS,IMPORT_ELIGIBLE,BLOCKER';
 
   const safeReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED",FROZEN\r\n`;
-  const safeImport = `${importHeader}\r\nQ-7.10-001,"FROZEN FR / SOURCE VERIFIED",YES\r\n`;
+  const safeImport = `${importHeader}\r\nQ-7.10-001,"FROZEN FR / SOURCE VERIFIED",YES,\r\n`;
   if (findViolations(safeReconciliation, safeImport).length !== 0) {
     throw new Error('Regression fixture failed: clean FROZEN import state was rejected.');
+  }
+
+  // Canonical provenance holds must veto import, even if a legacy
+  // reconciliation row is still stamped FROZEN.
+  const unresolvedImport = safeImport.replace(
+    '"FROZEN FR / SOURCE VERIFIED"',
+    '"FROZEN FR / SOURCE VERIFIED — TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED"',
+  );
+  if (!findViolations(safeReconciliation, unresolvedImport).some((v) => /current import FR_STATUS is unresolved/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: current Tier-A provenance hold in FR_STATUS was accepted.');
+  }
+
+  const unresolvedCurrent = safeReconciliation.replace(
+    '"FROZEN FR / SOURCE VERIFIED"',
+    '"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-10-24):** OLD STATUS: FROZEN FR / SOURCE VERIFIED. NEW STATUS: TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED"',
+  );
+  if (!findViolations(unresolvedCurrent, safeImport).some((v) => /reconciliation current FR status is unresolved/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: latest Tier-A provenance hold was hidden by historical FROZEN status.');
+  }
+
+  const explicitlyBlockedImport = safeImport.replace(
+    ',YES,\r\n',
+    ',YES,"TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED"\r\n',
+  );
+  if (!findViolations(safeReconciliation, explicitlyBlockedImport).some((v) => /import BLOCKER is non-empty/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: IMPORT_ELIGIBLE=YES ignored a canonical non-empty BLOCKER.');
+  }
+
+  const resolvedHistoricalProvenanceHold = safeReconciliation.replace(
+    '"FROZEN FR / SOURCE VERIFIED"',
+    '"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-10-24):** OLD STATUS: TIER_A_PROVENANCE_UNRESOLVED. NEW STATUS: FROZEN FR / SOURCE VERIFIED"',
+  );
+  if (findViolations(resolvedHistoricalProvenanceHold, safeImport).length !== 0) {
+    throw new Error('Regression fixture failed: a superseded historical Tier-A hold was treated as current.');
   }
 
   const conflictImport = safeImport.replace(
@@ -253,7 +295,7 @@ function runSelfTest() {
   }
 
   const historicalResolvedReconciliation = `${reconciliationHeader}\r\nQ-7.10-001,FROZEN,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — SOURCE REQUIRED for Tier A. NEW STATUS: FROZEN FR / SOURCE VERIFIED",FROZEN\r\n`;
-  const historicalResolvedImport = `${importHeader}\r\nQ-7.10-001,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-08-29):** OLD STATUS: STALE CITATION / SOURCE CONFLICT. NEW STATUS: FROZEN FR / SOURCE VERIFIED",YES\r\n`;
+  const historicalResolvedImport = `${importHeader}\r\nQ-7.10-001,"FROZEN FR / SOURCE VERIFIED.\n\n**Reconciliation (2026-08-29):** OLD STATUS: STALE CITATION / SOURCE CONFLICT. NEW STATUS: FROZEN FR / SOURCE VERIFIED",YES,\r\n`;
   if (findViolations(historicalResolvedReconciliation, historicalResolvedImport).length !== 0) {
     throw new Error('Regression fixture failed: resolved historical OLD STATUS prose was misclassified as current unresolved state.');
   }
@@ -292,12 +334,12 @@ function runSelfTest() {
     throw new Error('Regression fixture failed: explicitly superseded stale citation was misclassified as unresolved.');
   }
 
-  const heldImport = conflictImport.replace(',YES\r\n', ',NO\r\n');
+  const heldImport = conflictImport.replace(',YES,\r\n', ',NO,\r\n');
   if (findViolations(safeReconciliation, heldImport).length !== 0) {
     throw new Error('Regression fixture failed: truthful non-importable SOURCE CONFLICT state was rejected.');
   }
 
-  console.log('PASS: unresolved SOURCE GAP/CONFLICT current-state import regression fixtures');
+  console.log('PASS: unresolved source/provenance states and explicit BLOCKER import regression fixtures');
 }
 
 if (process.argv.includes('--test')) {
@@ -333,4 +375,4 @@ if (violations.length > 0) {
   process.exit(1);
 }
 
-console.log('PASS: no V2 import-eligible row carries an explicit unresolved current SOURCE GAP/CONFLICT state.');
+console.log('PASS: no V2 import-eligible row carries an explicit unresolved current source/provenance state or a non-empty BLOCKER.');

@@ -384,7 +384,7 @@ function isPositiveEnReviewState(value) {
 
 function runFrStatusMirrorRegressionFixtures() {
   const block = (id, status, note = "") =>
-    `### ${id} — fixture\n**FR status:** \`${status}\`\n${note}\n`;
+    `### ${id} — fixture\n**FR status:** ${status}\n${note}\n`;
   const strictFrozen = block("Q-7.2-001", "FROZEN FR / SOURCE VERIFIED");
   const sampledFrozen = block("Q-7.2-002", "FROZEN FR / SOURCE VERIFIED",
     "This item's own specific citation was not independently re-read.");

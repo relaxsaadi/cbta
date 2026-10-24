@@ -45,6 +45,21 @@ Use the frozen Stage 2A blueprint and 44-subtask competency matrix as the contro
 
 Exit evidence: source-controlled production bank meets the approved sitting/rotation requirements and has no unresolved critical source gaps for active questions.
 
+
+## Phase 2B — independent production-bank gates for Functions 7.2–7.10
+
+Repeat the source-to-question reconciliation separately for **each** of 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9 and 7.10. Completion of Function 7.1 is not evidence that another function is ready.
+
+1. Derive each function's leaf tasks and competency scope from **its own current official CBTA task table**; record edition/page/task-ID provenance. Never transfer Function 7.1's 44 leaves, weighting, question count, or sample questions.
+2. Reconcile the function-specific `docs/DGR_OFFICIAL_TASK_SET_7.x.md`, `docs/DGR_SOURCE_COMPETENCY_MATRIX_7.x.md`, `docs/DGR_STAGE2A_FUNCTION_7.x_BLUEPRINT.md`, `docs/DGR_PRODUCTION_BANK_7.x.md` and `docs/DGR_EN_REVIEW_PACKAGE_7.x.md` (substitute the exact function code for `7.x`). A file's existence is not evidence its content passed.
+3. For **each question and each material regulatory claim**, record direct licensed IATA DGR **67th Edition 2026** Tier-A evidence with precise section/table/appendix locator, current addenda and applicable State/operator variations. Keep licensed source content out of Git; record non-secret evidence locators only. Neither prior DGR editions nor courses, sample examinations, secondary guidance or cross-function answers substitute for direct Tier A.
+4. Classify unresolved items explicitly as `SOURCE GAP`, `SOURCE CONFLICT` or `TIER_A_PROVENANCE_UNRESOLVED`. A legacy `FROZEN`/source-verified database label, a reused generic citation, or a CI green result is not per-item evidence. Correct disputed answers only after verification; do not silently rewrite or promote them.
+5. Independently reconcile current **FR source-verification** state and the **EN bilingual technical-review** package, including status mirrors and wording changes. Preserve a traceable named qualified reviewer, reviewer-registry admission and real review date for each terminal review and final `APPROVED` transition.
+6. Gate imports and runtime exposure separately: `IMPORT_ELIGIBLE=NO` in a document or CSV does **not** establish that a question already present in a live Moodle/E-EXAM pool has been withdrawn. Verify actual published status with authorized read-only evidence before release.
+7. Record per-function totals for task coverage, drafted questions, current Tier-A evidence states, FR reviews, EN reviews, owner-qualified signoffs, import eligibility and outstanding exceptions; do not add overlapping exception counts.
+
+Exit evidence: **each** of Functions 7.2–7.10 has its own reconciled task set/matrix/blueprint/bank, directly supported current-edition per-item evidence, separate qualified FR and EN review, truthful approval/import status, and defensible coverage for its own planned sittings. Any missing critical evidence retains the function's `NOT READY` / pending state.
+
 ## Phase 3 — locate and audit the actual exam-platform code/runtime
 
 The current `relaxsaadi/cbta` repository may contain marketing/funnel code rather than the complete Moodle/E-EXAM runtime. Claude Code must inspect the local workspace/filesystem to locate the actual components used by:
@@ -143,7 +158,7 @@ Exit evidence: backup exists and restore path is proven, not merely described.
 Prepare a concise, evidence-based demonstration package:
 
 1. DGR 67e source state + Addendum 1 integrated.
-2. Function 7.1 competency → source → question → reviewer → exam traceability.
+2. Function-by-function (7.1–7.10) task → source/competency matrix → blueprint → question → FR/EN reviewer/date → exam/import traceability, with every unresolved SOURCE GAP/CONFLICT visible.
 3. Sample current-source-verified questions.
 4. RBAC/audit-trail demonstration.
 5. Real end-to-end test evidence clearly labeled as test data.
@@ -170,7 +185,7 @@ Before any declaration of readiness, produce `docs/PLATFORM_READINESS_REPORT.md`
 - status of every critical gate above;
 - evidence/commands/tests/URLs or artifacts used;
 - unresolved blockers;
-- exact content-review status (FR, EN, reviewer/date);
+- per-function 7.1–7.10 task/blueprint/coverage, Tier-A claim provenance, explicit source exceptions and exact content-review status (FR, EN, reviewer/date);
 - deployment and backup state;
 - final label: `READY`, `TECHNICALLY READY / REVIEW PENDING`, or `NOT READY`.
 

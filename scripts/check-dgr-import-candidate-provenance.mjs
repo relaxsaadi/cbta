@@ -114,8 +114,11 @@ function tableFromCsv(text, label, idHeader, requiredHeaders = []) {
     }
     const id = (values[idIndex] ?? '').trim();
     if (!id) throw new Error(`${label}: non-empty CSV row ${i + 1} is missing ${idHeader}`);
-    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/i.test(id)) {
-      throw new Error(`${label}: invalid question id at CSV row ${i + 1}: ${id}`);
+    // IDs are stable identifiers, not display strings. Allowing q-7.x and
+    // Q-7.x in the same ledger creates a case-alias that can evade exact-ID
+    // joins, duplicate detection, and reviewer provenance binding.
+    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/.test(id)) {
+      throw new Error(`${label}: invalid/non-canonical question id at CSV row ${i + 1}: ${id}`);
     }
 
     const record = { id, values, rowNumber: i + 1 };
@@ -544,6 +547,8 @@ function runSelfTest() {
     ['non-empty held import row missing ID', directReconciliation, ineligibleImport.replace('Q-7.3-040,7.3,', ',7.3,'), /missing kost_id/i],
     ['unquoted reconciliation quote', directReconciliation.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.3"BAD",'), eligibleImport, /unexpected quote inside unquoted CSV field/i],
     ['non-empty reconciliation row missing ID', directReconciliation.replace('Q-7.3-040,7.3,', ',7.3,'), eligibleImport, /missing kost_question_id/i],
+    ['non-canonical import ID alias', directReconciliation, eligibleImport.replace('Q-7.3-040,7.3,', 'q-7.3-040,7.3,'), /non-canonical question id/i],
+    ['non-canonical reconciliation ID alias', directReconciliation.replace('Q-7.3-040,7.3,', 'q-7.3-040,7.3,'), eligibleImport, /non-canonical question id/i],
   ];
   for (const [label, reconciliationFixture, importFixture, expected] of malformedCases) {
     let rejected = false;

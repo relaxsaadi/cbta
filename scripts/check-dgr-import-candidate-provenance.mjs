@@ -128,6 +128,13 @@ function hasMissingDirectEvidence(text) {
   return MISSING_DIRECT_EVIDENCE_PATTERNS.some((pattern) => pattern.test(text));
 }
 
+// Import and reconciliation must name the same controlled per-item DGR locator.
+// Normalize only presentation whitespace/case; different provisions cannot
+// silently inherit another row's evidence, even if both values are nonempty.
+function normalizedSourceReference(value) {
+  return String(value ?? '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
 function findViolations(reconciliationText, importText) {
   const reconciliation = tableFromCsv(
     reconciliationText,
@@ -238,6 +245,11 @@ function findViolations(reconciliationText, importText) {
     const reconciliationReference = valueFor(reconciliation, reconciliationRow, 'dgr_reference');
     if (!reconciliationReference) {
       violations.push({ id: importRow.id, reason: 'IMPORT_ELIGIBLE=YES but reconciliation DGR_Reference is missing' });
+    } else if (sourceReference && normalizedSourceReference(sourceReference) !== normalizedSourceReference(reconciliationReference)) {
+      violations.push({
+        id: importRow.id,
+        reason: 'IMPORT_ELIGIBLE=YES but SOURCE_REFERENCE differs from authoritative per-item reconciliation DGR_Reference',
+      });
     }
 
     const reconciliationFullTextRecoverable = valueFor(
@@ -310,6 +322,8 @@ function runSelfTest() {
   const wrongFunctionReconciliation = directReconciliation.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.4,');
   const legacyStatusHeader = directReconciliation.replace('Final_Reconciled_Status', 'Status');
   const missingSourceReferenceImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',,YES,YES,YES,');
+  const mismatchedSourceReferenceImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',§2.1.1,YES,YES,YES,');
+  const presentationOnlySourceReferenceImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',§9.6.1 ,YES,YES,YES,');
   const unrecoverableTextImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',§9.6.1,NO,YES,YES,');
   const unrecoverableAnswerImport = eligibleImport.replace(',§9.6.1,YES,YES,YES,', ',§9.6.1,YES,NO,YES,');
   const unrecoverableTextReconciliation = directReconciliation.replace(
@@ -365,6 +379,15 @@ function runSelfTest() {
   const missingSourceReference = findViolations(directReconciliation, missingSourceReferenceImport);
   if (!missingSourceReference.some((v) => v.id === 'Q-7.3-040' && /without SOURCE_REFERENCE/i.test(v.reason))) {
     throw new Error('Regression fixture failed: import-eligible row without source reference was not rejected.');
+  }
+
+  const mismatchedReference = findViolations(directReconciliation, mismatchedSourceReferenceImport);
+  if (!mismatchedReference.some((v) => v.id === 'Q-7.3-040' && /SOURCE_REFERENCE differs from authoritative/i.test(v.reason))) {
+    throw new Error('Regression fixture failed: a different nonempty DGR reference was accepted for import.');
+  }
+
+  if (findViolations(directReconciliation, presentationOnlySourceReferenceImport).length !== 0) {
+    throw new Error('Regression fixture failed: harmless source-reference presentation whitespace caused a false hold.');
   }
 
   const unrecoverableText = findViolations(directReconciliation, unrecoverableTextImport);

@@ -171,13 +171,23 @@ function findViolations(text) {
       /^FROZEN\b/i.test(statusBucket)
       || /^FROZEN\b/i.test(finalStatus)
       || /FROZEN FR \/ SOURCE VERIFIED/i.test(statusFull);
+    const claimsApproved =
+      /^APPROVED\b/i.test(statusBucket)
+      || /^APPROVED\b/i.test(finalStatus)
+      || /^APPROVED\b/i.test(statusFull);
+    const claimsSourceVerified =
+      /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(statusBucket)
+      || /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(finalStatus)
+      || /^(?:FR\s+)?SOURCE VERIFIED\b/i.test(statusFull);
     const claimsImportEligible = /Import-eligible for V2/i.test(nextAction);
     const claimsConfirmedGap =
-      /^GAP\b/i.test(statusBucket)
-      && /FR SOURCE GAP CONFIRMED/i.test([statusFull, finalStatus, reason].join('\n'));
+      /^FR SOURCE GAP CONFIRMED\b/i.test(statusFull)
+      || /^FR SOURCE GAP CONFIRMED\b/i.test(finalStatus)
+      || (/^GAP\b/i.test(statusBucket)
+        && /FR SOURCE GAP CONFIRMED/i.test([statusFull, finalStatus, reason].join('\n')));
 
-    if (missingDirectEvidence && (claimsFrozen || claimsImportEligible || claimsConfirmedGap)) {
-      violations.push({ id: row.id, claimsFrozen, claimsImportEligible, claimsConfirmedGap });
+    if (missingDirectEvidence && (claimsFrozen || claimsApproved || claimsSourceVerified || claimsImportEligible || claimsConfirmedGap)) {
+      violations.push({ id: row.id, claimsFrozen, claimsApproved, claimsSourceVerified, claimsImportEligible, claimsConfirmedGap });
     }
   }
 
@@ -233,6 +243,19 @@ function runSelfTest() {
   if (directConfirmedGapViolations.length !== 0) {
     throw new Error('Regression fixture failed: directly established SOURCE GAP was incorrectly rejected.');
   }
+  // Missing direct evidence cannot be masked by dropping FROZEN and
+  // import-eligible labels while retaining a different terminal state.
+  for (const state of ['APPROVED', 'SOURCE VERIFIED', 'FR SOURCE GAP CONFIRMED']) {
+    const altered = sampled
+      .replace(',,FROZEN,"FROZEN FR / SOURCE VERIFIED"', ',,DRAFT,"DRAFT — SOURCE REQUIRED"')
+      .replace(',FROZEN,"A representative sample', ',' + state + ',"A representative sample')
+      .replace('Import-eligible for V2 (pending reviewer sign-off)', 'Hold');
+    const flagged = findViolations(altered);
+    if (flagged.length !== 1 || flagged[0].id !== 'Q-7.8-047') {
+      throw new Error('Regression fixture failed: standalone ' + state + ' evaded missing-direct-evidence guard.');
+    }
+  }
+
   if (quotedBoundaryViolations.length !== 0) {
     throw new Error('Regression fixture failed: quoted multiline field containing Q-like text was misparsed as a new CSV row.');
   }
@@ -289,6 +312,8 @@ try {
       for (const v of provenance) {
         const claimedStates = [
           v.claimsFrozen ? 'FROZEN/source-verified' : null,
+          v.claimsApproved ? 'APPROVED' : null,
+          v.claimsSourceVerified ? 'SOURCE VERIFIED' : null,
           v.claimsImportEligible ? 'import-eligible' : null,
           v.claimsConfirmedGap ? 'FR SOURCE GAP CONFIRMED' : null,
         ].filter(Boolean).join(', ');

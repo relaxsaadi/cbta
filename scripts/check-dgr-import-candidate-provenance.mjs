@@ -155,13 +155,13 @@ function normalizedSourceReference(value) {
 // This checks ledger consistency, never regulatory truth or human approval.
 function leadingGovernanceState(value) {
   const text = String(value ?? '').trim().toUpperCase();
-  if (/^FROZEN FR\\s*\\/\\s*SOURCE VERIFIED\\b/.test(text)) return 'FROZEN';
-  if (/^DRAFT\\b/.test(text) || /^TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED\\b/.test(text)) return 'DRAFT';
-  if (/^FR SOURCE GAP CONFIRMED\\b/.test(text) || /^SOURCE GAP\\b/.test(text)) return 'SOURCE GAP';
-  if (/^STALE CITATION\\s*\\/\\s*SOURCE CONFLICT\\b/.test(text) || /^SOURCE CONFLICT\\b/.test(text)) return 'SOURCE CONFLICT';
-  if (/^PARTIALLY CONFIRMED\\b/.test(text)) return 'PARTIAL';
-  if (/^APPROVED\\b/.test(text)) return 'APPROVED';
-  if (/^SOURCE VERIFIED\\b/.test(text)) return 'SOURCE VERIFIED';
+  if (/^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/.test(text)) return 'FROZEN';
+  if (/^DRAFT\b/.test(text) || /^TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED\b/.test(text)) return 'DRAFT';
+  if (/^FR SOURCE GAP CONFIRMED\b/.test(text) || /^SOURCE GAP\b/.test(text)) return 'SOURCE GAP';
+  if (/^STALE CITATION\s*\/\s*SOURCE CONFLICT\b/.test(text) || /^SOURCE CONFLICT\b/.test(text)) return 'SOURCE CONFLICT';
+  if (/^PARTIALLY CONFIRMED\b/.test(text)) return 'PARTIAL';
+  if (/^APPROVED\b/.test(text)) return 'APPROVED';
+  if (/^SOURCE VERIFIED\b/.test(text)) return 'SOURCE VERIFIED';
   return '';
 }
 
@@ -465,7 +465,7 @@ function runSelfTest() {
     'UNKNOWN',
   );
   if (!findViolations(directReconciliation, missingHeldFrStatus).some((v) =>
-    v.id === 'Q-7.3-040' && /FR_STATUS \\(unclassified\\)/i.test(v.reason))) {
+    v.id === 'Q-7.3-040' && /FR_STATUS \(unclassified\)/i.test(v.reason))) {
     throw new Error('Regression fixture failed: unclassified held FR status evaded mirror enforcement.');
   }
 

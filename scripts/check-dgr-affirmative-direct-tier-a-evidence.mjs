@@ -129,8 +129,8 @@ function tableFromCsv(text, label) {
 
     const id = (values[idIndex] ?? '').trim();
     if (!id) throw new Error(`${label}: non-empty CSV row ${i + 1} is missing KOST_Question_ID`);
-    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/i.test(id)) {
-      throw new Error(`${label}: invalid question id at CSV row ${i + 1}: ${id}`);
+    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/.test(id)) {
+      throw new Error(`${label}: invalid/non-canonical question id at CSV row ${i + 1}: ${id}`);
     }
     if (seen.has(id)) throw new Error(`${label}: duplicate question id: ${id}`);
     seen.add(id);
@@ -327,6 +327,22 @@ function runSelfTest() {
     }
   }
 
+  // Independent Tier-A scanners must reject non-canonical ID aliases
+  // even when invoked without the separate controlled-CSV checker.
+  for (const [caseName, malformed, expectedError] of [
+    ['lowercase ID alias', direct.replace('Q-7.8-048,', 'q-7.8-048,'), /non-canonical question id/i],
+    ['duplicate canonical ID', direct + direct.split(/\r?\n/)[1] + '\r\n', /duplicate question id/i],
+  ]) {
+    let rejected = false;
+    try {
+      validate(malformed, { checkFiles: false });
+    } catch (error) {
+      rejected = expectedError.test(error.message);
+    }
+    if (!rejected) {
+      throw new Error('Regression fixture failed: ' + caseName + ' was not rejected by the independent Tier-A scanner.');
+    }
+  }
   console.log('PASS: affirmative per-item Tier-A evidence regression fixtures');
 }
 

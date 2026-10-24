@@ -3,7 +3,19 @@ import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
 
 describe("Admin user provisioning workflow atomicity (#46)", async () => {
-  before(() => setupTestDb());
+  // Initialize schema/roles before creating the test actor. Suite-definition
+  // code runs before node:test before() hooks, so an eager createUser()
+  // fails with "no such table: roles" and hides the actual rollback tests.
+  let actorId: number;
+  before(() => {
+    setupTestDb();
+    actorId = createUser({
+      username: "atomic.provision.admin",
+      password: "Test123!",
+      fullName: "Atomic Provision Admin",
+      role: "administrator",
+    });
+  });
 
   const { createUser, findUserByUsername, getRoleForUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");
@@ -12,12 +24,7 @@ describe("Admin user provisioning workflow atomicity (#46)", async () => {
   const { provisionPendingUserAtomically } = await import("../../lib/user-provisioning");
   const { getDb } = await import("../../lib/db");
 
-  const actorId = createUser({
-    username: "atomic.provision.admin",
-    password: "Test123!",
-    fullName: "Atomic Provision Admin",
-    role: "administrator",
-  });
+
 
   function scalar(sql: string, ...params: (string | number | bigint | null)[]): number {
     return (getDb().prepare(sql).get(...params) as { n: number }).n;

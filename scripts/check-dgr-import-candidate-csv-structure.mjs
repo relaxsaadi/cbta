@@ -93,6 +93,10 @@ function inspectCsv(text, label, idHeader) {
     return issues;
   }
 
+  // An ID must identify exactly one controlled row. CSV IDs are contractual,
+  // not case-folded display labels; reject aliases before a later parser can
+  // interpret the same question as two different records.
+  const seenQuestionIds = new Map();
   for (let i = 1; i < rows.length; i += 1) {
     const values = rows[i];
     const csvRow = i + 1;
@@ -107,8 +111,15 @@ function inspectCsv(text, label, idHeader) {
       continue;
     }
 
-    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/i.test(id)) {
-      issues.push(`${label}: CSV row ${csvRow} has invalid question id ${id}`);
+    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/.test(id)) {
+      issues.push(`${label}: CSV row ${csvRow} has invalid/non-canonical question id ${id}; expected uppercase Q-7.x-NNN`);
+    }
+    const canonical = id.toUpperCase();
+    const firstRow = seenQuestionIds.get(canonical);
+    if (firstRow !== undefined) {
+      issues.push(`${label}: duplicate question id ${canonical} at CSV rows ${firstRow} and ${csvRow} (case-insensitive collision)`);
+    } else {
+      seenQuestionIds.set(canonical, csvRow);
     }
   }
 
@@ -123,6 +134,9 @@ function runSelfTest() {
   const longRow = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,YES,EXTRA\r\n';
   const quoteInsideUnquoted = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,YE"S"\r\n';
   const trailingAfterQuoted = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,"YES"NO\r\n';
+  const repeatedId = good + 'Q-7.3-040,7.3,NO\r\n';
+  const caseAlias = good + 'q-7.3-040,7.3,NO\r\n';
+  const singleLowercase = good.replace('Q-7.3-040', 'q-7.3-040');
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');
@@ -130,6 +144,16 @@ function runSelfTest() {
 
   if (inspectCsv(goodQuoted, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid quoted CSV field was rejected.');
+  }
+
+  if (!inspectCsv(repeatedId, 'fixture.csv', 'kost_id').some((issue) => /duplicate question id Q-7\.3-040/i.test(issue))) {
+    throw new Error('Regression fixture failed: repeated question ID was accepted.');
+  }
+  if (!inspectCsv(caseAlias, 'fixture.csv', 'kost_id').some((issue) => /case-insensitive collision/i.test(issue))) {
+    throw new Error('Regression fixture failed: differently cased duplicate question ID was accepted.');
+  }
+  if (!inspectCsv(singleLowercase, 'fixture.csv', 'kost_id').some((issue) => /non-canonical question id/i.test(issue))) {
+    throw new Error('Regression fixture failed: lowercase question ID alias was accepted.');
   }
 
   if (!inspectCsv(blankId, 'fixture.csv', 'kost_id').some((issue) => /kost_id is blank/i.test(issue))) {

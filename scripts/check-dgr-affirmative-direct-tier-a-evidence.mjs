@@ -173,7 +173,11 @@ function hasCurrentDgr67Edition2026(text) {
 function hasConcreteDgrReference(value) {
   const text = String(value ?? '').trim();
   if (!text || /^(?:n\/?a|none|—|-)$/i.test(text)) return false;
-  return /§\s*\d|\b(?:table|tableau|appendix|appendice|figure|fig\.?|page|p\.)\b|\b[1-9]\d?(?:\.\d+){1,5}\b/i.test(text);
+  // A locator label alone (e.g. "Table", "Appendix", "page") is not a
+  // concrete DGR citation. Require an actual section, numbered table/figure,
+  // identified appendix, numbered page, or packing-instruction identifier.
+  // Bare numbered DGR sections remain accepted for older per-item records.
+  return /(?:§\s*\d+(?:\.\d+){0,5}(?:\([a-z0-9]+\))?|\b(?:table|tableau|tables|tableaux)\s+\d+(?:[.\-][a-z0-9]+)*|\b(?:appendix|appendice)\s+(?:[A-Z](?:\.\d+)*|[1-9]\d?(?:\.\d+)*)\b|\b(?:figure|fig\.?|page|p\.)\s*\d+(?:\.\d+)*\b|\bPI\s*\d{3}\b|\b[1-9]\d?(?:\.\d+){1,5}\b)/i.test(text);
 }
 
 function validate(text, { checkFiles = true } = {}) {
@@ -273,6 +277,21 @@ function runSelfTest() {
     .replace("Import-eligible for V2 (pending reviewer sign-off)", "Recheck against IATA DGR 67th Edition 2026");
   if (!validate(editionOnlyInNextAction, { checkFiles: false }).some((v) => /67th Edition 2026 binding/i.test(v.reason))) {
     throw new Error('Regression fixture failed: NEXT_ACTION alone supplied the current-edition binding.');
+  }
+
+  // A nonempty reference is not necessarily a useful locator. Older checks
+  // accepted generic nouns without section/table/page identifiers.
+  for (const placeholder of ['Table', 'Tableau', 'Appendix', 'Appendix pending', 'Appendix unknown', 'Figure', 'page', 'fig.', 'unverified placeholder']) {
+    const bad = direct.replace('YES,§9.6.1,docs/example.md', `YES,${placeholder},docs/example.md`);
+    if (!validate(bad, { checkFiles: false }).some((v) => /concrete per-item DGR_Reference/i.test(v.reason))) {
+      throw new Error(`Regression fixture failed: bare locator label "${placeholder}" accepted.`);
+    }
+  }
+  for (const locator of ['§9.6.1', 'Tableau 9.5.A', 'Table 4.2', 'Appendix A', 'page 42', 'PI 965', '9.6.1']) {
+    const verifiedShape = direct.replace('YES,§9.6.1,docs/example.md', `YES,${locator},docs/example.md`);
+    if (validate(verifiedShape, { checkFiles: false }).some((v) => /concrete per-item DGR_Reference/i.test(v.reason))) {
+      throw new Error(`Regression fixture failed: concrete locator "${locator}" rejected.`);
+    }
   }
 
   const ambiguous = validate(ambiguousBatch, { checkFiles: false });

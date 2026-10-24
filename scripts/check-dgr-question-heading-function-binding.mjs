@@ -210,21 +210,64 @@ function recordStructuralQuestion({ structural, index, expectedFn, errors, ids }
   }
 }
 
+function updateHtmlCommentState(line, initiallyInComment) {
+  let inComment = initiallyInComment;
+  let offset = 0;
+  while (offset < line.length) {
+    if (inComment) {
+      const close = line.indexOf("-->", offset);
+      if (close === -1) break;
+      inComment = false;
+      offset = close + 3;
+    } else {
+      const open = line.indexOf("<!--", offset);
+      if (open === -1) break;
+      inComment = true;
+      offset = open + 4;
+    }
+  }
+  return inComment;
+}
+
 function inspectArtifact(text, expectedFn, artifactLabel) {
   const errors = [];
   const ids = [];
   const lines = text.split(/\r?\n/);
+  let fence = null;
+  let inHtmlComment = false;
 
   for (let index = 0; index < lines.length; index += 1) {
-    const setext = structuralSetextQuestionHeading(lines[index], lines[index + 1]);
-    if (setext) {
-      recordStructuralQuestion({ structural: setext, index, expectedFn, errors, ids });
-      continue;
+    const line = lines[index];
+    // The readiness extractor sees ATX-looking lines even when Markdown does
+    // not render them as questions. Reject such phantom population members.
+    const hiddenContext = fence ? "fenced Markdown code block" : inHtmlComment ? "HTML comment" : null;
+    const setext = structuralSetextQuestionHeading(line, lines[index + 1]);
+    const structural = setext ?? structuralQuestionHeading(line);
+    if (structural) {
+      recordStructuralQuestion({ structural, index, expectedFn, errors, ids });
+      if (hiddenContext) {
+        errors.push(
+          `line ${index + 1}: structural question heading is inside a ${hiddenContext}; hidden question headings cannot satisfy readiness`,
+        );
+      }
     }
 
-    const structural = structuralQuestionHeading(lines[index]);
-    if (!structural) continue;
-    recordStructuralQuestion({ structural, index, expectedFn, errors, ids });
+    // Fences and comments must be tracked separately: an HTML comment marker
+    // printed inside a code fence is not a real comment, and vice versa.
+    const delimiter = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+    if (fence) {
+      if (delimiter && delimiter[1][0] === fence.marker &&
+          delimiter[1].length >= fence.length && /^[ \t]*$/.test(delimiter[2])) {
+        fence = null;
+      }
+    } else {
+      const previouslyInHtmlComment = inHtmlComment;
+      inHtmlComment = updateHtmlCommentState(line, inHtmlComment);
+      if (!previouslyInHtmlComment && !inHtmlComment && delimiter &&
+          (delimiter[1][0] !== "`" || !delimiter[2].includes("`"))) {
+        fence = { marker: delimiter[1][0], length: delimiter[1].length };
+      }
+    }
   }
 
   for (const { structural, index } of structuralHtmlQuestionHeadings(text)) {
@@ -441,6 +484,35 @@ function runRegressionFixtures() {
     "HTML-character-reference ATX question heading",
     characterReferenceAtxHeading.errors.some((error) => error.includes("malformed structural")),
     "HTML character references inside a rendered leading question ID could make an ATX item disappear from readiness without failing closed",
+  );
+
+  // A line resembling an ATX item inside a fenced example or HTML comment
+  // is counted by the readiness regex but is NOT a rendered question. It must
+  // block promotion rather than silently inflate the bank/EN population.
+  for (const [label, lines, expectedFn, context] of [
+    ["backtick-fenced-question", ["```md", "## Q-7.4-099 — hidden example", "```"], "7.4", "fenced Markdown code block"],
+    ["tilde-fenced-question", ["~~~~text", "### Q-7.6-099 — hidden example", "~~~~"], "7.6", "fenced Markdown code block"],
+    ["html-commented-question", ["<!--", "## Q-7.8-099 — hidden comment", "-->"], "7.8", "HTML comment"],
+  ]) {
+    const hidden = inspectArtifact(lines.join("\n"), expectedFn, label);
+    assertFixture(
+      label,
+      hidden.errors.some((error) => error.includes(context) && error.includes("cannot satisfy readiness")),
+      "a hidden pseudo-question was counted without any fail-closed error",
+    );
+  }
+
+  const ordinaryDocumentation = inspectArtifact([
+    "```md",
+    "This is a code sample, not a question item.",
+    "```",
+    "<!-- Documentation note -->",
+    "## Q-7.9-001 — actual question after the example",
+  ].join("\n"), "7.9", "ordinary-documentation");
+  assertFixture(
+    "ordinary documentation outside question headings",
+    ordinaryDocumentation.errors.length === 0 && ordinaryDocumentation.ids.length === 1,
+    "ordinary non-question documentation or a subsequent valid item was incorrectly rejected",
   );
 
   const narrativeForeign = inspectArtifact([

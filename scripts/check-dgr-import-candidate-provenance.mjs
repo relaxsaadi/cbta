@@ -155,7 +155,7 @@ function normalizedSourceReference(value) {
 // This checks ledger consistency, never regulatory truth or human approval.
 function leadingGovernanceState(value) {
   const text = String(value ?? '').trim().toUpperCase();
-  if (/^FROZEN FR\s*\/\s*SOURCE VERIFIED\b/.test(text)) return 'FROZEN';
+  if (/^FROZEN\b/.test(text)) return 'FROZEN';
   if (/^DRAFT\b/.test(text) || /^TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED\b/.test(text)) return 'DRAFT';
   if (/^FR SOURCE GAP CONFIRMED\b/.test(text) || /^SOURCE GAP\b/.test(text)) return 'SOURCE GAP';
   if (/^STALE CITATION\s*\/\s*SOURCE CONFLICT\b/.test(text) || /^SOURCE CONFLICT\b/.test(text)) return 'SOURCE CONFLICT';

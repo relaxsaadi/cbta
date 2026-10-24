@@ -28,6 +28,7 @@ function parseCsv(text, label) {
   let row = [];
   let field = '';
   let inQuotes = false;
+  let quotedFieldClosed = false;
 
   for (let i = 0; i < text.length; i += 1) {
     const ch = text[i];
@@ -39,6 +40,7 @@ function parseCsv(text, label) {
           i += 1;
         } else {
           inQuotes = false;
+          quotedFieldClosed = true;
         }
       } else {
         field += ch;
@@ -47,23 +49,31 @@ function parseCsv(text, label) {
     }
 
     if (ch === '"') {
+      if (field.length > 0 || quotedFieldClosed) {
+        throw new Error(`${label}: unexpected quote inside unquoted CSV field at character ${i + 1}`);
+      }
       inQuotes = true;
     } else if (ch === ',') {
       row.push(field);
       field = '';
+      quotedFieldClosed = false;
     } else if (ch === '\r' || ch === '\n') {
       if (ch === '\r' && text[i + 1] === '\n') i += 1;
       row.push(field);
       field = '';
+      quotedFieldClosed = false;
       if (row.some((value) => value.length > 0)) rows.push(row);
       row = [];
     } else {
+      if (quotedFieldClosed) {
+        throw new Error(`${label}: unexpected character after closing CSV quote at character ${i + 1}`);
+      }
       field += ch;
     }
   }
 
   if (inQuotes) throw new Error(`${label}: unterminated quoted CSV field`);
-  if (field.length > 0 || row.length > 0) {
+  if (field.length > 0 || row.length > 0 || quotedFieldClosed) {
     row.push(field);
     if (row.some((value) => value.length > 0)) rows.push(row);
   }
@@ -99,8 +109,11 @@ function tableFromCsv(text, label, idHeader, requiredHeaders = []) {
 
   for (let i = 1; i < parsed.length; i += 1) {
     const values = parsed[i];
+    if (values.length !== headers.length) {
+      throw new Error(`${label}: CSV row ${i + 1} has ${values.length} column(s), expected ${headers.length}`);
+    }
     const id = (values[idIndex] ?? '').trim();
-    if (!id) continue;
+    if (!id) throw new Error(`${label}: non-empty CSV row ${i + 1} is missing ${idHeader}`);
     if (!/^Q-7\.(?:10|[1-9])-\d{3}$/i.test(id)) {
       throw new Error(`${label}: invalid question id at CSV row ${i + 1}: ${id}`);
     }
@@ -423,6 +436,30 @@ function runSelfTest() {
   }
   if (!schemaRejected) {
     throw new Error('Regression fixture failed: reconciliation schema without Final_Reconciled_Status was not rejected.');
+  }
+
+  // Every non-empty row must have the declared columns and a question ID.
+  // Otherwise a malformed held row may be silently ignored and a shifted
+  // import candidate may be interpreted against the wrong evidence fields.
+  const malformedCases = [
+    ['unquoted import quote', directReconciliation, eligibleImport.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.3"BAD",'), /unexpected quote inside unquoted CSV field/i],
+    ['characters after import quote', directReconciliation, eligibleImport.replace('retained."', 'retained."BAD'), /unexpected character after closing CSV quote/i],
+    ['import row with extra column', directReconciliation, ineligibleImport.replace('NO,"direct evidence hold"', 'NO,"direct evidence hold",EXTRA'), /column.*expected/i],
+    ['import row with missing column', directReconciliation, ineligibleImport.replace('NO,"direct evidence hold"', 'NO'), /column.*expected/i],
+    ['non-empty held import row missing ID', directReconciliation, ineligibleImport.replace('Q-7.3-040,7.3,', ',7.3,'), /missing kost_id/i],
+    ['unquoted reconciliation quote', directReconciliation.replace('Q-7.3-040,7.3,', 'Q-7.3-040,7.3"BAD",'), eligibleImport, /unexpected quote inside unquoted CSV field/i],
+    ['non-empty reconciliation row missing ID', directReconciliation.replace('Q-7.3-040,7.3,', ',7.3,'), eligibleImport, /missing kost_question_id/i],
+  ];
+  for (const [label, reconciliationFixture, importFixture, expected] of malformedCases) {
+    let rejected = false;
+    try {
+      findViolations(reconciliationFixture, importFixture);
+    } catch (error) {
+      rejected = expected.test(error.message);
+    }
+    if (!rejected) {
+      throw new Error(`Regression fixture failed: ${label} was not rejected structurally.`);
+    }
   }
 
   console.log('PASS: V2 import-candidate provenance regression fixtures');

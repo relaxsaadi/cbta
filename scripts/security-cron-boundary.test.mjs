@@ -94,8 +94,10 @@ test('RELEASE HOLD: browser-triggered POST must not demand the cron-only Bearer 
   const offenders = []
   for (const filename of manualDashboardPostRoutes) {
     const code = source(filename)
-    const match = code.match(/export async function POST\([^)]*\)\s*\{([\s\S]{0,550})/)
-    if (!match || /process\.env\.CRON_SECRET|\`Bearer \$\{cronSecret\}\`/.test(match[1])) {
+    const start = code.indexOf('export async function POST(')
+    const getStart = start >= 0 ? code.indexOf('export async function GET(', start) : -1
+    const postOnly = start >= 0 ? code.slice(start, getStart >= 0 ? getStart : undefined) : ''
+    if (!postOnly || /process\.env\.CRON_SECRET|\`Bearer \$\{cronSecret\}\`/.test(postOnly)) {
       offenders.push(filename)
     }
   }

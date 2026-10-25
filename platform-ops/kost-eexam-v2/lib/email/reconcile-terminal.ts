@@ -37,6 +37,8 @@ export interface TerminalNotificationReconcileReport {
   submissionDispatches: number;
   resultDispatches: number;
   orchestrationFailures: number;
+  /** Attempts still lacking one or more logical notification rows after this pass. */
+  unresolved: number;
   wrapped: boolean;
 }
 
@@ -104,7 +106,7 @@ function missingAfter(cursor: number, since: string, adminEmail: string | null, 
 }
 
 export async function reconcileTerminalNotifications(limit = 25): Promise<TerminalNotificationReconcileReport> {
-  const empty = { enabled: false, candidates: 0, submissionDispatches: 0, resultDispatches: 0, orchestrationFailures: 0, wrapped: false };
+  const empty = { enabled: false, candidates: 0, submissionDispatches: 0, resultDispatches: 0, orchestrationFailures: 0, unresolved: 0, wrapped: false };
   const since = configuredCutover();
   if (since === null) return empty;
   if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) throw new Error("Invalid bounded reconciliation limit.");
@@ -125,6 +127,7 @@ export async function reconcileTerminalNotifications(limit = 25): Promise<Termin
   let submissionDispatches = 0;
   let resultDispatches = 0;
   let orchestrationFailures = 0;
+  let unresolved = 0;
   for (const row of rows) {
     if (row.missing_candidate || row.missing_manager || row.missing_admin) {
       try {
@@ -144,7 +147,13 @@ export async function reconcileTerminalNotifications(limit = 25): Promise<Termin
         orchestrationFailures++;
       }
     }
+    // The notification functions intentionally swallow pre-outbox failures.
+    // Re-read the authoritative keys rather than misreporting dispatch calls
+    // as successfully queued/delivered email.
+    const stillMissing = missingAfter(row.attempt_id - 1, since, adminEmail, resultEnabled, 1)
+      .some((candidate) => candidate.attempt_id === row.attempt_id);
+    if (stillMissing) unresolved++;
     storeCursor(row.attempt_id);
   }
-  return { enabled: true, candidates: rows.length, submissionDispatches, resultDispatches, orchestrationFailures, wrapped };
+  return { enabled: true, candidates: rows.length, submissionDispatches, resultDispatches, orchestrationFailures, unresolved, wrapped };
 }

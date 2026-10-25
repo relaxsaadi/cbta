@@ -210,7 +210,7 @@ test("#38: independent auto-submit before answer writer leaves no post-submit an
   assert.deepEqual(await worker("autosubmit", f.attemptId, f.candidateId, f.questionId), { ok: true });
   const after = stored(f);
   assert.equal(after.attempt.status, "auto_submitted");
-  assert.equal(after.answer, undefined);
+  assert.equal(after.answer?.answer_json, null, "unanswered question must remain unanswered after automatic grading");
   assert.equal(after.result?.raw_score, 0);
   assert.equal((await worker("answer", f.attemptId, f.candidateId, f.questionId)).ok, false);
   assert.deepEqual(stored(f), after);

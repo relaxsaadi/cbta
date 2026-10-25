@@ -271,3 +271,78 @@ test("#40: expiry sweep returns only first-time transitions, never already-final
   assert.equal(second.some((x) => x.attemptId === f.attemptId), false);
   assert.equal(stored(f).attempt.status, "auto_submitted");
 });
+
+
+type SubmissionReport =
+  | { ok: true; transitioned?: boolean; status?: string; sweptIds?: number[] }
+  | { ok: false; error: string };
+
+function submissionWorker(mode: "manual" | "sweep", attemptId: number, candidateId: number): Promise<SubmissionReport> {
+  const moduleUrl = pathToFileURL(resolve(import.meta.dirname, "../../lib/attempts.ts")).href;
+  const script = `
+    import { submitAttempt, sweepExpiredAttempts } from ${JSON.stringify(moduleUrl)};
+    const [mode, attemptId, candidateId] = JSON.parse(process.env.KOST_TEST_SUBMISSION_ARGS);
+    try {
+      const outcome = mode === "sweep"
+        ? { sweptIds: sweepExpiredAttempts().map((r) => r.attemptId) }
+        : submitAttempt(attemptId, candidateId, { auto: false });
+      process.stdout.write(JSON.stringify({ ok: true, ...outcome }));
+    } catch (error) {
+      process.stdout.write(JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    }
+  `;
+  return new Promise((resolvePromise, rejectPromise) => {
+    const child = spawn(process.execPath, ["--import", "tsx", "--input-type=module", "--eval", script], {
+      cwd: resolve(import.meta.dirname, "../.."),
+      env: { ...process.env, DB_PATH: process.env.DB_PATH,
+        KOST_TEST_SUBMISSION_ARGS: JSON.stringify([mode, attemptId, candidateId]) },
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = ""; let stderr = "";
+    child.stdout.setEncoding("utf8");
+    child.stderr.setEncoding("utf8");
+    child.stdout.on("data", (chunk) => { stdout += chunk; });
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("error", rejectPromise);
+    child.on("close", (code) => {
+      if (code !== 0) { rejectPromise(new Error(`submission worker failed ${code}: ${stderr}`)); return; }
+      try { resolvePromise(JSON.parse(stdout) as SubmissionReport); }
+      catch (error) { rejectPromise(new Error(`invalid submission worker output ${stdout}: ${String(error)} ${stderr}`)); }
+    });
+  });
+}
+
+test("#40: two independent manual submit processes report exactly one transition winner", async () => {
+  const f = await fixture();
+  const [a, b] = await Promise.all([
+    submissionWorker("manual", f.attemptId, f.candidateId),
+    submissionWorker("manual", f.attemptId, f.candidateId),
+  ]);
+  assert.equal(a.ok, true, JSON.stringify(a));
+  assert.equal(b.ok, true, JSON.stringify(b));
+  if (!a.ok || !b.ok) return;
+  assert.equal(Number(a.transitioned) + Number(b.transitioned), 1);
+  assert.equal(a.status, "submitted");
+  assert.equal(b.status, "submitted");
+  const audit = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_submit'`).get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 1);
+  assert.equal(stored(f).attempt.status, "submitted");
+});
+
+test("#40: expired candidate submit racing cron counts only the actual transition winner", async () => {
+  const f = await fixture();
+  f.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`).run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  const [manual, sweep] = await Promise.all([
+    submissionWorker("manual", f.attemptId, f.candidateId),
+    submissionWorker("sweep", f.attemptId, f.candidateId),
+  ]);
+  assert.equal(manual.ok, true, JSON.stringify(manual));
+  assert.equal(sweep.ok, true, JSON.stringify(sweep));
+  if (!manual.ok || !sweep.ok) return;
+  const cronWon = sweep.sweptIds?.includes(f.attemptId) ?? false;
+  assert.equal(Number(manual.transitioned) + Number(cronWon), 1,
+    "a stale sweep SELECT must never claim another caller's transition");
+  assert.equal(stored(f).attempt.status, "auto_submitted");
+  const audit = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 1);
+});

@@ -523,7 +523,7 @@ function runRegressionFixtures() {
     ["backtick-fenced-question", ["```md", "## Q-7.4-099 — hidden example", "```"], "7.4", "fenced Markdown code block"],
     ["tilde-fenced-question", ["~~~~text", "### Q-7.6-099 — hidden example", "~~~~"], "7.6", "fenced Markdown code block"],
     ["html-commented-question", ["<!--", "## Q-7.8-099 — hidden comment", "-->"], "7.8", "HTML comment"],
-    ["pre-html-block-question", ["<pre class="sample">", "## Q-7.3-099 — hidden raw HTML example", "</pre>"], "7.3", "raw HTML <pre> block"],
+    ["pre-html-block-question", ['<pre class="sample">', "## Q-7.3-099 — hidden raw HTML example", "</pre>"], "7.3", "raw HTML <pre> block"],
     ["script-html-block-question", ["<script>", "## Q-7.5-099 — hidden script text", "</script>"], "7.5", "raw HTML <script> block"],
     ["style-html-block-question", ["<style>", "## Q-7.6-098 — hidden style text", "</style>"], "7.6", "raw HTML <style> block"],
     ["textarea-html-block-question", ["<textarea>", "## Q-7.9-099 — hidden textarea text", "</textarea>"], "7.9", "raw HTML <textarea> block"],

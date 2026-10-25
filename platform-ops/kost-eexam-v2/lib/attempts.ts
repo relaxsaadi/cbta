@@ -1,4 +1,5 @@
 import { getDb, transaction, nowIso } from "./db";
+import type { DatabaseSync } from "node:sqlite";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 import { getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
@@ -417,64 +418,72 @@ export function getQuestionTestPreview(questionId: number): AttemptQuestionView 
 /** Revérifie l'expiration côté serveur à CHAQUE appel (§8 : le timer ne
  * dépend jamais uniquement du navigateur). Si expiré, auto-soumet
  * immédiatement au lieu d'accepter l'action demandée. */
-function assertNotExpiredOrAutoSubmit(attempt: AttemptRow): void {
-  if (attempt.status !== "in_progress") throw new AttemptError("Cette tentative n'est plus en cours.");
-  if (new Date(attempt.expires_at).getTime() < Date.now()) {
-    submitAttempt(attempt.id, attempt.candidate_user_id, { auto: true });
-    throw new AttemptError("Le temps imparti est écoulé — la tentative a été soumise automatiquement.");
-  }
+/** #38: all candidate writes must decide authorization and mutate within
+ * the same BEGIN IMMEDIATE as submission/grading (#37). A waiting writer
+ * must re-read the terminal status after the submission winner commits.
+ * Expiry auto-submission is executed in the owner's transaction and its
+ * error is returned only AFTER commit (throwing inside would roll it back).
+ */
+function mutateWritableAttempt(
+  attemptId: number,
+  candidateUserId: number,
+  mutation: (db: DatabaseSync) => void,
+): void {
+  let autoSubmitted = false;
+  transaction((db) => {
+    const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
+    if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
+    if (attempt.status !== "in_progress") throw new AttemptError("Cette tentative n'est plus en cours.");
+
+    const expiry = Date.parse(attempt.expires_at);
+    if (!Number.isFinite(expiry)) throw new AttemptError("Date d'expiration de tentative invalide.");
+    if (expiry < Date.now()) {
+      submitAttemptInTransaction(db, attemptId, candidateUserId, { auto: true });
+      autoSubmitted = true;
+      return;
+    }
+    mutation(db);
+  });
+  if (autoSubmitted) throw new AttemptError("Le temps imparti est écoulé — la tentative a été soumise automatiquement.");
 }
 
 export function saveAnswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, answerKeys: string[]): void {
-  const attempt = getAttempt(attemptId);
-  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-  assertNotExpiredOrAutoSubmit(attempt);
-
-  const owns = getDb().prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
-  if (!owns) throw new AttemptError("Question hors de cette tentative.");
-
-  getDb()
-    .prepare(
+  mutateWritableAttempt(attemptId, candidateUserId, (db) => {
+    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
+    if (!owns) throw new AttemptError("Question hors de cette tentative.");
+    db.prepare(
       `INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at)
        VALUES (?, ?, ?, ?)
        ON CONFLICT(attempt_question_id) DO UPDATE SET answer_json = excluded.answer_json, answered_at = excluded.answered_at`
-    )
-    .run(attemptId, attemptQuestionId, JSON.stringify(answerKeys), nowIso());
+    ).run(attemptId, attemptQuestionId, JSON.stringify(answerKeys), nowIso());
+  });
 }
 
-/** Autosave POUR UNE SOUS-QUESTION de scénario (mission "MISSION FINALE
- * CIBLÉE", 2026-08-30, §9) — seul point d'écriture qui MERGE dans
- * `answer_json` (Record<subquestionId, string[]>) plutôt que de
- * l'écraser : une ligne attempt_answers = UN scénario entier, jamais une
- * ligne par sous-question (voir lib/questions.ts::ScenarioAnswerSpec pour
- * la justification complète du choix d'embarquement). Mêmes garanties que
- * saveAnswer() ci-dessus (propriété de la tentative, non-expiration). */
+/** Scenario subanswers merge under the SAME serialized writer boundary.
+ * Two writes to different subquestions cannot both read stale JSON and
+ * overwrite each other; submission cannot grade half a concurrent merge. */
 export function saveScenarioSubanswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, subquestionId: string, answerKeys: string[]): void {
-  const attempt = getAttempt(attemptId);
-  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-  assertNotExpiredOrAutoSubmit(attempt);
-
-  const owns = getDb().prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
-  if (!owns) throw new AttemptError("Question hors de cette tentative.");
-
-  const existing = getDb().prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
-  const merged: Record<string, string[]> = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
-  merged[subquestionId] = answerKeys;
-
-  getDb()
-    .prepare(
+  mutateWritableAttempt(attemptId, candidateUserId, (db) => {
+    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
+    if (!owns) throw new AttemptError("Question hors de cette tentative.");
+    const existing = db.prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
+    const merged: Record<string, string[]> = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
+    merged[subquestionId] = answerKeys;
+    db.prepare(
       `INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at)
        VALUES (?, ?, ?, ?)
        ON CONFLICT(attempt_question_id) DO UPDATE SET answer_json = excluded.answer_json, answered_at = excluded.answered_at`
-    )
-    .run(attemptId, attemptQuestionId, JSON.stringify(merged), nowIso());
+    ).run(attemptId, attemptQuestionId, JSON.stringify(merged), nowIso());
+  });
 }
 
 export function toggleMark(attemptId: number, candidateUserId: number, attemptQuestionId: number, marked: boolean): void {
-  const attempt = getAttempt(attemptId);
-  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-  assertNotExpiredOrAutoSubmit(attempt);
-  getDb().prepare(`UPDATE attempt_questions SET marked_for_review = ? WHERE id = ? AND attempt_id = ?`).run(marked ? 1 : 0, attemptQuestionId, attemptId);
+  mutateWritableAttempt(attemptId, candidateUserId, (db) => {
+    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
+    if (!owns) throw new AttemptError("Question hors de cette tentative.");
+    db.prepare(`UPDATE attempt_questions SET marked_for_review = ? WHERE id = ? AND attempt_id = ?`)
+      .run(marked ? 1 : 0, attemptQuestionId, attemptId);
+  });
 }
 
 /** Finalisation atomique (#37): un statut terminal n'est jamais commité
@@ -482,8 +491,8 @@ export function toggleMark(attemptId: number, candidateUserId: number, attemptQu
  * la tentative IN_PROGRESS et donc retentable après résolution de l'erreur.
  * Les résultats de correction manuelle déjà existants ne sont jamais renotés.
  */
-export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
-  transaction((db) => {
+/** Internal finalizer. Caller MUST own the SQLite write transaction. */
+function submitAttemptInTransaction(db: DatabaseSync, attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
     const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
     if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
 
@@ -510,7 +519,11 @@ export function submitAttempt(attemptId: number, candidateUserId: number, opts: 
     // gradeAttemptInTransaction() partage ce BEGIN IMMEDIATE : une erreur
     // de parsing, SQL, résultat ou audit annule aussi statut + audit submit.
     gradeAttemptInTransaction(db, attemptId);
-  });
+}
+
+/** Public boundary for explicit submission and cron sweeps. */
+export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
+  transaction((db) => submitAttemptInTransaction(db, attemptId, candidateUserId, opts));
 }
 
 /** Balayage périodique — auto-soumet toute tentative dont le temps est

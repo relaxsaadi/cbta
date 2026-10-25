@@ -27,6 +27,10 @@ const FUNCTIONS: Array<{ code: string; label: string }> = Array.from({ length: 1
 // d'idempotence que le reste de ce fichier — §28, aucune migration
 // destructive).
 const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = [
+  // #326 — capture the original From identity only for NEW outbox rows.
+  // Historical rows remain NULL and must never be reconstructed by guesswork.
+  { table: "notification_log", column: "sender_name", ddl: "ALTER TABLE notification_log ADD COLUMN sender_name TEXT" },
+  { table: "notification_log", column: "sender_address", ddl: "ALTER TABLE notification_log ADD COLUMN sender_address TEXT" },
   { table: "incidents", column: "group_id", ddl: "ALTER TABLE incidents ADD COLUMN group_id INTEGER REFERENCES groups(id)" },
   {
     table: "assessment_question_snapshots",

@@ -87,5 +87,20 @@ test("grading rollback: malformed later answer cannot leave earlier question par
   assert.equal(gradedEvents.n, 0, "no false success audit should survive failed grading");
 
   const status = db.prepare(`SELECT status FROM attempts WHERE id = ?`).get(attempt.id) as { status: string };
-  assert.equal(status.status, "submitted", "submission status transition is separate and remains recorded");
+  assert.equal(status.status, "in_progress", "failed grading must also roll back submission status");
+  assert.equal(db.prepare(`SELECT 1 FROM audit_logs WHERE action = 'attempt_submit' AND target_id = ?`).get(attempt.id), undefined);
+
+  // Repair only the synthetic test payload, then retry the same attempt.
+  db.prepare(`UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?`)
+    .run('["A"]', questions[1]!.id);
+  submitAttempt(attempt.id, candidateId);
+  submitAttempt(attempt.id, candidateId); // delayed network retry must be a no-op
+
+  assert.equal((db.prepare(`SELECT status FROM attempts WHERE id = ?`).get(attempt.id) as { status: string }).status, "submitted");
+  assert.equal((db.prepare(`SELECT grading_state FROM results WHERE attempt_id = ?`).get(attempt.id) as { grading_state: string }).grading_state, "COMPLETE");
+  for (const action of ["attempt_submit", "attempt_graded"]) {
+    const entry = db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE action = ? AND target_id = ?`)
+      .get(action, attempt.id) as { n: number };
+    assert.equal(entry.n, 1, `exactly one ${action} audit after repair and retry`);
+  }
 });

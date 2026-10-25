@@ -6,7 +6,7 @@
 
 Previously, an initial notification could use `getSenderExam()` or `getSenderSecurity()`, but the retry worker sent *every* FAILED message as `getSenderNotifications()`. The outbox persisted the subject/body/idempotency key but not the original From identity. This changes the retry payload for the same provider idempotency key and can misrepresent security and exam correspondence.
 
-New enqueues persist `sender_name` and `sender_address` beside the outbox record **before** provider invocation, after defensive single-header validation. `processOutboxRetries()` selects only records whose original sender exactly matches a *currently configured* approved identity, and uses that stored identity for provider dispatch. New nullable columns are added idempotently to existing databases via `scripts/migrate.ts`. There is **no historical sender backfill**.
+New enqueues persist `sender_name`, `sender_address`, and the original nullable `reply_to_address` beside the outbox record **before** provider invocation, after defensive single-header validation. Reply-To is also frozen because re-reading a changed environment variable on retry would mutate the provider request under an existing idempotency key. `processOutboxRetries()` selects only records whose original sender exactly matches a *currently configured* approved identity, and uses that stored identity for provider dispatch. New nullable columns are added idempotently to existing databases via `scripts/migrate.ts`. There is **no historical sender backfill**.
 
 Legacy FAILED records with missing original sender data and previously configured/retired senders **remain FAILED on hold**, and are excluded in SQL so they cannot starve eligible newer records. Operators must not fabricate original From values or auto-replay them. The current retry result does not count these held records: use a read-only preflight, for example:
 
@@ -22,7 +22,7 @@ Record an audited, authorized disposition with recipient/privacy considerations 
 
 ## Validation and unresolved release gates
 
-Synthetic tests verify distinct Exam, Security and Notifications sender identities through the retry provider request, quarantining of legacy sender-less rows, and config-rotation holds. Require exact-head lint/TypeScript/unit/Playwright/build/backup-and-restore/Moodle-console checks and an independent staging drill before acceptance; CI does not establish provider idempotency behavior in real Resend.
+Synthetic tests verify distinct Exam, Security and Notifications sender identities, original Reply-To surviving configuration rotation, actual enqueue persistence, rejection of From header injection, quarantining of legacy sender-less rows, and config-rotation holds. Require exact-head lint/TypeScript/unit/Playwright/build/backup-and-restore/Moodle-console checks and an independent staging drill before acceptance; CI does not establish provider idempotency behavior in real Resend.
 
 This stacked draft fix **does not** install or authorize a retry runner (#99), resolve ambiguous SENDING/timeout recoveries, repair missing submission intents (#225), close signed webhook evidence reconciliation (#323), or establish independent security/backup/deployment readiness. Keep #326 open until current configuration and migration evidence are independently reviewed. The rollout plan must decide how to monitor held senders and avoid stale transactional mail.
 

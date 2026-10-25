@@ -242,6 +242,20 @@ function updateRawHtmlBlockState(line, activeTag) {
   return new RegExp(`</${tag}\\s*>`, "i").test(line.slice(open[0].length)) ? null : tag;
 }
 
+// CommonMark HTML block type 6: block tags suppress Markdown parsing
+// until the next blank line, even when the first line closes the HTML tag.
+// The readiness extractor's ATX regex is unaware of this boundary.
+const blankTerminatedHtmlTagNames = new Set(
+  "address article aside base basefont blockquote body caption center col colgroup dd details dialog dir div dl dt fieldset figcaption figure footer form frame frameset h1 h2 h3 h4 h5 h6 head header hr html iframe legend li link main menu menuitem nav noframes ol optgroup option p param section source summary table tbody td tfoot th thead title tr track ul".split(" "),
+);
+
+function blankTerminatedHtmlBlockTag(line) {
+  const opener = line.match(/^ {0,3}<\/?([A-Za-z][A-Za-z0-9-]*)(?=[ \t/>]|$)/);
+  if (!opener) return null;
+  const tag = opener[1].toLowerCase();
+  return blankTerminatedHtmlTagNames.has(tag) ? tag : null;
+}
+
 function inspectArtifact(text, expectedFn, artifactLabel) {
   const errors = [];
   const ids = [];
@@ -249,6 +263,7 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
   let fence = null;
   let inHtmlComment = false;
   let rawHtmlBlock = null;
+  let blankTerminatedHtmlBlock = null;
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
@@ -260,7 +275,9 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
         ? "HTML comment"
         : rawHtmlBlock
           ? `raw HTML <${rawHtmlBlock}> block`
-          : null;
+          : blankTerminatedHtmlBlock
+            ? `raw HTML <${blankTerminatedHtmlBlock}> block (blank-line terminated)`
+            : null;
     const setext = structuralSetextQuestionHeading(line, lines[index + 1]);
     const structural = setext ?? structuralQuestionHeading(line);
     if (structural) {
@@ -277,6 +294,10 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
     // count as a bank question. Do not parse fences/comments inside raw HTML.
     if (rawHtmlBlock) {
       rawHtmlBlock = updateRawHtmlBlockState(line, rawHtmlBlock);
+      continue;
+    }
+    if (blankTerminatedHtmlBlock) {
+      if (line.trim() === "") blankTerminatedHtmlBlock = null;
       continue;
     }
 
@@ -296,6 +317,7 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
         fence = { marker: delimiter[1][0], length: delimiter[1].length };
       } else if (!previouslyInHtmlComment && !inHtmlComment) {
         rawHtmlBlock = updateRawHtmlBlockState(line, null);
+        if (!rawHtmlBlock) blankTerminatedHtmlBlock = blankTerminatedHtmlBlockTag(line);
       }
     }
   }
@@ -535,6 +557,39 @@ function runRegressionFixtures() {
       "a hidden pseudo-question was counted without any fail-closed error",
     );
   }
+
+  // CommonMark type-6 raw HTML blocks end on the next blank line, not
+  // on a closing tag. HTML examples must not inflate the question count.
+  for (const [label, lines, expectedFn, context] of [
+    ["div-html-phantom", ['<div class="sample">', "## Q-7.2-099 — HTML-only example", "</div>"], "7.2", "raw HTML <div> block"],
+    ["table-html-phantom", ["<table><tr><td>", "### Q-7.7-099 — HTML-only example", "</td></tr></table>"], "7.7", "raw HTML <table> block"],
+    ["closing-html-tag-phantom", ["</section>", "## Q-7.10-099 — HTML-only example"], "7.10", "raw HTML <section> block"],
+    ["single-line-html-phantom", ["<div></div>", "## Q-7.9-099 — HTML-only example"], "7.9", "raw HTML <div> block"],
+    ["partial-html-tag-phantom", ["<div class", "## Q-7.5-099 — HTML-only example"], "7.5", "raw HTML <div> block"],
+  ]) {
+    const hidden = inspectArtifact(lines.join("\n"), expectedFn, label);
+    assertFixture(
+      label,
+      hidden.errors.some((error) => error.includes(context) && error.includes("cannot satisfy readiness")),
+      "CommonMark type-6 HTML swallowed an ATX-looking item without a fail-closed error",
+    );
+  }
+  const blankBoundary = inspectArtifact([
+    "<div>", "ordinary HTML", "", "## Q-7.4-001 — real question after blank boundary",
+  ].join("\n"), "7.4", "type-6-boundary");
+  assertFixture(
+    "type-6-boundary",
+    blankBoundary.errors.length === 0 && blankBoundary.ids.length === 1,
+    "blank line failed to terminate a type-6 HTML block",
+  );
+  const fenceHtmlExample = inspectArtifact([
+    "~~~html", "<div>", "~~~", "## Q-7.6-001 — real question outside fence",
+  ].join("\n"), "7.6", "html-tag-inside-fence");
+  assertFixture(
+    "html-tag-inside-fence",
+    fenceHtmlExample.errors.length === 0 && fenceHtmlExample.ids.length === 1,
+    "an HTML tag printed in a code fence incorrectly opened a type-6 block",
+  );
 
   const ordinaryDocumentation = inspectArtifact([
     "```md",

@@ -4,6 +4,7 @@ import { audit } from "@/lib/audit";
 import { getDb } from "@/lib/db";
 import { notifyResultAvailableForAttempt } from "@/lib/email/notify-result";
 import { notifySubmissionEvents } from "@/lib/email/notify-submission";
+import { reconcileTerminalNotifications } from "@/lib/email/reconcile-terminal";
 
 // Filet de sécurité pour le chronomètre serveur (§8) : auto-soumet toute
 // tentative expirée même si aucun candidat/membre du staff n'a consulté une
@@ -38,5 +39,10 @@ export async function POST(request: Request) {
       await notifyResultAvailableForAttempt(attemptId);
     }
   }
-  return NextResponse.json({ swept: swept.length });
+  // #225: terminal attempts that were committed before a process crash or
+  // pre-outbox template/configuration failure must be reconsidered on later
+  // authenticated sweeps. Cutover is explicitly opt-in and bounded; the
+  // existing notification idempotency keys guard logical duplicates.
+  const notificationReconciliation = await reconcileTerminalNotifications();
+  return NextResponse.json({ swept: swept.length, notificationReconciliation });
 }

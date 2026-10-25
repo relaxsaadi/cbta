@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
 import { getDb } from "../../lib/db";
 import { getSenderExam, getSenderNotifications, getSenderSecurity } from "../../lib/email/config";
-import { processOutboxRetries } from "../../lib/email/send";
+import { processOutboxRetries, queueAndSendEmail } from "../../lib/email/send";
 
 let db: ReturnType<typeof getDb>;
 const oldEnv: Record<string, string | undefined> = {};
@@ -86,4 +86,34 @@ test("#326: changed sender configuration holds old FAILED message instead of gue
   assert.equal(sentFrom.length, 0);
   assert.equal((db.prepare("SELECT status FROM notification_log WHERE id = ?").get(retired) as { status: string }).status,
     "FAILED");
+});
+
+test("#326: real enqueue persists original From identity before dispatch; injected headers fail closed", async () => {
+  process.env.EMAIL_MODE = "log"; // no provider activity
+  const sender = getSenderSecurity();
+  const params = {
+    eventType: "PASSWORD_CHANGED" as const,
+    idempotencyKey: "sender-provenance-enqueue-326",
+    recipientEmail: "sender-provenance-new@example.invalid",
+    userId: null,
+    tenant: { companyId: null, companyName: null },
+    sender,
+    rendered: { templateId: "synthetic-test", templateVersion: "v1",
+      subject: "Synthetic only", html: "<p>synthetic only</p>", text: "synthetic only" },
+  };
+  const result = await queueAndSendEmail(params);
+  assert.equal(result.status, "SUPPRESSED");
+  const stored = db.prepare("SELECT sender_name, sender_address, status FROM notification_log WHERE id = ?")
+    .get(result.notificationId) as { sender_name: string; sender_address: string; status: string };
+  assert.equal(stored.sender_name, sender.name);
+  assert.equal(stored.sender_address, sender.address);
+  assert.equal(stored.status, "SUPPRESSED");
+
+  const beforeCount = (db.prepare("SELECT COUNT(*) AS n FROM notification_log").get() as { n: number }).n;
+  await assert.rejects(() => queueAndSendEmail({
+    ...params, idempotencyKey: "sender-provenance-header-injection",
+    sender: { ...sender, name: "Invalid\\r\\nBcc: external@example.invalid".replaceAll("\\r", "\r").replaceAll("\\n", "\n") },
+  }), /Invalid configured sender identity/);
+  assert.equal((db.prepare("SELECT COUNT(*) AS n FROM notification_log").get() as { n: number }).n,
+    beforeCount, "invalid sender may not create an outbox record");
 });

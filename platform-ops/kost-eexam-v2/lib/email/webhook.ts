@@ -37,7 +37,7 @@ export interface ProviderWebhookEventEvidence {
 
 export interface WebhookApplyResult {
   applied: boolean;
-  reason?: "unknown_message_id" | "unhandled_event_type" | "stale_or_duplicate_event" | "invalid_event_evidence";
+  reason?: "unknown_message_id" | "deferred_unmatched" | "unhandled_event_type" | "stale_or_duplicate_event" | "invalid_event_evidence";
 }
 
 export type CanonicalProviderOutcome = "SENT" | "DELAYED" | "DELIVERED" | "FAILED" | "BOUNCED" | "COMPLAINED";
@@ -244,19 +244,125 @@ function applyWebhookEventToSnapshot(params: {
  * domaine historiques et les appels internes antérieurs ; la route publique
  * Resend l'exige désormais systématiquement.
  */
+// Safety ceiling. When full, the handler returns a retryable HTTP error
+// rather than acknowledging a verified event it cannot retain. Unmatched
+// provider identities need explicit operator disposition, never auto-resend.
+const MAX_UNMATCHED_VERIFIED_EVENTS = 2_000;
+const MAX_PROVIDER_EVENT_ID_LENGTH = 200;
+const MAX_PROVIDER_MESSAGE_ID_LENGTH = 256;
+
+interface NotificationForProvider {
+  id: number;
+  event_type: string;
+}
+
+function applyVerifiedEventInTransaction(
+  notification: NotificationForProvider,
+  eventType: string,
+  providerMessageId: string,
+  evidence: ProviderWebhookEventEvidence,
+  receivedAt: string
+): WebhookApplyResult {
+  if (providerEventAlreadyRecorded(notification.id, evidence.providerEventId)) {
+    return { applied: false, reason: "stale_or_duplicate_event" };
+  }
+  recordProviderEvent({
+    notificationId: notification.id,
+    providerMessageId,
+    eventType,
+    evidence,
+    receivedAt,
+  });
+  // Snapshot, suppression list and business audit are part of the same
+  // transaction as the immutable provider evidence.
+  applyWebhookEventToSnapshot({
+    notificationId: notification.id,
+    notificationEventType: notification.event_type,
+    eventType,
+    eventAt: evidence.providerCreatedAt,
+  });
+  return { applied: true };
+}
+
+/**
+ * Call ONLY after a successful provider API response containing its message
+ * ID. The ID linkage, SENT snapshot, replay of earlier signed events, and
+ * removal from the pending inbox commit atomically under BEGIN IMMEDIATE.
+ * A crash cannot strand already-acknowledged early events between linkage
+ * and replay. The caller must hold SENDING, not retry, on failure because
+ * provider acceptance may already have happened.
+ */
+export function finalizeResendAcceptedSend(notificationId: number, providerMessageId: string): void {
+  if (!providerMessageId || providerMessageId.length > MAX_PROVIDER_MESSAGE_ID_LENGTH) {
+    throw new Error("Provider acceptance missing a valid message identity");
+  }
+  const db = getDb();
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    const notification = db.prepare(
+      `SELECT id, event_type, status FROM notification_log WHERE id = ?`
+    ).get(notificationId) as (NotificationForProvider & { status: string }) | undefined;
+    if (!notification || notification.status !== "SENDING") {
+      throw new Error("Expected an in-flight notification for provider finalization");
+    }
+    const conflict = db.prepare(
+      `SELECT id FROM notification_log WHERE provider_message_id = ? AND id != ? LIMIT 1`
+    ).get(providerMessageId, notificationId);
+    if (conflict) throw new Error("Provider message identity already linked to another notification");
+
+    db.prepare(
+      `UPDATE notification_log
+       SET status = 'SENT', provider_message_id = ?, sent_at = ?,
+           rendered_html = NULL, rendered_text = NULL
+       WHERE id = ? AND status = 'SENDING'`
+    ).run(providerMessageId, nowIso(), notificationId);
+
+    const pending = db.prepare(
+      `SELECT provider_event_id, event_type, provider_created_at, received_at
+       FROM resend_pending_webhook_events
+       WHERE provider_message_id = ?
+       ORDER BY received_at ASC, provider_event_id ASC`
+    ).all(providerMessageId) as {
+      provider_event_id: string;
+      event_type: string;
+      provider_created_at: string;
+      received_at: string;
+    }[];
+
+    for (const event of pending) {
+      applyVerifiedEventInTransaction(
+        notification,
+        event.event_type,
+        providerMessageId,
+        { providerEventId: event.provider_event_id, providerCreatedAt: event.provider_created_at },
+        event.received_at
+      );
+      db.prepare(`DELETE FROM resend_pending_webhook_events WHERE provider_event_id = ?`).run(event.provider_event_id);
+    }
+
+    db.exec("COMMIT");
+  } catch (error) {
+    try { db.exec("ROLLBACK"); } catch { /* Preserve original error. */ }
+    throw error;
+  }
+}
+
+/** Signed, timestamp-validated request only. Unknown provider IDs are
+ * retained as compact verified evidence, not treated as delivered mail.
+ * Legacy internal callers without evidence keep their historical behavior.
+ */
 export function applyWebhookEvent(
   eventType: string,
   providerMessageId: string,
   evidence?: ProviderWebhookEventEvidence
 ): WebhookApplyResult {
   const db = getDb();
-  const notification = db.prepare(`SELECT id, event_type FROM notification_log WHERE provider_message_id = ?`).get(providerMessageId) as
-    | { id: number; event_type: string }
-    | undefined;
-  if (!notification) return { applied: false, reason: "unknown_message_id" };
-  if (!HANDLED_EVENT_TYPES.has(eventType)) return { applied: false, reason: "unhandled_event_type" };
-
   if (!evidence) {
+    const notification = db.prepare(
+      `SELECT id, event_type FROM notification_log WHERE provider_message_id = ?`
+    ).get(providerMessageId) as NotificationForProvider | undefined;
+    if (!notification) return { applied: false, reason: "unknown_message_id" };
+    if (!HANDLED_EVENT_TYPES.has(eventType)) return { applied: false, reason: "unhandled_event_type" };
     return applyWebhookEventToSnapshot({
       notificationId: notification.id,
       notificationEventType: notification.event_type,
@@ -265,47 +371,72 @@ export function applyWebhookEvent(
     });
   }
 
+  if (!HANDLED_EVENT_TYPES.has(eventType)) return { applied: false, reason: "unhandled_event_type" };
   const providerEventId = evidence.providerEventId.trim();
   const providerCreatedAt = normalizeProviderEventTimestamp(evidence.providerCreatedAt);
-  if (!providerEventId || !providerCreatedAt) {
-    return { applied: false, reason: "invalid_event_evidence" };
-  }
+  if (
+    !providerEventId ||
+    providerEventId.length > MAX_PROVIDER_EVENT_ID_LENGTH ||
+    !providerMessageId ||
+    providerMessageId.length > MAX_PROVIDER_MESSAGE_ID_LENGTH ||
+    !providerCreatedAt
+  ) return { applied: false, reason: "invalid_event_evidence" };
 
   db.exec("BEGIN IMMEDIATE");
   try {
-    if (providerEventAlreadyRecorded(notification.id, providerEventId)) {
+    const notification = db.prepare(
+      `SELECT id, event_type FROM notification_log WHERE provider_message_id = ?`
+    ).get(providerMessageId) as NotificationForProvider | undefined;
+
+    if (!notification) {
+      const existing = db.prepare(
+        `SELECT provider_message_id, event_type, provider_created_at
+         FROM resend_pending_webhook_events WHERE provider_event_id = ?`
+      ).get(providerEventId) as {
+        provider_message_id: string;
+        event_type: string;
+        provider_created_at: string;
+      } | undefined;
+
+      if (existing) {
+        const consistent = existing.provider_message_id === providerMessageId &&
+          existing.event_type === eventType && existing.provider_created_at === providerCreatedAt;
+        db.exec("COMMIT");
+        return consistent
+          ? { applied: false, reason: "deferred_unmatched" }
+          : { applied: false, reason: "invalid_event_evidence" };
+      }
+
+      const count = db.prepare(
+        `SELECT COUNT(*) AS n FROM resend_pending_webhook_events`
+      ).get() as { n: number };
+      if (count.n >= MAX_UNMATCHED_VERIFIED_EVENTS) {
+        // Caller returns 503; never ACK an event whose evidence was not saved.
+        throw new Error("Verified provider event inbox capacity reached");
+      }
+      db.prepare(
+        `INSERT INTO resend_pending_webhook_events
+           (provider_event_id, provider_message_id, event_type, provider_created_at, received_at)
+         VALUES (?, ?, ?, ?, ?)`
+      ).run(providerEventId, providerMessageId, eventType, providerCreatedAt, nowIso());
       db.exec("COMMIT");
-      return { applied: false, reason: "stale_or_duplicate_event" };
+      return { applied: false, reason: "deferred_unmatched" };
     }
 
-    const receivedAt = nowIso();
-    recordProviderEvent({
-      notificationId: notification.id,
-      providerMessageId,
-      eventType,
-      evidence: { providerEventId, providerCreatedAt },
-      receivedAt,
-    });
-
-    // Même si le snapshot est déjà terminal, la nouvelle preuve fournisseur
-    // vient d'être durablement enregistrée : l'événement est donc bien
-    // "applied" au sens de la route et sera visible dans l'historique UI.
-    applyWebhookEventToSnapshot({
-      notificationId: notification.id,
-      notificationEventType: notification.event_type,
-      eventType,
-      eventAt: providerCreatedAt,
-    });
-
+    const result = applyVerifiedEventInTransaction(
+      notification, eventType, providerMessageId,
+      { providerEventId, providerCreatedAt }, nowIso()
+    );
+    // Idempotent recovery if a signed event was already parked and this
+    // message ID became linked by a prior process or authorized DB repair.
+    db.prepare(
+      `DELETE FROM resend_pending_webhook_events
+       WHERE provider_event_id = ? AND provider_message_id = ? AND event_type = ?`
+    ).run(providerEventId, providerMessageId, eventType);
     db.exec("COMMIT");
-    return { applied: true };
+    return result;
   } catch (error) {
-    try {
-      db.exec("ROLLBACK");
-    } catch {
-      // Conserver l'erreur d'origine ; la base remontera elle-même toute
-      // impossibilité de rollback dans ses diagnostics serveur.
-    }
+    try { db.exec("ROLLBACK"); } catch { /* Preserve original error. */ }
     throw error;
   }
 }

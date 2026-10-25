@@ -346,3 +346,30 @@ test("#40: expired candidate submit racing cron counts only the actual transitio
   const audit = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(f.attemptId) as { n: number };
   assert.equal(audit.n, 1);
 });
+
+
+test("#40: timeout audit provenance separates server cron actor from candidate click", async () => {
+  const { submitAttempt, sweepExpiredAttempts } = await import("../../lib/attempts");
+  const candidateTriggered = await fixture();
+  candidateTriggered.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`)
+    .run(new Date(Date.now() - 30_000).toISOString(), candidateTriggered.attemptId);
+  const outcome = submitAttempt(candidateTriggered.attemptId, candidateTriggered.candidateId, { auto: false });
+  assert.equal(outcome.status, "auto_submitted");
+  const candidateAudit = candidateTriggered.db.prepare(`SELECT actor_user_id, actor_role, metadata_json FROM audit_logs
+    WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(candidateTriggered.attemptId) as
+    { actor_user_id: number | null; actor_role: string | null; metadata_json: string };
+  assert.equal(candidateAudit.actor_user_id, candidateTriggered.candidateId);
+  assert.equal(candidateAudit.actor_role, "candidate");
+  assert.equal(JSON.parse(candidateAudit.metadata_json).trigger, "candidate");
+
+  const cronTriggered = await fixture();
+  cronTriggered.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`)
+    .run(new Date(Date.now() - 30_000).toISOString(), cronTriggered.attemptId);
+  assert.ok(sweepExpiredAttempts().some((x) => x.attemptId === cronTriggered.attemptId));
+  const cronAudit = cronTriggered.db.prepare(`SELECT actor_user_id, actor_role, metadata_json FROM audit_logs
+    WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(cronTriggered.attemptId) as
+    { actor_user_id: number | null; actor_role: string | null; metadata_json: string };
+  assert.equal(cronAudit.actor_user_id, null);
+  assert.equal(cronAudit.actor_role, null);
+  assert.equal(JSON.parse(cronAudit.metadata_json).trigger, "expiry_sweep");
+});

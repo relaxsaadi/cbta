@@ -222,3 +222,40 @@ test("#225: invalid cutover timestamps fail closed without emitting any message"
     process.env.EXAM_NOTIFICATION_RECONCILE_SINCE_UTC = prior;
   }
 });
+
+test("#225: a failed old pre-outbox event is revisited despite continuous newer terminal arrivals", async () => {
+  const { reconcileTerminalNotifications } = await import("../../lib/email/reconcile-terminal");
+  // Clear earlier independent test cases before exercising a one-item scan.
+  for (let i = 0; i < 3; i++) await reconcileTerminalNotifications(100);
+  const old = await submittedFixture();
+  delete process.env.APP_BASE_URL;
+  try {
+    const failed = await reconcileTerminalNotifications(1);
+    assert.equal(failed.unresolved, 1, "the first missing-key dispatch must fail before outbox");
+    assert.equal(failed.backlogMissing, true, "an authoritative full-scope backlog flag remains set");
+    assert.equal(notificationRows(old).length, 0);
+  } finally {
+    process.env.APP_BASE_URL = "https://test.kostacademy.invalid";
+  }
+
+  // Every invocation is preceded by a NEWER committed terminal attempt.
+  // The earlier unbounded forward cursor would always find the new attempt
+  // and could skip the old failed notification forever.
+  let retriedOld = false;
+  let processedNew = false;
+  for (let i = 0; i < 8; i++) {
+    const newer = await submittedFixture();
+    await reconcileTerminalNotifications(1);
+    retriedOld ||= notificationRows(old).length === 4;
+    processedNew ||= notificationRows(newer).length === 4;
+  }
+  assert.equal(retriedOld, true, "fixed high-water pass must revisit the old failed event");
+  assert.equal(processedNew, true, "rechecking old gaps must not halt work on newer attempts");
+  assert.equal(notificationRows(old).length, 4, "logical event keys are never duplicated");
+
+  // After draining the bounded backlog, the distinct global missing-key flag
+  // must be false; per-pass unresolved=0 alone would not prove this.
+  for (let i = 0; i < 3; i++) await reconcileTerminalNotifications(100);
+  const verified = await reconcileTerminalNotifications(100);
+  assert.equal(verified.backlogMissing, false);
+});

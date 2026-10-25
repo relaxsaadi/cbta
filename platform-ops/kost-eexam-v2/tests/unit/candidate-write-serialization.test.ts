@@ -196,6 +196,8 @@ test("#38: expired candidate autosave commits automatic submission/grade before 
 test("#38: independent answer writer before auto-submit is graded and becomes immutable", async () => {
   const f = await fixture();
   assert.deepEqual(await worker("answer", f.attemptId, f.candidateId, f.questionId), { ok: true });
+  // Auto-finalization reason must be justified by the *server* expiry clock.
+  f.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`).run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
   assert.deepEqual(await worker("autosubmit", f.attemptId, f.candidateId, f.questionId), { ok: true });
   const after = stored(f);
   assert.equal(after.attempt.status, "auto_submitted");
@@ -205,8 +207,9 @@ test("#38: independent answer writer before auto-submit is graded and becomes im
   assert.deepEqual(stored(f), after, "late autosave must not change the auto-submitted result");
 });
 
-test("#38: independent auto-submit before answer writer leaves no post-submit answer", async () => {
+test("#38: independent expired auto-submit before answer writer leaves no post-submit answer", async () => {
   const f = await fixture();
+  f.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`).run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
   assert.deepEqual(await worker("autosubmit", f.attemptId, f.candidateId, f.questionId), { ok: true });
   const after = stored(f);
   assert.equal(after.attempt.status, "auto_submitted");
@@ -216,17 +219,55 @@ test("#38: independent auto-submit before answer writer leaves no post-submit an
   assert.deepEqual(stored(f), after);
 });
 
-test("#38: concurrent independent autosave and auto-submit grade the exact serialized winner", async () => {
+test("#38/#40: concurrently expired autosave and auto-submit never accept a late candidate answer", async () => {
   const f = await fixture();
+  f.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`).run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
   const outcomes = await Promise.all([
     worker("answer", f.attemptId, f.candidateId, f.questionId),
     worker("autosubmit", f.attemptId, f.candidateId, f.questionId),
   ]);
-  assert.equal(outcomes[1]?.ok, true, JSON.stringify(outcomes));
+  assert.equal(outcomes[0]?.ok, false, "expired candidate write must be rejected even if it triggers finalization");
+  assert.equal(outcomes[1]?.ok, true);
   const rows = stored(f);
   assert.equal(rows.attempt.status, "auto_submitted");
-  assert.ok(rows.result);
-  const answerCommitted = rows.answer?.answer_json === '["A"]';
-  assert.equal(outcomes[0]?.ok, answerCommitted);
-  assert.equal(rows.result?.raw_score, answerCommitted ? 1 : 0);
+  assert.equal(rows.answer?.answer_json, null);
+  assert.equal(rows.result?.raw_score, 0);
+  const audits = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(f.attemptId) as { n: number };
+  assert.equal(audits.n, 1, "only one authoritative auto-submit event");
+});
+
+test("#40: forged candidate auto=true before server expiry is a voluntary submit, with a single winner", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  const first = submitAttempt(f.attemptId, f.candidateId, { auto: true });
+  assert.deepEqual(first, { attemptId: f.attemptId, status: "submitted", transitioned: true });
+  const retry = submitAttempt(f.attemptId, f.candidateId, { auto: true });
+  assert.deepEqual(retry, { attemptId: f.attemptId, status: "submitted", transitioned: false });
+  assert.equal(stored(f).attempt.status, "submitted");
+  const manual = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_submit'`).get(f.attemptId) as { n: number };
+  const auto = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(f.attemptId) as { n: number };
+  assert.equal(manual.n, 1);
+  assert.equal(auto.n, 0);
+});
+
+test("#40: manual auto=false submitted after server expiry is authoritatively auto-submitted", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  f.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`).run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  const first = submitAttempt(f.attemptId, f.candidateId, { auto: false });
+  assert.deepEqual(first, { attemptId: f.attemptId, status: "auto_submitted", transitioned: true });
+  assert.equal(stored(f).attempt.status, "auto_submitted");
+  const audit = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 1);
+});
+
+test("#40: expiry sweep returns only first-time transitions, never already-finalized rows", async () => {
+  const f = await fixture();
+  const { sweepExpiredAttempts } = await import("../../lib/attempts");
+  f.db.prepare(`UPDATE attempts SET expires_at = ? WHERE id = ?`).run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  const first = sweepExpiredAttempts();
+  assert.ok(first.some((x) => x.attemptId === f.attemptId && x.candidateUserId === f.candidateId));
+  const second = sweepExpiredAttempts();
+  assert.equal(second.some((x) => x.attemptId === f.attemptId), false);
+  assert.equal(stored(f).attempt.status, "auto_submitted");
 });

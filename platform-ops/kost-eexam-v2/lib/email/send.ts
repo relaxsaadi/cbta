@@ -16,6 +16,7 @@
 // justification (module de domaine, doit rester testable via node:test).
 import { getDb, nowIso } from "../db";
 import { getResendClient } from "./client";
+import { finalizeResendAcceptedSend } from "./webhook";
 import { getEmailMode, getAllowedRecipients, isResendApiKeyConfigured, getReplyTo, type EmailSenderIdentity } from "./config";
 import type { RenderedEmail, EmailEventType, EmailTenantContext } from "./types";
 
@@ -182,11 +183,7 @@ async function attemptSend(notificationId: number, input: SendAttemptInput): Pro
         text: input.text,
         ...(replyTo ? { replyTo } : {}),
       },
-      // §34 — l'idempotence fournisseur est une OPTION DE REQUÊTE du SDK
-      // Resend, pas un header personnalisé dans le message. Le mettre dans
-      // `payload.headers` ne protège pas contre deux appels réseau du même
-      // outbox row ; ce second argument est la primitive documentée par
-      // Resend pour dédupliquer une même requête côté fournisseur.
+      // Resend request-scoped idempotency key, not a user-visible header.
       { idempotencyKey: input.idempotencyKey }
     );
 
@@ -200,10 +197,24 @@ async function attemptSend(notificationId: number, input: SendAttemptInput): Pro
       return "FAILED";
     }
 
-    db.prepare(`UPDATE notification_log SET status = 'SENT', provider_message_id = ?, sent_at = ? WHERE id = ?`).run(data?.id ?? null, nowIso(), notificationId);
-    purgeRenderedBodyIfTerminal(notificationId, "SENT");
-    return "SENT";
+    // Provider accepted the request. Without a valid provider identity we
+    // CANNOT classify this as SENT or schedule a blind resend. It remains
+    // SENDING for deliberate operator investigation (#225/#323).
+    if (!data?.id) return "SENDING";
+
+    try {
+      // ID, SENT state and all already-signed early webhooks are committed
+      // together. A failed reconciliation leaves SENDING (ambiguous
+      // provider acceptance); never turn it into FAILED for auto-retry.
+      finalizeResendAcceptedSend(notificationId, data.id);
+      return "SENT";
+    } catch {
+      return "SENDING";
+    }
   } catch (err) {
+    // This path covers a provider request error, not a successful response
+    // whose local persistence failed. Resend's idempotency key is still
+    // needed on retries because a transport error may be ambiguous.
     const safeReason = safeFailureReason(err instanceof Error ? err.message : "erreur réseau");
     db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1 WHERE id = ?`).run(
       safeReason,

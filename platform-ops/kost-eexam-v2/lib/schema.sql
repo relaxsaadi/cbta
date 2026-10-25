@@ -678,6 +678,24 @@ CREATE INDEX IF NOT EXISTS idx_notification_log_tenant ON notification_log(tenan
 CREATE INDEX IF NOT EXISTS idx_notification_log_status ON notification_log(status);
 CREATE INDEX IF NOT EXISTS idx_notification_log_event ON notification_log(event_type);
 
+-- #323 — signed Resend events that beat send-response persistence. Store only
+-- provider identity/type/timestamps (no raw body, recipient, token or signature).
+-- No FK to a notification exists until the provider ID can be matched; the
+-- application reconciles and removes a matched event in one SQLite transaction.
+-- A bounded pending queue fails closed on capacity; unmatched entries require
+-- audited operator disposition. No automatic resend or silent expiry.
+CREATE TABLE IF NOT EXISTS resend_pending_webhook_events (
+  provider_event_id TEXT PRIMARY KEY NOT NULL CHECK (length(provider_event_id) BETWEEN 1 AND 200),
+  provider_message_id TEXT NOT NULL CHECK (length(provider_message_id) BETWEEN 1 AND 256),
+  event_type TEXT NOT NULL CHECK (event_type IN
+    ('email.sent','email.delivered','email.delivery_delayed','email.bounced','email.complained','email.failed')),
+  provider_created_at TEXT NOT NULL,
+  received_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_resend_pending_provider ON resend_pending_webhook_events(provider_message_id);
+CREATE INDEX IF NOT EXISTS idx_resend_pending_received ON resend_pending_webhook_events(received_at);
+
+
 -- Préférences de notification (§31) — UNIQUEMENT pour les rappels
 -- OPTIONNELS. Les envois de sécurité et transactionnels obligatoires ne
 -- consultent jamais cette table (appliqué au niveau code, voir

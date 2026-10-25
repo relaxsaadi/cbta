@@ -47,10 +47,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = applyWebhookEvent(eventType, messageId, {
-    providerEventId: svixId,
-    providerCreatedAt,
-  });
+  let result: ReturnType<typeof applyWebhookEvent>;
+  try {
+    result = applyWebhookEvent(eventType, messageId, {
+      providerEventId: svixId,
+      providerCreatedAt,
+    });
+  } catch {
+    // Never ACK signed evidence that SQLite could not retain. The
+    // provider may retry; do not leak internal DB diagnostics or tokens.
+    return NextResponse.json({ error: "Événement fournisseur non conservé." }, { status: 503 });
+  }
+  if (!result.applied && result.reason === "deferred_unmatched") {
+    // Durable signed inbox, no invented notification match or resend.
+    return NextResponse.json({ ok: true, deferred: true });
+  }
   if (!result.applied && result.reason === "unknown_message_id") {
     // Message inconnu de cette plateforme : accusé réception sans retry
     // infini côté fournisseur, mais aucune donnée locale n'est inventée.

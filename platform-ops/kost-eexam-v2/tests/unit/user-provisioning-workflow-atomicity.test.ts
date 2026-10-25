@@ -3,8 +3,7 @@ import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
 
 describe("Admin user provisioning workflow atomicity (#46)", async () => {
-  before(() => setupTestDb());
-
+  let actorId: number;
   const { createUser, findUserByUsername, getRoleForUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");
   const { createGroup, isCandidateMemberOfGroup } = await import("../../lib/groups");
@@ -12,11 +11,17 @@ describe("Admin user provisioning workflow atomicity (#46)", async () => {
   const { provisionPendingUserAtomically } = await import("../../lib/user-provisioning");
   const { getDb } = await import("../../lib/db");
 
-  const actorId = createUser({
-    username: "atomic.provision.admin",
-    password: "Test123!",
-    fullName: "Atomic Provision Admin",
-    role: "administrator",
+  // Fixture must be initialized after setupTestDb(): describe() body is
+  // evaluated before before() hooks. The prior eager createUser() could
+  // open an uninitialized SQLite DB and fail with "no such table: roles".
+  before(() => {
+    setupTestDb();
+    actorId = createUser({
+      username: "atomic.provision.admin",
+      password: "Test123!",
+      fullName: "Atomic Provision Admin",
+      role: "administrator",
+    });
   });
 
   function scalar(sql: string, ...params: (string | number | bigint | null)[]): number {

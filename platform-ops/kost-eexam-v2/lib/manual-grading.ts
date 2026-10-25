@@ -289,12 +289,15 @@ export function finalizeManualGradingIfComplete(attemptId: number): { finalized:
   // sous-questions manuelles n'a pas été statuée (voir submitScenarioSubgrade
   // ci-dessous, qui ferme CETTE ligne dès que toutes le sont) — cette
   // fonction ne doit donc jamais la considérer close avant cela.
+  // Unknown legacy snapshot types are unresolved grading blockers too:
+  // do not mark an attempt COMPLETE merely because NULL falls outside IN().
   const stillPending = db
     .prepare(
       `SELECT 1 FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       WHERE aq.attempt_id = ? AND aa.is_correct IS NULL AND s.qtype_snapshot IN ('short_answer', 'scenario')`
+       WHERE aq.attempt_id = ? AND aa.is_correct IS NULL
+         AND (s.qtype_snapshot IS NULL OR s.qtype_snapshot IN ('short_answer', 'scenario'))`
     )
     .get(attemptId);
   if (stillPending) return { finalized: false };

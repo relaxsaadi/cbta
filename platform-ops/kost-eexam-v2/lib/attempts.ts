@@ -525,7 +525,7 @@ function submitAttemptInTransaction(db: DatabaseSync, attemptId: number, candida
     audit({
       actorUserId: candidateUserId,
       actorRole: "candidate",
-      action: opts.auto ? "attempt_auto_submit" : "attempt_submit",
+      action: status === "auto_submitted" ? "attempt_auto_submit" : "attempt_submit",
       targetType: "attempt",
       targetId: attemptId,
     });

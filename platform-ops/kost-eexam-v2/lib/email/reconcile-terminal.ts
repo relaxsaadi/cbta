@@ -51,6 +51,9 @@ export interface TerminalNotificationReconcileReport {
    * Neither is automatically retried; null means reconciliation is disabled. */
   agedQueued: number | null;
   agedSending: number | null;
+  /** Legacy candidate keys that match more than one committed attempt
+   * (same candidate+submitted_at): quarantine, never automatically resend. */
+  legacyCollisionGroups: number | null;
   wrapped: boolean;
 }
 
@@ -132,7 +135,9 @@ function missingAfter(cursor: number, ceiling: number, since: string, adminEmail
        SELECT at.id AS attempt_id,
          CASE WHEN u.email IS NOT NULL AND TRIM(u.email) <> ''
               AND NOT EXISTS (SELECT 1 FROM notification_log nl
-                WHERE nl.idempotency_key = 'exam-submitted/' || at.candidate_user_id || '/' || at.submitted_at)
+                WHERE nl.idempotency_key = 'exam-submitted/attempt/' || at.id)
+              AND NOT EXISTS (SELECT 1 FROM notification_log legacy
+                WHERE legacy.idempotency_key = 'exam-submitted/' || at.candidate_user_id || '/' || at.submitted_at)
               THEN 1 ELSE 0 END AS missing_candidate,
          CASE WHEN manager.email IS NOT NULL AND TRIM(manager.email) <> ''
               AND NOT EXISTS (SELECT 1 FROM notification_log nl
@@ -179,8 +184,26 @@ function observeAgedTerminalOutbox(): { agedQueued: number; agedSending: number 
   };
 }
 
+/** Count ambiguous historical candidate confirmations by *legacy* key.
+ * A pre-existing legacy row cannot prove which of two same-ms attempts
+ * generated it. Never replay either automatically; require case review. */
+function countAmbiguousLegacyCandidateKeys(since: string): number {
+  const row = getDb().prepare(
+    `SELECT COUNT(*) AS count FROM (
+       SELECT candidate_user_id, submitted_at FROM attempts
+       WHERE status IN ('submitted', 'auto_submitted')
+         AND submitted_at IS NOT NULL AND submitted_at >= ?
+       GROUP BY candidate_user_id, submitted_at
+       HAVING COUNT(*) > 1
+         AND EXISTS (SELECT 1 FROM notification_log nl
+           WHERE nl.idempotency_key = 'exam-submitted/' || candidate_user_id || '/' || submitted_at)
+     )`
+  ).get(since) as { count: number };
+  return row.count;
+}
+
 export async function reconcileTerminalNotifications(limit = 25): Promise<TerminalNotificationReconcileReport> {
-  const empty = { enabled: false, candidates: 0, submissionDispatches: 0, resultDispatches: 0, orchestrationFailures: 0, unresolved: 0, backlogMissing: null, agedQueued: null, agedSending: null, wrapped: false };
+  const empty = { enabled: false, candidates: 0, submissionDispatches: 0, resultDispatches: 0, orchestrationFailures: 0, unresolved: 0, backlogMissing: null, agedQueued: null, agedSending: null, legacyCollisionGroups: null, wrapped: false };
   const since = configuredCutover();
   if (since === null) return empty;
   if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) throw new Error("Invalid bounded reconciliation limit.");
@@ -235,5 +258,6 @@ export async function reconcileTerminalNotifications(limit = 25): Promise<Termin
   // selected batch; positive does NOT imply email delivery failure by itself.
   const backlogMissing = missingAfter(0, latestEligibleId(since), since, adminEmail, resultEnabled, 1).length > 0;
   const { agedQueued, agedSending } = observeAgedTerminalOutbox();
-  return { enabled: true, candidates: rows.length, submissionDispatches, resultDispatches, orchestrationFailures, unresolved, backlogMissing, agedQueued, agedSending, wrapped };
+  const legacyCollisionGroups = countAmbiguousLegacyCandidateKeys(since);
+  return { enabled: true, candidates: rows.length, submissionDispatches, resultDispatches, orchestrationFailures, unresolved, backlogMissing, agedQueued, agedSending, legacyCollisionGroups, wrapped };
 }

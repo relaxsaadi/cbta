@@ -1,4 +1,5 @@
 import { getDb, nowIso } from "./db";
+import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 
 // SOURCE UNIQUE DE VÉRITÉ (§10 de la mission originelle ; étendue par la
@@ -182,10 +183,9 @@ export function gradeAttempt(attemptId: number): GradeResult {
 
   const rows = db
     .prepare(
-      `SELECT aq.id AS attempt_question_id, s.correct_answer_snapshot, s.points, aa.answer_json, q.qtype
+      `SELECT aq.id AS attempt_question_id, s.correct_answer_snapshot, s.points, aa.answer_json, s.qtype_snapshot AS qtype
        FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        LEFT JOIN attempt_answers aa ON aa.attempt_question_id = aq.id
        WHERE aq.attempt_id = ?
        ORDER BY aq.position`
@@ -209,7 +209,7 @@ export function gradeAttempt(attemptId: number): GradeResult {
 
   for (const row of rows) {
     maxRawScore += row.points; // le maximum possible ne change jamais, correction en attente ou pas.
-    const { pending, isCorrect, partialPoints } = gradeOneQuestion(row.qtype, row.correct_answer_snapshot, row.answer_json);
+    const { pending, isCorrect, partialPoints } = gradeOneQuestion(requireSnapshotQtype(row.qtype), row.correct_answer_snapshot, row.answer_json);
     if (pending) {
       hasAwaitingManualReview = true;
       upsertPending.run(attemptId, row.attempt_question_id, row.answer_json);

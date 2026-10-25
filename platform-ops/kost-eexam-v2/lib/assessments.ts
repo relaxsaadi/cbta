@@ -442,13 +442,15 @@ export function publishAssessment(
 
     const insertSnap = db.prepare(
       `INSERT INTO assessment_question_snapshots
-         (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, explanation_snapshot, points)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, explanation_snapshot, points)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     );
     selected.forEach((questionId, idx) => {
       const version = getCurrentVersion(questionId);
       if (!version) throw new Error(`Question ${questionId} n'a aucune version — donnée corrompue, publication annulée.`);
-      insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, version.explanation ?? null, pointsForVersion(version));
+      const question = db.prepare(`SELECT qtype FROM questions WHERE id = ?`).get(questionId) as { qtype: string } | undefined;
+      if (!question) throw new Error(`Question ${questionId} introuvable — publication annulée.`);
+      insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, question.qtype, version.explanation ?? null, pointsForVersion(version));
     });
 
     // Les candidatUserIds fournis ont déjà été intégralement validés

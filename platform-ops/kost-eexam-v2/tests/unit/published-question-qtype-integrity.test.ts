@@ -38,6 +38,7 @@ function seedQuestion(
     choices?: unknown[];
     correctAnswer?: unknown;
     publish?: boolean;
+    explicitSnapshot?: boolean;
   }
 ): { questionId: number; versionId: number; snapshotId: number | null } {
   const qtype = params.qtype ?? "mcq_single";
@@ -92,15 +93,16 @@ function seedQuestion(
       .prepare(
         `INSERT INTO assessment_question_snapshots
            (assessment_id, position, question_id, version_id, stem_snapshot,
-            choices_snapshot_json, correct_answer_snapshot, points)
-         VALUES (?, 1, ?, ?, 'Question de test ?', ?, ?, 1)`
+            choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points)
+         VALUES (?, 1, ?, ?, 'Question de test ?', ?, ?, ?, 1)`
       )
       .run(
         assessmentId,
         questionId,
         versionId,
         JSON.stringify(choices),
-        JSON.stringify(correctAnswer)
+        JSON.stringify(correctAnswer),
+        params.explicitSnapshot ? qtype : null
       ).lastInsertRowid
   );
   return { questionId, versionId, snapshotId };
@@ -133,6 +135,7 @@ test("#58 migration backfills only a durably provable legacy qtype and then bloc
 
     assert.equal(result.publishedQuestions, 1);
     assert.equal(result.baselinesAdded, 1);
+    assert.equal((db.prepare(`SELECT qtype_snapshot FROM assessment_question_snapshots WHERE id = ?`).get(snapshotId) as { qtype_snapshot: string }).qtype_snapshot, "mcq_multi");
     assertBaseline(
       db
         .prepare(`SELECT question_id, qtype, first_snapshot_id FROM published_question_qtype_baselines`)
@@ -194,7 +197,10 @@ test("#58 a snapshot inserted after migration captures the qtype baseline before
   const db = openFreshDb(join(dir, "db.sqlite"));
   try {
     enforcePublishedQuestionQtypeIntegrity(db);
-    const { questionId, snapshotId } = seedQuestion(db, { kostId: "QTYPE-FUTURE-1" });
+    const { questionId, snapshotId } = seedQuestion(db, { kostId: "QTYPE-FUTURE-1", explicitSnapshot: true });
+    // Ambiguous one-answer MCQs are safe once their qtype was actually
+    // captured in the original publication transaction, not inferred.
+    enforcePublishedQuestionQtypeIntegrity(db);
 
     assertBaseline(
       db
@@ -207,6 +213,17 @@ test("#58 a snapshot inserted after migration captures the qtype baseline before
       /published question qtype is immutable/i
     );
     assert.equal(qtypeFor(db, questionId), "mcq_single");
+    assert.throws(
+      () => db.prepare(`UPDATE assessment_question_snapshots SET qtype_snapshot = 'mcq_multi' WHERE id = ?`).run(snapshotId),
+      /published snapshot qtype is immutable/i
+    );
+    assert.throws(
+      () => db.prepare(`INSERT INTO assessment_question_snapshots
+         (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points)
+         SELECT assessment_id, position + 100, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, 'mcq_multi', points
+         FROM assessment_question_snapshots WHERE id = ?`).run(snapshotId),
+      /published snapshot must persist matching historical qtype/i
+    );
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });

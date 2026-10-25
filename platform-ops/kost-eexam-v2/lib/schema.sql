@@ -292,6 +292,9 @@ CREATE TABLE IF NOT EXISTS assessment_question_snapshots (
   stem_snapshot TEXT NOT NULL,
   choices_snapshot_json TEXT NOT NULL,
   correct_answer_snapshot TEXT NOT NULL,
+  -- Historical publication-time authority. Legacy rows remain NULL until a
+  -- conservative evidence-based migration proves their original type.
+  qtype_snapshot TEXT,
   -- Addendum auditeur §3 : « explication/correction si autorisée » sur le
   -- rapport individuel — snapshotée comme le reste (jamais relue depuis
   -- question_versions au moment de l'affichage, même principe que le

@@ -243,11 +243,15 @@ test("#225: a failed old pre-outbox event is revisited despite continuous newer 
   // and could skip the old failed notification forever.
   let retriedOld = false;
   let processedNew = false;
+  const arrivals: Array<Awaited<ReturnType<typeof submittedFixture>>> = [];
   for (let i = 0; i < 8; i++) {
-    const newer = await submittedFixture();
+    arrivals.push(await submittedFixture());
     await reconcileTerminalNotifications(1);
     retriedOld ||= notificationRows(old).length === 4;
-    processedNew ||= notificationRows(newer).length === 4;
+    // A frozen pass defers this invocation's newest arrival by design;
+    // check progress of any earlier new arrival rather than requiring
+    // a just-created attempt to be handled immediately in the same pass.
+    processedNew ||= arrivals.some((attempt) => notificationRows(attempt).length === 4);
   }
   assert.equal(retriedOld, true, "fixed high-water pass must revisit the old failed event");
   assert.equal(processedNew, true, "rechecking old gaps must not halt work on newer attempts");

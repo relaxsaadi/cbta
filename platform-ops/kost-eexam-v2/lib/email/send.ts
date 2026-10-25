@@ -89,7 +89,8 @@ function safeFailureReason(rawMessage: string): string {
 
 function purgeRenderedBodyIfTerminal(notificationId: number, status: string) {
   if (TERMINAL_STATUSES.has(status)) {
-    getDb().prepare(`UPDATE notification_log SET rendered_html = NULL, rendered_text = NULL WHERE id = ?`).run(notificationId);
+    getDb().prepare(`UPDATE notification_log SET rendered_html = NULL, rendered_text = NULL
+      WHERE id = ? AND status IN ('SENT','DELIVERED','SUPPRESSED','BOUNCED','COMPLAINED')`).run(notificationId);
   }
 }
 
@@ -236,14 +237,17 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
       return { status: "SENDING", providerAttempted };
     }
   } catch (err) {
-    // This path covers a provider request error, not a successful response
-    // whose local persistence failed. Resend's idempotency key is still
-    // needed on retries because a transport error may be ambiguous.
+    // Errors before invocation must not consume retry budget. A transport
+    // error after invocation may still represent an ambiguous acceptance;
+    // provider-level idempotency mitigates duplicates but is NOT proof of
+    // safe operational replay. Keep #99/#225 open until staging adjudication.
     const safeReason = safeFailureReason(err instanceof Error ? err.message : "erreur réseau");
-    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1
+    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?,
+      retry_count = retry_count + ?
       WHERE id = ? AND status = 'SENDING'`).run(
       safeReason,
       nowIso(),
+      providerAttempted ? 1 : 0,
       notificationId
     );
     return { status: "FAILED", providerAttempted };

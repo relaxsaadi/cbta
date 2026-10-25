@@ -21,6 +21,17 @@ export interface AttemptRow {
   user_agent: string | null;
 }
 
+/** Persisted submission outcome from the authoritative SQLite write boundary.
+ * Callers must not infer transition wins or terminal reason from stale pre-reads. */
+export interface SubmitAttemptOutcome {
+  attemptId: number;
+  status: AttemptStatus;
+  transitioned: boolean;
+}
+
+/** Trusted server-only provenance. Do not accept this field from candidate input. */
+type SubmitTrigger = "candidate" | "expiry_sweep";
+
 export class AttemptError extends Error {}
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -438,7 +449,7 @@ function mutateWritableAttempt(
     const expiry = Date.parse(attempt.expires_at);
     if (!Number.isFinite(expiry)) throw new AttemptError("Date d'expiration de tentative invalide.");
     if (expiry < Date.now()) {
-      submitAttemptInTransaction(db, attemptId, candidateUserId, { auto: true });
+      submitAttemptInTransaction(db, attemptId, candidateUserId);
       autoSubmitted = true;
       return;
     }
@@ -492,7 +503,7 @@ export function toggleMark(attemptId: number, candidateUserId: number, attemptQu
  * Les résultats de correction manuelle déjà existants ne sont jamais renotés.
  */
 /** Internal finalizer. Caller MUST own the SQLite write transaction. */
-function submitAttemptInTransaction(db: DatabaseSync, attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
+function submitAttemptInTransaction(db: DatabaseSync, attemptId: number, candidateUserId: number, trigger: SubmitTrigger = "candidate"): SubmitAttemptOutcome {
     const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
     if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
 
@@ -504,26 +515,38 @@ function submitAttemptInTransaction(db: DatabaseSync, attemptId: number, candida
           !db.prepare(`SELECT 1 FROM results WHERE attempt_id = ?`).get(attemptId)) {
         throw new AttemptError("Soumission antérieure sans résultat : rapprochement contrôlé requis.");
       }
-      return; // double-submit avec résultat existant : aucun écrasement
+      return { attemptId, status: attempt.status, transitioned: false }; // no new audit/event intent
     }
 
-    const status: AttemptStatus = opts.auto ? "auto_submitted" : "submitted";
+    // #40: the candidate-controlled auto hint is NOT evidence of expiry.
+    // A valid, authoritative server timestamp decides the stored reason
+    // inside the same serialized transaction as grading and submission.
+    const expiresAt = Date.parse(attempt.expires_at);
+    if (!Number.isFinite(expiresAt)) throw new AttemptError("Date d'expiration de tentative invalide.");
+    const status: AttemptStatus = expiresAt < Date.now() ? "auto_submitted" : "submitted";
     db.prepare(`UPDATE attempts SET status = ?, submitted_at = ? WHERE id = ?`).run(status, nowIso(), attemptId);
     audit({
-      actorUserId: candidateUserId,
-      actorRole: "candidate",
-      action: opts.auto ? "attempt_auto_submit" : "attempt_submit",
+      // Server cron is the actor of a sweep-triggered timeout. A candidate
+      // who clicked submit after expiry remains the actor of *that* request.
+      actorUserId: trigger === "expiry_sweep" ? null : candidateUserId,
+      actorRole: trigger === "expiry_sweep" ? null : "candidate",
+      action: status === "auto_submitted" ? "attempt_auto_submit" : "attempt_submit",
       targetType: "attempt",
       targetId: attemptId,
+      metadata: { trigger },
     });
     // gradeAttemptInTransaction() partage ce BEGIN IMMEDIATE : une erreur
     // de parsing, SQL, résultat ou audit annule aussi statut + audit submit.
     gradeAttemptInTransaction(db, attemptId);
+    return { attemptId, status, transitioned: true };
 }
 
-/** Public boundary for explicit submission and cron sweeps. */
-export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
-  transaction((db) => submitAttemptInTransaction(db, attemptId, candidateUserId, opts));
+/** Public boundary for explicit submission and cron sweeps.
+ * 'auto' remains a backward-compatible client hint, never the timeout truth.
+ * 'trigger' is supplied only by trusted server-side call sites, never by
+ * the candidate Server Action. */
+export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean; trigger?: SubmitTrigger } = {}): SubmitAttemptOutcome {
+  return transaction((db) => submitAttemptInTransaction(db, attemptId, candidateUserId, opts.trigger ?? "candidate"));
 }
 
 /** Balayage périodique — auto-soumet toute tentative dont le temps est
@@ -539,8 +562,14 @@ export function sweepExpiredAttempts(): { attemptId: number; candidateUserId: nu
   const rows = getDb()
     .prepare(`SELECT id, candidate_user_id FROM attempts WHERE status = 'in_progress' AND expires_at < ?`)
     .all(nowIso()) as { id: number; candidate_user_id: number }[];
+  const transitioned: { attemptId: number; candidateUserId: number }[] = [];
   for (const r of rows) {
-    submitAttempt(r.id, r.candidate_user_id, { auto: true });
+    const outcome = submitAttempt(r.id, r.candidate_user_id, { auto: true, trigger: "expiry_sweep" });
+    // #40: stale SELECT losers (candidate/manual or another sweep won)
+    // must not be counted/audited/notified as transitions by this sweep.
+    if (outcome.transitioned && outcome.status === "auto_submitted") {
+      transitioned.push({ attemptId: r.id, candidateUserId: r.candidate_user_id });
+    }
   }
-  return rows.map((r) => ({ attemptId: r.id, candidateUserId: r.candidate_user_id }));
+  return transitioned;
 }

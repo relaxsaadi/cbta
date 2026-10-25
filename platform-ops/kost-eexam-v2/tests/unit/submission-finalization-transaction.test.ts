@@ -5,7 +5,8 @@ import { setupTestDb } from "./test-db";
 // Synthetic 7.2 fixtures only: no production exam questions, approvals or
 // regulatory-source assertions are introduced by this technical regression.
 let groupId: number;
-let assessmentId: number;
+let adminId: number;
+let questionIds: number[];
 let sequence = 0;
 
 before(async () => {
@@ -14,23 +15,38 @@ before(async () => {
   const { createCompany } = await import("../../lib/companies");
   const { createGroup } = await import("../../lib/groups");
   const { createQuestion } = await import("../../lib/questions");
-  const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
-
-  const adminId = createUser({
+  adminId = createUser({
     username: "submission-transaction.admin", password: "x".repeat(12),
     fullName: "Submission Transaction Admin", role: "administrator",
   });
   const companyId = createCompany({ name: "Submission Transaction Test Company", scope: "test", createdBy: adminId });
   groupId = createGroup({ companyId, name: "Submission Transaction Test Group", scope: "test", createdBy: adminId });
-  const questionIds = [1, 2].map((i) => createQuestion({
+  questionIds = [1, 2].map((i) => createQuestion({
     kostQuestionId: `TEST-SUBMISSION-TXN-${i}`,
     functionCode: "7.2", qtype: "mcq_single", sourceStatus: "FROZEN_SOURCE_VERIFIED",
     stem: `Submission transaction test question ${i}`,
     choices: [{ key: "A", text: "Correct" }, { key: "B", text: "Incorrect" }],
     correctAnswer: ["A"], createdBy: adminId,
   }));
-  assessmentId = createAssessmentDraft({
-    type: "examen", name: "Submission transaction rollback test",
+});
+
+async function makeAttempt() {
+  const { createUser } = await import("../../lib/users");
+  const { addCandidateToGroup } = await import("../../lib/groups");
+  const { startAttempt, saveAnswer } = await import("../../lib/attempts");
+  const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
+  const { getDb } = await import("../../lib/db");
+  const candidateUserId = createUser({
+    username: `submission-transaction.candidate${++sequence}`,
+    password: "x".repeat(12),
+    fullName: "Submission Transaction Candidate", role: "candidate",
+  });
+  addCandidateToGroup(groupId, candidateUserId, adminId);
+  // Publication allocates assessment assignments to the CURRENT group
+  // membership; create a fresh synthetic assessment after adding this
+  // candidate, never rely on a future group join for a prior publication.
+  const assessmentId = createAssessmentDraft({
+    type: "examen", name: `Submission transaction rollback test ${sequence}`,
     functionCode: "7.2", groupId, questionSource: "manual",
     manualQuestionIds: questionIds, questionCount: 2,
     durationMinutes: 30, passThresholdPct: 80, scope: "test",
@@ -39,19 +55,6 @@ before(async () => {
     closeAt: new Date(Date.now() + 3_600_000).toISOString(),
   });
   publishAssessment(assessmentId, adminId);
-});
-
-async function makeAttempt() {
-  const { createUser } = await import("../../lib/users");
-  const { addCandidateToGroup } = await import("../../lib/groups");
-  const { startAttempt, saveAnswer } = await import("../../lib/attempts");
-  const { getDb } = await import("../../lib/db");
-  const candidateUserId = createUser({
-    username: `submission-transaction.candidate${++sequence}`,
-    password: "x".repeat(12),
-    fullName: "Submission Transaction Candidate", role: "candidate",
-  });
-  addCandidateToGroup(groupId, candidateUserId, 1);
   const attempt = startAttempt(assessmentId, candidateUserId, {});
   const db = getDb();
   const rows = db.prepare(

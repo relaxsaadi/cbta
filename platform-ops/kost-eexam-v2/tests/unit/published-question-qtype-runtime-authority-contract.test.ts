@@ -101,7 +101,7 @@ test("#58 manual finalization blocks unknown/invalid historical types and missin
   assert.match(sql, /s\.qtype_snapshot IS NULL/);
   assert.match(sql, /s\.qtype_snapshot NOT IN/);
   assert.match(sql, /aa\.id IS NULL/);
-  assert.match(sql, /aa\.is_correct IS NULL AND s\.qtype_snapshot IN \('short_answer', 'scenario'\)/);
+  assert.match(sql, /OR aa\.is_correct IS NULL/);
   assert.ok(block.indexOf("const stillPending") < block.indexOf("const result ="),
     "the historical integrity gate must run before any final result is computed");
 
@@ -118,10 +118,11 @@ test("#58 manual finalization blocks unknown/invalid historical types and missin
       [1, null, 1, true],            // old graded row, unknown original qtype
       [2, "wrong_type", 1, true],    // old graded row, invalid original qtype
       [3, "short_answer", null, true], // still needs manual review
-      [4, "mcq_single", null, false],  // answered/auto-graded with a negative grade
+      [4, "mcq_single", null, true],   // partially graded automatic row
       [5, "short_answer", 1, false],   // manually graded and valid
       [6, "scenario", 1, false],       // fully manually graded scenario
       [7, "mcq_single", null, true],   // missing answer row, incomplete data
+      [8, "mcq_single", 0, false],     // correctly graded wrong answer (zero points)
     ];
     for (const [id, qtype, grade] of cases) {
       db.prepare("INSERT INTO assessment_question_snapshots (id, qtype_snapshot) VALUES (?, ?)").run(id, qtype);

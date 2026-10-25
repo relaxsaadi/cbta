@@ -24,14 +24,14 @@ after(() => {
 
 let seq = 0;
 
-async function submittedFixture() {
+async function submittedFixture(mode: "manual" | "expired_sweep" = "manual") {
   const n = ++seq;
   const { createUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");
   const { createGroup, addCandidateToGroup } = await import("../../lib/groups");
   const { createQuestion } = await import("../../lib/questions");
   const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
-  const { startAttempt, submitAttempt } = await import("../../lib/attempts");
+  const { startAttempt, submitAttempt, sweepExpiredAttempts } = await import("../../lib/attempts");
   const { getDb } = await import("../../lib/db");
 
   const admin = createUser({ username: `recon.admin.${n}`, password: "x".repeat(12), fullName: "Recovery Test Admin", role: "administrator" });
@@ -58,8 +58,15 @@ async function submittedFixture() {
   });
   publishAssessment(assessmentId, admin);
   const attempt = startAttempt(assessmentId, candidate, {});
-  const first = submitAttempt(attempt.id, candidate);
-  assert.equal(first.transitioned, true, "the exam transition committed without calling email orchestration");
+  if (mode === "expired_sweep") {
+    getDb().prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+      .run(new Date(Date.now() - 30_000).toISOString(), attempt.id);
+    assert.ok(sweepExpiredAttempts().some((row) => row.attemptId === attempt.id),
+      "expired cron must commit terminal grading before notification is attempted");
+  } else {
+    const first = submitAttempt(attempt.id, candidate);
+    assert.equal(first.transitioned, true, "the exam transition committed without calling email orchestration");
+  }
   return { db: getDb(), attemptId: attempt.id, candidateId: candidate, companyId, managerEmail, candidateEmail };
 }
 
@@ -125,6 +132,7 @@ test("#225: committed submission without any initial event is recovered with ten
   assert.equal(report.enabled, true);
   assert.ok(report.submissionDispatches >= 1);
   assert.ok(report.resultDispatches >= 1);
+  assert.equal(report.unresolved, 0);
   const rows = notificationRows(f);
   assert.equal(rows.length, 4, JSON.stringify(rows));
   assert.deepEqual(rows.map((r) => r.event_type).sort(), ["EXAM_SUBMITTED", "EXAM_SUBMITTED_ADMIN", "EXAM_SUBMITTED_ADMIN", "RESULT_AVAILABLE"]);
@@ -153,7 +161,8 @@ test("#225: pre-outbox template/config failure leaves gap discoverable and a new
   const { reconcileTerminalNotifications } = await import("../../lib/email/reconcile-terminal");
   delete process.env.APP_BASE_URL;
   try {
-    await reconcileTerminalNotifications(25);
+    const failed = await reconcileTerminalNotifications(25);
+    assert.equal(failed.unresolved >= 1, true, "pre-outbox failure must remain visibly unresolved");
     assert.equal(notificationRows(f).length, 0, "no phantom notification should be recorded before rendering");
   } finally {
     process.env.APP_BASE_URL = "https://test.kostacademy.invalid";
@@ -163,6 +172,29 @@ test("#225: pre-outbox template/config failure leaves gap discoverable and a new
   assert.equal(notificationRows(f).length, 4, "committed state must be recoverable after worker restart");
   await independentRecovery();
   assert.equal(notificationRows(f).length, 4, "second restart remains idempotent");
+});
+
+test("#225: expired cron commit without follow-up notification is recovered after restart", async () => {
+  const f = await submittedFixture("expired_sweep");
+  assert.equal(notificationRows(f).length, 0);
+  const recovered = await independentRecovery();
+  assert.equal(recovered.enabled, true);
+  assert.equal(notificationRows(f).length, 4, "previously auto-submitted attempt must be reconciled");
+  assert.equal((f.db.prepare("SELECT status FROM attempts WHERE id = ?").get(f.attemptId) as { status: string }).status, "auto_submitted");
+});
+
+test("#225: partially queued notification set is completed, never duplicated", async () => {
+  const f = await submittedFixture();
+  const { notifyResultAvailableForAttempt } = await import("../../lib/email/notify-result");
+  const { reconcileTerminalNotifications } = await import("../../lib/email/reconcile-terminal");
+  await notifyResultAvailableForAttempt(f.attemptId);
+  assert.deepEqual(notificationRows(f).map((row) => row.event_type), ["RESULT_AVAILABLE"]);
+  await reconcileTerminalNotifications(25);
+  const rows = notificationRows(f);
+  assert.equal(rows.length, 4);
+  assert.equal(rows.filter((row) => row.event_type === "RESULT_AVAILABLE").length, 1);
+  await reconcileTerminalNotifications(25);
+  assert.equal(notificationRows(f).length, 4);
 });
 
 test("#225: NO_EMAIL result policy is honored, but submission/staff events still recover", async () => {

@@ -263,3 +263,36 @@ test("#225: a failed old pre-outbox event is revisited despite continuous newer 
   const verified = await reconcileTerminalNotifications(100);
   assert.equal(verified.backlogMissing, false);
 });
+
+
+test("#225: old QUEUED/SENDING terminal outbox states are visible but never automatically replayed", async () => {
+  const { reconcileTerminalNotifications } = await import("../../lib/email/reconcile-terminal");
+  const baseline = await reconcileTerminalNotifications(100);
+  const f = await submittedFixture();
+  await reconcileTerminalNotifications(100); // EMAIL_MODE=log; write suppressed logical keys only
+  const rows = notificationRows(f);
+  assert.equal(rows.length, 4);
+  const oldAt = new Date(Date.now() - 16 * 60_000).toISOString();
+  const recentAt = new Date().toISOString();
+  try {
+    for (const [index, status, createdAt] of [
+      [0, "QUEUED", oldAt],
+      [1, "SENDING", oldAt],
+      [2, "QUEUED", recentAt],
+    ] as const) {
+      f.db.prepare("UPDATE notification_log SET status = ?, created_at = ? WHERE idempotency_key = ?")
+        .run(status, createdAt, rows[index]!.idempotency_key);
+    }
+    const report = await reconcileTerminalNotifications(100);
+    assert.equal(report.agedQueued, (baseline.agedQueued ?? 0) + 1, "recent QUEUED is not aged");
+    assert.equal(report.agedSending, (baseline.agedSending ?? 0) + 1, "ambiguous provider state is observable");
+    assert.equal(notificationRows(f).length, 4, "observation must not queue duplicate logical messages");
+    assert.equal(notificationRows(f).filter((row) => row.status === "SENDING").length, 1,
+      "reconciliation must not replay or silently terminalize ambiguous SENDING delivery");
+  } finally {
+    for (const row of rows) {
+      f.db.prepare("UPDATE notification_log SET status = 'SUPPRESSED', created_at = ? WHERE idempotency_key = ?")
+        .run(recentAt, row.idempotency_key);
+    }
+  }
+});

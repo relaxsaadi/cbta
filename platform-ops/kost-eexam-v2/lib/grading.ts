@@ -1,4 +1,5 @@
 import { transaction, nowIso } from "./db";
+import type { DatabaseSync } from "node:sqlite";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 
@@ -136,14 +137,10 @@ export function gradeOneQuestion(
   return { pending: false, isCorrect: answerJson !== null && answerSetsEqual(given, correct) };
 }
 
-export function gradeAttempt(attemptId: number): GradeResult {
-  // All answer rows, the final result and its audit entry must commit
-  // together. If a later published answer payload fails validation/parsing,
-  // never leave earlier questions partly graded without a results row.
-  // submitAttempt() has already completed its status transition and calls
-  // gradeAttempt() outside that transaction, so no nested BEGIN is needed.
-  return transaction((db) => {
-
+/** Caller holds the SQLite write transaction; do not BEGIN again.
+ * Submission, per-answer grading, result and both success audits must share
+ * one commit. The public gradeAttempt() wrapper retains standalone callers. */
+export function gradeAttemptInTransaction(db: DatabaseSync, attemptId: number): GradeResult {
   const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as
     | { id: number; assessment_id: number; candidate_user_id: number }
     | undefined;
@@ -273,5 +270,9 @@ export function gradeAttempt(attemptId: number): GradeResult {
   });
 
   return { rawScore, maxRawScore, score100, percentage, passThresholdPct: assessment.pass_threshold_pct, passed, gradingState };
-  });
+}
+
+/** Standalone callers get the same atomic grade/result/audit guarantees. */
+export function gradeAttempt(attemptId: number): GradeResult {
+  return transaction((db) => gradeAttemptInTransaction(db, attemptId));
 }

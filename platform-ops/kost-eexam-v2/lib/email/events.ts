@@ -632,6 +632,7 @@ export async function notifyExamRescheduled(params: {
 // n'appelle ce notify* que sur la VRAIE première transition).
 // ---------------------------------------------------------------------
 export async function notifyExamSubmitted(params: {
+  attemptId: number;
   userId: number;
   email: string;
   firstName: string;
@@ -658,7 +659,7 @@ export async function notifyExamSubmitted(params: {
     );
     await queueAndSendEmail({
       eventType: "EXAM_SUBMITTED",
-      idempotencyKey: `exam-submitted/${params.userId}/${params.submittedAt}`,
+      idempotencyKey: `exam-submitted/attempt/${params.attemptId}`,
       recipientEmail: params.email,
       userId: params.userId,
       tenant: { companyId: params.companyId, companyName: params.companyName },

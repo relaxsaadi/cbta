@@ -29,7 +29,7 @@ function assertPublishedRuntimeUsesSnapshot(source: string, functionName: string
   );
   assert.doesNotMatch(
     block,
-    /q\.qtype/,
+    /\bq\.qtype\b/,
     `${functionName} must not read mutable questions.qtype for a published assessment`
   );
   assert.doesNotMatch(
@@ -72,6 +72,10 @@ test("#58 candidate resume/render and published preview use snapshot qtype, not 
 
 test("#58 automatic grading is bound to the published qtype snapshot", () => {
   assertPublishedRuntimeUsesSnapshot(GRADING, "gradeAttempt");
+  const block = exportedFunctionBlock(GRADING, "gradeAttempt");
+  assert.match(block, /const validatedRows = rows\.map/);
+  assert.ok(block.indexOf("const validatedRows") < block.indexOf("const upsertGraded"),
+    "validate the entire historical batch before creating grade writes");
 });
 
 test("#58 all manual-grading routing and finalization paths use published qtype_snapshot", () => {

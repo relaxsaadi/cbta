@@ -10,6 +10,7 @@ import {
   PUBLISHED_QTYPE_IMMUTABLE_ERROR,
   enforcePublishedQuestionQtypeIntegrity,
   questionQtypeConflict,
+  requireSnapshotQtype,
 } from "../../lib/published-question-qtype-integrity";
 
 const SCHEMA = readFileSync(new URL("../../lib/schema.sql", import.meta.url), "utf8");
@@ -309,4 +310,11 @@ test("#58 sync/import and edit Server Action both fail closed on qtype mismatch"
   assert.match(ACTION_SOURCE, /const requestedQtype = formData\.get\("qtype"\)/);
   assert.match(ACTION_SOURCE, /questionQtypeConflict\(question\.qtype, String\(requestedQtype\)\)/);
   assert.match(ACTION_SOURCE, /Le type d’une question existante ne peut pas être modifié/);
+});
+
+// No silent fallback for genuinely unknown historical type.
+test("#58 runtime rejects unknown or invalid published snapshot qtypes", () => {
+  assert.equal(requireSnapshotQtype("scenario"), "scenario");
+  assert.throws(() => requireSnapshotQtype(null), /LEGACY_QTYPE_UNKNOWN/);
+  assert.throws(() => requireSnapshotQtype("not_a_type"), /LEGACY_QTYPE_UNKNOWN/);
 });

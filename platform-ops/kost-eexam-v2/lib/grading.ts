@@ -192,6 +192,10 @@ export function gradeAttempt(attemptId: number): GradeResult {
     )
     .all(attemptId) as { attempt_question_id: number; correct_answer_snapshot: string; points: number; answer_json: string | null; qtype: string }[];
 
+  // Validate *all* historical types before any automatic grade write: a
+  // later unresolved legacy snapshot must not leave a partially graded run.
+  const validatedRows = rows.map((row) => ({ ...row, qtype: requireSnapshotQtype(row.qtype) }));
+
   let rawScore = 0;
   let maxRawScore = 0;
   let hasAwaitingManualReview = false;
@@ -207,9 +211,9 @@ export function gradeAttempt(attemptId: number): GradeResult {
      ON CONFLICT(attempt_question_id) DO UPDATE SET is_correct = NULL, points_awarded = NULL`
   );
 
-  for (const row of rows) {
+  for (const row of validatedRows) {
     maxRawScore += row.points; // le maximum possible ne change jamais, correction en attente ou pas.
-    const { pending, isCorrect, partialPoints } = gradeOneQuestion(requireSnapshotQtype(row.qtype), row.correct_answer_snapshot, row.answer_json);
+    const { pending, isCorrect, partialPoints } = gradeOneQuestion(row.qtype, row.correct_answer_snapshot, row.answer_json);
     if (pending) {
       hasAwaitingManualReview = true;
       upsertPending.run(attemptId, row.attempt_question_id, row.answer_json);

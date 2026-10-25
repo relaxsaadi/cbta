@@ -77,6 +77,22 @@ function storeSetting(key: string, value: string): void {
   ).run(key, value);
 }
 
+/** node:sqlite DatabaseSync has no better-sqlite3 transaction() method.
+ * Persist scan metadata atomically with the project's native SQLite API. */
+function storeScanState(cursor: number, ceiling: number, since?: string): void {
+  const db = getDb();
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    storeSetting(CURSOR_KEY, String(cursor));
+    storeSetting(CEILING_KEY, String(ceiling));
+    if (since !== undefined) storeSetting(CUTOVER_KEY, since);
+    db.exec("COMMIT");
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
+  }
+}
+
 function latestEligibleId(since: string): number {
   const row = getDb().prepare(
     `SELECT COALESCE(MAX(id), 0) AS id FROM attempts
@@ -92,11 +108,7 @@ function latestEligibleId(since: string): number {
  * forever. Changing the deliberate UTC cutover resets the prior scan. */
 function scanState(since: string): { cursor: number; ceiling: number } {
   if (readSetting(CUTOVER_KEY) !== since || readNonnegativeId(CEILING_KEY) === null) {
-    getDb().transaction(() => {
-      storeSetting(CURSOR_KEY, "0");
-      storeSetting(CEILING_KEY, String(latestEligibleId(since)));
-      storeSetting(CUTOVER_KEY, since);
-    })();
+    storeScanState(0, latestEligibleId(since), since);
   }
   return {
     cursor: readNonnegativeId(CURSOR_KEY) ?? 0,
@@ -159,10 +171,7 @@ export async function reconcileTerminalNotifications(limit = 25): Promise<Termin
     // newly submitted attempts cannot prevent this wrap and old-key retry.
     // The next pass includes attempts that arrived after the prior ceiling.
     const nextCeiling = latestEligibleId(since);
-    getDb().transaction(() => {
-      storeSetting(CURSOR_KEY, "0");
-      storeSetting(CEILING_KEY, String(nextCeiling));
-    })();
+    storeScanState(0, nextCeiling);
     wrapped = cursor !== 0;
     rows = missingAfter(0, nextCeiling, since, adminEmail, resultEnabled, limit);
   }

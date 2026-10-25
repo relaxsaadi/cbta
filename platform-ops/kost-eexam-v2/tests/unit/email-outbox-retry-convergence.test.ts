@@ -1,6 +1,7 @@
 import { after, before, describe, test } from "node:test";
 import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
+import { getSenderNotifications } from "../../lib/email/config";
 
 describe("Outbox retry — convergence des gardes et compteurs", async () => {
   let db: ReturnType<typeof import("../../lib/db").getDb>;
@@ -22,12 +23,13 @@ describe("Outbox retry — convergence des gardes et compteurs", async () => {
   function insertFailed(key: string, email: string, retryCount = 1) {
     const result = db.prepare(
       `INSERT INTO notification_log
-         (recipient_email, event_type, template_id, template_version, subject,
+         (recipient_email, sender_name, sender_address, event_type, template_id, template_version, subject,
           idempotency_key, status, retry_count, rendered_html, rendered_text,
           created_at, failed_at)
-       VALUES (?, 'EXAM_ASSIGNED', 'test', 'v1', 'Test retry',
+       VALUES (?, ?, ?, 'EXAM_ASSIGNED', 'test', 'v1', 'Test retry',
                ?, 'FAILED', ?, '<p>retry</p>', 'retry', ?, ?)`
-    ).run(email, key, retryCount, new Date().toISOString(), new Date().toISOString());
+    ).run(email, getSenderNotifications().name, getSenderNotifications().address,
+      key, retryCount, new Date().toISOString(), new Date().toISOString());
     return Number(result.lastInsertRowid);
   }
 

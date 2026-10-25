@@ -191,3 +191,42 @@ test("#38: expired candidate autosave commits automatic submission/grade before 
   const audits = f.db.prepare(`SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'`).get(f.attemptId) as { n: number };
   assert.equal(audits.n, 1);
 });
+
+ 
+test("#38: independent answer writer before auto-submit is graded and becomes immutable", async () => {
+  const f = await fixture();
+  assert.deepEqual(await worker("answer", f.attemptId, f.candidateId, f.questionId), { ok: true });
+  assert.deepEqual(await worker("autosubmit", f.attemptId, f.candidateId, f.questionId), { ok: true });
+  const after = stored(f);
+  assert.equal(after.attempt.status, "auto_submitted");
+  assert.equal(after.answer?.answer_json, '["A"]');
+  assert.equal(after.result?.raw_score, 1);
+  assert.equal((await worker("answer", f.attemptId, f.candidateId, f.questionId)).ok, false);
+  assert.deepEqual(stored(f), after, "late autosave must not change the auto-submitted result");
+});
+
+test("#38: independent auto-submit before answer writer leaves no post-submit answer", async () => {
+  const f = await fixture();
+  assert.deepEqual(await worker("autosubmit", f.attemptId, f.candidateId, f.questionId), { ok: true });
+  const after = stored(f);
+  assert.equal(after.attempt.status, "auto_submitted");
+  assert.equal(after.answer, undefined);
+  assert.equal(after.result?.raw_score, 0);
+  assert.equal((await worker("answer", f.attemptId, f.candidateId, f.questionId)).ok, false);
+  assert.deepEqual(stored(f), after);
+});
+
+test("#38: concurrent independent autosave and auto-submit grade the exact serialized winner", async () => {
+  const f = await fixture();
+  const outcomes = await Promise.all([
+    worker("answer", f.attemptId, f.candidateId, f.questionId),
+    worker("autosubmit", f.attemptId, f.candidateId, f.questionId),
+  ]);
+  assert.equal(outcomes[1]?.ok, true, JSON.stringify(outcomes));
+  const rows = stored(f);
+  assert.equal(rows.attempt.status, "auto_submitted");
+  assert.ok(rows.result);
+  const answerCommitted = rows.answer?.answer_json === '["A"]';
+  assert.equal(outcomes[0]?.ok, answerCommitted);
+  assert.equal(rows.result?.raw_score, answerCommitted ? 1 : 0);
+});

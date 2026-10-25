@@ -41,19 +41,28 @@ export async function notifySubmissionEvents(attemptId: number): Promise<void> {
 
   // Confirmation candidat (§31) — toujours, indépendamment de grading_state.
   if (candidate?.email) {
-    const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
-    await notifyExamSubmitted({
-      userId: candidate.id,
-      email: candidate.email,
-      firstName,
-      username: candidate.username,
-      examName: assessment.name,
-      functionLabel: fnLabel,
-      submittedAt: attempt.submitted_at,
-      statusLabel,
-      companyId: group.company_id,
-      companyName: group.company_name,
-    });
+    // Backward compatibility: legacy deliveries used candidate ID + submission
+    // timestamp rather than attempt ID. Never silently replay old messages
+    // after changing the canonical key; ambiguous timestamp collisions require
+    // manual review (see #321 and reconciliation legacyCollisionGroups).
+    const oldKey = `exam-submitted/${candidate.id}/${attempt.submitted_at}`;
+    const legacySeen = db.prepare(`SELECT 1 FROM notification_log WHERE idempotency_key = ?`).get(oldKey);
+    if (!legacySeen) {
+      const firstName = candidate.full_name.split(/\s+/)[0] ?? candidate.full_name;
+      await notifyExamSubmitted({
+        attemptId,
+        userId: candidate.id,
+        email: candidate.email,
+        firstName,
+        username: candidate.username,
+        examName: assessment.name,
+        functionLabel: fnLabel,
+        submittedAt: attempt.submitted_at,
+        statusLabel,
+        companyId: group.company_id,
+        companyName: group.company_name,
+      });
+    }
   }
 
   // Notification staff (§34-36) — responsable pédagogique du groupe +

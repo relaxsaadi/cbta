@@ -292,7 +292,8 @@ export function finalizeManualGradingIfComplete(attemptId: number): { finalized:
   // Validate the ENTIRE published attempt before finalizing, not just
   // manual rows with NULL grades. An unknown/invalid historical qtype is
   // never safe even if an old answer already has a non-NULL is_correct.
-  // A missing attempt_answer is also incomplete, not an implicit zero.
+  // A missing attempt_answer or NULL grade of ANY qtype is also incomplete,
+  // not an implicit zero (including old, partially graded automatic rows).
   const stillPending = db
     .prepare(
       `SELECT 1 FROM attempt_questions aq
@@ -303,7 +304,7 @@ export function finalizeManualGradingIfComplete(attemptId: number): { finalized:
            s.qtype_snapshot IS NULL
            OR s.qtype_snapshot NOT IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')
            OR aa.id IS NULL
-           OR (aa.is_correct IS NULL AND s.qtype_snapshot IN ('short_answer', 'scenario'))
+           OR aa.is_correct IS NULL
          )
        LIMIT 1`
     )

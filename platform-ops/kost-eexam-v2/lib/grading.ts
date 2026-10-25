@@ -1,4 +1,4 @@
-import { getDb, nowIso } from "./db";
+import { transaction, nowIso } from "./db";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 
@@ -137,7 +137,12 @@ export function gradeOneQuestion(
 }
 
 export function gradeAttempt(attemptId: number): GradeResult {
-  const db = getDb();
+  // All answer rows, the final result and its audit entry must commit
+  // together. If a later published answer payload fails validation/parsing,
+  // never leave earlier questions partly graded without a results row.
+  // submitAttempt() has already completed its status transition and calls
+  // gradeAttempt() outside that transaction, so no nested BEGIN is needed.
+  return transaction((db) => {
 
   const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as
     | { id: number; assessment_id: number; candidate_user_id: number }
@@ -268,4 +273,5 @@ export function gradeAttempt(attemptId: number): GradeResult {
   });
 
   return { rawScore, maxRawScore, score100, percentage, passThresholdPct: assessment.pass_threshold_pct, passed, gradingState };
+  });
 }

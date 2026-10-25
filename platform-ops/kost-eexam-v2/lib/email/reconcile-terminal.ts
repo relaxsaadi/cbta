@@ -24,6 +24,8 @@ import { notifyResultAvailableForAttempt } from "./notify-result";
 const CURSOR_KEY = "exam_notification_reconcile_cursor";
 const CEILING_KEY = "exam_notification_reconcile_ceiling";
 const CUTOVER_KEY = "exam_notification_reconcile_cutover";
+// Operational warning heuristic, NOT a provider delivery decision or an automatic retry policy.
+const AGED_OUTBOX_MS = 15 * 60_000;
 
 interface MissingEventRow {
   attempt_id: number;
@@ -44,6 +46,11 @@ export interface TerminalNotificationReconcileReport {
   /** Any eligible absent logical key found across the full configured cutover scope at report time.
    * Does NOT cover stranded QUEUED/SENDING outbox rows or attempts lacking a result. */
   backlogMissing: boolean | null;
+  /** Read-only counts of terminal event rows older than 15 minutes in these states.
+   * QUEUED can be unsent; SENDING has an ambiguous provider outcome.
+   * Neither is automatically retried; null means reconciliation is disabled. */
+  agedQueued: number | null;
+  agedSending: number | null;
   wrapped: boolean;
 }
 
@@ -155,8 +162,25 @@ function missingAfter(cursor: number, ceiling: number, since: string, adminEmail
   ).all(adminEmail, adminEmail, resultEnabled ? 1 : 0, cursor, ceiling, since, limit) as unknown as MissingEventRow[];
 }
 
+/** Read-only visibility into stale terminal outbox states. Do not infer whether a
+ * provider already accepted an in-flight SENDING message and do not resend it. */
+function observeAgedTerminalOutbox(): { agedQueued: number; agedSending: number } {
+  const cutoff = new Date(Date.now() - AGED_OUTBOX_MS).toISOString();
+  const rows = getDb().prepare(
+    `SELECT status, COUNT(*) AS count FROM notification_log
+     WHERE status IN ('QUEUED', 'SENDING')
+       AND event_type IN ('EXAM_SUBMITTED', 'EXAM_SUBMITTED_ADMIN', 'RESULT_AVAILABLE')
+       AND created_at <= ?
+     GROUP BY status`
+  ).all(cutoff) as { status: string; count: number }[];
+  return {
+    agedQueued: rows.find((row) => row.status === "QUEUED")?.count ?? 0,
+    agedSending: rows.find((row) => row.status === "SENDING")?.count ?? 0,
+  };
+}
+
 export async function reconcileTerminalNotifications(limit = 25): Promise<TerminalNotificationReconcileReport> {
-  const empty = { enabled: false, candidates: 0, submissionDispatches: 0, resultDispatches: 0, orchestrationFailures: 0, unresolved: 0, backlogMissing: null, wrapped: false };
+  const empty = { enabled: false, candidates: 0, submissionDispatches: 0, resultDispatches: 0, orchestrationFailures: 0, unresolved: 0, backlogMissing: null, agedQueued: null, agedSending: null, wrapped: false };
   const since = configuredCutover();
   if (since === null) return empty;
   if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) throw new Error("Invalid bounded reconciliation limit.");
@@ -210,5 +234,6 @@ export async function reconcileTerminalNotifications(limit = 25): Promise<Termin
   // Authoritative missing-key existence for this cutover, not merely the last
   // selected batch; positive does NOT imply email delivery failure by itself.
   const backlogMissing = missingAfter(0, latestEligibleId(since), since, adminEmail, resultEnabled, 1).length > 0;
-  return { enabled: true, candidates: rows.length, submissionDispatches, resultDispatches, orchestrationFailures, unresolved, backlogMissing, wrapped };
+  const { agedQueued, agedSending } = observeAgedTerminalOutbox();
+  return { enabled: true, candidates: rows.length, submissionDispatches, resultDispatches, orchestrationFailures, unresolved, backlogMissing, agedQueued, agedSending, wrapped };
 }

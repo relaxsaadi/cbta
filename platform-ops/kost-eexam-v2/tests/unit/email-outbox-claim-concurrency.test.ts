@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { setupTestDb } from "./test-db";
+import { getSenderNotifications } from "../../lib/email/config";
 
 let db: ReturnType<typeof import("../../lib/db").getDb>;
 before(async () => {
@@ -20,11 +21,12 @@ after(() => {
 
 function insertFailed(key: string, status: "FAILED" | "SENDING" = "FAILED"): number {
   const row = db.prepare(`INSERT INTO notification_log
-    (recipient_email, event_type, template_id, template_version, subject,
+    (recipient_email, sender_name, sender_address, event_type, template_id, template_version, subject,
      idempotency_key, status, retry_count, rendered_html, rendered_text, created_at, failed_at)
-    VALUES (?, 'EXAM_SUBMITTED', 'synthetic-test', 'v1', 'Synthetic retry',
+    VALUES (?, ?, ?, 'EXAM_SUBMITTED', 'synthetic-test', 'v1', 'Synthetic retry',
             ?, ?, 1, '<p>test only</p>', 'test only', ?, ?)`)
-    .run(`${key}@example.invalid`, key, status, "2026-10-25T18:00:00.000Z", "2026-10-25T18:01:00.000Z");
+    .run(`${key}@example.invalid`, getSenderNotifications().name, getSenderNotifications().address,
+      key, status, "2026-10-25T18:00:00.000Z", "2026-10-25T18:01:00.000Z");
   return Number(row.lastInsertRowid);
 }
 

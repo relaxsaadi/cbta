@@ -17,11 +17,25 @@
 import { getDb, nowIso } from "../db";
 import { getResendClient } from "./client";
 import { finalizeResendAcceptedSend } from "./webhook";
-import { getEmailMode, getAllowedRecipients, isResendApiKeyConfigured, getReplyTo, type EmailSenderIdentity } from "./config";
+import { getEmailMode, getAllowedRecipients, isResendApiKeyConfigured, getReplyTo, getSenderExam, getSenderNotifications, getSenderSecurity, getSenderSupport, type EmailSenderIdentity } from "./config";
 import type { RenderedEmail, EmailEventType, EmailTenantContext } from "./types";
 
 const MAX_RETRIES = 5;
 const TERMINAL_STATUSES = new Set(["SENT", "DELIVERED", "SUPPRESSED", "BOUNCED", "COMPLAINED"]);
+
+/** The persisted From address must be a single safe identity, not a header. */
+function validOriginalSender(sender: EmailSenderIdentity): boolean {
+  return sender.name.length > 0 && sender.name.length <= 128 &&
+    sender.name.trim() === sender.name && !/[\r\n<>]/.test(sender.name) &&
+    sender.address.length <= 254 && sender.address.trim() === sender.address &&
+    /^[^\s@<>]+@[^\s@<>]+$/.test(sender.address);
+}
+
+/** Only currently configured identities may be reused; rotation quarantines legacy sender evidence. */
+function currentRetrySenders(): EmailSenderIdentity[] {
+  return [getSenderExam(), getSenderNotifications(), getSenderSecurity(), getSenderSupport()]
+    .filter(validOriginalSender);
+}
 
 export interface QueueEmailParams {
   eventType: EmailEventType;
@@ -100,24 +114,35 @@ function purgeRenderedBodyIfTerminal(notificationId: number, status: string) {
  * corps rendu conservé et sera reprise par processOutboxRetries(). */
 export async function queueAndSendEmail(params: QueueEmailParams): Promise<QueueEmailResult> {
   const db = getDb();
+  if (!validOriginalSender(params.sender)) {
+    throw new Error("Invalid configured sender identity — notification not enqueued");
+  }
 
   const existing = findExisting(params.idempotencyKey);
   if (existing) {
     return { notificationId: existing.id, status: existing.status, deduplicated: true };
   }
 
+  const replyTo = getReplyTo();
+  if (replyTo && (/\r|\n/.test(replyTo) || replyTo.length > 254)) {
+    throw new Error("Invalid configured Reply-To — notification not enqueued");
+  }
   const now = nowIso();
   const result = db
     .prepare(
       `INSERT INTO notification_log
-         (tenant_company_id, user_id, recipient_email, event_type, template_id, template_version, subject,
+         (tenant_company_id, user_id, recipient_email, sender_name, sender_address, reply_to_address,
+          event_type, template_id, template_version, subject,
           provider, idempotency_key, status, metadata_json, rendered_html, rendered_text, created_at, queued_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'resend', ?, 'QUEUED', ?, ?, ?, ?, ?)`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'resend', ?, 'QUEUED', ?, ?, ?, ?, ?)`
     )
     .run(
       params.tenant.companyId,
       params.userId,
       params.recipientEmail,
+      params.sender.name,
+      params.sender.address,
+      replyTo ?? null,
       params.eventType,
       params.rendered.templateId,
       params.rendered.templateVersion,
@@ -138,6 +163,7 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
     html: params.rendered.html,
     text: params.rendered.text,
     idempotencyKey: params.idempotencyKey,
+    replyTo,
   });
   return { notificationId, status: finalOutcome.status, deduplicated: false };
 }
@@ -149,6 +175,7 @@ interface SendAttemptInput {
   html: string;
   text: string;
   idempotencyKey: string;
+  replyTo?: string;
 }
 
 interface SendAttemptOutcome {
@@ -196,7 +223,6 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
   let providerAttempted = false;
   try {
     const resend = getResendClient();
-    const replyTo = getReplyTo();
     providerAttempted = true;
     const { data, error } = await resend.emails.send(
       {
@@ -205,7 +231,7 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
         subject: input.subject,
         html: input.html,
         text: input.text,
-        ...(replyTo ? { replyTo } : {}),
+        ...(input.replyTo ? { replyTo: input.replyTo } : {}),
       },
       // Resend request-scoped idempotency key, not a user-visible header.
       { idempotencyKey: input.idempotencyKey }
@@ -286,27 +312,37 @@ export interface OutboxRetryResult {
  * distincte ; cette fonction ne prétend pas qu'un cron est installé. */
 export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResult> {
   const db = getDb();
-  const candidates = db
+  // #326: the original From identity is immutable enqueue evidence.
+  // Legacy sender-less rows and rows using a retired configured identity
+  // must stay on hold; never guess an event->sender mapping. Filter them
+  // in SQL so a large held backlog cannot starve newer valid retries.
+  const senders = currentRetrySenders();
+  const senderClauses = senders.map(() => "(sender_name = ? AND lower(sender_address) = ?)").join(" OR ");
+  const senderArgs = senders.flatMap((sender) => [sender.name, sender.address.toLowerCase()]);
+  const candidates = senders.length > 0 ? db
     .prepare(
-      `SELECT id, recipient_email, subject, rendered_html, rendered_text, idempotency_key, retry_count, failed_at
+      `SELECT id, recipient_email, sender_name, sender_address, reply_to_address, subject,
+              rendered_html, rendered_text, idempotency_key, retry_count, failed_at
        FROM notification_log
        WHERE status = 'FAILED' AND retry_count < ? AND rendered_html IS NOT NULL
+         AND (${senderClauses})
        ORDER BY created_at ASC LIMIT ?`
     )
-    .all(MAX_RETRIES, limit) as {
+    .all(MAX_RETRIES, ...senderArgs, limit) as {
     id: number;
     recipient_email: string;
+    sender_name: string;
+    sender_address: string;
+    reply_to_address: string | null;
     subject: string;
     rendered_html: string;
     rendered_text: string;
     idempotency_key: string;
     retry_count: number;
     failed_at: string | null;
-  }[];
+  }[] : [];
 
   const resendConfigured = isResendApiKeyConfigured();
-  const { getSenderNotifications } = await import("./config");
-  const sender = getSenderNotifications();
 
   let attempted = 0;
   let sent = 0;
@@ -349,11 +385,12 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
 
     const outcome = await attemptSend(row.id, {
       recipientEmail: row.recipient_email,
-      sender,
+      sender: { name: row.sender_name, address: row.sender_address },
       subject: row.subject,
       html: row.rendered_html,
       text: row.rendered_text,
       idempotencyKey: row.idempotency_key,
+      replyTo: row.reply_to_address ?? undefined,
     }, true);
     if (!outcome.providerAttempted) {
       skipped++;

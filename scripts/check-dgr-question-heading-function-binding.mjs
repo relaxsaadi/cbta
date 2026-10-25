@@ -210,21 +210,116 @@ function recordStructuralQuestion({ structural, index, expectedFn, errors, ids }
   }
 }
 
+function updateHtmlCommentState(line, initiallyInComment) {
+  let inComment = initiallyInComment;
+  let offset = 0;
+  while (offset < line.length) {
+    if (inComment) {
+      const close = line.indexOf("-->", offset);
+      if (close === -1) break;
+      inComment = false;
+      offset = close + 3;
+    } else {
+      const open = line.indexOf("<!--", offset);
+      if (open === -1) break;
+      inComment = true;
+      offset = open + 4;
+    }
+  }
+  return inComment;
+}
+
+function updateRawHtmlBlockState(line, activeTag) {
+  // CommonMark type-1 raw HTML blocks (<pre>, <script>, <style>, <textarea>)
+  // suppress Markdown heading parsing until their matching closing tag. The
+  // separate readiness regex still sees Q headings inside those blocks.
+  if (activeTag) {
+    return new RegExp(`</${activeTag}\\s*>`, "i").test(line) ? null : activeTag;
+  }
+  const open = line.match(/^ {0,3}<(pre|script|style|textarea)(?=[\s>])[^>]*>/i);
+  if (!open) return null;
+  const tag = open[1].toLowerCase();
+  return new RegExp(`</${tag}\\s*>`, "i").test(line.slice(open[0].length)) ? null : tag;
+}
+
+// CommonMark HTML block type 6: block tags suppress Markdown parsing
+// until the next blank line, even when the first line closes the HTML tag.
+// The readiness extractor's ATX regex is unaware of this boundary.
+const blankTerminatedHtmlTagNames = new Set(
+  "address article aside base basefont blockquote body caption center col colgroup dd details dialog dir div dl dt fieldset figcaption figure footer form frame frameset h1 h2 h3 h4 h5 h6 head header hr html iframe legend li link main menu menuitem nav noframes ol optgroup option p param section source summary table tbody td tfoot th thead title tr track ul".split(" "),
+);
+
+function blankTerminatedHtmlBlockTag(line) {
+  const opener = line.match(/^ {0,3}<\/?([A-Za-z][A-Za-z0-9-]*)(?=[ \t/>]|$)/);
+  if (!opener) return null;
+  const tag = opener[1].toLowerCase();
+  return blankTerminatedHtmlTagNames.has(tag) ? tag : null;
+}
+
 function inspectArtifact(text, expectedFn, artifactLabel) {
   const errors = [];
   const ids = [];
   const lines = text.split(/\r?\n/);
+  let fence = null;
+  let inHtmlComment = false;
+  let rawHtmlBlock = null;
+  let blankTerminatedHtmlBlock = null;
 
   for (let index = 0; index < lines.length; index += 1) {
-    const setext = structuralSetextQuestionHeading(lines[index], lines[index + 1]);
-    if (setext) {
-      recordStructuralQuestion({ structural: setext, index, expectedFn, errors, ids });
+    const line = lines[index];
+    // The readiness extractor sees ATX-looking lines even when Markdown does
+    // not render them as questions. Reject such phantom population members.
+    const hiddenContext = fence
+      ? "fenced Markdown code block"
+      : inHtmlComment
+        ? "HTML comment"
+        : rawHtmlBlock
+          ? `raw HTML <${rawHtmlBlock}> block`
+          : blankTerminatedHtmlBlock
+            ? `raw HTML <${blankTerminatedHtmlBlock}> block (blank-line terminated)`
+            : null;
+    const setext = structuralSetextQuestionHeading(line, lines[index + 1]);
+    const structural = setext ?? structuralQuestionHeading(line);
+    if (structural) {
+      recordStructuralQuestion({ structural, index, expectedFn, errors, ids });
+      if (hiddenContext) {
+        errors.push(
+          `line ${index + 1}: structural question heading is inside a ${hiddenContext}; hidden question headings cannot satisfy readiness`,
+        );
+      }
+    }
+
+    // Raw HTML type-1 blocks also suppress Markdown headings, but the
+    // readiness regex is not HTML-aware. An example inside <pre> must never
+    // count as a bank question. Do not parse fences/comments inside raw HTML.
+    if (rawHtmlBlock) {
+      rawHtmlBlock = updateRawHtmlBlockState(line, rawHtmlBlock);
+      continue;
+    }
+    if (blankTerminatedHtmlBlock) {
+      if (line.trim() === "") blankTerminatedHtmlBlock = null;
       continue;
     }
 
-    const structural = structuralQuestionHeading(lines[index]);
-    if (!structural) continue;
-    recordStructuralQuestion({ structural, index, expectedFn, errors, ids });
+    // Fences and comments must be tracked separately: an HTML comment marker
+    // printed inside a code fence is not a real comment, and vice versa.
+    const delimiter = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+    if (fence) {
+      if (delimiter && delimiter[1][0] === fence.marker &&
+          delimiter[1].length >= fence.length && /^[ \t]*$/.test(delimiter[2])) {
+        fence = null;
+      }
+    } else {
+      const previouslyInHtmlComment = inHtmlComment;
+      inHtmlComment = updateHtmlCommentState(line, inHtmlComment);
+      if (!previouslyInHtmlComment && !inHtmlComment && delimiter &&
+          (delimiter[1][0] !== "`" || !delimiter[2].includes("`"))) {
+        fence = { marker: delimiter[1][0], length: delimiter[1].length };
+      } else if (!previouslyInHtmlComment && !inHtmlComment) {
+        rawHtmlBlock = updateRawHtmlBlockState(line, null);
+        if (!rawHtmlBlock) blankTerminatedHtmlBlock = blankTerminatedHtmlBlockTag(line);
+      }
+    }
   }
 
   for (const { structural, index } of structuralHtmlQuestionHeadings(text)) {
@@ -441,6 +536,79 @@ function runRegressionFixtures() {
     "HTML-character-reference ATX question heading",
     characterReferenceAtxHeading.errors.some((error) => error.includes("malformed structural")),
     "HTML character references inside a rendered leading question ID could make an ATX item disappear from readiness without failing closed",
+  );
+
+  // A line resembling an ATX item inside a fenced example or HTML comment
+  // is counted by the readiness regex but is NOT a rendered question. It must
+  // block promotion rather than silently inflate the bank/EN population.
+  for (const [label, lines, expectedFn, context] of [
+    ["backtick-fenced-question", ["```md", "## Q-7.4-099 — hidden example", "```"], "7.4", "fenced Markdown code block"],
+    ["tilde-fenced-question", ["~~~~text", "### Q-7.6-099 — hidden example", "~~~~"], "7.6", "fenced Markdown code block"],
+    ["html-commented-question", ["<!--", "## Q-7.8-099 — hidden comment", "-->"], "7.8", "HTML comment"],
+    ["pre-html-block-question", ['<pre class="sample">', "## Q-7.3-099 — hidden raw HTML example", "</pre>"], "7.3", "raw HTML <pre> block"],
+    ["script-html-block-question", ["<script>", "## Q-7.5-099 — hidden script text", "</script>"], "7.5", "raw HTML <script> block"],
+    ["style-html-block-question", ["<style>", "## Q-7.6-098 — hidden style text", "</style>"], "7.6", "raw HTML <style> block"],
+    ["textarea-html-block-question", ["<textarea>", "## Q-7.9-099 — hidden textarea text", "</textarea>"], "7.9", "raw HTML <textarea> block"],
+  ]) {
+    const hidden = inspectArtifact(lines.join("\n"), expectedFn, label);
+    assertFixture(
+      label,
+      hidden.errors.some((error) => error.includes(context) && error.includes("cannot satisfy readiness")),
+      "a hidden pseudo-question was counted without any fail-closed error",
+    );
+  }
+
+  // CommonMark type-6 raw HTML blocks end on the next blank line, not
+  // on a closing tag. HTML examples must not inflate the question count.
+  for (const [label, lines, expectedFn, context] of [
+    ["div-html-phantom", ['<div class="sample">', "## Q-7.2-099 — HTML-only example", "</div>"], "7.2", "raw HTML <div> block"],
+    ["table-html-phantom", ["<table><tr><td>", "### Q-7.7-099 — HTML-only example", "</td></tr></table>"], "7.7", "raw HTML <table> block"],
+    ["closing-html-tag-phantom", ["</section>", "## Q-7.10-099 — HTML-only example"], "7.10", "raw HTML <section> block"],
+    ["single-line-html-phantom", ["<div></div>", "## Q-7.9-099 — HTML-only example"], "7.9", "raw HTML <div> block"],
+    ["partial-html-tag-phantom", ["<div class", "## Q-7.5-099 — HTML-only example"], "7.5", "raw HTML <div> block"],
+  ]) {
+    const hidden = inspectArtifact(lines.join("\n"), expectedFn, label);
+    assertFixture(
+      label,
+      hidden.errors.some((error) => error.includes(context) && error.includes("cannot satisfy readiness")),
+      "CommonMark type-6 HTML swallowed an ATX-looking item without a fail-closed error",
+    );
+  }
+  const blankBoundary = inspectArtifact([
+    "<div>", "ordinary HTML", "", "## Q-7.4-001 — real question after blank boundary",
+  ].join("\n"), "7.4", "type-6-boundary");
+  assertFixture(
+    "type-6-boundary",
+    blankBoundary.errors.length === 0 && blankBoundary.ids.length === 1,
+    "blank line failed to terminate a type-6 HTML block",
+  );
+  const fenceHtmlExample = inspectArtifact([
+    "~~~html", "<div>", "~~~", "## Q-7.6-001 — real question outside fence",
+  ].join("\n"), "7.6", "html-tag-inside-fence");
+  assertFixture(
+    "html-tag-inside-fence",
+    fenceHtmlExample.errors.length === 0 && fenceHtmlExample.ids.length === 1,
+    "an HTML tag printed in a code fence incorrectly opened a type-6 block",
+  );
+
+  const ordinaryDocumentation = inspectArtifact([
+    "```md",
+    "This is a code sample, not a question item.",
+    "```",
+    "<!-- Documentation note -->",
+    "<pre>",
+    "Non-question documentation.",
+    "</pre>",
+    "<!-- <script> marker in a comment must not open a raw HTML block -->",
+    "```html",
+    "<textarea> marker in a fenced example must not open a raw HTML block",
+    "```",
+    "## Q-7.9-001 — actual question after the example",
+  ].join("\n"), "7.9", "ordinary-documentation");
+  assertFixture(
+    "ordinary documentation outside question headings",
+    ordinaryDocumentation.errors.length === 0 && ordinaryDocumentation.ids.length === 1,
+    "ordinary non-question documentation or a subsequent valid item was incorrectly rejected",
   );
 
   const narrativeForeign = inspectArtifact([

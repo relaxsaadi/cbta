@@ -236,7 +236,7 @@ function updateRawHtmlBlockState(line, activeTag) {
   if (activeTag) {
     return new RegExp(`</${activeTag}\\s*>`, "i").test(line) ? null : activeTag;
   }
-  const open = line.match(/^ {0,3}<(pre|script|style|textarea)(?=[\\s>])[^>]*>/i);
+  const open = line.match(/^ {0,3}<(pre|script|style|textarea)(?=[\s>])[^>]*>/i);
   if (!open) return null;
   const tag = open[1].toLowerCase();
   return new RegExp(`</${tag}\\s*>`, "i").test(line.slice(open[0].length)) ? null : tag;

@@ -94,8 +94,8 @@ test("#58 all manual-grading routing and finalization paths use published qtype_
 
 test("#58 unresolved legacy snapshot cannot silently finalize a manually graded attempt", () => {
   const block = exportedFunctionBlock(MANUAL, "finalizeManualGradingIfComplete");
-  assert.match(block, /s\\.qtype_snapshot IS NULL/);
-  assert.match(block, /s\\.qtype_snapshot IN \\('short_answer', 'scenario'\\)/);
+  assert.match(block, /s\.qtype_snapshot IS NULL/);
+  assert.match(block, /s\.qtype_snapshot IN \('short_answer', 'scenario'\)/);
 });
 
 test("#58 migration logic must explicitly govern snapshot qtype and preserve unknown legacy state", () => {

@@ -644,6 +644,11 @@ CREATE TABLE IF NOT EXISTS notification_log (
   tenant_company_id INTEGER REFERENCES companies(id),
   user_id INTEGER REFERENCES users(id),
   recipient_email TEXT NOT NULL,
+  -- #326: identity of the original From header. Nullable only so legacy
+  -- outbox records can be migrated without inventing historical evidence.
+  -- Legacy NULL-sender rows are NOT eligible for automatic retry.
+  sender_name TEXT,
+  sender_address TEXT,
   event_type TEXT NOT NULL,
   template_id TEXT NOT NULL,
   template_version TEXT NOT NULL,

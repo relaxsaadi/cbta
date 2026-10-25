@@ -89,7 +89,8 @@ function safeFailureReason(rawMessage: string): string {
 
 function purgeRenderedBodyIfTerminal(notificationId: number, status: string) {
   if (TERMINAL_STATUSES.has(status)) {
-    getDb().prepare(`UPDATE notification_log SET rendered_html = NULL, rendered_text = NULL WHERE id = ?`).run(notificationId);
+    getDb().prepare(`UPDATE notification_log SET rendered_html = NULL, rendered_text = NULL
+      WHERE id = ? AND status IN ('SENT','DELIVERED','SUPPRESSED','BOUNCED','COMPLAINED')`).run(notificationId);
   }
 }
 
@@ -130,7 +131,7 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
     );
   const notificationId = Number(result.lastInsertRowid);
 
-  const finalStatus = await attemptSend(notificationId, {
+  const finalOutcome = await attemptSend(notificationId, {
     recipientEmail: params.recipientEmail,
     sender: params.sender,
     subject: params.rendered.subject,
@@ -138,7 +139,7 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
     text: params.rendered.text,
     idempotencyKey: params.idempotencyKey,
   });
-  return { notificationId, status: finalStatus, deduplicated: false };
+  return { notificationId, status: finalOutcome.status, deduplicated: false };
 }
 
 interface SendAttemptInput {
@@ -150,30 +151,53 @@ interface SendAttemptInput {
   idempotencyKey: string;
 }
 
-async function attemptSend(notificationId: number, input: SendAttemptInput): Promise<string> {
+interface SendAttemptOutcome {
+  status: string;
+  /** True only after the provider SDK call was actually invoked. */
+  providerAttempted: boolean;
+}
+
+/**
+ * A retry must already own the FAILED -> SENDING conditional claim.
+ * Fresh notifications claim QUEUED -> SENDING here. A crash in SENDING is
+ * deliberately not auto-replayed: provider acceptance may be ambiguous.
+ */
+async function attemptSend(notificationId: number, input: SendAttemptInput, retryClaimed = false): Promise<SendAttemptOutcome> {
   const db = getDb();
+  if (!retryClaimed) {
+    const claim = db.prepare(`UPDATE notification_log SET status = 'SENDING'
+      WHERE id = ? AND status = 'QUEUED'`).run(notificationId);
+    if (Number(claim.changes) !== 1) {
+      const current = db.prepare(`SELECT status FROM notification_log WHERE id = ?`).get(notificationId) as
+        { status: string } | undefined;
+      return { status: current?.status ?? "FAILED", providerAttempted: false };
+    }
+  }
+  // Reevaluate policy AFTER the durable claim, immediately before dispatch.
   const decision = resolveDeliveryDecision(input.recipientEmail);
 
   if (!decision.shouldSendReal) {
-    db.prepare(`UPDATE notification_log SET status = 'SUPPRESSED', failure_reason_safe = ? WHERE id = ?`).run(decision.suppressReason ?? null, notificationId);
+    db.prepare(`UPDATE notification_log SET status = 'SUPPRESSED', failure_reason_safe = ?
+      WHERE id = ? AND status = 'SENDING'`).run(decision.suppressReason ?? null, notificationId);
     purgeRenderedBodyIfTerminal(notificationId, "SUPPRESSED");
-    return "SUPPRESSED";
+    return { status: "SUPPRESSED", providerAttempted: false };
   }
 
   if (!isResendApiKeyConfigured()) {
-    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ? WHERE id = ?`).run(
+    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?
+      WHERE id = ? AND status = 'SENDING'`).run(
       "RESEND_API_KEY non configuré",
       nowIso(),
       notificationId
     );
-    return "FAILED"; // corps CONSERVÉ — pas terminal, un retry ultérieur (une fois la clé ajoutée) doit pouvoir le rejouer
+    return { status: "FAILED", providerAttempted: false }; // corps conservé, retry après configuration
   }
 
-  db.prepare(`UPDATE notification_log SET status = 'SENDING' WHERE id = ?`).run(notificationId);
-
+  let providerAttempted = false;
   try {
     const resend = getResendClient();
     const replyTo = getReplyTo();
+    providerAttempted = true;
     const { data, error } = await resend.emails.send(
       {
         from: `${input.sender.name} <${input.sender.address}>`,
@@ -189,39 +213,44 @@ async function attemptSend(notificationId: number, input: SendAttemptInput): Pro
 
     if (error) {
       const safeReason = safeFailureReason(error.message ?? "erreur fournisseur");
-      db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1 WHERE id = ?`).run(
+      db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1
+        WHERE id = ? AND status = 'SENDING'`).run(
         safeReason,
         nowIso(),
         notificationId
       );
-      return "FAILED";
+      return { status: "FAILED", providerAttempted };
     }
 
     // Provider accepted the request. Without a valid provider identity we
     // CANNOT classify this as SENT or schedule a blind resend. It remains
     // SENDING for deliberate operator investigation (#225/#323).
-    if (!data?.id) return "SENDING";
+    if (!data?.id) return { status: "SENDING", providerAttempted };
 
     try {
       // ID, SENT state and all already-signed early webhooks are committed
       // together. A failed reconciliation leaves SENDING (ambiguous
       // provider acceptance); never turn it into FAILED for auto-retry.
       finalizeResendAcceptedSend(notificationId, data.id);
-      return "SENT";
+      return { status: "SENT", providerAttempted };
     } catch {
-      return "SENDING";
+      return { status: "SENDING", providerAttempted };
     }
   } catch (err) {
-    // This path covers a provider request error, not a successful response
-    // whose local persistence failed. Resend's idempotency key is still
-    // needed on retries because a transport error may be ambiguous.
+    // Errors before invocation must not consume retry budget. A transport
+    // error after invocation may still represent an ambiguous acceptance;
+    // provider-level idempotency mitigates duplicates but is NOT proof of
+    // safe operational replay. Keep #99/#225 open until staging adjudication.
     const safeReason = safeFailureReason(err instanceof Error ? err.message : "erreur réseau");
-    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1 WHERE id = ?`).run(
+    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?,
+      retry_count = retry_count + ?
+      WHERE id = ? AND status = 'SENDING'`).run(
       safeReason,
       nowIso(),
+      providerAttempted ? 1 : 0,
       notificationId
     );
-    return "FAILED";
+    return { status: "FAILED", providerAttempted };
   }
 }
 
@@ -230,7 +259,7 @@ export interface OutboxRetryResult {
   attempted: number;
   sent: number;
   stillFailed: number;
-  /** Lignes non envoyées parce qu'une garde de politique/configuration l'interdit. */
+  /** Sans appel fournisseur (politique/configuration, ou claim perdu face à un worker). */
   skipped: number;
   /** Sous-ensemble de skipped devenu terminal SUPPRESSED pendant ce run. */
   terminalized: number;
@@ -259,7 +288,7 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
   const db = getDb();
   const candidates = db
     .prepare(
-      `SELECT id, recipient_email, subject, rendered_html, rendered_text, idempotency_key
+      `SELECT id, recipient_email, subject, rendered_html, rendered_text, idempotency_key, retry_count, failed_at
        FROM notification_log
        WHERE status = 'FAILED' AND retry_count < ? AND rendered_html IS NOT NULL
        ORDER BY created_at ASC LIMIT ?`
@@ -271,6 +300,8 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
     rendered_html: string;
     rendered_text: string;
     idempotency_key: string;
+    retry_count: number;
+    failed_at: string | null;
   }[];
 
   const resendConfigured = isResendApiKeyConfigured();
@@ -287,40 +318,50 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
     const decision = resolveDeliveryDecision(row.recipient_email);
 
     if (!decision.shouldSendReal) {
-      // Réutilise attemptSend() afin que la même règle de suppression soit
-      // appliquée à l'envoi initial ET au retry. Cette branche s'arrête
-      // avant toute vérification/appel Resend : aucun réseau possible.
-      const status = await attemptSend(row.id, {
-        recipientEmail: row.recipient_email,
-        sender,
-        subject: row.subject,
-        html: row.rendered_html,
-        text: row.rendered_text,
-        idempotencyKey: row.idempotency_key,
-      });
+      // Policy terminalization is also conditional: another worker may have
+      // claimed this snapshot already. Never overwrite its in-flight state.
+      const terminal = db.prepare(`UPDATE notification_log
+        SET status = 'SUPPRESSED', failure_reason_safe = ?, rendered_html = NULL, rendered_text = NULL
+        WHERE id = ? AND status = 'FAILED' AND retry_count = ? AND failed_at IS ?`)
+        .run(decision.suppressReason ?? null, row.id, row.retry_count, row.failed_at);
       skipped++;
-      if (status === "SUPPRESSED") terminalized++;
+      if (Number(terminal.changes) === 1) terminalized++;
       continue;
     }
 
     if (!resendConfigured) {
-      // Pas une tentative fournisseur : ne pas mentir dans les compteurs et
-      // ne pas brûler le budget de retries. La ligne reste FAILED avec son
-      // corps durable pour reprendre après correction de configuration.
       skipped++;
       continue;
     }
 
-    attempted++;
-    const status = await attemptSend(row.id, {
+    // Single SQLite writer / CAS: both the FAILED state and the selected
+    // failure generation must still match. The retry_count + failed_at
+    // fence prevents a stale worker from claiming again after a fast
+    // failed first attempt (FAILED -> SENDING -> FAILED, the ABA race).
+    const claim = db.prepare(`UPDATE notification_log SET status = 'SENDING'
+      WHERE id = ? AND status = 'FAILED' AND retry_count = ? AND failed_at IS ?
+        AND retry_count < ? AND rendered_html IS NOT NULL`)
+      .run(row.id, row.retry_count, row.failed_at, MAX_RETRIES);
+    if (Number(claim.changes) !== 1) {
+      skipped++; // another worker won, or row changed; no provider attempt
+      continue;
+    }
+
+    const outcome = await attemptSend(row.id, {
       recipientEmail: row.recipient_email,
       sender,
       subject: row.subject,
       html: row.rendered_html,
       text: row.rendered_text,
       idempotencyKey: row.idempotency_key,
-    });
-    if (status === "SENT") sent++;
+    }, true);
+    if (!outcome.providerAttempted) {
+      skipped++;
+      if (outcome.status === "SUPPRESSED") terminalized++;
+      continue;
+    }
+    attempted++;
+    if (outcome.status === "SENT") sent++;
     else stillFailed++;
   }
 

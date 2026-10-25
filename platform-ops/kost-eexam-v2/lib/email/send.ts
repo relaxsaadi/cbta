@@ -123,14 +123,18 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
     return { notificationId: existing.id, status: existing.status, deduplicated: true };
   }
 
+  const replyTo = getReplyTo();
+  if (replyTo && (/\r|\n/.test(replyTo) || replyTo.length > 254)) {
+    throw new Error("Invalid configured Reply-To — notification not enqueued");
+  }
   const now = nowIso();
   const result = db
     .prepare(
       `INSERT INTO notification_log
-         (tenant_company_id, user_id, recipient_email, sender_name, sender_address,
+         (tenant_company_id, user_id, recipient_email, sender_name, sender_address, reply_to_address,
           event_type, template_id, template_version, subject,
           provider, idempotency_key, status, metadata_json, rendered_html, rendered_text, created_at, queued_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'resend', ?, 'QUEUED', ?, ?, ?, ?, ?)`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'resend', ?, 'QUEUED', ?, ?, ?, ?, ?)`
     )
     .run(
       params.tenant.companyId,
@@ -138,6 +142,7 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
       params.recipientEmail,
       params.sender.name,
       params.sender.address,
+      replyTo ?? null,
       params.eventType,
       params.rendered.templateId,
       params.rendered.templateVersion,
@@ -158,6 +163,7 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
     html: params.rendered.html,
     text: params.rendered.text,
     idempotencyKey: params.idempotencyKey,
+    replyTo,
   });
   return { notificationId, status: finalOutcome.status, deduplicated: false };
 }
@@ -169,6 +175,7 @@ interface SendAttemptInput {
   html: string;
   text: string;
   idempotencyKey: string;
+  replyTo?: string;
 }
 
 interface SendAttemptOutcome {
@@ -216,7 +223,6 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
   let providerAttempted = false;
   try {
     const resend = getResendClient();
-    const replyTo = getReplyTo();
     providerAttempted = true;
     const { data, error } = await resend.emails.send(
       {
@@ -225,7 +231,7 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
         subject: input.subject,
         html: input.html,
         text: input.text,
-        ...(replyTo ? { replyTo } : {}),
+        ...(input.replyTo ? { replyTo: input.replyTo } : {}),
       },
       // Resend request-scoped idempotency key, not a user-visible header.
       { idempotencyKey: input.idempotencyKey }
@@ -315,7 +321,7 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
   const senderArgs = senders.flatMap((sender) => [sender.name, sender.address.toLowerCase()]);
   const candidates = senders.length > 0 ? db
     .prepare(
-      `SELECT id, recipient_email, sender_name, sender_address, subject,
+      `SELECT id, recipient_email, sender_name, sender_address, reply_to_address, subject,
               rendered_html, rendered_text, idempotency_key, retry_count, failed_at
        FROM notification_log
        WHERE status = 'FAILED' AND retry_count < ? AND rendered_html IS NOT NULL
@@ -327,6 +333,7 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
     recipient_email: string;
     sender_name: string;
     sender_address: string;
+    reply_to_address: string | null;
     subject: string;
     rendered_html: string;
     rendered_text: string;
@@ -383,6 +390,7 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
       html: row.rendered_html,
       text: row.rendered_text,
       idempotencyKey: row.idempotency_key,
+      replyTo: row.reply_to_address ?? undefined,
     }, true);
     if (!outcome.providerAttempted) {
       skipped++;

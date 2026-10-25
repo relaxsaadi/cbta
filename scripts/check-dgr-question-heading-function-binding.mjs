@@ -229,18 +229,38 @@ function updateHtmlCommentState(line, initiallyInComment) {
   return inComment;
 }
 
+function updateRawHtmlBlockState(line, activeTag) {
+  // CommonMark type-1 raw HTML blocks (<pre>, <script>, <style>, <textarea>)
+  // suppress Markdown heading parsing until their matching closing tag. The
+  // separate readiness regex still sees Q headings inside those blocks.
+  if (activeTag) {
+    return new RegExp(`</${activeTag}\\s*>`, "i").test(line) ? null : activeTag;
+  }
+  const open = line.match(/^ {0,3}<(pre|script|style|textarea)(?=[\\s>])[^>]*>/i);
+  if (!open) return null;
+  const tag = open[1].toLowerCase();
+  return new RegExp(`</${tag}\\s*>`, "i").test(line.slice(open[0].length)) ? null : tag;
+}
+
 function inspectArtifact(text, expectedFn, artifactLabel) {
   const errors = [];
   const ids = [];
   const lines = text.split(/\r?\n/);
   let fence = null;
   let inHtmlComment = false;
+  let rawHtmlBlock = null;
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     // The readiness extractor sees ATX-looking lines even when Markdown does
     // not render them as questions. Reject such phantom population members.
-    const hiddenContext = fence ? "fenced Markdown code block" : inHtmlComment ? "HTML comment" : null;
+    const hiddenContext = fence
+      ? "fenced Markdown code block"
+      : inHtmlComment
+        ? "HTML comment"
+        : rawHtmlBlock
+          ? `raw HTML <${rawHtmlBlock}> block`
+          : null;
     const setext = structuralSetextQuestionHeading(line, lines[index + 1]);
     const structural = setext ?? structuralQuestionHeading(line);
     if (structural) {
@@ -250,6 +270,14 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
           `line ${index + 1}: structural question heading is inside a ${hiddenContext}; hidden question headings cannot satisfy readiness`,
         );
       }
+    }
+
+    // Raw HTML type-1 blocks also suppress Markdown headings, but the
+    // readiness regex is not HTML-aware. An example inside <pre> must never
+    // count as a bank question. Do not parse fences/comments inside raw HTML.
+    if (rawHtmlBlock) {
+      rawHtmlBlock = updateRawHtmlBlockState(line, rawHtmlBlock);
+      continue;
     }
 
     // Fences and comments must be tracked separately: an HTML comment marker
@@ -266,6 +294,8 @@ function inspectArtifact(text, expectedFn, artifactLabel) {
       if (!previouslyInHtmlComment && !inHtmlComment && delimiter &&
           (delimiter[1][0] !== "`" || !delimiter[2].includes("`"))) {
         fence = { marker: delimiter[1][0], length: delimiter[1].length };
+      } else if (!previouslyInHtmlComment && !inHtmlComment) {
+        rawHtmlBlock = updateRawHtmlBlockState(line, null);
       }
     }
   }
@@ -493,6 +523,10 @@ function runRegressionFixtures() {
     ["backtick-fenced-question", ["```md", "## Q-7.4-099 — hidden example", "```"], "7.4", "fenced Markdown code block"],
     ["tilde-fenced-question", ["~~~~text", "### Q-7.6-099 — hidden example", "~~~~"], "7.6", "fenced Markdown code block"],
     ["html-commented-question", ["<!--", "## Q-7.8-099 — hidden comment", "-->"], "7.8", "HTML comment"],
+    ["pre-html-block-question", ["<pre class="sample">", "## Q-7.3-099 — hidden raw HTML example", "</pre>"], "7.3", "raw HTML <pre> block"],
+    ["script-html-block-question", ["<script>", "## Q-7.5-099 — hidden script text", "</script>"], "7.5", "raw HTML <script> block"],
+    ["style-html-block-question", ["<style>", "## Q-7.6-098 — hidden style text", "</style>"], "7.6", "raw HTML <style> block"],
+    ["textarea-html-block-question", ["<textarea>", "## Q-7.9-099 — hidden textarea text", "</textarea>"], "7.9", "raw HTML <textarea> block"],
   ]) {
     const hidden = inspectArtifact(lines.join("\n"), expectedFn, label);
     assertFixture(
@@ -507,6 +541,13 @@ function runRegressionFixtures() {
     "This is a code sample, not a question item.",
     "```",
     "<!-- Documentation note -->",
+    "<pre>",
+    "Non-question documentation.",
+    "</pre>",
+    "<!-- <script> marker in a comment must not open a raw HTML block -->",
+    "```html",
+    "<textarea> marker in a fenced example must not open a raw HTML block",
+    "```",
     "## Q-7.9-001 — actual question after the example",
   ].join("\n"), "7.9", "ordinary-documentation");
   assertFixture(

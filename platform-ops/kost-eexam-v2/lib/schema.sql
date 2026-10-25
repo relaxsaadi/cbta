@@ -649,6 +649,8 @@ CREATE TABLE IF NOT EXISTS notification_log (
   -- Legacy NULL-sender rows are NOT eligible for automatic retry.
   sender_name TEXT,
   sender_address TEXT,
+  -- Original Reply-To is part of the idempotent provider request payload.
+  reply_to_address TEXT,
   event_type TEXT NOT NULL,
   template_id TEXT NOT NULL,
   template_version TEXT NOT NULL,

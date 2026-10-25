@@ -2,7 +2,7 @@ import { getDb, transaction, nowIso } from "./db";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 import { getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
-import { gradeAttempt } from "./grading";
+import { gradeAttemptInTransaction } from "./grading";
 import { isNewAttemptsBlocked } from "./platform-settings";
 
 export type AttemptStatus = "in_progress" | "submitted" | "auto_submitted" | "abandoned";
@@ -477,27 +477,29 @@ export function toggleMark(attemptId: number, candidateUserId: number, attemptQu
   getDb().prepare(`UPDATE attempt_questions SET marked_for_review = ? WHERE id = ? AND attempt_id = ?`).run(marked ? 1 : 0, attemptQuestionId, attemptId);
 }
 
+/** Finalisation atomique (#37): un statut terminal n'est jamais commité
+ * sans son résultat et les deux traces d'audit. Un échec de notation laisse
+ * la tentative IN_PROGRESS et donc retentable après résolution de l'erreur.
+ * Les résultats de correction manuelle déjà existants ne sont jamais renotés.
+ */
 export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
-  // Bug réel trouvé en concevant la correction manuelle (mission "COMPLETE
-  // CANDIDATE EXAM LIFECYCLE", 2026-08-29) : gradeAttempt() était appelée
-  // SANS CONDITION après la transaction ci-dessous, y compris quand la
-  // transition "déjà soumise -> no-op" avait eu lieu (double-clic, retry
-  // réseau retardé) — inoffensif avant la correction manuelle (renotage
-  // idempotent), mais dangereux depuis : un ré-appel tardif écraserait une
-  // correction manuelle déjà écrite. `transitioned` ne devient vrai QUE la
-  // toute première fois — gradeAttempt() n'est donc plus jamais appelée
-  // sur un no-op (défense en profondeur, doublée par la garde interne à
-  // gradeAttempt() elle-même).
-  let transitioned = false;
   transaction((db) => {
     const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
     if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-    if (attempt.status !== "in_progress") return; // déjà soumise — idempotent, pas une erreur (double clic sur Terminer)
+
+    if (attempt.status !== "in_progress") {
+      // Ancien état orphelin (créé AVANT ce correctif) : ne pas feindre
+      // qu'une soumission sans résultat a réussi, ni renoter silencieusement.
+      // La reprise historique exige un rapprochement indépendant et audité.
+      if ((attempt.status === "submitted" || attempt.status === "auto_submitted") &&
+          !db.prepare(`SELECT 1 FROM results WHERE attempt_id = ?`).get(attemptId)) {
+        throw new AttemptError("Soumission antérieure sans résultat : rapprochement contrôlé requis.");
+      }
+      return; // double-submit avec résultat existant : aucun écrasement
+    }
 
     const status: AttemptStatus = opts.auto ? "auto_submitted" : "submitted";
     db.prepare(`UPDATE attempts SET status = ?, submitted_at = ? WHERE id = ?`).run(status, nowIso(), attemptId);
-    transitioned = true;
-
     audit({
       actorUserId: candidateUserId,
       actorRole: "candidate",
@@ -505,14 +507,10 @@ export function submitAttempt(attemptId: number, candidateUserId: number, opts: 
       targetType: "attempt",
       targetId: attemptId,
     });
+    // gradeAttemptInTransaction() partage ce BEGIN IMMEDIATE : une erreur
+    // de parsing, SQL, résultat ou audit annule aussi statut + audit submit.
+    gradeAttemptInTransaction(db, attemptId);
   });
-
-  if (!transitioned) return;
-
-  // Notation hors de la transaction d'écriture ci-dessus (gradeAttempt gère
-  // sa propre cohérence) — évite d'imbriquer deux BEGIN IMMEDIATE (SQLite
-  // n'autorise pas les transactions imbriquées).
-  gradeAttempt(attemptId);
 }
 
 /** Balayage périodique — auto-soumet toute tentative dont le temps est

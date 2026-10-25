@@ -52,7 +52,7 @@ async function submittedFixture(mode: "manual" | "expired_sweep" = "manual") {
   const assessmentId = createAssessmentDraft({
     type: "examen", name: `Recovery Test Exam ${n}`, functionCode: "7.2", groupId,
     questionSource: "manual", manualQuestionIds: [questionId], questionCount: 1,
-    durationMinutes: 30, passThresholdPct: 80, scope: "test", createdBy: admin,
+    durationMinutes: 30, passThresholdPct: 80, attemptsAllowed: 2, scope: "test", createdBy: admin,
     openAt: new Date(Date.now() - 60_000).toISOString(),
     closeAt: new Date(Date.now() + 3_600_000).toISOString(),
   });
@@ -79,7 +79,7 @@ function notificationRows(f: Awaited<ReturnType<typeof submittedFixture>>) {
      ORDER BY id`
   ).all(
     `result-available/${f.attemptId}`,
-    `exam-submitted/${f.candidateId}/${(f.db.prepare("SELECT submitted_at FROM attempts WHERE id = ?").get(f.attemptId) as { submitted_at: string }).submitted_at}`,
+    `exam-submitted/attempt/${f.attemptId}`,
     `exam-submitted-admin/${f.attemptId}/%`,
   ) as { event_type: string; idempotency_key: string; recipient_email: string; tenant_company_id: number; status: string }[];
 }
@@ -295,4 +295,58 @@ test("#225: old QUEUED/SENDING terminal outbox states are visible but never auto
         .run(recentAt, row.idempotency_key);
     }
   }
+});
+
+test("#321: one candidate can submit two attempts at identical millisecond without losing either confirmation", async () => {
+  const f = await submittedFixture();
+  const { startAttempt, submitAttempt } = await import("../../lib/attempts");
+  const { reconcileTerminalNotifications } = await import("../../lib/email/reconcile-terminal");
+  const first = f.db.prepare("SELECT assessment_id, submitted_at FROM attempts WHERE id = ?")
+    .get(f.attemptId) as { assessment_id: number; submitted_at: string };
+  // Same assessment allows 2 synthetic attempts. Force an exact timestamp
+  // collision deterministically instead of relying on scheduler timing.
+  const second = startAttempt(first.assessment_id, f.candidateId, {});
+  assert.equal(submitAttempt(second.id, f.candidateId).transitioned, true);
+  f.db.prepare("UPDATE attempts SET submitted_at = ? WHERE id = ?").run(first.submitted_at, second.id);
+  for (let i = 0; i < 3; i++) await reconcileTerminalNotifications(100);
+
+  const firstKey = `exam-submitted/attempt/${f.attemptId}`;
+  const secondKey = `exam-submitted/attempt/${second.id}`;
+  const candidateEvents = f.db.prepare(
+    "SELECT idempotency_key FROM notification_log WHERE event_type = 'EXAM_SUBMITTED' AND idempotency_key IN (?, ?) ORDER BY idempotency_key"
+  ).all(firstKey, secondKey) as { idempotency_key: string }[];
+  assert.deepEqual(candidateEvents.map((r) => r.idempotency_key), [firstKey, secondKey].sort(),
+    "two committed attempts require distinct durable candidate notification identities");
+  await reconcileTerminalNotifications(100);
+  const duplicates = f.db.prepare("SELECT COUNT(*) AS total FROM notification_log WHERE idempotency_key IN (?, ?)")
+    .get(firstKey, secondKey) as { total: number };
+  assert.equal(duplicates.total, 2, "repeat reconciliation must not duplicate either logical event");
+});
+
+test("#321: historical candidate key is honored without resending; ambiguous collision is quarantined", async () => {
+  const f = await submittedFixture();
+  const { startAttempt, submitAttempt } = await import("../../lib/attempts");
+  const { notifySubmissionEvents } = await import("../../lib/email/notify-submission");
+  const { reconcileTerminalNotifications } = await import("../../lib/email/reconcile-terminal");
+  const first = f.db.prepare("SELECT assessment_id, submitted_at FROM attempts WHERE id = ?")
+    .get(f.attemptId) as { assessment_id: number; submitted_at: string };
+  await notifySubmissionEvents(f.attemptId);
+  const currentKey = `exam-submitted/attempt/${f.attemptId}`;
+  const legacyKey = `exam-submitted/${f.candidateId}/${first.submitted_at}`;
+  // Simulate a previously persisted legacy delivery without contacting any provider.
+  f.db.prepare("UPDATE notification_log SET idempotency_key = ? WHERE idempotency_key = ?")
+    .run(legacyKey, currentKey);
+  const second = startAttempt(first.assessment_id, f.candidateId, {});
+  assert.equal(submitAttempt(second.id, f.candidateId).transitioned, true);
+  f.db.prepare("UPDATE attempts SET submitted_at = ? WHERE id = ?").run(first.submitted_at, second.id);
+  const report = await reconcileTerminalNotifications(100);
+  assert.ok((report.legacyCollisionGroups ?? 0) >= 1, "same-user/timestamp legacy ambiguity must be surfaced");
+  const oldCount = f.db.prepare("SELECT COUNT(*) AS total FROM notification_log WHERE idempotency_key = ?")
+    .get(legacyKey) as { total: number };
+  assert.equal(oldCount.total, 1, "original legacy outbox entry remains authoritative");
+  const newCount = f.db.prepare(
+    "SELECT COUNT(*) AS total FROM notification_log WHERE idempotency_key IN (?, ?)"
+  ).get(currentKey, `exam-submitted/attempt/${second.id}`) as { total: number };
+  assert.equal(newCount.total, 0,
+    "ambiguous legacy collision must never trigger unreviewed candidate email replay");
 });

@@ -10,7 +10,12 @@ Therefore the current Track-A status is **PRE-PRODUCTION / NOT READY**. Any olde
 
 The user explicitly expanded the final project scope to cover **all Functions 7.1 through 7.10**. Therefore, do not interpret any prior narrower-scope core-platform label as a final project-completion label.
 
+## Current confidentiality release blocker — 2026-10-26 (issue #340)
+
+The repository is publicly visible, including unmerged DGR handoff branches. Draft question banks and bilingual review packages for **Functions 7.1–7.10** contain correct-answer indicators and rationales. This is a **confirmed assessment-content exposure**, not proof of a live exam breach or of regulatory approval. These already-public items are **not confidential summative exam inventory**; historic staging import counts are not production acceptance. See [#340](https://github.com/relaxsaadi/cbta/issues/340) for the owner-controlled containment, exposure inventory, restricted-storage design, new non-public validated pool and independent server-side release checks. Until accepted, **Track A + Track B remain NOT READY** even if other CI/tests pass. Do not place new confidential questions or answer keys in public repository history, comments, logs, CI artifacts or client bundles. No destructive migration or visibility change is authorized by this note.
+
 ## Final project end condition
+
 
 The project may be described as fully ready only when BOTH tracks are complete:
 

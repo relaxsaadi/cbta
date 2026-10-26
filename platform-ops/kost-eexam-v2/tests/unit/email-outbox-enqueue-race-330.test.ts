@@ -76,11 +76,13 @@ test("#330: competing enqueue wins during INSERT; loser returns deduplicated win
     recipient_email: string; rendered_html: string | null;
   }>;
   assert.equal(rows.length, 1, "SQLite UNIQUE key must remain authoritative");
-  assert.equal(rows[0].id, result.notificationId);
-  assert.equal(rows[0].status, "QUEUED");
-  assert.equal(rows[0].recipient_email, params.recipientEmail);
-  assert.equal(rows[0].sender_address, params.sender.address);
-  assert.equal(rows[0].rendered_html, params.rendered.html,
+  const winner = rows[0];
+  assert.ok(winner, "winning notification row must be accessible");
+  assert.equal(winner.id, result.notificationId);
+  assert.equal(winner.status, "QUEUED");
+  assert.equal(winner.recipient_email, params.recipientEmail);
+  assert.equal(winner.sender_address, params.sender.address);
+  assert.equal(winner.rendered_html, params.rendered.html,
     "loser must not overwrite or purge the winning payload");
 
   const repeated = await queueAndSendEmail(params);

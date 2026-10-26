@@ -44,6 +44,12 @@ test("#333: provider-format valid 24-byte Base64 key, padded/unpadded and raw co
   assert.equal(verify("whsec_" + encoded, signature, ts).valid, true);
   assert.equal(verify(encoded, signature, ts).valid, true);
   assert.equal(verify("whsec_" + encoded.replace(/=+$/, ""), signature, ts).valid, true);
+  const paddedKey = Buffer.alloc(25, 0x33);
+  const padded = paddedKey.toString("base64");
+  assert.match(padded, /=$/, "25-byte key must have Base64 padding");
+  const paddedSignature = signedHeader(paddedKey, ts);
+  assert.equal(verify("whsec_" + padded, paddedSignature, ts).valid, true);
+  assert.equal(verify("whsec_" + padded.replace(/=+$/, ""), paddedSignature, ts).valid, true);
 });
 
 test("#333: only v1 signatures; rotation list, malformed signature and stale timestamp fail safely", () => {

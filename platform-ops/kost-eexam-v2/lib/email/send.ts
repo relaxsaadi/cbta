@@ -238,6 +238,21 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
     );
 
     if (error) {
+      // Resend SDK v6 returns transport/network failures as an *error
+      // result* with statusCode=null, not necessarily as thrown exceptions.
+      // Without a definitive HTTP response, acceptance may be unknown.
+      // Never move this potentially accepted message to replayable FAILED.
+      // HTTP 408 and 5xx also do not prove non-acceptance: a gateway or
+      // upstream may fail after processing. Quarantine instead of replaying.
+      if (error.statusCode == null || error.statusCode === 408 || error.statusCode >= 500) {
+        db.prepare(`UPDATE notification_log
+          SET failure_reason_safe = ?
+          WHERE id = ? AND status = 'SENDING'`).run(
+          "Acceptation fournisseur indéterminée après erreur réseau ou serveur — contrôle opérateur requis",
+          notificationId
+        );
+        return { status: "SENDING", providerAttempted };
+      }
       const safeReason = safeFailureReason(error.message ?? "erreur fournisseur");
       db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1
         WHERE id = ? AND status = 'SENDING'`).run(
@@ -263,20 +278,32 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
       return { status: "SENDING", providerAttempted };
     }
   } catch (err) {
-    // Errors before invocation must not consume retry budget. A transport
-    // error after invocation may still represent an ambiguous acceptance;
-    // provider-level idempotency mitigates duplicates but is NOT proof of
-    // safe operational replay. Keep #99/#225 open until staging adjudication.
-    const safeReason = safeFailureReason(err instanceof Error ? err.message : "erreur réseau");
-    db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?,
-      retry_count = retry_count + ?
+    // #328: a thrown transport error *after* invoking Resend is not proof
+    // of rejection. The request could have been accepted before the reply
+    // was lost. Keep SENDING off the automatic FAILED retry path, including
+    // after process restart / expiration of provider idempotency retention.
+    // Only a qualified operator can reconcile provider evidence.
+    if (providerAttempted) {
+      db.prepare(`UPDATE notification_log
+        SET failure_reason_safe = ?
+        WHERE id = ? AND status = 'SENDING'`).run(
+        "Acceptation fournisseur indéterminée après interruption de transport — contrôle opérateur requis",
+        notificationId
+      );
+      return { status: "SENDING", providerAttempted: true };
+    }
+
+    // Failure before the SDK invocation: no provider call is known to have
+    // occurred. Preserve the durable body without burning a retry attempt.
+    const safeReason = safeFailureReason(err instanceof Error ? err.message : "erreur locale");
+    db.prepare(`UPDATE notification_log
+      SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?
       WHERE id = ? AND status = 'SENDING'`).run(
       safeReason,
       nowIso(),
-      providerAttempted ? 1 : 0,
       notificationId
     );
-    return { status: "FAILED", providerAttempted };
+    return { status: "FAILED", providerAttempted: false };
   }
 }
 

@@ -238,6 +238,19 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
     );
 
     if (error) {
+      // Resend SDK v6 returns transport/network failures as an *error
+      // result* with statusCode=null, not necessarily as thrown exceptions.
+      // Without a definitive HTTP response, acceptance may be unknown.
+      // Never move this potentially accepted message to replayable FAILED.
+      if (error.statusCode == null) {
+        db.prepare(`UPDATE notification_log
+          SET failure_reason_safe = ?
+          WHERE id = ? AND status = 'SENDING'`).run(
+          "Acceptation fournisseur indéterminée après erreur réseau — contrôle opérateur requis",
+          notificationId
+        );
+        return { status: "SENDING", providerAttempted };
+      }
       const safeReason = safeFailureReason(error.message ?? "erreur fournisseur");
       db.prepare(`UPDATE notification_log SET status = 'FAILED', failure_reason_safe = ?, failed_at = ?, retry_count = retry_count + 1
         WHERE id = ? AND status = 'SENDING'`).run(

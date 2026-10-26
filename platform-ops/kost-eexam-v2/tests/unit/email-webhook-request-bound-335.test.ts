@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import {
   hasSvixSignatureHeaders,
+  InvalidWebhookEncodingError,
   MAX_RESEND_WEBHOOK_BODY_BYTES,
   readBoundedWebhookBody,
 } from "../../lib/email/webhook-request";
@@ -86,4 +87,53 @@ test("#335: split multibyte UTF-8 bytes preserve the signed Svix HMAC input", as
     svixId, svixTimestamp: timestamp, svixSignature: signature,
     rawBody: bounded.rawBody,
   }).valid, true);
+});
+
+
+test("#338: invalid UTF-8 bytes and incomplete multibyte sequences are rejected, not substituted", async () => {
+  const invalidBody = streamRequest([
+    Buffer.from('{"value":"'),
+    new Uint8Array([0xff]),
+    Buffer.from('"}'),
+  ]);
+  await assert.rejects(
+    readBoundedWebhookBody(invalidBody),
+    InvalidWebhookEncodingError
+  );
+
+  const truncatedBody = streamRequest([new Uint8Array([0xe2, 0x82])]);
+  await assert.rejects(
+    readBoundedWebhookBody(truncatedBody),
+    InvalidWebhookEncodingError
+  );
+});
+
+test("#338: a BOM-prefixed wire body cannot reuse the BOM-free Svix HMAC", async () => {
+  const rawBody = '{"type":"email.delivered","data":{"label":"été"}}';
+  const request = streamRequest([
+    new Uint8Array([0xef]),
+    new Uint8Array([0xbb]),
+    new Uint8Array([0xbf]),
+    Buffer.from(rawBody, "utf-8"),
+  ]);
+  const bounded = await readBoundedWebhookBody(request);
+  assert.equal(bounded.tooLarge, false);
+  if (bounded.tooLarge) throw Error("Unexpected bound failure");
+  // TextDecoder's default BOM stripping must never alias signed byte streams.
+  assert.equal(bounded.rawBody, "\uFEFF" + rawBody);
+
+  const key = Buffer.alloc(24, 0x45);
+  const timestamp = String(Math.floor(Date.now() / 1000));
+  const svixId = "synthetic-338";
+  const signature = "v1," + createHmac("sha256", key)
+    .update(`${svixId}.${timestamp}.${rawBody}`).digest("base64");
+  const verified = {
+    secret: "whsec_" + key.toString("base64"),
+    svixId, svixTimestamp: timestamp, svixSignature: signature,
+  };
+  assert.equal(verifyResendWebhookSignature({ ...verified, rawBody }).valid, true);
+  assert.equal(
+    verifyResendWebhookSignature({ ...verified, rawBody: bounded.rawBody }).valid,
+    false
+  );
 });

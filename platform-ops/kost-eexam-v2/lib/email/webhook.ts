@@ -78,6 +78,23 @@ export function normalizeProviderEventTimestamp(value: unknown): string | null {
   return new Date(millis).toISOString();
 }
 
+/**
+ * Node's Base64 decoder silently drops invalid characters: "!!!!"
+ * becomes an EMPTY HMAC key. Never authenticate provider events with
+ * a malformed/empty/trivially short configuration value.
+ * Accept padded or unpadded canonical Base64 and the conventional whsec_
+ * prefix. Key *entropy* cannot be proved here: ops must configure the
+ * provider-generated signing secret, not a human-chosen placeholder.
+ */
+function decodeConfiguredWebhookKey(secret: string): Buffer | null {
+  const encoded = secret.startsWith("whsec_") ? secret.slice(6) : secret;
+  if (!/^[A-Za-z0-9+/]+={0,2}$/.test(encoded) || encoded.length % 4 === 1) return null;
+  const key = Buffer.from(encoded, "base64");
+  if (key.length < 16) return null;
+  if (key.toString("base64").replace(/=+$/, "") !== encoded.replace(/=+$/, "")) return null;
+  return key;
+}
+
 /** Ne fait JAMAIS confiance à une requête webhook non signée. */
 export function verifyResendWebhookSignature(params: {
   secret: string;
@@ -98,23 +115,21 @@ export function verifyResendWebhookSignature(params: {
     return { valid: false, reason: "svix-timestamp hors tolérance (rejeu potentiel ou horloge désynchronisée)." };
   }
 
-  const secretRaw = secret.startsWith("whsec_") ? secret.slice("whsec_".length) : secret;
-  const secretBytes = Buffer.from(secretRaw, "base64");
+  const secretBytes = decodeConfiguredWebhookKey(secret);
+  if (!secretBytes) return { valid: false, reason: "Secret de signature webhook invalide." };
   const signedContent = `${svixId}.${svixTimestamp}.${rawBody}`;
-  const expected = createHmac("sha256", secretBytes).update(signedContent).digest("base64");
-  const expectedBuf = Buffer.from(expected, "base64");
+  const expectedBuf = createHmac("sha256", secretBytes).update(signedContent).digest();
 
-  const candidates = svixSignature
-    .split(" ")
-    .map((part) => part.split(",")[1])
-    .filter(Boolean) as string[];
-  for (const candidate of candidates) {
-    let candidateBuf: Buffer;
-    try {
-      candidateBuf = Buffer.from(candidate, "base64");
-    } catch {
-      continue;
-    }
+  // Svix/Resend signatures are versioned "v1,<base64>" entries. Ignore
+  // unknown versions and malformed encodings rather than interpreting
+  // arbitrary text as a valid signature.
+  for (const entry of svixSignature.trim().split(/\s+/)) {
+    const match = /^v1,([A-Za-z0-9+/]+={0,2})$/.exec(entry);
+    if (!match) continue;
+    const candidate = match[1]!;
+    if (candidate.length % 4 === 1) continue;
+    const candidateBuf = Buffer.from(candidate, "base64");
+    if (candidateBuf.toString("base64").replace(/=+$/, "") !== candidate.replace(/=+$/, "")) continue;
     if (candidateBuf.length === expectedBuf.length && timingSafeEqual(candidateBuf, expectedBuf)) {
       return { valid: true };
     }

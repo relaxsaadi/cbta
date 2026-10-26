@@ -17,6 +17,16 @@ When working on the KOST DGR/CBTA question-bank revalidation or exam-platform re
 
 These files are the shared coordination state between Claude Code and ChatGPT.
 
+## CRITICAL exam-content confidentiality gate (2026-10-26, issue #340)
+
+GitHub reports this repository as **public**. Function 7.1–7.10 draft banks and EN-review packages already committed to publicly readable refs include explicit correct-answer keys/rationales. Such exposed items **cannot be assumed confidential for high-stakes/summative certification exams**, regardless of later regulatory verification or CI results. Treat confidentiality as a separate critical release gate from FR Tier A, EN review and named qualified reviewer approval.
+
+- **Do not publish any further confidential examination stems, answer keys, rationales, candidate materials or licensed extracts** in public Git branches, pull requests, comments, logs, artifacts or front-end bundles. Safe task matrices, source references, provenance/state ledgers, and code/tests with synthetic items may continue here.
+- Do not promote an already-public item into a secure production exam merely because its source or review status changes. Inventory contamination of staging/live candidate banks without inventing production usage; defer confidential replacement content to owner-authorized, access-controlled storage.
+- Do not attempt destructive history rewriting, deleting records or changing repository visibility/deployment settings autonomously. Those require an authorized containment plan, since removing files now does not retract public history/forks/copies.
+- Issue [#340](https://github.com/relaxsaadi/cbta/issues/340) is **OPEN / RELEASE BLOCKER** until an independent exam-confidentiality and server-side assessment-eligibility acceptance is recorded. Continue non-sensitive technical/security/readiness work without weakening any gate.
+
+
 ## Regulatory/source rules
 
 1. Never infer regulatory content that is not directly supported by the supplied current source.

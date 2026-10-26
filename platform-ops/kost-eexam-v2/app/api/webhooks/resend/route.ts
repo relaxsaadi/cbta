@@ -5,7 +5,11 @@ import {
   normalizeProviderEventTimestamp,
 } from "@/lib/email/webhook";
 import { isResendWebhookSecretConfigured, getResendWebhookSecretOrThrow } from "@/lib/email/config";
-import { hasSvixSignatureHeaders, readBoundedWebhookBody } from "@/lib/email/webhook-request";
+import {
+  hasSvixSignatureHeaders,
+  readBoundedWebhookBody,
+  InvalidWebhookEncodingError,
+} from "@/lib/email/webhook-request";
 
 // Route publique authentifiée exclusivement par signature Svix/Resend.
 // Depuis #100, le svix-id signé sert aussi d'identité idempotente durable
@@ -25,7 +29,17 @@ export async function POST(request: Request) {
 
   // Request.text() alone is unbounded on the public Route Handler. Enforce
   // a real streamed-byte ceiling before cryptographic/JSON processing.
-  const bounded = await readBoundedWebhookBody(request);
+  let bounded: Awaited<ReturnType<typeof readBoundedWebhookBody>>;
+  try {
+    bounded = await readBoundedWebhookBody(request);
+  } catch (error) {
+    if (error instanceof InvalidWebhookEncodingError) {
+      return NextResponse.json({ error: "Encodage UTF-8 webhook invalide." }, { status: 400 });
+    }
+    // A stream transport failure is transient; do not acknowledge it as
+    // a malformed signed provider event or mutate any local audit state.
+    return NextResponse.json({ error: "Lecture webhook interrompue." }, { status: 503 });
+  }
   if (bounded.tooLarge) {
     return NextResponse.json({ error: "Corps webhook trop volumineux." }, { status: 413 });
   }

@@ -242,11 +242,13 @@ async function attemptSend(notificationId: number, input: SendAttemptInput, retr
       // result* with statusCode=null, not necessarily as thrown exceptions.
       // Without a definitive HTTP response, acceptance may be unknown.
       // Never move this potentially accepted message to replayable FAILED.
-      if (error.statusCode == null) {
+      // HTTP 408 and 5xx also do not prove non-acceptance: a gateway or
+      // upstream may fail after processing. Quarantine instead of replaying.
+      if (error.statusCode == null || error.statusCode === 408 || error.statusCode >= 500) {
         db.prepare(`UPDATE notification_log
           SET failure_reason_safe = ?
           WHERE id = ? AND status = 'SENDING'`).run(
-          "Acceptation fournisseur indéterminée après erreur réseau — contrôle opérateur requis",
+          "Acceptation fournisseur indéterminée après erreur réseau ou serveur — contrôle opérateur requis",
           notificationId
         );
         return { status: "SENDING", providerAttempted };

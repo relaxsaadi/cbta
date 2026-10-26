@@ -1,0 +1,27 @@
+name: Public exam artifact boundary (known paths)
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exam-artifact-path-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout proposed repository tree
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate detector fixture paths
+        run: node scripts/check-public-exam-artifact-paths.mjs --self-test
+      - name: Reject known answer-key artifact paths from public tree
+        run: node scripts/check-public-exam-artifact-paths.mjs

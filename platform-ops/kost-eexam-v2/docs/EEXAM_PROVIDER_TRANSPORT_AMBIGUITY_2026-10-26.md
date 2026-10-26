@@ -10,7 +10,8 @@ The proposed #328 change distinguishes:
 
 - **Before provider invocation:** exceptions may remain `FAILED`, retaining the existing rendered-body recoverability without consuming a provider attempt.
 - **After invocation, thrown/indeterminate exception:** leave the row in `SENDING`, persist only a fixed sanitized operator-action reason, and **do not** classify it as `SENT` or `FAILED`. Automatic `FAILED` retry queries never select it.
-- **Explicit provider negative HTTP response with a numeric `statusCode`:** existing bounded `FAILED` handling remains. Whether some HTTP 5xx responses are themselves ambiguous requires separate provider-contract evidence; this PR does not authorize a retry runner or close #99.
+- **HTTP `408` or `5xx` responses:** conservatively retain `SENDING` for operator reconciliation. A timeout or upstream failure is not proof of non-acceptance, even with a numeric HTTP status. Synthetic tests cover initial sends and claimed retries.
+- **Other explicit numeric provider rejections:** preserve bounded `FAILED` handling, subject to provider-specific response semantics. This change does not authorize a retry runner or close #99.
 
 The fix preserves #325 atomic claim, #326 stored original sender/Reply-To, #323 signed webhook linkage, recipient suppression, `EMAIL_MODE` and allowlist, and no automatic replay of ambiguous historical `SENDING` rows. The application must not infer message delivery from a timeout.
 

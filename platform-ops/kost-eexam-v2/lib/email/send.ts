@@ -134,7 +134,8 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
          (tenant_company_id, user_id, recipient_email, sender_name, sender_address, reply_to_address,
           event_type, template_id, template_version, subject,
           provider, idempotency_key, status, metadata_json, rendered_html, rendered_text, created_at, queued_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'resend', ?, 'QUEUED', ?, ?, ?, ?, ?)`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'resend', ?, 'QUEUED', ?, ?, ?, ?, ?)
+       ON CONFLICT(idempotency_key) DO NOTHING`
     )
     .run(
       params.tenant.companyId,
@@ -154,6 +155,16 @@ export async function queueAndSendEmail(params: QueueEmailParams): Promise<Queue
       now,
       now
     );
+  // A competing process may insert this logical notification after the
+  // initial findExisting() read. The UNIQUE key remains authoritative:
+  // the losing enqueue returns the winner without re-sending or rewriting
+  // its immutable recipient/sender/payload/status. Do not suppress any
+  // database error other than this specific idempotency conflict.
+  if (Number(result.changes) === 0) {
+    const winner = findExisting(params.idempotencyKey);
+    if (!winner) throw new Error("Idempotency conflict without an accessible notification row");
+    return { notificationId: winner.id, status: winner.status, deduplicated: true };
+  }
   const notificationId = Number(result.lastInsertRowid);
 
   const finalOutcome = await attemptSend(notificationId, {

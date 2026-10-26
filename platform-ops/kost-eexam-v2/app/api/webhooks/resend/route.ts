@@ -5,6 +5,7 @@ import {
   normalizeProviderEventTimestamp,
 } from "@/lib/email/webhook";
 import { isResendWebhookSecretConfigured, getResendWebhookSecretOrThrow } from "@/lib/email/config";
+import { hasSvixSignatureHeaders, readBoundedWebhookBody } from "@/lib/email/webhook-request";
 
 // Route publique authentifiée exclusivement par signature Svix/Resend.
 // Depuis #100, le svix-id signé sert aussi d'identité idempotente durable
@@ -16,7 +17,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "RESEND_WEBHOOK_SECRET non configuré côté serveur." }, { status: 503 });
   }
 
-  const rawBody = await request.text();
+  // Reject unsigned calls before reading even one byte of their body.
+  // The shared verifier below still performs the actual HMAC/time checks.
+  if (!hasSvixSignatureHeaders(request.headers)) {
+    return NextResponse.json({ error: "Signature invalide." }, { status: 401 });
+  }
+
+  // Request.text() alone is unbounded on the public Route Handler. Enforce
+  // a real streamed-byte ceiling before cryptographic/JSON processing.
+  const bounded = await readBoundedWebhookBody(request);
+  if (bounded.tooLarge) {
+    return NextResponse.json({ error: "Corps webhook trop volumineux." }, { status: 413 });
+  }
+  const rawBody = bounded.rawBody;
   const svixId = request.headers.get("svix-id");
   const verification = verifyResendWebhookSignature({
     secret: getResendWebhookSecretOrThrow(),

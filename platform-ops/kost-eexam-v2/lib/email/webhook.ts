@@ -123,7 +123,7 @@ export function verifyResendWebhookSignature(params: {
   // Svix/Resend signatures are versioned "v1,<base64>" entries. Ignore
   // unknown versions and malformed encodings rather than interpreting
   // arbitrary text as a valid signature.
-  for (const entry of svixSignature.trim().split(/\\s+/)) {
+  for (const entry of svixSignature.trim().split(/\s+/)) {
     const match = /^v1,([A-Za-z0-9+/]+={0,2})$/.exec(entry);
     if (!match) continue;
     const candidate = match[1]!;

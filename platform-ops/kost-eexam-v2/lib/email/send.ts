@@ -333,17 +333,18 @@ export interface OutboxRetryResult {
  * persisté (fonctionne même après redémarrage du process, contrairement à
  * une simple retry en mémoire). Ne retente JAMAIS un bounce dur / une
  * plainte (déjà marqués BOUNCED/COMPLAINED par le webhook — jamais
- * remis à FAILED) — uniquement les FAILED dont retry_count < MAX_RETRIES
+ * remis à FAILED) — uniquement les QUEUED (jamais remis au fournisseur) ou
+ * FAILED dont retry_count < MAX_RETRIES
  * et dont le corps est encore présent.
  *
- * Important pour la convergence : une ligne FAILED peut devenir
- * non-envoyable APRÈS son échec initial (EMAIL_MODE=log, retrait de
+ * Important pour la convergence : une ligne QUEUED ou FAILED peut devenir
+ * non-envoyable APRÈS sa mise en file ou son échec initial (EMAIL_MODE=log, retrait de
  * l'allowlist, hard bounce/plainte). Dans ce cas elle devient SUPPRESSED et
  * son corps est purgé, plutôt que de rester FAILED et d'être resélectionnée
  * à chaque run. Cela ne contourne jamais les gardes : aucun appel réseau
  * n'est fait pour ces lignes. Une clé Resend absente, en revanche, est une
- * panne de configuration potentiellement temporaire : la ligne reste
- * FAILED et ne consomme pas son budget de retry tant qu'aucune vraie
+ * panne de configuration potentiellement temporaire : la ligne conserve
+ * son état QUEUED/FAILED et ne consomme pas son budget de retry tant qu'aucune vraie
  * tentative fournisseur n'a eu lieu.
  *
  * L'installation d'un runner automatique reste une étape opérationnelle
@@ -359,15 +360,16 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
   const senderArgs = senders.flatMap((sender) => [sender.name, sender.address.toLowerCase()]);
   const candidates = senders.length > 0 ? db
     .prepare(
-      `SELECT id, recipient_email, sender_name, sender_address, reply_to_address, subject,
+      `SELECT id, status, recipient_email, sender_name, sender_address, reply_to_address, subject,
               rendered_html, rendered_text, idempotency_key, retry_count, failed_at
        FROM notification_log
-       WHERE status = 'FAILED' AND retry_count < ? AND rendered_html IS NOT NULL
+       WHERE status IN ('QUEUED','FAILED') AND retry_count < ? AND rendered_html IS NOT NULL
          AND (${senderClauses})
        ORDER BY created_at ASC LIMIT ?`
     )
     .all(MAX_RETRIES, ...senderArgs, limit) as {
     id: number;
+    status: "QUEUED" | "FAILED";
     recipient_email: string;
     sender_name: string;
     sender_address: string;
@@ -396,8 +398,8 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
       // claimed this snapshot already. Never overwrite its in-flight state.
       const terminal = db.prepare(`UPDATE notification_log
         SET status = 'SUPPRESSED', failure_reason_safe = ?, rendered_html = NULL, rendered_text = NULL
-        WHERE id = ? AND status = 'FAILED' AND retry_count = ? AND failed_at IS ?`)
-        .run(decision.suppressReason ?? null, row.id, row.retry_count, row.failed_at);
+        WHERE id = ? AND status = ? AND retry_count = ? AND failed_at IS ?`)
+        .run(decision.suppressReason ?? null, row.id, row.status, row.retry_count, row.failed_at);
       skipped++;
       if (Number(terminal.changes) === 1) terminalized++;
       continue;
@@ -408,14 +410,14 @@ export async function processOutboxRetries(limit = 25): Promise<OutboxRetryResul
       continue;
     }
 
-    // Single SQLite writer / CAS: both the FAILED state and the selected
-    // failure generation must still match. The retry_count + failed_at
-    // fence prevents a stale worker from claiming again after a fast
-    // failed first attempt (FAILED -> SENDING -> FAILED, the ABA race).
+    // A QUEUED row has never reached Resend: provider calls require a prior
+    // durable QUEUED -> SENDING claim. Recover it with the same CAS as FAILED.
+    // The observed status, retry_count and failed_at fence also prevents
+    // stale claims after a fast FAILED -> SENDING -> FAILED transition.
     const claim = db.prepare(`UPDATE notification_log SET status = 'SENDING'
-      WHERE id = ? AND status = 'FAILED' AND retry_count = ? AND failed_at IS ?
+      WHERE id = ? AND status = ? AND retry_count = ? AND failed_at IS ?
         AND retry_count < ? AND rendered_html IS NOT NULL`)
-      .run(row.id, row.retry_count, row.failed_at, MAX_RETRIES);
+      .run(row.id, row.status, row.retry_count, row.failed_at, MAX_RETRIES);
     if (Number(claim.changes) !== 1) {
       skipped++; // another worker won, or row changed; no provider attempt
       continue;

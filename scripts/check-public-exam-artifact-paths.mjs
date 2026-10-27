@@ -30,8 +30,8 @@ const MAX_TEXT_BYTES = 16 * 1024 * 1024;
 // Require a function-specific item ID, a question-text field AND an answer-key
 // field. A provenance ledger with only Correct_Answer_Recoverable must not trip.
 const dgrQuestionId = /(?:^|[^A-Za-z0-9])Q-7\.(?:10|[1-9])-\d{3}(?!\d)/i;
-const questionField = /(?:^|[,{\t\r\n])["']?(?:question(?:[_-]?(?:text|fr|en))?|stem(?:[_-]?(?:fr|en))?|prompt|item[_-]?text|text[_-]?(?:fr|en))["']?\s*[:,]/im;
-const answerField = /(?:^|[,{\t\r\n])["']?(?:correct[_-]?answer|correct[_-]?option|correct[_-]?choice|answer[_-]?key|answer)["']?\s*[:,]/im;
+const questionField = /(?:^|[,{\t\r\n])["']?(?:question(?:[_-]?(?:text|fr|en))?|stem(?:[_-]?(?:fr|en))?|prompt|item[_-]?text|text[_-]?(?:fr|en))["']?\s*(?:[:,]|$)/im;
+const answerField = /(?:^|[,{\t\r\n])["']?(?:correct[_-]?answer|correct[_-]?option|correct[_-]?choice|answer[_-]?key|answer)["']?\s*(?:[:,]|$)/im;
 
 function containsStructuredDgrAnswerKey(text) {
   return dgrQuestionId.test(text) && questionField.test(text) && answerField.test(text);

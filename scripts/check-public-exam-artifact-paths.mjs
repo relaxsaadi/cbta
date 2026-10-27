@@ -8,7 +8,7 @@
  */
 import { execFileSync } from "node:child_process";
 
-const restrictedArtifact = /(?:^|\/)DGR_(?:PRODUCTION_BANK|EN_REVIEW_PACKAGE)_7\.(?:[1-9]|10)\.md$/i;
+const restrictedArtifact = /(?:^|\/)DGR_(?:PRODUCTION_BANK|EN_REVIEW_PACKAGE)_7\.(?:10|[1-9])(?:\.|$)/i;
 
 function isRestricted(path) {
   return restrictedArtifact.test(path.replaceAll("\\", "/"));
@@ -23,7 +23,8 @@ function selfTest() {
     ["docs/DGR_SOURCE_COMPETENCY_MATRIX_7.2.md", false],
     ["docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md", false],
     ["docs/DGR_PRODUCTION_BANK_7.11.md", false],
-    ["docs/DGR_PRODUCTION_BANK_7.1.md.bak", false],
+    ["docs/DGR_PRODUCTION_BANK_7.1.md.bak", true],
+    ["docs/DGR_PRODUCTION_BANK_7.3.txt", true],
   ];
   const failures = cases.filter(([name, expected]) => isRestricted(name) !== expected);
   if (failures.length) {

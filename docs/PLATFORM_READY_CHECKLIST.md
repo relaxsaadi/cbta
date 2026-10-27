@@ -2,7 +2,17 @@
 
 This checklist defines the end condition for the project. Do **not** claim `PLATFORM READY TO USE` until every critical gate below is supported by direct evidence.
 
+> **Current release override — 2026-10-27: NOT READY.** Historical `[x]` entries below document earlier limited tests (mostly August 2026); they do **not** constitute fresh, integrated Stage 2B.1 staging, deployment, incident-recovery or regulator acceptance. The cross-function regulatory Tier-A and readiness checks on PR #3 still fail, and independent E-EXAM technical acceptance remains open. This checklist must be read with [`FULL_PROGRAM_READINESS_SCOPE.md`](FULL_PROGRAM_READINESS_SCOPE.md), the exact-head CI checks, and confidential-content [issue #340](https://github.com/relaxsaadi/cbta/issues/340).
+
 ## A. Regulatory / Question Bank
+
+**Separate fail-closed checks for Functions 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9 and 7.10 — not a Function 7.1 template:**
+
+- [ ] For **each** function, verify its own current CBTA task set, source/competency matrix and Stage 2A blueprint before judging question coverage. Do not copy Function 7.1's 44-subtask structure or mechanically assign functions by job title/sector.
+- [ ] For **each** function's active question, establish direct current IATA DGR **67th Edition (2026)** Tier-A support, applicable addendum/edition state, item-specific locator, and affirmative evidence for correct answer **and distractors**. Old exams, representative examples, secondary summaries and unverified citations cannot substitute for direct evidence.
+- [ ] Record `SOURCE GAP`, `SOURCE CONFLICT`, `STALE CITATION` or `PENDING` explicitly on affected FR items; unresolved states block promotion and import, even if an old staging database contains that question.
+- [ ] Verify FR against its own source, then conduct a **separate** technical EN bilingual review. A translation draft is not a reviewed question.
+- [ ] No `APPROVED` status for any function without an exact admitted, qualified human reviewer's name/ID, independently evidenced qualification, and actual review date (plus separate qualified FR/EN review as applicable); structural CI alone is insufficient.
 
 - [ ] Function 7.1 pilot is fully FR source-verified against current Tier A source (IATA DGR 67th Edition 2026 / applicable current source).
 - [ ] Q-7.1-001 is resolved from direct current glossary/source evidence; no inferred danger/risk definition.
@@ -12,6 +22,13 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 - [ ] No `APPROVED` status exists without qualified reviewer name + review date.
 - [ ] EN content remains separately flagged for bilingual technical review until actually reviewed.
 - [ ] No question is promoted to production merely because a draft/pilot answer exists.
+
+## A2. Examination confidentiality (critical release gate — #340)
+
+- [ ] Inventory all question/answer-key material already publicly exposed, by Function 7.1–7.10, and assess item eligibility. **Already-public answer-key-bearing items are not a confidential summative examination pool.** No claim of an operational breach is implied.
+- [ ] Obtain owner-authorized access-controlled storage and a reviewed plan for non-public replacement/retirement of affected items. Prevent new keys or rationales in public commits, issue comments, logs, artifacts or client bundles; a Git ignore/path-pattern detector alone is insufficient.
+- [ ] Independently verify server-side candidate/non-admin access restrictions, secure exam delivery and export, new-item provenance, and the production publication path. Making the repository private does not retract its existing public history.
+- [ ] Do not interpret earlier Moodle/staging imports, exam-bank draft counts, or passing structural checks as proof of confidential production item readiness.
 
 ## B. Exam Workflow
 
@@ -101,7 +118,9 @@ If any critical gate is open, final status must be `NOT READY — <exact blocker
 
 The four gates above were corrected from `PASS` to `PENDING` because their own evidence records untested cases, missing roles, or unverified browser-secret isolation. These are documentation-state corrections **only**; they do not claim a new live test, a remediated code path, or production authorization. The `NEXT_PUBLIC_CRON_SECRET` references occur in `app/dashboard/{agent,intel,linkedin,instructors}/page.tsx` on this branch. `PLATFORM READY TO USE` remains blocked pending direct technical and regulatory evidence for Functions 7.1–7.10.
 
-## Current Stage 2B.1 snapshot (2026-08-24)
+## Historical Stage 2B.1 snapshot (2026-08-24 — superseded; not current readiness)
+
+> The five bullets below are preserved as an August progress record, not current FR/EN or runtime sign-off. In subsequent documentation, Q-7.1-001 was classified as a confirmed DGR-specific source gap; Q-7.1-008's distractor was corrected **in documentation only**, with actual deployed question text still unverified. See [`DGR_STAGE_2B_STATUS.md`](DGR_STAGE_2B_STATUS.md). All ten functions remain under independent direct Tier-A/qualified FR/EN/approval release holds.
 
 - Q-7.1-006: current Tier A evidence retrieved; FR source-verified.
 - Q-7.1-007: current A1/A2 evidence retrieved; FR source-verified with wording-precision note.

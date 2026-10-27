@@ -78,15 +78,15 @@ async function runLinkedInBlitz(limit = 10) {
       .order('score', { ascending: false })
       .limit(limit)
 
-    if (!fallback?.length) return { messaged: 0, prospects: [] }
+    if (!fallback?.length) return { messaged: 0, drafted: 0, prospects: [] }
 
-    return processLinkedIn(fallback, supabase)
+    return processLinkedIn(fallback)
   }
 
-  return processLinkedIn(prospects, supabase)
+  return processLinkedIn(prospects)
 }
 
-async function processLinkedIn(prospects: Record<string, unknown>[], supabase: ReturnType<typeof getSupabase>) {
+async function processLinkedIn(prospects: Record<string, unknown>[]) {
   const results = []
 
   for (const p of prospects) {
@@ -98,13 +98,11 @@ async function processLinkedIn(prospects: Record<string, unknown>[], supabase: R
       linkedin: p.decision_maker_linkedin,
       message,
     })
-    // Mark as contacted
-    await supabase.from('company_prospects')
-      .update({ status: 'contacted', notes: `LinkedIn message envoyé ${new Date().toLocaleDateString('fr-FR')}`, updated_at: new Date().toISOString() })
-      .eq('id', p.id as string)
+    // Draft generation is not delivery. Never mark a prospect contacted
+    // until a verified send event has been recorded by the actual channel.
   }
 
-  return { messaged: results.length, prospects: results }
+  return { messaged: 0, drafted: results.length, prospects: results }
 }
 
 // POST — generate messages for a batch (returns results, doesn't auto-send — user copies+sends)

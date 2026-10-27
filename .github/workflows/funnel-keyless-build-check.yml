@@ -1,0 +1,38 @@
+name: Funnel keyless Resend build check
+
+on:
+  pull_request:
+    paths:
+      - "lib/resend-client.ts"
+      - "lib/agent.ts"
+      - "app/api/agent/intel/**"
+      - ".github/workflows/funnel-keyless-build-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-without-email-secret:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      RESEND_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+      - name: Confirm build without Resend credentials
+        run: pnpm build

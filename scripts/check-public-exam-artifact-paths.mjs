@@ -21,8 +21,8 @@ function isRestricted(path) {
 // Detect only high-confidence keyed item sections; this is a tripwire, not a
 // guarantee that every answer-key style or exported format is recognized.
 // Never print source excerpts, correct answers, or rationales to CI logs.
-const questionHeading = /^\\s{0,3}#{1,6}\\s+Q-7\\.(?:10|[1-9])-\\d{3}(?!\\d)(?:\\s|$)/gmi;
-const candidateTextExtensions = /\\.(?:md|markdown|txt)$/i;
+const questionHeading = /^\s{0,3}#{1,6}\s+Q-7\.(?:10|[1-9])-\d{3}(?!\d)(?:\s|$)/gmi;
+const candidateTextExtensions = /\.(?:md|markdown|txt)$/i;
 const MAX_TEXT_BYTES = 16 * 1024 * 1024;
 
 function containsKeyedDgrSection(text) {
@@ -31,9 +31,9 @@ function containsKeyedDgrSection(text) {
     const start = headings[i].index;
     const end = i + 1 < headings.length ? headings[i + 1].index : text.length;
     const section = text.slice(start, end);
-    if (/\\*\\*Stem\\s*\\(FR\\)\\s*:/i.test(section)
-      && /\\*\\*Options\\s*:/i.test(section)
-      && /\\*\\*Correct answer rationale\\s*:/i.test(section)) {
+    if (/\*\*Stem\s*\(FR\)\s*:/i.test(section)
+      && /\*\*Options\s*:/i.test(section)
+      && /\*\*Correct answer rationale\s*:/i.test(section)) {
       return true;
     }
   }
@@ -61,12 +61,12 @@ function selfTest() {
     "**Stem (FR):** synthetic",
     "**Options:** synthetic",
     "**Correct answer rationale:** synthetic only",
-  ].join("\\n");
+  ].join("\n");
   const nonKeyedMarkdown = [
     "## Q-7.2-001 — synthetic fixture",
     "Reviewer guidance: do not include answer keys.",
     "A note mentions correct answer rationale as a concept, not an item field.",
-  ].join("\\n");
+  ].join("\n");
   if (!containsKeyedDgrSection(renamedKeyedMarkdown)
     || containsKeyedDgrSection(nonKeyedMarkdown)
     || containsKeyedDgrSection("No item headings; **Stem (FR):** x **Options:** y **Correct answer rationale:** z")) {

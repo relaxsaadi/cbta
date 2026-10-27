@@ -26,11 +26,13 @@ export function middleware(req: NextRequest) {
   // Compatibility only: a valid cron query is not a dashboard login.
   // The exact GET endpoint still enforces its own server-side secret check.
   // TODO: migrate legacy cron integrations to server-only Bearer auth and
-  // remove query tokens entirely. NEXT_PUBLIC_CRON_SECRET must never equal
-  // the server CRON_SECRET (see security release gate).
+  // remove query tokens entirely. If NEXT_PUBLIC_CRON_SECRET aliases
+  // CRON_SECRET, the compatibility bypass fails closed. Still verify the
+  // deployed browser bundle and rotate leaked credentials before release.
   const cronSecret = process.env.CRON_SECRET
   if (canBypassBasicForLegacyCron(
-    req.method, pathname, searchParams.get('secret'), cronSecret
+    req.method, pathname, searchParams.get('secret'), cronSecret,
+    process.env.NEXT_PUBLIC_CRON_SECRET
   )) {
     return NextResponse.next()
   }

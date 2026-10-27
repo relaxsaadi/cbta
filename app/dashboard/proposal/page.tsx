@@ -1,12 +1,7 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 import { FileText, RefreshCw, Download, Mail, Building2, Users, Search, ChevronDown } from 'lucide-react'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 type Prospect = {
   id: string; company_name: string; sector: string; decision_maker_name: string | null

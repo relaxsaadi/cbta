@@ -11,6 +11,18 @@ const PROTECTED_PREFIXES = [
   '/api/linkedin',
 ]
 
+// Narrow compatibility exception for legacy GET-only cron endpoints that
+// independently validate CRON_SECRET in their own route handlers.
+// Never allow a cron query token to authenticate dashboard pages, streams,
+// arbitrary API endpoints, or mutating POST requests.
+const LEGACY_CRON_GET_PATHS = new Set([
+  '/api/agents/africa-scan',
+  '/api/agents/followup',
+  '/api/agents/linkedin-outreach',
+  '/api/agents/send-email',
+  '/api/prospects/scan',
+])
+
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
 }
@@ -22,10 +34,18 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // Laisse passer les appels cron légitimes (Vercel Cron n'envoie pas de Basic Auth)
-  // déjà protégés par leur propre secret partagé (voir CRON_SECRET dans les routes).
+  // Compatibility only: a valid cron query is not a dashboard login.
+  // The exact GET endpoint still enforces its own server-side secret check.
+  // TODO: migrate legacy cron integrations to server-only Bearer auth and
+  // remove query tokens entirely. NEXT_PUBLIC_CRON_SECRET must never equal
+  // the server CRON_SECRET (see security release gate).
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && searchParams.get('secret') === cronSecret) {
+  if (
+    req.method === 'GET' &&
+    LEGACY_CRON_GET_PATHS.has(pathname) &&
+    cronSecret &&
+    searchParams.get('secret') === cronSecret
+  ) {
     return NextResponse.next()
   }
 
@@ -47,6 +67,7 @@ export function middleware(req: NextRequest) {
     try {
       const decoded = atob(encoded)
       const sepIndex = decoded.indexOf(':')
+      if (sepIndex <= 0) throw new Error('Malformed Basic authentication credentials')
       const suppliedUser = decoded.slice(0, sepIndex)
       const suppliedPass = decoded.slice(sepIndex + 1)
       if (suppliedUser === expectedUser && suppliedPass === expectedPass) {

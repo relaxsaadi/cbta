@@ -1,9 +1,8 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { supabase, SECTORS, type Lead, type LeadStatus } from './supabase'
-import { Resend } from 'resend'
+import { getResendClient } from './resend-client'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'contact@dgr.kostacademy.com'
 const FROM_NAME = 'KOST GROUP — DGR IATA'
 
@@ -99,6 +98,8 @@ Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy
 // Send email via Resend
 async function sendEmail(to: string, subject: string, body: string): Promise<boolean> {
   try {
+    const resend = getResendClient()
+    if (!resend) return false
     const { error } = await resend.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to,

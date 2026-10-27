@@ -8,7 +8,9 @@
  */
 import { execFileSync } from "node:child_process";
 
-const restrictedArtifact = /(?:^|\/)DGR_(?:PRODUCTION_BANK|EN_REVIEW_PACKAGE)_7\.(?:10|[1-9])(?:\.|$)/i;
+// A valid function number must not be followed by another digit. This also
+// blocks filename-copy suffixes such as "-backup", "_copy", or " (copy)".
+const restrictedArtifact = /(?:^|\/)DGR_(?:PRODUCTION_BANK|EN_REVIEW_PACKAGE)_7\.(?:10|[1-9])(?![0-9])/i;
 
 function isRestricted(path) {
   return restrictedArtifact.test(path.replaceAll("\\", "/"));
@@ -23,6 +25,10 @@ function selfTest() {
     ["docs/DGR_SOURCE_COMPETENCY_MATRIX_7.2.md", false],
     ["docs/DGR_STAGE2A_FUNCTION_7.2_BLUEPRINT.md", false],
     ["docs/DGR_PRODUCTION_BANK_7.11.md", false],
+    ["docs/DGR_PRODUCTION_BANK_7.100.md", false],
+    ["docs/DGR_PRODUCTION_BANK_7.1-copy.md", true],
+    ["docs/DGR_PRODUCTION_BANK_7.10_backup.md", true],
+    ["archive/DGR_EN_REVIEW_PACKAGE_7.2 (copy).md", true],
     ["docs/DGR_PRODUCTION_BANK_7.1.md.bak", true],
     ["docs/DGR_PRODUCTION_BANK_7.3.txt", true],
   ];

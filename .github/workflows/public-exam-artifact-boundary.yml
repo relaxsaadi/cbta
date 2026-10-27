@@ -1,4 +1,4 @@
-name: Public exam artifact boundary (known paths)
+name: Public exam artifact boundary (paths and keyed Markdown)
 
 on:
   pull_request:
@@ -23,5 +23,5 @@ jobs:
           node-version: "22"
       - name: Validate detector fixture paths
         run: node scripts/check-public-exam-artifact-paths.mjs --self-test
-      - name: Reject known answer-key artifact paths from public tree
+      - name: Reject known answer-key paths and keyed Markdown content from public tree
         run: node scripts/check-public-exam-artifact-paths.mjs

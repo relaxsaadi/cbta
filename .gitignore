@@ -75,5 +75,5 @@ public/guide-fonctions-dgr*.html
 
 # Known confidential DGR examination banks/reviewer packages (issue #340).
 # Avoid accidental first-time staging; already-tracked/public history is NOT erased.
-**/DGR_PRODUCTION_BANK_7.*.md
-**/DGR_EN_REVIEW_PACKAGE_7.*.md
+**/DGR_PRODUCTION_BANK_7.*
+**/DGR_EN_REVIEW_PACKAGE_7.*

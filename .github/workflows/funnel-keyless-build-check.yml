@@ -1,4 +1,4 @@
-name: Funnel keyless Resend build check
+name: Funnel keyless external-service build check
 
 on:
   pull_request:
@@ -6,6 +6,8 @@ on:
       - "lib/resend-client.ts"
       - "lib/agent.ts"
       - "app/api/agent/intel/**"
+      - "app/dashboard/blitz/page.tsx"
+      - "app/dashboard/proposal/page.tsx"
       - ".github/workflows/funnel-keyless-build-check.yml"
   workflow_dispatch:
 
@@ -19,6 +21,8 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       RESEND_API_KEY: ""
+      NEXT_PUBLIC_SUPABASE_URL: ""
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ""
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,5 +38,5 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Typecheck
         run: pnpm exec tsc --noEmit
-      - name: Confirm build without Resend credentials
+      - name: Confirm build without external delivery/database credentials
         run: pnpm build

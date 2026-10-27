@@ -12,7 +12,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-// Historical internal KOST outreach target, not an IATA CBTA approval or revocation deadline.
+// Historical campaign target; verify any IATA provider requirements against primary sources.
 const DEADLINE = new Date('2026-09-30T23:59:59')
 const GOAL = 25
 
@@ -162,7 +162,7 @@ export default function BlitzPage() {
             <h1 className="text-2xl font-bold text-gray-900">Blitz Septembre 2026</h1>
             <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-bold rounded-full">CAMPAGNE HISTORIQUE</span>
           </div>
-          <p className="text-gray-500 text-sm">Objectif commercial interne fixé au 30 septembre 2026 ; ce compteur ne détermine aucun statut IATA ou ANAC.</p>
+          <p className="text-gray-500 text-sm">Objectif de campagne fixé au 30 septembre 2026 ; cet affichage n'établit ni échéance réglementaire ni sanction IATA/ANAC.</p>
         </div>
         <button onClick={fetchData} className="p-2 text-gray-400 hover:text-gray-600 rounded-lg border border-gray-200">
           <RefreshCw size={14} />

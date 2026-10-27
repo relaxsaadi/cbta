@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { canBypassBasicForLegacyCron } from './lib/cron-query-scope'
 
 // Routes exposant le CRM interne / capables de déclencher de vrais envois
 // (email, WhatsApp, scraping LinkedIn...) — jamais destinées au public.
@@ -10,18 +11,6 @@ const PROTECTED_PREFIXES = [
   '/api/instructors',
   '/api/linkedin',
 ]
-
-// Narrow compatibility exception for legacy GET-only cron endpoints that
-// independently validate CRON_SECRET in their own route handlers.
-// Never allow a cron query token to authenticate dashboard pages, streams,
-// arbitrary API endpoints, or mutating POST requests.
-const LEGACY_CRON_GET_PATHS = new Set([
-  '/api/agents/africa-scan',
-  '/api/agents/followup',
-  '/api/agents/linkedin-outreach',
-  '/api/agents/send-email',
-  '/api/prospects/scan',
-])
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
@@ -40,12 +29,9 @@ export function middleware(req: NextRequest) {
   // remove query tokens entirely. NEXT_PUBLIC_CRON_SECRET must never equal
   // the server CRON_SECRET (see security release gate).
   const cronSecret = process.env.CRON_SECRET
-  if (
-    req.method === 'GET' &&
-    LEGACY_CRON_GET_PATHS.has(pathname) &&
-    cronSecret &&
-    searchParams.get('secret') === cronSecret
-  ) {
+  if (canBypassBasicForLegacyCron(
+    req.method, pathname, searchParams.get('secret'), cronSecret
+  )) {
     return NextResponse.next()
   }
 

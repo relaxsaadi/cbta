@@ -3,13 +3,25 @@
 ## Contexte business
 
 Site vitrine + funnel de conversion pour **KOST GROUP** (Algérie).
-Produit phare : formations DGR IATA (marchandises dangereuses) — premier centre IATA CBTA certifié d'Algérie.
+Produit phare : formations DGR IATA (marchandises dangereuses). Le propriétaire déclare des agréments IATA CBTA et ANAC couvrant les fonctions 7.1 à 7.10 ; la portée, les dates et toute allégation publique doivent être vérifiées sur pièces avant publication. Une déclaration du propriétaire ne vaut pas vérification documentaire indépendante.
 
 - **Domaine principal :** https://dgr.kostacademy.com
 - **Email propriétaire :** kostgroupe@gmail.com
 - **WhatsApp :** +213 542 30 53 83
-- **Adresse :** Alger, code postal **16111** (GBP à corriger — affiche encore 16024)
+- **Adresse :** Alger ; le code postal **16024** est indiqué comme confirmé plus bas dans ce fichier (ne pas réintroduire l'ancienne note contradictoire « 16111 »).
 - **Téléphone correct :** +213 542 30 53 83 (GBP affiche encore 0770 70 92 81 — à corriger manuellement)
+
+## Gouvernance DGR/CBTA — impératif pour Claude Code, SEO et E-EXAM (27/10/2026)
+
+**Cette section prime sur toute consigne marketing/SEO plus ancienne présente ici.** L’objectif est de ne plus reproduire la régression de [PR #342](https://github.com/relaxsaadi/cbta/pull/342). Vérifier la cohérence avec [PR #3](https://github.com/relaxsaadi/cbta/pull/3) et [PR #337](https://github.com/relaxsaadi/cbta/pull/337) avant toute modification de contenu public.
+
+- **Évidence des claims** : ne jamais publier ou réintroduire « seul/premier centre en Algérie », « reconnu par 300+ compagnies », reconnaissance universelle, « certificat/examen officiel IATA », conformité ANAC automatique, ou exclusivité sans preuve documentaire actuelle, spécifique, datée et correctement portée (registre, certificat ou décision selon le claim). Une formation CBTA Provider et un agrément national ne démontrent pas par eux-mêmes tous ces autres énoncés. Conserver les claims en état **SOURCE GAP / NON VÉRIFIÉ** plutôt que les affirmer sans preuve.
+- **Fonctions 7.1–7.10** : choisir la formation d’après les tâches et compétences CBTA de la fonction visée, non d’après « transitaire », « expéditeur » ou toute autre étiquette métier. Ne pas transférer mécaniquement les questions ni la structure à 44 sous-tâches de 7.1 vers les autres fonctions.
+- **Durées / tarification / reconnaissance** : ne promettre ni certificat délivré automatiquement ni durée universelle de 3 jours, ni date/session, prix ou reconnaissance sans vérification de l’offre applicable. Traiter les différences entre sources comme conflits explicites et bloquants pour le claim concerné.
+- **Surfaces publiques** : maintenir strictement cohérents contenu visible, titres/méta descriptions, OpenGraph, JSON-LD (FAQ, Course, Organization), landing pages, annonces et FAQ ; aucune nouvelle promesse indirecte par données structurées.
+- **Banque d'examen** : toute affirmation réglementaire doit être appuyée directement sur le texte IATA DGR **67e édition 2026**, preuve **Tier A** licitement consultée ; état SOURCE GAP/CONFLICT si manque/discordance. Vérifier indépendamment les références **FR** et réaliser la revue technique **EN** séparément ; ne jamais marquer APPROVED sans reviewer humain qualifié identifié et date. Ne pas contourner le DRM ni présenter la présence d'une matrice/blueprint comme une approbation.
+- **Confidentialité** : le dépôt GitHub est **public** et [issue #340](https://github.com/relaxsaadi/cbta/issues/340) constate des clés de réponses de brouillons publiées. Ne plus committer d'items, bonnes réponses, justifications ou paquets de revue confidentiels dans ce dépôt/branches/CI/logs. Les éléments déjà publics ne sont pas automatiquement éligibles à des examens certificatifs sécurisés ; stockage restreint, inventaire d'exposition et remplacement contrôlé sont requis.
+- **Livraison** : code/métadonnées, DGR réglementaire, plateforme Moodle/console, sécurité/RBAC, audit, sauvegarde/restauration et déploiement constituent des gates distincts. Aucune commande `--prod`, aucune fusion ni statut « PLATFORM READY TO USE » sans vérifications de release complètes. Les déploiements Vercel de `kost-funnel` ne valident pas l'environnement E-EXAM.
 
 ## Stack technique
 
@@ -25,8 +37,8 @@ pnpm dev          # dev server
 pnpm build        # build prod
 pnpm lint         # lint
 npx tsc --noEmit  # typecheck
-vercel --prod     # déployer en staging + promouvoir
-vercel deploy --prod  # déployer directement en prod
+vercel deploy     # déploiement Preview (sans --prod)
+# vercel deploy --prod  # PRODUCTION : seulement après validation explicite du release gate
 ```
 
 ## Google Ads
@@ -147,7 +159,7 @@ op.update_mask.CopyFrom(field_mask_pb2.FieldMask(paths=["status"]))
 ```
 
 ### Callout text — limite 25 caractères
-"1er Centre CBTA en Algérie" = trop long. Max 25 chars.
+La limite est de 25 caractères. Ne pas utiliser une allégation de primauté (« 1er centre »), même si elle respecte la longueur, sans preuve externe actuelle et vérifiable.
 
 ### `load_dotenv()` en heredoc stdin
 `find_dotenv()` plante en stdin. Lire `.env` manuellement avec `open('.env')`.
@@ -177,7 +189,7 @@ Footer.tsx, contact/page.tsx, formation-dgr-afrique/page.tsx, a-propos/page.tsx,
 entreprises/page.tsx.
 Le code postal 16024 sur GBP est donc déjà correct — rien à changer côté GBP.
 
-Avis Google réels : 4.3★ / 12 avis (utilisés dans le schema aggregateRating).
+Ancienne note (août 2026) : 4,3★ / 12 avis. Ne pas reprendre ces chiffres comme preuve actuelle, ni dans `aggregateRating`, sans source Google récente et vérifiable ; voir la correction de claims en PR #337.
 
 ## Structure du projet
 

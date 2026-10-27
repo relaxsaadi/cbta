@@ -16,14 +16,14 @@ export const FORMATIONS: Formation[] = [
   {
     slug: "dgr-7-1",
     code: "DGR 7.1 Initial",
-    title: "Préparation des expéditions de marchandises dangereuses",
+    title: "Certifié IATA CBTA à Alger",
     publicCible: "Expéditeurs, packers, freight forwarders",
     duree: "4 jours / 32h",
     prixEur: 1800,
     prixUsd: 1950,
     category: "initial",
     description:
-      "Formation initiale IATA CBTA pour le personnel responsable de la préparation, de la classification et de la documentation des expéditions de marchandises dangereuses par voie aérienne.",
+      "Formation IATA DGR 7.1 pour expéditeurs à Alger. 1er centre CBTA certifié d'Algérie, reconnu par 300+ compagnies IATA.",
     programme: [
       "Réglementation IATA DGR 2026 (67e édition)",
       "Classification des 9 classes de marchandises dangereuses",

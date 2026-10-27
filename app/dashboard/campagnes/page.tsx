@@ -83,30 +83,19 @@ export default function CampagnesPage() {
 
   const template = EMAIL_TEMPLATES.find(t => t.id === selectedTemplate)!
 
+  // This view prepares outreach text but has no provider delivery integration.
+  // Copying a template must never create a sent email event or advance pipeline status.
   const handleSendCampaign = async () => {
     if (selectedLeads.length === 0) return alert('Sélectionnez au moins un lead')
-    if (!confirm(`Envoyer "${template.name}" à ${selectedLeads.length} contact(s) ?`)) return
     setSending(true)
-
-    // Log emails in Supabase
-    for (const lead_id of selectedLeads) {
-      await supabase.from('email_logs').insert({
-        lead_id,
-        subject: template.subject,
-        body: template.body,
-        status: 'sent',
-        sent_at: new Date().toISOString(),
-      })
+    try {
+      await navigator.clipboard.writeText(`Objet: ${template.subject}\n\n${template.body}`)
+      alert(`Modèle copié pour ${selectedLeads.length} contact(s). Envoi manuel à effectuer et confirmer séparément ; aucun email n'a été marqué comme envoyé.`)
+    } catch {
+      alert('Copie impossible. Sélectionnez et copiez le modèle affiché manuellement. Aucun email n’a été marqué envoyé.')
+    } finally {
+      setSending(false)
     }
-
-    // Update lead status to contacted
-    await supabase.from('leads').update({ status: 'contacted', updated_at: new Date().toISOString() })
-      .in('id', selectedLeads)
-
-    setSending(false)
-    setSelectedLeads([])
-    fetchData()
-    alert(`✅ ${selectedLeads.length} email(s) enregistré(s). Copiez le texte ci-dessous et envoyez via Gmail / WhatsApp.`)
   }
 
   const toggleLead = (id: string) =>
@@ -198,7 +187,7 @@ export default function CampagnesPage() {
               className="mt-4 w-full flex items-center justify-center gap-2 bg-[#0f2557] text-white py-2.5 rounded-lg text-sm font-medium hover:bg-[#1a3a7a] transition-colors disabled:opacity-40"
             >
               <Send size={15} />
-              {sending ? 'Enregistrement...' : `Envoyer à ${selectedLeads.length} contact${selectedLeads.length > 1 ? 's' : ''}`}
+              {sending ? 'Copie...' : `Copier le modèle pour ${selectedLeads.length} contact${selectedLeads.length > 1 ? 's' : ''}`}
             </button>
           </div>
 

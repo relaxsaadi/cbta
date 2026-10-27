@@ -23,7 +23,9 @@ function isRestricted(path) {
 // Never print source excerpts, correct answers, or rationales to CI logs.
 const questionHeading = /^\s{0,3}#{1,6}\s+Q-7\.(?:10|[1-9])-\d{3}(?!\d)(?:\s|$)/gmi;
 const structuredTextExtensions = /\.(?:csv|tsv|json|jsonl|ndjson)$/i;
-const candidateTextExtensions = /\.(?:md|markdown|txt|csv|tsv|json|jsonl|ndjson)$/i;
+const moodleXmlExtension = /\.xml$/i;
+const giftExtension = /\.(?:gift|txt)$/i;
+const candidateTextExtensions = /\.(?:md|markdown|txt|csv|tsv|json|jsonl|ndjson|xml|gift)$/i;
 const MAX_TEXT_BYTES = 16 * 1024 * 1024;
 
 // Structured exports may conceal keyed DGR items even when renamed.
@@ -35,6 +37,21 @@ const answerField = /(?:^|[,{\t\r\n])["']?(?:correct[_-]?answer|correct[_-]?opti
 
 function containsStructuredDgrAnswerKey(text) {
   return dgrQuestionId.test(text) && questionField.test(text) && answerField.test(text);
+}
+
+// Recognize high-confidence Moodle XML exports with a DGR item ID and a
+// positively keyed <answer>. These exports can have innocuous filenames.
+function containsMoodleXmlDgrAnswerKey(text) {
+  return dgrQuestionId.test(text)
+    && /<question\b[^>]*\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(text)
+    && /<answer\b[^>]*\bfraction\s*=\s*["']100(?:\.0+)?["']/i.test(text);
+}
+
+// Moodle GIFT may be stored with either .gift or .txt extension. Require a
+// function-scoped item title and a keyed answer, not just explanatory prose.
+function containsGiftDgrAnswerKey(text) {
+  return /::\s*Q-7\.(?:10|[1-9])-\d{3}(?!\d)\s*::/i.test(text)
+    && /\{[^{}]*=[^\s{}][^{}]*\}/s.test(text);
 }
 
 function containsKeyedDgrSection(text) {
@@ -91,6 +108,18 @@ function selfTest() {
     "**Options:** placeholder",
     "**EN draft translation:** placeholder",
   ].join("\n");
+  const moodleXmlCases = [
+    ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', true],
+    ['<quiz><question type="truefalse"><name><text>Q-7.10-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', true],
+    ['<quiz><question type="multichoice"><name><text>Q-7.11-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', false],
+    ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="0"><text>synthetic</text></answer></question></quiz>', false],
+  ];
+  const giftCases = [
+    ['::Q-7.2-901::Synthetic fixture question {=Synthetic keyed choice ~Distractor}', true],
+    ['::Q-7.10-901::Synthetic fixture question {~Wrong =Correct}', true],
+    ['::Q-7.2-901::Explanatory sample without an answer', false],
+    ['::Q-7.11-901::Synthetic question {=Synthetic keyed choice}', false],
+  ];
   const structuredCases = [
     ['question_id,question_text,correct_answer\nQ-7.2-001,synthetic,option A', true],
     ['{"questionId":"Q-7.10-001","stem":"synthetic","answerKey":"A"}', true],
@@ -101,6 +130,8 @@ function selfTest() {
   if (!containsKeyedDgrSection(renamedKeyedMarkdown)
     || !containsKeyedDgrSection(renamedBilingualPackage)
     || structuredCases.some(([fixture, expected]) => containsStructuredDgrAnswerKey(fixture) !== expected)
+    || moodleXmlCases.some(([fixture, expected]) => containsMoodleXmlDgrAnswerKey(fixture) !== expected)
+    || giftCases.some(([fixture, expected]) => containsGiftDgrAnswerKey(fixture) !== expected)
     || containsKeyedDgrSection(nonKeyedMarkdown)
     || containsKeyedDgrSection("No item headings; **Stem (FR):** x **Options:** y **Correct answer rationale:** z")) {
     throw new Error("Exam-content keyed Markdown regression fixture failed.");
@@ -133,9 +164,12 @@ if (process.argv.includes("--self-test")) {
       continue; // Fail closed below; never silently bless unscanned text.
     }
     const text = readFileSync(file, "utf8");
-    if (structuredTextExtensions.test(file)
+    const hasKey = structuredTextExtensions.test(file)
       ? containsStructuredDgrAnswerKey(text)
-      : containsKeyedDgrSection(text)) keyedContent.push(file);
+      : moodleXmlExtension.test(file)
+        ? containsMoodleXmlDgrAnswerKey(text)
+        : containsKeyedDgrSection(text) || (giftExtension.test(file) && containsGiftDgrAnswerKey(text));
+    if (hasKey) keyedContent.push(file);
   }
   if (exposedPaths.length || keyedContent.length || unscannedLargeText.length) {
     console.error("RELEASE BLOCKED: public repository exam-content boundary requires remediation.");

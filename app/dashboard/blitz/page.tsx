@@ -1,16 +1,11 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 import {
   Flame, Target, Mail, MessageSquare, Phone, Linkedin, Globe,
   RefreshCw, CheckCircle, Clock, Zap, AlertTriangle, TrendingUp,
   Send, Users, DollarSign, Calendar, ChevronRight, Play, Copy, Check
 } from 'lucide-react'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 // September 30, 2026 — IATA CBTA certification deadline
 const DEADLINE = new Date('2026-09-30T23:59:59')

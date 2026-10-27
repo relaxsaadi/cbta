@@ -3,11 +3,10 @@ import { getSupabase } from '@/lib/supabase'
 import { scrapeGoogleIntents, scrapeGoogleMapsLeads, scrapeJobBoards, type ApifyLead } from '@/lib/apify'
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/resend-client'
 
 export const maxDuration = 300
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function GET(req: NextRequest) {
   const auth = req.nextUrl.searchParams.get('secret')
@@ -170,6 +169,8 @@ async function sendApprovalEmail(leads: (ApifyLead & { score: number; message_dr
     </div>
   `).join('')
 
+  const resend = getResendClient()
+  if (!resend) throw new Error('Email service is not configured')
   await resend.emails.send({
     from: 'KOST Agent <cbta@dgr.kostacademy.com>',
     to: 'kostgroupe@gmail.com',

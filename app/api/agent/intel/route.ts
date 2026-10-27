@@ -3,11 +3,10 @@ import { getSupabase } from '@/lib/supabase'
 import { scrapeGoogleIntents, scrapeGoogleMapsLeads, scrapeJobBoards } from '@/lib/apify'
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/resend-client'
 
 export const maxDuration = 300
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
@@ -161,6 +160,8 @@ async function sendApprovalEmail(leads: Array<{ company_name: string; country: s
     </div>
   `).join('')
 
+  const resend = getResendClient()
+  if (!resend) throw new Error('Email service is not configured')
   await resend.emails.send({
     from: 'KOST Agent <cbta@dgr.kostacademy.com>',
     to: 'kostgroupe@gmail.com',

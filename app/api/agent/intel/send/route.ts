@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabase } from '@/lib/supabase'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/resend-client'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
   const { lead_id, email_override } = await req.json()
@@ -21,6 +20,9 @@ export async function POST(req: NextRequest) {
   const msgHtml = lead.message_draft
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/\n/g, '<br>')
+
+  const resend = getResendClient()
+  if (!resend) return NextResponse.json({ error: 'Email service unavailable' }, { status: 503 })
 
   const { error: sendError } = await resend.emails.send({
     from: 'KOST GROUP <cbta@dgr.kostacademy.com>',

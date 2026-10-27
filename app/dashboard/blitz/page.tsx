@@ -12,7 +12,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-// September 30, 2026 — IATA CBTA certification deadline
+// Historical internal KOST outreach target, not an IATA CBTA approval or revocation deadline.
 const DEADLINE = new Date('2026-09-30T23:59:59')
 const GOAL = 25
 
@@ -160,9 +160,9 @@ export default function BlitzPage() {
           <div className="flex items-center gap-2 mb-1">
             <Flame className="text-red-500" size={24} />
             <h1 className="text-2xl font-bold text-gray-900">Blitz Septembre 2026</h1>
-            <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded-full animate-pulse">URGENT</span>
+            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-bold rounded-full">CAMPAGNE HISTORIQUE</span>
           </div>
-          <p className="text-gray-500 text-sm">25 personnes formées avant le 30 septembre — ou révocation certification IATA CBTA</p>
+          <p className="text-gray-500 text-sm">Objectif commercial interne fixé au 30 septembre 2026 ; ce compteur ne détermine aucun statut IATA ou ANAC.</p>
         </div>
         <button onClick={fetchData} className="p-2 text-gray-400 hover:text-gray-600 rounded-lg border border-gray-200">
           <RefreshCw size={14} />
@@ -173,7 +173,7 @@ export default function BlitzPage() {
       <div className="grid grid-cols-2 gap-4">
 
         {/* Countdown */}
-        <div className={`rounded-2xl p-6 ${countdown.urgent ? 'bg-red-900' : 'bg-gray-900'}`}>
+        <div className="rounded-2xl p-6 bg-gray-900">
           <div className="text-xs text-gray-400 mb-3 uppercase tracking-wider">Temps restant</div>
           <div className="grid grid-cols-4 gap-3">
             {[
@@ -183,13 +183,13 @@ export default function BlitzPage() {
               { v: countdown.seconds, l: 'Sec' },
             ].map(({ v, l }) => (
               <div key={l} className="text-center">
-                <div className={`text-3xl font-black tabular-nums ${countdown.urgent ? 'text-red-400' : 'text-white'}`}>{String(v).padStart(2, '0')}</div>
+                <div className="text-3xl font-black tabular-nums text-white">{String(v).padStart(2, '0')}</div>
                 <div className="text-xs text-gray-500 mt-1">{l}</div>
               </div>
             ))}
           </div>
           <div className="mt-4 text-xs text-gray-500">
-            📅 Deadline : 30 septembre 2026
+            📅 Ancienne échéance interne : 30 septembre 2026
           </div>
         </div>
 
@@ -296,7 +296,7 @@ export default function BlitzPage() {
           {
             icon: <TrendingUp size={16} className="text-purple-500" />,
             title: 'Google Ads',
-            desc: 'Optimisation urgence',
+            desc: 'Optimisation des campagnes',
             action: () => window.open('https://ads.google.com', '_blank'),
             loading: false,
             color: 'border-purple-200 bg-purple-50 hover:bg-purple-100',
@@ -328,7 +328,7 @@ export default function BlitzPage() {
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-6 text-white">
         <div className="flex items-center gap-2 mb-4">
           <Target size={18} className="text-yellow-400" />
-          <h2 className="font-bold">Plan Blitz — 25 formations en 87 jours</h2>
+          <h2 className="font-bold">Plan de prospection historique — septembre 2026</h2>
         </div>
         <div className="grid grid-cols-3 gap-4">
           {[
@@ -338,8 +338,8 @@ export default function BlitzPage() {
               color: 'bg-green-500',
               tactics: [
                 'Envoyer à tous les contacts trouvés via le script généré',
-                'Message d\'urgence : "Obligation IATA — places limitées"',
-                'Statut WhatsApp : compte à rebours live',
+                'Présenter les besoins CBTA selon les tâches, sans inventer de places limitées',
+                'Publier uniquement des dates de session confirmées',
                 'Broadcast list sur +213 542 30 53 83',
               ],
               effort: '2h/jour',
@@ -351,8 +351,8 @@ export default function BlitzPage() {
               tactics: [
                 '20 connexions/jour avec responsables formation DZ',
                 'InMail aux DRH + HSE des 144 prospects',
-                'Post quotidien countdown + témoignage client',
-                'Article LinkedIn : "Pourquoi les DGR IATA sont obligatoires"',
+                'Post informatif avec témoignage autorisé et vérifié',
+                'Article LinkedIn : "Choisir sa fonction CBTA selon ses tâches"',
               ],
               effort: '1h/jour',
             },
@@ -361,10 +361,10 @@ export default function BlitzPage() {
               priority: 'PRIORITÉ 3',
               color: 'bg-purple-500',
               tactics: [
-                'J0 : Email présentation urgence réglementaire',
+                'J0 : Email présentant les formations adaptées aux tâches du prospect',
                 'J+3 : Relance avec calendrier sessions',
-                'J+7 : Offre early bird -15% avant 31 juillet',
-                'J+14 : Last call — places restantes',
+                'J+7 : Offre tarifaire uniquement si validée et encore en vigueur',
+                'J+14 : Relance avec disponibilités confirmées',
               ],
               effort: 'Automatique',
             },
@@ -373,8 +373,8 @@ export default function BlitzPage() {
               priority: 'PRIORITÉ 4',
               color: 'bg-yellow-500',
               tactics: [
-                'Mots-clés urgence : "formation dgr obligatoire algérie"',
-                'Budget +50% en août (deadline approche)',
+                'Mots-clés : "formation marchandises dangereuses Algérie"',
+                'Ajuster le budget selon données de campagne actuelles',
                 'Remarketing : visitors non-convertis',
                 'Extension appel pour appels directs',
               ],
@@ -386,7 +386,7 @@ export default function BlitzPage() {
               color: 'bg-red-500',
               tactics: [
                 '10 appels/jour aux DG + responsables formation',
-                'Script : urgence IATA + offre session août',
+                'Script : besoins CBTA et sessions vérifiées',
                 'Cibler Air Algérie, Swissport, Sonatrach en premier',
                 'Follow-up dans les 24h après email',
               ],

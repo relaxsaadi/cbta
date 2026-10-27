@@ -80,13 +80,13 @@ async function runLinkedInBlitz(limit = 10) {
 
     if (!fallback?.length) return { messaged: 0, drafted: 0, prospects: [] }
 
-    return processLinkedIn(fallback, supabase)
+    return processLinkedIn(fallback)
   }
 
-  return processLinkedIn(prospects, supabase)
+  return processLinkedIn(prospects)
 }
 
-async function processLinkedIn(prospects: Record<string, unknown>[], supabase: ReturnType<typeof getSupabase>) {
+async function processLinkedIn(prospects: Record<string, unknown>[]) {
   const results = []
 
   for (const p of prospects) {

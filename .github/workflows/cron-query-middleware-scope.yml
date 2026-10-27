@@ -1,0 +1,23 @@
+name: Cron-query middleware authorization scope
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cron-query-scope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test exact-path GET-only cron query authorization
+        run: node --experimental-strip-types --test scripts/test-cron-query-scope.mjs

@@ -3,8 +3,8 @@ import { test } from 'node:test';
 import { canBypassBasicForLegacyCron } from '../lib/cron-query-scope.ts';
 
 const secret = 'synthetic-unit-test-only';
-const accepts = (method, pathname, suppliedSecret = secret, configuredSecret = secret) =>
-  canBypassBasicForLegacyCron(method, pathname, suppliedSecret, configuredSecret);
+const accepts = (method, pathname, suppliedSecret = secret, configuredSecret = secret, browserExposedSecret) =>
+  canBypassBasicForLegacyCron(method, pathname, suppliedSecret, configuredSecret, browserExposedSecret);
 
 test('only explicitly named legacy GET cron handlers can bypass Basic', () => {
   for (const pathname of [
@@ -33,4 +33,14 @@ test('missing, empty, incorrect or unconfigured cron tokens fail closed', () => 
   assert.equal(accepts('GET', '/api/agents/send-email', 'wrong'), false);
   assert.equal(accepts('GET', '/api/agents/send-email', '', ''), false);
   assert.equal(accepts('GET', '/api/agents/send-email', null, undefined), false);
+});
+
+test('browser-public and server cron credentials must never alias for query bypass', () => {
+  const endpoint = '/api/agents/send-email';
+  // All tokens below are synthetic test values.
+  assert.equal(accepts('GET', endpoint, secret, secret, secret), false);
+  assert.equal(accepts('GET', endpoint, secret, secret, 'other-public-synthetic'), true);
+  assert.equal(accepts('GET', endpoint, secret, secret, undefined), true);
+  assert.equal(accepts('GET', endpoint, secret, secret, ''), true);
+  assert.equal(accepts('POST', endpoint, secret, secret, 'other-public-synthetic'), false);
 });

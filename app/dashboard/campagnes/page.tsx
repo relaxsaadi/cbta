@@ -102,7 +102,7 @@ export default function CampagnesPage() {
     setSelectedLeads(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
 
   const stats = {
-    sent: logs.length,
+    sent: logs.filter(l => ['sent', 'opened', 'replied'].includes(l.status)).length,
     opened: logs.filter(l => l.status === 'opened').length,
     replied: logs.filter(l => l.status === 'replied').length,
   }

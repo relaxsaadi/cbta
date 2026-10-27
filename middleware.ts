@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { canBypassBasicForLegacyCron } from './lib/cron-query-scope'
 
 // Routes exposant le CRM interne / capables de déclencher de vrais envois
 // (email, WhatsApp, scraping LinkedIn...) — jamais destinées au public.
@@ -22,10 +23,17 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // Laisse passer les appels cron légitimes (Vercel Cron n'envoie pas de Basic Auth)
-  // déjà protégés par leur propre secret partagé (voir CRON_SECRET dans les routes).
+  // Compatibility only: a valid cron query is not a dashboard login.
+  // The exact GET endpoint still enforces its own server-side secret check.
+  // TODO: migrate legacy cron integrations to server-only Bearer auth and
+  // remove query tokens entirely. If NEXT_PUBLIC_CRON_SECRET aliases
+  // CRON_SECRET, the compatibility bypass fails closed. Still verify the
+  // deployed browser bundle and rotate leaked credentials before release.
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && searchParams.get('secret') === cronSecret) {
+  if (canBypassBasicForLegacyCron(
+    req.method, pathname, searchParams.get('secret'), cronSecret,
+    process.env.NEXT_PUBLIC_CRON_SECRET
+  )) {
     return NextResponse.next()
   }
 
@@ -47,6 +55,7 @@ export function middleware(req: NextRequest) {
     try {
       const decoded = atob(encoded)
       const sepIndex = decoded.indexOf(':')
+      if (sepIndex <= 0) throw new Error('Malformed Basic authentication credentials')
       const suppliedUser = decoded.slice(0, sepIndex)
       const suppliedPass = decoded.slice(sepIndex + 1)
       if (suppliedUser === expectedUser && suppliedPass === expectedPass) {

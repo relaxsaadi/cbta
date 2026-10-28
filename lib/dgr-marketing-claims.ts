@@ -21,7 +21,7 @@ const BLOCKED_DGR_MARKETING_CLAIMS: Array<{ label: string; pattern: RegExp }> = 
   },
   {
     label: "unsupported regulatory deadline claim",
-    pattern: /\b(?:deadline|[eé]ch[eé]ance|renforcement)\b[^\n]{0,80}\b(?:IATA|ANAC)\b/i,
+    pattern: /(?:^|[^\p{L}\p{N}_])(?:deadline|[eé]ch[eé]ance|renforcement)\b[^\n]{0,80}\b(?:IATA|ANAC)\b/iu,
   },
   {
     label: "stale August/September 2026 campaign claim",

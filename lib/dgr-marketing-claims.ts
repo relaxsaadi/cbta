@@ -8,6 +8,16 @@ const BLOCKED_DGR_MARKETING_CLAIMS: Array<{ label: string; pattern: RegExp }> = 
     pattern: /\b(?:certifi(?:e|é|ée|es|és)?|accr[eé]dit(?:e|é|ée|es|és)?)\b[^\n]{0,80}\b(?:IATA|CBTA|ANAC)\b/i,
   },
   {
+    // Authority-first wording (e.g. "IATA certifié") evades the claim-first check.
+    label: "IATA/CBTA/ANAC certification or accreditation claim (authority-first)",
+    pattern: /\b(?:IATA|CBTA|ANAC)\b[^\n]{0,80}\b(?:certifi(?:e|é|ée|es|és)?|accr[eé]dit(?:e|é|ée|es|és)?)\b/i,
+  },
+  {
+    // Adjectives such as "agréé ANAC" are not matched by the noun "agrément".
+    label: "ANAC/IATA adjectival authorization or approval claim",
+    pattern: /\b(?:agr[eé][eé](?:e|s|es)?|approuv[eé](?:e|s|es)?|homologu[eé](?:e|s|es)?|autoris[eé](?:e|s|es)?)[^\n]{0,80}\b(?:ANAC|IATA)\b|\b(?:ANAC|IATA)\b[^\n]{0,80}\b(?:agr[eé][eé](?:e|s|es)?|approuv[eé](?:e|s|es)?|homologu[eé](?:e|s|es)?|autoris[eé](?:e|s|es)?)/i,
+  },
+  {
     label: "official IATA certification/certificate claim",
     pattern: /\b(?:certification|certificat)\s+(?:officiel(?:le)?\s+)?IATA\b/i,
   },

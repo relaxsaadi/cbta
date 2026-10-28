@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { assertSafeDgrMarketingCopy, SAFE_DGR_MARKETING_RULES } from '@/lib/dgr-marketing-claims'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,16 +11,10 @@ function getSupabase() {
   )
 }
 
-const DAYS_LEFT = Math.max(0, Math.ceil((new Date('2026-09-30').getTime() - Date.now()) / 86400000))
-
+// Automated follow-up text must not manufacture legal deadlines, client results,
+// certifications or promises. This channel remains unapproved for release.
 async function generateFollowup(prospect: Record<string, unknown>, daysSinceContact: number): Promise<{ email: string; linkedin: string; whatsapp: string }> {
-  const angles = [
-    `Il reste ${DAYS_LEFT} jours avant la deadline IATA — les places de la session août se remplissent.`,
-    `Air Algérie vient de certifier 12 agents avec KOST. Votre équipe est-elle à jour ?`,
-    `Un incident DGR non déclaré = suspension immédiate par l'IATA. La certification protège votre licence.`,
-    `Dernière chance session août — après le 15 août, uniquement session septembre, plus proche du deadline.`,
-  ]
-  const angle = angles[Math.min(Math.floor(daysSinceContact / 3), angles.length - 1)]
+  const angle = 'Reprendre contact avec respect pour discuter de besoins possibles de formation DGR/CBTA, sans urgence ni obligation réglementaire présumée.'
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -41,15 +36,19 @@ Angle: "${angle}"
 2. LINKEDIN (150 chars max, différent de l'email)
 3. WHATSAPP (100 mots max, émojis ok, conversationnel)
 
+N'invente pas de date de session, délai IATA, sanction, agrément, résultat client ni certification.
+${SAFE_DGR_MARKETING_RULES}
+
 Format exact:
 EMAIL_OBJET: [objet]
 EMAIL_CORPS: [corps]
 LINKEDIN: [message]
-WHATSAPP: [message]`,
+WHATSAPP: [message]
       }],
     }),
   })
 
+  if (!res.ok) throw new Error('Follow-up generation provider rejected the request')
   const data = await res.json()
   const text: string = data.content?.[0]?.text || ''
 
@@ -60,11 +59,15 @@ WHATSAPP: [message]`,
 
   const emailObjet = extract('EMAIL_OBJET')
   const emailCorps = extract('EMAIL_CORPS')
-  return {
-    email: emailObjet ? `Objet: ${emailObjet}\n\n${emailCorps}` : emailCorps,
-    linkedin: extract('LINKEDIN'),
-    whatsapp: extract('WHATSAPP'),
+  const linkedin = extract('LINKEDIN')
+  const whatsapp = extract('WHATSAPP')
+  if (!emailObjet || !emailCorps || !linkedin || !whatsapp) {
+    throw new Error('Follow-up generation returned missing required content')
   }
+  const email = `Objet: ${emailObjet}\n\n${emailCorps}`
+  // Validate every channel before invoking any external email provider.
+  assertSafeDgrMarketingCopy([email, linkedin, whatsapp].join('\n'))
+  return { email, linkedin, whatsapp }
 }
 
 async function runFollowupAgent() {
@@ -82,20 +85,24 @@ async function runFollowupAgent() {
     .order('score', { ascending: false })
     .limit(10)
 
-  if (!stale?.length) return { followups: 0 }
+  if (!stale?.length) return { drafted: 0, acceptedByProvider: 0 }
 
   const results = []
+  let acceptedByProvider = 0
   for (const p of stale) {
     const daysSince = Math.floor((now.getTime() - new Date(p.updated_at).getTime()) / 86400000)
     if (daysSince > 30) continue // Don't follow up after 30 days
 
     const messages = await generateFollowup(p, daysSince)
 
-    // Send email if Resend available
-    if (process.env.RESEND_API_KEY && p.contact_email) {
+    // Autonomy must be explicitly enabled by the owner; safe by default.
+    // Provider acceptance is not proof of recipient delivery.
+    let providerAccepted = false
+    if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED === 'true' &&
+        process.env.RESEND_API_KEY && p.contact_email) {
       const [subjectLine, ...bodyParts] = messages.email.split('\n\n')
       const subject = subjectLine.replace('Objet: ', '')
-      await fetch('https://api.resend.com/emails', {
+      const providerResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -106,18 +113,34 @@ async function runFollowupAgent() {
           reply_to: 'kostgroupe@gmail.com',
         }),
       })
+      if (!providerResponse.ok) {
+        console.error('[agents/followup] provider refused request; HTTP status:', providerResponse.status)
+        results.push({ id: p.id, company: p.company_name, daysSince, status: 'provider_rejected' })
+        continue
+      }
+      providerAccepted = true
+      acceptedByProvider++
     }
 
-    // Update notes with follow-up attempt
-    await supabase.from('company_prospects').update({
-      notes: `Relance J+${daysSince} — ${new Date().toLocaleDateString('fr-FR')}`,
-      updated_at: new Date().toISOString(),
-    }).eq('id', p.id)
+    if (providerAccepted) {
+      // Do not write "sent" or "delivered": only provider acceptance is known.
+      const { error } = await supabase.from('company_prospects').update({
+        notes: `Relance J+${daysSince} — acceptée par le fournisseur email, livraison non confirmée — ${new Date().toLocaleDateString('fr-FR')}`,
+        updated_at: new Date().toISOString(),
+      }).eq('id', p.id)
+      if (error) console.error('[agents/followup] CRM note update failed')
+    }
 
-    results.push({ id: p.id, company: p.company_name, daysSince, ...messages })
+    results.push({
+      id: p.id,
+      company: p.company_name,
+      daysSince,
+      status: providerAccepted ? 'accepted_by_provider' : 'draft_only',
+      ...messages,
+    })
   }
 
-  return { followups: results.length, results }
+  return { drafted: results.length, acceptedByProvider, results }
 }
 
 export async function POST() {

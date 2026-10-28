@@ -13,6 +13,10 @@ test('synthetic misleading regulatory, approval and expired-session claims fail 
     'premier centre IATA du territoire',
     'centre certifié IATA',
     'agrément ANAC garanti',
+    'Notre organisme IATA certifié',
+    'Notre centre est agréé par ANAC',
+    'Notre formation est approuvée par IATA',
+    'ANAC a homologué notre programme',
     'suspension de vol immédiate',
   ]) {
     assert.throws(() => assertSafeDgrMarketingCopy(text), /blocked generated copy:/, text)
@@ -26,6 +30,8 @@ test('HTML tags and entities cannot conceal unsupported generated DGR claims', (
   for (const html of [
     '<p>premier <strong>centre</strong> IATA</p>',
     '<p>centre certifi<strong>é</strong> IATA</p>',
+    '<p>Notre organisme IATA <strong>certifi&#233;</strong></p>',
+    '<p>Notre centre agr&eacute;&eacute; par ANAC</p>',
     '<p>1er&nbsp;centre IATA</p>',
     '<p>agr&eacute;ment ANAC</p>',
     '<p>certifi&#233; IATA</p>',

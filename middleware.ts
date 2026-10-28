@@ -64,10 +64,15 @@ export function middleware(req: NextRequest) {
     try {
       const decoded = atob(encoded)
       const sepIndex = decoded.indexOf(':')
-      const suppliedUser = decoded.slice(0, sepIndex)
-      const suppliedPass = decoded.slice(sepIndex + 1)
-      if (suppliedUser === expectedUser && suppliedPass === expectedPass) {
-        return NextResponse.next()
+      // A Basic credential must contain a nonempty username followed by ':'.
+      // Without this guard, slice(0, -1) can accidentally accept malformed
+      // credentials for some user/password configurations.
+      if (sepIndex > 0) {
+        const suppliedUser = decoded.slice(0, sepIndex)
+        const suppliedPass = decoded.slice(sepIndex + 1)
+        if (suppliedUser === expectedUser && suppliedPass === expectedPass) {
+          return NextResponse.next()
+        }
       }
     } catch {
       // decoding failed — fall through to 401

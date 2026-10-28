@@ -27,6 +27,25 @@ function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
 }
 
+// Basic authentication is ambient browser state: without an origin boundary,
+// a hostile site can POST to protected /api routes on behalf of a logged-in
+// operator (including unattended campaign triggers). Scheduled cron access is
+// GET-only and handled independently before this guard.
+function isSafeDashboardMutation(req: NextRequest): boolean {
+  if (!req.nextUrl.pathname.startsWith('/api/')) return true
+  if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) return true
+
+  const source = req.headers.get('origin') || req.headers.get('referer')
+  if (!source) return false
+  try {
+    if (new URL(source).origin !== req.nextUrl.origin) return false
+  } catch {
+    return false
+  }
+  const fetchSite = req.headers.get('sec-fetch-site')
+  return !fetchSite || fetchSite === 'same-origin'
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
@@ -71,6 +90,9 @@ export function middleware(req: NextRequest) {
         const suppliedUser = decoded.slice(0, sepIndex)
         const suppliedPass = decoded.slice(sepIndex + 1)
         if (suppliedUser === expectedUser && suppliedPass === expectedPass) {
+          if (!isSafeDashboardMutation(req)) {
+            return new NextResponse('Same-origin dashboard request required', { status: 403 })
+          }
           return NextResponse.next()
         }
       }

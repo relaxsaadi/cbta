@@ -1,0 +1,19 @@
+name: DGR outbound claims regression
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  outbound-claims:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reject unsupported DGR commercial copy and accidental follow-up send
+        run: node --experimental-strip-types --test scripts/test-dgr-outbound-claims.mjs

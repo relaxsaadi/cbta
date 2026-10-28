@@ -37,6 +37,8 @@ test('follow-up automation has no stale hardcoded IATA deadline or client-succes
     assert.ok(!followup.includes(phrase), 'outdated claim remains: ' + phrase)
   }
   assert.match(followup, /process\.env\.DGR_OUTBOUND_AUTOSEND_ENABLED === 'true'/)
+  assert.match(outbound, /process\.env\.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true'/)
+  assert.match(outbound, /if \(!html\.trim\(\)\) throw/)
   assert.match(followup, /if \(!providerResponse\.ok\)/)
   assert.match(followup, /providerAccepted \? 'accepted_by_provider' : 'draft_only'/)
   assert.match(followup, /if \(providerAccepted\) \{/)

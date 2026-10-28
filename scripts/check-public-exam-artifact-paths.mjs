@@ -69,15 +69,19 @@ function containsKeyedDgrClozeXml(text) {
 // positively keyed <answer> or embedded cloze answer. Filename may vary.
 function containsMoodleXmlDgrAnswerKey(text) {
   if (containsKeyedDgrClozeXml(text)) return true;
-  // Multi-response Moodle XML exports can split correct-answer credit across
-  // multiple positive fractions (for example 50 + 50) without any 100.
-  // Detect any positive keyed credit, not just a 100-percent answer.
-  if (!dgrQuestionId.test(text)
-    || !/<question\b[^>]*\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(text)) {
-    return false;
+  // Scope the DGR item identity, Moodle question type and answer fraction
+  // to the SAME <question>. A non-DGR keyed question elsewhere in a mixed
+  // export must not make an unkeyed DGR question appear confidentially keyed.
+  const questions = text.matchAll(/<question\b([^>]*)>([\s\S]*?)<\/question\s*>/gi);
+  for (const [, attrs, question] of questions) {
+    if (!/\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(attrs)
+      || !dgrQuestionId.test(question)) continue;
+    const hasPositiveAnswer = [...question.matchAll(
+      /<answer\b[^>]*\bfraction\s*=\s*["']([+-]?(?:\d+(?:\.\d+)?|\.\d+))["']/gi
+    )].some(([, fraction]) => Number(fraction) > 0);
+    if (hasPositiveAnswer) return true;
   }
-  return [...text.matchAll(/<answer\b[^>]*\bfraction\s*=\s*["']([+-]?(?:\d+(?:\.\d+)?|\.\d+))["']/gi)]
-    .some(([, fraction]) => Number(fraction) > 0);
+  return false;
 }
 
 // Moodle GIFT may be stored with either .gift or .txt extension. Require a
@@ -167,6 +171,10 @@ function selfTest() {
     ['<quiz><question type="truefalse"><name><text>Q-7.10-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', true],
     ['<quiz><question type="multichoice"><name><text>Q-7.11-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', false],
     ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="0"><text>synthetic</text></answer></question></quiz>', false],
+    // Mixed Moodle exports: unrelated answer keys must not cross question boundaries.
+    ['<quiz><question type="multichoice"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="0"><text>synthetic non-key</text></answer></question></quiz>', false],
+    ['<quiz><question type="multichoice"><name><text>Q-7.10-901</text></name><answer fraction="-50"><text>synthetic non-key</text></answer></question><question type="truefalse"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question></quiz>', false],
+    ['<quiz><question type="multichoice"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question><question type="multichoice"><name><text>Q-7.3-901</text></name><answer fraction="50"><text>synthetic DGR key</text></answer></question></quiz>', true],
   ];
   const giftCases = [
     ['::Q-7.2-901::Synthetic fixture question {=Synthetic keyed choice ~Distractor}', true],

@@ -22,6 +22,23 @@ test('synthetic misleading regulatory, approval and expired-session claims fail 
   ))
 })
 
+test('HTML tags and entities cannot conceal unsupported generated DGR claims', () => {
+  for (const html of [
+    '<p>premier <strong>centre</strong> IATA</p>',
+    '<p>centre certifi<strong>é</strong> IATA</p>',
+    '<p>1er&nbsp;centre IATA</p>',
+    '<p>agr&eacute;ment ANAC</p>',
+    '<p>certifi&#233; IATA</p>',
+    '<h2>&eacute;ch&eacute;ance IATA</h2>',
+    '<p>ao&#251;t 2026</p>',
+  ]) {
+    assert.throws(() => assertSafeDgrMarketingCopy(html), /blocked generated copy:/, html)
+  }
+  assert.doesNotThrow(() => assertSafeDgrMarketingCopy(
+    '<p>Nous pouvons échanger sur vos besoins possibles de formation <strong>DGR/CBTA</strong>.</p>'
+  ))
+})
+
 test('outbound generators validate generated text before any provider send', () => {
   for (const source of [followup, outbound]) {
     const check = source.indexOf('assertSafeDgrMarketingCopy(')

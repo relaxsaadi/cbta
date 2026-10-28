@@ -50,8 +50,13 @@ function containsMoodleXmlDgrAnswerKey(text) {
 // Moodle GIFT may be stored with either .gift or .txt extension. Require a
 // function-scoped item title and a keyed answer, not just explanatory prose.
 function containsGiftDgrAnswerKey(text) {
-  return /::\s*Q-7\.(?:10|[1-9])-\d{3}(?!\d)\s*::/i.test(text)
-    && /\{[^{}]*=[^\s{}][^{}]*\}/s.test(text);
+  // GIFT supports whitespace after "=" plus keyed true/false and numerical
+  // answers that do not use "=" at all. Detect those high-confidence formats
+  // only when a Function 7.1–7.10 item title is present.
+  if (!/::\s*Q-7\.(?:10|[1-9])-\d{3}(?!\d)\s*::/i.test(text)) return false;
+  return /\{[^{}]*=\s*[^\s{}][^{}]*\}/s.test(text)
+    || /\{\s*(?:T|F|TRUE|FALSE)(?:\s*#[^{}]*)?\s*\}/i.test(text)
+    || /\{\s*#\s*[-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[^{}]*)\}/s.test(text);
 }
 
 function containsKeyedDgrSection(text) {
@@ -117,6 +122,15 @@ function selfTest() {
   const giftCases = [
     ['::Q-7.2-901::Synthetic fixture question {=Synthetic keyed choice ~Distractor}', true],
     ['::Q-7.10-901::Synthetic fixture question {~Wrong =Correct}', true],
+    ['::Q-7.2-901::Synthetic question {= Correct keyed choice ~ Distractor}', true],
+    ['::Q-7.2-901::Synthetic question {\n= Correct keyed choice\n~ Distractor\n}', true],
+    ['::Q-7.2-901::Synthetic true-false question {TRUE}', true],
+    ['::Q-7.10-901::Synthetic true-false question {F}', true],
+    ['::Q-7.2-901::Synthetic numerical question {#42:1}', true],
+    ['::Q-7.2-901::Synthetic numerical question {#-3.14:0.1}', true],
+    ['::Q-7.2-901::Blank answer marker {=   }', false],
+    ['::Q-7.2-901::Nonkeyed explanation {ordinary words}', false],
+    ['::Q-7.11-901::Outside-scope GIFT true-false question {TRUE}', false],
     ['::Q-7.2-901::Explanatory sample without an answer', false],
     ['::Q-7.11-901::Synthetic question {=Synthetic keyed choice}', false],
   ];

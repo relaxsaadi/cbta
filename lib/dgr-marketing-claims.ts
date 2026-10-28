@@ -43,10 +43,36 @@ Règles de conformité obligatoires :
 - N'utilise pas les anciennes campagnes août/septembre 2026 comme urgence commerciale.
 `;
 
+// Generated email bodies are HTML. A claim may be split by inline tags or
+// HTML entities while remaining plainly visible to a recipient. Evaluate both
+// text projections; this is a defence-in-depth veto, not regulatory approval.
+function decodeMarketingEntities(input: string): string {
+  return input
+    .replace(/&(?:nbsp|ensp|emsp|thinsp);/gi, ' ')
+    .replace(/&eacute;/gi, 'é')
+    .replace(/&egrave;/gi, 'è')
+    .replace(/&agrave;/gi, 'à')
+    .replace(/&amp;/gi, '&')
+    .replace(/&#(x[0-9a-f]+|[0-9]+);/gi, (_match, code: string) => {
+      const value = /^x/i.test(code)
+        ? Number.parseInt(code.slice(1), 16)
+        : Number.parseInt(code, 10);
+      return Number.isInteger(value) && value >= 32 && value <= 0x10ffff
+        ? String.fromCodePoint(value)
+        : ' ';
+    });
+}
+
 export function assertSafeDgrMarketingCopy(text: string): void {
-  const candidate = text.replace(/\s+/g, " ").trim();
+  const decoded = decodeMarketingEntities(text).normalize('NFC');
+  const views = [
+    decoded,
+    decoded.replace(/<[^>]*>/g, ''),
+    decoded.replace(/<[^>]*>/g, ' '),
+  ].map((value) => value.replace(/\s+/g, ' ').trim());
+
   for (const { label, pattern } of BLOCKED_DGR_MARKETING_CLAIMS) {
-    if (pattern.test(candidate)) {
+    if (views.some((candidate) => pattern.test(candidate))) {
       throw new Error(`[dgr-marketing] blocked generated copy: ${label}`);
     }
   }

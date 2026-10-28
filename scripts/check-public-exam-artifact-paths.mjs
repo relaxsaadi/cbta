@@ -50,13 +50,19 @@ function containsMoodleXmlDgrAnswerKey(text) {
 // Moodle GIFT may be stored with either .gift or .txt extension. Require a
 // function-scoped item title and a keyed answer, not just explanatory prose.
 function containsGiftDgrAnswerKey(text) {
-  // GIFT supports whitespace after "=" plus keyed true/false and numerical
-  // answers that do not use "=" at all. Detect those high-confidence formats
-  // only when a Function 7.1–7.10 item title is present.
+  // GIFT supports "=" answers, true/false, numerical answers, and multiple-
+  // response questions with positive partial-credit weights but NO "=" at all.
+  // See Moodle's GIFT "Multiple Answers" and numerical examples.
   if (!/::\s*Q-7\.(?:10|[1-9])-\d{3}(?!\d)\s*::/i.test(text)) return false;
+  const positiveWeightedChoices = [...text.matchAll(/\{([^{}]*)\}/gs)].some(([, choices]) =>
+    [...choices.matchAll(/~\s*%\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*%\s*(?=\S)/g)]
+      .some(([, weight]) => Number(weight) > 0)
+  );
   return /\{[^{}]*=\s*[^\s{}][^{}]*\}/s.test(text)
     || /\{\s*(?:T|F|TRUE|FALSE)(?:\s*#[^{}]*)?\s*\}/i.test(text)
-    || /\{\s*#\s*[-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[^{}]*)\}/s.test(text);
+    || /\{\s*#\s*[-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[^{}]*)\}/s.test(text)
+    || /\{\s*#\s*=\s*(?:%[+-]?(?:\d+(?:\.\d+)?|\.\d+)%\s*)?[-+]?(?:\d+(?:\.\d+)?|\.\d+)/s.test(text)
+    || positiveWeightedChoices;
 }
 
 function containsKeyedDgrSection(text) {
@@ -128,6 +134,11 @@ function selfTest() {
     ['::Q-7.10-901::Synthetic true-false question {F}', true],
     ['::Q-7.2-901::Synthetic numerical question {#42:1}', true],
     ['::Q-7.2-901::Synthetic numerical question {#-3.14:0.1}', true],
+    ['::Q-7.3-901::Synthetic multi-answer question {~%50%Alpha ~%50%Beta ~%-50%Gamma}', true],
+    ['::Q-7.10-901::Synthetic weighted-answer question {~%33.33333%Alpha ~%66.66667%Beta}', true],
+    ['::Q-7.2-901::Synthetic numerical range {#\\n=1822:0\\n=%50%1822:2}', true],
+    ['::Q-7.2-901::Zero-only weighting is not keyed {~%0%Alpha ~%-50%Beta}', false],
+    ['::Q-7.2-901::Negative-only weighting is not keyed {~%-100%Alpha}', false],
     ['::Q-7.2-901::Blank answer marker {=   }', false],
     ['::Q-7.2-901::Nonkeyed explanation {ordinary words}', false],
     ['::Q-7.11-901::Outside-scope GIFT true-false question {TRUE}', false],

@@ -42,9 +42,15 @@ function containsStructuredDgrAnswerKey(text) {
 // Recognize high-confidence Moodle XML exports with a DGR item ID and a
 // positively keyed <answer>. These exports can have innocuous filenames.
 function containsMoodleXmlDgrAnswerKey(text) {
-  return dgrQuestionId.test(text)
-    && /<question\b[^>]*\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(text)
-    && /<answer\b[^>]*\bfraction\s*=\s*["']100(?:\.0+)?["']/i.test(text);
+  // Multi-response Moodle XML exports can split correct-answer credit across
+  // multiple positive fractions (for example 50 + 50) without any 100.
+  // Detect any positive keyed credit, not just a 100-percent answer.
+  if (!dgrQuestionId.test(text)
+    || !/<question\b[^>]*\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(text)) {
+    return false;
+  }
+  return [...text.matchAll(/<answer\b[^>]*\bfraction\s*=\s*["']([+-]?(?:\d+(?:\.\d+)?|\.\d+))["']/gi)]
+    .some(([, fraction]) => Number(fraction) > 0);
 }
 
 // Moodle GIFT may be stored with either .gift or .txt extension. Require a
@@ -120,6 +126,10 @@ function selfTest() {
     "**EN draft translation:** placeholder",
   ].join("\n");
   const moodleXmlCases = [
+    ['<quiz><question type="multichoice"><name><text>Q-7.3-901</text></name><single>false</single><answer fraction="50"><text>synthetic A</text></answer><answer fraction="50"><text>synthetic B</text></answer><answer fraction="-50"><text>synthetic C</text></answer></question></quiz>', true],
+    ['<quiz><question type="multichoice"><name><text>Q-7.10-901</text></name><answer fraction="33.33333"><text>synthetic</text></answer></question></quiz>', true],
+    ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="-50"><text>synthetic</text></answer></question></quiz>', false],
+    ['<quiz><question type="multichoice"><name><text>Q-7.11-901</text></name><answer fraction="50"><text>synthetic</text></answer></question></quiz>', false],
     ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', true],
     ['<quiz><question type="truefalse"><name><text>Q-7.10-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', true],
     ['<quiz><question type="multichoice"><name><text>Q-7.11-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', false],

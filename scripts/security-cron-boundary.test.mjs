@@ -134,3 +134,18 @@ test('human POST and side-effecting SSE GET routes verify dashboard Basic auth a
   ]) assert.ok(guard.includes(marker), 'missing human/CSRF guard: ' + marker)
   assert.doesNotMatch(guard, /process\.env\.(?:CRON_SECRET|NEXT_PUBLIC_CRON_SECRET)/)
 })
+
+
+test('Colonless Basic credentials must be rejected before slicing user and password', () => {
+  const middleware = source('middleware.ts')
+  const basic = middleware.slice(
+    middleware.indexOf("const authHeader = req.headers.get('authorization')"),
+    middleware.indexOf("return new NextResponse('Authentification requise'")
+  )
+  assert.ok(basic.includes("const sepIndex = decoded.indexOf(':')"), 'Basic must parse colon')
+  assert.match(
+    basic,
+    /if \(sepIndex > 0\) \{[\s\S]*?const suppliedUser = decoded\.slice\(0, sepIndex\)[\s\S]*?const suppliedPass = decoded\.slice\(sepIndex \+ 1\)/,
+    'Both credential components must be parsed only after validating the separator'
+  )
+})

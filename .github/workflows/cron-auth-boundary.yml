@@ -23,3 +23,5 @@ jobs:
           node-version: '22'
       - name: Check cron allowlist, route auth, browser token and SSE hold
         run: node --test scripts/security-cron-boundary.test.mjs
+      - name: Test Basic-auth dashboard mutation CSRF origin policy
+        run: node --experimental-strip-types --test scripts/security-dashboard-origin.test.mjs

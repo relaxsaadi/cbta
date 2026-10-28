@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR pour Transitaires — KOST GROUP",
     description:
-      "DGR 7.1 & 7.2 certifiés CBTA pour transitaires, commissionnaires en douane et agents de fret aérien.",
+      "Formation DGR pour transitaires et agents de fret aérien. Parcours CBTA établi selon les tâches et compétences à évaluer.",
     url: "https://dgr.kostacademy.com/formation-dgr-transitaires",
   },
 };

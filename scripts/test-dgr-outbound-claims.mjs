@@ -31,6 +31,8 @@ test('HTML tags and entities cannot conceal unsupported generated DGR claims', (
     '<p>certifi&#233; IATA</p>',
     '<h2>&eacute;ch&eacute;ance IATA</h2>',
     '<p>ao&#251;t 2026</p>',
+    '<p>session ao&ucirc;t 2026 : places limitées</p>',
+    '<p>Session AO&UCIRC;T 2026 !</p>',
   ]) {
     assert.throws(() => assertSafeDgrMarketingCopy(html), /blocked generated copy:/, html)
   }

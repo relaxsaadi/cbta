@@ -54,8 +54,10 @@ Réponds uniquement avec le HTML du corps (pas de markdown).`,
       }],
     }),
   })
+  if (!res.ok) throw new Error('Email generation provider rejected the request')
   const data = await res.json()
   const html = data.content?.[0]?.text || ''
+  if (!html.trim()) throw new Error('Email generation returned empty content')
   assertSafeDgrMarketingCopy(html)
   return html
 }
@@ -82,6 +84,11 @@ async function sendViaResend(to: string, subject: string, html: string): Promise
 }
 
 async function runDailyBlitz() {
+  // Sending to real recipients requires explicit owner opt-in and review.
+  // Never default to autonomous outbound merely because cron is configured.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return { sent: 0, disabled: true }
+  }
   const supabase = getSupabase()
 
   const { data: prospects } = await supabase

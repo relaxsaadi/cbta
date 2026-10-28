@@ -47,12 +47,20 @@ Règles de conformité obligatoires :
 // HTML entities while remaining plainly visible to a recipient. Evaluate both
 // text projections; this is a defence-in-depth veto, not regulatory approval.
 function decodeMarketingEntities(input: string): string {
+  const namedFrenchEntities: Record<string, string> = {
+    nbsp: ' ', ensp: ' ', emsp: ' ', thinsp: ' ',
+    aacute: 'á', agrave: 'à', acirc: 'â', auml: 'ä',
+    ccedil: 'ç',
+    eacute: 'é', egrave: 'è', ecirc: 'ê', euml: 'ë',
+    iacute: 'í', igrave: 'ì', icirc: 'î', iuml: 'ï',
+    oacute: 'ó', ograve: 'ò', ocirc: 'ô', ouml: 'ö',
+    uacute: 'ú', ugrave: 'ù', ucirc: 'û', uuml: 'ü',
+    yacute: 'ý', yuml: 'ÿ',
+    amp: '&', quot: '"', apos: "'", laquo: '«', raquo: '»',
+  };
   return input
-    .replace(/&(?:nbsp|ensp|emsp|thinsp);/gi, ' ')
-    .replace(/&eacute;/gi, 'é')
-    .replace(/&egrave;/gi, 'è')
-    .replace(/&agrave;/gi, 'à')
-    .replace(/&amp;/gi, '&')
+    .replace(/&([a-z][a-z0-9]+);/gi, (raw, name: string) =>
+      namedFrenchEntities[name.toLowerCase()] ?? raw)
     .replace(/&#(x[0-9a-f]+|[0-9]+);/gi, (_match, code: string) => {
       const value = /^x/i.test(code)
         ? Number.parseInt(code.slice(1), 16)

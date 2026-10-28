@@ -39,9 +39,36 @@ function containsStructuredDgrAnswerKey(text) {
   return dgrQuestionId.test(text) && questionField.test(text) && answerField.test(text);
 }
 
+// Moodle XML "cloze" questions store correct answers within questiontext
+// (often CDATA), not necessarily <answer fraction="..."> elements.
+// Scope both ID and key to one cloze question; this is a narrow tripwire,
+// not a complete XML parser or a confidentiality guarantee.
+function containsKeyedDgrClozeXml(text) {
+  const questions = text.matchAll(/<question\b[^>]*\btype\s*=\s*["']cloze["'][^>]*>([\s\S]*?)<\/question\s*>/gi);
+  for (const [, question] of questions) {
+    if (!dgrQuestionId.test(question)) continue;
+    const texts = question.matchAll(/<questiontext\b[^>]*>([\s\S]*?)<\/questiontext\s*>/gi);
+    for (const [, questionText] of texts) {
+      const embedded = questionText.matchAll(
+        /\{\s*(?:\d+(?:\.\d+)?)?\s*:\s*(?:SHORTANSWER(?:_C)?|MULTICHOICE(?:_[VH])?|NUMERICAL|SA|SAC|MC|MCV|MCH|NM|MW|MWC)\s*:\s*([^{}]*)\}/gi
+      );
+      for (const [, choices] of embedded) {
+        if (/(?:^|~)\s*=\s*\S/.test(choices)) return true;
+        // Moodle also permits positive partial-credit answers without '='.
+        const fractions = choices.matchAll(
+          /(?:^|~)\s*%\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*%\s*(?=\S)/gi
+        );
+        if ([...fractions].some(([, fraction]) => Number(fraction) > 0)) return true;
+      }
+    }
+  }
+  return false;
+}
+
 // Recognize high-confidence Moodle XML exports with a DGR item ID and a
-// positively keyed <answer>. These exports can have innocuous filenames.
+// positively keyed <answer> or embedded cloze answer. Filename may vary.
 function containsMoodleXmlDgrAnswerKey(text) {
+  if (containsKeyedDgrClozeXml(text)) return true;
   // Multi-response Moodle XML exports can split correct-answer credit across
   // multiple positive fractions (for example 50 + 50) without any 100.
   // Detect any positive keyed credit, not just a 100-percent answer.
@@ -126,6 +153,12 @@ function selfTest() {
     "**EN draft translation:** placeholder",
   ].join("\n");
   const moodleXmlCases = [
+    ['<quiz><question type="cloze"><name><text>Q-7.3-901</text></name><questiontext><text><![CDATA[synthetic {1:MC:=placeholder key~other}]]></text></questiontext></question></quiz>', true],
+    ['<quiz><question type="cloze"><name><text>Q-7.10-901</text></name><questiontext><text><![CDATA[synthetic {1:SA:wrong~%50%placeholder key}]]></text></questiontext></question></quiz>', true],
+    ['<quiz><question type="cloze"><name><text>Q-7.2-901</text></name><questiontext><text><![CDATA[synthetic {1:NM:=42:0.1}]]></text></questiontext></question></quiz>', true],
+    ['<quiz><question type="cloze"><name><text>Q-7.2-901</text></name><questiontext><text><![CDATA[synthetic {1:MC:wrong~%-50%other}]]></text></questiontext></question></quiz>', false],
+    ['<quiz><question type="cloze"><name><text>Q-7.11-901</text></name><questiontext><text><![CDATA[synthetic {1:MC:=placeholder key}]]></text></questiontext></question></quiz>', false],
+    ['<quiz><question type="cloze"><name><text>Other-item</text></name><questiontext><text><![CDATA[synthetic {1:MC:=placeholder key}]]></text></questiontext></question><question type="cloze"><name><text>Q-7.2-901</text></name><questiontext><text>nonkeyed</text></questiontext></question></quiz>', false],
     ['<quiz><question type="multichoice"><name><text>Q-7.3-901</text></name><single>false</single><answer fraction="50"><text>synthetic A</text></answer><answer fraction="50"><text>synthetic B</text></answer><answer fraction="-50"><text>synthetic C</text></answer></question></quiz>', true],
     ['<quiz><question type="multichoice"><name><text>Q-7.10-901</text></name><answer fraction="33.33333"><text>synthetic</text></answer></question></quiz>', true],
     ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="-50"><text>synthetic</text></answer></question></quiz>', false],

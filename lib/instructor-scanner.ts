@@ -280,21 +280,20 @@ export async function scanCbtaInstructors(
 async function scrapeLinkedInContacts(linkedinUrl: string, existingBio: string): Promise<{ email: string; phone: string }> {
   try {
     // Try Apify LinkedIn profile scraper
-    const data = await runSync('apify/linkedin-profile-scraper', {
-      startUrls: [{ url: linkedinUrl }],
-      proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] },
-    }, 60) as Array<{ email?: string; phone?: string; contactInfo?: { email?: string; phone?: string }; about?: string }>
+    const data = await runSync('johnvc/linkedin-profile-api', {
+      profileUrls: [linkedinUrl],
+    }, 120) as Array<{ email?: string | null; about?: string | null; summary?: string | null; error_message?: string | null }>
 
-    if (data.length > 0) {
-      const p = data[0]
-      const email = p.email || p.contactInfo?.email || ''
-      const phone = p.phone || p.contactInfo?.phone || ''
+    // Error rows carry error_message instead of profile data
+    const p = data.find(d => !d.error_message)
+    if (p) {
+      const email = p.email || ''
       // Also try extracting from the full about/bio text returned
-      const bio = p.about || existingBio
+      const bio = p.about || p.summary || existingBio
       const fallback = await extractContacts(bio)
       return {
         email: email || fallback.email,
-        phone: phone || fallback.phone,
+        phone: fallback.phone,
       }
     }
   } catch {

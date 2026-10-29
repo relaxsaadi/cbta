@@ -67,6 +67,31 @@ function containsKeyedDgrClozeXml(text) {
 
 // Recognize high-confidence Moodle XML exports with a DGR item ID and a
 // positively keyed <answer> or embedded cloze answer. Filename may vary.
+// Moodle's ddimageortext and ddmarker export their grading mapping as
+// <drop><choice>N</choice></drop> tied to <drag><no>N</no>.
+// Neither type requires a positive <answer fraction>. Keep all evidence
+// within a single DGR question to avoid mixed-export false positives.
+// Detection is deliberately high-confidence and does not parse every XML variant.
+function containsKeyedDgrImageDragXml(attrs, question) {
+  if (!/\\btype\\s*=\\s*["'](?:ddimageortext|ddmarker)["']/i.test(attrs)
+    || !dgrQuestionId.test(question)) return false;
+  const referenced = new Set(
+    [...question.matchAll(/<drop\\b[^>]*>([\\s\\S]*?)<\\/drop\\s*>/gi)]
+      .map(([, drop]) => /<choice\\b[^>]*>\\s*([1-9]\\d*)\\s*<\\/choice\\s*>/i.exec(drop)?.[1])
+      .filter(Boolean)
+  );
+  if (!referenced.size) return false;
+  for (const [, drag] of question.matchAll(/<drag\\b[^>]*>([\\s\\S]*?)<\\/drag\\s*>/gi)) {
+    const number = /<no\\b[^>]*>\\s*([1-9]\\d*)\\s*<\\/no\\s*>/i.exec(drag)?.[1];
+    if (!number || !referenced.has(number)) continue;
+    const labelled = [...drag.matchAll(/<text\\b[^>]*>([\\s\\S]*?)<\\/text\\s*>/gi)]
+      .some(([, value]) => Boolean(value.replace(/<!\\[CDATA\\[|\\]\\]>/g, "").trim()));
+    const image = /<file\\b[^>]*\\bname\\s*=\\s*["'][^"']+["'][^>]*>/i.test(drag);
+    if (labelled || image) return true;
+  }
+  return false;
+}
+
 function containsMoodleXmlDgrAnswerKey(text) {
   if (containsKeyedDgrClozeXml(text)) return true;
   // Scope the DGR item identity, Moodle question type and answer fraction
@@ -74,6 +99,7 @@ function containsMoodleXmlDgrAnswerKey(text) {
   // export must not make an unkeyed DGR question appear confidentially keyed.
   const questions = text.matchAll(/<question\b([^>]*)>([\s\S]*?)<\/question\s*>/gi);
   for (const [, attrs, question] of questions) {
+    if (containsKeyedDgrImageDragXml(attrs, question)) return true;
     // Moodle matching exports store each correct pairing as an unweighted
     // <subquestion><answer><text>...</text></answer></subquestion>. There is
     // no positive fraction attribute. Keep the DGR ID and its pairing inside
@@ -201,6 +227,17 @@ function selfTest() {
     "MR", "MRH", "MRS", "MRHS",
   ];
   const moodleXmlCases = [
+    // Moodle 5.x ddimageortext/ddmarker: <drop><choice>N</choice>
+    // refers to a specific <drag><no>N</no> instead of an answer fraction.
+    ['<quiz><question type="ddimageortext"><name><text>Q-7.2-901</text></name><drag><no>2</no><text>Synthetic labelled key</text></drag><drop><no>1</no><choice>2</choice></drop></question></quiz>', true],
+    ['<quiz><question type="ddmarker"><name><text>Q-7.8-901</text></name><drag><no>1</no><text>Synthetic marker</text></drag><drop><no>1</no><shape>rectangle</shape><choice>1</choice></drop></question></quiz>', true],
+    ['<quiz><question type="ddimageortext"><name><text>Q-7.10-901</text></name><drag><no>3</no><file name="synthetic-image.png">fixture</file></drag><drop><no>1</no><choice>3</choice></drop></question></quiz>', true],
+    ['<quiz><question type="ddmarker"><name><text>Q-7.11-901</text></name><drag><no>1</no><text>Outside scope</text></drag><drop><choice>1</choice></drop></question></quiz>', false],
+    ['<quiz><question type="ddimageortext"><name><text>Q-7.4-901</text></name><drag><no>1</no><text>Unreferenced</text></drag><drop><choice>2</choice></drop></question></quiz>', false],
+    ['<quiz><question type="ddmarker"><name><text>Q-7.5-901</text></name><drag><no>1</no><text>Unreferenced</text></drag><drop><choice>0</choice></drop></question></quiz>', false],
+    ['<quiz><question type="ddimageortext"><name><text>Q-7.6-901</text></name><drag><no>1</no><text> </text></drag><drop><choice>1</choice></drop></question></quiz>', false],
+    ['<quiz><question type="ddmarker"><name><text>Other-item</text></name><drag><no>1</no><text>Other key</text></drag><drop><choice>1</choice></drop></question><question type="ddmarker"><name><text>Q-7.9-901</text></name><drag><no>1</no><text>Unkeyed</text></drag><drop><choice>2</choice></drop></question></quiz>', false],
+    ['<quiz><question type="ddimageortext"><name><text>Other-item</text></name><drag><no>1</no><text>Other key</text></drag><drop><choice>1</choice></drop></question><question type="ddimageortext"><name><text>Q-7.3-901</text></name><drag><no>2</no><text>DGR keyed</text></drag><drop><choice>2</choice></drop></question></quiz>', true],
     // Moodle 5.x gapselect/ddwtos encode keyed word choices via 1-based
     // [[n]] positions; no positive <answer fraction> is required.
     ['<quiz><question type="gapselect"><name><text>Q-7.4-901</text></name><questiontext><text><![CDATA[Synthetic [[2]] blank]]></text></questiontext><selectoption><text>Distractor</text></selectoption><selectoption><text>Synthetic keyed choice</text></selectoption></question></quiz>', true],

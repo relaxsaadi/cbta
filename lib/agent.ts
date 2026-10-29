@@ -99,13 +99,14 @@ Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy
 // Send email via Resend
 async function sendEmail(to: string, subject: string, body: string): Promise<boolean> {
   try {
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to,
       subject,
       text: body,
     })
-    return !error
+    // A missing provider message ID is not evidence that a send was accepted.
+    return !error && typeof data?.id === 'string' && data.id.length > 0
   } catch {
     return false
   }

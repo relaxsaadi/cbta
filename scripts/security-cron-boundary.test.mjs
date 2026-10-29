@@ -149,3 +149,17 @@ test('Colonless Basic credentials must be rejected before slicing user and passw
     'Both credential components must be parsed only after validating the separator'
   )
 })
+
+test('RELEASE HOLD: cron and manual lead agents default to no sends or database mutations', () => {
+  const agent = source('lib/agent.ts')
+  for (const fn of ['processNewLeads', 'processFollowups']) {
+    const start = agent.indexOf('export async function ' + fn + '(')
+    assert.ok(start >= 0, fn + ' must exist')
+    const remainder = agent.slice(start)
+    const firstQuery = remainder.indexOf(".from('leads')")
+    const guard = remainder.indexOf("if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true')")
+    assert.ok(firstQuery > 0, fn + ' must have a lead query')
+    assert.ok(guard > 0 && guard < firstQuery, fn + ' must fail closed before querying or mutating leads')
+    assert.match(remainder.slice(guard, firstQuery), /return\\s*\\{[^}]*disabled:\\s*true/, fn + ' must explicitly report the disabled state')
+  }
+})

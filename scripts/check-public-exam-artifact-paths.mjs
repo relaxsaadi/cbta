@@ -74,6 +74,16 @@ function containsMoodleXmlDgrAnswerKey(text) {
   // export must not make an unkeyed DGR question appear confidentially keyed.
   const questions = text.matchAll(/<question\b([^>]*)>([\s\S]*?)<\/question\s*>/gi);
   for (const [, attrs, question] of questions) {
+    // Moodle matching exports store each correct pairing as an unweighted
+    // <subquestion><answer><text>...</text></answer></subquestion>. There is
+    // no positive fraction attribute. Keep the DGR ID and its pairing inside
+    // the SAME Moodle question to avoid mixed-export false positives.
+    if (/\btype\s*=\s*["']matching["']/i.test(attrs) && dgrQuestionId.test(question)) {
+      for (const [, subquestion] of question.matchAll(/<subquestion\b[^>]*>([\s\S]*?)<\/subquestion\s*>/gi)) {
+        const pair = /<answer\b[^>]*>\s*<text\b[^>]*>([\s\S]*?)<\/text\s*>\s*<\/answer\s*>/i.exec(subquestion);
+        if (pair && pair[1].replace(/<!\[CDATA\[|\]\]>/g, "").trim()) return true;
+      }
+    }
     if (!/\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(attrs)
       || !dgrQuestionId.test(question)) continue;
     const hasPositiveAnswer = [...question.matchAll(
@@ -169,6 +179,13 @@ function selfTest() {
     "MR", "MRH", "MRS", "MRHS",
   ];
   const moodleXmlCases = [
+    // Moodle's matching format has no fraction weights; the pairing itself is the key.
+    ['<quiz><question type="matching"><name><text>Q-7.4-901</text></name><subquestion><text>Synthetic left</text><answer><text>Synthetic right</text></answer></subquestion></question></quiz>', true],
+    ['<quiz><question type="matching"><name><text>Q-7.10-901</text></name><subquestion><text>Left</text><answer><text><![CDATA[<b>synthetic right</b>]]></text></answer></subquestion></question></quiz>', true],
+    ['<quiz><question type="matching"><name><text>Q-7.8-901</text></name><subquestion><text>Left</text><answer><text>  </text></answer></subquestion></question></quiz>', false],
+    ['<quiz><question type="matching"><name><text>Q-7.11-901</text></name><subquestion><text>Left</text><answer><text>synthetic right</text></answer></subquestion></question></quiz>', false],
+    ['<quiz><question type="matching"><name><text>Other-item</text></name><subquestion><text>Left</text><answer><text>synthetic right</text></answer></subquestion></question><question type="matching"><name><text>Q-7.2-901</text></name><subquestion><text>Left</text><answer><text></text></answer></subquestion></question></quiz>', false],
+    ['<quiz><question type="matching"><name><text>Other-item</text></name><subquestion><text>Left</text><answer><text>synthetic right</text></answer></subquestion></question><question type="matching"><name><text>Q-7.7-901</text></name><subquestion><text>Left</text><answer><text>synthetic DGR key</text></answer></subquestion></question></quiz>', true],
     ...clozeVariants.map((type) => [
       `<quiz><question type="cloze"><name><text>Q-7.7-901</text></name><questiontext><text><![CDATA[synthetic {1:${type}:=synthetic key~other}]]></text></questiontext></question></quiz>`,
       true,

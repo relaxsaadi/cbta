@@ -112,7 +112,14 @@ async function sendEmail(to: string, subject: string, body: string): Promise<boo
 }
 
 // Main agent: process new leads
-export async function processNewLeads(limit = 10): Promise<{ processed: number; sent: number; skipped: number }> {
+export async function processNewLeads(limit = 10): Promise<{ processed: number; sent: number; skipped: number; disabled?: boolean }> {
+  // A valid cron or dashboard credential authorizes invocation, not outbound email.
+  // Stay read/write/send-inert until the deployment owner explicitly enables
+  // autonomous outreach after reviewing consent, claims and send controls.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return { processed: 0, sent: 0, skipped: 0, disabled: true }
+  }
+
   const { data: leads } = await supabase
     .from('leads')
     .select('*, company:companies(*)')
@@ -181,7 +188,12 @@ export async function processNewLeads(limit = 10): Promise<{ processed: number; 
 }
 
 // Follow-up agent: J+3 and J+7
-export async function processFollowups(): Promise<{ j3: number; j7: number }> {
+export async function processFollowups(): Promise<{ j3: number; j7: number; disabled?: boolean }> {
+  // Do not read, mutate, or send follow-ups when autonomous outreach is off.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return { j3: 0, j7: 0, disabled: true }
+  }
+
   const now = new Date()
   const j3 = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString()
   const j7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()

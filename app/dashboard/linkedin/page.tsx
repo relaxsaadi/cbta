@@ -114,10 +114,9 @@ export default function LinkedInPage() {
     }
     setScanEvents([])
     setScanning(true)
-    const secret = process.env.NEXT_PUBLIC_CRON_SECRET || ''
     const countryParam = scanCountry === 'all' ? '' : encodeURIComponent(scanCountry)
     const sectorsParam = scanSectors.length ? scanSectors.join(',') : ''
-    const url = `/api/linkedin/scan/stream?secret=${secret}&country=${countryParam}&sectors=${sectorsParam}`
+    const url = `/api/linkedin/scan/stream?country=${countryParam}&sectors=${sectorsParam}`
     const es = new EventSource(url)
     esRef.current = es
 

@@ -97,9 +97,8 @@ export default function IntelPage() {
     setCycle(cycleRef.current)
     const label = scanCountry === 'all' ? 'Tous les pays' : scanCountry
     setEvents(prev => [...prev, { type: 'status', msg: `━━━ Cycle ${cycleRef.current} · ${label} ━━━` }])
-    const secret = process.env.NEXT_PUBLIC_CRON_SECRET || ''
     const countriesParam = scanCountry === 'all' ? '' : encodeURIComponent(scanCountry)
-    const es = new EventSource(`/api/agent/intel/stream?secret=${secret}&countries=${countriesParam}`)
+    const es = new EventSource(`/api/agent/intel/stream?countries=${countriesParam}`)
     esRef.current = es
     es.addEventListener('status', e => { const d = JSON.parse(e.data); setEvents(p => [...p, { type: 'status', msg: d.msg }]) })
     es.addEventListener('lead', e => { const d = JSON.parse(e.data); setEvents(p => [...p, { type: 'lead', ...d }]); fetchLeads() })
@@ -140,7 +139,7 @@ export default function IntelPage() {
     try {
       await fetch('/api/agent/intel', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ countries: scanCountry === 'all' ? undefined : [scanCountry] }),
       })
       setEvents(p => [...p, { type: 'done', msg: '✅ Scan arrière-plan terminé — leads mis à jour.' }])

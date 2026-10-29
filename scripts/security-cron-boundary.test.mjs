@@ -182,3 +182,14 @@ test('RELEASE HOLD: rejected email requests cannot mark a lead bounced or contac
   assert.match(fn.slice(log), /livraison non confirmée/,
     'provider acceptance must not be represented as confirmed recipient delivery')
 })
+
+test('RELEASE HOLD: provider success requires a nonempty provider message ID', () => {
+  const agent = source('lib/agent.ts')
+  const start = agent.indexOf('async function sendEmail(')
+  const end = agent.indexOf('// Main agent:', start)
+  assert.ok(start >= 0 && end > start)
+  const sendFn = agent.slice(start, end)
+  assert.match(sendFn, /const \{ data, error \} = await resend\.emails\.send\(/)
+  assert.match(sendFn, /return !error && typeof data\?\.id === 'string' && data\.id\.length > 0/,
+    'do not report successful API acceptance without a provider-assigned ID')
+})

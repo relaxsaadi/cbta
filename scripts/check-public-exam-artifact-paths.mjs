@@ -113,6 +113,28 @@ function containsQtiXmlDgrAnswerKey(text) {
   return false;
 }
 
+
+// 1EdTech QTI 3.0 uses qti-prefixed XML element names. A detector that only
+// recognizes QTI 2.x <assessmentItem>/<correctResponse> misses the official
+// QTI 3.0 <qti-correct-response> key. Keep ID, response and nonempty value
+// scoped to one assessment item, without printing any contents.
+function containsQti3XmlDgrAnswerKey(text) {
+  for (const [, attributes, item] of text.matchAll(
+    /<qti-assessment-item\b([^>]*)>([\s\S]*?)<\/qti-assessment-item\s*>/gi
+  )) {
+    if (!dgrQuestionId.test(attributes) && !dgrQuestionId.test(item)) continue;
+    for (const [, declaration] of item.matchAll(
+      /<qti-response-declaration\b[^>]*>([\s\S]*?)<\/qti-response-declaration\s*>/gi
+    )) {
+      const correct = /<qti-correct-response\b[^>]*>([\s\S]*?)<\/qti-correct-response\s*>/i.exec(declaration)?.[1];
+      if (!correct) continue;
+      if ([...correct.matchAll(/<qti-value\b[^>]*>([\s\S]*?)<\/qti-value\s*>/gi)]
+        .some(([, value]) => Boolean(value.replace(/<!\[CDATA\[|\]\]>/g, "").trim()))) return true;
+    }
+  }
+  return false;
+}
+
 function containsMoodleXmlDgrAnswerKey(text) {
   if (containsKeyedDgrClozeXml(text)) return true;
   // Scope the DGR item identity, Moodle question type and answer fraction
@@ -351,6 +373,18 @@ function selfTest() {
     ['<assessmentItem identifier="Other-item"><responseDeclaration><correctResponse><value>A</value></correctResponse></responseDeclaration></assessmentItem><assessmentItem identifier="Q-7.8-901"><responseDeclaration><correctResponse><value>B</value></correctResponse></responseDeclaration></assessmentItem>', true],
     ['<assessmentItem identifier="Q-7.6-901"><responseDeclaration><defaultValue><value>A</value></defaultValue></responseDeclaration></assessmentItem>', false],
   ];
+  // 1EdTech QTI 3.0 (official qti-prefixed item and response elements).
+  // The old QTI 2.x-only detector missed these keyed exports entirely.
+  const qti3XmlCases = [
+    ['<qti-assessment-item identifier="Q-7.2-901"><qti-response-declaration identifier="RESPONSE"><qti-correct-response><qti-value>A</qti-value></qti-correct-response></qti-response-declaration><qti-item-body><qti-prompt>Synthetic</qti-prompt></qti-item-body></qti-assessment-item>', true],
+    ['<qti-assessment-item title="Q-7.10-901"><qti-response-declaration><qti-correct-response><qti-value><![CDATA[synthetic choice]]></qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item>', true],
+    ['<qti-assessment-item identifier="Q-7.6-901"><qti-response-declaration cardinality="multiple"><qti-correct-response><qti-value>A</qti-value><qti-value>B</qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item>', true],
+    ['<qti-assessment-item identifier="Q-7.11-901"><qti-response-declaration><qti-correct-response><qti-value>A</qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item>', false],
+    ['<qti-assessment-item identifier="Q-7.3-901"><qti-response-declaration><qti-correct-response><qti-value> </qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item>', false],
+    ['<qti-assessment-item identifier="Q-7.5-901"><qti-response-declaration><qti-default-value><qti-value>A</qti-value></qti-default-value></qti-response-declaration></qti-assessment-item>', false],
+    ['<qti-assessment-item identifier="Other-item"><qti-response-declaration><qti-correct-response><qti-value>A</qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item><qti-assessment-item identifier="Q-7.7-901"><qti-response-declaration identifier="RESPONSE"></qti-response-declaration></qti-assessment-item>', false],
+    ['<qti-assessment-item identifier="Other-item"><qti-response-declaration><qti-correct-response><qti-value>A</qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item><qti-assessment-item identifier="Q-7.8-901"><qti-response-declaration><qti-correct-response><qti-value>B</qti-value></qti-correct-response></qti-response-declaration></qti-assessment-item>', true],
+  ];
   const giftCases = [
     ['::Q-7.2-901::Synthetic fixture question {=Synthetic keyed choice ~Distractor}', true],
     ['::Q-7.10-901::Synthetic fixture question {~Wrong =Correct}', true],
@@ -392,6 +426,7 @@ function selfTest() {
     || structuredCases.some(([fixture, expected]) => containsStructuredDgrAnswerKey(fixture) !== expected)
     || moodleXmlCases.some(([fixture, expected]) => containsMoodleXmlDgrAnswerKey(fixture) !== expected)
     || qtiXmlCases.some(([fixture, expected]) => containsQtiXmlDgrAnswerKey(fixture) !== expected)
+    || qti3XmlCases.some(([fixture, expected]) => containsQti3XmlDgrAnswerKey(fixture) !== expected)
     || giftCases.some(([fixture, expected]) => containsGiftDgrAnswerKey(fixture) !== expected)
     || containsKeyedDgrSection(nonKeyedMarkdown)
     || containsKeyedDgrSection("No item headings; **Stem (FR):** x **Options:** y **Correct answer rationale:** z")) {
@@ -428,7 +463,7 @@ if (process.argv.includes("--self-test")) {
     const hasKey = structuredTextExtensions.test(file)
       ? containsStructuredDgrAnswerKey(text)
       : moodleXmlExtension.test(file)
-        ? containsMoodleXmlDgrAnswerKey(text) || containsQtiXmlDgrAnswerKey(text)
+        ? containsMoodleXmlDgrAnswerKey(text) || containsQtiXmlDgrAnswerKey(text) || containsQti3XmlDgrAnswerKey(text)
         : containsKeyedDgrSection(text) || (giftExtension.test(file) && containsGiftDgrAnswerKey(text));
     if (hasKey) keyedContent.push(file);
   }

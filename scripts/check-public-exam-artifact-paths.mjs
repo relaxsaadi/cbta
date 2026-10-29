@@ -97,22 +97,25 @@ function containsKeyedDgrImageDragXml(attrs, question) {
 // assessmentItem. This deliberately does not claim support for every QTI/ZIP
 // variant; in particular, public-history and archived exports remain unassessed.
 function containsQtiXmlDgrAnswerKey(text) {
-  for (const [, attributes, item] of text.matchAll(
-    /<assessmentItem\b([^>]*)>([\s\S]*?)<\/assessmentItem\s*>/gi
+  // QTI 2.x may use the default XML namespace or a declared namespace
+  // prefix (e.g. <qt:assessmentItem>). Match complete same-name tag pairs
+  // at each level so key evidence cannot cross item boundaries. This is
+  // still a high-confidence tripwire, not full namespace/XML validation.
+  for (const [, , attributes, item] of text.matchAll(
+    /<((?:[A-Za-z_][\w.-]*:)?assessmentItem)\b([^>]*)>([\s\S]*?)<\/\1\s*>/gi
   )) {
     if (!dgrQuestionId.test(attributes) && !dgrQuestionId.test(item)) continue;
-    for (const [, declaration] of item.matchAll(
-      /<responseDeclaration\b[^>]*>([\s\S]*?)<\/responseDeclaration\s*>/gi
+    for (const [, , declaration] of item.matchAll(
+      /<((?:[A-Za-z_][\w.-]*:)?responseDeclaration)\b[^>]*>([\s\S]*?)<\/\1\s*>/gi
     )) {
-      const correct = /<correctResponse\b[^>]*>([\s\S]*?)<\/correctResponse\s*>/i.exec(declaration)?.[1];
+      const correct = /<((?:[A-Za-z_][\w.-]*:)?correctResponse)\b[^>]*>([\s\S]*?)<\/\1\s*>/i.exec(declaration)?.[2];
       if (!correct) continue;
-      if ([...correct.matchAll(/<value\b[^>]*>([\s\S]*?)<\/value\s*>/gi)]
-        .some(([, value]) => Boolean(value.replace(/<!\[CDATA\[|\]\]>/g, "").trim()))) return true;
+      if ([...correct.matchAll(/<((?:[A-Za-z_][\w.-]*:)?value)\b[^>]*>([\s\S]*?)<\/\1\s*>/gi)]
+        .some(([, , value]) => Boolean(value.replace(/<!\[CDATA\[|\]\]>/g, "").trim()))) return true;
     }
   }
   return false;
 }
-
 
 // 1EdTech QTI 3.0 uses qti-prefixed XML element names. A detector that only
 // recognizes QTI 2.x <assessmentItem>/<correctResponse> misses the official
@@ -372,6 +375,14 @@ function selfTest() {
     ['<assessmentItem identifier="Other-item"><responseDeclaration><correctResponse><value>A</value></correctResponse></responseDeclaration></assessmentItem><assessmentItem identifier="Q-7.7-901"><responseDeclaration identifier="RESPONSE"></responseDeclaration></assessmentItem>', false],
     ['<assessmentItem identifier="Other-item"><responseDeclaration><correctResponse><value>A</value></correctResponse></responseDeclaration></assessmentItem><assessmentItem identifier="Q-7.8-901"><responseDeclaration><correctResponse><value>B</value></correctResponse></responseDeclaration></assessmentItem>', true],
     ['<assessmentItem identifier="Q-7.6-901"><responseDeclaration><defaultValue><value>A</value></defaultValue></responseDeclaration></assessmentItem>', false],
+    // QTI 2.x can use an explicit XML namespace prefix on every QTI tag.
+    // A valid namespaced keyed DGR item must not evade the public-tree guard.
+    ['<qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Q-7.2-901"><qt:responseDeclaration identifier="RESPONSE"><qt:correctResponse><qt:value>A</qt:value></qt:correctResponse></qt:responseDeclaration></qt:assessmentItem>', true],
+    ['<x:assessmentItem xmlns:x="http://www.imsglobal.org/xsd/imsqti_v2p2" title="Q-7.10-901"><x:responseDeclaration><x:correctResponse><x:value><![CDATA[Synthetic option]]></x:value></x:correctResponse></x:responseDeclaration></x:assessmentItem>', true],
+    ['<qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Q-7.11-901"><qt:responseDeclaration><qt:correctResponse><qt:value>A</qt:value></qt:correctResponse></qt:responseDeclaration></qt:assessmentItem>', false],
+    ['<qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Q-7.4-901"><qt:responseDeclaration><qt:defaultValue><qt:value>A</qt:value></qt:defaultValue></qt:responseDeclaration></qt:assessmentItem>', false],
+    ['<qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Other"><qt:responseDeclaration><qt:correctResponse><qt:value>A</qt:value></qt:correctResponse></qt:responseDeclaration></qt:assessmentItem><qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Q-7.7-901"><qt:responseDeclaration identifier="RESPONSE"></qt:responseDeclaration></qt:assessmentItem>', false],
+    ['<qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Other"><qt:responseDeclaration><qt:correctResponse><qt:value>A</qt:value></qt:correctResponse></qt:responseDeclaration></qt:assessmentItem><qt:assessmentItem xmlns:qt="http://www.imsglobal.org/xsd/imsqti_v2p2" identifier="Q-7.8-901"><qt:responseDeclaration><qt:correctResponse><qt:value>B</qt:value></qt:correctResponse></qt:responseDeclaration></qt:assessmentItem>', true],
   ];
   // 1EdTech QTI 3.0 (official qti-prefixed item and response elements).
   // The old QTI 2.x-only detector missed these keyed exports entirely.

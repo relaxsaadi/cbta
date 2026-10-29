@@ -3,7 +3,11 @@ import type { Formation } from "./formations";
 
 export function buildFormationMetadata(formation: Formation): Metadata {
   // Keep title ≤47 chars so "— KOST GROUP" suffix stays under 60 total
-  const shortTitle = `${formation.code} — ${formation.title}`.slice(0, 47).replace(/\s\S+$/, "");
+  const combinedTitle = `${formation.code} — ${formation.title}`;
+  const shortTitle =
+    combinedTitle.length > 47
+      ? combinedTitle.slice(0, 47).replace(/\s\S+$/, "")
+      : combinedTitle;
   return {
     title: shortTitle,
     description: `${formation.description} Durée : ${formation.duree}. Tarif : ${formation.prixEur} €.`,

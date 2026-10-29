@@ -8,9 +8,9 @@ import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR Transitaires Algérie — Cat. 7.1 & 7.2",
+  title: "Formation DGR Transitaires en Algérie",
   description:
-    "Formation IATA DGR pour transitaires et agents de fret en Algérie. Catégories 7.1 & 7.2, CBTA Provider certifié, reconnu par 300+ compagnies. Devis sous 24h.",
+    "Formation DGR pour transitaires et agents de fret à Alger. Fonction CBTA et programme à déterminer selon les tâches exercées. Informations sur demande.",
   alternates: { canonical: "/formation-dgr-transitaires" },
   keywords: [
     "formation DGR transitaires",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR pour Transitaires — KOST GROUP",
     description:
-      "DGR 7.1 & 7.2 certifiés CBTA pour transitaires, commissionnaires en douane et agents de fret aérien.",
+      "Formation DGR pour transitaires et agents de fret aérien. Parcours CBTA établi selon les tâches et compétences à évaluer.",
     url: "https://dgr.kostacademy.com/formation-dgr-transitaires",
   },
 };
@@ -30,66 +30,58 @@ export const metadata: Metadata = {
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "Formation IATA DGR pour Transitaires (Catégories 7.1 & 7.2)",
+  name: "Formation DGR / CBTA pour personnels du transit et du fret aérien",
   description:
-    "Formation obligatoire IATA DGR pour les transitaires, commissionnaires en douane et agents de fret aérien. Couvre les catégories 7.1 (expéditeurs) et 7.2 (agents cargo).",
+    "Parcours de formation DGR pour les personnels du transit et du fret aérien. Les fonctions, compétences et évaluations sont définies à partir des tâches effectivement exercées.",
   provider: {
     "@type": "EducationalOrganization",
     name: "KOST GROUP",
     url: "https://dgr.kostacademy.com",
   },
-  courseCode: "DGR-7.1-7.2",
   availableLanguage: "fr",
-  occupationalCredentialAwarded: "Certificat IATA DGR-CBTA",
-  offers: {
-    "@type": "Offer",
-    price: "900",
-    priceCurrency: "EUR",
-    availability: "https://schema.org/InStock",
-  },
 };
 
 const RISKS = [
   {
     icon: "⚠️",
-    title: "Amende & suspension",
-    text: "Un transitaire qui expédie des marchandises dangereuses sans personnel certifié DGR risque une suspension d'accréditation cargo et des amendes DGAC/ANAC.",
+    title: "Conformité des opérations",
+    text: "La formation et les compétences nécessaires dépendent des tâches réellement exercées et des exigences applicables. Les conséquences d'un écart doivent être appréciées selon les faits et le cadre concerné.",
   },
   {
     icon: "✈️",
-    title: "Refus en compagnie",
-    text: "Les compagnies aériennes refusent systématiquement les envois DGR dont le transitaire n'a pas de personnel certifié DGR 7.1 en poste.",
+    title: "Contrôle des expéditions",
+    text: "Un transporteur peut refuser une expédition si les conditions applicables de classification, emballage, documentation ou acceptation ne sont pas remplies.",
   },
   {
     icon: "📋",
-    title: "Responsabilité pénale",
-    text: "En cas d'incident DGR, la responsabilité civile et pénale de l'expéditeur — et donc du transitaire signataire — est directement engagée.",
+    title: "Responsabilités à déterminer",
+    text: "Les responsabilités de l'expéditeur, du transitaire et des autres intervenants varient selon leurs actes, leurs obligations et les circonstances. Elles ne se déduisent pas automatiquement d'un intitulé de poste.",
   },
 ];
 
 const FORMATIONS = [
   {
     code: "DGR 7.1 Initial",
-    titre: "Expéditeurs & Transitaires",
-    desc: "Formation complète pour toute personne qui prépare, classe, emballe, étiquette et documente des envois de marchandises dangereuses. La formation de référence pour les transitaires.",
+    titre: "Personnel préparant des envois DGR",
+    desc: "Parcours initial destiné aux tâches de préparation d'expéditions DGR concernées. L'adéquation de la fonction 7.1 est à vérifier selon les responsabilités du poste.",
     duree: "4 jours / 32h",
     prix: "1 800 €",
-    badge: "Essentielle transitaires",
+    badge: "Selon tâches",
     color: "#003087",
   },
   {
     code: "DGR 7.1 Recurrent",
-    titre: "Renouvellement 7.1 (24 mois)",
-    desc: "Renouvellement obligatoire tous les 24 mois pour maintenir la certification 7.1 active. Mise à jour DGR dernière édition incluse.",
+    titre: "Formation périodique 7.1",
+    desc: "Parcours périodique à adapter aux exigences applicables, à l'analyse des tâches et à la version réglementaire utilisée. Périodicité à confirmer pour chaque contexte.",
     duree: "3 jours / 24h",
     prix: "1 400 €",
     badge: "Renouvellement",
     color: "#0052cc",
   },
   {
-    code: "DGR 7.2 + 7.4",
+    code: "DGR 7.2 et/ou 7.4",
     titre: "Agents cargo & manutention",
-    desc: "Pour les agents de fret en station cargo : acceptation, manutention et stockage des envois DGR. Complémentaire au 7.1 pour les équipes cargo.",
+    desc: "Fonction(s) à choisir selon les tâches exactes de traitement, d'acceptation ou de manutention. Aucun regroupement 7.2/7.4 ne doit être présumé automatiquement.",
     duree: "2 jours / 16h",
     prix: "900 €",
     badge: "Cargo & handling",
@@ -114,10 +106,10 @@ export default function Page() {
             Formation IATA DGR<br />pour Transitaires
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 580, margin: "0 auto 12px" }}>
-            Catégories <strong>7.1 & 7.2</strong> — Certifiez vos équipes pour expédier légalement des marchandises dangereuses par avion.
+            Parcours <strong>DGR / CBTA</strong> — Identifiez les compétences à évaluer selon les tâches de vos équipes de transit et de fret aérien.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            Obligation OACI Annexe 18 · CBTA Provider certifié · Certificat valable 24 mois
+            Approche basée sur les compétences · Fonction adaptée aux tâches · Informations et justificatifs sur demande
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#formations" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -133,7 +125,7 @@ export default function Page() {
         <section style={{ background: "#FFF3CD", borderBottom: "1px solid #FBBF24", padding: "32px 24px" }}>
           <div style={{ maxWidth: 900, margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", fontSize: 20, fontWeight: 700, marginBottom: 24, color: "#92400E" }}>
-              Sans certification DGR, votre activité de transitaire est en danger
+              Formation DGR : identifier les exigences de chaque poste
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
               {RISKS.map((r) => (
@@ -185,10 +177,10 @@ export default function Page() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
-                { icon: "🏅", t: "1er CBTA Provider d'Algérie", d: "Seul centre IATA CBTA accrédité en Algérie — vos certificats sont reconnus par toutes les compagnies aériennes." },
+                { icon: "📚", t: "Approche DGR / CBTA", d: "Programme établi selon les tâches du personnel. Statut du prestataire et justificatifs du parcours disponibles sur demande." },
                 { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
-                { icon: "🏢", t: "Intra-entreprise possible", d: "Formateur IATA déplacé dans vos locaux pour former tout votre pôle export DGR en une session." },
-                { icon: "💶", t: "50% moins cher qu'en Europe", d: "Même certification IATA, même formateur accrédité, moitié prix par rapport à Paris ou Bruxelles." },
+                { icon: "🏢", t: "Intra-entreprise possible", d: "Session sur site envisageable selon l'effectif, les fonctions à couvrir et la disponibilité des formateurs." },
+                { icon: "💶", t: "Devis selon vos besoins", d: "Tarif et durée détaillés selon les fonctions, l'effectif et le lieu de formation, sans comparaison tarifaire non vérifiée." },
               ].map((r) => (
                 <div key={r.t} style={{ background: "white", borderRadius: 10, padding: "20px" }}>
                   <div style={{ fontSize: 30, marginBottom: 10 }}>{r.icon}</div>
@@ -204,11 +196,11 @@ export default function Page() {
         <section style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px" }}>
           <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Questions fréquentes — Transitaires</h2>
           {[
-            { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "Oui. Tout agent qui prépare, classe, emballe ou documente des envois DGR doit détenir un certificat DGR 7.1 en cours de validité (OACI Annexe 18, IATA DGR Section 1)." },
-            { q: "Quelle est la validité de la certification ?", a: "24 mois. À l'échéance, votre agent doit suivre la formation DGR 7.1 Recurrent pour renouveler son certificat." },
-            { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
-            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Oui. KOST GROUP est un IATA CBTA Provider officiel. Le certificat émis est un certificat IATA reconnu par toutes les compagnies aériennes mondiales." },
-            { q: "Y a-t-il un examen à la fin ?", a: "Oui. L'examen CBTA est basé sur des compétences (Competency-Based Training and Assessment). Le taux de réussite de nos stagiaires dépasse 95 %." },
+            { q: "Tous mes agents export doivent-ils suivre la fonction 7.1 ?", a: "Pas automatiquement. Les besoins de formation et d'évaluation dépendent des tâches réellement exercées, des responsabilités attribuées et des règles applicables au poste." },
+            { q: "Quelle est la périodicité des formations ?", a: "Elle doit être confirmée au regard des exigences applicables et du dispositif de suivi des compétences. Nous précisons les modalités et justificatifs du parcours proposé avant inscription." },
+            { q: "Peut-on organiser une formation intra-entreprise ?", a: "Une session sur site peut être étudiée selon les fonctions, l'effectif, le lieu et les disponibilités. La durée n'est pas garantie avant validation du programme." },
+            { q: "Comment vérifier la reconnaissance de la formation ?", a: "Demandez les justificatifs actuels du programme et de l'organisme émetteur. Les exigences d'acceptation dépendent de l'autorité, du transporteur et de l'employeur ; aucune reconnaissance universelle n'est présumée." },
+            { q: "Quelles évaluations sont prévues ?", a: "Les modalités d'évaluation sont définies selon les compétences et le programme concernés ; elles sont communiquées avant inscription. Aucun taux de réussite n'est avancé sans données vérifiées." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#003087" }}>{faq.q}</summary>
@@ -221,7 +213,7 @@ export default function Page() {
         <section style={{ background: "#003087", padding: "60px 24px" }}>
           <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", color: "white", marginBottom: 32 }}>
             <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>Devis gratuit pour votre entreprise</h2>
-            <p style={{ opacity: 0.9, fontSize: 15 }}>Indiquez le nombre d&apos;agents à certifier — nous vous envoyons un devis sous 24h.</p>
+            <p style={{ opacity: 0.9, fontSize: 15 }}>Indiquez les tâches, l'effectif et le lieu souhaité pour recevoir une proposition adaptée.</p>
           </div>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>
             <Suspense fallback={null}>

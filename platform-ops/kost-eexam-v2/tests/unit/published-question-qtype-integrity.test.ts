@@ -8,6 +8,7 @@ import {
   LEGACY_QTYPE_UNKNOWN_CODE,
   PUBLISHED_QTYPE_CONFLICT_CODE,
   PUBLISHED_QTYPE_IMMUTABLE_ERROR,
+  SNAPSHOT_IDENTITY_IMMUTABLE_ERROR,
   enforcePublishedQuestionQtypeIntegrity,
   questionQtypeConflict,
   requireSnapshotQtype,
@@ -225,6 +226,44 @@ test("#58 a snapshot inserted after migration captures the qtype baseline before
          FROM assessment_question_snapshots WHERE id = ?`).run(snapshotId),
       /published snapshot must persist matching historical qtype/i
     );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 a published snapshot cannot be retargeted to a different question or version", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-snapshot-identity-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const original = seedQuestion(db, {
+      kostId: "QTYPE-IDENTITY-ORIGINAL",
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
+      explicitSnapshot: true,
+    });
+    const other = seedQuestion(db, {
+      kostId: "QTYPE-IDENTITY-OTHER",
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
+      publish: false,
+    });
+    enforcePublishedQuestionQtypeIntegrity(db);
+    assert.ok(original.snapshotId !== null);
+    assert.throws(
+      () => db.prepare(`UPDATE assessment_question_snapshots SET question_id = ? WHERE id = ?`)
+        .run(other.questionId, original.snapshotId),
+      new RegExp(SNAPSHOT_IDENTITY_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`UPDATE assessment_question_snapshots SET version_id = ? WHERE id = ?`)
+        .run(other.versionId, original.snapshotId),
+      new RegExp(SNAPSHOT_IDENTITY_IMMUTABLE_ERROR, "i")
+    );
+    const row = db.prepare(`SELECT question_id, version_id FROM assessment_question_snapshots WHERE id = ?`)
+      .get(original.snapshotId) as { question_id: number; version_id: number };
+    assert.equal(row.question_id, original.questionId);
+    assert.equal(row.version_id, original.versionId);
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });

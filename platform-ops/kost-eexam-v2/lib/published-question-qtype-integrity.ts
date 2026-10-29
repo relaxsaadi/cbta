@@ -20,6 +20,7 @@ export const PUBLISHED_QTYPE_IMMUTABLE_ERROR = "published question qtype is immu
 export const SNAPSHOT_QTYPE_IMMUTABLE_ERROR = "published snapshot qtype is immutable";
 export const SNAPSHOT_IDENTITY_IMMUTABLE_ERROR = "published snapshot question identity is immutable";
 export const SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR = "published snapshot payload is immutable";
+export const SNAPSHOT_DELETE_IMMUTABLE_ERROR = "published snapshot deletion is denied";
 
 export interface PublishedQtypeIntegrityResult {
   publishedQuestions: number;
@@ -374,6 +375,16 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         OR NEW.points IS NOT OLD.points
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
+      END;
+
+      -- A published question must not disappear from audit history. SQLite
+      -- ON DELETE CASCADE from assessments also invokes this child trigger,
+      -- protecting an exam before its first candidate attempt exists.
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_delete
+      BEFORE DELETE ON assessment_question_snapshots
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype

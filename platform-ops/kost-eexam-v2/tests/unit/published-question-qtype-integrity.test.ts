@@ -11,6 +11,8 @@ import {
   SNAPSHOT_IDENTITY_IMMUTABLE_ERROR,
   SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR,
   SNAPSHOT_DELETE_IMMUTABLE_ERROR,
+  SNAPSHOT_APPEND_IMMUTABLE_ERROR,
+  ASSESSMENT_PUBLICATION_ROLLBACK_ERROR,
   enforcePublishedQuestionQtypeIntegrity,
   questionQtypeConflict,
   requireSnapshotQtype,
@@ -88,7 +90,7 @@ function seedQuestion(
       .prepare(
         `INSERT INTO assessments
            (type, name, function_code, group_id, question_source, question_count, duration_minutes, status, scope)
-         VALUES ('examen', ?, '7.1', ?, 'manual', 1, 30, 'published', 'test')`
+         VALUES ('examen', ?, '7.1', ?, 'manual', 1, 30, 'draft', 'test')`
       )
       .run(`Assessment ${params.kostId}`, groupId).lastInsertRowid
   );
@@ -109,6 +111,10 @@ function seedQuestion(
         params.explicitSnapshot ? qtype : null
       ).lastInsertRowid
   );
+  // Mirror publishAssessment's legitimate order: snapshot while draft,
+  // then atomically mark published.
+  db.prepare(`UPDATE assessments SET status = 'published', published_at = ?
+              WHERE id = ?`).run("2026-10-29T12:00:00.000Z", assessmentId);
   return { questionId, versionId, snapshotId };
 }
 
@@ -226,7 +232,7 @@ test("#58 a snapshot inserted after migration captures the qtype baseline before
          (assessment_id, position, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points)
          SELECT assessment_id, position + 100, question_id, version_id, stem_snapshot, choices_snapshot_json, correct_answer_snapshot, 'mcq_multi', points
          FROM assessment_question_snapshots WHERE id = ?`).run(snapshotId),
-      /published snapshot must persist matching historical qtype/i
+      /published snapshot (must persist matching historical qtype|addition is denied)/i
     );
   } finally {
     db.close();
@@ -355,6 +361,91 @@ test("#58 published snapshots cannot be deleted directly or by parent cascade", 
     assert.deepEqual(
       db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(original.assessment_id),
       assessmentBefore
+    );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 forbid post-publication snapshot appends and publication rollback", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-snapshot-append-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-SNAPSHOT-APPEND-1",
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
+      explicitSnapshot: true,
+    });
+    assert.ok(snapshotId !== null);
+    enforcePublishedQuestionQtypeIntegrity(db);
+    const original = db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId) as { assessment_id: number };
+    const publishedId = original.assessment_id;
+    const clone = db.prepare(`
+      INSERT INTO assessment_question_snapshots
+        (assessment_id, position, question_id, version_id, stem_snapshot,
+         choices_snapshot_json, correct_answer_snapshot, qtype_snapshot,
+         explanation_snapshot, points)
+      SELECT ?, ?, question_id, version_id, stem_snapshot, choices_snapshot_json,
+             correct_answer_snapshot, qtype_snapshot, explanation_snapshot, points
+      FROM assessment_question_snapshots WHERE id = ?
+    `);
+
+    // Correct qtype and unused position must not permit a published append.
+    assert.throws(
+      () => clone.run(publishedId, 2, snapshotId),
+      new RegExp(SNAPSHOT_APPEND_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`UPDATE assessments SET status = 'draft' WHERE id = ?`).run(publishedId),
+      new RegExp(ASSESSMENT_PUBLICATION_ROLLBACK_ERROR, "i")
+    );
+
+    // Real publication inserts snapshots in draft state before status update.
+    const draftId = Number(db.prepare(`
+      INSERT INTO assessments
+        (type, name, function_code, group_id, question_source, question_count,
+         duration_minutes, status, scope)
+      SELECT type, 'Draft snapshot insertion', function_code, group_id,
+             question_source, question_count, duration_minutes, 'draft', scope
+      FROM assessments WHERE id = ?
+    `).run(publishedId).lastInsertRowid);
+    clone.run(draftId, 1, snapshotId);
+    assert.equal(
+      (db.prepare(`SELECT COUNT(*) AS n FROM assessment_question_snapshots
+                     WHERE assessment_id = ?`).get(draftId) as { n: number }).n,
+      1
+    );
+    // Existing qtype validation still rejects an invalid draft insert.
+    assert.throws(() => db.prepare(`
+      INSERT INTO assessment_question_snapshots
+        (assessment_id, position, question_id, version_id, stem_snapshot,
+         choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points)
+      SELECT ?, 2, question_id, version_id, stem_snapshot,
+             choices_snapshot_json, correct_answer_snapshot, 'true_false', points
+      FROM assessment_question_snapshots WHERE id = ?
+    `).run(draftId, snapshotId), /published snapshot must persist matching historical qtype/i);
+
+    db.prepare(`UPDATE assessments SET status = 'published', published_at = ? WHERE id = ?`)
+      .run("2026-10-29T12:00:00.000Z", draftId);
+    assert.throws(
+      () => clone.run(draftId, 2, snapshotId),
+      new RegExp(SNAPSHOT_APPEND_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`UPDATE assessments SET published_at = NULL WHERE id = ?`).run(draftId),
+      new RegExp(ASSESSMENT_PUBLICATION_ROLLBACK_ERROR, "i")
+    );
+    db.prepare(`UPDATE assessments SET status = 'open' WHERE id = ?`).run(draftId);
+    assert.throws(
+      () => clone.run(draftId, 2, snapshotId),
+      new RegExp(SNAPSHOT_APPEND_IMMUTABLE_ERROR, "i")
+    );
+    assert.deepEqual(
+      db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`).get(snapshotId),
+      original
     );
   } finally {
     db.close();

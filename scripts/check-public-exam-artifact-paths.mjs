@@ -44,7 +44,7 @@ function containsStructuredDgrAnswerKey(text) {
 // Scope both ID and key to one cloze question; this is a narrow tripwire,
 // not a complete XML parser or a confidentiality guarantee.
 function containsKeyedDgrClozeXml(text) {
-  const questions = text.matchAll(/<question\b[^>]*\btype\s*=\s*["']cloze["'][^>]*>([\s\S]*?)<\/question\s*>/gi);
+  const questions = text.matchAll(/<question\b[^>]*\btype\s*=\s*["'](?:cloze|multianswer)["'][^>]*>([\s\S]*?)<\/question\s*>/gi);
   for (const [, question] of questions) {
     if (!dgrQuestionId.test(question)) continue;
     const texts = question.matchAll(/<questiontext\b[^>]*>([\s\S]*?)<\/questiontext\s*>/gi);
@@ -132,7 +132,7 @@ function containsMoodleXmlDgrAnswerKey(text) {
         })) return true;
       }
     }
-    if (!/\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(attrs)
+    if (!/\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated|calculatedsimple|calculatedmulti)["']/i.test(attrs)
       || !dgrQuestionId.test(question)) continue;
     const hasPositiveAnswer = [...question.matchAll(
       /<answer\b[^>]*\bfraction\s*=\s*["']([+-]?(?:\d+(?:\.\d+)?|\.\d+))["']/gi
@@ -275,6 +275,18 @@ function selfTest() {
     ['<quiz><question type="truefalse"><name><text>Q-7.10-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', true],
     ['<quiz><question type="multichoice"><name><text>Q-7.11-901</text></name><answer fraction="100"><text>synthetic</text></answer></question></quiz>', false],
     ['<quiz><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="0"><text>synthetic</text></answer></question></quiz>', false],
+    // Calculated variants carry positive correct-answer fractions.
+    // An unrelated item must not key a DGR question in a mixed export.
+    ['<quiz><question type="calculated"><name><text>Q-7.2-901</text></name><answer fraction="100"><text>{x}+1</text></answer></question></quiz>', true],
+    ['<quiz><question type="calculatedsimple"><name><text>Q-7.5-901</text></name><answer fraction="100"><text>{x}+1</text></answer></question></quiz>', true],
+    ['<quiz><question type="calculatedmulti"><name><text>Q-7.9-901</text></name><answer fraction="50"><text>{x}+1</text></answer></question></quiz>', true],
+    ['<quiz><question type="calculatedsimple"><name><text>Q-7.11-901</text></name><answer fraction="100"><text>{x}+1</text></answer></question></quiz>', false],
+    ['<quiz><question type="calculatedmulti"><name><text>Q-7.4-901</text></name><answer fraction="0"><text>zero credit</text></answer></question></quiz>', false],
+    ['<quiz><question type="calculatedsimple"><name><text>Other-item</text></name><answer fraction="100"><text>Other key</text></answer></question><question type="calculated"><name><text>Q-7.3-901</text></name><answer fraction="0"><text>Unkeyed</text></answer></question></quiz>', false],
+    // Some import/export adapters use the internal multianswer alias for Cloze.
+    ['<quiz><question type="multianswer"><name><text>Q-7.10-901</text></name><questiontext><text><![CDATA[Synthetic {1:SA:=answer}]]></text></questiontext></question></quiz>', true],
+    ['<quiz><question type="multianswer"><name><text>Q-7.11-901</text></name><questiontext><text><![CDATA[Synthetic {1:SA:=answer}]]></text></questiontext></question></quiz>', false],
+    ['<quiz><question type="multianswer"><name><text>Other-item</text></name><questiontext><text><![CDATA[Synthetic {1:SA:=answer}]]></text></questiontext></question><question type="multianswer"><name><text>Q-7.8-901</text></name><questiontext><text>Unkeyed</text></questiontext></question></quiz>', false],
     // Mixed Moodle exports: unrelated answer keys must not cross question boundaries.
     ['<quiz><question type="multichoice"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question><question type="multichoice"><name><text>Q-7.2-901</text></name><answer fraction="0"><text>synthetic non-key</text></answer></question></quiz>', false],
     ['<quiz><question type="multichoice"><name><text>Q-7.10-901</text></name><answer fraction="-50"><text>synthetic non-key</text></answer></question><question type="truefalse"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question></quiz>', false],

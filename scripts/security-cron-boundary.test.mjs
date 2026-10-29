@@ -163,3 +163,22 @@ test('RELEASE HOLD: cron and manual lead agents default to no sends or database 
     assert.match(remainder.slice(guard, firstQuery), /return\s*\{[^}]*disabled:\s*true/, fn + ' must explicitly report the disabled state')
   }
 })
+
+test('RELEASE HOLD: rejected email requests cannot mark a lead bounced or contacted', () => {
+  const code = source('lib/agent.ts')
+  const start = code.indexOf('export async function processNewLeads(')
+  const end = code.indexOf('// Follow-up agent:', start)
+  assert.ok(start >= 0 && end > start)
+  const fn = code.slice(start, end)
+  const send = fn.indexOf('const ok = await sendEmail(')
+  const log = fn.indexOf("await supabase.from('email_logs').insert", send)
+  const contacted = fn.indexOf("status: 'contacted' as LeadStatus", log)
+  assert.ok(send >= 0 && log > send && contacted > log, 'the success path must remain explicit')
+  const failurePath = fn.slice(send, log)
+  assert.match(failurePath, /if\s*\(!ok\)\s*\{\s*skipped\+\+\s*continue\s*\}/,
+    'provider error/uncertainty must exit before email log and lead status mutations')
+  assert.doesNotMatch(fn.slice(send), /status:\s*['"]bounced['"]|Email envoyé/,
+    'provider rejection is neither a bounce nor confirmed delivery')
+  assert.match(fn.slice(log), /livraison non confirmée/,
+    'provider acceptance must not be represented as confirmed recipient delivery')
+})

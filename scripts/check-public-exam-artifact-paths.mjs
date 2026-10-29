@@ -50,7 +50,7 @@ function containsKeyedDgrClozeXml(text) {
     const texts = question.matchAll(/<questiontext\b[^>]*>([\s\S]*?)<\/questiontext\s*>/gi);
     for (const [, questionText] of texts) {
       const embedded = questionText.matchAll(
-        /\{\s*(?:\d+(?:\.\d+)?)?\s*:\s*(?:SHORTANSWER(?:_C)?|MULTICHOICE(?:_[VH])?|NUMERICAL|SA|SAC|MC|MCV|MCH|NM|MW|MWC)\s*:\s*([^{}]*)\}/gi
+        /\{\s*(?:\d+(?:\.\d+)?)?\s*:\s*(?:SHORTANSWER(?:_C)?|MULTICHOICE(?:_(?:VS|HS|V|H|S))?|MULTIRESPONSE(?:_(?:HS|H|S))?|NUMERICAL|SA|SAC|MC(?:VS|HS|V|H|S)?|MR(?:HS|H|S)?|NM|MW|MWC)\s*:\s*([^{}]*)\}/gi
       );
       for (const [, choices] of embedded) {
         if (/(?:^|~)\s*=\s*\S/.test(choices)) return true;
@@ -160,7 +160,22 @@ function selfTest() {
     "**Options:** placeholder",
     "**EN draft translation:** placeholder",
   ].join("\n");
+  // Moodle's documented Cloze shuffled multichoice and multiresponses
+  // must not bypass this public-answer-key tripwire (synthetic items only).
+  const clozeVariants = [
+    "MULTICHOICE_S", "MULTICHOICE_VS", "MULTICHOICE_HS",
+    "MCS", "MCVS", "MCHS",
+    "MULTIRESPONSE", "MULTIRESPONSE_H", "MULTIRESPONSE_S", "MULTIRESPONSE_HS",
+    "MR", "MRH", "MRS", "MRHS",
+  ];
   const moodleXmlCases = [
+    ...clozeVariants.map((type) => [
+      `<quiz><question type="cloze"><name><text>Q-7.7-901</text></name><questiontext><text><![CDATA[synthetic {1:${type}:=synthetic key~other}]]></text></questiontext></question></quiz>`,
+      true,
+    ]),
+    ['<quiz><question type="cloze"><name><text>Q-7.9-901</text></name><questiontext><text><![CDATA[synthetic {1:MRHS:~%50%synthetic partial credit~other}]]></text></questiontext></question></quiz>', true],
+    ['<quiz><question type="cloze"><name><text>Q-7.7-901</text></name><questiontext><text><![CDATA[synthetic {1:MCS:wrong~%0%zero~%-50%negative}]]></text></questiontext></question></quiz>', false],
+    ['<quiz><question type="cloze"><name><text>Q-7.11-901</text></name><questiontext><text><![CDATA[synthetic {1:MRHS:=synthetic key}]]></text></questiontext></question></quiz>', false],
     ['<quiz><question type="cloze"><name><text>Q-7.3-901</text></name><questiontext><text><![CDATA[synthetic {1:MC:=placeholder key~other}]]></text></questiontext></question></quiz>', true],
     ['<quiz><question type="cloze"><name><text>Q-7.10-901</text></name><questiontext><text><![CDATA[synthetic {1:SA:wrong~%50%placeholder key}]]></text></questiontext></question></quiz>', true],
     ['<quiz><question type="cloze"><name><text>Q-7.2-901</text></name><questiontext><text><![CDATA[synthetic {1:NM:=42:0.1}]]></text></questiontext></question></quiz>', true],

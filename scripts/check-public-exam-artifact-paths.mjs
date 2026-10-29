@@ -92,6 +92,27 @@ function containsKeyedDgrImageDragXml(attrs, question) {
   return false;
 }
 
+// 1EdTech QTI 2.x items can expose keyed correct responses independently of
+// Moodle XML. Scope item identity, response declaration, and answer to the SAME
+// assessmentItem. This deliberately does not claim support for every QTI/ZIP
+// variant; in particular, public-history and archived exports remain unassessed.
+function containsQtiXmlDgrAnswerKey(text) {
+  for (const [, attributes, item] of text.matchAll(
+    /<assessmentItem\\b([^>]*)>([\\s\\S]*?)<\\/assessmentItem\\s*>/gi
+  )) {
+    if (!dgrQuestionId.test(attributes) && !dgrQuestionId.test(item)) continue;
+    for (const [, declaration] of item.matchAll(
+      /<responseDeclaration\\b[^>]*>([\\s\\S]*?)<\\/responseDeclaration\\s*>/gi
+    )) {
+      const correct = /<correctResponse\\b[^>]*>([\\s\\S]*?)<\\/correctResponse\\s*>/i.exec(declaration)?.[1];
+      if (!correct) continue;
+      if ([...correct.matchAll(/<value\\b[^>]*>([\\s\\S]*?)<\\/value\\s*>/gi)]
+        .some(([, value]) => Boolean(value.replace(/<!\\[CDATA\\[|\\]\\]>/g, "").trim()))) return true;
+    }
+  }
+  return false;
+}
+
 function containsMoodleXmlDgrAnswerKey(text) {
   if (containsKeyedDgrClozeXml(text)) return true;
   // Scope the DGR item identity, Moodle question type and answer fraction
@@ -319,6 +340,17 @@ function selfTest() {
     ['<quiz><question type="multichoice"><name><text>Q-7.10-901</text></name><answer fraction="-50"><text>synthetic non-key</text></answer></question><question type="truefalse"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question></quiz>', false],
     ['<quiz><question type="multichoice"><name><text>Other-item</text></name><answer fraction="100"><text>synthetic key</text></answer></question><question type="multichoice"><name><text>Q-7.3-901</text></name><answer fraction="50"><text>synthetic DGR key</text></answer></question></quiz>', true],
   ];
+  // IMS/1EdTech QTI 2.x <correctResponse><value> carries the key in
+  // <assessmentItem>, even without any Moodle <question> or fraction.
+  const qtiXmlCases = [
+    ['<assessmentItem identifier="Q-7.2-901"><responseDeclaration identifier="RESPONSE"><correctResponse><value>A</value></correctResponse></responseDeclaration><itemBody><prompt>Synthetic</prompt></itemBody></assessmentItem>', true],
+    ['<assessmentItem title="Q-7.10-901"><responseDeclaration><correctResponse><value><![CDATA[synthetic option]]></value></correctResponse></responseDeclaration></assessmentItem>', true],
+    ['<assessmentItem identifier="Q-7.11-901"><responseDeclaration><correctResponse><value>A</value></correctResponse></responseDeclaration></assessmentItem>', false],
+    ['<assessmentItem identifier="Q-7.3-901"><responseDeclaration><correctResponse><value> </value></correctResponse></responseDeclaration></assessmentItem>', false],
+    ['<assessmentItem identifier="Other-item"><responseDeclaration><correctResponse><value>A</value></correctResponse></responseDeclaration></assessmentItem><assessmentItem identifier="Q-7.7-901"><responseDeclaration identifier="RESPONSE"></responseDeclaration></assessmentItem>', false],
+    ['<assessmentItem identifier="Other-item"><responseDeclaration><correctResponse><value>A</value></correctResponse></responseDeclaration></assessmentItem><assessmentItem identifier="Q-7.8-901"><responseDeclaration><correctResponse><value>B</value></correctResponse></responseDeclaration></assessmentItem>', true],
+    ['<assessmentItem identifier="Q-7.6-901"><responseDeclaration><defaultValue><value>A</value></defaultValue></responseDeclaration></assessmentItem>', false],
+  ];
   const giftCases = [
     ['::Q-7.2-901::Synthetic fixture question {=Synthetic keyed choice ~Distractor}', true],
     ['::Q-7.10-901::Synthetic fixture question {~Wrong =Correct}', true],
@@ -359,6 +391,7 @@ function selfTest() {
     || containsKeyedDgrSection(separateKeySectionMarkdown)
     || structuredCases.some(([fixture, expected]) => containsStructuredDgrAnswerKey(fixture) !== expected)
     || moodleXmlCases.some(([fixture, expected]) => containsMoodleXmlDgrAnswerKey(fixture) !== expected)
+    || qtiXmlCases.some(([fixture, expected]) => containsQtiXmlDgrAnswerKey(fixture) !== expected)
     || giftCases.some(([fixture, expected]) => containsGiftDgrAnswerKey(fixture) !== expected)
     || containsKeyedDgrSection(nonKeyedMarkdown)
     || containsKeyedDgrSection("No item headings; **Stem (FR):** x **Options:** y **Correct answer rationale:** z")) {
@@ -395,7 +428,7 @@ if (process.argv.includes("--self-test")) {
     const hasKey = structuredTextExtensions.test(file)
       ? containsStructuredDgrAnswerKey(text)
       : moodleXmlExtension.test(file)
-        ? containsMoodleXmlDgrAnswerKey(text)
+        ? containsMoodleXmlDgrAnswerKey(text) || containsQtiXmlDgrAnswerKey(text)
         : containsKeyedDgrSection(text) || (giftExtension.test(file) && containsGiftDgrAnswerKey(text));
     if (hasKey) keyedContent.push(file);
   }

@@ -73,20 +73,20 @@ function containsKeyedDgrClozeXml(text) {
 // within a single DGR question to avoid mixed-export false positives.
 // Detection is deliberately high-confidence and does not parse every XML variant.
 function containsKeyedDgrImageDragXml(attrs, question) {
-  if (!/\\btype\\s*=\\s*["'](?:ddimageortext|ddmarker)["']/i.test(attrs)
+  if (!/\btype\s*=\s*["'](?:ddimageortext|ddmarker)["']/i.test(attrs)
     || !dgrQuestionId.test(question)) return false;
   const referenced = new Set(
-    [...question.matchAll(/<drop\\b[^>]*>([\\s\\S]*?)<\\/drop\\s*>/gi)]
-      .map(([, drop]) => /<choice\\b[^>]*>\\s*([1-9]\\d*)\\s*<\\/choice\\s*>/i.exec(drop)?.[1])
+    [...question.matchAll(/<drop\b[^>]*>([\s\S]*?)<\/drop\s*>/gi)]
+      .map(([, drop]) => /<choice\b[^>]*>\s*([1-9]\d*)\s*<\/choice\s*>/i.exec(drop)?.[1])
       .filter(Boolean)
   );
   if (!referenced.size) return false;
-  for (const [, drag] of question.matchAll(/<drag\\b[^>]*>([\\s\\S]*?)<\\/drag\\s*>/gi)) {
-    const number = /<no\\b[^>]*>\\s*([1-9]\\d*)\\s*<\\/no\\s*>/i.exec(drag)?.[1];
+  for (const [, drag] of question.matchAll(/<drag\b[^>]*>([\s\S]*?)<\/drag\s*>/gi)) {
+    const number = /<no\b[^>]*>\s*([1-9]\d*)\s*<\/no\s*>/i.exec(drag)?.[1];
     if (!number || !referenced.has(number)) continue;
-    const labelled = [...drag.matchAll(/<text\\b[^>]*>([\\s\\S]*?)<\\/text\\s*>/gi)]
-      .some(([, value]) => Boolean(value.replace(/<!\\[CDATA\\[|\\]\\]>/g, "").trim()));
-    const image = /<file\\b[^>]*\\bname\\s*=\\s*["'][^"']+["'][^>]*>/i.test(drag);
+    const labelled = [...drag.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text\s*>/gi)]
+      .some(([, value]) => Boolean(value.replace(/<!\[CDATA\[|\]\]>/g, "").trim()));
+    const image = /<file\b[^>]*\bname\s*=\s*["'][^"']+["'][^>]*>/i.test(drag);
     if (labelled || image) return true;
   }
   return false;

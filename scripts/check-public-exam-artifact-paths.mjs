@@ -87,19 +87,23 @@ function containsMoodleXmlDgrAnswerKey(text) {
 // Moodle GIFT may be stored with either .gift or .txt extension. Require a
 // function-scoped item title and a keyed answer, not just explanatory prose.
 function containsGiftDgrAnswerKey(text) {
-  // GIFT supports "=" answers, true/false, numerical answers, and multiple-
-  // response questions with positive partial-credit weights but NO "=" at all.
-  // See Moodle's GIFT "Multiple Answers" and numerical examples.
-  if (!/::\s*Q-7\.(?:10|[1-9])-\d{3}(?!\d)\s*::/i.test(text)) return false;
-  const positiveWeightedChoices = [...text.matchAll(/\{([^{}]*)\}/gs)].some(([, choices]) =>
-    [...choices.matchAll(/~\s*%\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*%\s*(?=\S)/g)]
-      .some(([, weight]) => Number(weight) > 0)
-  );
-  return /\{[^{}]*=\s*[^\s{}][^{}]*\}/s.test(text)
-    || /\{\s*(?:T|F|TRUE|FALSE)(?:\s*#[^{}]*)?\s*\}/i.test(text)
-    || /\{\s*#\s*[-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[^{}]*)\}/s.test(text)
-    || /\{\s*#\s*=\s*(?:%[+-]?(?:\d+(?:\.\d+)?|\.\d+)%\s*)?[-+]?(?:\d+(?:\.\d+)?|\.\d+)/s.test(text)
-    || positiveWeightedChoices;
+  // In valid GIFT, a blank line separates question records. The DGR ID
+  // and a keyed answer must occur in the SAME record: an unrelated keyed
+  // question elsewhere in the export cannot key an unkeyed DGR question.
+  // This remains a narrow high-confidence tripwire, not a full GIFT parser.
+  const records = text.split(/\r?\n[ \t]*\r?\n/);
+  return records.some((record) => {
+    if (!/::\s*Q-7\.(?:10|[1-9])-\d{3}(?!\d)\s*::/i.test(record)) return false;
+    const positiveWeightedChoices = [...record.matchAll(/\{([^{}]*)\}/gs)].some(([, choices]) =>
+      [...choices.matchAll(/~\s*%\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*%\s*(?=\S)/g)]
+        .some(([, weight]) => Number(weight) > 0)
+    );
+    return /\{[^{}]*=\s*[^\s{}][^{}]*\}/s.test(record)
+      || /\{\s*(?:T|F|TRUE|FALSE)(?:\s*#[^{}]*)?\s*\}/i.test(record)
+      || /\{\s*#\s*[-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[^{}]*)\}/s.test(record)
+      || /\{\s*#\s*=\s*(?:%[+-]?(?:\d+(?:\.\d+)?|\.\d+)%\s*)?[-+]?(?:\d+(?:\.\d+)?|\.\d+)/s.test(record)
+      || positiveWeightedChoices;
+  });
 }
 
 function containsKeyedDgrSection(text) {
@@ -194,6 +198,12 @@ function selfTest() {
     ['::Q-7.2-901::Nonkeyed explanation {ordinary words}', false],
     ['::Q-7.11-901::Outside-scope GIFT true-false question {TRUE}', false],
     ['::Q-7.2-901::Explanatory sample without an answer', false],
+    // Mixed GIFT exports: a key from another question must not leak across
+    // record boundaries into an unkeyed DGR item.
+    ['::Other-item::Unrelated keyed choice {=Synthetic key}\\n\\n::Q-7.2-901::Unkeyed DGR {ordinary words}', false],
+    ['::Q-7.3-901::Unkeyed DGR {~%0%No credit}\\n\\n::Other-item::Unrelated true/false {TRUE}', false],
+    ['::Other-item::Unrelated weighted key {~%50%Synthetic}\\n\\n::Q-7.10-901::Unkeyed DGR {ordinary words}', false],
+    ['::Other-item::Unrelated keyed choice {=Synthetic}\\n\\n::Q-7.2-901::Keyed DGR {=Synthetic key}', true],
     ['::Q-7.11-901::Synthetic question {=Synthetic keyed choice}', false],
   ];
   const structuredCases = [

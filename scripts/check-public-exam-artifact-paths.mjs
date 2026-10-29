@@ -98,16 +98,16 @@ function containsKeyedDgrImageDragXml(attrs, question) {
 // variant; in particular, public-history and archived exports remain unassessed.
 function containsQtiXmlDgrAnswerKey(text) {
   for (const [, attributes, item] of text.matchAll(
-    /<assessmentItem\\b([^>]*)>([\\s\\S]*?)<\\/assessmentItem\\s*>/gi
+    /<assessmentItem\b([^>]*)>([\s\S]*?)<\/assessmentItem\s*>/gi
   )) {
     if (!dgrQuestionId.test(attributes) && !dgrQuestionId.test(item)) continue;
     for (const [, declaration] of item.matchAll(
-      /<responseDeclaration\\b[^>]*>([\\s\\S]*?)<\\/responseDeclaration\\s*>/gi
+      /<responseDeclaration\b[^>]*>([\s\S]*?)<\/responseDeclaration\s*>/gi
     )) {
-      const correct = /<correctResponse\\b[^>]*>([\\s\\S]*?)<\\/correctResponse\\s*>/i.exec(declaration)?.[1];
+      const correct = /<correctResponse\b[^>]*>([\s\S]*?)<\/correctResponse\s*>/i.exec(declaration)?.[1];
       if (!correct) continue;
-      if ([...correct.matchAll(/<value\\b[^>]*>([\\s\\S]*?)<\\/value\\s*>/gi)]
-        .some(([, value]) => Boolean(value.replace(/<!\\[CDATA\\[|\\]\\]>/g, "").trim()))) return true;
+      if ([...correct.matchAll(/<value\b[^>]*>([\s\S]*?)<\/value\s*>/gi)]
+        .some(([, value]) => Boolean(value.replace(/<!\[CDATA\[|\]\]>/g, "").trim()))) return true;
     }
   }
   return false;

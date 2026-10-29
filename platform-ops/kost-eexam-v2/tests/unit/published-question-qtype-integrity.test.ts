@@ -10,6 +10,7 @@ import {
   PUBLISHED_QTYPE_IMMUTABLE_ERROR,
   SNAPSHOT_IDENTITY_IMMUTABLE_ERROR,
   SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR,
+  SNAPSHOT_DELETE_IMMUTABLE_ERROR,
   enforcePublishedQuestionQtypeIntegrity,
   questionQtypeConflict,
   requireSnapshotQtype,
@@ -313,6 +314,48 @@ test("#58 published snapshot answer key, candidate text, ordering and scores are
 
     // Identical-value updates are harmless and remain permitted.
     db.prepare(`UPDATE assessment_question_snapshots SET stem_snapshot = stem_snapshot WHERE id = ?`).run(snapshotId);
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 published snapshots cannot be deleted directly or by parent cascade", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-snapshot-delete-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-SNAPSHOT-DELETE-1",
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
+      explicitSnapshot: true,
+    });
+    assert.ok(snapshotId !== null);
+    enforcePublishedQuestionQtypeIntegrity(db);
+
+    const original = db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId) as { assessment_id: number };
+    const assessmentBefore = db.prepare(`SELECT * FROM assessments WHERE id = ?`)
+      .get(original.assessment_id);
+
+    // There are no candidate attempts here. Without the delete trigger,
+    // both direct delete and ON DELETE CASCADE would destroy publication evidence.
+    assert.throws(
+      () => db.prepare(`DELETE FROM assessment_question_snapshots WHERE id = ?`).run(snapshotId),
+      new RegExp(SNAPSHOT_DELETE_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`DELETE FROM assessments WHERE id = ?`).run(original.assessment_id),
+      new RegExp(SNAPSHOT_DELETE_IMMUTABLE_ERROR, "i")
+    );
+    assert.deepEqual(
+      db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`).get(snapshotId),
+      original
+    );
+    assert.deepEqual(
+      db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(original.assessment_id),
+      assessmentBefore
+    );
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });

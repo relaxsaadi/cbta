@@ -200,10 +200,10 @@ function selfTest() {
     ['::Q-7.2-901::Explanatory sample without an answer', false],
     // Mixed GIFT exports: a key from another question must not leak across
     // record boundaries into an unkeyed DGR item.
-    ['::Other-item::Unrelated keyed choice {=Synthetic key}\\n\\n::Q-7.2-901::Unkeyed DGR {ordinary words}', false],
-    ['::Q-7.3-901::Unkeyed DGR {~%0%No credit}\\n\\n::Other-item::Unrelated true/false {TRUE}', false],
-    ['::Other-item::Unrelated weighted key {~%50%Synthetic}\\n\\n::Q-7.10-901::Unkeyed DGR {ordinary words}', false],
-    ['::Other-item::Unrelated keyed choice {=Synthetic}\\n\\n::Q-7.2-901::Keyed DGR {=Synthetic key}', true],
+    ['::Other-item::Unrelated keyed choice {=Synthetic key}\n\n::Q-7.2-901::Unkeyed DGR {ordinary words}', false],
+    ['::Q-7.3-901::Unkeyed DGR {~%0%No credit}\n\n::Other-item::Unrelated true/false {TRUE}', false],
+    ['::Other-item::Unrelated weighted key {~%50%Synthetic}\n\n::Q-7.10-901::Unkeyed DGR {ordinary words}', false],
+    ['::Other-item::Unrelated keyed choice {=Synthetic}\n\n::Q-7.2-901::Keyed DGR {=Synthetic key}', true],
     ['::Q-7.11-901::Synthetic question {=Synthetic keyed choice}', false],
   ];
   const structuredCases = [

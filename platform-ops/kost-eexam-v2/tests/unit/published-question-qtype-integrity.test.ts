@@ -9,6 +9,7 @@ import {
   PUBLISHED_QTYPE_CONFLICT_CODE,
   PUBLISHED_QTYPE_IMMUTABLE_ERROR,
   SNAPSHOT_IDENTITY_IMMUTABLE_ERROR,
+  SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR,
   enforcePublishedQuestionQtypeIntegrity,
   questionQtypeConflict,
   requireSnapshotQtype,
@@ -264,6 +265,54 @@ test("#58 a published snapshot cannot be retargeted to a different question or v
       .get(original.snapshotId) as { question_id: number; version_id: number };
     assert.equal(row.question_id, original.questionId);
     assert.equal(row.version_id, original.versionId);
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 published snapshot answer key, candidate text, ordering and scores are immutable", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-snapshot-payload-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-SNAPSHOT-PAYLOAD-1",
+      qtype: "mcq_multi",
+      correctAnswer: ["A", "B"],
+      explicitSnapshot: true,
+    });
+    assert.ok(snapshotId !== null);
+    enforcePublishedQuestionQtypeIntegrity(db);
+    const original = db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId);
+
+    // Each attempt modifies a different publication-time field. The test
+    // deliberately uses only synthetic items and never touches actual banks.
+    const edits: Array<[string, string | number]> = [
+      ["id", Number(snapshotId) + 100],
+      ["assessment_id", 987654],
+      ["position", 2],
+      ["stem_snapshot", "Altered exam question"],
+      ["choices_snapshot_json", JSON.stringify([{ key: "X", text: "X-ray" }])],
+      ["correct_answer_snapshot", JSON.stringify(["X"])],
+      ["explanation_snapshot", "Altered rationale"],
+      ["points", 42],
+    ];
+    for (const [column, value] of edits) {
+      assert.throws(
+        () => db.prepare(`UPDATE assessment_question_snapshots SET ${column} = ? WHERE id = ?`).run(value, snapshotId),
+        new RegExp(SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR, "i"),
+        `published snapshot ${column} must be immutable`
+      );
+      assert.deepEqual(
+        db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`).get(snapshotId),
+        original,
+        `mutation of ${column} must not change stored historical evidence`
+      );
+    }
+
+    // Identical-value updates are harmless and remain permitted.
+    db.prepare(`UPDATE assessment_question_snapshots SET stem_snapshot = stem_snapshot WHERE id = ?`).run(snapshotId);
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });

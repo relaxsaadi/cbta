@@ -3,11 +3,10 @@ import type { DatabaseSync } from "node:sqlite";
 /**
  * Issue #58 — published question type integrity.
  *
- * Design choice: once a question has been snapshotted by a published
- * assessment, its qtype becomes immutable forever. Candidate rendering,
- * grading and manual-routing may continue reading questions.qtype only after
- * this gate has proved or captured the historical baseline and SQLite has
- * made that value immutable.
+ * Design choice: every published assessment persists qtype_snapshot as the
+ * authority for rendering, grading and manual routing. A durable per-question
+ * baseline and SQLite immutability triggers are defense-in-depth, never a
+ * substitute for historical per-snapshot evidence.
  *
  * Legacy rule: never claim that today's current qtype was necessarily the
  * publication-time qtype when the old schema did not store enough durable
@@ -18,6 +17,8 @@ import type { DatabaseSync } from "node:sqlite";
 export const PUBLISHED_QTYPE_CONFLICT_CODE = "DRIFT_CONFLICT";
 export const LEGACY_QTYPE_UNKNOWN_CODE = "LEGACY_QTYPE_UNKNOWN";
 export const PUBLISHED_QTYPE_IMMUTABLE_ERROR = "published question qtype is immutable";
+export const SNAPSHOT_QTYPE_IMMUTABLE_ERROR = "published snapshot qtype is immutable";
+export const SNAPSHOT_IDENTITY_IMMUTABLE_ERROR = "published snapshot question identity is immutable";
 
 export interface PublishedQtypeIntegrityResult {
   publishedQuestions: number;
@@ -53,6 +54,14 @@ const SUPPORTED_QTYPES = [
   "ordering",
   "scenario",
 ] as const;
+
+/** No fallback to current questions.qtype when legacy publication history is unknown. */
+export function requireSnapshotQtype(value: unknown): string {
+  if (typeof value !== "string" || !SUPPORTED_QTYPES.some((type) => type === value)) {
+    throw new Error(`${LEGACY_QTYPE_UNKNOWN_CODE}: published snapshot has no valid historical qtype`);
+  }
+  return value;
+}
 
 function tableExists(db: DatabaseSync, name: string): boolean {
   return Boolean(
@@ -174,10 +183,10 @@ function inferLegacyQtype(choices: unknown, correct: unknown): LegacyInference {
 }
 
 /**
- * Validates only questions that do not already have a durable baseline.
- * Questions published after this enforcement was installed already captured
- * qtype at publication time, so their snapshot payload does not need legacy
- * inference on later migration reruns.
+ * Legacy snapshots lacking qtype_snapshot must be individually proven from
+ * their durable publication payload, even if an older migration already
+ * created a per-question baseline. Existing baselines alone do not establish
+ * which qtype a particular old snapshot used.
  */
 function assertLegacySnapshotsProvable(db: DatabaseSync): void {
   const rows = db
@@ -186,8 +195,7 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
               s.choices_snapshot_json, s.correct_answer_snapshot
        FROM assessment_question_snapshots s
        JOIN questions q ON q.id = s.question_id
-       LEFT JOIN published_question_qtype_baselines b ON b.question_id = s.question_id
-       WHERE b.question_id IS NULL
+       WHERE s.qtype_snapshot IS NULL
        ORDER BY s.id`
     )
     .all() as unknown as SnapshotIntegrityRow[];
@@ -225,6 +233,8 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
         `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} durably proves qtype '${inference.qtype}', but current qtype is '${row.qtype}'`
       );
     }
+    db.prepare(`UPDATE assessment_question_snapshots SET qtype_snapshot = ? WHERE id = ?`)
+      .run(inference.qtype, row.snapshot_id);
   }
 }
 
@@ -252,6 +262,10 @@ export function questionQtypeConflict(currentQtype: string, incomingQtype: strin
 export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): PublishedQtypeIntegrityResult {
   if (!tableExists(db, "questions") || !tableExists(db, "assessment_question_snapshots")) {
     return { publishedQuestions: 0, baselinesAdded: 0 };
+  }
+  const snapshotColumns = db.prepare("PRAGMA table_info(assessment_question_snapshots)").all() as { name: string }[];
+  if (!snapshotColumns.some((column) => column.name === "qtype_snapshot")) {
+    throw new Error(`${LEGACY_QTYPE_UNKNOWN_CODE}: qtype_snapshot migration missing — run pnpm migrate before enforcement`);
   }
 
   db.exec("BEGIN IMMEDIATE");
@@ -282,6 +296,21 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
     }
 
     assertLegacySnapshotsProvable(db);
+    // Existing explicit snapshot types must match the durable question
+    // baseline/current type. No historical type may be inferred from an
+    // unrelated live question value.
+    const snapshotConflict = db.prepare(`
+      SELECT s.id AS snapshot_id, s.question_id, s.qtype_snapshot, q.qtype
+      FROM assessment_question_snapshots s
+      JOIN questions q ON q.id = s.question_id
+      WHERE s.qtype_snapshot IS NULL
+         OR s.qtype_snapshot NOT IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')
+         OR s.qtype_snapshot <> q.qtype
+      ORDER BY s.id LIMIT 1
+    `).get() as { snapshot_id: number; question_id: number; qtype_snapshot: string | null; qtype: string } | undefined;
+    if (snapshotConflict) {
+      throw new Error(`${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${snapshotConflict.snapshot_id} for question ${snapshotConflict.question_id} has historical qtype '${snapshotConflict.qtype_snapshot}' incompatible with current '${snapshotConflict.qtype}'`);
+    }
 
     const before = (
       db.prepare(`SELECT COUNT(*) AS n FROM published_question_qtype_baselines`).get() as { n: number }
@@ -298,6 +327,33 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
     `);
 
     db.exec(`
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_qtype_required
+      BEFORE INSERT ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN NEW.qtype_snapshot IS NULL
+        OR NEW.qtype_snapshot NOT IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')
+        OR NEW.qtype_snapshot <> (SELECT qtype FROM questions WHERE id = NEW.question_id)
+      BEGIN
+        SELECT RAISE(ABORT, 'published snapshot must persist matching historical qtype');
+      END;
+
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_qtype_immutable
+      BEFORE UPDATE OF qtype_snapshot ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN NEW.qtype_snapshot IS NOT OLD.qtype_snapshot
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_QTYPE_IMMUTABLE_ERROR}');
+      END;
+
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_identity_immutable
+      BEFORE UPDATE OF question_id, version_id ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN NEW.question_id IS NOT OLD.question_id
+        OR NEW.version_id IS NOT OLD.version_id
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_IDENTITY_IMMUTABLE_ERROR}');
+      END;
+
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype
       AFTER INSERT ON assessment_question_snapshots
       BEGIN

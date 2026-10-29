@@ -33,6 +33,11 @@ const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = 
     column: "explanation_snapshot",
     ddl: "ALTER TABLE assessment_question_snapshots ADD COLUMN explanation_snapshot TEXT",
   },
+  {
+    table: "assessment_question_snapshots",
+    column: "qtype_snapshot",
+    ddl: "ALTER TABLE assessment_question_snapshots ADD COLUMN qtype_snapshot TEXT",
+  },
   { table: "users", column: "mfa_secret", ddl: "ALTER TABLE users ADD COLUMN mfa_secret TEXT" },
   { table: "users", column: "mfa_recovery_codes_json", ddl: "ALTER TABLE users ADD COLUMN mfa_recovery_codes_json TEXT" },
   // Mission "COMPLETE USER MANAGEMENT" (2026-08-29).

@@ -1,4 +1,5 @@
 import { getDb, nowIso } from "./db";
+import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 
 // SOURCE UNIQUE DE VÉRITÉ (§10 de la mission originelle ; étendue par la
@@ -182,15 +183,18 @@ export function gradeAttempt(attemptId: number): GradeResult {
 
   const rows = db
     .prepare(
-      `SELECT aq.id AS attempt_question_id, s.correct_answer_snapshot, s.points, aa.answer_json, q.qtype
+      `SELECT aq.id AS attempt_question_id, s.correct_answer_snapshot, s.points, aa.answer_json, s.qtype_snapshot AS qtype
        FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        LEFT JOIN attempt_answers aa ON aa.attempt_question_id = aq.id
        WHERE aq.attempt_id = ?
        ORDER BY aq.position`
     )
     .all(attemptId) as { attempt_question_id: number; correct_answer_snapshot: string; points: number; answer_json: string | null; qtype: string }[];
+
+  // Validate *all* historical types before any automatic grade write: a
+  // later unresolved legacy snapshot must not leave a partially graded run.
+  const validatedRows = rows.map((row) => ({ ...row, qtype: requireSnapshotQtype(row.qtype) }));
 
   let rawScore = 0;
   let maxRawScore = 0;
@@ -207,7 +211,7 @@ export function gradeAttempt(attemptId: number): GradeResult {
      ON CONFLICT(attempt_question_id) DO UPDATE SET is_correct = NULL, points_awarded = NULL`
   );
 
-  for (const row of rows) {
+  for (const row of validatedRows) {
     maxRawScore += row.points; // le maximum possible ne change jamais, correction en attente ou pas.
     const { pending, isCorrect, partialPoints } = gradeOneQuestion(row.qtype, row.correct_answer_snapshot, row.answer_json);
     if (pending) {

@@ -1,4 +1,5 @@
 import { getDb, transaction, nowIso } from "./db";
+import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 import { getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
 import { gradeAttempt } from "./grading";
@@ -264,14 +265,15 @@ interface SnapshotSourceRow {
 }
 
 function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionView {
+  const qtype = requireSnapshotQtype(r.qtype);
   const allChoices: { key: string; text: string }[] = JSON.parse(r.choices_snapshot_json);
   const order: string[] = r.choices_order_json ? JSON.parse(r.choices_order_json) : allChoices.map((c) => c.key);
   const byKey = new Map(allChoices.map((c) => [c.key, c]));
-  const isMcqLike = r.qtype === "mcq_single" || r.qtype === "mcq_multi" || r.qtype === "true_false";
+  const isMcqLike = qtype === "mcq_single" || qtype === "mcq_multi" || qtype === "true_false";
 
   let matchingLeft: { key: string; text: string }[] = [];
   let matchingRight: { key: string; text: string }[] = [];
-  if (r.qtype === "matching") {
+  if (qtype === "matching") {
     // Un même mélange global (choices_order_json) partitionné par
     // préfixe de clé conserve un ordre indépendant et uniforme sur
     // chaque côté — voir MatchingAnswerSpec pour la preuve.
@@ -280,12 +282,12 @@ function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionVie
   }
 
   let orderingItems: { key: string; text: string }[] = [];
-  if (r.qtype === "ordering") {
+  if (qtype === "ordering") {
     orderingItems = order.map((k) => byKey.get(k)!).filter(Boolean);
   }
 
   let scenario: ScenarioCandidateView | null = null;
-  if (r.qtype === "scenario") {
+  if (qtype === "scenario") {
     const spec = JSON.parse(r.correct_answer_snapshot) as {
       context: string;
       documentRef?: string;
@@ -311,12 +313,12 @@ function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionVie
     attempt_question_id: r.attempt_question_id,
     position: r.position,
     stem: r.stem_snapshot,
-    qtype: r.qtype,
+    qtype: qtype,
     choices: isMcqLike ? order.map((k) => byKey.get(k)!).filter(Boolean) : [],
-    unit: r.qtype === "numeric" ? (allChoices.find((c) => c.key === "unit")?.text ?? null) : null,
+    unit: qtype === "numeric" ? (allChoices.find((c) => c.key === "unit")?.text ?? null) : null,
     marked_for_review: r.marked_for_review,
-    answer: r.qtype === "scenario" ? null : r.answer_json ? JSON.parse(r.answer_json) : null,
-    multiSelect: r.qtype === "mcq_multi",
+    answer: qtype === "scenario" ? null : r.answer_json ? JSON.parse(r.answer_json) : null,
+    multiSelect: qtype === "mcq_multi",
     matchingLeft,
     matchingRight,
     orderingItems,
@@ -329,10 +331,9 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
     .prepare(
       `SELECT aq.id AS attempt_question_id, aq.position, aq.choices_order_json, aq.marked_for_review,
               s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot,
-              aa.answer_json, q.qtype
+              aa.answer_json, s.qtype_snapshot AS qtype
        FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        LEFT JOIN attempt_answers aa ON aa.attempt_question_id = aq.id
        WHERE aq.attempt_id = ?
        ORDER BY aq.position`
@@ -357,9 +358,8 @@ export function getAttemptQuestions(attemptId: number): AttemptQuestionView[] {
 export function getPreviewQuestions(assessmentId: number): AttemptQuestionView[] {
   const rows = getDb()
     .prepare(
-      `SELECT s.id AS snapshot_id, s.position, s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot, q.qtype
+      `SELECT s.id AS snapshot_id, s.position, s.stem_snapshot, s.choices_snapshot_json, s.correct_answer_snapshot, s.qtype_snapshot AS qtype
        FROM assessment_question_snapshots s
-       JOIN questions q ON q.id = s.question_id
        WHERE s.assessment_id = ?
        ORDER BY s.position`
     )

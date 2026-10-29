@@ -91,7 +91,7 @@ function manualGradingFilterClauses(filters: ManualGradingFilters): { clauses: s
 export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): PendingGradingRow[] {
   const db = getDb();
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
-  const clauses: string[] = [`aa.is_correct IS NULL`, `q.qtype = 'short_answer'`, `at.status IN ('submitted','auto_submitted')`];
+  const clauses: string[] = [`aa.is_correct IS NULL`, `s.qtype_snapshot = 'short_answer'`, `at.status IN ('submitted','auto_submitted')`];
   const params: (string | number)[] = [];
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
     clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
@@ -109,7 +109,6 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        JOIN attempts at ON at.id = aa.attempt_id
        JOIN users u ON u.id = at.candidate_user_id
        JOIN assessments a ON a.id = at.assessment_id
@@ -164,7 +163,7 @@ export interface GradedManualRow extends PendingGradingRow {
 export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): GradedManualRow[] {
   const db = getDb();
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
-  const clauses: string[] = [`aa.is_correct IS NOT NULL`, `aa.graded_by IS NOT NULL`, `q.qtype = 'short_answer'`];
+  const clauses: string[] = [`aa.is_correct IS NOT NULL`, `aa.graded_by IS NOT NULL`, `s.qtype_snapshot = 'short_answer'`];
   const params: (string | number)[] = [];
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
     clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
@@ -184,7 +183,6 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        JOIN attempts at ON at.id = aa.attempt_id
        JOIN users u ON u.id = at.candidate_user_id
        JOIN assessments a ON a.id = at.assessment_id
@@ -244,11 +242,10 @@ export function submitManualGrade(
   const db = getDb();
   const row = db
     .prepare(
-      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, q.qtype
+      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        WHERE aa.attempt_question_id = ?`
     )
     .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string } | undefined;
@@ -292,13 +289,24 @@ export function finalizeManualGradingIfComplete(attemptId: number): { finalized:
   // sous-questions manuelles n'a pas été statuée (voir submitScenarioSubgrade
   // ci-dessous, qui ferme CETTE ligne dès que toutes le sont) — cette
   // fonction ne doit donc jamais la considérer close avant cela.
+  // Validate the ENTIRE published attempt before finalizing, not just
+  // manual rows with NULL grades. An unknown/invalid historical qtype is
+  // never safe even if an old answer already has a non-NULL is_correct.
+  // A missing attempt_answer or NULL grade of ANY qtype is also incomplete,
+  // not an implicit zero (including old, partially graded automatic rows).
   const stillPending = db
     .prepare(
-      `SELECT 1 FROM attempt_answers aa
-       JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
+      `SELECT 1 FROM attempt_questions aq
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
-       WHERE aq.attempt_id = ? AND aa.is_correct IS NULL AND q.qtype IN ('short_answer', 'scenario')`
+       LEFT JOIN attempt_answers aa ON aa.attempt_question_id = aq.id
+       WHERE aq.attempt_id = ?
+         AND (
+           s.qtype_snapshot IS NULL
+           OR s.qtype_snapshot NOT IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')
+           OR aa.id IS NULL
+           OR aa.is_correct IS NULL
+         )
+       LIMIT 1`
     )
     .get(attemptId);
   if (stillPending) return { finalized: false };
@@ -363,7 +371,7 @@ export interface PendingScenarioSubquestionRow {
 export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): PendingScenarioSubquestionRow[] {
   const db = getDb();
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
-  const clauses: string[] = [`aa.is_correct IS NULL`, `q.qtype = 'scenario'`, `at.status IN ('submitted','auto_submitted')`];
+  const clauses: string[] = [`aa.is_correct IS NULL`, `s.qtype_snapshot = 'scenario'`, `at.status IN ('submitted','auto_submitted')`];
   const params: (string | number)[] = [];
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
     clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
@@ -382,7 +390,6 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        JOIN attempts at ON at.id = aa.attempt_id
        JOIN users u ON u.id = at.candidate_user_id
        JOIN assessments a ON a.id = at.assessment_id
@@ -473,7 +480,7 @@ export interface GradedScenarioSubquestionRow extends PendingScenarioSubquestion
 export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[] | null = null, filters: ManualGradingFilters = {}): GradedScenarioSubquestionRow[] {
   const db = getDb();
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length === 0) return [];
-  const clauses: string[] = [`q.qtype = 'scenario'`, `aa.scenario_grading_json IS NOT NULL`];
+  const clauses: string[] = [`s.qtype_snapshot = 'scenario'`, `aa.scenario_grading_json IS NOT NULL`];
   const params: (string | number)[] = [];
   if (restrictToGroupIdsOrNull && restrictToGroupIdsOrNull.length > 0) {
     clauses.push(`g.id IN (${restrictToGroupIdsOrNull.map(() => "?").join(",")})`);
@@ -492,7 +499,6 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        JOIN attempts at ON at.id = aa.attempt_id
        JOIN users u ON u.id = at.candidate_user_id
        JOIN assessments a ON a.id = at.assessment_id
@@ -606,11 +612,10 @@ export function submitScenarioSubgrade(
   const db = getDb();
   const row = db
     .prepare(
-      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, aa.answer_json, aa.scenario_grading_json, s.correct_answer_snapshot, q.qtype
+      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, aa.answer_json, aa.scenario_grading_json, s.correct_answer_snapshot, s.qtype_snapshot AS qtype
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       JOIN questions q ON q.id = s.question_id
        WHERE aa.attempt_question_id = ?`
     )
     .get(attemptQuestionId) as

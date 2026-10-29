@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { DatabaseSync } from "node:sqlite";
 
 const SCHEMA = readFileSync(new URL("../../lib/schema.sql", import.meta.url), "utf8");
 const MIGRATE = readFileSync(new URL("../../scripts/migrate.ts", import.meta.url), "utf8");
@@ -29,7 +30,7 @@ function assertPublishedRuntimeUsesSnapshot(source: string, functionName: string
   );
   assert.doesNotMatch(
     block,
-    /q\.qtype/,
+    /\bq\.qtype\b/,
     `${functionName} must not read mutable questions.qtype for a published assessment`
   );
   assert.doesNotMatch(
@@ -72,6 +73,10 @@ test("#58 candidate resume/render and published preview use snapshot qtype, not 
 
 test("#58 automatic grading is bound to the published qtype snapshot", () => {
   assertPublishedRuntimeUsesSnapshot(GRADING, "gradeAttempt");
+  const block = exportedFunctionBlock(GRADING, "gradeAttempt");
+  assert.match(block, /const validatedRows = rows\.map/);
+  assert.ok(block.indexOf("const validatedRows") < block.indexOf("const upsertGraded"),
+    "validate the entire historical batch before creating grade writes");
 });
 
 test("#58 all manual-grading routing and finalization paths use published qtype_snapshot", () => {
@@ -85,6 +90,52 @@ test("#58 all manual-grading routing and finalization paths use published qtype_
     "submitScenarioSubgrade",
   ]) {
     assertPublishedRuntimeUsesSnapshot(MANUAL, name);
+  }
+});
+
+test("#58 manual finalization blocks unknown/invalid historical types and missing answers regardless of grading flag", () => {
+  const block = exportedFunctionBlock(MANUAL, "finalizeManualGradingIfComplete");
+  const sqlMatch = block.match(/const stillPending = db\s*\.prepare\(\s*`([\s\S]*?)`\s*\)\s*\.get\(attemptId\)/);
+  assert.ok(sqlMatch, "manual finalization must contain a prefinalization database gate");
+  const sql = sqlMatch[1]!;
+  assert.match(sql, /s\.qtype_snapshot IS NULL/);
+  assert.match(sql, /s\.qtype_snapshot NOT IN/);
+  assert.match(sql, /aa\.id IS NULL/);
+  assert.match(sql, /OR aa\.is_correct IS NULL/);
+  assert.ok(block.indexOf("const stillPending") < block.indexOf("const result ="),
+    "the historical integrity gate must run before any final result is computed");
+
+  // Execute the actual embedded SQL against adversarial legacy snapshots:
+  // a previously graded but unproven historical type must never finalize.
+  const db = new DatabaseSync(":memory:");
+  try {
+    db.exec(`
+      CREATE TABLE assessment_question_snapshots (id INTEGER PRIMARY KEY, qtype_snapshot TEXT);
+      CREATE TABLE attempt_questions (id INTEGER PRIMARY KEY, attempt_id INTEGER NOT NULL, snapshot_id INTEGER NOT NULL);
+      CREATE TABLE attempt_answers (id INTEGER PRIMARY KEY, attempt_question_id INTEGER, is_correct INTEGER);
+    `);
+    const cases: Array<[number, string | null, number | null, boolean]> = [
+      [1, null, 1, true],            // old graded row, unknown original qtype
+      [2, "wrong_type", 1, true],    // old graded row, invalid original qtype
+      [3, "short_answer", null, true], // still needs manual review
+      [4, "mcq_single", null, true],   // partially graded automatic row
+      [5, "short_answer", 1, false],   // manually graded and valid
+      [6, "scenario", 1, false],       // fully manually graded scenario
+      [7, "mcq_single", null, true],   // missing answer row, incomplete data
+      [8, "mcq_single", 0, false],     // correctly graded wrong answer (zero points)
+    ];
+    for (const [id, qtype, grade] of cases) {
+      db.prepare("INSERT INTO assessment_question_snapshots (id, qtype_snapshot) VALUES (?, ?)").run(id, qtype);
+      db.prepare("INSERT INTO attempt_questions (id, attempt_id, snapshot_id) VALUES (?, ?, ?)").run(id, id, id);
+      if (id !== 7) {
+        db.prepare("INSERT INTO attempt_answers (id, attempt_question_id, is_correct) VALUES (?, ?, ?)").run(id, id, grade);
+      }
+    }
+    for (const [id, , , shouldBlock] of cases) {
+      assert.equal(Boolean(db.prepare(sql).get(id)), shouldBlock, `attempt ${id} readiness gate`);
+    }
+  } finally {
+    db.close();
   }
 });
 

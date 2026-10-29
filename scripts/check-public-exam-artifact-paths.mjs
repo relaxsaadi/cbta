@@ -84,6 +84,28 @@ function containsMoodleXmlDgrAnswerKey(text) {
         if (pair && pair[1].replace(/<!\[CDATA\[|\]\]>/g, "").trim()) return true;
       }
     }
+    // Moodle gapselect and ddwtos serialize the correct choice as a
+    // [[1-based choice index]] in questiontext, with non-fractional choices
+    // under <selectoption> / <dragbox>. The mapping itself is an answer key.
+    // Require a real referenced, nonempty option IN THE SAME DGR question.
+    const indexedType = /\btype\s*=\s*["'](gapselect|ddwtos)["']/i.exec(attrs)?.[1]?.toLowerCase();
+    if (indexedType && dgrQuestionId.test(question)) {
+      const questionText = /<questiontext\b[^>]*>([\s\S]*?)<\/questiontext\s*>/i.exec(question)?.[1] ?? "";
+      const referenced = new Set(
+        [...questionText.matchAll(/\[\[\s*([1-9]\d*)\s*\]\]/g)].map(([, n]) => Number(n))
+      );
+      if (referenced.size) {
+        const tag = indexedType === "gapselect" ? "selectoption" : "dragbox";
+        const optionBlocks = [...question.matchAll(
+          new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}\\s*>`, "gi")
+        )];
+        if (optionBlocks.some(([, option], index) => {
+          if (!referenced.has(index + 1)) return false;
+          const value = /<text\b[^>]*>([\s\S]*?)<\/text\s*>/i.exec(option)?.[1] ?? "";
+          return Boolean(value.replace(/<!\[CDATA\[|\]\]>/g, "").trim());
+        })) return true;
+      }
+    }
     if (!/\btype\s*=\s*["'](?:multichoice|truefalse|shortanswer|matching|numerical|calculated)["']/i.test(attrs)
       || !dgrQuestionId.test(question)) continue;
     const hasPositiveAnswer = [...question.matchAll(
@@ -179,6 +201,15 @@ function selfTest() {
     "MR", "MRH", "MRS", "MRHS",
   ];
   const moodleXmlCases = [
+    // Moodle 5.x gapselect/ddwtos encode keyed word choices via 1-based
+    // [[n]] positions; no positive <answer fraction> is required.
+    ['<quiz><question type="gapselect"><name><text>Q-7.4-901</text></name><questiontext><text><![CDATA[Synthetic [[2]] blank]]></text></questiontext><selectoption><text>Distractor</text></selectoption><selectoption><text>Synthetic keyed choice</text></selectoption></question></quiz>', true],
+    ['<quiz><question type="ddwtos"><name><text>Q-7.6-901</text></name><questiontext><text><![CDATA[Drag [[1]] here]]></text></questiontext><dragbox><text>Synthetic keyed choice</text></dragbox></question></quiz>', true],
+    ['<quiz><question type="gapselect"><name><text>Q-7.11-901</text></name><questiontext><text>[[1]]</text></questiontext><selectoption><text>Synthetic</text></selectoption></question></quiz>', false],
+    ['<quiz><question type="gapselect"><name><text>Q-7.5-901</text></name><questiontext><text>[[3]]</text></questiontext><selectoption><text>Unreferenced choice</text></selectoption></question></quiz>', false],
+    ['<quiz><question type="ddwtos"><name><text>Q-7.8-901</text></name><questiontext><text>No gaps</text></questiontext><dragbox><text>Unreferenced choice</text></dragbox></question></quiz>', false],
+    ['<quiz><question type="gapselect"><name><text>Other-item</text></name><questiontext><text>[[1]]</text></questiontext><selectoption><text>Other key</text></selectoption></question><question type="gapselect"><name><text>Q-7.7-901</text></name><questiontext><text>No gaps</text></questiontext><selectoption><text>Synthetic</text></selectoption></question></quiz>', false],
+    ['<quiz><question type="gapselect"><name><text>Other-item</text></name><questiontext><text>[[1]]</text></questiontext><selectoption><text>Other key</text></selectoption></question><question type="ddwtos"><name><text>Q-7.10-901</text></name><questiontext><text>[[1]]</text></questiontext><dragbox><text>Synthetic DGR choice</text></dragbox></question></quiz>', true],
     // Moodle's matching format has no fraction weights; the pairing itself is the key.
     ['<quiz><question type="matching"><name><text>Q-7.4-901</text></name><subquestion><text>Synthetic left</text><answer><text>Synthetic right</text></answer></subquestion></question></quiz>', true],
     ['<quiz><question type="matching"><name><text>Q-7.10-901</text></name><subquestion><text>Left</text><answer><text><![CDATA[<b>synthetic right</b>]]></text></answer></subquestion></question></quiz>', true],

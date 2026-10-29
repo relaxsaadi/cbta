@@ -19,6 +19,7 @@ export const LEGACY_QTYPE_UNKNOWN_CODE = "LEGACY_QTYPE_UNKNOWN";
 export const PUBLISHED_QTYPE_IMMUTABLE_ERROR = "published question qtype is immutable";
 export const SNAPSHOT_QTYPE_IMMUTABLE_ERROR = "published snapshot qtype is immutable";
 export const SNAPSHOT_IDENTITY_IMMUTABLE_ERROR = "published snapshot question identity is immutable";
+export const SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR = "published snapshot payload is immutable";
 
 export interface PublishedQtypeIntegrityResult {
   publishedQuestions: number;
@@ -352,6 +353,27 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         OR NEW.version_id IS NOT OLD.version_id
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_IDENTITY_IMMUTABLE_ERROR}');
+      END;
+
+      -- Preserve the complete published snapshot, not only its qtype and
+      -- source question/version references. Candidate rendering, scoring and
+      -- historical evidence must never be silently rewritten after publish.
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_payload_immutable
+      BEFORE UPDATE OF id, assessment_id, position, stem_snapshot,
+                       choices_snapshot_json, correct_answer_snapshot,
+                       explanation_snapshot, points
+      ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN NEW.id IS NOT OLD.id
+        OR NEW.assessment_id IS NOT OLD.assessment_id
+        OR NEW.position IS NOT OLD.position
+        OR NEW.stem_snapshot IS NOT OLD.stem_snapshot
+        OR NEW.choices_snapshot_json IS NOT OLD.choices_snapshot_json
+        OR NEW.correct_answer_snapshot IS NOT OLD.correct_answer_snapshot
+        OR NEW.explanation_snapshot IS NOT OLD.explanation_snapshot
+        OR NEW.points IS NOT OLD.points
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype

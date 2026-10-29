@@ -173,13 +173,19 @@ function containsKeyedDgrSection(text) {
     const keyedProductionItem = /\*\*Stem\s*\(FR\)\s*:/i.test(section)
       && /\*\*Options\s*:/i.test(section)
       && /\*\*Correct answer rationale\s*:/i.test(section);
+    // Draft banks may use a direct answer-key label instead of a rationale.
+    // Require a DGR item heading, stem, options, and explicit key label in
+    // the SAME section: a casual mention of a key is not sufficient.
+    const explicitlyKeyedItem = /\*\*(?:Stem(?:\s*\(FR\))?|[ÉE]nonc[ée])\s*:/i.test(section)
+      && /\*\*(?:Options|Choix)\s*:/i.test(section)
+      && /\*\*(?:Correct\s+(?:answers?|option|choice)|Answer\s*key|R[ée]ponse\s+correcte|Bonnes?\s+r[ée]ponses?)\s*:/i.test(section);
     // Bilingual reviewer packages include copied confidential FR item text,
     // even where the answer rationale is not printed in the EN section.
     const bilingualReviewerItem = /\*\*FR text\s*\(verbatim\b/i.test(section)
       && /\*\*EN draft translation\b/i.test(section)
       && /\*\*Stem\s*:/i.test(section)
       && /\*\*Options\s*:/i.test(section);
-    if (keyedProductionItem || bilingualReviewerItem) return true;
+    if (keyedProductionItem || explicitlyKeyedItem || bilingualReviewerItem) return true;
   }
   return false;
 }
@@ -217,6 +223,27 @@ function selfTest() {
     "**Stem:** placeholder",
     "**Options:** placeholder",
     "**EN draft translation:** placeholder",
+  ].join("\n");
+  // Renamed keyed Markdown banks with direct EN/FR answer fields were
+  // previously missed because only "Correct answer rationale" was checked.
+  const renamedDirectKeyMarkdown = [
+    "## Q-7.5-901 — synthetic fixture",
+    "**Stem:** synthetic",
+    "**Options:** synthetic A/B",
+    "**Answer key:** B",
+  ].join("\n");
+  const renamedFrenchKeyMarkdown = [
+    "## Q-7.10-901 — synthetic fixture",
+    "**Énoncé :** texte synthétique",
+    "**Choix :** A/B",
+    "**Bonne réponse :** B",
+  ].join("\n");
+  const separateKeySectionMarkdown = [
+    "## Q-7.7-901 — synthetic stem only",
+    "**Stem:** synthetic",
+    "**Options:** A/B",
+    "## Q-7.8-901 — synthetic key mention only",
+    "**Answer key:** metadata",
   ].join("\n");
   // Moodle's documented Cloze shuffled multichoice and multiresponses
   // must not bypass this public-answer-key tripwire (synthetic items only).
@@ -327,6 +354,9 @@ function selfTest() {
   ];
   if (!containsKeyedDgrSection(renamedKeyedMarkdown)
     || !containsKeyedDgrSection(renamedBilingualPackage)
+    || !containsKeyedDgrSection(renamedDirectKeyMarkdown)
+    || !containsKeyedDgrSection(renamedFrenchKeyMarkdown)
+    || containsKeyedDgrSection(separateKeySectionMarkdown)
     || structuredCases.some(([fixture, expected]) => containsStructuredDgrAnswerKey(fixture) !== expected)
     || moodleXmlCases.some(([fixture, expected]) => containsMoodleXmlDgrAnswerKey(fixture) !== expected)
     || giftCases.some(([fixture, expected]) => containsGiftDgrAnswerKey(fixture) !== expected)

@@ -160,6 +160,6 @@ test('RELEASE HOLD: cron and manual lead agents default to no sends or database 
     const guard = remainder.indexOf("if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true')")
     assert.ok(firstQuery > 0, fn + ' must have a lead query')
     assert.ok(guard > 0 && guard < firstQuery, fn + ' must fail closed before querying or mutating leads')
-    assert.match(remainder.slice(guard, firstQuery), /return\\s*\\{[^}]*disabled:\\s*true/, fn + ' must explicitly report the disabled state')
+    assert.match(remainder.slice(guard, firstQuery), /return\s*\{[^}]*disabled:\s*true/, fn + ' must explicitly report the disabled state')
   }
 })

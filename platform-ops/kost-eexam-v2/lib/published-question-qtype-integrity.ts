@@ -18,6 +18,7 @@ export const PUBLISHED_QTYPE_CONFLICT_CODE = "DRIFT_CONFLICT";
 export const LEGACY_QTYPE_UNKNOWN_CODE = "LEGACY_QTYPE_UNKNOWN";
 export const PUBLISHED_QTYPE_IMMUTABLE_ERROR = "published question qtype is immutable";
 export const SNAPSHOT_QTYPE_IMMUTABLE_ERROR = "published snapshot qtype is immutable";
+export const SNAPSHOT_IDENTITY_IMMUTABLE_ERROR = "published snapshot question identity is immutable";
 
 export interface PublishedQtypeIntegrityResult {
   publishedQuestions: number;
@@ -342,6 +343,15 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       WHEN NEW.qtype_snapshot IS NOT OLD.qtype_snapshot
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_QTYPE_IMMUTABLE_ERROR}');
+      END;
+
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_identity_immutable
+      BEFORE UPDATE OF question_id, version_id ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN NEW.question_id IS NOT OLD.question_id
+        OR NEW.version_id IS NOT OLD.version_id
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_IDENTITY_IMMUTABLE_ERROR}');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype

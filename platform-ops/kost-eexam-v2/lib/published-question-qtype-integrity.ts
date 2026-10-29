@@ -21,6 +21,8 @@ export const SNAPSHOT_QTYPE_IMMUTABLE_ERROR = "published snapshot qtype is immut
 export const SNAPSHOT_IDENTITY_IMMUTABLE_ERROR = "published snapshot question identity is immutable";
 export const SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR = "published snapshot payload is immutable";
 export const SNAPSHOT_DELETE_IMMUTABLE_ERROR = "published snapshot deletion is denied";
+export const SNAPSHOT_APPEND_IMMUTABLE_ERROR = "published snapshot addition is denied";
+export const ASSESSMENT_PUBLICATION_ROLLBACK_ERROR = "published assessment publication cannot be reversed";
 
 export interface PublishedQtypeIntegrityResult {
   publishedQuestions: number;
@@ -385,6 +387,34 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       FOR EACH ROW
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
+      END;
+
+      -- publishAssessment inserts the full question set while still draft,
+      -- then changes status inside the same transaction. Once published, no
+      -- SQL writer may append a candidate-visible historical question.
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_append
+      BEFORE INSERT ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM assessments a
+        WHERE a.id = NEW.assessment_id
+          AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+      )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_APPEND_IMMUTABLE_ERROR}');
+      END;
+
+      -- A direct status rollback must not circumvent the append guard.
+      -- Preserve the original publication timestamp once present; ordinary
+      -- published/open/closed/suspended/archived transitions remain permitted.
+      CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_rollback
+      BEFORE UPDATE OF status, published_at ON assessments
+      FOR EACH ROW
+      WHEN (OLD.status <> 'draft' AND NEW.status = 'draft')
+        OR (OLD.published_at IS NOT NULL
+            AND NEW.published_at IS NOT OLD.published_at)
+      BEGIN
+        SELECT RAISE(ABORT, '${ASSESSMENT_PUBLICATION_ROLLBACK_ERROR}');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype

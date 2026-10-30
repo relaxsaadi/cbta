@@ -367,14 +367,22 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
                        explanation_snapshot, points
       ON assessment_question_snapshots
       FOR EACH ROW
-      WHEN NEW.id IS NOT OLD.id
+      -- Drafts are editable until first publication. Check BOTH parents:
+      -- updating assessment_id must never smuggle a draft row into a
+      -- published assessment or move a published row into a draft.
+      WHEN (NEW.id IS NOT OLD.id
         OR NEW.assessment_id IS NOT OLD.assessment_id
         OR NEW.position IS NOT OLD.position
         OR NEW.stem_snapshot IS NOT OLD.stem_snapshot
         OR NEW.choices_snapshot_json IS NOT OLD.choices_snapshot_json
         OR NEW.correct_answer_snapshot IS NOT OLD.correct_answer_snapshot
         OR NEW.explanation_snapshot IS NOT OLD.explanation_snapshot
-        OR NEW.points IS NOT OLD.points
+        OR NEW.points IS NOT OLD.points)
+        AND EXISTS (
+          SELECT 1 FROM assessments a
+          WHERE a.id IN (OLD.assessment_id, NEW.assessment_id)
+            AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+        )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
       END;
@@ -385,6 +393,22 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_delete
       BEFORE DELETE ON assessment_question_snapshots
       FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM assessments a
+        WHERE a.id = OLD.assessment_id
+          AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+      )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
+      END;
+
+      -- SQLite cascades parent DELETEs after removing the parent row. At
+      -- that point a child trigger cannot reliably look up its parent.
+      -- Guard the assessment itself before deletion to close that bypass.
+      CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_delete
+      BEFORE DELETE ON assessments
+      FOR EACH ROW
+      WHEN OLD.status <> 'draft' OR OLD.published_at IS NOT NULL
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
       END;

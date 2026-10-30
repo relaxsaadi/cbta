@@ -364,11 +364,14 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
     // Earlier pre-production heads installed unconditional draft-unsafe
     // payload/deletion triggers under these names. CREATE IF NOT EXISTS
     // alone would silently keep those old SQL definitions after upgrade.
-    // Refresh just these two guards inside the existing BEGIN IMMEDIATE
-    // transaction; a failed migration rolls the replacement back.
+    // Refresh all four publication boundaries inside BEGIN IMMEDIATE:
+    // older deployed trigger definitions may lack the attempted-assessment
+    // evidence guard. A failed migration restores all previous definitions.
     db.exec(`
       DROP TRIGGER IF EXISTS trg_published_snapshot_payload_immutable;
       DROP TRIGGER IF EXISTS trg_published_snapshot_no_delete;
+      DROP TRIGGER IF EXISTS trg_published_assessment_no_delete;
+      DROP TRIGGER IF EXISTS trg_published_snapshot_no_append;
     `);
 
     db.exec(`
@@ -408,7 +411,9 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
                        explanation_snapshot, points
       ON assessment_question_snapshots
       FOR EACH ROW
-      -- Drafts are editable until first publication. Check BOTH parents:
+      -- Drafts without candidate attempts are editable until first publication.
+      -- Attempt records are durable issue evidence even if status/published_at
+      -- were reset by an older migration. Check BOTH parents:
       -- updating assessment_id must never smuggle a draft row into a
       -- published assessment or move a published row into a draft.
       WHEN (NEW.id IS NOT OLD.id
@@ -419,16 +424,23 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         OR NEW.correct_answer_snapshot IS NOT OLD.correct_answer_snapshot
         OR NEW.explanation_snapshot IS NOT OLD.explanation_snapshot
         OR NEW.points IS NOT OLD.points)
-        AND EXISTS (
-          SELECT 1 FROM assessments a
-          WHERE a.id IN (OLD.assessment_id, NEW.assessment_id)
-            AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+        AND (
+          EXISTS (
+            SELECT 1 FROM assessments a
+            WHERE a.id IN (OLD.assessment_id, NEW.assessment_id)
+              AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+          )
+          OR EXISTS (
+            SELECT 1 FROM attempts t
+            WHERE t.assessment_id IN (OLD.assessment_id, NEW.assessment_id)
+          )
         )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
       END;
 
-      -- Deny direct deletion of a published question. Never-published
+      -- Deny deletion of a published or previously administered question.
+      -- Never-published
       -- drafts remain removable; a separate BEFORE DELETE parent guard
       -- prevents published exams from disappearing via ON DELETE CASCADE.
       CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_delete
@@ -439,17 +451,24 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         WHERE a.id = OLD.assessment_id
           AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
       )
+        OR EXISTS (
+          SELECT 1 FROM attempts t WHERE t.assessment_id = OLD.assessment_id
+        )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
       END;
 
-      -- SQLite cascades parent DELETEs after removing the parent row. At
+      -- Candidate attempts also prohibit parent deletion after legacy metadata
+      -- rollback. SQLite cascades parent DELETEs after removing the parent row. At
       -- that point a child trigger cannot reliably look up its parent.
       -- Guard the assessment itself before deletion to close that bypass.
       CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_delete
       BEFORE DELETE ON assessments
       FOR EACH ROW
       WHEN OLD.status <> 'draft' OR OLD.published_at IS NOT NULL
+        OR EXISTS (
+          SELECT 1 FROM attempts t WHERE t.assessment_id = OLD.id
+        )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
       END;
@@ -465,6 +484,9 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         WHERE a.id = NEW.assessment_id
           AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
       )
+        OR EXISTS (
+          SELECT 1 FROM attempts t WHERE t.assessment_id = NEW.assessment_id
+        )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_APPEND_IMMUTABLE_ERROR}');
       END;

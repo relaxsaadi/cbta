@@ -330,6 +330,16 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       GROUP BY q.id, q.qtype;
     `);
 
+    // Earlier pre-production heads installed unconditional draft-unsafe
+    // payload/deletion triggers under these names. CREATE IF NOT EXISTS
+    // alone would silently keep those old SQL definitions after upgrade.
+    // Refresh just these two guards inside the existing BEGIN IMMEDIATE
+    // transaction; a failed migration rolls the replacement back.
+    db.exec(`
+      DROP TRIGGER IF EXISTS trg_published_snapshot_payload_immutable;
+      DROP TRIGGER IF EXISTS trg_published_snapshot_no_delete;
+    `);
+
     db.exec(`
       CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_qtype_required
       BEFORE INSERT ON assessment_question_snapshots
@@ -387,9 +397,9 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
       END;
 
-      -- A published question must not disappear from audit history. SQLite
-      -- ON DELETE CASCADE from assessments also invokes this child trigger,
-      -- protecting an exam before its first candidate attempt exists.
+      -- Deny direct deletion of a published question. Never-published
+      -- drafts remain removable; a separate BEFORE DELETE parent guard
+      -- prevents published exams from disappearing via ON DELETE CASCADE.
       CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_delete
       BEFORE DELETE ON assessment_question_snapshots
       FOR EACH ROW

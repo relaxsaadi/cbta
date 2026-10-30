@@ -31,6 +31,7 @@ export interface PublishedQtypeIntegrityResult {
 
 interface SnapshotIntegrityRow {
   snapshot_id: number;
+  assessment_id: number;
   question_id: number;
   qtype: string;
   assessment_status: string;
@@ -197,7 +198,7 @@ function inferLegacyQtype(choices: unknown, correct: unknown): LegacyInference {
 function assertLegacySnapshotsProvable(db: DatabaseSync): void {
   const rows = db
     .prepare(
-      `SELECT s.id AS snapshot_id, s.question_id, q.qtype,
+      `SELECT s.id AS snapshot_id, s.assessment_id, s.question_id, q.qtype,
               a.status AS assessment_status, a.published_at AS assessment_published_at,
               s.choices_snapshot_json, s.correct_answer_snapshot
        FROM assessment_question_snapshots s
@@ -220,11 +221,21 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
       );
     }
 
-    // A never-published draft has no publication-time qtype to reconstruct.
-    // Its editable current question qtype may be used only when the stored
-    // draft payload actually matches it. This exception is never available
-    // to a published or previously published assessment.
+    // A draft-labeled row with no publication timestamp is NOT by itself
+    // proof that the assessment was never administered. Legacy data can have
+    // cleared or rolled-back publication fields. A durable candidate attempt
+    // proves delivery and must defeat the editable-draft inference path.
+    // For truly unissued drafts, current qtype is allowed only when the
+    // stored draft payload matches it; historical snapshots remain fail-closed.
     if (row.assessment_status === "draft" && row.assessment_published_at === null) {
+      const candidateAttempt = db.prepare(
+        `SELECT 1 FROM attempts WHERE assessment_id = ? LIMIT 1`
+      ).get(row.assessment_id);
+      if (candidateAttempt) {
+        throw new Error(
+          `${LEGACY_QTYPE_UNKNOWN_CODE}: draft-labeled snapshot ${row.snapshot_id} has candidate attempt evidence; current qtype cannot prove the publication-time type`
+        );
+      }
       if (!SUPPORTED_QTYPES.some((type) => type === row.qtype) ||
           !answerShapeMatches(row.qtype, choices, correct)) {
         throw new Error(

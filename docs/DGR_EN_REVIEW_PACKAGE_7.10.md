@@ -91,7 +91,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 ---
 
-## The 32 items
+## The 44 items
 
 ### Batch 1 items (Q-7.10-001 – Q-7.10-015)
 

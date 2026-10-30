@@ -266,6 +266,69 @@ test("#58 a legacy assessment with attempts cannot masquerade as an unissued dra
   }
 });
 
+test("#58 administered assessment with explicit qtype stays immutable after legacy draft-label rollback", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-administered-reset-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-ADMINISTERED-RESET-1",
+      explicitSnapshot: true,
+    });
+    assert.ok(snapshotId !== null);
+    const { assessment_id: assessmentId } = db.prepare(
+      `SELECT assessment_id FROM assessment_question_snapshots WHERE id = ?`
+    ).get(snapshotId) as { assessment_id: number };
+    const candidateId = Number(db.prepare(
+      `INSERT INTO users (username, password_hash, full_name)
+       VALUES ('issued_candidate', 'synthetic_hash', 'Issued Candidate')`
+    ).run().lastInsertRowid);
+    db.prepare(`INSERT INTO attempts
+      (assessment_id, candidate_user_id, attempt_number, status, expires_at)
+      VALUES (?, ?, 1, 'submitted', '2026-11-01T00:00:00.000Z')`
+    ).run(assessmentId, candidateId);
+
+    // This legacy snapshot already has actual capture-time qtype evidence,
+    // so a migration may proceed. Attempt history nonetheless proves the
+    // assessment was issued despite corrupted draft/publication metadata.
+    db.prepare(`UPDATE assessments SET status = 'draft', published_at = NULL WHERE id = ?`)
+      .run(assessmentId);
+    enforcePublishedQuestionQtypeIntegrity(db);
+    const original = db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId);
+    assert.throws(
+      () => db.prepare(`UPDATE assessment_question_snapshots
+        SET stem_snapshot = 'Tampered issued exam' WHERE id = ?`).run(snapshotId),
+      new RegExp(SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`DELETE FROM assessment_question_snapshots WHERE id = ?`).run(snapshotId),
+      new RegExp(SNAPSHOT_DELETE_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`INSERT INTO assessment_question_snapshots
+        (assessment_id, position, question_id, version_id, stem_snapshot,
+         choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points)
+        SELECT assessment_id, position + 1, question_id, version_id,
+               stem_snapshot, choices_snapshot_json, correct_answer_snapshot,
+               qtype_snapshot, points FROM assessment_question_snapshots
+        WHERE id = ?`).run(snapshotId),
+      new RegExp(SNAPSHOT_APPEND_IMMUTABLE_ERROR, "i")
+    );
+    assert.throws(
+      () => db.prepare(`DELETE FROM assessments WHERE id = ?`).run(assessmentId),
+      new RegExp(SNAPSHOT_DELETE_IMMUTABLE_ERROR, "i")
+    );
+    assert.deepEqual(
+      db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`).get(snapshotId),
+      original,
+      "candidate-issued history must remain unchanged"
+    );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("#58 inconsistent never-published legacy draft cannot be silently backfilled", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-qtype-invalid-draft-"));
   const db = openFreshDb(join(dir, "db.sqlite"));

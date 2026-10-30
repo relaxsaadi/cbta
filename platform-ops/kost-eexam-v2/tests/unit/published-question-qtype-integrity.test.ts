@@ -428,6 +428,56 @@ test("#58 forbid post-publication snapshot appends and publication rollback", ()
       FROM assessment_question_snapshots WHERE id = ?
     `).run(draftId, snapshotId), /published snapshot must persist matching historical qtype/i);
 
+    // A legitimate draft snapshot must remain editable and removable until
+    // publication. The earlier unconditional triggers accidentally blocked
+    // these operations even though the INSERT lifecycle is draft-first.
+    db.prepare(`UPDATE assessment_question_snapshots
+                SET stem_snapshot = 'Revised draft question', points = 4
+                WHERE assessment_id = ?`).run(draftId);
+    const editedDraft = db.prepare(`SELECT stem_snapshot, points
+                                    FROM assessment_question_snapshots
+                                    WHERE assessment_id = ?`).get(draftId) as {
+      stem_snapshot: string;
+      points: number;
+    };
+    assert.equal(editedDraft.stem_snapshot, "Revised draft question");
+    assert.equal(editedDraft.points, 4);
+
+    // Retargeting a draft row into a published exam must remain prohibited,
+    // even with a fresh position that avoids the unique-position constraint.
+    assert.throws(
+      () => db.prepare(`UPDATE assessment_question_snapshots
+                        SET assessment_id = ?, position = 99
+                        WHERE assessment_id = ?`).run(publishedId, draftId),
+      new RegExp(SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR, "i")
+    );
+    db.prepare(`DELETE FROM assessment_question_snapshots WHERE assessment_id = ?`).run(draftId);
+    assert.equal(
+      (db.prepare(`SELECT COUNT(*) AS n FROM assessment_question_snapshots
+                   WHERE assessment_id = ?`).get(draftId) as { n: number }).n,
+      0
+    );
+    clone.run(draftId, 1, snapshotId);
+
+    // A never-published draft may be deleted by parent cascade; the
+    // separate BEFORE DELETE assessment guard must still reject published
+    // parent deletion as asserted in the preceding regression test.
+    const throwawayDraftId = Number(db.prepare(`
+      INSERT INTO assessments
+        (type, name, function_code, group_id, question_source, question_count,
+         duration_minutes, status, scope)
+      SELECT type, 'Throwaway draft', function_code, group_id,
+             question_source, question_count, duration_minutes, 'draft', scope
+      FROM assessments WHERE id = ?
+    `).run(publishedId).lastInsertRowid);
+    clone.run(throwawayDraftId, 1, snapshotId);
+    db.prepare(`DELETE FROM assessments WHERE id = ?`).run(throwawayDraftId);
+    assert.equal(
+      (db.prepare(`SELECT COUNT(*) AS n FROM assessments WHERE id = ?`)
+        .get(throwawayDraftId) as { n: number }).n,
+      0
+    );
+
     db.prepare(`UPDATE assessments SET status = 'published', published_at = ? WHERE id = ?`)
       .run("2026-10-29T12:00:00.000Z", draftId);
     assert.throws(

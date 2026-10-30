@@ -45,6 +45,7 @@ function seedQuestion(
     correctAnswer?: unknown;
     publish?: boolean;
     explicitSnapshot?: boolean;
+    leaveDraft?: boolean;
   }
 ): { questionId: number; versionId: number; snapshotId: number | null } {
   const qtype = params.qtype ?? "mcq_single";
@@ -113,8 +114,10 @@ function seedQuestion(
   );
   // Mirror publishAssessment's legitimate order: snapshot while draft,
   // then atomically mark published.
-  db.prepare(`UPDATE assessments SET status = 'published', published_at = ?
-              WHERE id = ?`).run("2026-10-29T12:00:00.000Z", assessmentId);
+  if (!params.leaveDraft) {
+    db.prepare(`UPDATE assessments SET status = 'published', published_at = ?
+                WHERE id = ?`).run("2026-10-29T12:00:00.000Z", assessmentId);
+  }
   return { questionId, versionId, snapshotId };
 }
 
@@ -182,6 +185,66 @@ test("#58 ambiguous legacy one-answer MCQ is never silently backfilled from toda
       0,
       "unknown legacy history leaves no silently asserted baseline behind"
     );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 ambiguous legacy draft qtype is backfilled only if never published and payload matches", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-legacy-draft-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { questionId, snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-LEGACY-DRAFT-1",
+      qtype: "mcq_single",
+      leaveDraft: true,
+    });
+    assert.ok(snapshotId !== null);
+    const assessment = db.prepare(`SELECT a.id, a.status, a.published_at
+      FROM assessments a JOIN assessment_question_snapshots s ON s.assessment_id = a.id
+      WHERE s.id = ?`).get(snapshotId) as { id: number; status: string; published_at: string | null };
+    assert.equal(assessment.status, "draft");
+    assert.equal(assessment.published_at, null);
+
+    // One correct option is ambiguous for historical MCQ single/multi.
+    // That ambiguity blocks published legacy rows (tested separately), but
+    // a never-issued draft can rely on a compatible editable current qtype.
+    enforcePublishedQuestionQtypeIntegrity(db);
+    const snapshot = db.prepare(`SELECT qtype_snapshot FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId) as { qtype_snapshot: string };
+    assert.equal(snapshot.qtype_snapshot, "mcq_single");
+
+    db.prepare(`UPDATE assessments SET status = 'published', published_at = ? WHERE id = ?`)
+      .run("2026-10-30T12:00:00.000Z", assessment.id);
+    assert.throws(
+      () => db.prepare(`UPDATE questions SET qtype = 'mcq_multi' WHERE id = ?`).run(questionId),
+      new RegExp(PUBLISHED_QTYPE_IMMUTABLE_ERROR, "i")
+    );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 inconsistent never-published legacy draft cannot be silently backfilled", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-invalid-draft-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-INVALID-DRAFT-1",
+      qtype: "mcq_single",
+      correctAnswer: ["Z"],
+      leaveDraft: true,
+    });
+    assert.ok(snapshotId !== null);
+    assert.throws(
+      () => enforcePublishedQuestionQtypeIntegrity(db),
+      new RegExp(`${PUBLISHED_QTYPE_CONFLICT_CODE}.*unissued draft snapshot`, "i")
+    );
+    const snapshot = db.prepare(`SELECT qtype_snapshot FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId) as { qtype_snapshot: string | null };
+    assert.equal(snapshot.qtype_snapshot, null, "failed migration does not assert a qtype");
   } finally {
     db.close();
     rmSync(dir, { recursive: true, force: true });

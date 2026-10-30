@@ -19,6 +19,10 @@ export const LEGACY_QTYPE_UNKNOWN_CODE = "LEGACY_QTYPE_UNKNOWN";
 export const PUBLISHED_QTYPE_IMMUTABLE_ERROR = "published question qtype is immutable";
 export const SNAPSHOT_QTYPE_IMMUTABLE_ERROR = "published snapshot qtype is immutable";
 export const SNAPSHOT_IDENTITY_IMMUTABLE_ERROR = "published snapshot question identity is immutable";
+export const SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR = "published snapshot payload is immutable";
+export const SNAPSHOT_DELETE_IMMUTABLE_ERROR = "published snapshot deletion is denied";
+export const SNAPSHOT_APPEND_IMMUTABLE_ERROR = "published snapshot addition is denied";
+export const ASSESSMENT_PUBLICATION_ROLLBACK_ERROR = "published assessment publication cannot be reversed";
 
 export interface PublishedQtypeIntegrityResult {
   publishedQuestions: number;
@@ -27,8 +31,11 @@ export interface PublishedQtypeIntegrityResult {
 
 interface SnapshotIntegrityRow {
   snapshot_id: number;
+  assessment_id: number;
   question_id: number;
   qtype: string;
+  assessment_status: string;
+  assessment_published_at: string | null;
   choices_snapshot_json: string;
   correct_answer_snapshot: string;
 }
@@ -191,10 +198,12 @@ function inferLegacyQtype(choices: unknown, correct: unknown): LegacyInference {
 function assertLegacySnapshotsProvable(db: DatabaseSync): void {
   const rows = db
     .prepare(
-      `SELECT s.id AS snapshot_id, s.question_id, q.qtype,
+      `SELECT s.id AS snapshot_id, s.assessment_id, s.question_id, q.qtype,
+              a.status AS assessment_status, a.published_at AS assessment_published_at,
               s.choices_snapshot_json, s.correct_answer_snapshot
        FROM assessment_question_snapshots s
        JOIN questions q ON q.id = s.question_id
+       JOIN assessments a ON a.id = s.assessment_id
        WHERE s.qtype_snapshot IS NULL
        ORDER BY s.id`
     )
@@ -210,6 +219,32 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
       throw new Error(
         `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} contains invalid JSON`
       );
+    }
+
+    // A draft-labeled row with no publication timestamp is NOT by itself
+    // proof that the assessment was never administered. Legacy data can have
+    // cleared or rolled-back publication fields. A durable candidate attempt
+    // proves delivery and must defeat the editable-draft inference path.
+    // For truly unissued drafts, current qtype is allowed only when the
+    // stored draft payload matches it; historical snapshots remain fail-closed.
+    if (row.assessment_status === "draft" && row.assessment_published_at === null) {
+      const candidateAttempt = db.prepare(
+        `SELECT 1 FROM attempts WHERE assessment_id = ? LIMIT 1`
+      ).get(row.assessment_id);
+      if (candidateAttempt) {
+        throw new Error(
+          `${LEGACY_QTYPE_UNKNOWN_CODE}: draft-labeled snapshot ${row.snapshot_id} has candidate attempt evidence; current qtype cannot prove the publication-time type`
+        );
+      }
+      if (!SUPPORTED_QTYPES.some((type) => type === row.qtype) ||
+          !answerShapeMatches(row.qtype, choices, correct)) {
+        throw new Error(
+          `${PUBLISHED_QTYPE_CONFLICT_CODE}: unissued draft snapshot ${row.snapshot_id} does not match current question qtype '${row.qtype}'`
+        );
+      }
+      db.prepare(`UPDATE assessment_question_snapshots SET qtype_snapshot = ? WHERE id = ?`)
+        .run(row.qtype, row.snapshot_id);
+      continue;
     }
 
     const inference = inferLegacyQtype(choices, correct);
@@ -326,6 +361,19 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       GROUP BY q.id, q.qtype;
     `);
 
+    // Earlier pre-production heads installed unconditional draft-unsafe
+    // payload/deletion triggers under these names. CREATE IF NOT EXISTS
+    // alone would silently keep those old SQL definitions after upgrade.
+    // Refresh all four publication boundaries inside BEGIN IMMEDIATE:
+    // older deployed trigger definitions may lack the attempted-assessment
+    // evidence guard. A failed migration restores all previous definitions.
+    db.exec(`
+      DROP TRIGGER IF EXISTS trg_published_snapshot_payload_immutable;
+      DROP TRIGGER IF EXISTS trg_published_snapshot_no_delete;
+      DROP TRIGGER IF EXISTS trg_published_assessment_no_delete;
+      DROP TRIGGER IF EXISTS trg_published_snapshot_no_append;
+    `);
+
     db.exec(`
       CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_qtype_required
       BEFORE INSERT ON assessment_question_snapshots
@@ -352,6 +400,108 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         OR NEW.version_id IS NOT OLD.version_id
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_IDENTITY_IMMUTABLE_ERROR}');
+      END;
+
+      -- Preserve the complete published snapshot, not only its qtype and
+      -- source question/version references. Candidate rendering, scoring and
+      -- historical evidence must never be silently rewritten after publish.
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_payload_immutable
+      BEFORE UPDATE OF id, assessment_id, position, stem_snapshot,
+                       choices_snapshot_json, correct_answer_snapshot,
+                       explanation_snapshot, points
+      ON assessment_question_snapshots
+      FOR EACH ROW
+      -- Drafts without candidate attempts are editable until first publication.
+      -- Attempt records are durable issue evidence even if status/published_at
+      -- were reset by an older migration. Check BOTH parents:
+      -- updating assessment_id must never smuggle a draft row into a
+      -- published assessment or move a published row into a draft.
+      WHEN (NEW.id IS NOT OLD.id
+        OR NEW.assessment_id IS NOT OLD.assessment_id
+        OR NEW.position IS NOT OLD.position
+        OR NEW.stem_snapshot IS NOT OLD.stem_snapshot
+        OR NEW.choices_snapshot_json IS NOT OLD.choices_snapshot_json
+        OR NEW.correct_answer_snapshot IS NOT OLD.correct_answer_snapshot
+        OR NEW.explanation_snapshot IS NOT OLD.explanation_snapshot
+        OR NEW.points IS NOT OLD.points)
+        AND (
+          EXISTS (
+            SELECT 1 FROM assessments a
+            WHERE a.id IN (OLD.assessment_id, NEW.assessment_id)
+              AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+          )
+          OR EXISTS (
+            SELECT 1 FROM attempts t
+            WHERE t.assessment_id IN (OLD.assessment_id, NEW.assessment_id)
+          )
+        )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
+      END;
+
+      -- Deny deletion of a published or previously administered question.
+      -- Never-published
+      -- drafts remain removable; a separate BEFORE DELETE parent guard
+      -- prevents published exams from disappearing via ON DELETE CASCADE.
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_delete
+      BEFORE DELETE ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM assessments a
+        WHERE a.id = OLD.assessment_id
+          AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+      )
+        OR EXISTS (
+          SELECT 1 FROM attempts t WHERE t.assessment_id = OLD.assessment_id
+        )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
+      END;
+
+      -- Candidate attempts also prohibit parent deletion after legacy metadata
+      -- rollback. SQLite cascades parent DELETEs after removing the parent row. At
+      -- that point a child trigger cannot reliably look up its parent.
+      -- Guard the assessment itself before deletion to close that bypass.
+      CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_delete
+      BEFORE DELETE ON assessments
+      FOR EACH ROW
+      WHEN OLD.status <> 'draft' OR OLD.published_at IS NOT NULL
+        OR EXISTS (
+          SELECT 1 FROM attempts t WHERE t.assessment_id = OLD.id
+        )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
+      END;
+
+      -- publishAssessment inserts the full question set while still draft,
+      -- then changes status inside the same transaction. Once published, no
+      -- SQL writer may append a candidate-visible historical question.
+      CREATE TRIGGER IF NOT EXISTS trg_published_snapshot_no_append
+      BEFORE INSERT ON assessment_question_snapshots
+      FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM assessments a
+        WHERE a.id = NEW.assessment_id
+          AND (a.status <> 'draft' OR a.published_at IS NOT NULL)
+      )
+        OR EXISTS (
+          SELECT 1 FROM attempts t WHERE t.assessment_id = NEW.assessment_id
+        )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_APPEND_IMMUTABLE_ERROR}');
+      END;
+
+      -- A direct status rollback must not circumvent the append guard.
+      -- Preserve the original publication timestamp once present; ordinary
+      -- published/open/closed/suspended/archived transitions remain permitted.
+      CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_rollback
+      BEFORE UPDATE OF status, published_at ON assessments
+      FOR EACH ROW
+      WHEN (OLD.status <> 'draft' AND NEW.status = 'draft')
+        OR (OLD.published_at IS NOT NULL
+            AND NEW.published_at IS NOT OLD.published_at)
+      BEGIN
+        SELECT RAISE(ABORT, '${ASSESSMENT_PUBLICATION_ROLLBACK_ERROR}');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype

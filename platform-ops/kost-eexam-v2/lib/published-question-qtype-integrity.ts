@@ -33,6 +33,8 @@ interface SnapshotIntegrityRow {
   snapshot_id: number;
   question_id: number;
   qtype: string;
+  assessment_status: string;
+  assessment_published_at: string | null;
   choices_snapshot_json: string;
   correct_answer_snapshot: string;
 }
@@ -196,9 +198,11 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
   const rows = db
     .prepare(
       `SELECT s.id AS snapshot_id, s.question_id, q.qtype,
+              a.status AS assessment_status, a.published_at AS assessment_published_at,
               s.choices_snapshot_json, s.correct_answer_snapshot
        FROM assessment_question_snapshots s
        JOIN questions q ON q.id = s.question_id
+       JOIN assessments a ON a.id = s.assessment_id
        WHERE s.qtype_snapshot IS NULL
        ORDER BY s.id`
     )
@@ -214,6 +218,22 @@ function assertLegacySnapshotsProvable(db: DatabaseSync): void {
       throw new Error(
         `${PUBLISHED_QTYPE_CONFLICT_CODE}: snapshot ${row.snapshot_id} for question ${row.question_id} contains invalid JSON`
       );
+    }
+
+    // A never-published draft has no publication-time qtype to reconstruct.
+    // Its editable current question qtype may be used only when the stored
+    // draft payload actually matches it. This exception is never available
+    // to a published or previously published assessment.
+    if (row.assessment_status === "draft" && row.assessment_published_at === null) {
+      if (!SUPPORTED_QTYPES.some((type) => type === row.qtype) ||
+          !answerShapeMatches(row.qtype, choices, correct)) {
+        throw new Error(
+          `${PUBLISHED_QTYPE_CONFLICT_CODE}: unissued draft snapshot ${row.snapshot_id} does not match current question qtype '${row.qtype}'`
+        );
+      }
+      db.prepare(`UPDATE assessment_question_snapshots SET qtype_snapshot = ? WHERE id = ?`)
+        .run(row.qtype, row.snapshot_id);
+      continue;
     }
 
     const inference = inferLegacyQtype(choices, correct);

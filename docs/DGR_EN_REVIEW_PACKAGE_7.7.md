@@ -72,7 +72,7 @@ record behind each item.
 
 ---
 
-## The 33 items
+## The 53 items
 
 ### Batch 1 items (Q-7.7-001 – Q-7.7-015)
 

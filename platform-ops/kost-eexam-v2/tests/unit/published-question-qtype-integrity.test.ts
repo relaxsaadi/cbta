@@ -379,6 +379,17 @@ test("#58 forbid post-publication snapshot appends and publication rollback", ()
       explicitSnapshot: true,
     });
     assert.ok(snapshotId !== null);
+    // Simulate a database booted under the old draft-unsafe triggers. A
+    // subsequent migration must replace them, not silently preserve them
+    // via CREATE TRIGGER IF NOT EXISTS.
+    db.exec(`
+      CREATE TRIGGER trg_published_snapshot_payload_immutable
+      BEFORE UPDATE OF stem_snapshot, points ON assessment_question_snapshots
+      FOR EACH ROW BEGIN SELECT RAISE(ABORT, 'stale unconditional payload guard'); END;
+      CREATE TRIGGER trg_published_snapshot_no_delete
+      BEFORE DELETE ON assessment_question_snapshots
+      FOR EACH ROW BEGIN SELECT RAISE(ABORT, 'stale unconditional delete guard'); END;
+    `);
     enforcePublishedQuestionQtypeIntegrity(db);
     const original = db.prepare(`SELECT * FROM assessment_question_snapshots WHERE id = ?`)
       .get(snapshotId) as { assessment_id: number };

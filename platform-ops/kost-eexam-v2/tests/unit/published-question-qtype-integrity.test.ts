@@ -227,6 +227,45 @@ test("#58 ambiguous legacy draft qtype is backfilled only if never published and
   }
 });
 
+test("#58 a legacy assessment with attempts cannot masquerade as an unissued draft", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-legacy-reset-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const { snapshotId } = seedQuestion(db, {
+      kostId: "QTYPE-PUBLISHED-STATUS-RESET-1",
+      qtype: "mcq_single",
+    });
+    assert.ok(snapshotId !== null);
+    const assessment = db.prepare(`SELECT assessment_id FROM assessment_question_snapshots WHERE id = ?`)
+      .get(snapshotId) as { assessment_id: number };
+    const candidateId = Number(db.prepare(
+      `INSERT INTO users (username, password_hash, full_name) VALUES ('legacy_candidate', 'synthetic_hash', 'Legacy Candidate')`
+    ).run().lastInsertRowid);
+    db.prepare(`INSERT INTO attempts (assessment_id, candidate_user_id, attempt_number, status, expires_at)
+      VALUES (?, ?, 1, 'submitted', '2026-11-01T00:00:00.000Z')`)
+      .run(assessment.assessment_id, candidateId);
+
+    // Reproduce legacy metadata drift before immutability triggers existed:
+    // the exam was published and administered, then its mutable state was
+    // reverted to draft and its publication timestamp cleared.
+    db.prepare(`UPDATE assessments SET status = 'draft', published_at = NULL WHERE id = ?`)
+      .run(assessment.assessment_id);
+    assert.throws(
+      () => enforcePublishedQuestionQtypeIntegrity(db),
+      new RegExp(`${LEGACY_QTYPE_UNKNOWN_CODE}.*candidate attempt evidence`, "i")
+    );
+    assert.equal(
+      (db.prepare(`SELECT qtype_snapshot FROM assessment_question_snapshots WHERE id = ?`)
+        .get(snapshotId) as { qtype_snapshot: string | null }).qtype_snapshot,
+      null,
+      "must not manufacture historical type evidence from reverted draft metadata"
+    );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("#58 inconsistent never-published legacy draft cannot be silently backfilled", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-qtype-invalid-draft-"));
   const db = openFreshDb(join(dir, "db.sqlite"));

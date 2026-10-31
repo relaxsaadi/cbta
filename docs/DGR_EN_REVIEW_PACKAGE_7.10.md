@@ -837,7 +837,9 @@ for production use. For every one of the ten functions:
 
 - FR Tier A verification (checking each item's Tier B course-sourced text
   against the current IATA DGR 67th Edition/Addendum 1 official text)
-  remains open, blocked pending the owner's IATA Bookshelf 2FA re-login.
+  remains open pending item-specific direct-source reconciliation and
+  qualified FR review. Historical Bookshelf 2FA is not a verified
+  current owner-only access blocker.
 - Full human bilingual technical review of every EN package (the work this
   package, and the nine before it, exist to prepare for) remains open — no
   item across any function has a named qualified reviewer and a review
@@ -1133,8 +1135,9 @@ It does not mean any item, function, or the platform overall is ready for
 production use. For every one of the ten functions, unchanged from the
 programmatic milestone recorded above:
 
-- FR Tier A verification remains open, blocked pending the owner's IATA
-  Bookshelf 2FA re-login.
+- FR Tier A verification remains open pending item-specific direct-source
+  reconciliation and qualified FR review. Historical Bookshelf 2FA is
+  not a verified current owner-only access blocker.
 - Full human bilingual technical review of every EN package remains open —
   no item across any function has a named qualified reviewer and a review
   date.

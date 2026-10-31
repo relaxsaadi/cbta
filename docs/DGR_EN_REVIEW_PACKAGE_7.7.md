@@ -45,10 +45,9 @@ repository — only the regulatory source basis and validation conclusions
 were. That gloss was explicitly flagged as *not* a verbatim transcription.
 
 **Function 7.7 does not have this problem**, exactly like Function 7.3
-before it. The FR question text for every one of these 33 items — stem,
+before it. The FR question text for all 53 current items — stem,
 every answer option, the marked correct answer, and its source citation —
-is already stored **verbatim** in `docs/DGR_PRODUCTION_BANK_7.7.md` (Batch 1
-and Batch 2, both drafted from the actual KOST Function 7.7 course PDF,
+is already stored **verbatim** in `docs/DGR_PRODUCTION_BANK_7.7.md` (Batches 1–3, drafted from the KOST Function 7.7 course PDF,
 slide-cited). This package translates that **actual, already-written FR
 text directly** — no reconstruction, no gloss, no working-approximation
 step. The FR text quoted below is copied verbatim (stem + options, or
@@ -744,7 +743,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    softened into plausible truths; Q-7.7-012 must not be read as testing a
    classification-stage primary/subsidiary-hazard determination method.
 6. **Terminology consistency:** confirm EN terms match the terminology
-   table and are used consistently across all 33 items (e.g., "Packing
+   table and are used consistently across the 33 Batch 1–2 items (e.g., "Packing
    Group" not "packaging group"; "State variation" reserved for the DGR 2.8
    technical sense; "NOTOC" never re-expanded or re-translated mid-item).
 7. **Distractor plausibility in English:** confirm each EN distractor

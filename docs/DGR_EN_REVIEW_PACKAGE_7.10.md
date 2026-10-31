@@ -50,10 +50,10 @@ repository — only the regulatory source basis and validation conclusions
 were. That gloss was explicitly flagged as *not* a verbatim transcription.
 
 **Function 7.10 does not have this problem**, exactly like Functions 7.3
-and 7.7 before it. The FR question text for every one of these 32 items —
+and 7.7 before it. The FR question text for all 44 current items —
 stem, every answer option, the marked correct answer, and its source
 citation — is already stored **verbatim** in
-`docs/DGR_PRODUCTION_BANK_7.10.md` (Batch 1 and Batch 2, both drafted from
+`docs/DGR_PRODUCTION_BANK_7.10.md` (Batches 1–3, drafted from
 the actual KOST Function 7.10 course PDF, slide-cited). This package
 translates that **actual, already-written FR text directly** — no
 reconstruction, no gloss, no working-approximation step. The FR text quoted
@@ -83,9 +83,10 @@ Q-7.7-019), "divergence d'État"/"divergence de l'exploitant"→"State
 variation"/"Operator variation" (Q-7.10-001, Q-7.10-022, same as
 Q-7.7-023), and "SCoETDG"→"UNCETDG" (Q-7.10-017, same as Q-7.7-017). The
 task's own example fourth term, "dérogation"→"Exemption" (used in Function
-7.7's Q-7.7-032 for a NOTOC-field wording), does not recur anywhere in
-Function 7.10's 32 items — checked, not silently dropped. Where Function
-7.10 shares identical FR text with a Function 7.7 item (Q-7.10-007/
+7.7's Q-7.7-032 for a NOTOC-field wording), did not recur in the first
+32 items (Batches 1–2), but **does recur in Batch 3 item Q-7.10-038**.
+Its proposed EN equivalent remains flagged for independent bilingual and
+regulatory-context review. Where Function 7.10 shares identical FR text with a Function 7.7 item (Q-7.10-007/
 Q-7.7-005, Q-7.10-008/Q-7.7-006, Q-7.10-015/Q-7.7-015), this package reuses
 Function 7.7's own EN translation verbatim, for cross-function consistency.
 
@@ -727,7 +728,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    "mesures prescrites par l'employeur" content beyond the bare
    wheel-item fact.
 6. **Terminology consistency:** confirm EN terms match the terminology
-   table and are used consistently across all 32 items (e.g., "Packing
+   table and are used consistently across the 32 Batch 1–2 items (e.g., "Packing
    Group" not "packaging group"; "State variation"/"Operator variation"
    reserved for the DGR 2.8 technical sense; "NOTOC" never re-expanded or
    re-translated mid-item; "security screening" used consistently for

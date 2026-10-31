@@ -28,8 +28,9 @@ not a substitute for that review.**
   than after — Tier A FR verification is permitted, but it means **two
   separate, still-open gates** stand between every item here and
   `APPROVED`: (1) Tier A FR regulatory verification against the current
-  IATA DGR 67th Edition/Addendum 1 text (blocked pending the owner's
-  Bookshelf re-authentication, per `docs/DGR_PRODUCTION_BANK_7.4.md`), and
+  IATA DGR 67th Edition 2026 and applicable addendum text (item-specific
+  direct-source reconciliation and qualified FR review still outstanding;
+  historical Bookshelf 2FA interruption is not a verified current blocker), and
   (2) the bilingual technical review this package prepares for. A completed
   bilingual review of an item's English draft is **not** evidence that the
   item's underlying French regulatory content has been Tier A-verified, and

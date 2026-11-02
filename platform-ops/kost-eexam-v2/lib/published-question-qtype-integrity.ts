@@ -381,6 +381,10 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       DROP TRIGGER IF EXISTS trg_published_snapshot_no_delete;
       DROP TRIGGER IF EXISTS trg_published_assessment_no_delete;
       DROP TRIGGER IF EXISTS trg_published_snapshot_no_append;
+      -- Older installations used INSERT OR IGNORE for baseline capture.
+      -- Refresh it transactionally so the new conflict guard does not reject
+      -- a legitimate second snapshot of the same question.
+      DROP TRIGGER IF EXISTS trg_snapshot_capture_question_qtype;
     `);
 
     db.exec(`

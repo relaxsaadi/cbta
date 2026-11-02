@@ -87,6 +87,42 @@ test("audit_logs accepts inserts but rejects direct update/delete at SQLite boun
   }
 });
 
+test("audit primary-key REPLACE cannot erase a logged event with recursive triggers disabled", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-audit-replace-"));
+  const db = openFreshDb(join(dir, "replace.sqlite"));
+  try {
+    const originalId = insertAudit(db, "exam_submitted");
+    const original = db.prepare("SELECT * FROM audit_logs WHERE id = ?").get(originalId);
+
+    // A separate direct SQLite client may use the default OFF setting.
+    // DELETE triggers alone did not protect the old audit table from REPLACE.
+    db.exec("PRAGMA recursive_triggers = OFF");
+    assert.equal(
+      (db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number }).recursive_triggers,
+      0
+    );
+
+    assert.throws(
+      () => db.prepare(
+        "INSERT OR REPLACE INTO audit_logs (id, action, result) VALUES (?, 'tampered', 'success')"
+      ).run(originalId),
+      /audit_logs is append-only: REPLACE denied/i
+    );
+    assert.throws(
+      () => db.prepare("UPDATE OR REPLACE audit_logs SET action = 'tampered' WHERE id = ?").run(originalId),
+      /audit_logs is append-only: UPDATE denied/i
+    );
+    assert.deepEqual(db.prepare("SELECT * FROM audit_logs WHERE id = ?").get(originalId), original);
+
+    const nextId = insertAudit(db, "exam_regraded");
+    assert.ok(nextId > originalId, "non-conflicting audit append must still work");
+    assert.equal(auditRow(db, nextId).action, "exam_regraded");
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("schema migration is idempotent and preserves pre-existing audit rows", () => {
   const dir = mkdtempSync(join(tmpdir(), "kost-audit-migration-"));
   const dbPath = join(dir, "migration.sqlite");
@@ -95,9 +131,18 @@ test("schema migration is idempotent and preserves pre-existing audit rows", () 
   try {
     const id = insertAudit(db, "before_migration");
 
+    // Simulate a database created before the new INSERT collision guard.
+    db.exec("DROP TRIGGER IF EXISTS audit_logs_no_replace");
     db.exec(SCHEMA);
     db.exec(SCHEMA);
 
+    assertAuditRow(db, id, "before_migration");
+    assert.throws(
+      () => db.prepare(
+        "INSERT OR REPLACE INTO audit_logs (id, action, result) VALUES (?, 'tampered', 'success')"
+      ).run(id),
+      /audit_logs is append-only: REPLACE denied/i
+    );
     assertAuditRow(db, id, "before_migration");
     assertAppendOnly(db, id, "before_migration");
   } finally {

@@ -226,6 +226,34 @@ CREATE TABLE IF NOT EXISTS question_annual_reviews (
 );
 CREATE INDEX IF NOT EXISTS idx_question_annual_reviews_question ON question_annual_reviews(question_id);
 
+-- Annual regulatory reviews are historical evidence, not editable authoring
+-- state. Guard direct SQL writers as well as ordinary application code.
+-- A reviewed question cannot be hard-deleted: the foreign-key CASCADE would
+-- otherwise erase its annual-review history (release blocker #9).
+CREATE TRIGGER IF NOT EXISTS question_annual_reviews_no_update
+BEFORE UPDATE ON question_annual_reviews
+BEGIN
+  SELECT RAISE(ABORT, 'question_annual_reviews is append-only: UPDATE denied');
+END;
+
+CREATE TRIGGER IF NOT EXISTS question_annual_reviews_no_delete
+BEFORE DELETE ON question_annual_reviews
+BEGIN
+  SELECT RAISE(ABORT, 'question_annual_reviews is append-only: DELETE denied');
+END;
+
+-- An INSERT OR REPLACE can silently delete the old row when
+-- recursive_triggers=OFF. Reject a conflicting id before resolution.
+CREATE TRIGGER IF NOT EXISTS question_annual_reviews_no_replace
+BEFORE INSERT ON question_annual_reviews
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM question_annual_reviews existing WHERE existing.id = NEW.id
+)
+BEGIN
+  SELECT RAISE(ABORT, 'question_annual_reviews is append-only: REPLACE denied');
+END;
+
 -- Append-only : jamais d'UPDATE sur une version existante (§4 de la
 -- mission — un examen publié doit toujours pouvoir montrer la version EXACTE
 -- reçue par le candidat, même si la question a changé depuis).

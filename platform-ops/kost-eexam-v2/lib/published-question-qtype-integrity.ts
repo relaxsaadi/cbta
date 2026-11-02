@@ -303,6 +303,15 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
     throw new Error(`${LEGACY_QTYPE_UNKNOWN_CODE}: qtype_snapshot migration missing — run pnpm migrate before enforcement`);
   }
 
+  // SQLite REPLACE conflict resolution silently deletes existing rows unless
+  // recursive triggers are enabled. This includes migration/maintenance clients
+  // that do not go through the normal getDb() connection factory.
+  db.exec("PRAGMA recursive_triggers = ON");
+  const recursive = db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number };
+  if (recursive.recursive_triggers !== 1) {
+    throw new Error("SQLite recursive_triggers must be enabled for published snapshot integrity");
+  }
+
   db.exec("BEGIN IMMEDIATE");
   try {
     db.exec(`
@@ -372,6 +381,10 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       DROP TRIGGER IF EXISTS trg_published_snapshot_no_delete;
       DROP TRIGGER IF EXISTS trg_published_assessment_no_delete;
       DROP TRIGGER IF EXISTS trg_published_snapshot_no_append;
+      -- Older installations used INSERT OR IGNORE for baseline capture.
+      -- Refresh it transactionally so the new conflict guard does not reject
+      -- a legitimate second snapshot of the same question.
+      DROP TRIGGER IF EXISTS trg_snapshot_capture_question_qtype;
     `);
 
     db.exec(`
@@ -434,6 +447,20 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
             SELECT 1 FROM attempts t
             WHERE t.assessment_id IN (OLD.assessment_id, NEW.assessment_id)
           )
+          -- UPDATE OR REPLACE on an editable draft must not delete a different
+          -- issued snapshot sharing NEW.id, even with recursion disabled.
+          OR EXISTS (
+            SELECT 1
+            FROM assessment_question_snapshots conflicting
+            JOIN assessments previous ON previous.id = conflicting.assessment_id
+            WHERE conflicting.id = NEW.id AND conflicting.id <> OLD.id
+              AND (
+                previous.status <> 'draft' OR previous.published_at IS NOT NULL
+                OR EXISTS (
+                  SELECT 1 FROM attempts t WHERE t.assessment_id = conflicting.assessment_id
+                )
+              )
+          )
         )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR}');
@@ -473,6 +500,51 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
         SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
       END;
 
+      -- Guard the published parent itself against REPLACE's implicit DELETE
+      -- and ON DELETE CASCADE when recursive_triggers is disabled by a writer.
+      CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_replace
+      BEFORE INSERT ON assessments
+      FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM assessments previous
+        WHERE previous.id = NEW.id
+          AND (
+            previous.status <> 'draft' OR previous.published_at IS NOT NULL
+            OR EXISTS (
+              SELECT 1 FROM attempts t WHERE t.assessment_id = previous.id
+            )
+          )
+      )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
+      END;
+
+      -- UPDATE OR REPLACE can also delete a colliding published assessment
+      -- while retargeting a draft. Protect the issued id and its original id.
+      CREATE TRIGGER IF NOT EXISTS trg_published_assessment_no_id_retarget
+      BEFORE UPDATE OF id ON assessments
+      FOR EACH ROW
+      WHEN NEW.id IS NOT OLD.id
+        AND (
+          OLD.status <> 'draft' OR OLD.published_at IS NOT NULL
+          OR EXISTS (
+            SELECT 1 FROM attempts t WHERE t.assessment_id = OLD.id
+          )
+          OR EXISTS (
+            SELECT 1 FROM assessments previous
+            WHERE previous.id = NEW.id
+              AND (
+                previous.status <> 'draft' OR previous.published_at IS NOT NULL
+                OR EXISTS (
+                  SELECT 1 FROM attempts t WHERE t.assessment_id = previous.id
+                )
+              )
+          )
+        )
+      BEGIN
+        SELECT RAISE(ABORT, '${SNAPSHOT_DELETE_IMMUTABLE_ERROR}');
+      END;
+
       -- publishAssessment inserts the full question set while still draft,
       -- then changes status inside the same transaction. Once published, no
       -- SQL writer may append a candidate-visible historical question.
@@ -486,6 +558,20 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       )
         OR EXISTS (
           SELECT 1 FROM attempts t WHERE t.assessment_id = NEW.assessment_id
+        )
+        -- INSERT OR REPLACE into a draft can collide with an issued row's
+        -- primary key and silently remove it if DELETE triggers do not recurse.
+        OR EXISTS (
+          SELECT 1
+          FROM assessment_question_snapshots conflicting
+          JOIN assessments previous ON previous.id = conflicting.assessment_id
+          WHERE conflicting.id = NEW.id
+            AND (
+              previous.status <> 'draft' OR previous.published_at IS NOT NULL
+              OR EXISTS (
+                SELECT 1 FROM attempts t WHERE t.assessment_id = conflicting.assessment_id
+              )
+            )
         )
       BEGIN
         SELECT RAISE(ABORT, '${SNAPSHOT_APPEND_IMMUTABLE_ERROR}');
@@ -507,10 +593,14 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype
       AFTER INSERT ON assessment_question_snapshots
       BEGIN
-        INSERT OR IGNORE INTO published_question_qtype_baselines (question_id, qtype, first_snapshot_id)
+        INSERT INTO published_question_qtype_baselines (question_id, qtype, first_snapshot_id)
         SELECT q.id, q.qtype, NEW.id
         FROM questions q
-        WHERE q.id = NEW.question_id;
+        WHERE q.id = NEW.question_id
+          AND NOT EXISTS (
+            SELECT 1 FROM published_question_qtype_baselines existing
+            WHERE existing.question_id = q.id
+          );
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_questions_qtype_immutable_after_publish
@@ -524,6 +614,20 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
        )
       BEGIN
         SELECT RAISE(ABORT, '${PUBLISHED_QTYPE_IMMUTABLE_ERROR}');
+      END;
+
+      -- A direct SQLite writer may disable recursive DELETE triggers, allowing
+      -- INSERT OR REPLACE to erase a captured qtype baseline without invoking
+      -- its DELETE guard. Deny the conflicting INSERT before conflict resolution.
+      CREATE TRIGGER IF NOT EXISTS trg_published_qtype_baseline_no_replace
+      BEFORE INSERT ON published_question_qtype_baselines
+      FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM published_question_qtype_baselines existing
+        WHERE existing.question_id = NEW.question_id
+      )
+      BEGIN
+        SELECT RAISE(ABORT, 'published question qtype baseline is append-only');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_published_qtype_baseline_no_update

@@ -856,6 +856,49 @@ test("#58 SQLite REPLACE cannot rewrite a captured question-type baseline", () =
     const original = db.prepare(
       "SELECT * FROM published_question_qtype_baselines WHERE question_id = ?"
     ).get(issued.questionId);
+
+    // Simulate the capture trigger installed by the earlier Stage 2B.1 head:
+    // a second snapshot must not trip the new BEFORE INSERT conflict guard.
+    db.exec(`
+      DROP TRIGGER trg_snapshot_capture_question_qtype;
+      CREATE TRIGGER trg_snapshot_capture_question_qtype
+      AFTER INSERT ON assessment_question_snapshots
+      BEGIN
+        INSERT OR IGNORE INTO published_question_qtype_baselines
+          (question_id, qtype, first_snapshot_id)
+        SELECT q.id, q.qtype, NEW.id
+        FROM questions q WHERE q.id = NEW.question_id;
+      END;
+    `);
+    enforcePublishedQuestionQtypeIntegrity(db);
+    const captureSql = db.prepare(
+      "SELECT sql FROM sqlite_master WHERE type = 'trigger' AND name = 'trg_snapshot_capture_question_qtype'"
+    ).get() as { sql: string };
+    assert.match(captureSql.sql, /NOT EXISTS/);
+
+    const originalAssessment = db.prepare(
+      "SELECT assessment_id FROM assessment_question_snapshots WHERE id = ?"
+    ).get(issued.snapshotId) as { assessment_id: number };
+    const draftAssessmentId = Number(db.prepare(`
+      INSERT INTO assessments
+        (type, name, function_code, group_id, question_source,
+         question_count, duration_minutes, status, scope)
+      SELECT type, name || ' draft', function_code, group_id, question_source,
+             question_count, duration_minutes, 'draft', scope
+      FROM assessments WHERE id = ?
+    `).run(originalAssessment.assessment_id).lastInsertRowid);
+    db.prepare(`
+      INSERT INTO assessment_question_snapshots
+        (assessment_id, position, question_id, version_id, stem_snapshot,
+         choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points)
+      SELECT ?, 1, question_id, version_id, stem_snapshot,
+             choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points
+      FROM assessment_question_snapshots WHERE id = ?
+    `).run(draftAssessmentId, issued.snapshotId);
+    assert.deepEqual(db.prepare(
+      "SELECT * FROM published_question_qtype_baselines WHERE question_id = ?"
+    ).get(issued.questionId), original);
+
     assert.equal(
       (db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number }).recursive_triggers,
       1

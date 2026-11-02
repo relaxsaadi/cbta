@@ -860,6 +860,13 @@ test("#58 SQLite REPLACE cannot rewrite a captured question-type baseline", () =
       (db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number }).recursive_triggers,
       1
     );
+    // Exercise a separate direct SQL writer's default OFF setting. The
+    // BEFORE INSERT conflict guard must not depend on recursive DELETE hooks.
+    db.exec("PRAGMA recursive_triggers = OFF");
+    assert.equal(
+      (db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number }).recursive_triggers,
+      0
+    );
     assert.throws(() => db.prepare(
       "INSERT OR REPLACE INTO published_question_qtype_baselines " +
       "(question_id, qtype, first_snapshot_id) VALUES (?, ?, ?)"

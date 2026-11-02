@@ -58,6 +58,8 @@ export function getDb(): DatabaseSync {
   db = new DatabaseSync(path);
   db.exec("PRAGMA journal_mode = WAL");
   db.exec("PRAGMA foreign_keys = ON");
+  // SQLite REPLACE must invoke DELETE guards on immutable exam/audit records.
+  db.exec("PRAGMA recursive_triggers = ON");
   db.exec("PRAGMA busy_timeout = 5000");
   return db;
 }

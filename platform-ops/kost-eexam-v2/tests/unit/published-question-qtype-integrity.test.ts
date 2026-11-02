@@ -766,3 +766,109 @@ test("#58 runtime rejects unknown or invalid published snapshot qtypes", () => {
   assert.throws(() => requireSnapshotQtype(null), /LEGACY_QTYPE_UNKNOWN/);
   assert.throws(() => requireSnapshotQtype("not_a_type"), /LEGACY_QTYPE_UNKNOWN/);
 });
+
+test("#58 SQLite REPLACE conflict paths cannot erase issued exam snapshots", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-replace-guard-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const issued = seedQuestion(db, {
+      kostId: "QTYPE-REPLACE-ISSUED-1", qtype: "mcq_single", explicitSnapshot: true,
+    });
+    const draft = seedQuestion(db, {
+      kostId: "QTYPE-REPLACE-DRAFT-1", qtype: "mcq_single",
+      explicitSnapshot: true, leaveDraft: true,
+    });
+    assert.ok(issued.snapshotId !== null);
+    assert.ok(draft.snapshotId !== null);
+    const issuedSnapshot = db.prepare(
+      "SELECT * FROM assessment_question_snapshots WHERE id = ?"
+    ).get(issued.snapshotId) as { assessment_id: number };
+    const issuedAssessment = db.prepare("SELECT * FROM assessments WHERE id = ?")
+      .get(issuedSnapshot.assessment_id);
+    const draftSnapshot = db.prepare(
+      "SELECT * FROM assessment_question_snapshots WHERE id = ?"
+    ).get(draft.snapshotId) as { assessment_id: number };
+    enforcePublishedQuestionQtypeIntegrity(db);
+    assert.equal(
+      (db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number }).recursive_triggers,
+      1,
+      "integrity installation must enable DELETE guards for SQLite REPLACE"
+    );
+
+    // An independent direct SQL writer may have SQLite's default OFF. Explicit
+    // conflict guards must still preserve issued historical data.
+    db.exec("PRAGMA recursive_triggers = OFF");
+    const snapshotGuard = new RegExp(
+      [SNAPSHOT_DELETE_IMMUTABLE_ERROR, SNAPSHOT_APPEND_IMMUTABLE_ERROR,
+       SNAPSHOT_PAYLOAD_IMMUTABLE_ERROR].join("|"), "i"
+    );
+
+    assert.throws(() => db.prepare(
+      "INSERT OR REPLACE INTO assessment_question_snapshots " +
+      "(id, assessment_id, position, question_id, version_id, stem_snapshot, " +
+      "choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points) " +
+      "SELECT ?, ?, 2, question_id, version_id, 'Unauthorized replacement', " +
+      "choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, points " +
+      "FROM assessment_question_snapshots WHERE id = ?"
+    ).run(issued.snapshotId, draftSnapshot.assessment_id, draft.snapshotId), snapshotGuard);
+
+    assert.throws(() => db.prepare(
+      "UPDATE OR REPLACE assessment_question_snapshots " +
+      "SET id = ?, position = 2 WHERE id = ?"
+    ).run(issued.snapshotId, draft.snapshotId), snapshotGuard);
+
+    // Replacing a published parent otherwise destroys its snapshot by CASCADE.
+    assert.throws(() => db.prepare(
+      "INSERT OR REPLACE INTO assessments " +
+      "(id, type, name, function_code, group_id, question_source, " +
+      "question_count, duration_minutes, status, scope) " +
+      "SELECT id, type, 'Unauthorized replacement', function_code, group_id, " +
+      "question_source, question_count, duration_minutes, 'draft', scope " +
+      "FROM assessments WHERE id = ?"
+    ).run(issuedSnapshot.assessment_id),
+      new RegExp(SNAPSHOT_DELETE_IMMUTABLE_ERROR, "i"));
+
+    assert.throws(() => db.prepare(
+      "UPDATE OR REPLACE assessments SET id = ? WHERE id = ?"
+    ).run(issuedSnapshot.assessment_id, draftSnapshot.assessment_id),
+      new RegExp(SNAPSHOT_DELETE_IMMUTABLE_ERROR, "i"));
+
+    assert.deepEqual(db.prepare(
+      "SELECT * FROM assessment_question_snapshots WHERE id = ?"
+    ).get(issued.snapshotId), issuedSnapshot);
+    assert.deepEqual(db.prepare(
+      "SELECT * FROM assessments WHERE id = ?"
+    ).get(issuedSnapshot.assessment_id), issuedAssessment);
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("#58 SQLite REPLACE cannot rewrite a captured question-type baseline", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-qtype-baseline-replace-"));
+  const db = openFreshDb(join(dir, "db.sqlite"));
+  try {
+    const issued = seedQuestion(db, {
+      kostId: "QTYPE-BASELINE-REPLACE-1", qtype: "mcq_single", explicitSnapshot: true,
+    });
+    enforcePublishedQuestionQtypeIntegrity(db);
+    const original = db.prepare(
+      "SELECT * FROM published_question_qtype_baselines WHERE question_id = ?"
+    ).get(issued.questionId);
+    assert.equal(
+      (db.prepare("PRAGMA recursive_triggers").get() as { recursive_triggers: number }).recursive_triggers,
+      1
+    );
+    assert.throws(() => db.prepare(
+      "INSERT OR REPLACE INTO published_question_qtype_baselines " +
+      "(question_id, qtype, first_snapshot_id) VALUES (?, ?, ?)"
+    ).run(issued.questionId, "mcq_multi", issued.snapshotId), /append-only/i);
+    assert.deepEqual(db.prepare(
+      "SELECT * FROM published_question_qtype_baselines WHERE question_id = ?"
+    ).get(issued.questionId), original);
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

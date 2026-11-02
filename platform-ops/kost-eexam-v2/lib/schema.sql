@@ -517,6 +517,22 @@ BEGIN
   SELECT RAISE(ABORT, 'audit_logs is append-only: DELETE denied');
 END;
 
+-- SQLite's INSERT OR REPLACE resolves a conflicting primary key by deleting
+-- the previous row. With PRAGMA recursive_triggers = OFF (a connection-local
+-- setting that outside SQL clients can use), the DELETE trigger above is not
+-- fired for that implicit deletion. Reject the conflicting INSERT first,
+-- rather than relying on connection settings to preserve audit evidence.
+-- A fresh, non-conflicting audit INSERT remains valid.
+CREATE TRIGGER IF NOT EXISTS audit_logs_no_replace
+BEFORE INSERT ON audit_logs
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM audit_logs existing WHERE existing.id = NEW.id
+)
+BEGIN
+  SELECT RAISE(ABORT, 'audit_logs is append-only: REPLACE denied');
+END;
+
 CREATE TABLE IF NOT EXISTS exports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   type TEXT NOT NULL,

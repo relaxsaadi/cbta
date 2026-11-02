@@ -49,6 +49,17 @@ function assertAppendOnly(db: DatabaseSync, id: number, originalAction: string):
     /audit_logs is append-only/i
   );
   assertAuditRow(db, id, originalAction);
+
+  // Also assert this survives schema re-application and VACUUM/restore,
+  // including connections where SQLite does not recurse implicit deletes.
+  db.exec("PRAGMA recursive_triggers = OFF");
+  assert.throws(
+    () => db.prepare(
+      "INSERT OR REPLACE INTO audit_logs (id, action, result) VALUES (?, 'tampered', 'success')"
+    ).run(id),
+    /audit_logs is append-only: REPLACE denied/i
+  );
+  assertAuditRow(db, id, originalAction);
 }
 
 test("audit_logs accepts inserts but rejects direct update/delete at SQLite boundary", () => {

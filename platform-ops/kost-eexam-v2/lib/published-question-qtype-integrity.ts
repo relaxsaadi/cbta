@@ -589,10 +589,14 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
       CREATE TRIGGER IF NOT EXISTS trg_snapshot_capture_question_qtype
       AFTER INSERT ON assessment_question_snapshots
       BEGIN
-        INSERT OR IGNORE INTO published_question_qtype_baselines (question_id, qtype, first_snapshot_id)
+        INSERT INTO published_question_qtype_baselines (question_id, qtype, first_snapshot_id)
         SELECT q.id, q.qtype, NEW.id
         FROM questions q
-        WHERE q.id = NEW.question_id;
+        WHERE q.id = NEW.question_id
+          AND NOT EXISTS (
+            SELECT 1 FROM published_question_qtype_baselines existing
+            WHERE existing.question_id = q.id
+          );
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_questions_qtype_immutable_after_publish
@@ -606,6 +610,20 @@ export function enforcePublishedQuestionQtypeIntegrity(db: DatabaseSync): Publis
        )
       BEGIN
         SELECT RAISE(ABORT, '${PUBLISHED_QTYPE_IMMUTABLE_ERROR}');
+      END;
+
+      -- A direct SQLite writer may disable recursive DELETE triggers, allowing
+      -- INSERT OR REPLACE to erase a captured qtype baseline without invoking
+      -- its DELETE guard. Deny the conflicting INSERT before conflict resolution.
+      CREATE TRIGGER IF NOT EXISTS trg_published_qtype_baseline_no_replace
+      BEFORE INSERT ON published_question_qtype_baselines
+      FOR EACH ROW
+      WHEN EXISTS (
+        SELECT 1 FROM published_question_qtype_baselines existing
+        WHERE existing.question_id = NEW.question_id
+      )
+      BEGIN
+        SELECT RAISE(ABORT, 'published question qtype baseline is append-only');
       END;
 
       CREATE TRIGGER IF NOT EXISTS trg_published_qtype_baseline_no_update

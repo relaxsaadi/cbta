@@ -118,6 +118,9 @@ test("schema reapplication installs guards for legacy annual reviews, and backup
     db.exec("DROP TRIGGER IF EXISTS question_annual_reviews_no_update");
     db.exec("DROP TRIGGER IF EXISTS question_annual_reviews_no_delete");
     db.exec("DROP TRIGGER IF EXISTS question_annual_reviews_no_replace");
+    db.exec("DROP TRIGGER IF EXISTS questions_reviewed_no_delete");
+    db.exec("DROP TRIGGER IF EXISTS questions_reviewed_no_update_conflict");
+    db.exec("DROP TRIGGER IF EXISTS questions_reviewed_no_insert_conflict");
     // Existing rows are never rewritten or silently assigned an approval.
     const before = getReview(db, reviewId);
     db.exec(SCHEMA);
@@ -135,6 +138,66 @@ test("schema reapplication installs guards for legacy annual reviews, and backup
     assertReviewImmutable(restored, reviewed, reviewId);
   } finally {
     restored.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("reviewed questions survive direct parent deletes and conflict replacements even with FK checks disabled", () => {
+  const dir = mkdtempSync(join(tmpdir(), "kost-annual-review-no-fk-"));
+  const db = openDb(join(dir, "maintenance.sqlite"));
+  try {
+    const reviewed = makeQuestion(db, "Q-SYNTH-REVIEWED-PARENT");
+    const competitor = makeQuestion(db, "Q-SYNTH-OTHER-PARENT");
+    const reviewId = addReview(db, reviewed);
+    const before = getReview(db, reviewId);
+
+    // SQLite FK enforcement is per connection. An independent maintenance
+    // client may use the default foreign_keys=OFF, and REPLACE may also omit
+    // implicit DELETE trigger invocations with recursive_triggers=OFF.
+    db.exec("PRAGMA foreign_keys = OFF; PRAGMA recursive_triggers = OFF");
+    assert.equal((db.prepare("PRAGMA foreign_keys").get() as { foreign_keys: number }).foreign_keys, 0);
+
+    assert.throws(
+      () => db.prepare("DELETE FROM questions WHERE id = ?").run(reviewed),
+      /reviewed question: DELETE denied/
+    );
+    assert.throws(
+      () => db.prepare("UPDATE questions SET id = ? WHERE id = ?").run(reviewed + 1000, reviewed),
+      /reviewed question: UPDATE\/REPLACE denied/
+    );
+    assert.throws(
+      () => db.prepare(
+        "INSERT OR REPLACE INTO questions (id, kost_question_id, function_code) VALUES (?, ?, '7.2')"
+      ).run(reviewed + 1001, "Q-SYNTH-REVIEWED-PARENT"),
+      /reviewed question: REPLACE denied/
+    );
+    assert.throws(
+      () => db.prepare(
+        "INSERT OR REPLACE INTO questions (id, kost_question_id, function_code) VALUES (?, ?, '7.2')"
+      ).run(reviewed, "Q-SYNTH-REPLACEMENT"),
+      /reviewed question: REPLACE denied/
+    );
+    assert.throws(
+      () => db.prepare("UPDATE OR REPLACE questions SET kost_question_id = ? WHERE id = ?")
+        .run("Q-SYNTH-REVIEWED-PARENT", competitor),
+      /reviewed question: UPDATE\/REPLACE denied/
+    );
+    assert.throws(
+      () => db.prepare("UPDATE OR REPLACE questions SET id = ? WHERE id = ?").run(reviewed, competitor),
+      /reviewed question: UPDATE\/REPLACE denied/
+    );
+
+    assert.deepEqual(getReview(db, reviewId), before);
+    assert.equal(
+      (db.prepare("SELECT COUNT(*) AS n FROM questions WHERE id = ?").get(reviewed) as { n: number }).n, 1
+    );
+    assert.equal(
+      (db.prepare("SELECT COUNT(*) AS n FROM questions WHERE id = ?").get(competitor) as { n: number }).n, 1
+    );
+    // Unreviewed, unpublished questions must still be deletable.
+    assert.equal(db.prepare("DELETE FROM questions WHERE id = ?").run(competitor).changes, 1);
+  } finally {
+    db.close();
     rmSync(dir, { recursive: true, force: true });
   }
 });

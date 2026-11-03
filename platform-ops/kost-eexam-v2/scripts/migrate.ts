@@ -1,7 +1,10 @@
 // Applique lib/schema.sql puis insère les données de référence (rôles,
 // fonctions DGR 7.1-7.10) de façon idempotente. Exécuté en dev via
-// `pnpm migrate`, et au démarrage du conteneur en production (§28 : aucune
-// migration destructive — ce script ne fait jamais de DROP).
+// `pnpm migrate`, et au démarrage du conteneur en production. ATTENTION :
+// les migrations des anciens CHECK qtype et de l'état de notation reconstruisent
+// des tables (copie dans *_new, DROP TABLE, RENAME) dans une transaction.
+// Avant une migration réelle : sauvegarde vérifiée, test sur copie représentative
+// et plan de restauration ; ne jamais supposer qu'aucun DROP n'est exécuté.
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { getDb, closeDb } from "../lib/db";
@@ -23,9 +26,9 @@ const FUNCTIONS: Array<{ code: string; label: string }> = Array.from({ length: 1
 // où la table `incidents` porte déjà des lignes réelles. `ALTER TABLE ...
 // ADD COLUMN` n'a pas de variante idempotente native en SQLite ; on
 // vérifie donc via PRAGMA table_info avant d'exécuter, pour que ce script
-// reste rejouable sans erreur sur une base déjà migrée (même garantie
-// d'idempotence que le reste de ce fichier — §28, aucune migration
-// destructive).
+// reste rejouable sans erreur sur une base déjà migrée. Cette garantie
+// concerne l'ajout de colonnes ; les reconstructions de tables legacy sont
+// distinctes et nécessitent une validation préalable sur sauvegarde.
 const ADDITIVE_COLUMNS: Array<{ table: string; column: string; ddl: string }> = [
   { table: "incidents", column: "group_id", ddl: "ALTER TABLE incidents ADD COLUMN group_id INTEGER REFERENCES groups(id)" },
   {
@@ -489,6 +492,14 @@ function main() {
   migrateQuestionsQtypeCheckConstraint(db);
   migrateQuestionsQtypeCheckConstraintV2(db);
   migrateResultsGradingState(db);
+
+  // Legacy questions.qtype CHECK upgrades rebuild the questions table with
+  // DROP TABLE/RENAME, which removes its SQLite triggers. The initial schema
+  // application above installs guards *before* that rebuild. Reapply the
+  // idempotent DDL only after all table reconstructions so reviewed-question
+  // immutability guards are present on upgraded databases too.
+  // This does not backfill question/review states or alter candidate records.
+  db.exec(schema);
 
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"

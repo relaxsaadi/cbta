@@ -490,6 +490,14 @@ function main() {
   migrateQuestionsQtypeCheckConstraintV2(db);
   migrateResultsGradingState(db);
 
+  // Legacy questions.qtype CHECK upgrades rebuild the questions table with
+  // DROP TABLE/RENAME, which removes its SQLite triggers. The initial schema
+  // application above installs guards *before* that rebuild. Reapply the
+  // idempotent DDL only after all table reconstructions so reviewed-question
+  // immutability guards are present on upgraded databases too.
+  // This does not backfill question/review states or alter candidate records.
+  db.exec(schema);
+
   const upsertRole = db.prepare(
     "INSERT INTO roles (code, label) VALUES (?, ?) ON CONFLICT(code) DO UPDATE SET label = excluded.label"
   );

@@ -64,7 +64,7 @@ function assertReviewImmutable(db: DatabaseSync, questionId: number, reviewId: n
   // primary-key/unique-conflict REPLACE on a direct SQL maintenance client.
   assert.throws(
     () => db.prepare("DELETE FROM questions WHERE id = ?").run(questionId),
-    /question_annual_reviews is append-only: DELETE denied/
+    /reviewed question: DELETE denied/
   );
   const questionKey = (db.prepare("SELECT kost_question_id FROM questions WHERE id = ?").get(questionId) as { kost_question_id: string }).kost_question_id;
   assert.throws(
@@ -72,7 +72,7 @@ function assertReviewImmutable(db: DatabaseSync, questionId: number, reviewId: n
       INSERT OR REPLACE INTO questions (id, kost_question_id, function_code)
       VALUES (?, ?, '7.2')
     `).run(questionId + 1000, questionKey),
-    /question_annual_reviews is append-only: DELETE denied/
+    /reviewed question: REPLACE denied/
   );
   assert.deepEqual(getReview(db, reviewId), before);
   assert.equal(

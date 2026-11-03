@@ -1,9 +1,11 @@
-import { before, describe, test } from "node:test";
+import { describe, test } from "node:test";
 import assert from "node:assert/strict";
 import { setupTestDb } from "./test-db";
 
 describe("Admin user provisioning workflow atomicity (#46)", async () => {
-  before(() => setupTestDb());
+  // The administrator below is created eagerly while the suite is defined.
+  // A before() hook runs only later, so initialize roles/schema first.
+  setupTestDb();
 
   const { createUser, findUserByUsername, getRoleForUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");

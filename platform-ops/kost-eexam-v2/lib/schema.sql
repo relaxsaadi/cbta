@@ -226,6 +226,83 @@ CREATE TABLE IF NOT EXISTS question_annual_reviews (
 );
 CREATE INDEX IF NOT EXISTS idx_question_annual_reviews_question ON question_annual_reviews(question_id);
 
+-- Annual regulatory reviews are historical evidence, not editable authoring
+-- state. Guard direct SQL writers as well as ordinary application code.
+-- A reviewed question cannot be hard-deleted: the foreign-key CASCADE would
+-- otherwise erase its annual-review history (release blocker #9).
+CREATE TRIGGER IF NOT EXISTS question_annual_reviews_no_update
+BEFORE UPDATE ON question_annual_reviews
+BEGIN
+  SELECT RAISE(ABORT, 'question_annual_reviews is append-only: UPDATE denied');
+END;
+
+CREATE TRIGGER IF NOT EXISTS question_annual_reviews_no_delete
+BEFORE DELETE ON question_annual_reviews
+BEGIN
+  SELECT RAISE(ABORT, 'question_annual_reviews is append-only: DELETE denied');
+END;
+
+-- An INSERT OR REPLACE can silently delete the old row when
+-- recursive_triggers=OFF. Reject a conflicting id before resolution.
+CREATE TRIGGER IF NOT EXISTS question_annual_reviews_no_replace
+BEFORE INSERT ON question_annual_reviews
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM question_annual_reviews existing WHERE existing.id = NEW.id
+)
+BEGIN
+  SELECT RAISE(ABORT, 'question_annual_reviews is append-only: REPLACE denied');
+END;
+
+-- A direct SQLite maintenance connection can turn foreign_keys OFF.
+-- In that mode child ON DELETE CASCADE never fires, so child-table triggers
+-- alone cannot protect annual-review history from deleting or rekeying its
+-- parent question. Enforce the reviewed-parent invariant independently of FK
+-- pragmas and recursive trigger settings. The application also guards deletes.
+CREATE TRIGGER IF NOT EXISTS questions_reviewed_no_delete
+BEFORE DELETE ON questions
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM question_annual_reviews r WHERE r.question_id = OLD.id
+)
+BEGIN
+  SELECT RAISE(ABORT, 'reviewed question: DELETE denied');
+END;
+
+-- With foreign_keys OFF, changing a reviewed question's primary key would
+-- orphan its annual reviews even without deleting either row.
+CREATE TRIGGER IF NOT EXISTS questions_reviewed_no_update_conflict
+BEFORE UPDATE OF id, kost_question_id ON questions
+FOR EACH ROW
+WHEN (
+  NEW.id != OLD.id AND EXISTS (
+    SELECT 1 FROM question_annual_reviews r WHERE r.question_id = OLD.id
+  )
+) OR EXISTS (
+  SELECT 1 FROM questions q
+  JOIN question_annual_reviews r ON r.question_id = q.id
+  WHERE q.id != OLD.id
+    AND (q.id = NEW.id OR q.kost_question_id = NEW.kost_question_id)
+)
+BEGIN
+  SELECT RAISE(ABORT, 'reviewed question: UPDATE/REPLACE denied');
+END;
+
+-- INSERT OR REPLACE on id or the unique KOST question key can implicitly
+-- delete a reviewed parent without firing DELETE triggers when
+-- recursive_triggers=OFF. Detect that conflict *before* conflict resolution.
+CREATE TRIGGER IF NOT EXISTS questions_reviewed_no_insert_conflict
+BEFORE INSERT ON questions
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM questions q
+  JOIN question_annual_reviews r ON r.question_id = q.id
+  WHERE q.id = NEW.id OR q.kost_question_id = NEW.kost_question_id
+)
+BEGIN
+  SELECT RAISE(ABORT, 'reviewed question: REPLACE denied');
+END;
+
 -- Append-only : jamais d'UPDATE sur une version existante (§4 de la
 -- mission — un examen publié doit toujours pouvoir montrer la version EXACTE
 -- reçue par le candidat, même si la question a changé depuis).

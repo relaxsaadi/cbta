@@ -18,7 +18,7 @@ describe("Suppression/archivage de question — garanties de sécurité (lib/que
   const { createUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");
   const { createGroup, addCandidateToGroup } = await import("../../lib/groups");
-  const { createQuestion, getQuestionById, isQuestionProtected, deleteQuestion, setQuestionActive, QuestionDeleteError } = await import("../../lib/questions");
+  const { createQuestion, recordAnnualReview, getQuestionById, isQuestionProtected, deleteQuestion, setQuestionActive, QuestionDeleteError } = await import("../../lib/questions");
   const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
   const { getDb } = await import("../../lib/db");
 
@@ -47,6 +47,27 @@ describe("Suppression/archivage de question — garanties de sécurité (lib/que
     assert.equal(isQuestionProtected(qId), false);
     deleteQuestion(qId);
     assert.equal(getQuestionById(qId), undefined, "la question doit avoir réellement disparu de la banque");
+  });
+
+  test("question non publiée avec revue annuelle : suppression interdite, revue conservée", () => {
+    const { t, adminId } = makeAdminAndGroup();
+    const qId = createQuestion({
+      kostQuestionId: `TEST-${t}-reviewed`, functionCode: "7.2", qtype: "mcq_single", sourceStatus: "DRAFT",
+      stem: "Brouillon avec historique de revue", choices: [{ key: "A", text: "a" }, { key: "B", text: "b" }],
+      correctAnswer: ["A"], createdBy: adminId,
+    });
+    assert.equal(isQuestionProtected(qId), false);
+    recordAnnualReview({
+      questionId: qId, reviewYear: 2026, applicableEdition: "Synthetic test edition 2026",
+      reviewerName: "Synthetic Reviewer", reviewDate: "2026-10-01", decision: "A_REVOIR", createdBy: adminId,
+    });
+    assert.equal(isQuestionProtected(qId), true);
+    assert.throws(() => deleteQuestion(qId), QuestionDeleteError);
+    assert.ok(getQuestionById(qId));
+    assert.equal(
+      (getDb().prepare("SELECT COUNT(*) AS n FROM question_annual_reviews WHERE question_id = ?").get(qId) as { n: number }).n,
+      1
+    );
   });
 
   test("question publiée (référencée par assessment_question_snapshots) : isQuestionProtected=true, deleteQuestion() lève QuestionDeleteError, la ligne SURVIT", () => {

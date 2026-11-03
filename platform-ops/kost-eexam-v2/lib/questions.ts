@@ -733,11 +733,16 @@ export function getQuestionById(id: number): QuestionRow | undefined {
 // qu'exposer dans l'UI un état déjà pleinement effectif côté moteur.
 // ============================================================================
 
-/** Vrai si cette question a déjà été publiée dans au moins une évaluation
- * (donc potentiellement des tentatives/résultats/corrections en dépendent)
- * — jamais supprimable définitivement dans ce cas, uniquement archivable. */
+/** Une question déjà publiée OU portant une revue annuelle est conservée
+ * comme preuve historique. Elle reste archivable mais jamais hard-deletable.
+ * La seconde condition évite la destruction en cascade d'une revue datée. */
 export function isQuestionProtected(questionId: number): boolean {
-  const row = getDb().prepare(`SELECT 1 FROM assessment_question_snapshots WHERE question_id = ? LIMIT 1`).get(questionId);
+  const row = getDb().prepare(`
+    SELECT 1 FROM assessment_question_snapshots WHERE question_id = ?
+    UNION ALL
+    SELECT 1 FROM question_annual_reviews WHERE question_id = ?
+    LIMIT 1
+  `).get(questionId, questionId);
   return !!row;
 }
 
@@ -755,7 +760,7 @@ export class QuestionDeleteError extends Error {}
  * question (§10) — un DELETE par id ne touche que cette ligne. */
 export function deleteQuestion(questionId: number): void {
   if (isQuestionProtected(questionId)) {
-    throw new QuestionDeleteError("Cette question a déjà été publiée dans une évaluation — suppression définitive impossible, utilisez l'archivage.");
+    throw new QuestionDeleteError("Cette question a déjà été publiée ou possède un historique de revue annuelle — suppression définitive impossible, utilisez l'archivage.");
   }
   transaction((db) => {
     db.prepare(`DELETE FROM assessment_question_pool WHERE question_id = ?`).run(questionId);

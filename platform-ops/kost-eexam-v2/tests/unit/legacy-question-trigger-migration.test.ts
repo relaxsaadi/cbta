@@ -32,8 +32,8 @@ test("legacy qtype table rebuild reinstalls reviewed-question guards without cha
   const path = join(dir, "legacy.sqlite");
   try {
     const seed = new DatabaseSync(path);
-    let questionId: number;
-    let reviewId: number;
+    let questionId = 0;
+    let reviewId = 0;
     try {
       seed.exec("PRAGMA foreign_keys = ON");
       // Same schema except for a historical 3-type questions CHECK; this
@@ -84,7 +84,7 @@ test("legacy qtype table rebuild reinstalls reviewed-question guards without cha
       );
       assert.throws(
         () => db.prepare("UPDATE questions SET id=? WHERE id=?").run(questionId + 200, questionId),
-        /reviewed question: UPDATE\\/REPLACE denied/
+        /reviewed question: UPDATE\/REPLACE denied/
       );
       assert.throws(
         () => db.prepare(

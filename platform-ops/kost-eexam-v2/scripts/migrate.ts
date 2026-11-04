@@ -168,6 +168,8 @@ function migrateUsersStatusCheckConstraint(db: ReturnType<typeof getDb>) {
   // une future colonne contenait "pending_activation" dans son nom).
   if (!row || row.sql.includes("'pending_activation'")) return;
 
+  // Keep every additive users field copied: losing must_change_password or
+  // temp_password_expires_at would silently weaken temporary-login controls.
   db.exec("PRAGMA foreign_keys = OFF");
   db.exec("BEGIN IMMEDIATE");
   try {
@@ -184,7 +186,11 @@ function migrateUsersStatusCheckConstraint(db: ReturnType<typeof getDb>) {
         mfa_secret TEXT,
         mfa_recovery_codes_json TEXT,
         created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-        last_login_at TEXT
+        last_login_at TEXT,
+        candidate_type TEXT,
+        archived_at TEXT,
+        must_change_password INTEGER NOT NULL DEFAULT 0,
+        temp_password_expires_at TEXT
       );
     `);
     // Colonnes EXPLICITES des deux côtés, JAMAIS "SELECT * FROM users" —
@@ -201,8 +207,8 @@ function migrateUsersStatusCheckConstraint(db: ReturnType<typeof getDb>) {
     // réel sur staging, zéro perte de données (voir docs/
     // KOST_EEXAM_V2_RESEND_OPERATIONS.md pour le compte-rendu complet).
     db.exec(`
-      INSERT INTO users_new (id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at)
-      SELECT id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at FROM users;
+      INSERT INTO users_new (id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at, must_change_password, temp_password_expires_at)
+      SELECT id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at, must_change_password, temp_password_expires_at FROM users;
     `);
     db.exec(`DROP TABLE users;`);
     db.exec(`ALTER TABLE users_new RENAME TO users;`);
@@ -241,6 +247,8 @@ function migrateUsersArchivedStatus(db: ReturnType<typeof getDb>) {
   // jamais au nom d'une colonne.
   if (!row || row.sql.includes("'archived'")) return;
 
+  // Preserve temporary-password and candidate/archival fields across this
+  // legacy CHECK rebuild; applyAdditiveColumns() ran before this step.
   db.exec("PRAGMA foreign_keys = OFF");
   db.exec("BEGIN IMMEDIATE");
   try {
@@ -259,12 +267,14 @@ function migrateUsersArchivedStatus(db: ReturnType<typeof getDb>) {
         created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
         last_login_at TEXT,
         candidate_type TEXT,
-        archived_at TEXT
+        archived_at TEXT,
+        must_change_password INTEGER NOT NULL DEFAULT 0,
+        temp_password_expires_at TEXT
       );
     `);
     db.exec(`
-      INSERT INTO users_new (id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at)
-      SELECT id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at FROM users;
+      INSERT INTO users_new (id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at, must_change_password, temp_password_expires_at)
+      SELECT id, email, username, password_hash, full_name, phone, status, mfa_enabled, mfa_secret, mfa_recovery_codes_json, created_at, last_login_at, candidate_type, archived_at, must_change_password, temp_password_expires_at FROM users;
     `);
     db.exec(`DROP TABLE users;`);
     db.exec(`ALTER TABLE users_new RENAME TO users;`);

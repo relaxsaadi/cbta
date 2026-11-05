@@ -108,8 +108,17 @@ export function subquestionToDraft(sq: { qtype: ScenarioSubQType; stem: string; 
 export function draftToPayload(d: SubquestionDraft): { qtype: ScenarioSubQType; stem: string; points: number; choices: Choice[]; correctAnswer: unknown } {
   const points = Number(d.points) || 0;
   if (d.qtype === "mcq_single" || d.qtype === "mcq_multi") {
-    const choices = d.choiceTexts.filter((t) => t.trim()).map((text, i) => ({ key: String.fromCharCode(65 + i), text: text.trim() }));
-    const correctAnswer = d.correctIndexes.map((i) => String.fromCharCode(65 + i));
+    // Keep the original slot index when compacting empty optional choices.
+    // Otherwise a selected answer after a blank slot is silently rebound to
+    // a different option. Invalid/blank selected slots must fail server review.
+    const populated = d.choiceTexts
+      .map((text, originalIndex) => ({ originalIndex, text: text.trim() }))
+      .filter((choice) => choice.text !== "");
+    const choices = populated.map((choice, i) => ({ key: String.fromCharCode(65 + i), text: choice.text }));
+    const correctAnswer = d.correctIndexes.map((originalIndex) => {
+      const compactIndex = populated.findIndex((choice) => choice.originalIndex === originalIndex);
+      return compactIndex < 0 ? "__INVALID_CHOICE__" : String.fromCharCode(65 + compactIndex);
+    });
     return { qtype: d.qtype, stem: d.stem, points, choices, correctAnswer };
   }
   if (d.qtype === "true_false") {
@@ -128,7 +137,15 @@ export function draftToPayload(d: SubquestionDraft): { qtype: ScenarioSubQType; 
       stem: d.stem,
       points,
       choices: unit ? [{ key: "unit", text: unit }] : [],
-      correctAnswer: { mode: "numeric", value: Number(d.numericValue), tolerance: Number(d.numericTolerance) || 0, unit: unit || undefined },
+      // A blank numeric key must not silently become 0. Preserve invalid
+      // input as null in JSON so recursive server validation rejects it.
+      // An explicitly entered "0" remains a legitimate correct answer.
+      correctAnswer: {
+        mode: "numeric",
+        value: d.numericValue.trim() === "" ? null : Number(d.numericValue),
+        tolerance: d.numericTolerance.trim() === "" ? null : Number(d.numericTolerance),
+        unit: unit || undefined,
+      },
     };
   }
   if (d.qtype === "short_answer") {
@@ -143,7 +160,9 @@ export function draftToPayload(d: SubquestionDraft): { qtype: ScenarioSubQType; 
     for (let i = 0; i < Math.max(d.matchingLeftTexts.length, d.matchingRightTexts.length); i++) {
       const l = (d.matchingLeftTexts[i] ?? "").trim();
       const r = (d.matchingRightTexts[i] ?? "").trim();
-      if (!l || !r) continue;
+      // A half-filled pair is authored content, not an unused row. Keep it
+      // intact for recursive server validation instead of dropping it.
+      if (!l && !r) continue;
       idx += 1;
       choices.push({ key: `L${idx}`, text: l }, { key: `R${idx}`, text: r });
       pairs.push({ left: `L${idx}`, right: `R${idx}` });

@@ -435,7 +435,7 @@ export function publishAssessment(
 
     // A source-verified question with reviewer_status=PENDING was previously
     // eligible for a real production assessment. Require at least an explicit
-    // recorded human approval + date before any production snapshot is made.
+    // APPROVED status flag and nonblank review date before any snapshot.
     // This is a NECESSARY, not sufficient, release gate: this schema does not
     // store the qualified reviewer identity/independent qualification evidence,
     // the separate FR/EN review, or confidential item provenance. Those
@@ -453,7 +453,7 @@ export function publishAssessment(
       poolIds = poolIds.filter((id) => reviewerApprovedIds.has(id));
       if (poolIds.length < a.question_count) {
         throw new Error(
-          `Publication en production refusée : ${poolIds.length} question(s) avec approbation humaine datée pour ${a.function_code}, ${a.question_count} requises. La qualification du réviseur, les revues FR/EN et la confidentialité restent des contrôles de sortie distincts.`
+          `Publication en production refusée : ${poolIds.length} question(s) avec statut APPROVED et date de revue pour ${a.function_code}, ${a.question_count} requises. La qualification du réviseur, les revues FR/EN et la confidentialité restent des contrôles de sortie distincts.`
         );
       }
     }

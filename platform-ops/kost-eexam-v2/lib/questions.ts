@@ -159,8 +159,26 @@ export function parseAuthoringFormData(qtype: QType, formData: FormData): { choi
   if (qtype === "mcq_single" || qtype === "mcq_multi") {
     const choiceTexts = formData.getAll("choiceText").map(String);
     const correctIndexes = formData.getAll("correct").map(String);
-    const choices = choiceTexts.filter((t) => t.trim().length > 0).map((text, i) => ({ key: String.fromCharCode(65 + i), text: text.trim() }));
-    const correctAnswer = correctIndexes.map((i) => String.fromCharCode(65 + Number(i)));
+    // The form indexes checked boxes by their original A-D slot. If an
+    // earlier choice is blank, compacting text without remapping selected
+    // indexes can silently assign the correct answer to another option.
+    const populatedSlots = choiceTexts
+      .map((text, originalIndex) => ({ originalIndex, text: text.trim() }))
+      .filter(({ text }) => text.length > 0);
+    const choices = populatedSlots.map(({ text }, compactIndex) => ({
+      key: String.fromCharCode(65 + compactIndex),
+      text,
+    }));
+    const correctAnswer = correctIndexes.map((rawIndex) => {
+      const index = Number(rawIndex);
+      const compactIndex =
+        /^(0|[1-9]\d*)$/.test(rawIndex) && Number.isSafeInteger(index)
+          ? populatedSlots.findIndex((slot) => slot.originalIndex === index)
+          : -1;
+      // Keep invalid selections invalid: the shared authoring validator
+      // rejects this key instead of approving a different answer by accident.
+      return compactIndex < 0 ? "__INVALID_CHOICE__" : String.fromCharCode(65 + compactIndex);
+    });
     return { choices, correctAnswer };
   }
   if (qtype === "true_false") {

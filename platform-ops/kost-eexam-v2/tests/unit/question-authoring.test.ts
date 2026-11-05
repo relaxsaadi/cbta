@@ -49,6 +49,40 @@ describe("Auteurage de question — lib/questions.ts (parseAuthoringFormData/val
     assert.match(validateQuestionAuthoring("mcq_multi", choices, correctAnswer) ?? "", /Au moins une réponse correcte/);
   });
 
+  test("mcq_single — blank earlier slot does not shift the selected answer onto a different text", () => {
+    const { choices, correctAnswer } = parseAuthoringFormData("mcq_single", fd({
+      choiceText: ["", "Correct B", "Incorrect C", ""],
+      correct: ["1"],
+    }));
+    assert.deepEqual(choices, [
+      { key: "A", text: "Correct B" },
+      { key: "B", text: "Incorrect C" },
+    ]);
+    assert.deepEqual(correctAnswer, ["A"]);
+    assert.equal(choices.find((c) => c.key === (Array.isArray(correctAnswer) ? correctAnswer[0] : null))?.text, "Correct B");
+    assert.equal(validateQuestionAuthoring("mcq_single", choices, correctAnswer), null);
+  });
+
+  test("mcq_multi — selected slots on both sides of a blank keep their original meaning", () => {
+    const { choices, correctAnswer } = parseAuthoringFormData("mcq_multi", fd({
+      choiceText: ["Answer A", " ", "Answer C", "Answer D"],
+      correct: ["0", "2"],
+    }));
+    assert.deepEqual(choices.map((c) => c.text), ["Answer A", "Answer C", "Answer D"]);
+    assert.deepEqual(correctAnswer, ["A", "B"]);
+    assert.equal(validateQuestionAuthoring("mcq_multi", choices, correctAnswer), null);
+  });
+
+  test("mcq_single — checked blank or malformed slot fails closed", () => {
+    for (const selected of ["1", "nope", "99", "-1"]) {
+      const { choices, correctAnswer } = parseAuthoringFormData("mcq_single", fd({
+        choiceText: ["Answer A", "", "Answer C"],
+        correct: [selected],
+      }));
+      assert.match(validateQuestionAuthoring("mcq_single", choices, correctAnswer) ?? "", /n'existe pas/);
+    }
+  });
+
   // ---------- true_false ----------
   test("true_false — parsing produit exactement 2 choix fixes (Vrai/Faux), validation réussit avec 1 réponse", () => {
     const { choices, correctAnswer } = parseAuthoringFormData("true_false", fd({ trueFalseCorrect: "true" }));

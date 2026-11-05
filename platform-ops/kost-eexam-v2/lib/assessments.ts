@@ -621,10 +621,11 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
       | { group_id: number; function_code: string; status: AssessmentStatus }
       | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
-    // #61/#78: never attach candidates to an unpublished draft or an
-    // immutable archived exam. A forged/stale server action must obey the
-    // same lifecycle boundary as the management UI, under the write lock.
-    if (a.status === "draft" || a.status === "archived") {
+    // #61/#78: reassignment is allowed only while an assessment is
+    // published/open. Closed and suspended assessments cannot start fresh
+    // attempts; a forged/stale action must not create new assignments there.
+    // Fail closed for unexpected persisted statuses, under the write lock.
+    if (a.status !== "published" && a.status !== "open") {
       return { kind: "status_denied" as const, status: a.status };
     }
 
@@ -689,7 +690,7 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
         reassignment: true,
       },
     });
-    throw new Error("Affectation impossible : évaluation non publiée ou archivée.");
+    throw new Error("Affectation impossible : seules les évaluations publiées ou ouvertes acceptent de nouvelles affectations.");
   }
   return outcome.count;
 }

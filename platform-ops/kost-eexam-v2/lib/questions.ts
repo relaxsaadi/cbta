@@ -192,7 +192,12 @@ export function parseAuthoringFormData(qtype: QType, formData: FormData): { choi
     };
   }
   if (qtype === "numeric") {
-    const value = Number(formData.get("numericValue"));
+    // Number(null), Number("") and Number("   ") all produce 0.
+    // An omitted/blank answer must never silently become a valid zero key.
+    const rawValue = formData.get("numericValue");
+    const value = typeof rawValue === "string" && rawValue.trim() !== ""
+      ? Number(rawValue)
+      : Number.NaN;
     const tolerance = Number(formData.get("numericTolerance") ?? "0");
     const unit = String(formData.get("numericUnit") ?? "").trim();
     return {

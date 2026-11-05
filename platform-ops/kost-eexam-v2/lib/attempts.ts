@@ -3,6 +3,7 @@ import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 import { assertConsistentAssessmentScope, assertProductionSnapshotAdmission, getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
 import { gradeAttempt } from "./grading";
+import { isCandidateMemberOfGroup } from "./groups";
 import { isNewAttemptsBlocked } from "./platform-settings";
 
 export type AttemptStatus = "in_progress" | "submitted" | "auto_submitted" | "abandoned";
@@ -163,6 +164,15 @@ export function startAttempt(
 
     if (!isCandidateAssignedToAssessment(assessmentId, candidateUserId)) {
       throw new AttemptError("Vous n'êtes pas affecté à cette évaluation.");
+    }
+
+    // #65: assessment_assignments is retained as historical assignment data.
+    // A candidate removed from the group (or whose candidate-only role was
+    // revoked) must not use that stale assignment to start a NEW attempt.
+    // Reuse the authoritative role-aware membership predicate; existing
+    // in-progress attempts still resume by design.
+    if (!isCandidateMemberOfGroup(assessment.group_id, candidateUserId)) {
+      throw new AttemptError("Démarrage refusé : ce candidat n'appartient plus au groupe de l'évaluation ou son rôle n'est plus valide.");
     }
 
     const finished = countFinishedAttempts(assessmentId, candidateUserId);

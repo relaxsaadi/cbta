@@ -135,7 +135,10 @@ test("expired candidate autosave auto-submits without persisting the answer", as
   f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?").run("2000-01-01T00:00:00.000Z", f.attemptId);
   assert.throws(() => saveAnswer(f.attemptId, f.candidateId, f.questionId, ["A"]), /soumise automatiquement/);
   assert.equal((f.db.prepare("SELECT status FROM attempts WHERE id = ?").get(f.attemptId) as { status: string }).status, "auto_submitted");
-  assert.equal((f.db.prepare("SELECT COUNT(*) AS n FROM attempt_answers WHERE attempt_question_id = ?").get(f.questionId) as { n: number }).n, 0);
+  // The grader may insert an unanswered placeholder row on auto-submission.
+  // The invariant is that no candidate answer was persisted, not zero rows.
+  const saved = f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?").get(f.questionId) as { answer_json: string | null } | undefined;
+  assert.equal(saved?.answer_json ?? null, null);
 });
 
 test("a submit transaction winning the SQLite write lock denies the waiting stale autosave", async () => {

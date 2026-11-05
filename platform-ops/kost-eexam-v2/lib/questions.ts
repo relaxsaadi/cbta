@@ -172,7 +172,7 @@ export function parseAuthoringFormData(qtype: QType, formData: FormData): { choi
     const correctAnswer = correctIndexes.map((rawIndex) => {
       const index = Number(rawIndex);
       const compactIndex =
-        /^(0|[1-9]\\d*)$/.test(rawIndex) && Number.isSafeInteger(index)
+        /^(0|[1-9]\d*)$/.test(rawIndex) && Number.isSafeInteger(index)
           ? populatedSlots.findIndex((slot) => slot.originalIndex === index)
           : -1;
       // Keep invalid selections invalid: the shared authoring validator

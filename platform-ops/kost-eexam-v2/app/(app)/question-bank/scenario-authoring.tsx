@@ -183,7 +183,9 @@ export function SubquestionFields({ draft, onChange }: { draft: SubquestionDraft
   if (draft.qtype === "mcq_single" || draft.qtype === "mcq_multi") {
     return (
       <div className="flex flex-col gap-1.5">
-        {[0, 1, 2, 3].map((i) => (
+        {/* A stored/imported scenario MCQ may have more than four options.
+            Show every authored slot so a fifth correct answer cannot be hidden during editing. */}
+        {draft.choiceTexts.map((_, i) => (
           <div key={i} className="flex items-center gap-2">
             <input
               type="checkbox"

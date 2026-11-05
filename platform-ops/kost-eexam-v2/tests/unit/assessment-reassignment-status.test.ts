@@ -54,6 +54,11 @@ test("forged reassignment to a draft assessment fails before assignment or succe
   );
   assert.deepEqual(f.listAssignedCandidateIds(f.assessment), []);
   assert.equal(countReassignmentAudits(db, f.assessment), auditBefore);
+  const denial = db.prepare(
+    "SELECT metadata_json FROM audit_logs WHERE target_type = 'assessment' AND target_id = ? AND action = 'assessment_assign_denied' ORDER BY id DESC LIMIT 1"
+  ).get(f.assessment) as { metadata_json: string } | undefined;
+  assert.ok(denial, "rejected lifecycle mutation must have a durable failure audit");
+  assert.equal((JSON.parse(denial.metadata_json) as { reason: string }).reason, "invalid_assessment_status");
   assert.equal(
     (db.prepare("SELECT status FROM assessments WHERE id = ?").get(f.assessment) as { status: string }).status,
     "draft"
@@ -72,6 +77,11 @@ test("archived assessment cannot gain assignments or a fabricated success audit"
   );
   assert.deepEqual(f.listAssignedCandidateIds(f.assessment), [f.first]);
   assert.equal(countReassignmentAudits(db, f.assessment), auditBefore);
+  const denial = db.prepare(
+    "SELECT metadata_json FROM audit_logs WHERE target_type = 'assessment' AND target_id = ? AND action = 'assessment_assign_denied' ORDER BY id DESC LIMIT 1"
+  ).get(f.assessment) as { metadata_json: string } | undefined;
+  assert.ok(denial, "rejected lifecycle mutation must have a durable failure audit");
+  assert.equal((JSON.parse(denial.metadata_json) as { reason: string }).reason, "invalid_assessment_status");
 });
 
 test("published assessment still accepts a valid candidate and records reassignment", async () => {

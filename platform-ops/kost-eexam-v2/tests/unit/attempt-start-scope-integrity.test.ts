@@ -84,4 +84,45 @@ describe("candidate attempt start checks persisted scope authority", async () =>
     assert.equal(resumed.id, first.id);
     assert.equal(attemptCount(f.assessmentId), 1);
   });
+
+  test("consistent production reclassification cannot revive a demo bank without review", () => {
+    const f = publishedFixture("demo");
+    const db = getDb();
+    // Simulate a historical/external scope migration that updates all three
+    // persisted labels: simple scope-consistency checks alone pass this state.
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production' WHERE id = ?").run(f.assessmentId);
+    assert.throws(
+      () => startAttempt(f.assessmentId, f.candidate, {}),
+      /production refusé.*revue ou source/
+    );
+    assert.equal(attemptCount(f.assessmentId), 0);
+  });
+
+  test("new production starts fail after demo snapshot source becomes stale, despite matched labels", () => {
+    const f = publishedFixture("test");
+    const db = getDb();
+    const snapshot = db.prepare("SELECT question_id FROM assessment_question_snapshots WHERE assessment_id = ?")
+      .get(f.assessmentId) as { question_id: number };
+    db.prepare("UPDATE questions SET source_status = 'STALE' WHERE id = ?").run(snapshot.question_id);
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production' WHERE id = ?").run(f.assessmentId);
+    assert.throws(() => startAttempt(f.assessmentId, f.candidate, {}), /production refusé/);
+    assert.equal(attemptCount(f.assessmentId), 0);
+  });
+
+  test("existing attempt still resumes after all three labels become production", () => {
+    const f = publishedFixture("demo");
+    const first = startAttempt(f.assessmentId, f.candidate, {});
+    const db = getDb();
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production' WHERE id = ?").run(f.assessmentId);
+    const resumed = startAttempt(f.assessmentId, f.candidate, {});
+    assert.equal(resumed.id, first.id);
+    assert.equal(attemptCount(f.assessmentId), 1);
+  });
+
 });

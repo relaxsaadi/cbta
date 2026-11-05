@@ -5,7 +5,15 @@ import assert from "node:assert/strict";
 // obligatoires pour matching/ordering/scenario. Fonctions pures — pas de
 // base de données nécessaire (même style que question-authoring.test.ts).
 describe("Auteurage matching/ordering/scenario — lib/questions.ts", async () => {
-  const { validateQuestionAuthoring, formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } = await import("../../lib/questions");
+  const { parseAuthoringFormData, validateQuestionAuthoring, formatCorrectAnswerForDisplay, formatCandidateAnswerForDisplay } = await import("../../lib/questions");
+
+  function fd(entries: Record<string, string[]>): FormData {
+    const form = new FormData();
+    for (const [key, values] of Object.entries(entries)) {
+      for (const value of values) form.append(key, value);
+    }
+    return form;
+  }
 
   // ---------- matching ----------
   test("matching — au moins 2 paires valides réussit", () => {
@@ -32,6 +40,29 @@ describe("Auteurage matching/ordering/scenario — lib/questions.ts", async () =
     const choices = [{ key: "L1", text: "Azote" }, { key: "R1", text: "Gaz inerte" }];
     const correctAnswer = { mode: "matching" as const, pairs: [{ left: "L1", right: "R1" }, { left: "L2", right: "R2" }] };
     assert.match(validateQuestionAuthoring("matching", choices, correctAnswer) ?? "", /référence un élément qui n'existe pas/);
+  });
+
+  test("matching — a half-filled pair is rejected even with two complete pairs", () => {
+    for (const partial of [
+      { left: "Incomplete left", right: "" },
+      { left: "", right: "Incomplete right" },
+      { left: "   ", right: "Whitespace only" },
+    ]) {
+      const { choices, correctAnswer } = parseAuthoringFormData("matching", fd({
+        matchingLeftText: ["Azote", "Oxygène", partial.left],
+        matchingRightText: ["Gaz inerte", "Comburant", partial.right],
+      }));
+      assert.equal(choices.length, 6, "a half-filled pair must stay visible to validation");
+      assert.match(validateQuestionAuthoring("matching", choices, correctAnswer) ?? "", /ne peut être vide/);
+    }
+  });
+  test("matching — fully blank optional rows remain omitted without changing valid pairs", () => {
+    const { choices, correctAnswer } = parseAuthoringFormData("matching", fd({
+      matchingLeftText: ["Azote", "", "Oxygène"],
+      matchingRightText: ["Gaz inerte", " ", "Comburant"],
+    }));
+    assert.deepEqual(choices.map((c) => c.text), ["Azote", "Gaz inerte", "Oxygène", "Comburant"]);
+    assert.equal(validateQuestionAuthoring("matching", choices, correctAnswer), null);
   });
 
   // ---------- ordering ----------

@@ -251,7 +251,11 @@ function parseMatchingPairs(leftTexts: string[], rightTexts: string[]): { choice
   for (let i = 0; i < n; i++) {
     const l = (leftTexts[i] ?? "").trim();
     const r = (rightTexts[i] ?? "").trim();
-    if (!l || !r) continue; // ligne incomplète — ignorée silencieusement à l'auteurage (comme un choix MCQ vide), la validation refusera s'il en résulte moins de 2 paires.
+    // A fully empty row is an unused optional slot. A half-filled row is
+    // authoring content that must NOT disappear silently: preserve it so
+    // validateQuestionAuthoring() rejects its empty side before persistence,
+    // even when two other complete pairs satisfy the minimum count.
+    if (!l && !r) continue;
     idx += 1;
     const leftKey = `L${idx}`;
     const rightKey = `R${idx}`;

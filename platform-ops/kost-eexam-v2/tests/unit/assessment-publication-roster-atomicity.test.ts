@@ -122,3 +122,42 @@ test("revocation at the writer-lock boundary is not bypassed by a stale selected
     "the denial must remain recorded"
   );
 });
+
+
+test("explicitly empty selected roster is rejected without broadening to all candidates", async () => {
+  const f = await fixture();
+  const db = f.getDb();
+
+  assert.throws(
+    () => f.publishAssessment(f.assessment, f.admin, { candidateUserIds: [] }),
+    /Sélectionnez au moins un candidat pour une affectation ciblée/
+  );
+  assert.equal(
+    (db.prepare("SELECT status FROM assessments WHERE id = ?").get(f.assessment) as { status: string }).status,
+    "draft", "empty selection must not publish an exam"
+  );
+  assert.deepEqual(f.listAssignedCandidateIds(f.assessment), [], "empty selection must never become whole-group assignment");
+  assert.equal(
+    (db.prepare("SELECT COUNT(*) AS n FROM assessment_question_snapshots WHERE assessment_id = ?").get(f.assessment) as { n: number }).n,
+    0, "empty selection must not freeze any questions"
+  );
+  const denied = db.prepare(
+    "SELECT result, metadata_json FROM audit_logs WHERE target_id = ? AND action = 'assessment_assign_denied' ORDER BY id DESC LIMIT 1"
+  ).get(f.assessment) as { result: string; metadata_json: string } | undefined;
+  assert.ok(denied, "empty selection refusal must leave durable audit evidence");
+  assert.equal(denied.result, "failure");
+  const metadata = JSON.parse(denied.metadata_json) as { reason: string; requestedCandidateUserIds: number[] };
+  assert.equal(metadata.reason, "explicit_empty_candidate_selection");
+  assert.deepEqual(metadata.requestedCandidateUserIds, []);
+});
+
+test("omitted candidate roster retains intentional whole-group publication", async () => {
+  const f = await fixture();
+  f.publishAssessment(f.assessment, f.admin);
+  assert.deepEqual(f.listAssignedCandidateIds(f.assessment).sort((a, b) => a - b), [f.allowed, f.removed].sort((a, b) => a - b));
+  const db = f.getDb();
+  assert.equal(
+    (db.prepare("SELECT status FROM assessments WHERE id = ?").get(f.assessment) as { status: string }).status,
+    "published"
+  );
+});

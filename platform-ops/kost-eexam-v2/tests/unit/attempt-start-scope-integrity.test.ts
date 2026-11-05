@@ -8,7 +8,7 @@ import { setupTestDb } from "./test-db";
 describe("candidate attempt start checks persisted scope authority", async () => {
   const { createUser } = await import("../../lib/users");
   const { createCompany } = await import("../../lib/companies");
-  const { createGroup, addCandidateToGroup } = await import("../../lib/groups");
+  const { createGroup, addCandidateToGroup, removeCandidateFromGroup } = await import("../../lib/groups");
   const { createQuestion } = await import("../../lib/questions");
   const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
   const { startAttempt } = await import("../../lib/attempts");
@@ -120,6 +120,33 @@ describe("candidate attempt start checks persisted scope authority", async () =>
     db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
     db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
     db.prepare("UPDATE assessments SET scope = 'production' WHERE id = ?").run(f.assessmentId);
+    const resumed = startAttempt(f.assessmentId, f.candidate, {});
+    assert.equal(resumed.id, first.id);
+    assert.equal(attemptCount(f.assessmentId), 1);
+  });
+
+  test("historical assignment cannot authorize new starts after group membership removal", () => {
+    for (const scope of ["demo", "test"] as const) {
+      const f = publishedFixture(scope);
+      const db = getDb();
+      // The assignment is deliberately retained as historical evidence.
+      removeCandidateFromGroup(f.groupId, f.candidate);
+      const retained = db.prepare(
+        "SELECT COUNT(*) AS n FROM assessment_assignments WHERE assessment_id = ? AND candidate_user_id = ?"
+      ).get(f.assessmentId, f.candidate) as { n: number };
+      assert.equal(retained.n, 1);
+      assert.throws(
+        () => startAttempt(f.assessmentId, f.candidate, {}),
+        /n'appartient plus au groupe/
+      );
+      assert.equal(attemptCount(f.assessmentId), 0);
+    }
+  });
+
+  test("a previously started attempt still resumes after group removal", () => {
+    const f = publishedFixture("demo");
+    const first = startAttempt(f.assessmentId, f.candidate, {});
+    removeCandidateFromGroup(f.groupId, f.candidate);
     const resumed = startAttempt(f.assessmentId, f.candidate, {});
     assert.equal(resumed.id, first.id);
     assert.equal(attemptCount(f.assessmentId), 1);

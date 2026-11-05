@@ -1,7 +1,7 @@
 import { getDb, transaction, nowIso } from "./db";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
-import { assertConsistentAssessmentScope, getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
+import { assertConsistentAssessmentScope, assertProductionSnapshotAdmission, getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
 import { gradeAttempt } from "./grading";
 import { isNewAttemptsBlocked } from "./platform-settings";
 
@@ -173,6 +173,17 @@ export function startAttempt(
     const snapshots = getSnapshots(assessmentId);
     if (snapshots.length === 0) {
       throw new AttemptError("Cette évaluation n'a pas encore été publiée correctement (aucune question figée).");
+    }
+    // Publication-time review guards are not retroactive: legacy production
+    // exams and previously demo/test exams reclassified to production may
+    // carry PENDING, stale, or superseded snapshots. Refuse new attempts
+    // before any write, but preserve resumption of attempts already running.
+    if (assessment.scope === "production") {
+      try {
+        assertProductionSnapshotAdmission(assessment.id, assessment.function_code);
+      } catch {
+        throw new AttemptError("Démarrage en production refusé : revue ou source d'une question figée non admissible.");
+      }
     }
 
     const now = new Date();

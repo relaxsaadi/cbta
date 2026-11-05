@@ -279,7 +279,7 @@ const productionReviewerWhere = [
  * Called under startAttempt's BEGIN IMMEDIATE to serialize with writers.
  * Does not mutate snapshots, questions, or already-running attempts.
  */
-export function assertProductionSnapshotAdmission(assessmentId: number, functionCode: string): void {
+export function assertProductionSnapshotAdmission(assessmentId: number, functionCode: string, expectedQuestionCount: number): void {
   const stats = getDb().prepare(
     `SELECT COUNT(*) AS total,
             COALESCE(SUM(CASE WHEN
@@ -293,8 +293,13 @@ export function assertProductionSnapshotAdmission(assessmentId: number, function
        LEFT JOIN questions q ON q.id = s.question_id
        WHERE s.assessment_id = ?`
   ).get(functionCode, assessmentId) as { total: number; eligible: number };
-  if (stats.total === 0 || stats.total !== stats.eligible) {
-    throw new Error("Production refusée : une ou plusieurs questions figées n'ont plus les prérequis techniques de revue/source/version.");
+  // #65: a legacy/migrated published assessment may have fewer frozen
+  // questions than its declared question_count. Every snapshot being eligible
+  // is insufficient when the exam would silently deliver a shorter test.
+  // Reject malformed counts too; do not infer or repair the intended exam.
+  if (!Number.isSafeInteger(expectedQuestionCount) || expectedQuestionCount <= 0 ||
+      stats.total !== expectedQuestionCount || stats.total !== stats.eligible) {
+    throw new Error("Production refusée : décompte des questions figées incohérent ou prérequis de revue/source/version non satisfaits.");
   }
 }
 

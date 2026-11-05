@@ -190,7 +190,7 @@ export function startAttempt(
     // before any write, but preserve resumption of attempts already running.
     if (assessment.scope === "production") {
       try {
-        assertProductionSnapshotAdmission(assessment.id, assessment.function_code);
+        assertProductionSnapshotAdmission(assessment.id, assessment.function_code, assessment.question_count);
       } catch {
         throw new AttemptError("Démarrage en production refusé : revue ou source d'une question figée non admissible.");
       }

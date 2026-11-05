@@ -489,6 +489,16 @@ export function publishAssessment(
     // write lock that freezes question snapshots and inserts assignments.
     // An out-of-scope selected candidate denies the entire publication.
     const members = listGroupMembers(a.group_id);
+    // An explicitly supplied empty selection must NEVER broaden into a
+    // whole-group publication. Only an omitted roster means "all members".
+    // Return a denial so the rejection can be audited outside the transaction.
+    if (opts.candidateUserIds?.length === 0) {
+      return {
+        kind: "empty_selection_denied" as const,
+        groupId: a.group_id,
+        functionCode: a.function_code,
+      };
+    }
     const targetIds = opts.candidateUserIds?.length
       ? Array.from(new Set(opts.candidateUserIds))
       : members.map((m) => m.candidate_user_id);
@@ -585,6 +595,23 @@ export function publishAssessment(
 
   // Never roll back the refusal audit: a denied decision returned from the
   // transaction has committed no snapshots, assignments or status changes.
+  if (outcome.kind === "empty_selection_denied") {
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_assign_denied",
+      targetType: "assessment",
+      targetId: assessmentId,
+      result: "failure",
+      metadata: {
+        reason: "explicit_empty_candidate_selection",
+        requestedCandidateUserIds: [],
+        groupId: outcome.groupId,
+        functionCode: outcome.functionCode,
+      },
+    });
+    throw new Error("Sélectionnez au moins un candidat pour une affectation ciblée.");
+  }
   if (outcome.kind === "denied") {
     audit({
       actorUserId,

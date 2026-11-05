@@ -603,18 +603,44 @@ export function listAssignedCandidateIds(assessmentId: number): number[] {
  * revérifié membre du groupe. Idempotent (INSERT OR IGNORE) : réaffecter
  * un candidat déjà affecté ne fait rien de plus. */
 export function assignCandidatesToAssessment(assessmentId: number, candidateUserIds: number[], actorUserId: number): number {
-  const db = getDb();
-  const a = db.prepare(`SELECT group_id, function_code FROM assessments WHERE id = ?`).get(assessmentId) as
-    | { group_id: number; function_code: string }
-    | undefined;
-  if (!a) throw new Error("Évaluation introuvable.");
-  const members = new Set(listGroupMembers(a.group_id).map((m) => m.candidate_user_id));
-  // Correction d'audit : un id hors groupe rejette TOUTE la demande (rien
-  // n'est affecté, même les ids par ailleurs valides de la même requête),
-  // avec une trace d'audit du refus — jamais un filtrage silencieux. Voir
-  // le même principe et le même message dans publishAssessment() ci-dessus.
-  const invalidIds = candidateUserIds.filter((id) => !members.has(id));
-  if (invalidIds.length > 0) {
+  // #61/#78: membership, reassignment writes and their success audit must
+  // share BEGIN IMMEDIATE. Otherwise group removal can win after a stale
+  // pre-check, or an audit failure can leave unaudited assignments durable.
+  // Return a denial decision from the transaction so its failure audit can
+  // be written AFTER the rollback/commit boundary (never rolled back by throw).
+  const outcome = transaction((db) => {
+    const a = db.prepare(`SELECT group_id, function_code FROM assessments WHERE id = ?`).get(assessmentId) as
+      | { group_id: number; function_code: string }
+      | undefined;
+    if (!a) throw new Error("Évaluation introuvable.");
+
+    const members = new Set(listGroupMembers(a.group_id).map((m) => m.candidate_user_id));
+    const invalidIds = candidateUserIds.filter((id) => !members.has(id));
+    if (invalidIds.length > 0) {
+      return { kind: "denied" as const, invalidIds, groupId: a.group_id, functionCode: a.function_code };
+    }
+
+    const valid = Array.from(new Set(candidateUserIds));
+    const insertAssign = db.prepare(`INSERT OR IGNORE INTO assessment_assignments (assessment_id, candidate_user_id, assigned_by) VALUES (?, ?, ?)`);
+    let count = 0;
+    for (const cid of valid) {
+      const result = insertAssign.run(assessmentId, cid, actorUserId);
+      if (Number(result.changes) > 0) count++;
+    }
+    if (count > 0) {
+      audit({
+        actorUserId,
+        actorRole: null,
+        action: "assessment_assign",
+        targetType: "assessment",
+        targetId: assessmentId,
+        metadata: { mode: valid.length === 1 ? "individual" : "selected_candidates", candidateUserIds: valid, functionCode: a.function_code, groupId: a.group_id, reassignment: true },
+      });
+    }
+    return { kind: "assigned" as const, count };
+  });
+
+  if (outcome.kind === "denied") {
     audit({
       actorUserId,
       actorRole: null,
@@ -622,29 +648,17 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
       targetType: "assessment",
       targetId: assessmentId,
       result: "failure",
-      metadata: { requestedCandidateUserIds: candidateUserIds, invalidCandidateUserIds: invalidIds, groupId: a.group_id, functionCode: a.function_code, reassignment: true },
+      metadata: {
+        requestedCandidateUserIds: candidateUserIds,
+        invalidCandidateUserIds: outcome.invalidIds,
+        groupId: outcome.groupId,
+        functionCode: outcome.functionCode,
+        reassignment: true,
+      },
     });
     throw new Error(CANDIDATE_OUT_OF_SCOPE_MESSAGE);
   }
-  const valid = Array.from(new Set(candidateUserIds));
-
-  const insertAssign = db.prepare(`INSERT OR IGNORE INTO assessment_assignments (assessment_id, candidate_user_id, assigned_by) VALUES (?, ?, ?)`);
-  let count = 0;
-  for (const cid of valid) {
-    const result = insertAssign.run(assessmentId, cid, actorUserId);
-    if (Number(result.changes) > 0) count++;
-  }
-  if (count > 0) {
-    audit({
-      actorUserId,
-      actorRole: null,
-      action: "assessment_assign",
-      targetType: "assessment",
-      targetId: assessmentId,
-      metadata: { mode: valid.length === 1 ? "individual" : "selected_candidates", candidateUserIds: valid, functionCode: a.function_code, groupId: a.group_id, reassignment: true },
-    });
-  }
-  return count;
+  return outcome.count;
 }
 
 /** Retirer un candidat d'une évaluation — addendum §1. Bloqué s'il a déjà

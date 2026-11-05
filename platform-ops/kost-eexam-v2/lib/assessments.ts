@@ -339,6 +339,13 @@ export interface CreateAssessmentInput {
  * « interdire nombre demandé > questions disponibles » — jamais seulement
  * une validation client, qui peut être contournée). */
 export function createAssessmentDraft(input: CreateAssessmentInput): number {
+  // #65: never persist a zero, negative, fractional, or non-finite question
+  // count. A forged server-action payload can bypass the HTML min=1 guard;
+  // a negative count could otherwise publish a mismatched random selection
+  // because slice(0, negativeCount) is legal JavaScript.
+  if (!Number.isSafeInteger(input.questionCount) || input.questionCount < 1) {
+    throw new Error("Nombre de questions invalide : entier strictement positif requis.");
+  }
   const preset = TYPE_PRESETS[input.type];
   const admissibleIds = listAdmissibleQuestionIds(input.functionCode);
 

@@ -436,10 +436,10 @@ const CANDIDATE_OUT_OF_SCOPE_MESSAGE =
  * n'est plus silencieusement filtré — toute la publication est refusée
  * (aucune évaluation publiée, aucune affectation créée), un message clair
  * est renvoyé, et le refus est tracé dans le journal d'audit. Cette
- * validation se fait délibérément AVANT la transaction ci-dessous : toute
- * écriture (y compris une entrée d'audit) à l'intérieur d'une transaction
- * qui se termine par un throw est annulée avec elle — enregistrer un
- * refus puis l'annuler serait pire qu'aucune trace du tout. */
+ * validation se fait sous le verrou d'écriture de la transaction
+ * de publication. Le refus est retourné sans throw pour préserver une
+ * trace d'audit écrite APRES la transaction, sans publier d'évaluation
+ * ni affecter de candidat. */
 
 /** Mission "MISSION FINALE CIBLÉE" (2026-08-30) §5 — le score d'un scénario
  * = somme des points de ses sous-questions (crédit partiel explicitement
@@ -470,34 +470,38 @@ export function publishAssessment(
   actorUserId: number,
   opts: { candidateUserIds?: number[] } = {}
 ): void {
-  if (opts.candidateUserIds && opts.candidateUserIds.length > 0) {
-    const pre = getDb().prepare(`SELECT group_id, function_code FROM assessments WHERE id = ?`).get(assessmentId) as
-      | { group_id: number; function_code: string }
-      | undefined;
-    if (!pre) throw new Error("Évaluation introuvable.");
-    const memberIds = new Set(listGroupMembers(pre.group_id).map((m) => m.candidate_user_id));
-    const invalidIds = opts.candidateUserIds.filter((id) => !memberIds.has(id));
-    if (invalidIds.length > 0) {
-      audit({
-        actorUserId,
-        actorRole: null,
-        action: "assessment_assign_denied",
-        targetType: "assessment",
-        targetId: assessmentId,
-        result: "failure",
-        metadata: { requestedCandidateUserIds: opts.candidateUserIds, invalidCandidateUserIds: invalidIds, groupId: pre.group_id, functionCode: pre.function_code },
-      });
-      throw new Error(CANDIDATE_OUT_OF_SCOPE_MESSAGE);
-    }
-  }
-
-  transaction((db) => {
+  const outcome = transaction((db) => {
     const a = db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(assessmentId) as AssessmentRow | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
     if (a.status !== "draft") throw new Error(`Impossible de publier : statut actuel "${a.status}".`);
     // Enforce the *persisted* group/company boundary, not just a client-supplied
     // assessment.scope label, before any snapshot/assignment/status writes.
     assertConsistentAssessmentScope(a.group_id, a.scope);
+
+    // #61/#78: resolve the selected roster under the SAME BEGIN IMMEDIATE
+    // write lock that freezes question snapshots and inserts assignments.
+    // An out-of-scope selected candidate denies the entire publication.
+    const members = listGroupMembers(a.group_id);
+    const targetIds = opts.candidateUserIds?.length
+      ? Array.from(new Set(opts.candidateUserIds))
+      : members.map((m) => m.candidate_user_id);
+    const assignmentMode: AssignmentMode = opts.candidateUserIds?.length
+      ? (targetIds.length === 1 ? "individual" : "selected_candidates")
+      : "group";
+    if (opts.candidateUserIds?.length) {
+      const memberIds = new Set(members.map((m) => m.candidate_user_id));
+      const invalidIds = targetIds.filter((id) => !memberIds.has(id));
+      if (invalidIds.length > 0) {
+        return {
+          kind: "denied" as const,
+          requestedCandidateUserIds: opts.candidateUserIds,
+          invalidIds,
+          groupId: a.group_id,
+          functionCode: a.function_code,
+        };
+      }
+    }
+    if (targetIds.length === 0) throw new Error("Ce groupe n'a aucun candidat à affecter.");
 
     const poolRows = db.prepare(`SELECT question_id FROM assessment_question_pool WHERE assessment_id = ?`).all(assessmentId) as { question_id: number }[];
     let poolIds = poolRows.map((r) => r.question_id);
@@ -551,23 +555,6 @@ export function publishAssessment(
       insertSnap.run(assessmentId, idx + 1, questionId, version.id, version.stem, version.choices_json, version.correct_answer, question.qtype, version.explanation ?? null, pointsForVersion(version));
     });
 
-    // Les candidatUserIds fournis ont déjà été intégralement validés
-    // ci-dessus (avant la transaction) — aucun filtrage silencieux ici,
-    // par construction : soit tous appartiennent au groupe et on continue
-    // avec exactement cette liste (dédupliquée), soit on n'est jamais
-    // arrivé jusqu'ici.
-    const members = listGroupMembers(a.group_id);
-    let targetIds: number[];
-    let assignmentMode: AssignmentMode;
-    if (opts.candidateUserIds && opts.candidateUserIds.length > 0) {
-      targetIds = Array.from(new Set(opts.candidateUserIds));
-      assignmentMode = targetIds.length === 1 ? "individual" : "selected_candidates";
-    } else {
-      targetIds = members.map((m) => m.candidate_user_id);
-      assignmentMode = "group";
-    }
-    if (targetIds.length === 0) throw new Error("Ce groupe n'a aucun candidat à affecter.");
-
     const insertAssign = db.prepare(`INSERT OR IGNORE INTO assessment_assignments (assessment_id, candidate_user_id, assigned_by) VALUES (?, ?, ?)`);
     for (const cid of targetIds) insertAssign.run(assessmentId, cid, actorUserId);
 
@@ -586,7 +573,28 @@ export function publishAssessment(
       metadata: { mode: assignmentMode, candidateUserIds: targetIds, functionCode: a.function_code, groupId: a.group_id },
     });
     audit({ actorUserId, actorRole: null, action: "assessment_publish", targetType: "assessment", targetId: assessmentId, metadata: { questionCount: selected.length, candidateCount: targetIds.length, assignmentMode } });
+    return { kind: "published" as const };
   });
+
+  // Never roll back the refusal audit: a denied decision returned from the
+  // transaction has committed no snapshots, assignments or status changes.
+  if (outcome.kind === "denied") {
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_assign_denied",
+      targetType: "assessment",
+      targetId: assessmentId,
+      result: "failure",
+      metadata: {
+        requestedCandidateUserIds: outcome.requestedCandidateUserIds,
+        invalidCandidateUserIds: outcome.invalidIds,
+        groupId: outcome.groupId,
+        functionCode: outcome.functionCode,
+      },
+    });
+    throw new Error(CANDIDATE_OUT_OF_SCOPE_MESSAGE);
+  }
 }
 
 export function listAssignedCandidateIds(assessmentId: number): number[] {

@@ -625,7 +625,7 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
     // immutable archived exam. A forged/stale server action must obey the
     // same lifecycle boundary as the management UI, under the write lock.
     if (a.status === "draft" || a.status === "archived") {
-      throw new Error("Affectation impossible : évaluation non publiée ou archivée.");
+      return { kind: "status_denied" as const, status: a.status };
     }
 
     const members = new Set(listGroupMembers(a.group_id).map((m) => m.candidate_user_id));
@@ -671,6 +671,25 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
       },
     });
     throw new Error(CANDIDATE_OUT_OF_SCOPE_MESSAGE);
+  }
+  if (outcome.kind === "status_denied") {
+    // Persist the rejected mutation as evidence OUTSIDE the read/write
+    // transaction, without manufacturing a successful assignment.
+    audit({
+      actorUserId,
+      actorRole: null,
+      action: "assessment_assign_denied",
+      targetType: "assessment",
+      targetId: assessmentId,
+      result: "failure",
+      metadata: {
+        reason: "invalid_assessment_status",
+        status: outcome.status,
+        requestedCandidateUserIds: candidateUserIds,
+        reassignment: true,
+      },
+    });
+    throw new Error("Affectation impossible : évaluation non publiée ou archivée.");
   }
   return outcome.count;
 }

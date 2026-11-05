@@ -432,6 +432,31 @@ export function publishAssessment(
     // la création du brouillon).
     const admissibleNow = new Set(listAdmissibleQuestionIds(a.function_code));
     poolIds = poolIds.filter((id) => admissibleNow.has(id));
+
+    // A source-verified question with reviewer_status=PENDING was previously
+    // eligible for a real production assessment. Require at least an explicit
+    // recorded human approval + date before any production snapshot is made.
+    // This is a NECESSARY, not sufficient, release gate: this schema does not
+    // store the qualified reviewer identity/independent qualification evidence,
+    // the separate FR/EN review, or confidential item provenance. Those
+    // external gates must still be independently satisfied before launch.
+    // Test/demo scopes keep their existing synthetic exercise pathways.
+    if (a.scope === "production") {
+      const reviewerApprovedRows = db.prepare(
+        `SELECT q.id FROM questions q
+         WHERE q.function_code = ?
+           AND q.reviewer_status = 'APPROVED'
+           AND q.review_date IS NOT NULL
+           AND TRIM(q.review_date) <> ''`
+      ).all(a.function_code) as { id: number }[];
+      const reviewerApprovedIds = new Set(reviewerApprovedRows.map((row) => row.id));
+      poolIds = poolIds.filter((id) => reviewerApprovedIds.has(id));
+      if (poolIds.length < a.question_count) {
+        throw new Error(
+          `Publication en production refusée : ${poolIds.length} question(s) avec approbation humaine datée pour ${a.function_code}, ${a.question_count} requises. La qualification du réviseur, les revues FR/EN et la confidentialité restent des contrôles de sortie distincts.`
+        );
+      }
+    }
     if (poolIds.length < a.question_count) {
       throw new Error(
         `Publication impossible : seules ${poolIds.length} question(s) admissible(s) restent disponibles pour ${a.function_code} (${a.question_count} requises). Une question a peut-être été désactivée depuis la création du brouillon.`

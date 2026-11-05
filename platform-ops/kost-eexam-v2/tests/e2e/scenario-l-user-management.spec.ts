@@ -169,6 +169,7 @@ test("E — suppression définitive : un candidat avec un examen affecté est BL
   await page.locator('input[name="questionCount"]').fill("1");
   await page.locator('input[name="durationMinutes"]').fill("15");
   await page.locator('input[name="passThresholdPct"]').fill("80");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/\d+/);
   await page.getByRole("button", { name: /^publier$/i }).click();

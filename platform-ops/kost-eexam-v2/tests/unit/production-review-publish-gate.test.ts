@@ -39,7 +39,7 @@ describe("Production publication requires recorded reviewer approval and date", 
   test("pending source-verified question cannot publish in production, manual or random", () => {
     for (const source of ["manual", "random"] as const) {
       const { admin, assessmentId } = fixture("production", source);
-      assert.throws(() => publishAssessment(assessmentId, admin), /approbation humaine datée/);
+      assert.throws(() => publishAssessment(assessmentId, admin), /statut APPROVED et date de revue/);
       assert.equal(getAssessment(assessmentId)?.status, "draft");
       const snapshots = getDb().prepare("SELECT COUNT(*) AS n FROM assessment_question_snapshots WHERE assessment_id = ?").get(assessmentId) as { n: number };
       assert.equal(snapshots.n, 0);
@@ -51,7 +51,7 @@ describe("Production publication requires recorded reviewer approval and date", 
   test("APPROVED flag without an actual review date still cannot publish in production", () => {
     const { admin, questionId, assessmentId } = fixture("production");
     getDb().prepare("UPDATE questions SET reviewer_status = 'APPROVED', review_date = NULL WHERE id = ?").run(questionId);
-    assert.throws(() => publishAssessment(assessmentId, admin), /approbation humaine datée/);
+    assert.throws(() => publishAssessment(assessmentId, admin), /statut APPROVED et date de revue/);
     assert.equal(getAssessment(assessmentId)?.status, "draft");
   });
 

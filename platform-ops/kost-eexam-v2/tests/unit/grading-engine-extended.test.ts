@@ -17,7 +17,7 @@ describe("Moteur de notation étendu — numeric/short_answer/correction manuell
   const { createQuestion } = await import("../../lib/questions");
   const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
   const { startAttempt, saveAnswer, submitAttempt } = await import("../../lib/attempts");
-  const { gradeAttempt } = await import("../../lib/grading");
+  const { gradeAttempt, gradeOneQuestion } = await import("../../lib/grading");
   const { getDb } = await import("../../lib/db");
 
   let counter = 0;
@@ -120,6 +120,41 @@ describe("Moteur de notation étendu — numeric/short_answer/correction manuell
     assert.doesNotThrow(() => submitAttempt(attempt.id, candidateId)); // jamais répondu
     const result = getDb().prepare(`SELECT raw_score FROM results WHERE attempt_id = ?`).get(attempt.id) as { raw_score: number };
     assert.equal(result.raw_score, 0);
+  });
+
+  test("D2 — numeric zero: empty/whitespace/null submissions never score, but an explicit zero does", () => {
+    const correct = JSON.stringify({ mode: "numeric", value: 0, tolerance: 0 });
+    for (const submitted of [null, [], [""], ["   "], [null], [false]]) {
+      assert.deepEqual(
+        gradeOneQuestion("numeric", correct, submitted === null ? null : JSON.stringify(submitted)),
+        { pending: false, isCorrect: false },
+        `submission ${JSON.stringify(submitted)} must not become a zero`,
+      );
+    }
+    for (const submitted of [["0"], [" 0 "], [0]]) {
+      assert.deepEqual(
+        gradeOneQuestion("numeric", correct, JSON.stringify(submitted)),
+        { pending: false, isCorrect: true },
+        `explicit zero ${JSON.stringify(submitted)} must remain correct`,
+      );
+    }
+  });
+
+  test("D3 — numeric zero: a persisted whitespace answer cannot pass the exam", () => {
+    const t = tag();
+    const { adminId, candidateId, groupId } = makeCandidateAndGroup(t);
+    const qid = createQuestion({
+      kostQuestionId: `TEST-${t}-zero`, functionCode: "7.1", qtype: "numeric", sourceStatus: "FROZEN_SOURCE_VERIFIED",
+      stem: "Combien ?", choices: [], correctAnswer: { mode: "numeric", value: 0, tolerance: 0 }, createdBy: adminId,
+    });
+    const assessmentId = publishSingleQuestionExam(t, adminId, groupId, qid);
+    const attempt = startAttempt(assessmentId, candidateId, {});
+    const aq = getDb().prepare(`SELECT id FROM attempt_questions WHERE attempt_id = ?`).get(attempt.id) as { id: number };
+    saveAnswer(attempt.id, candidateId, aq.id, ["   "]);
+    submitAttempt(attempt.id, candidateId);
+    const result = getDb().prepare(`SELECT raw_score, passed FROM results WHERE attempt_id = ?`).get(attempt.id) as { raw_score: number; passed: number | null };
+    assert.equal(result.raw_score, 0, "blank input must never earn credit for zero");
+    assert.equal(result.passed, 0, "an unanswered zero question cannot cause a pass");
   });
 
   // --- E. Short answer exact — normalisation (casse/espaces) ---

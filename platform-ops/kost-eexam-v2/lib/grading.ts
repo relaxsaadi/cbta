@@ -59,7 +59,14 @@ export function gradeOneQuestion(
 
   if (qtype === "numeric") {
     const spec = JSON.parse(correctAnswerSnapshot) as { value: number; tolerance: number };
-    const givenValue = Array.isArray(given) && given.length > 0 ? Number(given[0]) : NaN;
+    // Number("") / Number("   ") / Number(null) / Number(false) all equal
+    // zero. A blank or malformed candidate submission must not earn points
+    // when the actual correct answer is zero (including scenario subanswers).
+    const rawGivenValue: unknown = Array.isArray(given) && given.length > 0 ? given[0] : null;
+    const hasExplicitNumericValue =
+      (typeof rawGivenValue === "string" && rawGivenValue.trim() !== "") ||
+      (typeof rawGivenValue === "number" && Number.isFinite(rawGivenValue));
+    const givenValue = hasExplicitNumericValue ? Number(rawGivenValue) : Number.NaN;
     if (!Number.isFinite(givenValue)) return { pending: false, isCorrect: false };
     return { pending: false, isCorrect: Math.abs(givenValue - spec.value) <= spec.tolerance };
   }

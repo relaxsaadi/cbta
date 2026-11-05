@@ -1,7 +1,7 @@
 import { getDb, transaction, nowIso } from "./db";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
-import { getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
+import { assertConsistentAssessmentScope, getAssessment, getSnapshots, isAssessmentOpenNow, type AssessmentRow } from "./assessments";
 import { gradeAttempt } from "./grading";
 import { isNewAttemptsBlocked } from "./platform-settings";
 
@@ -148,6 +148,17 @@ export function startAttempt(
     if (!assessment) throw new AttemptError("Évaluation introuvable.");
     if (!hasValidAssessmentWindow(assessment) || !isAssessmentOpenNow(assessment)) {
       throw new AttemptError("Cette évaluation n'est pas ouverte actuellement.");
+    }
+
+    // #65: a once-valid demo/test publication can become cross-scope after
+    // publication or through legacy data. Check persisted company/group/assessment
+    // on every NEW candidate start under the same SQLite write lock; never turn
+    // a stale demo label into a production-context review-gate bypass.
+    // Existing in-progress attempts intentionally retain resume continuity.
+    try {
+      assertConsistentAssessmentScope(assessment.group_id, assessment.scope);
+    } catch {
+      throw new AttemptError("Démarrage refusé : périmètre de l'évaluation, du groupe ou du client incohérent.");
     }
 
     if (!isCandidateAssignedToAssessment(assessmentId, candidateUserId)) {

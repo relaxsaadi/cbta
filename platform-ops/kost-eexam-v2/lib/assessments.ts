@@ -248,7 +248,7 @@ export function admissibleCountFor(functionCode: string): number {
  * Called inside BEGIN IMMEDIATE for both create and publish, so scope
  * mutations cannot race past the check in these transactions.
  */
-function assertConsistentAssessmentScope(groupId: number, assessmentScope: Scope): void {
+export function assertConsistentAssessmentScope(groupId: number, assessmentScope: Scope): void {
   const row = getDb().prepare(
     `SELECT g.scope AS group_scope, c.scope AS company_scope
      FROM groups g JOIN companies c ON c.id = g.company_id

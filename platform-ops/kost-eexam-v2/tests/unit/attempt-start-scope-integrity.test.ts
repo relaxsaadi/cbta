@@ -187,4 +187,40 @@ describe("candidate attempt start checks persisted scope authority", async () =>
     assert.equal(attemptCount(f.assessmentId), 1);
   });
 
+
+  test("duplicate question identities cannot masquerade as a complete two-question production exam", () => {
+    const f = publishedFixture("demo");
+    const db = getDb();
+    // Synthetic legacy import: distinct snapshot positions but repeated item.
+    // The snapshot table has UNIQUE(assessment_id, position), not question_id.
+    db.prepare(`INSERT INTO assessment_question_snapshots
+      (assessment_id, position, question_id, version_id, stem_snapshot,
+       choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, explanation_snapshot, points)
+      SELECT assessment_id, 2, question_id, version_id, stem_snapshot,
+             choices_snapshot_json, correct_answer_snapshot, qtype_snapshot, explanation_snapshot, points
+      FROM assessment_question_snapshots WHERE assessment_id = ?`).run(f.assessmentId);
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production', question_count = 2 WHERE id = ?").run(f.assessmentId);
+    db.prepare(`UPDATE questions SET reviewer_status = 'APPROVED', review_date = '2026-11-05'
+      WHERE id IN (SELECT question_id FROM assessment_question_snapshots WHERE assessment_id = ?)`).run(f.assessmentId);
+
+    assert.throws(() => startAttempt(f.assessmentId, f.candidate, {}), /production refusé/);
+    assert.equal(attemptCount(f.assessmentId), 0);
+  });
+
+  test("a legacy snapshot with a non-1-based position cannot start production", () => {
+    const f = publishedFixture("test");
+    const db = getDb();
+    db.prepare("UPDATE assessment_question_snapshots SET position = 2 WHERE assessment_id = ?").run(f.assessmentId);
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production' WHERE id = ?").run(f.assessmentId);
+    db.prepare(`UPDATE questions SET reviewer_status = 'APPROVED', review_date = '2026-11-05'
+      WHERE id IN (SELECT question_id FROM assessment_question_snapshots WHERE assessment_id = ?)`).run(f.assessmentId);
+
+    assert.throws(() => startAttempt(f.assessmentId, f.candidate, {}), /production refusé/);
+    assert.equal(attemptCount(f.assessmentId), 0);
+  });
+
 });

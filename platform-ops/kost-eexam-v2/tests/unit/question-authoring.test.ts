@@ -59,7 +59,7 @@ describe("Auteurage de question — lib/questions.ts (parseAuthoringFormData/val
       { key: "B", text: "Incorrect C" },
     ]);
     assert.deepEqual(correctAnswer, ["A"]);
-    assert.equal(choices.find((c) => c.key === correctAnswer[0])?.text, "Correct B");
+    assert.equal(choices.find((c) => c.key === (Array.isArray(correctAnswer) ? correctAnswer[0] : null))?.text, "Correct B");
     assert.equal(validateQuestionAuthoring("mcq_single", choices, correctAnswer), null);
   });
 

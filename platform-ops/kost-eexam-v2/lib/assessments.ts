@@ -259,6 +259,45 @@ export function assertConsistentAssessmentScope(groupId: number, assessmentScope
   }
 }
 
+/** Shared minimum reviewer gate for production publication AND new starts.
+ * This flag/date check does NOT establish qualified FR/EN or Tier-A approval. */
+const productionReviewerWhere = [
+  "q.reviewer_status = 'APPROVED'",
+  "q.review_date IS NOT NULL",
+  "TRIM(q.review_date) <> ''",
+].join(" AND ");
+
+/**
+ * #65: Existing published snapshots predate the new production publication
+ * gate, and scopes can subsequently be reclassified. Before creating any NEW
+ * production attempt, verify EVERY persisted snapshot still references an
+ * active, source-verified, reviewer-flagged question of the correct function
+ * and the same current version. An approved flag is only a technical minimum;
+ * confidential item provenance and qualified human FR/EN/Tier-A reviews remain
+ * independent pre-production blockers.
+ *
+ * Called under startAttempt's BEGIN IMMEDIATE to serialize with writers.
+ * Does not mutate snapshots, questions, or already-running attempts.
+ */
+export function assertProductionSnapshotAdmission(assessmentId: number, functionCode: string): void {
+  const stats = getDb().prepare(
+    `SELECT COUNT(*) AS total,
+            COALESCE(SUM(CASE WHEN
+              q.function_code = ?
+              AND q.active = 1
+              AND q.source_status = 'FROZEN_SOURCE_VERIFIED'
+              AND ${productionReviewerWhere}
+              AND q.current_version_id = s.version_id
+              THEN 1 ELSE 0 END), 0) AS eligible
+       FROM assessment_question_snapshots s
+       LEFT JOIN questions q ON q.id = s.question_id
+       WHERE s.assessment_id = ?`
+  ).get(functionCode, assessmentId) as { total: number; eligible: number };
+  if (stats.total === 0 || stats.total !== stats.eligible) {
+    throw new Error("Production refusée : une ou plusieurs questions figées n'ont plus les prérequis techniques de revue/source/version.");
+  }
+}
+
 export interface CreateAssessmentInput {
   type: AssessmentType;
   name: string;
@@ -467,9 +506,7 @@ export function publishAssessment(
       const reviewerApprovedRows = db.prepare(
         `SELECT q.id FROM questions q
          WHERE q.function_code = ?
-           AND q.reviewer_status = 'APPROVED'
-           AND q.review_date IS NOT NULL
-           AND TRIM(q.review_date) <> ''`
+           AND ${productionReviewerWhere}`
       ).all(a.function_code) as { id: number }[];
       const reviewerApprovedIds = new Set(reviewerApprovedRows.map((row) => row.id));
       poolIds = poolIds.filter((id) => reviewerApprovedIds.has(id));

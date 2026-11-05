@@ -20,6 +20,7 @@ test("le responsable pédagogique crée, publie une évaluation et voit le suivi
   await page.locator('input[name="durationMinutes"]').fill("15");
   await page.locator('input[name="passThresholdPct"]').fill("80");
 
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
 
   // Redirigé vers la fiche de l'évaluation — statut brouillon.

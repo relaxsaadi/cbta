@@ -128,6 +128,7 @@ test("matching + ordering — interaction accessible (select clavier / boutons M
   await page.locator('input[name="questionCount"]').fill("2");
   await page.locator('input[name="durationMinutes"]').fill("30");
   await page.locator('input[name="passThresholdPct"]').fill("80");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/\d+/);
   await page.getByRole("button", { name: /^publier$/i }).click();
@@ -381,6 +382,7 @@ test("cycle complet — les 8 types de question dans un seul examen démo, y com
   await page.locator('input[name="questionCount"]').fill("8");
   await page.locator('input[name="durationMinutes"]').fill("30");
   await page.locator('input[name="passThresholdPct"]').fill("50");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/\d+/);
   await page.getByRole("button", { name: /^publier$/i }).click();

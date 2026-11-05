@@ -24,6 +24,7 @@ test("G — reprogrammer à 11:30 stocke 10:30Z (Africa/Algiers = UTC+1), jamais
   await page.locator('input[name="questionCount"]').fill("3");
   await page.locator('input[name="durationMinutes"]').fill("15");
   await page.locator('input[name="passThresholdPct"]').fill("80");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/(\d+)/);
   const assessmentId = Number(page.url().match(/\/exam-preparation\/(\d+)/)![1]);
@@ -60,6 +61,7 @@ test("H — créer un examen avec ouverture à 15:00 stocke 14:00Z (Africa/Algie
   await page.locator('input[name="durationMinutes"]').fill("15");
   await page.locator('input[name="passThresholdPct"]').fill("80");
   await page.locator("#openAt").fill("2026-09-02T15:00");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/(\d+)/);
   const assessmentId = Number(page.url().match(/\/exam-preparation\/(\d+)/)![1]);
@@ -79,6 +81,7 @@ test("A — le responsable pédagogique reprogramme réellement un examen publi�
   await page.locator('input[name="questionCount"]').fill("3");
   await page.locator('input[name="durationMinutes"]').fill("15");
   await page.locator('input[name="passThresholdPct"]').fill("80");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/\d+/);
   await page.getByRole("button", { name: /^publier$/i }).click();
@@ -108,6 +111,7 @@ test("F — des dates invalides (fermeture avant ouverture) sont refusées avec 
   await page.locator('input[name="questionCount"]').fill("3");
   await page.locator('input[name="durationMinutes"]').fill("15");
   await page.locator('input[name="passThresholdPct"]').fill("80");
+  await page.locator('select[name="scope"]').selectOption("demo");
   await page.getByRole("button", { name: /créer le brouillon/i }).click();
   await page.waitForURL(/\/exam-preparation\/\d+/);
   await page.getByRole("button", { name: /^publier$/i }).click();

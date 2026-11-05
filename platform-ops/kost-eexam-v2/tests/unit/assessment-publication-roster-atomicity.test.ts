@@ -77,3 +77,48 @@ test("valid selected publication persists only selected members with snapshots a
   assert.equal(metadata.mode, "individual");
   assert.deepEqual(metadata.candidateUserIds, [f.allowed]);
 });
+
+
+test("revocation at the writer-lock boundary is not bypassed by a stale selected-roster check", async () => {
+  const f = await fixture();
+  const db = f.getDb();
+  const originalExec = db.exec.bind(db);
+  let revokedAtBoundary = false;
+
+  // Deterministically model an external writer winning between a legacy
+  // pre-transaction membership read and BEGIN IMMEDIATE. In the fixed path
+  // the membership read occurs AFTER this boundary, under the writer lock.
+  db.exec = (sql: string) => {
+    if (sql === "BEGIN IMMEDIATE" && !revokedAtBoundary) {
+      revokedAtBoundary = true;
+      db.prepare("DELETE FROM group_members WHERE group_id = ? AND candidate_user_id = ?")
+        .run(f.group, f.removed);
+    }
+    originalExec(sql);
+  };
+  try {
+    assert.throws(
+      () => f.publishAssessment(f.assessment, f.admin, { candidateUserIds: [f.allowed, f.removed] }),
+      /Ce candidat n'appartient pas au groupe sélectionné/
+    );
+  } finally {
+    db.exec = originalExec;
+  }
+
+  assert.equal(revokedAtBoundary, true, "the synthetic interleaving must actually occur");
+  assert.equal(
+    (db.prepare("SELECT status FROM assessments WHERE id = ?").get(f.assessment) as { status: string }).status,
+    "draft"
+  );
+  assert.deepEqual(f.listAssignedCandidateIds(f.assessment), []);
+  assert.equal(
+    (db.prepare("SELECT COUNT(*) AS n FROM assessment_question_snapshots WHERE assessment_id = ?")
+      .get(f.assessment) as { n: number }).n,
+    0
+  );
+  assert.ok(
+    db.prepare("SELECT 1 FROM audit_logs WHERE target_id = ? AND action = 'assessment_assign_denied'")
+      .get(f.assessment),
+    "the denial must remain recorded"
+  );
+});

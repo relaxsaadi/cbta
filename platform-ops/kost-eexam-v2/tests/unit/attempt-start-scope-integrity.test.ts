@@ -152,4 +152,39 @@ describe("candidate attempt start checks persisted scope authority", async () =>
     assert.equal(attemptCount(f.assessmentId), 1);
   });
 
+
+  test("new production start rejects a truncated legacy snapshot set even if its only item is flag-approved", () => {
+    const f = publishedFixture("demo");
+    const db = getDb();
+    const before = db.prepare("SELECT COUNT(*) AS n FROM assessment_question_snapshots WHERE assessment_id = ?")
+      .get(f.assessmentId) as { n: number };
+    assert.equal(before.n, 1);
+
+    // Simulate legacy/external reclassification and a structural mismatch.
+    // This APPROVED flag is strictly SYNTHETIC test data, not regulatory sign-off.
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production', question_count = 2 WHERE id = ?").run(f.assessmentId);
+    db.prepare(`UPDATE questions SET reviewer_status = 'APPROVED', review_date = '2026-11-05'
+      WHERE id IN (SELECT question_id FROM assessment_question_snapshots WHERE assessment_id = ?)`).run(f.assessmentId);
+
+    assert.throws(() => startAttempt(f.assessmentId, f.candidate, {}), /production refusé/);
+    assert.equal(attemptCount(f.assessmentId), 0);
+  });
+
+  test("matching synthetic production snapshot count remains technically eligible", () => {
+    const f = publishedFixture("test");
+    const db = getDb();
+    // Only verifies the technical minimum; does not claim FR/EN/Tier-A review.
+    db.prepare("UPDATE companies SET scope = 'production' WHERE id = ?").run(f.companyId);
+    db.prepare("UPDATE groups SET scope = 'production' WHERE id = ?").run(f.groupId);
+    db.prepare("UPDATE assessments SET scope = 'production' WHERE id = ?").run(f.assessmentId);
+    db.prepare(`UPDATE questions SET reviewer_status = 'APPROVED', review_date = '2026-11-05'
+      WHERE id IN (SELECT question_id FROM assessment_question_snapshots WHERE assessment_id = ?)`).run(f.assessmentId);
+
+    const attempt = startAttempt(f.assessmentId, f.candidate, {});
+    assert.equal(attempt.status, "in_progress");
+    assert.equal(attemptCount(f.assessmentId), 1);
+  });
+
 });

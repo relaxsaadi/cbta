@@ -241,6 +241,24 @@ export function admissibleCountFor(functionCode: string): number {
   return listAdmissibleQuestionIds(functionCode).length;
 }
 
+/**
+ * #65 — An assessment's client-selected scope cannot be the authority that
+ * downgrades production reviewer admission. Company, group and assessment
+ * must all agree; mismatched legacy drafts fail closed at publication.
+ * Called inside BEGIN IMMEDIATE for both create and publish, so scope
+ * mutations cannot race past the check in these transactions.
+ */
+function assertConsistentAssessmentScope(groupId: number, assessmentScope: Scope): void {
+  const row = getDb().prepare(
+    `SELECT g.scope AS group_scope, c.scope AS company_scope
+     FROM groups g JOIN companies c ON c.id = g.company_id
+     WHERE g.id = ?`
+  ).get(groupId) as { group_scope: Scope; company_scope: Scope } | undefined;
+  if (!row || row.group_scope !== row.company_scope || row.group_scope !== assessmentScope) {
+    throw new Error("Périmètre incompatible : l'évaluation, le groupe et le client doivent avoir le même périmètre (production, démo ou test).");
+  }
+}
+
 export interface CreateAssessmentInput {
   type: AssessmentType;
   name: string;
@@ -292,6 +310,7 @@ export function createAssessmentDraft(input: CreateAssessmentInput): number {
   }
 
   return transaction((db) => {
+    assertConsistentAssessmentScope(input.groupId, input.scope);
     const result = db
       .prepare(
         `INSERT INTO assessments
@@ -423,6 +442,9 @@ export function publishAssessment(
     const a = db.prepare(`SELECT * FROM assessments WHERE id = ?`).get(assessmentId) as AssessmentRow | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
     if (a.status !== "draft") throw new Error(`Impossible de publier : statut actuel "${a.status}".`);
+    // Enforce the *persisted* group/company boundary, not just a client-supplied
+    // assessment.scope label, before any snapshot/assignment/status writes.
+    assertConsistentAssessmentScope(a.group_id, a.scope);
 
     const poolRows = db.prepare(`SELECT question_id FROM assessment_question_pool WHERE assessment_id = ?`).all(assessmentId) as { question_id: number }[];
     let poolIds = poolRows.map((r) => r.question_id);

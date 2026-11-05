@@ -1,11 +1,13 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 
 // Regression guard for the CLIENT -> hidden scenario JSON -> SERVER pathway.
 // The top-level MCQ, matching and numeric parsers have their own guards;
 // scenario subquestions must obey the SAME rules before persistence.
 describe("Scenario subquestion draft-to-server integrity", async () => {
-  const { emptyDraft, draftToPayload } = await import("../../app/(app)/question-bank/scenario-authoring");
+  const { emptyDraft, draftToPayload, subquestionToDraft, SubquestionFields } = await import("../../app/(app)/question-bank/scenario-authoring");
   const { parseAuthoringFormData, validateQuestionAuthoring } = await import("../../lib/questions");
 
   function serverError(draft: ReturnType<typeof emptyDraft>): string | null {
@@ -93,5 +95,31 @@ describe("Scenario subquestion draft-to-server integrity", async () => {
     const payload = draftToPayload(d);
     assert.equal(payload.choices.length, 4);
     assert.equal(serverError(d), null);
+  });
+
+  test("editing a stored five-choice scenario MCQ exposes its fifth option and correct key", () => {
+    const choices = ["First", "Second", "Third", "Fourth", "Fifth correct"].map((text, i) => ({
+      key: String.fromCharCode(65 + i),
+      text,
+    }));
+    const draft = subquestionToDraft({
+      qtype: "mcq_single",
+      stem: "Choose the fifth item",
+      points: 1,
+      choices,
+      correctAnswer: ["E"],
+    });
+
+    assert.equal(draft.choiceTexts.length, 5);
+    assert.deepEqual(draft.correctIndexes, [4]);
+    const html = renderToStaticMarkup(createElement(SubquestionFields, { draft, onChange: () => {} }));
+    assert.match(html, /aria-label="Choix E"/);
+    assert.match(html, /Bonne réponse — choix E/);
+    assert.match(html, /value="Fifth correct"/);
+
+    const payload = draftToPayload(draft);
+    assert.deepEqual(payload.choices, choices);
+    assert.deepEqual(payload.correctAnswer, ["E"]);
+    assert.equal(serverError(draft), null);
   });
 });

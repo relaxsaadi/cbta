@@ -282,6 +282,9 @@ const productionReviewerWhere = [
 export function assertProductionSnapshotAdmission(assessmentId: number, functionCode: string, expectedQuestionCount: number): void {
   const stats = getDb().prepare(
     `SELECT COUNT(*) AS total,
+            COUNT(DISTINCT s.question_id) AS distinct_questions,
+            MIN(s.position) AS first_position,
+            MAX(s.position) AS last_position,
             COALESCE(SUM(CASE WHEN
               q.function_code = ?
               AND q.active = 1
@@ -292,14 +295,20 @@ export function assertProductionSnapshotAdmission(assessmentId: number, function
        FROM assessment_question_snapshots s
        LEFT JOIN questions q ON q.id = s.question_id
        WHERE s.assessment_id = ?`
-  ).get(functionCode, assessmentId) as { total: number; eligible: number };
+  ).get(functionCode, assessmentId) as { total: number; eligible: number; distinct_questions: number; first_position: number | null; last_position: number | null };
   // #65: a legacy/migrated published assessment may have fewer frozen
   // questions than its declared question_count. Every snapshot being eligible
   // is insufficient when the exam would silently deliver a shorter test.
-  // Reject malformed counts too; do not infer or repair the intended exam.
+  // Reject malformed counts and structurally invalid sets too: a duplicated
+  // question or gapped/non-1-based positions must not pass merely because the
+  // raw snapshot count matches. UNIQUE(assessment_id,position) protects against
+  // duplicate positions, but not duplicates of the same question_id.
+  // Do not infer or repair the intended exam.
   if (!Number.isSafeInteger(expectedQuestionCount) || expectedQuestionCount <= 0 ||
-      stats.total !== expectedQuestionCount || stats.total !== stats.eligible) {
-    throw new Error("Production refusée : décompte des questions figées incohérent ou prérequis de revue/source/version non satisfaits.");
+      stats.total !== expectedQuestionCount || stats.total !== stats.eligible ||
+      stats.distinct_questions !== expectedQuestionCount ||
+      stats.first_position !== 1 || stats.last_position !== expectedQuestionCount) {
+    throw new Error("Production refusée : décompte/identité/positions des questions figées incohérents ou prérequis de revue/source/version non satisfaits.");
   }
 }
 

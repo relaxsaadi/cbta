@@ -50,7 +50,7 @@ test("forged reassignment to a draft assessment fails before assignment or succe
   const auditBefore = countReassignmentAudits(db, f.assessment);
   assert.throws(
     () => f.assignCandidatesToAssessment(f.assessment, [f.second], f.admin),
-    /Affectation impossible : évaluation non publiée ou archivée/
+    /Affectation impossible : seules les évaluations publiées ou ouvertes/
   );
   assert.deepEqual(f.listAssignedCandidateIds(f.assessment), []);
   assert.equal(countReassignmentAudits(db, f.assessment), auditBefore);
@@ -65,23 +65,41 @@ test("forged reassignment to a draft assessment fails before assignment or succe
   );
 });
 
-test("archived assessment cannot gain assignments or a fabricated success audit", async () => {
+for (const lifecycleStatus of ["archived", "closed", "suspended"] as const) {
+  test(`${lifecycleStatus} assessment cannot gain assignments or a fabricated success audit`, async () => {
+    const f = await fixture();
+    f.publishAssessment(f.assessment, f.admin, { candidateUserIds: [f.first] });
+    const db = f.getDb();
+    db.prepare("UPDATE assessments SET status = ? WHERE id = ?").run(lifecycleStatus, f.assessment);
+    const auditBefore = countReassignmentAudits(db, f.assessment);
+    assert.throws(
+      () => f.assignCandidatesToAssessment(f.assessment, [f.second], f.admin),
+      /Affectation impossible : seules les évaluations publiées ou ouvertes/
+    );
+    assert.deepEqual(f.listAssignedCandidateIds(f.assessment), [f.first]);
+    assert.equal(countReassignmentAudits(db, f.assessment), auditBefore);
+    const denial = db.prepare(
+      "SELECT metadata_json FROM audit_logs WHERE target_type = 'assessment' AND target_id = ? AND action = 'assessment_assign_denied' ORDER BY id DESC LIMIT 1"
+    ).get(f.assessment) as { metadata_json: string } | undefined;
+    assert.ok(denial, "rejected lifecycle mutation must have a durable failure audit");
+    const metadata = JSON.parse(denial.metadata_json) as { reason: string; status: string };
+    assert.equal(metadata.reason, "invalid_assessment_status");
+    assert.equal(metadata.status, lifecycleStatus);
+  });
+}
+
+test("open assessment accepts reassignment as a valid active lifecycle state", async () => {
   const f = await fixture();
   f.publishAssessment(f.assessment, f.admin, { candidateUserIds: [f.first] });
   const db = f.getDb();
-  db.prepare("UPDATE assessments SET status = 'archived' WHERE id = ?").run(f.assessment);
+  db.prepare("UPDATE assessments SET status = 'open' WHERE id = ?").run(f.assessment);
   const auditBefore = countReassignmentAudits(db, f.assessment);
-  assert.throws(
-    () => f.assignCandidatesToAssessment(f.assessment, [f.second], f.admin),
-    /Affectation impossible : évaluation non publiée ou archivée/
+  assert.equal(f.assignCandidatesToAssessment(f.assessment, [f.second], f.admin), 1);
+  assert.deepEqual(
+    f.listAssignedCandidateIds(f.assessment).sort((a, b) => a - b),
+    [f.first, f.second].sort((a, b) => a - b)
   );
-  assert.deepEqual(f.listAssignedCandidateIds(f.assessment), [f.first]);
-  assert.equal(countReassignmentAudits(db, f.assessment), auditBefore);
-  const denial = db.prepare(
-    "SELECT metadata_json FROM audit_logs WHERE target_type = 'assessment' AND target_id = ? AND action = 'assessment_assign_denied' ORDER BY id DESC LIMIT 1"
-  ).get(f.assessment) as { metadata_json: string } | undefined;
-  assert.ok(denial, "rejected lifecycle mutation must have a durable failure audit");
-  assert.equal((JSON.parse(denial.metadata_json) as { reason: string }).reason, "invalid_assessment_status");
+  assert.equal(countReassignmentAudits(db, f.assessment), auditBefore + 1);
 });
 
 test("published assessment still accepts a valid candidate and records reassignment", async () => {

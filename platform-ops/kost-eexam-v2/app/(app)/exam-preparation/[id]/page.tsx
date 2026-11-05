@@ -162,7 +162,7 @@ export default async function AssessmentDetailPage({ params }: { params: Promise
         )}
       </Card>
 
-      {canWrite && assessment.status !== "draft" && assessment.status !== "archived" && unassignedMembers.length > 0 && (
+      {canWrite && (assessment.status === "published" || assessment.status === "open") && unassignedMembers.length > 0 && (
         <Card>
           <CardHeader title="Affecter d'autres candidats" description="Candidats du groupe pas encore affectés à cette évaluation (addendum §1 — réaffectation)" />
           <AssignMoreCandidatesForm assessmentId={assessmentId} members={unassignedMembers} />

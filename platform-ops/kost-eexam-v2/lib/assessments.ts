@@ -617,10 +617,16 @@ export function assignCandidatesToAssessment(assessmentId: number, candidateUser
   // Return a denial decision from the transaction so its failure audit can
   // be written AFTER the rollback/commit boundary (never rolled back by throw).
   const outcome = transaction((db) => {
-    const a = db.prepare(`SELECT group_id, function_code FROM assessments WHERE id = ?`).get(assessmentId) as
-      | { group_id: number; function_code: string }
+    const a = db.prepare(`SELECT group_id, function_code, status FROM assessments WHERE id = ?`).get(assessmentId) as
+      | { group_id: number; function_code: string; status: AssessmentStatus }
       | undefined;
     if (!a) throw new Error("Évaluation introuvable.");
+    // #61/#78: never attach candidates to an unpublished draft or an
+    // immutable archived exam. A forged/stale server action must obey the
+    // same lifecycle boundary as the management UI, under the write lock.
+    if (a.status === "draft" || a.status === "archived") {
+      throw new Error("Affectation impossible : évaluation non publiée ou archivée.");
+    }
 
     const members = new Set(listGroupMembers(a.group_id).map((m) => m.candidate_user_id));
     const invalidIds = candidateUserIds.filter((id) => !members.has(id));

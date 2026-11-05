@@ -115,7 +115,8 @@ describe("Auteurage de question — lib/questions.ts (parseAuthoringFormData/val
     assert.match(validateQuestionAuthoring("numeric", choices, correctAnswer) ?? "", /valeur numérique correcte est obligatoire/);
   });
   test("numeric — valeur absente ou vide n'est jamais convertie en clé 0", () => {
-    for (const input of [{}, { numericValue: "" }, { numericValue: "   " }]) {
+    const inputs: Record<string, string | string[]>[] = [{}, { numericValue: "" }, { numericValue: "   " }];
+    for (const input of inputs) {
       const { choices, correctAnswer } = parseAuthoringFormData("numeric", fd(input));
       assert.match(
         validateQuestionAuthoring("numeric", choices, correctAnswer) ?? "",

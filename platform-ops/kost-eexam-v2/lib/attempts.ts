@@ -446,32 +446,53 @@ export function getQuestionTestPreview(questionId: number): AttemptQuestionView 
   });
 }
 
-/** Revérifie l'expiration côté serveur à CHAQUE appel (§8 : le timer ne
- * dépend jamais uniquement du navigateur). Si expiré, auto-soumet
- * immédiatement au lieu d'accepter l'action demandée. */
-function assertNotExpiredOrAutoSubmit(attempt: AttemptRow): void {
-  if (attempt.status !== "in_progress") throw new AttemptError("Cette tentative n'est plus en cours.");
-  if (new Date(attempt.expires_at).getTime() < Date.now()) {
-    submitAttempt(attempt.id, attempt.candidate_user_id, { auto: true });
+/**
+ * Candidate writes and exam submission must serialize on the SAME SQLite
+ * BEGIN IMMEDIATE boundary. Checking status/expiry before that lock allows a
+ * stale autosave to commit after submission (and after grading). This also
+ * serializes scenario subanswer read/merge/write against other autosaves.
+ *
+ * Expired attempts are auto-submitted only AFTER releasing the write lock:
+ * submitAttempt owns its own transaction and must never be nested here.
+ */
+function writeActiveAttempt(
+  attemptId: number,
+  candidateUserId: number,
+  write: (db: ReturnType<typeof getDb>) => void
+): void {
+  const outcome = transaction((db) => {
+    const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
+    if (!attempt || attempt.candidate_user_id !== candidateUserId) {
+      throw new AttemptError("Tentative introuvable.");
+    }
+    if (attempt.status !== "in_progress") {
+      throw new AttemptError("Cette tentative n'est plus en cours.");
+    }
+    const deadline = Date.parse(attempt.expires_at);
+    if (!Number.isFinite(deadline)) {
+      throw new AttemptError("La date d'expiration de cette tentative est invalide.");
+    }
+    if (deadline <= Date.now()) return "expired" as const;
+    write(db);
+    return "written" as const;
+  });
+  if (outcome === "expired") {
+    submitAttempt(attemptId, candidateUserId, { auto: true });
     throw new AttemptError("Le temps imparti est écoulé — la tentative a été soumise automatiquement.");
   }
 }
 
 export function saveAnswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, answerKeys: string[]): void {
-  const attempt = getAttempt(attemptId);
-  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-  assertNotExpiredOrAutoSubmit(attempt);
+  writeActiveAttempt(attemptId, candidateUserId, (db) => {
+    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
+    if (!owns) throw new AttemptError("Question hors de cette tentative.");
 
-  const owns = getDb().prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
-  if (!owns) throw new AttemptError("Question hors de cette tentative.");
-
-  getDb()
-    .prepare(
+    db.prepare(
       `INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at)
        VALUES (?, ?, ?, ?)
        ON CONFLICT(attempt_question_id) DO UPDATE SET answer_json = excluded.answer_json, answered_at = excluded.answered_at`
-    )
-    .run(attemptId, attemptQuestionId, JSON.stringify(answerKeys), nowIso());
+    ).run(attemptId, attemptQuestionId, JSON.stringify(answerKeys), nowIso());
+  });
 }
 
 /** Autosave POUR UNE SOUS-QUESTION de scénario (mission "MISSION FINALE
@@ -482,31 +503,26 @@ export function saveAnswer(attemptId: number, candidateUserId: number, attemptQu
  * la justification complète du choix d'embarquement). Mêmes garanties que
  * saveAnswer() ci-dessus (propriété de la tentative, non-expiration). */
 export function saveScenarioSubanswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, subquestionId: string, answerKeys: string[]): void {
-  const attempt = getAttempt(attemptId);
-  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-  assertNotExpiredOrAutoSubmit(attempt);
+  writeActiveAttempt(attemptId, candidateUserId, (db) => {
+    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
+    if (!owns) throw new AttemptError("Question hors de cette tentative.");
 
-  const owns = getDb().prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
-  if (!owns) throw new AttemptError("Question hors de cette tentative.");
+    const existing = db.prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
+    const merged: Record<string, string[]> = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
+    merged[subquestionId] = answerKeys;
 
-  const existing = getDb().prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
-  const merged: Record<string, string[]> = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
-  merged[subquestionId] = answerKeys;
-
-  getDb()
-    .prepare(
+    db.prepare(
       `INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at)
        VALUES (?, ?, ?, ?)
        ON CONFLICT(attempt_question_id) DO UPDATE SET answer_json = excluded.answer_json, answered_at = excluded.answered_at`
-    )
-    .run(attemptId, attemptQuestionId, JSON.stringify(merged), nowIso());
+    ).run(attemptId, attemptQuestionId, JSON.stringify(merged), nowIso());
+  });
 }
 
 export function toggleMark(attemptId: number, candidateUserId: number, attemptQuestionId: number, marked: boolean): void {
-  const attempt = getAttempt(attemptId);
-  if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-  assertNotExpiredOrAutoSubmit(attempt);
-  getDb().prepare(`UPDATE attempt_questions SET marked_for_review = ? WHERE id = ? AND attempt_id = ?`).run(marked ? 1 : 0, attemptQuestionId, attemptId);
+  writeActiveAttempt(attemptId, candidateUserId, (db) => {
+    db.prepare(`UPDATE attempt_questions SET marked_for_review = ? WHERE id = ? AND attempt_id = ?`).run(marked ? 1 : 0, attemptQuestionId, attemptId);
+  });
 }
 
 export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {

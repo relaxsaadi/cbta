@@ -114,6 +114,20 @@ describe("Auteurage de question — lib/questions.ts (parseAuthoringFormData/val
     const { choices, correctAnswer } = parseAuthoringFormData("numeric", fd({ numericValue: "pas-un-nombre", numericTolerance: "0" }));
     assert.match(validateQuestionAuthoring("numeric", choices, correctAnswer) ?? "", /valeur numérique correcte est obligatoire/);
   });
+  test("numeric — valeur absente ou vide n'est jamais convertie en clé 0", () => {
+    for (const input of [{}, { numericValue: "" }, { numericValue: "   " }]) {
+      const { choices, correctAnswer } = parseAuthoringFormData("numeric", fd(input));
+      assert.match(
+        validateQuestionAuthoring("numeric", choices, correctAnswer) ?? "",
+        /valeur numérique correcte est obligatoire/,
+      );
+    }
+  });
+  test("numeric — zéro saisi explicitement reste une valeur correcte valide", () => {
+    const { choices, correctAnswer } = parseAuthoringFormData("numeric", fd({ numericValue: "0", numericTolerance: "0" }));
+    assert.deepEqual(correctAnswer, { mode: "numeric", value: 0, tolerance: 0, unit: undefined });
+    assert.equal(validateQuestionAuthoring("numeric", choices, correctAnswer), null);
+  });
   test("numeric — tolérance négative est REFUSÉE", () => {
     const { choices, correctAnswer } = parseAuthoringFormData("numeric", fd({ numericValue: "10", numericTolerance: "-1" }));
     assert.match(validateQuestionAuthoring("numeric", choices, correctAnswer) ?? "", /positif ou nul/);

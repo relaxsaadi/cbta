@@ -101,3 +101,39 @@ test("separate subquestion verdicts retain both decisions and finalize exactly o
   assert.equal(result.max_raw_score, 5);
   assert.equal(result.grading_state, "COMPLETE");
 });
+
+
+test("scenario manual grader rejects malformed historical metadata before any verdict or audit", async () => {
+  // Corrupt only a synthetic frozen snapshot after a valid submission.
+  // These are not real DGR examination questions or candidate records.
+  for (const failure of ["duplicate_id", "negative_points", "unknown_subtype", "invalid_json"] as const) {
+    const f = await fixture();
+    const snapshot = f.db.prepare(
+      `SELECT s.id, s.correct_answer_snapshot FROM assessment_question_snapshots s
+       JOIN attempt_questions aq ON aq.snapshot_id = s.id WHERE aq.id = ?`
+    ).get(f.attemptQuestionId) as { id: number; correct_answer_snapshot: string };
+    let malformed = "{not-json";
+    if (failure !== "invalid_json") {
+      const spec = JSON.parse(snapshot.correct_answer_snapshot) as {
+        mode: string;
+        subquestions: Array<{ id: string; qtype: string; points: number }>;
+      };
+      if (failure === "duplicate_id") spec.subquestions[1]!.id = spec.subquestions[0]!.id;
+      if (failure === "negative_points") spec.subquestions[0]!.points = -5;
+      if (failure === "unknown_subtype") spec.subquestions[1]!.qtype = "unknown_legacy";
+      malformed = JSON.stringify(spec);
+    }
+    f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+      .run(malformed, snapshot.id);
+
+    const previous = verdict(f);
+    const auditsBefore = manualAuditCount(f);
+    assert.throws(
+      () => f.submitScenarioSubgrade(f.attemptQuestionId, "sq1", true, f.adminId, "administrator"),
+      /Métadonnées du scénario invalides/,
+      failure,
+    );
+    assert.deepEqual(verdict(f), previous, failure);
+    assert.equal(manualAuditCount(f), auditsBefore, failure);
+  }
+});

@@ -218,7 +218,11 @@ export function gradeOneQuestion(
     let earnedPoints = 0;
     let anyPending = false;
     for (const sq of validated) {
-      const subAnswer = givenMap[sq.id];
+      // Never treat inherited Object.prototype names as submitted answers
+      // when grading a historical scenario with a reserved subquestion ID.
+      const subAnswer = Object.prototype.hasOwnProperty.call(givenMap, sq.id)
+        ? givenMap[sq.id]
+        : null;
       const subAnswerJson = subAnswer ? JSON.stringify(subAnswer) : null;
       const subResult = gradeOneQuestion(sq.qtype, JSON.stringify(sq.correctAnswer), subAnswerJson);
       if (subResult.pending) {

@@ -205,3 +205,27 @@ test("corrupt legacy scenario answer map cannot be silently merged into candidat
     .get(f.questionId) as { answer_json: string };
   assert.equal(stored.answer_json, "[]", "reject without overwriting historical evidence");
 });
+
+
+test("corrupt persisted scenario answer entries block resume and autosave without changing evidence", async () => {
+  const { getAttemptQuestions, saveScenarioSubanswer } = await import("../../lib/attempts");
+  const corruptCases = [
+    "null", "[]", "42", '"not a map"',
+    '{"sq1":42}', '{"sq1":[null]}', '{"sq1":["A",false]}',
+    '{"__proto__":{"polluted":true}}', "{broken",
+  ];
+  for (const corrupt of corruptCases) {
+    const f = await fixture(true);
+    f.db.prepare(
+      "INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at) VALUES (?, ?, ?, ?)"
+    ).run(f.attemptId, f.questionId, corrupt, "2026-11-06T00:00:00.000Z");
+    assert.throws(() => getAttemptQuestions(f.attemptId), /Réponses précédentes du scénario invalides/);
+    assert.throws(
+      () => saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "sq2", ["B"]),
+      /Réponses précédentes du scénario invalides/
+    );
+    const stored = f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+      .get(f.questionId) as { answer_json: string };
+    assert.equal(stored.answer_json, corrupt, "reject malformed legacy evidence without overwriting it");
+  }
+});

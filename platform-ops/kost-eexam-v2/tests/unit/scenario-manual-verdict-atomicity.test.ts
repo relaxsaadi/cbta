@@ -219,3 +219,46 @@ test("graded scenario history skips corrupt synthetic rows and preserves healthy
     assert.equal(manualAuditCount(f), 1);
   }
 });
+
+
+test("corrupt prior scenario subgrade cannot contaminate final points or reviewer audit", async () => {
+  const { listPendingScenarioSubquestions } = await import("../../lib/manual-grading");
+  const healthy = await fixture();
+  healthy.submitScenarioSubgrade(healthy.attemptQuestionId, "sq1", true, healthy.adminId, "administrator");
+
+  const damaged: Array<Awaited<ReturnType<typeof fixture>>> = [];
+  // Historical corruption is injected only after an actual synthetic manual
+  // verdict; no production data or examination keys are involved.
+  for (const kind of ["broken_json", "invalid_verdict", "forged_points", "unknown_id", "invalid_reviewer"] as const) {
+    const f = await fixture();
+    f.submitScenarioSubgrade(f.attemptQuestionId, "sq1", true, f.adminId, "administrator");
+    let payload = "{invalid-progress";
+    if (kind !== "broken_json") {
+      const progress = JSON.parse(verdict(f).scenario_grading_json!);
+      if (kind === "invalid_verdict") progress.sq1 = null;
+      if (kind === "forged_points") progress.sq1.pointsAwarded = 999;
+      if (kind === "unknown_id") progress.unknown = { ...progress.sq1 };
+      if (kind === "invalid_reviewer") progress.sq1.gradedBy = "fake";
+      payload = JSON.stringify(progress);
+    }
+    f.db.prepare("UPDATE attempt_answers SET scenario_grading_json = ? WHERE attempt_question_id = ?")
+      .run(payload, f.attemptQuestionId);
+    damaged.push(f);
+
+    const before = verdict(f);
+    assert.throws(
+      () => f.submitScenarioSubgrade(f.attemptQuestionId, "sq2", true, f.adminId, "administrator"),
+      /Historique de correction du scénario invalide/,
+      kind
+    );
+    assert.deepEqual(verdict(f), before, kind);
+    assert.equal(manualAuditCount(f), 1, kind);
+    assert.equal(f.finalizeManualGradingIfComplete(f.attemptId).finalized, false, kind);
+  }
+
+  const pending = listPendingScenarioSubquestions(null);
+  assert.equal(pending.some((r) => r.attempt_question_id === healthy.attemptQuestionId && r.subquestion_id === "sq2"), true);
+  for (const f of damaged) {
+    assert.equal(pending.some((r) => r.attempt_question_id === f.attemptQuestionId), false);
+  }
+});

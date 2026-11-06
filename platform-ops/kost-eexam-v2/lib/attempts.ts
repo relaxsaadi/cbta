@@ -526,25 +526,20 @@ export function toggleMark(attemptId: number, candidateUserId: number, attemptQu
 }
 
 export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
-  // Bug réel trouvé en concevant la correction manuelle (mission "COMPLETE
-  // CANDIDATE EXAM LIFECYCLE", 2026-08-29) : gradeAttempt() était appelée
-  // SANS CONDITION après la transaction ci-dessous, y compris quand la
-  // transition "déjà soumise -> no-op" avait eu lieu (double-clic, retry
-  // réseau retardé) — inoffensif avant la correction manuelle (renotage
-  // idempotent), mais dangereux depuis : un ré-appel tardif écraserait une
-  // correction manuelle déjà écrite. `transitioned` ne devient vrai QUE la
-  // toute première fois — gradeAttempt() n'est donc plus jamais appelée
-  // sur un no-op (défense en profondeur, doublée par la garde interne à
-  // gradeAttempt() elle-même).
-  let transitioned = false;
+  // Submission, per-question grading, result and both audit events must
+  // commit together. Previously submission committed first, so a later
+  // scoring/DB/audit error could strand a submitted attempt without a
+  // durable result and a retry would be ignored as already submitted.
+  // All library writes use the same getDb() connection; gradeAttempt()
+  // does not begin its own transaction. BEGIN IMMEDIATE also serializes
+  // candidate autosaves with this final state transition.
   transaction((db) => {
     const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
     if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-    if (attempt.status !== "in_progress") return; // déjà soumise — idempotent, pas une erreur (double clic sur Terminer)
+    if (attempt.status !== "in_progress") return; // safe idempotent retry; do not regrade/manual-overwrite
 
     const status: AttemptStatus = opts.auto ? "auto_submitted" : "submitted";
     db.prepare(`UPDATE attempts SET status = ?, submitted_at = ? WHERE id = ?`).run(status, nowIso(), attemptId);
-    transitioned = true;
 
     audit({
       actorUserId: candidateUserId,
@@ -553,14 +548,11 @@ export function submitAttempt(attemptId: number, candidateUserId: number, opts: 
       targetType: "attempt",
       targetId: attemptId,
     });
+
+    // Any grading failure rolls back submission status, grading writes,
+    // result and audit together. Retry remains possible after repair.
+    gradeAttempt(attemptId);
   });
-
-  if (!transitioned) return;
-
-  // Notation hors de la transaction d'écriture ci-dessus (gradeAttempt gère
-  // sa propre cohérence) — évite d'imbriquer deux BEGIN IMMEDIATE (SQLite
-  // n'autorise pas les transactions imbriquées).
-  gradeAttempt(attemptId);
 }
 
 /** Balayage périodique — auto-soumet toute tentative dont le temps est

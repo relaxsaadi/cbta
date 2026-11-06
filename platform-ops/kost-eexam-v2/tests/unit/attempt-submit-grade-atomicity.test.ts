@@ -22,7 +22,7 @@ async function fixture() {
   addCandidateToGroup(groupId, candidateId, adminId);
   const questionId = createQuestion({
     kostQuestionId: `TEST-${prefix}`, functionCode: "7.8", qtype: "mcq_single",
-    sourceStatus: "DRAFT", stem: "Synthetic question",
+    sourceStatus: "FROZEN_SOURCE_VERIFIED", stem: "Synthetic question",
     choices: [{ key: "A", text: "A" }, { key: "B", text: "B" }],
     correctAnswer: ["A"], createdBy: adminId,
   });

@@ -507,10 +507,37 @@ function writeActiveAttempt(
   }
 }
 
+/** Server actions are callable with arbitrary client arguments. Check the frozen
+ * question type before writing so the generic-answer endpoint cannot replace
+ * a scenario answer map (or the scenario endpoint write an object to an MCQ).
+ * Keep the membership check inside the candidate write transaction. */
+function ownedQuestionSnapshot(
+  db: ReturnType<typeof getDb>, attemptId: number, attemptQuestionId: number
+): { qtype_snapshot: string; correct_answer_snapshot: string } {
+  const snapshot = db.prepare(
+    `SELECT s.qtype_snapshot, s.correct_answer_snapshot
+     FROM attempt_questions aq
+     JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+     WHERE aq.id = ? AND aq.attempt_id = ?`
+  ).get(attemptQuestionId, attemptId) as
+    { qtype_snapshot: string; correct_answer_snapshot: string } | undefined;
+  if (!snapshot) throw new AttemptError("Question hors de cette tentative.");
+  return snapshot;
+}
+
+function assertCandidateAnswerArray(answerKeys: string[]): void {
+  if (!Array.isArray(answerKeys) || !answerKeys.every((key: unknown) => typeof key === "string")) {
+    throw new AttemptError("Format de réponse invalide.");
+  }
+}
+
 export function saveAnswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, answerKeys: string[]): void {
   writeActiveAttempt(attemptId, candidateUserId, (db) => {
-    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
-    if (!owns) throw new AttemptError("Question hors de cette tentative.");
+    const snapshot = ownedQuestionSnapshot(db, attemptId, attemptQuestionId);
+    if (snapshot.qtype_snapshot === "scenario") {
+      throw new AttemptError("Un scénario exige une réponse par sous-question.");
+    }
+    assertCandidateAnswerArray(answerKeys);
 
     db.prepare(
       `INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at)
@@ -529,8 +556,35 @@ export function saveAnswer(attemptId: number, candidateUserId: number, attemptQu
  * saveAnswer() ci-dessus (propriété de la tentative, non-expiration). */
 export function saveScenarioSubanswer(attemptId: number, candidateUserId: number, attemptQuestionId: number, subquestionId: string, answerKeys: string[]): void {
   writeActiveAttempt(attemptId, candidateUserId, (db) => {
-    const owns = db.prepare(`SELECT 1 FROM attempt_questions WHERE id = ? AND attempt_id = ?`).get(attemptQuestionId, attemptId);
-    if (!owns) throw new AttemptError("Question hors de cette tentative.");
+    const snapshot = ownedQuestionSnapshot(db, attemptId, attemptQuestionId);
+    if (snapshot.qtype_snapshot !== "scenario") {
+      throw new AttemptError("Cette question n'est pas un scénario.");
+    }
+    assertCandidateAnswerArray(answerKeys);
+    // Never accept an arbitrary client-supplied subquestion ID. It must be
+    // an unambiguous identity in this attempt's FROZEN scenario snapshot.
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(snapshot.correct_answer_snapshot) as unknown;
+    } catch {
+      throw new AttemptError("Configuration du scénario publiée invalide.");
+    }
+    const spec = parsed as { mode?: unknown; subquestions?: unknown } | null;
+    const items = spec && typeof spec === "object" && !Array.isArray(spec)
+      ? spec.subquestions : null;
+    if (spec?.mode !== "scenario" || !Array.isArray(items) || items.length === 0 ||
+        !items.every((item: unknown) => item !== null && typeof item === "object" &&
+          !Array.isArray(item) && typeof (item as { id?: unknown }).id === "string" &&
+          ((item as { id: string }).id).trim().length > 0)) {
+      throw new AttemptError("Configuration du scénario publiée invalide.");
+    }
+    const ids = (items as { id: string }[]).map((item) => item.id);
+    if (new Set(ids).size !== ids.length) {
+      throw new AttemptError("Configuration du scénario publiée invalide.");
+    }
+    if (typeof subquestionId !== "string" || !ids.includes(subquestionId)) {
+      throw new AttemptError("Sous-question hors de ce scénario.");
+    }
 
     const existing = db.prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
     const previous = readPersistedScenarioAnswers(existing?.answer_json ?? null);

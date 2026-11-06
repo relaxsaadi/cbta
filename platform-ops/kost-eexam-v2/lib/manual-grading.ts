@@ -683,7 +683,11 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
       if (!valid) continue;
       for (const sub of spec.subquestions) {
         if (sub.qtype !== "short_answer" || sub.correctAnswer?.mode !== "manual") continue;
-        const candidateAnswer = givenValue[sub.id];
+        // An absent answer is unanswered, not an inherited Object.prototype
+        // value. Legacy subquestion IDs may be "constructor"/"toString".
+        const candidateAnswer = Object.prototype.hasOwnProperty.call(givenValue, sub.id)
+          ? givenValue[sub.id]
+          : undefined;
         if (candidateAnswer !== undefined && (!Array.isArray(candidateAnswer) ||
             !candidateAnswer.every((value: unknown) => typeof value === "string"))) {
           valid = false;
@@ -717,7 +721,9 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
         ? progress[sq.id]
         : undefined;
       if (!verdict) continue; // pas encore corrigée — jamais dans l'historique.
-      const ans = given[sq.id];
+      const ans = Object.prototype.hasOwnProperty.call(given, sq.id)
+        ? given[sq.id]
+        : undefined;
       out.push({
         attempt_question_id: r.attempt_question_id,
         attempt_id: r.attempt_id,

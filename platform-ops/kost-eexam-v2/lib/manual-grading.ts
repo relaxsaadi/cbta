@@ -444,11 +444,28 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
 
   const out: PendingScenarioSubquestionRow[] = [];
   for (const r of rows) {
-    const spec = JSON.parse(r.correct_answer_snapshot) as {
+    // One incomplete/corrupt historical attempt must not crash the entire
+    // examiner queue or expose an invalid scenario for manual grading.
+    // Reuse the authoritative grading preflight introduced for the mutation;
+    // it validates the frozen scenario structure before any display.
+    let spec: {
       subquestions: { id: string; qtype: string; stem: string; points: number; correctAnswer: { mode?: string } }[];
     };
-    const given = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
-    const progress = (r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {}) as Record<string, unknown>;
+    let given: Record<string, unknown>;
+    let progress: Record<string, unknown>;
+    try {
+      if (!gradeOneQuestion("scenario", r.correct_answer_snapshot, r.answer_json).pending) continue;
+      spec = JSON.parse(r.correct_answer_snapshot) as typeof spec;
+      const parsedGiven: unknown = r.answer_json ? JSON.parse(r.answer_json) : {};
+      const parsedProgress: unknown = r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {};
+      if (!parsedGiven || typeof parsedGiven !== "object" || Array.isArray(parsedGiven) ||
+          !parsedProgress || typeof parsedProgress !== "object" || Array.isArray(parsedProgress)) continue;
+      given = parsedGiven as Record<string, unknown>;
+      progress = parsedProgress as Record<string, unknown>;
+    } catch {
+      // READ-ONLY isolation; do not repair, grade, or silently approve a row.
+      continue;
+    }
     for (const sq of spec.subquestions) {
       const isManual = sq.qtype === "short_answer" && sq.correctAnswer?.mode === "manual";
       if (!isManual || progress[sq.id]) continue; // pas manuel, ou déjà statuée — jamais dans la file.
@@ -468,7 +485,7 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
         function_code: r.function_code,
         scenario_title: r.scenario_title,
         subquestion_stem: sq.stem,
-        candidate_answer: ans && ans[0] ? ans[0] : "",
+        candidate_answer: Array.isArray(ans) && typeof ans[0] === "string" ? ans[0] : "",
         points: sq.points,
         submitted_at: r.submitted_at,
       });

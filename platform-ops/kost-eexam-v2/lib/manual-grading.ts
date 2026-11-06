@@ -609,7 +609,10 @@ export function submitScenarioSubgrade(
   graderRole: ConsoleRole,
   comment?: string
 ): { attemptId: number; finalized: boolean } {
-  const db = getDb();
+  // Acquire the SQLite write lock before reading scenario_grading_json. Two
+  // graders must not overwrite one another's verdicts; the audit and verdict
+  // must also commit or roll back together on any storage failure.
+  return transaction((db) => {
   const row = db
     .prepare(
       `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, aa.answer_json, aa.scenario_grading_json, s.correct_answer_snapshot, s.qtype_snapshot AS qtype
@@ -691,4 +694,5 @@ export function submitScenarioSubgrade(
   );
 
   return { attemptId: row.attempt_id, finalized: true };
+  });
 }

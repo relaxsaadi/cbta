@@ -339,7 +339,7 @@ function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionVie
         // Historical subquestion IDs can be names on Object.prototype.
         // Missing saved fields must remain null, not inherited objects/functions.
         answer: Object.prototype.hasOwnProperty.call(savedAnswers, sq.id)
-          ? savedAnswers[sq.id]
+          ? (savedAnswers[sq.id] ?? null)
           : null,
       })),
     };

@@ -711,7 +711,11 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
   const out: GradedScenarioSubquestionRow[] = [];
   for (const { r, spec, given, progress } of validRows) {
     for (const sq of spec.subquestions) {
-      const verdict = progress[sq.id];
+      // Historical IDs may be inherited Object prototype keys. Only an own
+      // persisted progress entry is evidence of a human grading verdict.
+      const verdict = Object.prototype.hasOwnProperty.call(progress, sq.id)
+        ? progress[sq.id]
+        : undefined;
       if (!verdict) continue; // pas encore corrigée — jamais dans l'historique.
       const ans = given[sq.id];
       out.push({

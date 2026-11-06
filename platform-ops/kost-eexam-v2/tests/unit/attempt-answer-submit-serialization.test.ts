@@ -23,7 +23,7 @@ async function fixture(scenario = false) {
   addCandidateToGroup(groupId, candidateId, adminId);
 
   const choices = [{ key: "A", text: "Option A" }, { key: "B", text: "Option B" }];
-  createQuestion({
+  const authoredQuestionId = createQuestion({
     kostQuestionId: `TEST-${suffix}`,
     functionCode: "7.8",
     qtype: scenario ? "scenario" : "mcq_single",
@@ -40,7 +40,9 @@ async function fixture(scenario = false) {
   });
   const assessmentId = createAssessmentDraft({
     type: "examen", name: suffix, functionCode: "7.8", groupId,
-    questionSource: "random", questionCount: 1, durationMinutes: 30,
+    // Select this fixture's authored question deterministically; a random
+    // pool can pull another synthetic question from earlier tests.
+    questionSource: "manual", manualQuestionIds: [authoredQuestionId], questionCount: 1, durationMinutes: 30,
     passThresholdPct: 80, scope: "test", createdBy: adminId,
   });
   publishAssessment(assessmentId, adminId);

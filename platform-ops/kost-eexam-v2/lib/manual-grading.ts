@@ -81,6 +81,20 @@ function manualGradingFilterClauses(filters: ManualGradingFilters): { clauses: s
   return { clauses, params };
 }
 
+/** Fail closed on malformed or legacy short-answer snapshots. The qtype alone
+ * is not evidence that an answer requires human judgement: exact-mode
+ * short answers must never enter the manual-grading queue or mutation. */
+function isManualShortAnswerSnapshot(value: unknown): boolean {
+  if (typeof value !== "string") return false;
+  try {
+    const spec: unknown = JSON.parse(value);
+    return spec !== null && typeof spec === "object" && !Array.isArray(spec) &&
+      (spec as { mode?: unknown }).mode === "manual";
+  } catch {
+    return false;
+  }
+}
+
 /** Liste des réponses en attente de correction manuelle — jamais une
  * question déjà notée automatiquement (les questions 'short_answer' mode
  * 'exact' ne passent jamais ici), jamais une tentative encore
@@ -105,7 +119,7 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
       `SELECT aa.id AS attempt_answer_id, aq.id AS attempt_question_id, at.id AS attempt_id,
               u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
               g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
-              s.stem_snapshot AS stem, aa.answer_json, s.points, at.submitted_at
+              s.stem_snapshot AS stem, aa.answer_json, s.correct_answer_snapshot AS answer_spec_snapshot, s.points, at.submitted_at
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
@@ -118,6 +132,7 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
        ORDER BY at.submitted_at ASC`
     )
     .all(...params)
+    .filter((r) => isManualShortAnswerSnapshot((r as Record<string, unknown>).answer_spec_snapshot))
     .map((r) => {
       const row = r as Record<string, unknown>;
       const answerJson = row.answer_json as string | null;
@@ -243,19 +258,21 @@ export function submitManualGrade(
   return transaction((db) => {
     const row = db
       .prepare(
-        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype, at.status AS attempt_status
+        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype, s.correct_answer_snapshot AS answer_spec_snapshot, at.status AS attempt_status
          FROM attempt_answers aa
          JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
          JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
          JOIN attempts at ON at.id = aa.attempt_id
          WHERE aa.attempt_question_id = ?`
       )
-      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string; attempt_status: string } | undefined;
+      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string; answer_spec_snapshot: string; attempt_status: string } | undefined;
     if (!row) throw new ManualGradingError("Réponse introuvable.");
     if (row.attempt_status !== "submitted" && row.attempt_status !== "auto_submitted") {
       throw new ManualGradingError("La tentative doit être soumise avant correction.");
     }
-    if (row.qtype !== "short_answer") throw new ManualGradingError("Cette question n'est pas à correction manuelle.");
+    if (row.qtype !== "short_answer" || !isManualShortAnswerSnapshot(row.answer_spec_snapshot)) {
+      throw new ManualGradingError("Cette question n'est pas à correction manuelle.");
+    }
     if (row.is_correct !== null) throw new ManualGradingError("Cette réponse a déjà été corrigée.");
 
     const pointsAwarded = isCorrect ? row.points : 0;

@@ -95,6 +95,22 @@ function isManualShortAnswerSnapshot(value: unknown): boolean {
   }
 }
 
+// A single corrupt standalone answer must not invalidate the entire
+// examiner queue or history. A null DB answer means unanswered; a malformed
+// stored JSON payload or a multi-valued short answer is not reviewer evidence.
+function parseManualCandidateAnswer(answerJson: unknown): string | null {
+  if (answerJson === null) return "";
+  if (typeof answerJson !== "string") return null;
+  try {
+    const value: unknown = JSON.parse(answerJson);
+    if (!Array.isArray(value) || value.length > 1 ||
+        !value.every((item: unknown) => typeof item === "string")) return null;
+    return value.length === 0 ? "" : value[0] as string;
+  } catch {
+    return null;
+  }
+}
+
 /** Liste des réponses en attente de correction manuelle — jamais une
  * question déjà notée automatiquement (les questions 'short_answer' mode
  * 'exact' ne passent jamais ici), jamais une tentative encore
@@ -133,10 +149,11 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
     )
     .all(...params)
     .filter((r) => isManualShortAnswerSnapshot((r as Record<string, unknown>).answer_spec_snapshot))
-    .map((r) => {
+    .flatMap((r) => {
       const row = r as Record<string, unknown>;
-      const answerJson = row.answer_json as string | null;
-      return {
+      const candidateAnswer = parseManualCandidateAnswer(row.answer_json);
+      if (candidateAnswer === null) return [];
+      return [{
         attempt_answer_id: row.attempt_answer_id,
         attempt_question_id: row.attempt_question_id,
         attempt_id: row.attempt_id,
@@ -150,10 +167,10 @@ export function listPendingManualGrading(restrictToGroupIdsOrNull: number[] | nu
         assessment_name: row.assessment_name,
         function_code: row.function_code,
         stem: row.stem,
-        candidate_answer: answerJson ? (JSON.parse(answerJson)[0] ?? "") : "",
+        candidate_answer: candidateAnswer,
         points: row.points,
         submitted_at: row.submitted_at,
-      };
+      }];
     }) as unknown as PendingGradingRow[];
 }
 
@@ -192,7 +209,7 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
       `SELECT aa.id AS attempt_answer_id, aq.id AS attempt_question_id, at.id AS attempt_id,
               u.id AS candidate_user_id, u.full_name AS candidate_name, c.id AS company_id, c.name AS company_name,
               g.id AS group_id, g.name AS group_name, a.id AS assessment_id, a.name AS assessment_name, a.function_code,
-              s.stem_snapshot AS stem, aa.answer_json, s.points, at.submitted_at,
+              s.stem_snapshot AS stem, aa.answer_json, s.correct_answer_snapshot AS answer_spec_snapshot, s.points, at.submitted_at,
               aa.is_correct, aa.points_awarded, aa.graded_by, aa.grader_comment, aa.graded_at,
               grader.full_name AS grader_name, r.grading_state AS attempt_grading_state
        FROM attempt_answers aa
@@ -209,10 +226,12 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
        ORDER BY at.submitted_at DESC`
     )
     .all(...params)
-    .map((r) => {
+    .filter((r) => isManualShortAnswerSnapshot((r as Record<string, unknown>).answer_spec_snapshot))
+    .flatMap((r) => {
       const row = r as Record<string, unknown>;
-      const answerJson = row.answer_json as string | null;
-      return {
+      const candidateAnswer = parseManualCandidateAnswer(row.answer_json);
+      if (candidateAnswer === null) return [];
+      return [{
         attempt_answer_id: row.attempt_answer_id,
         attempt_question_id: row.attempt_question_id,
         attempt_id: row.attempt_id,
@@ -226,7 +245,7 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
         assessment_name: row.assessment_name,
         function_code: row.function_code,
         stem: row.stem,
-        candidate_answer: answerJson ? (JSON.parse(answerJson)[0] ?? "") : "",
+        candidate_answer: candidateAnswer,
         points: row.points,
         submitted_at: row.submitted_at,
         is_correct: row.is_correct === 1,
@@ -236,7 +255,7 @@ export function listGradedManually(restrictToGroupIdsOrNull: number[] | null = n
         graded_at: row.graded_at,
         grader_name: row.grader_name,
         attempt_grading_state: row.attempt_grading_state,
-      };
+      }];
     }) as unknown as GradedManualRow[];
 }
 

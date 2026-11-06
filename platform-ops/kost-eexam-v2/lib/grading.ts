@@ -62,7 +62,9 @@ export function gradeOneQuestion(
     // Number("") / Number("   ") / Number(null) / Number(false) all equal
     // zero. A blank or malformed candidate submission must not earn points
     // when the actual correct answer is zero (including scenario subanswers).
-    const rawGivenValue: unknown = Array.isArray(given) && given.length > 0 ? given[0] : null;
+    // A single-value question cannot grade a contradictory/multi-value payload
+    // by silently ignoring every submitted value after the first.
+    const rawGivenValue: unknown = Array.isArray(given) && given.length === 1 ? given[0] : null;
     const hasExplicitNumericValue =
       (typeof rawGivenValue === "string" && rawGivenValue.trim() !== "") ||
       (typeof rawGivenValue === "number" && Number.isFinite(rawGivenValue));
@@ -74,7 +76,8 @@ export function gradeOneQuestion(
   if (qtype === "short_answer") {
     const spec = JSON.parse(correctAnswerSnapshot) as { mode: "exact" | "manual"; acceptedAnswers?: string[] };
     if (spec.mode === "manual") return { pending: true, isCorrect: false };
-    const givenText = Array.isArray(given) && given.length > 0 ? String(given[0]) : "";
+    // Keep exact-answer grading unambiguous even for forged autosave bodies.
+    const givenText = Array.isArray(given) && given.length === 1 ? String(given[0]) : "";
     if (!givenText) return { pending: false, isCorrect: false };
     const normalizedGiven = normalizeShortAnswer(givenText);
     const isCorrect = (spec.acceptedAnswers ?? []).some((a) => normalizeShortAnswer(a) === normalizedGiven);

@@ -5,7 +5,7 @@ import { validateQuestionAuthoring } from "../../lib/questions";
 
 // Synthetic answer identities only: no real KOST/DGR question text or keys.
 const correctPairs = {
-  mode: "matching",
+  mode: "matching" as const,
   pairs: [{ left: "L1", right: "R1" }, { left: "L2", right: "R2" }],
 };
 const gradeMatching = (key: unknown, given: unknown) =>

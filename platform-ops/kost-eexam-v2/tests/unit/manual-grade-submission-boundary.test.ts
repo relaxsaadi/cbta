@@ -95,6 +95,10 @@ test("scenario human subgrade also rejects in-progress answers and permits auto-
   assert.deepEqual(answerState(f), initial);
   assert.equal(manualAudits(f), 0);
 
+  // An auto-submission must be backed by server expiry, not by the
+  // caller's untrusted auto hint (#40).
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
   f.submitAttempt(f.attemptId, f.candidateId, { auto: true });
   const row = f.db.prepare("SELECT status FROM attempts WHERE id = ?").get(f.attemptId) as { status: string };
   assert.equal(row.status, "auto_submitted");

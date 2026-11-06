@@ -281,8 +281,11 @@ test("graded scenario history never manufactures decisions from inherited object
     spec.subquestions[0].id = inheritedKey;
     f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
       .run(JSON.stringify(spec), snapshot.id);
-    f.db.prepare("UPDATE attempt_answers SET scenario_grading_json = ? WHERE attempt_question_id = ?")
-      .run("{}", f.attemptQuestionId);
+    // Give the synthetic legacy answer an OWN key. Without this setup the
+    // history parser rejects inherited candidate answers before reaching
+    // the progress lookup, so the regression would pass even without the fix.
+    f.db.prepare("UPDATE attempt_answers SET answer_json = ?, scenario_grading_json = ? WHERE attempt_question_id = ?")
+      .run(JSON.stringify({ [inheritedKey]: ["synthetic answer"] }), "{}", f.attemptQuestionId);
     malformed.push(f);
   }
 

@@ -260,4 +260,36 @@ describe("Correction manuelle — lib/manual-grading.ts", async () => {
       assert.equal(audits.n, 1, "historical read does not rewrite or erase audit evidence");
     }
   });
+  test("standalone manual grading mutation rejects malformed historical candidate payloads atomically", () => {
+    const cases = [
+      "{broken-json",
+      JSON.stringify(["one", "contradictory second"]),
+      JSON.stringify([false]),
+      JSON.stringify({ response: "forged" }),
+    ];
+    const fixtures = cases.map(() => makeFixture({ withMcq: false }));
+    for (let i = 0; i < cases.length; i++) {
+      const f = fixtures[i]!;
+      getDb().prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
+        .run(cases[i], f.manualAqId);
+      assert.equal(listPendingManualGrading(null).some((row) => row.attempt_question_id === f.manualAqId), false);
+      assert.throws(
+        () => submitManualGrade(f.manualAqId, true, f.adminId, "administrator"),
+        (err: unknown) => err instanceof ManualGradingError && /candidat invalide/.test(err.message)
+      );
+      const row = getDb().prepare(
+        "SELECT is_correct, points_awarded, graded_by, graded_at FROM attempt_answers WHERE attempt_question_id = ?"
+      ).get(f.manualAqId) as { is_correct: number | null; points_awarded: number | null; graded_by: number | null; graded_at: string | null };
+      assert.deepEqual(row, { is_correct: null, points_awarded: null, graded_by: null, graded_at: null });
+      const auditCount = getDb().prepare(
+        "SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'answer_graded_manual'"
+      ).get(f.attemptId) as { n: number };
+      assert.equal(auditCount.n, 0, "rejected write must not create a review audit");
+      assert.equal(finalizeManualGradingIfComplete(f.attemptId).finalized, false);
+    }
+    const healthy = makeFixture({ withMcq: false });
+    assert.deepEqual(submitManualGrade(healthy.manualAqId, true, healthy.adminId, "administrator"), { attemptId: healthy.attemptId });
+    assert.equal(finalizeManualGradingIfComplete(healthy.attemptId).finalized, true);
+  });
+
 });

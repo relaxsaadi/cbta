@@ -277,14 +277,14 @@ export function submitManualGrade(
   return transaction((db) => {
     const row = db
       .prepare(
-        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype, s.correct_answer_snapshot AS answer_spec_snapshot, at.status AS attempt_status
+        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, aa.answer_json AS candidate_answer_json, s.points, s.qtype_snapshot AS qtype, s.correct_answer_snapshot AS answer_spec_snapshot, at.status AS attempt_status
          FROM attempt_answers aa
          JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
          JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
          JOIN attempts at ON at.id = aa.attempt_id
          WHERE aa.attempt_question_id = ?`
       )
-      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string; answer_spec_snapshot: string; attempt_status: string } | undefined;
+      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; candidate_answer_json: string | null; points: number; qtype: string; answer_spec_snapshot: string; attempt_status: string } | undefined;
     if (!row) throw new ManualGradingError("Réponse introuvable.");
     if (row.attempt_status !== "submitted" && row.attempt_status !== "auto_submitted") {
       throw new ManualGradingError("La tentative doit être soumise avant correction.");
@@ -293,6 +293,11 @@ export function submitManualGrade(
       throw new ManualGradingError("Cette question n'est pas à correction manuelle.");
     }
     if (row.is_correct !== null) throw new ManualGradingError("Cette réponse a déjà été corrigée.");
+    // A hidden/corrupt historical answer must not be manually graded through
+    // a direct server action after the read queue excluded that row.
+    if (parseManualCandidateAnswer(row.candidate_answer_json) === null) {
+      throw new ManualGradingError("Réponse du candidat invalide : correction impossible.");
+    }
 
     const pointsAwarded = isCorrect ? row.points : 0;
     db.prepare(`UPDATE attempt_answers SET is_correct = ?, points_awarded = ?, graded_by = ?, grader_comment = ?, graded_at = ? WHERE id = ?`).run(

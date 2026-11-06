@@ -87,14 +87,24 @@ export function gradeOneQuestion(
   // tableau "leftKey:rightKey" (voir lib/questions.ts::MatchingAnswerSpec).
   if (qtype === "matching") {
     const spec = JSON.parse(correctAnswerSnapshot) as { pairs: { left: string; right: string }[] };
-    const givenPairs = Array.isArray(given) ? (given as string[]) : [];
-    const givenMap = new Map(
-      givenPairs.map((p) => {
-        const [l, r] = String(p).split(":");
-        return [l, r];
-      })
-    );
-    const isCorrect = spec.pairs.length > 0 && givenMap.size === spec.pairs.length && spec.pairs.every((p) => givenMap.get(p.left) === p.right);
+    // An exact, complete matching answer must contain ONE unambiguous
+    // candidate entry for each left key. Map() alone drops duplicate keys:
+    // ["L1:wrong", "L1:right", "L2:right"] previously earned full credit
+    // for a two-pair question despite the conflicting extra response.
+    const givenPairs = Array.isArray(given) ? given : [];
+    if (spec.pairs.length === 0 || givenPairs.length !== spec.pairs.length) {
+      return { pending: false, isCorrect: false };
+    }
+    const givenMap = new Map<string, string>();
+    for (const encoded of givenPairs) {
+      if (typeof encoded !== "string") return { pending: false, isCorrect: false };
+      const parts = encoded.split(":");
+      if (parts.length !== 2 || !parts[0] || !parts[1] || givenMap.has(parts[0])) {
+        return { pending: false, isCorrect: false };
+      }
+      givenMap.set(parts[0], parts[1]);
+    }
+    const isCorrect = spec.pairs.every((p) => givenMap.get(p.left) === p.right);
     return { pending: false, isCorrect };
   }
 

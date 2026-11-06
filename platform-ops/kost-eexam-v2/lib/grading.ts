@@ -114,13 +114,30 @@ export function gradeOneQuestion(
   // configuré explicitement — non implémenté cette passe). `given` est un
   // tableau "leftKey:rightKey" (voir lib/questions.ts::MatchingAnswerSpec).
   if (qtype === "matching") {
-    const spec = JSON.parse(correctAnswerSnapshot) as { pairs: { left: string; right: string }[] };
-    // An exact, complete matching answer must contain ONE unambiguous
-    // candidate entry for each left key. Map() alone drops duplicate keys:
-    // ["L1:wrong", "L1:right", "L2:right"] previously earned full credit
-    // for a two-pair question despite the conflicting extra response.
+    const spec = JSON.parse(correctAnswerSnapshot) as { mode?: unknown; pairs?: unknown } | null;
+    // Historical/corrupted answer keys can bypass the authoring validator.
+    // A repeated left or right identity is not a one-to-one matching key:
+    // without this guard, two identical expected left pairs plus an unrelated
+    // candidate pair can receive full marks. This also applies in scenarios.
+    const pairs = Array.isArray(spec?.pairs) ? spec.pairs as unknown[] : [];
+    const validPair = (p: unknown): p is { left: string; right: string } =>
+      !!p && typeof p === "object" && !Array.isArray(p) &&
+      typeof (p as { left?: unknown }).left === "string" &&
+      (p as { left: string }).left.trim().length > 0 &&
+      typeof (p as { right?: unknown }).right === "string" &&
+      (p as { right: string }).right.trim().length > 0;
+    if (spec?.mode !== "matching" || pairs.length < 2 || !pairs.every(validPair)) {
+      return { pending: false, isCorrect: false };
+    }
+    const expectedPairs = pairs as { left: string; right: string }[];
+    if (new Set(expectedPairs.map((p) => p.left)).size !== expectedPairs.length ||
+        new Set(expectedPairs.map((p) => p.right)).size !== expectedPairs.length) {
+      return { pending: false, isCorrect: false };
+    }
+    // Candidate responses must also provide one complete unambiguous pair
+    // per left key. Map() alone would silently overwrite duplicate entries.
     const givenPairs = Array.isArray(given) ? given : [];
-    if (spec.pairs.length === 0 || givenPairs.length !== spec.pairs.length) {
+    if (givenPairs.length !== expectedPairs.length) {
       return { pending: false, isCorrect: false };
     }
     const givenMap = new Map<string, string>();
@@ -132,7 +149,7 @@ export function gradeOneQuestion(
       }
       givenMap.set(parts[0], parts[1]);
     }
-    const isCorrect = spec.pairs.every((p) => givenMap.get(p.left) === p.right);
+    const isCorrect = expectedPairs.every((p) => givenMap.get(p.left) === p.right);
     return { pending: false, isCorrect };
   }
 
@@ -140,9 +157,18 @@ export function gradeOneQuestion(
   // (jamais de crédit partiel par position correcte, sauf configuré
   // explicitement — non implémenté cette passe).
   if (qtype === "ordering") {
-    const spec = JSON.parse(correctAnswerSnapshot) as { sequence: string[] };
+    const spec = JSON.parse(correctAnswerSnapshot) as { mode?: unknown; sequence?: unknown } | null;
+    // Validate legacy answer keys at grading time: duplicate/blank sequence
+    // keys must not become a correct answer merely because a candidate sends
+    // the same malformed sequence. Scenario subquestions share this path.
+    const sequence = Array.isArray(spec?.sequence) ? spec.sequence as unknown[] : [];
+    if (spec?.mode !== "ordering" || sequence.length < 2 ||
+        !sequence.every((k) => typeof k === "string" && k.trim().length > 0) ||
+        new Set(sequence).size !== sequence.length) {
+      return { pending: false, isCorrect: false };
+    }
     const givenSeq = Array.isArray(given) && given.every((k: unknown) => typeof k === "string") ? (given as string[]) : [];
-    const isCorrect = Array.isArray(spec.sequence) && spec.sequence.length > 0 && givenSeq.length === spec.sequence.length && givenSeq.every((k, i) => k === spec.sequence[i]);
+    const isCorrect = givenSeq.length === sequence.length && givenSeq.every((k, i) => k === sequence[i]);
     return { pending: false, isCorrect };
   }
 

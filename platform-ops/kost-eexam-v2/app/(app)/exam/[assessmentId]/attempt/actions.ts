@@ -49,36 +49,21 @@ export async function toggleMarkAction(attemptId: number, attemptQuestionId: num
   }
 }
 
-/** `auto` (mission "COMPLETE CANDIDATE EXAM LIFECYCLE" §16/§20) — distingue
- * une vraie soumission manuelle (clic "Terminer et envoyer l'examen") d'une
- * auto-soumission déclenchée par l'expiration du chronomètre CÔTÉ CLIENT
- * (ExamRunner.tsx, temps écoulé pendant que le navigateur reste ouvert) —
- * jusqu'ici toujours enregistrée comme 'submitted' même dans ce second cas,
- * ce qui masquait la vraie raison de fin de tentative dans
- * attempts.status/l'audit. La revérification serveur de l'expiration
- * (assertNotExpiredOrAutoSubmit, lib/attempts.ts) reste de toute façon
- * l'autorité finale, indépendamment de ce que le client déclare ici. */
+/** The client-side timeout hint is only UX state. The SQLite finalizer
+ * verifies expiry against the server clock inside the decisive transaction. */
 export async function submitAttemptAction(attemptId: number, auto = false): Promise<ActionResult> {
   const session = await requireRole("candidate");
-  // Bug réel identifié en concevant EXAM_SUBMITTED (mission "COMPLETE
-  // CANDIDATE EXAM LIFECYCLE" §17/§31) : submitAttempt() est idempotente
-  // par conception (un second appel sur une tentative déjà soumise ne
-  // change rien, voir lib/attempts.ts) — sans cette vérification AVANT
-  // l'appel, une resoumission (double-clic, retry réseau) redéclencherait
-  // quand même les notifications ci-dessous à chaque appel. `alreadySubmitted`
-  // capture l'état AVANT, pour ne notifier que sur la vraie première
-  // transition — jamais une confirmation/alerte staff en double.
-  const before = getDb().prepare(`SELECT status FROM attempts WHERE id = ?`).get(attemptId) as { status: string } | undefined;
-  const alreadySubmitted = !before || before.status !== "in_progress";
-
+  // #40: only the winning serialized transition may trigger notifications.
+  // A pre-transaction SELECT races competing candidate/cron submissions.
+  let transitioned = false;
   try {
-    submitAttempt(attemptId, session.userId, { auto });
+    transitioned = submitAttempt(attemptId, session.userId, { auto }).transitioned;
   } catch (err) {
     if (err instanceof AttemptError) return { ok: false, error: err.message };
     throw err;
   }
 
-  if (!alreadySubmitted) {
+  if (transitioned) {
     // EXAM_SUBMITTED + EXAM_SUBMITTED_ADMIN (§31-36) et RESULT_AVAILABLE
     // (mission email §24, préservé) — après coup, jamais dans la
     // transaction de soumission/notation elle-même (§35 — outbox).

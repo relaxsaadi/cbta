@@ -21,6 +21,17 @@ export interface AttemptRow {
   user_agent: string | null;
 }
 
+/** The terminal status and the transition winner must come from the same
+ * serialized SQLite write, not a stale read or an untrusted timer hint. */
+export interface SubmitAttemptOutcome {
+  attemptId: number;
+  status: AttemptStatus;
+  transitioned: boolean;
+}
+
+/** Only server-side callers supply the initiator. */
+type SubmitTrigger = "candidate" | "expiry_sweep";
+
 export class AttemptError extends Error {}
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -607,33 +618,35 @@ export function toggleMark(attemptId: number, candidateUserId: number, attemptQu
   });
 }
 
-export function submitAttempt(attemptId: number, candidateUserId: number, opts: { auto?: boolean } = {}): void {
-  // Submission, per-question grading, result and both audit events must
-  // commit together. Previously submission committed first, so a later
-  // scoring/DB/audit error could strand a submitted attempt without a
-  // durable result and a retry would be ignored as already submitted.
-  // All library writes use the same getDb() connection; gradeAttempt()
-  // does not begin its own transaction. BEGIN IMMEDIATE also serializes
-  // candidate autosaves with this final state transition.
-  transaction((db) => {
+export function submitAttempt(
+  attemptId: number, candidateUserId: number,
+  opts: { auto?: boolean; trigger?: SubmitTrigger } = {}
+): SubmitAttemptOutcome {
+  // #40: Persisted expiry, transition outcome, scoring, result, and audit
+  // are decided under the same BEGIN IMMEDIATE as candidate autosaves.
+  // The legacy client-controlled "auto" flag is never timeout evidence.
+  return transaction((db) => {
     const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as AttemptRow | undefined;
     if (!attempt || attempt.candidate_user_id !== candidateUserId) throw new AttemptError("Tentative introuvable.");
-    if (attempt.status !== "in_progress") return; // safe idempotent retry; do not regrade/manual-overwrite
-
-    const status: AttemptStatus = opts.auto ? "auto_submitted" : "submitted";
+    if (attempt.status !== "in_progress") {
+      return { attemptId, status: attempt.status, transitioned: false };
+    }
+    const expiry = Date.parse(attempt.expires_at);
+    if (!Number.isFinite(expiry)) throw new AttemptError("La date d'expiration de cette tentative est invalide.");
+    const status: AttemptStatus = expiry <= Date.now() ? "auto_submitted" : "submitted";
+    const trigger: SubmitTrigger = opts.trigger ?? "candidate";
     db.prepare(`UPDATE attempts SET status = ?, submitted_at = ? WHERE id = ?`).run(status, nowIso(), attemptId);
-
     audit({
-      actorUserId: candidateUserId,
-      actorRole: "candidate",
-      action: opts.auto ? "attempt_auto_submit" : "attempt_submit",
+      actorUserId: trigger === "expiry_sweep" ? null : candidateUserId,
+      actorRole: trigger === "expiry_sweep" ? null : "candidate",
+      action: status === "auto_submitted" ? "attempt_auto_submit" : "attempt_submit",
       targetType: "attempt",
       targetId: attemptId,
+      metadata: { trigger },
     });
-
-    // Any grading failure rolls back submission status, grading writes,
-    // result and audit together. Retry remains possible after repair.
+    // A failure here rolls back status, audit, grades, and result together.
     gradeAttempt(attemptId);
+    return { attemptId, status, transitioned: true };
   });
 }
 
@@ -650,8 +663,13 @@ export function sweepExpiredAttempts(): { attemptId: number; candidateUserId: nu
   const rows = getDb()
     .prepare(`SELECT id, candidate_user_id FROM attempts WHERE status = 'in_progress' AND expires_at < ?`)
     .all(nowIso()) as { id: number; candidate_user_id: number }[];
+  const transitioned: { attemptId: number; candidateUserId: number }[] = [];
   for (const r of rows) {
-    submitAttempt(r.id, r.candidate_user_id, { auto: true });
+    const outcome = submitAttempt(r.id, r.candidate_user_id, { trigger: "expiry_sweep" });
+    // Stale preselection losers may not be counted/audited/notified by cron.
+    if (outcome.transitioned && outcome.status === "auto_submitted") {
+      transitioned.push({ attemptId: r.id, candidateUserId: r.candidate_user_id });
+    }
   }
-  return rows.map((r) => ({ attemptId: r.id, candidateUserId: r.candidate_user_id }));
+  return transitioned;
 }

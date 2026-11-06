@@ -83,6 +83,10 @@ test("late result-insert failure rolls back partial grading, status and audit at
   } finally {
     f.db.exec("DROP TRIGGER IF EXISTS temp.synthetic_result_write_failure");
   }
+  // Test the automatic path with a real expired server timestamp, not
+  // an untrusted candidate-controlled auto=true hint.
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
   f.submitAttempt(f.attemptId, f.candidateId, { auto: true });
   const after = snapshot(f);
   assert.equal(after.status.status, "auto_submitted");

@@ -271,7 +271,7 @@ describe("Correction manuelle — lib/manual-grading.ts", async () => {
     for (let i = 0; i < cases.length; i++) {
       const f = fixtures[i]!;
       getDb().prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
-        .run(cases[i], f.manualAqId);
+        .run(cases[i]!, f.manualAqId);
       assert.equal(listPendingManualGrading(null).some((row) => row.attempt_question_id === f.manualAqId), false);
       assert.throws(
         () => submitManualGrade(f.manualAqId, true, f.adminId, "administrator"),

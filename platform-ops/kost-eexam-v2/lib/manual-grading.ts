@@ -666,6 +666,20 @@ export function submitScenarioSubgrade(
   if (row.qtype !== "scenario") throw new ManualGradingError("Cette question n'est pas un scénario.");
   if (row.is_correct !== null) throw new ManualGradingError("Ce scénario a déjà été entièrement corrigé.");
 
+  // A published historical snapshot can be malformed after authoring or
+  // migrated incompletely. The scoring engine rejects invalid scenario
+  // structures; manual grading must enforce that same fail-closed boundary
+  // before writing a reviewer verdict, points or an audit record.
+  let requiresManualReview = false;
+  try {
+    requiresManualReview = gradeOneQuestion("scenario", row.correct_answer_snapshot, row.answer_json).pending;
+  } catch {
+    throw new ManualGradingError("Métadonnées du scénario invalides : correction impossible.");
+  }
+  if (!requiresManualReview) {
+    throw new ManualGradingError("Métadonnées du scénario invalides : correction impossible.");
+  }
+
   const spec = JSON.parse(row.correct_answer_snapshot) as { subquestions: { id: string; qtype: string; points: number; correctAnswer: unknown }[] };
   const sq = spec.subquestions.find((s) => s.id === subquestionId);
   if (!sq) throw new ManualGradingError("Sous-question introuvable dans ce scénario.");

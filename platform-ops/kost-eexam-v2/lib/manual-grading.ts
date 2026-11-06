@@ -7,7 +7,7 @@
 // point qui referme ensuite `results` vers 'COMPLETE'. Ne rappelle JAMAIS
 // gradeAttempt() (qui écraserait la décision humaine — voir son garde-fou
 // dédié).
-import { getDb, nowIso } from "./db";
+import { getDb, nowIso, transaction } from "./db";
 import { audit } from "./audit";
 import { gradeOneQuestion } from "./grading";
 import type { ConsoleRole } from "./session";

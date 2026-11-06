@@ -182,13 +182,42 @@ export function gradeOneQuestion(
   // encore statuée, le scénario ENTIER reste en attente (même sémantique
   // que le short_answer manuel autonome, appliquée au niveau du scénario).
   if (qtype === "scenario") {
-    const spec = JSON.parse(correctAnswerSnapshot) as { subquestions: { id: string; qtype: string; points: number; correctAnswer: unknown }[] };
-    const givenMap = (given as Record<string, string[]>) ?? {};
+    const spec = JSON.parse(correctAnswerSnapshot) as { mode?: unknown; subquestions?: unknown } | null;
+    const subquestions = spec && typeof spec === "object" && !Array.isArray(spec)
+      ? spec.subquestions : null;
+    const invalidScenario = () => ({ pending: false, isCorrect: false, partialPoints: 0 });
+    // Existing authoring validates this structure, but published historical
+    // snapshots can predate it. Recheck before awarding ANY scenario marks:
+    // duplicate IDs could credit the same candidate answer more than once;
+    // invalid/negative points could distort the aggregate score.
+    if (spec?.mode !== "scenario" || !Array.isArray(subquestions) || subquestions.length === 0) {
+      return invalidScenario();
+    }
+    const allowedSubtypes = new Set([
+      "mcq_single", "mcq_multi", "true_false", "numeric",
+      "short_answer", "matching", "ordering",
+    ]);
+    const seenIds = new Set<string>();
     let totalPoints = 0;
+    for (const item of subquestions) {
+      if (!item || typeof item !== "object" || Array.isArray(item)) return invalidScenario();
+      const sq = item as { id?: unknown; qtype?: unknown; points?: unknown; correctAnswer?: unknown };
+      if (typeof sq.id !== "string" || sq.id.trim().length === 0 || seenIds.has(sq.id) ||
+          typeof sq.qtype !== "string" || !allowedSubtypes.has(sq.qtype) ||
+          typeof sq.points !== "number" || !Number.isFinite(sq.points) || sq.points <= 0 ||
+          !Object.prototype.hasOwnProperty.call(sq, "correctAnswer") || sq.correctAnswer === null) {
+        return invalidScenario();
+      }
+      seenIds.add(sq.id);
+      totalPoints += sq.points;
+      if (!Number.isFinite(totalPoints)) return invalidScenario();
+    }
+    const validated = subquestions as { id: string; qtype: string; points: number; correctAnswer: unknown }[];
+    const givenMap = (given && typeof given === "object" && !Array.isArray(given)
+      ? given : {}) as Record<string, unknown>;
     let earnedPoints = 0;
     let anyPending = false;
-    for (const sq of spec.subquestions) {
-      totalPoints += sq.points;
+    for (const sq of validated) {
       const subAnswer = givenMap[sq.id];
       const subAnswerJson = subAnswer ? JSON.stringify(subAnswer) : null;
       const subResult = gradeOneQuestion(sq.qtype, JSON.stringify(sq.correctAnswer), subAnswerJson);

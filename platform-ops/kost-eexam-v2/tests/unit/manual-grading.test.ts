@@ -218,16 +218,24 @@ describe("Correction manuelle — lib/manual-grading.ts", async () => {
   });
 
   test("malformed standalone candidate JSON does not crash healthy pending reviewer work", () => {
-    const broken = makeFixture({ withMcq: false });
+    const broken = [
+      { fixture: makeFixture({ withMcq: false }), payload: "{invalid-json" },
+      { fixture: makeFixture({ withMcq: false }), payload: JSON.stringify(["one", "contradictory second"]) },
+      { fixture: makeFixture({ withMcq: false }), payload: JSON.stringify([false]) },
+    ];
     const healthy = makeFixture({ withMcq: false });
-    getDb().prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
-      .run("{invalid-json", broken.manualAqId);
+    for (const { fixture, payload } of broken) {
+      getDb().prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
+        .run(payload, fixture.manualAqId);
+    }
     const pending = listPendingManualGrading(null);
     assert.ok(pending.some((row) => row.attempt_question_id === healthy.manualAqId));
-    assert.equal(pending.some((row) => row.attempt_question_id === broken.manualAqId), false);
-    const audits = getDb().prepare("SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'answer_graded_manual'")
-      .get(broken.attemptId) as { n: number };
-    assert.equal(audits.n, 0, "read-only queue must not invent reviewer decisions");
+    for (const { fixture } of broken) {
+      assert.equal(pending.some((row) => row.attempt_question_id === fixture.manualAqId), false);
+      const audits = getDb().prepare("SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'answer_graded_manual'")
+        .get(fixture.attemptId) as { n: number };
+      assert.equal(audits.n, 0, "read-only queue must not invent reviewer decisions");
+    }
   });
 
   test("graded standalone history excludes corrupt candidate payload and nonmanual key without losing healthy review", () => {

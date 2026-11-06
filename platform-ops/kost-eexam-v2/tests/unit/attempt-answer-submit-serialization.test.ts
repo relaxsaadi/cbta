@@ -229,3 +229,52 @@ test("corrupt persisted scenario answer entries block resume and autosave withou
     assert.equal(stored.answer_json, corrupt, "reject malformed legacy evidence without overwriting it");
   }
 });
+
+
+test("candidate answer actions reject cross-type writes without overwriting saved evidence", async () => {
+  const { saveAnswer, saveScenarioSubanswer } = await import("../../lib/attempts");
+  const scenario = await fixture(true);
+  saveScenarioSubanswer(scenario.attemptId, scenario.candidateId, scenario.questionId, "sq1", ["A"]);
+  const readScenario = () => (scenario.db.prepare(
+    "SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?"
+  ).get(scenario.questionId) as { answer_json: string }).answer_json;
+  const before = readScenario();
+  assert.throws(() => saveAnswer(scenario.attemptId, scenario.candidateId, scenario.questionId, ["B"]),
+    /scénario exige une réponse par sous-question/);
+  assert.equal(readScenario(), before, "regular autosave cannot destroy a submitted scenario map");
+
+  const mcq = await fixture(false);
+  assert.throws(() => saveScenarioSubanswer(mcq.attemptId, mcq.candidateId, mcq.questionId, "sq1", ["A"]),
+    /n'est pas un scénario/);
+  assert.equal((mcq.db.prepare("SELECT COUNT(*) AS n FROM attempt_answers WHERE attempt_question_id = ?")
+    .get(mcq.questionId) as { n: number }).n, 0);
+  saveAnswer(mcq.attemptId, mcq.candidateId, mcq.questionId, ["A"]);
+  assert.equal((mcq.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+    .get(mcq.questionId) as { answer_json: string }).answer_json, '["A"]');
+});
+
+test("scenario subanswer writes reject forged IDs, malformed payloads and duplicate frozen IDs", async () => {
+  const { saveScenarioSubanswer } = await import("../../lib/attempts");
+  const f = await fixture(true);
+  saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "sq1", ["A"]);
+  const read = () => (f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+    .get(f.questionId) as { answer_json: string }).answer_json;
+  const before = read();
+  assert.throws(() => saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "forged-id", ["B"]),
+    /Sous-question hors de ce scénario/);
+  assert.throws(() => saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "sq2",
+    ["B", null] as unknown as string[]), /Format de réponse invalide/);
+  assert.equal(read(), before, "invalid client arguments must not persist");
+
+  const frozen = f.db.prepare(
+    `SELECT s.id, s.correct_answer_snapshot FROM assessment_question_snapshots s
+     JOIN attempt_questions aq ON aq.snapshot_id = s.id WHERE aq.id = ?`
+  ).get(f.questionId) as { id: number; correct_answer_snapshot: string };
+  const corrupted = JSON.parse(frozen.correct_answer_snapshot);
+  corrupted.subquestions[1].id = corrupted.subquestions[0].id;
+  f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+    .run(JSON.stringify(corrupted), frozen.id);
+  assert.throws(() => saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "sq1", ["B"]),
+    /Configuration du scénario publiée invalide/);
+  assert.equal(read(), before, "ambiguous frozen IDs must not alter existing candidate evidence");
+});

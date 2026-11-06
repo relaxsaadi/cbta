@@ -573,10 +573,66 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
   // §7 — gradedBy vit DANS le JSON par sous-question (pas une colonne SQL
   // indexable, voir commentaire d'en-tête de section) : résolution des noms
   // en un seul aller-retour supplémentaire, jamais une requête par ligne.
+  type ScenarioSpec = {
+    subquestions: { id: string; qtype: string; stem: string; points: number; correctAnswer: { mode?: string } }[];
+  };
+  type StoredVerdict = {
+    isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string; gradedAt?: string;
+  };
+  const isRecord = (value: unknown): value is Record<string, unknown> =>
+    value !== null && typeof value === "object" && !Array.isArray(value);
+
+  // A single corrupt historical verdict must not crash the whole examiner
+  // history, including the first pass that resolves grader names.
+  const validRows: {
+    r: (typeof rows)[number];
+    spec: ScenarioSpec;
+    given: Record<string, unknown>;
+    progress: Record<string, StoredVerdict>;
+  }[] = [];
   const graderIds = new Set<number>();
   for (const r of rows) {
-    const progress = (r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {}) as Record<string, { gradedBy: number }>;
-    for (const v of Object.values(progress)) graderIds.add(v.gradedBy);
+    try {
+      // The scorer validates the frozen scenario structure. Manual items
+      // remain pending at this layer even when their verdicts are persisted.
+      if (!gradeOneQuestion("scenario", r.correct_answer_snapshot, r.answer_json).pending) continue;
+      const spec = JSON.parse(r.correct_answer_snapshot) as ScenarioSpec;
+      const givenValue: unknown = r.answer_json ? JSON.parse(r.answer_json) : {};
+      const progressValue: unknown = r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {};
+      if (!isRecord(givenValue) || !isRecord(progressValue)) continue;
+      let valid = true;
+      for (const [id, rawVerdict] of Object.entries(progressValue)) {
+        const sub = spec.subquestions.find((item) => item.id === id);
+        if (!sub || sub.qtype !== "short_answer" || sub.correctAnswer?.mode !== "manual" ||
+            !isRecord(rawVerdict) || typeof rawVerdict.isCorrect !== "boolean" ||
+            typeof rawVerdict.gradedBy !== "number" || !Number.isSafeInteger(rawVerdict.gradedBy) ||
+            rawVerdict.gradedBy <= 0 ||
+            typeof rawVerdict.pointsAwarded !== "number" || !Number.isFinite(rawVerdict.pointsAwarded) ||
+            rawVerdict.pointsAwarded !== (rawVerdict.isCorrect ? sub.points : 0) ||
+            (rawVerdict.comment !== undefined && typeof rawVerdict.comment !== "string") ||
+            (rawVerdict.gradedAt !== undefined && typeof rawVerdict.gradedAt !== "string")) {
+          valid = false;
+          break;
+        }
+      }
+      if (!valid) continue;
+      for (const sub of spec.subquestions) {
+        if (sub.qtype !== "short_answer" || sub.correctAnswer?.mode !== "manual") continue;
+        const candidateAnswer = givenValue[sub.id];
+        if (candidateAnswer !== undefined && (!Array.isArray(candidateAnswer) ||
+            !candidateAnswer.every((value: unknown) => typeof value === "string"))) {
+          valid = false;
+          break;
+        }
+      }
+      if (!valid) continue;
+      const progress = progressValue as Record<string, StoredVerdict>;
+      for (const verdict of Object.values(progress)) graderIds.add(verdict.gradedBy);
+      validRows.push({ r, spec, given: givenValue, progress });
+    } catch {
+      // READ-ONLY isolation; never repair, approve or grade bad history.
+      continue;
+    }
   }
   const graderNames = new Map<number, string>();
   if (graderIds.size > 0) {
@@ -588,13 +644,7 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
   }
 
   const out: GradedScenarioSubquestionRow[] = [];
-  for (const r of rows) {
-    const spec = JSON.parse(r.correct_answer_snapshot) as { subquestions: { id: string; qtype: string; stem: string; points: number; correctAnswer: { mode?: string } }[] };
-    const given = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
-    const progress = (r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {}) as Record<
-      string,
-      { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string; gradedAt?: string }
-    >;
+  for (const { r, spec, given, progress } of validRows) {
     for (const sq of spec.subquestions) {
       const verdict = progress[sq.id];
       if (!verdict) continue; // pas encore corrigée — jamais dans l'historique.
@@ -614,7 +664,7 @@ export function listGradedScenarioSubquestions(restrictToGroupIdsOrNull: number[
         function_code: r.function_code,
         scenario_title: r.scenario_title,
         subquestion_stem: sq.stem,
-        candidate_answer: ans && ans[0] ? ans[0] : "",
+        candidate_answer: Array.isArray(ans) && typeof ans[0] === "string" ? ans[0] : "",
         points: sq.points,
         submitted_at: r.submitted_at,
         is_correct: verdict.isCorrect,

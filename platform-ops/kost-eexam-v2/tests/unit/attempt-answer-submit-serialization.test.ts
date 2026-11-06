@@ -150,3 +150,56 @@ test("a submit transaction winning the SQLite write lock denies the waiting stal
   await writer.done;
   assert.equal((f.db.prepare("SELECT COUNT(*) AS n FROM attempt_answers WHERE attempt_question_id = ?").get(f.questionId) as { n: number }).n, 0);
 });
+
+
+test("legacy prototype-name scenario IDs retain candidate answers through autosave, resume and grading", async () => {
+  const f = await fixture(true);
+  const { saveScenarioSubanswer, getAttemptQuestions, submitAttempt } = await import("../../lib/attempts");
+  const snap = f.db.prepare(
+    `SELECT s.id, s.correct_answer_snapshot FROM assessment_question_snapshots s
+     JOIN attempt_questions aq ON aq.snapshot_id = s.id WHERE aq.id = ?`
+  ).get(f.questionId) as { id: number; correct_answer_snapshot: string };
+  const spec = JSON.parse(snap.correct_answer_snapshot);
+  // Mutate only a synthetic snapshot to simulate valid old IDs which overlap
+  // Object.prototype. No production questions or candidate attempts touched.
+  spec.subquestions[0].id = "__proto__";
+  spec.subquestions[1].id = "constructor";
+  f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+    .run(JSON.stringify(spec), snap.id);
+
+  const initial = getAttemptQuestions(f.attemptId)[0]?.scenario?.subquestions;
+  assert.deepEqual(initial?.map((item) => item.answer), [null, null],
+    "unanswered prototype-name fields must never inherit Object.prototype values");
+
+  saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "__proto__", ["A"]);
+  saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "constructor", ["B"]);
+  const saved = f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+    .get(f.questionId) as { answer_json: string };
+  const actual = JSON.parse(saved.answer_json) as Record<string, string[]>;
+  assert.equal(Object.prototype.hasOwnProperty.call(actual, "__proto__"), true);
+  assert.equal(Object.prototype.hasOwnProperty.call(actual, "constructor"), true);
+  assert.deepEqual(actual["__proto__"], ["A"]);
+  assert.deepEqual(actual["constructor"], ["B"]);
+
+  const resumed = getAttemptQuestions(f.attemptId)[0]?.scenario?.subquestions;
+  assert.deepEqual(resumed?.map((item) => item.answer), [["A"], ["B"]]);
+  submitAttempt(f.attemptId, f.candidateId);
+  const result = f.db.prepare("SELECT raw_score, max_raw_score, grading_state FROM results WHERE attempt_id = ?")
+    .get(f.attemptId) as { raw_score: number; max_raw_score: number; grading_state: string };
+  assert.deepEqual(result, { raw_score: 2, max_raw_score: 2, grading_state: "COMPLETE" });
+});
+
+test("corrupt legacy scenario answer map cannot be silently merged into candidate autosave", async () => {
+  const f = await fixture(true);
+  const { saveScenarioSubanswer } = await import("../../lib/attempts");
+  f.db.prepare(
+    "INSERT INTO attempt_answers (attempt_id, attempt_question_id, answer_json, answered_at) VALUES (?, ?, ?, ?)"
+  ).run(f.attemptId, f.questionId, "[]", "2026-11-06T00:00:00.000Z");
+  assert.throws(
+    () => saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "sq1", ["A"]),
+    /Réponses précédentes du scénario invalides/
+  );
+  const stored = f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+    .get(f.questionId) as { answer_json: string };
+  assert.equal(stored.answer_json, "[]", "reject without overwriting historical evidence");
+});

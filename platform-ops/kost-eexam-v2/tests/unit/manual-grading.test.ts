@@ -16,7 +16,7 @@ describe("Correction manuelle — lib/manual-grading.ts", async () => {
   const { createQuestion } = await import("../../lib/questions");
   const { createAssessmentDraft, publishAssessment } = await import("../../lib/assessments");
   const { startAttempt, saveAnswer, submitAttempt } = await import("../../lib/attempts");
-  const { submitManualGrade, finalizeManualGradingIfComplete, listPendingManualGrading, ManualGradingError } = await import("../../lib/manual-grading");
+  const { submitManualGrade, finalizeManualGradingIfComplete, listPendingManualGrading, listGradedManually, ManualGradingError } = await import("../../lib/manual-grading");
   const { getDb } = await import("../../lib/db");
 
   let counter = 0;
@@ -215,5 +215,41 @@ describe("Correction manuelle — lib/manual-grading.ts", async () => {
     const { manualAqId } = makeFixture({ withMcq: false });
     const restricted = listPendingManualGrading([-1]); // aucun groupe réel dans ce périmètre
     assert.ok(!restricted.some((p) => p.attempt_question_id === manualAqId), "hors périmètre — ne doit jamais apparaître");
+  });
+
+  test("malformed standalone candidate JSON does not crash healthy pending reviewer work", () => {
+    const broken = makeFixture({ withMcq: false });
+    const healthy = makeFixture({ withMcq: false });
+    getDb().prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
+      .run("{invalid-json", broken.manualAqId);
+    const pending = listPendingManualGrading(null);
+    assert.ok(pending.some((row) => row.attempt_question_id === healthy.manualAqId));
+    assert.equal(pending.some((row) => row.attempt_question_id === broken.manualAqId), false);
+    const audits = getDb().prepare("SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'answer_graded_manual'")
+      .get(broken.attemptId) as { n: number };
+    assert.equal(audits.n, 0, "read-only queue must not invent reviewer decisions");
+  });
+
+  test("graded standalone history excludes corrupt candidate payload and nonmanual key without losing healthy review", () => {
+    const healthy = makeFixture({ withMcq: false });
+    const brokenAnswer = makeFixture({ withMcq: false });
+    const wrongMode = makeFixture({ withMcq: false });
+    for (const f of [healthy, brokenAnswer, wrongMode]) {
+      submitManualGrade(f.manualAqId, true, f.adminId, "administrator");
+    }
+    getDb().prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
+      .run(JSON.stringify({ unexpected: "object" }), brokenAnswer.manualAqId);
+    getDb().prepare(`UPDATE assessment_question_snapshots SET correct_answer_snapshot = ?
+      WHERE id = (SELECT snapshot_id FROM attempt_questions WHERE id = ?)`)
+      .run(JSON.stringify({ mode: "exact", acceptedAnswers: ["legacy"] }), wrongMode.manualAqId);
+    const history = listGradedManually(null);
+    assert.ok(history.some((row) => row.attempt_question_id === healthy.manualAqId));
+    assert.equal(history.some((row) => row.attempt_question_id === brokenAnswer.manualAqId), false);
+    assert.equal(history.some((row) => row.attempt_question_id === wrongMode.manualAqId), false);
+    for (const f of [healthy, brokenAnswer, wrongMode]) {
+      const audits = getDb().prepare("SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'answer_graded_manual'")
+        .get(f.attemptId) as { n: number };
+      assert.equal(audits.n, 1, "historical read does not rewrite or erase audit evidence");
+    }
   });
 });

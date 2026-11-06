@@ -331,6 +331,11 @@ export function validateQuestionAuthoring(qtype: QType, choices: Choice[], corre
     if (correctAnswer.pairs.some((p) => !keys.has(p.left) || !keys.has(p.right))) return "Une paire d'appariement référence un élément qui n'existe pas.";
     const leftKeys = correctAnswer.pairs.map((p) => p.left);
     if (new Set(leftKeys).size !== leftKeys.length) return "Chaque élément de gauche ne peut être associé qu'une seule fois — paire en double.";
+    // Matching is a one-to-one relationship: the UI emits a distinct R-key
+    // per pair. Reject malformed programmatic authoring before publication,
+    // rather than leaving an impossible-to-score answer key for candidates.
+    const rightKeys = correctAnswer.pairs.map((p) => p.right);
+    if (new Set(rightKeys).size !== rightKeys.length) return "Chaque élément de droite ne peut être associé qu'une seule fois — paire en double.";
     return null;
   }
   if (qtype === "ordering") {

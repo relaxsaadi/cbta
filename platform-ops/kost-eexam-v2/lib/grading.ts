@@ -25,8 +25,17 @@ export interface GradeResult {
 }
 
 function answerSetsEqual(a: unknown, b: unknown): boolean {
-  const arrA = Array.isArray(a) ? a.map(String).sort() : [];
-  const arrB = Array.isArray(b) ? b.map(String).sort() : [];
+  // Candidate choices are string keys, not arbitrary JSON values. Coercing
+  // false -> "false" could previously award marks for true/false; coercing
+  // null or objects also produced false-positive matches to string keys.
+  // Empty/malformed legacy keys must not make an unanswered question correct.
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length === 0 || b.length === 0) return false;
+  if (!a.every((v: unknown) => typeof v === "string" && v.length > 0)) return false;
+  if (!b.every((v: unknown) => typeof v === "string" && v.length > 0)) return false;
+  // Choice sets may not repeat one key to fabricate a complete answer.
+  if (new Set(a).size !== a.length || new Set(b).size !== b.length) return false;
+  const arrA = [...a].sort();
+  const arrB = [...b].sort();
   return arrA.length === arrB.length && arrA.every((v, i) => v === arrB[i]);
 }
 
@@ -77,7 +86,7 @@ export function gradeOneQuestion(
     const spec = JSON.parse(correctAnswerSnapshot) as { mode: "exact" | "manual"; acceptedAnswers?: string[] };
     if (spec.mode === "manual") return { pending: true, isCorrect: false };
     // Keep exact-answer grading unambiguous even for forged autosave bodies.
-    const givenText = Array.isArray(given) && given.length === 1 ? String(given[0]) : "";
+    const givenText = Array.isArray(given) && given.length === 1 && typeof given[0] === "string" ? given[0] : "";
     if (!givenText) return { pending: false, isCorrect: false };
     const normalizedGiven = normalizeShortAnswer(givenText);
     const isCorrect = (spec.acceptedAnswers ?? []).some((a) => normalizeShortAnswer(a) === normalizedGiven);
@@ -116,8 +125,8 @@ export function gradeOneQuestion(
   // explicitement — non implémenté cette passe).
   if (qtype === "ordering") {
     const spec = JSON.parse(correctAnswerSnapshot) as { sequence: string[] };
-    const givenSeq = Array.isArray(given) ? (given as string[]).map(String) : [];
-    const isCorrect = givenSeq.length === spec.sequence.length && givenSeq.every((k, i) => k === spec.sequence[i]);
+    const givenSeq = Array.isArray(given) && given.every((k: unknown) => typeof k === "string") ? (given as string[]) : [];
+    const isCorrect = Array.isArray(spec.sequence) && spec.sequence.length > 0 && givenSeq.length === spec.sequence.length && givenSeq.every((k, i) => k === spec.sequence[i]);
     return { pending: false, isCorrect };
   }
 

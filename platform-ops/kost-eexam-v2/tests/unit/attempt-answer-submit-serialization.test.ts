@@ -278,3 +278,44 @@ test("scenario subanswer writes reject forged IDs, malformed payloads and duplic
     /Configuration du scénario publiée invalide/);
   assert.equal(read(), before, "ambiguous frozen IDs must not alter existing candidate evidence");
 });
+
+test("#40: forged early auto=true is voluntary and idempotent with truthful audit", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  const first = submitAttempt(f.attemptId, f.candidateId, { auto: true });
+  assert.deepEqual(first, { attemptId: f.attemptId, status: "submitted", transitioned: true });
+  const second = submitAttempt(f.attemptId, f.candidateId, { auto: true });
+  assert.deepEqual(second, { attemptId: f.attemptId, status: "submitted", transitioned: false });
+  const events = f.db.prepare("SELECT action FROM audit_logs WHERE target_id = ? AND action IN ('attempt_submit','attempt_auto_submit')")
+    .all(f.attemptId) as { action: string }[];
+  assert.deepEqual(events.map((r) => r.action), ["attempt_submit"]);
+});
+
+test("#40: a late candidate submit is automatically classified by server expiry", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  assert.deepEqual(submitAttempt(f.attemptId, f.candidateId, { auto: false }), {
+    attemptId: f.attemptId, status: "auto_submitted", transitioned: true,
+  });
+  const event = f.db.prepare("SELECT actor_user_id, actor_role, metadata_json FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'")
+    .get(f.attemptId) as { actor_user_id: number | null; actor_role: string | null; metadata_json: string };
+  assert.equal(event.actor_user_id, f.candidateId);
+  assert.equal(event.actor_role, "candidate");
+  assert.equal(JSON.parse(event.metadata_json).trigger, "candidate");
+});
+
+test("#40: expiry sweep reports only its own winning transitions", async () => {
+  const f = await fixture();
+  const { sweepExpiredAttempts } = await import("../../lib/attempts");
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  assert.equal(sweepExpiredAttempts().filter((r) => r.attemptId === f.attemptId).length, 1);
+  assert.equal(sweepExpiredAttempts().filter((r) => r.attemptId === f.attemptId).length, 0);
+  const event = f.db.prepare("SELECT actor_user_id, actor_role, metadata_json FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'")
+    .get(f.attemptId) as { actor_user_id: number | null; actor_role: string | null; metadata_json: string };
+  assert.equal(event.actor_user_id, null);
+  assert.equal(event.actor_role, null);
+  assert.equal(JSON.parse(event.metadata_json).trigger, "expiry_sweep");
+});

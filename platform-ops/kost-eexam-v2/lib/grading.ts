@@ -1,4 +1,5 @@
-import { getDb, nowIso } from "./db";
+import { transaction, nowIso } from "./db";
+import type { DatabaseSync } from "node:sqlite";
 import { requireSnapshotQtype } from "./published-question-qtype-integrity";
 import { audit } from "./audit";
 
@@ -156,8 +157,10 @@ export function gradeOneQuestion(
   return { pending: false, isCorrect: answerJson !== null && answerSetsEqual(given, correct) };
 }
 
-export function gradeAttempt(attemptId: number): GradeResult {
-  const db = getDb();
+/** Grade within a caller-owned SQLite BEGIN IMMEDIATE transaction.
+ * Submission, answers, result, and both success audits must share one COMMIT.
+ * Do not start a second transaction here. */
+export function gradeAttemptInTransaction(db: DatabaseSync, attemptId: number): GradeResult {
 
   const attempt = db.prepare(`SELECT * FROM attempts WHERE id = ?`).get(attemptId) as
     | { id: number; assessment_id: number; candidate_user_id: number }
@@ -288,4 +291,9 @@ export function gradeAttempt(attemptId: number): GradeResult {
   });
 
   return { rawScore, maxRawScore, score100, percentage, passThresholdPct: assessment.pass_threshold_pct, passed, gradingState };
+}
+
+/** Standalone grading also guarantees all answer/result/audit writes are atomic. */
+export function gradeAttempt(attemptId: number): GradeResult {
+  return transaction((db) => gradeAttemptInTransaction(db, attemptId));
 }

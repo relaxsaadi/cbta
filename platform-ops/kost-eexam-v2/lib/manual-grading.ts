@@ -239,40 +239,42 @@ export function submitManualGrade(
   graderRole: ConsoleRole,
   comment?: string
 ): { attemptId: number } {
-  const db = getDb();
-  const row = db
-    .prepare(
-      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype
-       FROM attempt_answers aa
-       JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
-       JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       WHERE aa.attempt_question_id = ?`
-    )
-    .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string } | undefined;
-  if (!row) throw new ManualGradingError("Réponse introuvable.");
-  if (row.qtype !== "short_answer") throw new ManualGradingError("Cette question n'est pas à correction manuelle.");
-  if (row.is_correct !== null) throw new ManualGradingError("Cette réponse a déjà été corrigée.");
+  // Serialize verdict/finalization and its audit as one durable SQLite write.
+  return transaction((db) => {
+    const row = db
+      .prepare(
+        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype
+         FROM attempt_answers aa
+         JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
+         JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+         WHERE aa.attempt_question_id = ?`
+      )
+      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string } | undefined;
+    if (!row) throw new ManualGradingError("Réponse introuvable.");
+    if (row.qtype !== "short_answer") throw new ManualGradingError("Cette question n'est pas à correction manuelle.");
+    if (row.is_correct !== null) throw new ManualGradingError("Cette réponse a déjà été corrigée.");
 
-  const pointsAwarded = isCorrect ? row.points : 0;
-  db.prepare(`UPDATE attempt_answers SET is_correct = ?, points_awarded = ?, graded_by = ?, grader_comment = ?, graded_at = ? WHERE id = ?`).run(
-    isCorrect ? 1 : 0,
-    pointsAwarded,
-    graderUserId,
-    comment ?? null,
-    nowIso(),
-    row.attempt_answer_id
-  );
+    const pointsAwarded = isCorrect ? row.points : 0;
+    db.prepare(`UPDATE attempt_answers SET is_correct = ?, points_awarded = ?, graded_by = ?, grader_comment = ?, graded_at = ? WHERE id = ?`).run(
+      isCorrect ? 1 : 0,
+      pointsAwarded,
+      graderUserId,
+      comment ?? null,
+      nowIso(),
+      row.attempt_answer_id
+    );
 
-  audit({
-    actorUserId: graderUserId,
-    actorRole: graderRole,
-    action: "answer_graded_manual",
-    targetType: "attempt",
-    targetId: row.attempt_id,
-    metadata: { attemptQuestionId, isCorrect, pointsAwarded },
+    audit({
+      actorUserId: graderUserId,
+      actorRole: graderRole,
+      action: "answer_graded_manual",
+      targetType: "attempt",
+      targetId: row.attempt_id,
+      metadata: { attemptQuestionId, isCorrect, pointsAwarded },
+    });
+
+    return { attemptId: row.attempt_id };
   });
-
-  return { attemptId: row.attempt_id };
 }
 
 /** Clôture réelle si (et seulement si) plus aucune réponse de cette
@@ -283,52 +285,54 @@ export function submitManualGrade(
  * 'COMPLETE' — l'appelant (Server Action) déclenche RESULT_AVAILABLE
  * uniquement dans ce cas, jamais avant. */
 export function finalizeManualGradingIfComplete(attemptId: number): { finalized: boolean } {
-  const db = getDb();
-  // Mission "MISSION FINALE CIBLÉE" (2026-08-30) §5 — 'scenario' ajouté ici :
-  // une ligne scénario reste is_correct IS NULL tant qu'AU MOINS UNE de ses
-  // sous-questions manuelles n'a pas été statuée (voir submitScenarioSubgrade
-  // ci-dessous, qui ferme CETTE ligne dès que toutes le sont) — cette
-  // fonction ne doit donc jamais la considérer close avant cela.
-  // Validate the ENTIRE published attempt before finalizing, not just
-  // manual rows with NULL grades. An unknown/invalid historical qtype is
-  // never safe even if an old answer already has a non-NULL is_correct.
-  // A missing attempt_answer or NULL grade of ANY qtype is also incomplete,
-  // not an implicit zero (including old, partially graded automatic rows).
-  const stillPending = db
-    .prepare(
-      `SELECT 1 FROM attempt_questions aq
-       JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
-       LEFT JOIN attempt_answers aa ON aa.attempt_question_id = aq.id
-       WHERE aq.attempt_id = ?
-         AND (
-           s.qtype_snapshot IS NULL
-           OR s.qtype_snapshot NOT IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')
-           OR aa.id IS NULL
-           OR aa.is_correct IS NULL
-         )
-       LIMIT 1`
-    )
-    .get(attemptId);
-  if (stillPending) return { finalized: false };
+  // Serialize verdict/finalization and its audit as one durable SQLite write.
+  return transaction((db) => {
+    // Mission "MISSION FINALE CIBLÉE" (2026-08-30) §5 — 'scenario' ajouté ici :
+    // une ligne scénario reste is_correct IS NULL tant qu'AU MOINS UNE de ses
+    // sous-questions manuelles n'a pas été statuée (voir submitScenarioSubgrade
+    // ci-dessous, qui ferme CETTE ligne dès que toutes le sont) — cette
+    // fonction ne doit donc jamais la considérer close avant cela.
+    // Validate the ENTIRE published attempt before finalizing, not just
+    // manual rows with NULL grades. An unknown/invalid historical qtype is
+    // never safe even if an old answer already has a non-NULL is_correct.
+    // A missing attempt_answer or NULL grade of ANY qtype is also incomplete,
+    // not an implicit zero (including old, partially graded automatic rows).
+    const stillPending = db
+      .prepare(
+        `SELECT 1 FROM attempt_questions aq
+         JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+         LEFT JOIN attempt_answers aa ON aa.attempt_question_id = aq.id
+         WHERE aq.attempt_id = ?
+           AND (
+             s.qtype_snapshot IS NULL
+             OR s.qtype_snapshot NOT IN ('mcq_single','mcq_multi','true_false','numeric','short_answer','matching','ordering','scenario')
+             OR aa.id IS NULL
+             OR aa.is_correct IS NULL
+           )
+         LIMIT 1`
+      )
+      .get(attemptId);
+    if (stillPending) return { finalized: false };
 
-  const result = db.prepare(`SELECT max_raw_score, pass_threshold_pct, grading_state FROM results WHERE attempt_id = ?`).get(attemptId) as
-    | { max_raw_score: number; pass_threshold_pct: number; grading_state: string }
-    | undefined;
-  if (!result) return { finalized: false };
-  if (result.grading_state === "COMPLETE") return { finalized: false }; // déjà clôturé — jamais une double notification
+    const result = db.prepare(`SELECT max_raw_score, pass_threshold_pct, grading_state FROM results WHERE attempt_id = ?`).get(attemptId) as
+      | { max_raw_score: number; pass_threshold_pct: number; grading_state: string }
+      | undefined;
+    if (!result) return { finalized: false };
+    if (result.grading_state === "COMPLETE") return { finalized: false }; // déjà clôturé — jamais une double notification
 
-  const sum = db.prepare(`SELECT COALESCE(SUM(points_awarded), 0) AS total FROM attempt_answers WHERE attempt_id = ?`).get(attemptId) as { total: number };
-  const rawScore = sum.total;
-  const score100 = result.max_raw_score > 0 ? Math.round((rawScore / result.max_raw_score) * 10000) / 100 : 0;
-  const passed = score100 >= result.pass_threshold_pct;
+    const sum = db.prepare(`SELECT COALESCE(SUM(points_awarded), 0) AS total FROM attempt_answers WHERE attempt_id = ?`).get(attemptId) as { total: number };
+    const rawScore = sum.total;
+    const score100 = result.max_raw_score > 0 ? Math.round((rawScore / result.max_raw_score) * 10000) / 100 : 0;
+    const passed = score100 >= result.pass_threshold_pct;
 
-  db.prepare(
-    `UPDATE results SET raw_score = ?, score_100 = ?, percentage = ?, passed = ?, grading_state = 'COMPLETE', graded_at = ? WHERE attempt_id = ?`
-  ).run(rawScore, score100, score100, passed ? 1 : 0, nowIso(), attemptId);
+    db.prepare(
+      `UPDATE results SET raw_score = ?, score_100 = ?, percentage = ?, passed = ?, grading_state = 'COMPLETE', graded_at = ? WHERE attempt_id = ?`
+    ).run(rawScore, score100, score100, passed ? 1 : 0, nowIso(), attemptId);
 
-  audit({ actorUserId: null, actorRole: null, action: "grading_finalized", targetType: "attempt", targetId: attemptId, metadata: { score100, passed } });
+    audit({ actorUserId: null, actorRole: null, action: "grading_finalized", targetType: "attempt", targetId: attemptId, metadata: { score100, passed } });
 
-  return { finalized: true };
+    return { finalized: true };
+  });
 }
 
 // ============================================================================

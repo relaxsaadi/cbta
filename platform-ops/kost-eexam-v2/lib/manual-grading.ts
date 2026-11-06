@@ -111,6 +111,46 @@ function parseManualCandidateAnswer(answerJson: unknown): string | null {
   }
 }
 
+// Historical scenario progress must be trustworthy before another verdict can
+// reuse it. The history view already checks these invariants; the read queue
+// and write path must also fail closed rather than accepting fabricated marks.
+type StoredScenarioVerdict = {
+  isCorrect: boolean;
+  pointsAwarded: number;
+  gradedBy: number;
+  comment?: string;
+  gradedAt?: string;
+};
+
+function validatedScenarioProgress(
+  value: unknown,
+  subquestions: { id: string; qtype: string; points: number; correctAnswer: unknown }[]
+): Record<string, StoredScenarioVerdict> | null {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
+  const manual = new Map(
+    subquestions
+      .filter((sq) => sq.qtype === "short_answer" &&
+        sq.correctAnswer !== null && typeof sq.correctAnswer === "object" &&
+        (sq.correctAnswer as { mode?: unknown }).mode === "manual")
+      .map((sq) => [sq.id, sq.points] as const)
+  );
+  // Null prototype means an inherited "constructor" / "__proto__" value
+  // cannot masquerade as an existing grader decision for a legacy ID.
+  const accepted = Object.create(null) as Record<string, StoredScenarioVerdict>;
+  for (const [id, raw] of Object.entries(value)) {
+    if (!manual.has(id) || raw === null || typeof raw !== "object" || Array.isArray(raw)) return null;
+    const verdict = raw as Record<string, unknown>;
+    if (typeof verdict.isCorrect !== "boolean" ||
+        typeof verdict.gradedBy !== "number" || !Number.isSafeInteger(verdict.gradedBy) || verdict.gradedBy <= 0 ||
+        typeof verdict.pointsAwarded !== "number" || !Number.isFinite(verdict.pointsAwarded) ||
+        verdict.pointsAwarded !== (verdict.isCorrect ? manual.get(id) : 0) ||
+        (verdict.comment !== undefined && typeof verdict.comment !== "string") ||
+        (verdict.gradedAt !== undefined && typeof verdict.gradedAt !== "string")) return null;
+    accepted[id] = raw as StoredScenarioVerdict;
+  }
+  return accepted;
+}
+
 /** Liste des réponses en attente de correction manuelle — jamais une
  * question déjà notée automatiquement (les questions 'short_answer' mode
  * 'exact' ne passent jamais ici), jamais une tentative encore
@@ -482,10 +522,11 @@ export function listPendingScenarioSubquestions(restrictToGroupIdsOrNull: number
       spec = JSON.parse(r.correct_answer_snapshot) as typeof spec;
       const parsedGiven: unknown = r.answer_json ? JSON.parse(r.answer_json) : {};
       const parsedProgress: unknown = r.scenario_grading_json ? JSON.parse(r.scenario_grading_json) : {};
-      if (!parsedGiven || typeof parsedGiven !== "object" || Array.isArray(parsedGiven) ||
-          !parsedProgress || typeof parsedProgress !== "object" || Array.isArray(parsedProgress)) continue;
+      if (!parsedGiven || typeof parsedGiven !== "object" || Array.isArray(parsedGiven)) continue;
+      const acceptedProgress = validatedScenarioProgress(parsedProgress, spec.subquestions);
+      if (!acceptedProgress) continue;
       given = parsedGiven as Record<string, unknown>;
-      progress = parsedProgress as Record<string, unknown>;
+      progress = acceptedProgress;
     } catch {
       // READ-ONLY isolation; do not repair, grade, or silently approve a row.
       continue;
@@ -778,10 +819,15 @@ export function submitScenarioSubgrade(
     throw new ManualGradingError("Cette sous-question n'est pas à correction manuelle.");
   }
 
-  const progress = (row.scenario_grading_json ? JSON.parse(row.scenario_grading_json) : {}) as Record<
-    string,
-    { isCorrect: boolean; pointsAwarded: number; gradedBy: number; comment?: string; gradedAt?: string }
-  >;
+  let progress: Record<string, StoredScenarioVerdict>;
+  try {
+    const rawProgress: unknown = row.scenario_grading_json ? JSON.parse(row.scenario_grading_json) : {};
+    const checked = validatedScenarioProgress(rawProgress, spec.subquestions);
+    if (!checked) throw new Error("invalid scenario progress");
+    progress = checked;
+  } catch {
+    throw new ManualGradingError("Historique de correction du scénario invalide : correction impossible.");
+  }
   if (progress[subquestionId]) throw new ManualGradingError("Cette sous-question a déjà été corrigée.");
 
   const pointsAwarded = isCorrect ? sq.points : 0;

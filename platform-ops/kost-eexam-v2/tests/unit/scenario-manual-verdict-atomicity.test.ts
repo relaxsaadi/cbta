@@ -262,3 +262,36 @@ test("corrupt prior scenario subgrade cannot contaminate final points or reviewe
     assert.equal(pending.some((r) => r.attempt_question_id === f.attemptQuestionId), false);
   }
 });
+
+test("graded scenario history never manufactures decisions from inherited object keys", async () => {
+  const { listGradedScenarioSubquestions } = await import("../../lib/manual-grading");
+  const healthy = await fixture();
+  healthy.submitScenarioSubgrade(healthy.attemptQuestionId, "sq1", true, healthy.adminId, "administrator");
+
+  // Historical snapshots can contain nonblank IDs that are also names on
+  // Object.prototype. An empty progress JSON must not count as a decision.
+  const malformed: Array<Awaited<ReturnType<typeof fixture>>> = [];
+  for (const inheritedKey of ["constructor", "__proto__", "toString"]) {
+    const f = await fixture();
+    const snapshot = f.db.prepare(
+      `SELECT s.id, s.correct_answer_snapshot FROM assessment_question_snapshots s
+       JOIN attempt_questions aq ON aq.snapshot_id = s.id WHERE aq.id = ?`
+    ).get(f.attemptQuestionId) as { id: number; correct_answer_snapshot: string };
+    const spec = JSON.parse(snapshot.correct_answer_snapshot);
+    spec.subquestions[0].id = inheritedKey;
+    f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+      .run(JSON.stringify(spec), snapshot.id);
+    f.db.prepare("UPDATE attempt_answers SET scenario_grading_json = ? WHERE attempt_question_id = ?")
+      .run("{}", f.attemptQuestionId);
+    malformed.push(f);
+  }
+
+  const history = listGradedScenarioSubquestions(null);
+  assert.equal(history.some((r) => r.attempt_question_id === healthy.attemptQuestionId &&
+    r.subquestion_id === "sq1" && r.points_awarded === 2), true);
+  for (const f of malformed) {
+    assert.equal(history.some((r) => r.attempt_question_id === f.attemptQuestionId), false);
+    assert.equal(manualAuditCount(f), 0);
+    assert.equal(verdict(f).scenario_grading_json, "{}");
+  }
+});

@@ -336,7 +336,11 @@ function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionVie
         choices: sq.choices,
         unit: sq.qtype === "numeric" ? (sq.choices.find((c) => c.key === "unit")?.text ?? null) : null,
         multiSelect: sq.qtype === "mcq_multi",
-        answer: savedAnswers[sq.id] ?? null,
+        // Historical subquestion IDs can be names on Object.prototype.
+        // Missing saved fields must remain null, not inherited objects/functions.
+        answer: Object.prototype.hasOwnProperty.call(savedAnswers, sq.id)
+          ? (savedAnswers[sq.id] ?? null)
+          : null,
       })),
     };
   }
@@ -508,7 +512,13 @@ export function saveScenarioSubanswer(attemptId: number, candidateUserId: number
     if (!owns) throw new AttemptError("Question hors de cette tentative.");
 
     const existing = db.prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
-    const merged: Record<string, string[]> = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
+    const previous: unknown = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
+    if (previous === null || typeof previous !== "object" || Array.isArray(previous)) {
+      throw new AttemptError("Réponses précédentes du scénario invalides.");
+    }
+    // An inherited-name historical ID (especially "__proto__") must be
+    // stored as an OWN JSON key, not mutate a plain object's prototype.
+    const merged = Object.assign(Object.create(null) as Record<string, string[]>, previous);
     merged[subquestionId] = answerKeys;
 
     db.prepare(

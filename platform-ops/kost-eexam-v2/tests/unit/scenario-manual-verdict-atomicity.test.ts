@@ -137,3 +137,43 @@ test("scenario manual grader rejects malformed historical metadata before any ve
     assert.equal(manualAuditCount(f), auditsBefore, failure);
   }
 });
+
+
+test("pending scenario queue skips corrupt historical rows without hiding healthy pending work", async () => {
+  const { listPendingScenarioSubquestions } = await import("../../lib/manual-grading");
+  const healthy = await fixture();
+  const damaged: Array<Awaited<ReturnType<typeof fixture>>> = [];
+
+  // All corruption is deliberately synthetic and occurs AFTER submission.
+  // A single bad snapshot/answer/progress must not take down the shared queue.
+  for (const kind of ["invalid_snapshot", "duplicate_subquestion", "invalid_answer", "invalid_progress"] as const) {
+    const f = await fixture();
+    const snapshot = f.db.prepare(
+      `SELECT s.id, s.correct_answer_snapshot FROM assessment_question_snapshots s
+       JOIN attempt_questions aq ON aq.snapshot_id = s.id WHERE aq.id = ?`
+    ).get(f.attemptQuestionId) as { id: number; correct_answer_snapshot: string };
+    if (kind === "invalid_snapshot") {
+      f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+        .run("{corrupt-json", snapshot.id);
+    } else if (kind === "duplicate_subquestion") {
+      const spec = JSON.parse(snapshot.correct_answer_snapshot);
+      spec.subquestions[1].id = spec.subquestions[0].id;
+      f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+        .run(JSON.stringify(spec), snapshot.id);
+    } else if (kind === "invalid_answer") {
+      f.db.prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
+        .run("{corrupt-answer", f.attemptQuestionId);
+    } else {
+      f.db.prepare("UPDATE attempt_answers SET scenario_grading_json = ? WHERE attempt_question_id = ?")
+        .run("{corrupt-progress", f.attemptQuestionId);
+    }
+    damaged.push(f);
+  }
+
+  const pending = listPendingScenarioSubquestions(null);
+  assert.equal(pending.filter((row) => row.attempt_question_id === healthy.attemptQuestionId).length, 2);
+  for (const f of damaged) {
+    assert.equal(pending.some((row) => row.attempt_question_id === f.attemptQuestionId), false);
+    assert.equal(manualAuditCount(f), 0);
+  }
+});

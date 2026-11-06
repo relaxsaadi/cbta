@@ -177,3 +177,45 @@ test("pending scenario queue skips corrupt historical rows without hiding health
     assert.equal(manualAuditCount(f), 0);
   }
 });
+
+
+test("graded scenario history skips corrupt synthetic rows and preserves healthy reviewer evidence", async () => {
+  const { listGradedScenarioSubquestions } = await import("../../lib/manual-grading");
+  const healthy = await fixture();
+  healthy.submitScenarioSubgrade(healthy.attemptQuestionId, "sq1", true, healthy.adminId, "administrator");
+
+  const damaged: Array<Awaited<ReturnType<typeof fixture>>> = [];
+  // Historical corruption is injected only AFTER a legitimate synthetic verdict.
+  for (const kind of ["invalid_snapshot", "invalid_answer", "invalid_progress_json", "invalid_verdict", "invalid_grader"] as const) {
+    const f = await fixture();
+    f.submitScenarioSubgrade(f.attemptQuestionId, "sq1", true, f.adminId, "administrator");
+    if (kind === "invalid_snapshot") {
+      f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = '{broken-json' WHERE id = (SELECT snapshot_id FROM attempt_questions WHERE id = ?)")
+        .run(f.attemptQuestionId);
+    } else if (kind === "invalid_answer") {
+      f.db.prepare("UPDATE attempt_answers SET answer_json = ? WHERE attempt_question_id = ?")
+        .run("{broken-json", f.attemptQuestionId);
+    } else if (kind === "invalid_progress_json") {
+      f.db.prepare("UPDATE attempt_answers SET scenario_grading_json = ? WHERE attempt_question_id = ?")
+        .run("{broken-json", f.attemptQuestionId);
+    } else {
+      const progress = JSON.parse(verdict(f).scenario_grading_json!);
+      if (kind === "invalid_verdict") progress.sq1 = null;
+      if (kind === "invalid_grader") progress.sq1.gradedBy = "not-a-user-id";
+      f.db.prepare("UPDATE attempt_answers SET scenario_grading_json = ? WHERE attempt_question_id = ?")
+        .run(JSON.stringify(progress), f.attemptQuestionId);
+    }
+    damaged.push(f);
+  }
+
+  const history = listGradedScenarioSubquestions(null);
+  const visible = history.filter((row) => row.attempt_question_id === healthy.attemptQuestionId);
+  assert.equal(visible.length, 1);
+  assert.equal(visible[0]!.subquestion_id, "sq1");
+  assert.equal(visible[0]!.points_awarded, 2);
+  assert.equal(visible[0]!.graded_by, healthy.adminId);
+  for (const f of damaged) {
+    assert.equal(history.some((row) => row.attempt_question_id === f.attemptQuestionId), false);
+    assert.equal(manualAuditCount(f), 1);
+  }
+});

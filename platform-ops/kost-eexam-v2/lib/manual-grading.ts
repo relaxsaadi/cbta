@@ -243,14 +243,18 @@ export function submitManualGrade(
   return transaction((db) => {
     const row = db
       .prepare(
-        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype
+        `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, s.points, s.qtype_snapshot AS qtype, at.status AS attempt_status
          FROM attempt_answers aa
          JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
          JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+         JOIN attempts at ON at.id = aa.attempt_id
          WHERE aa.attempt_question_id = ?`
       )
-      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string } | undefined;
+      .get(attemptQuestionId) as { attempt_answer_id: number; is_correct: number | null; attempt_id: number; points: number; qtype: string; attempt_status: string } | undefined;
     if (!row) throw new ManualGradingError("Réponse introuvable.");
+    if (row.attempt_status !== "submitted" && row.attempt_status !== "auto_submitted") {
+      throw new ManualGradingError("La tentative doit être soumise avant correction.");
+    }
     if (row.qtype !== "short_answer") throw new ManualGradingError("Cette question n'est pas à correction manuelle.");
     if (row.is_correct !== null) throw new ManualGradingError("Cette réponse a déjà été corrigée.");
 
@@ -619,10 +623,11 @@ export function submitScenarioSubgrade(
   return transaction((db) => {
   const row = db
     .prepare(
-      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, aa.answer_json, aa.scenario_grading_json, s.correct_answer_snapshot, s.qtype_snapshot AS qtype
+      `SELECT aa.id AS attempt_answer_id, aa.is_correct, aa.attempt_id, aa.answer_json, aa.scenario_grading_json, s.correct_answer_snapshot, s.qtype_snapshot AS qtype, at.status AS attempt_status
        FROM attempt_answers aa
        JOIN attempt_questions aq ON aq.id = aa.attempt_question_id
        JOIN assessment_question_snapshots s ON s.id = aq.snapshot_id
+       JOIN attempts at ON at.id = aa.attempt_id
        WHERE aa.attempt_question_id = ?`
     )
     .get(attemptQuestionId) as
@@ -634,9 +639,13 @@ export function submitScenarioSubgrade(
         scenario_grading_json: string | null;
         correct_answer_snapshot: string;
         qtype: string;
+        attempt_status: string;
       }
     | undefined;
   if (!row) throw new ManualGradingError("Réponse introuvable.");
+  if (row.attempt_status !== "submitted" && row.attempt_status !== "auto_submitted") {
+    throw new ManualGradingError("La tentative doit être soumise avant correction.");
+  }
   if (row.qtype !== "scenario") throw new ManualGradingError("Cette question n'est pas un scénario.");
   if (row.is_correct !== null) throw new ManualGradingError("Ce scénario a déjà été entièrement corrigé.");
 

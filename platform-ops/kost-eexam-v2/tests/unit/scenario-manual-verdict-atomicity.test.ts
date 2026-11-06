@@ -313,11 +313,9 @@ test("graded scenario history preserves real reviewer verdict for unanswered inh
 
   // No candidate response is a legitimate empty answer. It must not be
   // mistaken for Object.prototype.constructor, nor hide an actual verdict.
-  assert.equal(
-    f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
-      .get(f.attemptQuestionId)?.answer_json ?? null,
-    null,
-  );
+  const unanswered = f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+    .get(f.attemptQuestionId) as { answer_json: string | null } | undefined;
+  assert.equal(unanswered?.answer_json ?? null, null);
   assert.equal(f.submitScenarioSubgrade(f.attemptQuestionId, "constructor", false, f.adminId, "administrator").finalized, false);
   const history = listGradedScenarioSubquestions(null).filter((r) => r.attempt_question_id === f.attemptQuestionId);
   assert.equal(history.length, 1);

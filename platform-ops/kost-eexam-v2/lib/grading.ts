@@ -67,7 +67,17 @@ export function gradeOneQuestion(
   const given: unknown = answerJson ? JSON.parse(answerJson) : null;
 
   if (qtype === "numeric") {
-    const spec = JSON.parse(correctAnswerSnapshot) as { value: number; tolerance: number };
+    const spec = JSON.parse(correctAnswerSnapshot) as { mode?: unknown; value?: unknown; tolerance?: unknown } | null;
+    // A corrupted/historical numeric key must never be accepted through JS
+    // coercion (e.g. value=false or "0", tolerance=null or true). Authoring
+    // requires a finite numeric value and a finite nonnegative tolerance.
+    // Apply the same invariant at grading, including scenario subquestions.
+    if (!spec || typeof spec !== "object" || spec.mode !== "numeric" ||
+        typeof spec.value !== "number" || !Number.isFinite(spec.value) ||
+        typeof spec.tolerance !== "number" || !Number.isFinite(spec.tolerance) ||
+        spec.tolerance < 0) {
+      return { pending: false, isCorrect: false };
+    }
     // Number("") / Number("   ") / Number(null) / Number(false) all equal
     // zero. A blank or malformed candidate submission must not earn points
     // when the actual correct answer is zero (including scenario subanswers).

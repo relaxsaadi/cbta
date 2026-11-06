@@ -83,14 +83,20 @@ export function gradeOneQuestion(
   }
 
   if (qtype === "short_answer") {
-    const spec = JSON.parse(correctAnswerSnapshot) as { mode: "exact" | "manual"; acceptedAnswers?: string[] };
-    if (spec.mode === "manual") return { pending: true, isCorrect: false };
-    // Keep exact-answer grading unambiguous even for forged autosave bodies.
+    const spec = JSON.parse(correctAnswerSnapshot) as { mode: "exact" | "manual"; acceptedAnswers?: unknown } | null;
+    if (spec?.mode === "manual") return { pending: true, isCorrect: false };
+    // A malformed/blank legacy accepted-answer set must NEVER award marks.
+    // Whitespace-only candidate input also normalizes to empty; reject it.
+    // Validate every key so a partly corrupt snapshot cannot silently pass.
+    const accepted = spec?.mode === "exact" ? spec.acceptedAnswers : null;
+    if (!Array.isArray(accepted) || accepted.length === 0 ||
+        !accepted.every((a: unknown) => typeof a === "string" && normalizeShortAnswer(a).length > 0)) {
+      return { pending: false, isCorrect: false };
+    }
     const givenText = Array.isArray(given) && given.length === 1 && typeof given[0] === "string" ? given[0] : "";
-    if (!givenText) return { pending: false, isCorrect: false };
     const normalizedGiven = normalizeShortAnswer(givenText);
-    const isCorrect = (spec.acceptedAnswers ?? []).some((a) => normalizeShortAnswer(a) === normalizedGiven);
-    return { pending: false, isCorrect };
+    if (!normalizedGiven) return { pending: false, isCorrect: false };
+    return { pending: false, isCorrect: accepted.some((a: string) => normalizeShortAnswer(a) === normalizedGiven) };
   }
 
   // §2 — appariement : correspondance EXACTE et COMPLÈTE des deux côtés,

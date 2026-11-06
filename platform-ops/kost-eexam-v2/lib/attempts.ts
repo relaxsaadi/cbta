@@ -296,6 +296,27 @@ interface SnapshotSourceRow {
   qtype: string;
 }
 
+/** Persisted scenario answers are a map of subquestion IDs to string arrays.
+ * Fail closed on corrupt historical rows rather than passing wrong types to
+ * candidate resume or silently merging the invalid evidence on autosave.
+ * Own "__proto__" / "constructor" fields remain valid historical IDs. */
+function readPersistedScenarioAnswers(raw: string | null): Record<string, string[]> {
+  let parsed: unknown = {};
+  if (raw !== null) {
+    try {
+      parsed = JSON.parse(raw) as unknown;
+    } catch {
+      throw new AttemptError("Réponses précédentes du scénario invalides.");
+    }
+  }
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed) ||
+      !Object.values(parsed).every((entry) =>
+        Array.isArray(entry) && entry.every((value: unknown) => typeof value === "string"))) {
+    throw new AttemptError("Réponses précédentes du scénario invalides.");
+  }
+  return parsed as Record<string, string[]>;
+}
+
 function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionView {
   const qtype = requireSnapshotQtype(r.qtype);
   const allChoices: { key: string; text: string }[] = JSON.parse(r.choices_snapshot_json);
@@ -325,7 +346,7 @@ function mapSnapshotRowToCandidateView(r: SnapshotSourceRow): AttemptQuestionVie
       documentRef?: string;
       subquestions: { id: string; qtype: string; stem: string; choices: { key: string; text: string }[] }[];
     };
-    const savedAnswers = (r.answer_json ? JSON.parse(r.answer_json) : {}) as Record<string, string[]>;
+    const savedAnswers = readPersistedScenarioAnswers(r.answer_json);
     scenario = {
       context: spec.context,
       documentRef: spec.documentRef ?? null,
@@ -512,10 +533,7 @@ export function saveScenarioSubanswer(attemptId: number, candidateUserId: number
     if (!owns) throw new AttemptError("Question hors de cette tentative.");
 
     const existing = db.prepare(`SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?`).get(attemptQuestionId) as { answer_json: string | null } | undefined;
-    const previous: unknown = existing?.answer_json ? JSON.parse(existing.answer_json) : {};
-    if (previous === null || typeof previous !== "object" || Array.isArray(previous)) {
-      throw new AttemptError("Réponses précédentes du scénario invalides.");
-    }
+    const previous = readPersistedScenarioAnswers(existing?.answer_json ?? null);
     // An inherited-name historical ID (especially "__proto__") must be
     // stored as an OWN JSON key, not mutate a plain object's prototype.
     const merged = Object.assign(Object.create(null) as Record<string, string[]>, previous);

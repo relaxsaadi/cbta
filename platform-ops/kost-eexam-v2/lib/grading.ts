@@ -202,8 +202,21 @@ export function gradeOneQuestion(
     return { pending: false, isCorrect: totalPoints > 0 && earnedPoints === totalPoints, partialPoints: earnedPoints };
   }
 
-  // mcq_single / mcq_multi / true_false — comportement d'origine, inchangé.
-  const correct = JSON.parse(correctAnswerSnapshot);
+  // A corrupted legacy/scenario subquestion type must not be graded as a
+  // multiple-choice question simply because its JSON happens to be an array.
+  if (qtype !== "mcq_single" && qtype !== "mcq_multi" && qtype !== "true_false") {
+    return { pending: false, isCorrect: false };
+  }
+  const correct: unknown = JSON.parse(correctAnswerSnapshot);
+  // Single-choice and true/false authoring require exactly one correct key.
+  // Enforce the same invariant on historical snapshots and candidate payloads:
+  // otherwise an invalid two-key answer could receive full marks if both
+  // keys are submitted, including within a scenario subquestion.
+  if ((qtype === "mcq_single" || qtype === "true_false") &&
+      (!Array.isArray(correct) || correct.length !== 1 ||
+       !Array.isArray(given) || given.length !== 1)) {
+    return { pending: false, isCorrect: false };
+  }
   return { pending: false, isCorrect: answerJson !== null && answerSetsEqual(given, correct) };
 }
 

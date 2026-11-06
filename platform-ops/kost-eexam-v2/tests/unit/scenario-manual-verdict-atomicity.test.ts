@@ -298,3 +298,33 @@ test("graded scenario history never manufactures decisions from inherited object
     assert.equal(verdict(f).scenario_grading_json, "{}");
   }
 });
+
+test("graded scenario history preserves real reviewer verdict for unanswered inherited-name ID", async () => {
+  const { listGradedScenarioSubquestions } = await import("../../lib/manual-grading");
+  const f = await fixture();
+  const snapshot = f.db.prepare(
+    `SELECT s.id, s.correct_answer_snapshot FROM assessment_question_snapshots s
+     JOIN attempt_questions aq ON aq.snapshot_id = s.id WHERE aq.id = ?`
+  ).get(f.attemptQuestionId) as { id: number; correct_answer_snapshot: string };
+  const spec = JSON.parse(snapshot.correct_answer_snapshot);
+  spec.subquestions[0].id = "constructor";
+  f.db.prepare("UPDATE assessment_question_snapshots SET correct_answer_snapshot = ? WHERE id = ?")
+    .run(JSON.stringify(spec), snapshot.id);
+
+  // No candidate response is a legitimate empty answer. It must not be
+  // mistaken for Object.prototype.constructor, nor hide an actual verdict.
+  assert.equal(
+    f.db.prepare("SELECT answer_json FROM attempt_answers WHERE attempt_question_id = ?")
+      .get(f.attemptQuestionId)?.answer_json ?? null,
+    null,
+  );
+  assert.equal(f.submitScenarioSubgrade(f.attemptQuestionId, "constructor", false, f.adminId, "administrator").finalized, false);
+  const history = listGradedScenarioSubquestions(null).filter((r) => r.attempt_question_id === f.attemptQuestionId);
+  assert.equal(history.length, 1);
+  assert.equal(history[0]!.subquestion_id, "constructor");
+  assert.equal(history[0]!.candidate_answer, "");
+  assert.equal(history[0]!.is_correct, false);
+  assert.equal(history[0]!.points_awarded, 0);
+  assert.equal(history[0]!.graded_by, f.adminId);
+  assert.equal(manualAuditCount(f), 1);
+});

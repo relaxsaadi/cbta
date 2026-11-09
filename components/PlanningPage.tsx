@@ -502,7 +502,7 @@ export default function PlanningPage() {
           <span className="text-yellow-400">IATA DGR 2026</span>
         </h1>
         <p className="text-white/60 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-          Présentiel · Formateurs certifiés IATA · Certificat valide 24 mois<br />
+          Formation selon périmètre et exigences applicables · Validité à confirmer<br />
           Dimanche – Jeudi · 08h30 – 16h30
         </p>
 
@@ -530,10 +530,10 @@ export default function PlanningPage() {
 
         {/* PRICE ANCHOR */}
         <div className="inline-flex flex-wrap items-center justify-center gap-3 bg-green-500/[0.08] border border-green-500/20 rounded-xl px-5 py-3 mb-2">
-          <span className="text-sm text-white/40 line-through">IATA Bruxelles : <span className="text-red-400">$3 950</span>/pers</span>
+          <span className="text-sm text-white/40 line-through">Comparaison à vérifier : <span className="text-red-400">—</span>/pers</span>
           <span className="text-green-400 text-lg">→</span>
-          <span className="text-green-400 font-bold text-base">KOST GROUP : à partir de 650 €</span>
-          <span className="bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full uppercase">Économisez 5× à 8×</span>
+          <span className="text-green-400 font-bold text-base">KOST GROUP : tarif à confirmer sur devis</span>
+          <span className="bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full uppercase">Devis personnalisé</span>
         </div>
       </section>
 
@@ -546,7 +546,7 @@ export default function PlanningPage() {
           </div>
           {[
             { icon: "📘", label: "Manuel DGR officiel IATA (support de formation)", val: "Valeur : 180 €" },
-            { icon: "🏆", label: "Certification IATA CBTA valide 24 mois", val: "Valeur : $2 250+" },
+            { icon: "🏆", label: "Évaluation et document délivré selon conditions confirmées", val: "À confirmer" },
             { icon: "👨‍🏫", label: "Formateur international certifié IATA", val: "Inclus" },
             { icon: "🍽️", label: "Hébergement & restauration (si déplacement)", val: "Inclus" },
             { icon: "📄", label: "Facture officielle France (Strategix) ou Algérie", val: "Inclus" },
@@ -561,8 +561,8 @@ export default function PlanningPage() {
             </div>
           ))}
           <div className="flex items-center justify-between px-5 py-4 bg-yellow-400/[0.06] border-t border-yellow-400/15">
-            <span className="text-sm font-bold text-yellow-400">Valeur totale de l'offre</span>
-            <span className="text-lg font-black text-yellow-400">$2 800+ · Votre prix : dès 650 €</span>
+            <span className="text-sm font-bold text-yellow-400">Conditions de l'offre</span>
+            <span className="text-lg font-black text-yellow-400">Proposition sur devis</span>
           </div>
         </div>
       </section>
@@ -570,7 +570,7 @@ export default function PlanningPage() {
       {/* INTRO STATIQUE — texte indexable par Google */}
       <section className="max-w-3xl mx-auto px-4 pb-10 text-white/60 text-sm leading-relaxed">
         <p className="mb-4">
-          KOST GROUP, premier centre IATA CBTA Provider certifié en Algérie, organise ses sessions de formation IATA DGR (Marchandises Dangereuses) de juillet à décembre 2026 à Alger. Chaque session est animée par un formateur certifié IATA, inclut le manuel DGR 67e édition et l'examen officiel IATA. Le certificat délivré est identique à celui obtenu à Bruxelles et reconnu par les 300+ compagnies membres IATA.
+          KOST GROUP propose des formations DGR/CBTA dont le périmètre doit être confirmé à partir des tâches réellement exercées, des sources courantes applicables et du circuit de revue. Les modalités de session, de délivrance, de reconnaissance et d'évaluation sont à confirmer dans une proposition écrite.
         </p>
         <p className="mb-6">
           Les formations couvrent toutes les fonctions réglementées : préparation des expéditions (<Link href="/dgr-7-1" className="text-yellow-400 hover:underline">DGR 7.1</Link>), acceptation cargo (<Link href="/dgr-7-3" className="text-yellow-400 hover:underline">DGR 7.3</Link>), personnel sol (<Link href="/dgr-7-4" className="text-yellow-400 hover:underline">DGR 7.4</Link>), enregistrement (<Link href="/dgr-7-5" className="text-yellow-400 hover:underline">DGR 7.5</Link>), équipages (<Link href="/dgr-7-7" className="text-yellow-400 hover:underline">DGR 7.7</Link>) et personnels navigants de cabine (<Link href="/dgr-7-9" className="text-yellow-400 hover:underline">DGR 7.9</Link>). Sessions intra-entreprise disponibles dès 4 participants.
@@ -635,7 +635,7 @@ export default function PlanningPage() {
               { color: "bg-purple-400", label: "DGR 7.5 / 7.6 — Passage & Équipage" },
               { color: "bg-orange-400", label: "DGR 7.7 / 7.8 / 7.9 — Cabine & Ops" },
               { color: "bg-teal-400", label: "DGR 7.10 — Fret aérien" },
-              { color: "bg-yellow-400", label: "Recurrent — Renouvellement 24 mois" },
+              { color: "bg-yellow-400", label: "Recurrent — selon exigences applicables" },
             ].map((l) => (
               <div key={l.label} className="flex items-center gap-2 text-xs text-white/50">
                 <div className={`w-5 h-1 rounded-full ${l.color}`} />
@@ -687,7 +687,7 @@ export default function PlanningPage() {
               {[
                 "✅ Paiement sécurisé via Strategix France",
                 "✅ Facture officielle",
-                "✅ Certificat IATA garanti",
+                "✅ Modalités de délivrance à confirmer",
               ].map((item) => (
                 <span key={item}>{item}</span>
               ))}

@@ -15,7 +15,7 @@ export default function Hero() {
         <div className="animate-fade-in-up flex flex-col items-start gap-6 max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-sm font-medium">
             <BadgeCheck className="h-4 w-4 text-[#F39C12]" aria-hidden />
-            <span>DGR / CBTA — périmètre validé fonction par fonction</span>
+            <span>DGR / CBTA — parcours étudiés fonction par fonction</span>
           </div>
 
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">

@@ -50,18 +50,18 @@ const JSON_LD = {
 const RISKS = [
   {
     icon: "⚠️",
-    title: "Amende & suspension",
-    text: "Un transitaire qui expédie des marchandises dangereuses sans personnel certifié DGR risque une suspension d'accréditation cargo et des amendes DGAC/ANAC.",
+    title: "Exigences à vérifier",
+    text: "Les obligations de formation et conséquences de non-conformité dépendent des tâches, des textes en vigueur et des exigences des opérateurs. Vérifier les sources applicables.",
   },
   {
     icon: "✈️",
-    title: "Refus en compagnie",
-    text: "Les compagnies aériennes refusent systématiquement les envois DGR dont le transitaire n'a pas de personnel certifié DGR 7.1 en poste.",
+    title: "Exigences des opérateurs",
+    text: "Les transporteurs peuvent appliquer des conditions particulières d'acceptation et de formation. Vérifier les exigences de chaque opérateur et les tâches réellement exercées.",
   },
   {
     icon: "📋",
-    title: "Responsabilité pénale",
-    text: "En cas d'incident DGR, la responsabilité civile et pénale de l'expéditeur — et donc du transitaire signataire — est directement engagée.",
+    title: "Responsabilités opérationnelles",
+    text: "Les responsabilités dépendent des rôles, contrats, opérations et textes applicables. Aucune sanction ou attribution de responsabilité ne peut être présumée ici.",
   },
 ];
 
@@ -69,16 +69,16 @@ const FORMATIONS = [
   {
     code: "DGR 7.1 Initial",
     titre: "Expéditeurs & Transitaires",
-    desc: "Formation complète pour toute personne qui prépare, classe, emballe, étiquette et documente des envois de marchandises dangereuses. La formation de référence pour les transitaires.",
+    desc: "Parcours destiné aux personnes réalisant des tâches de préparation d'expéditions DGR, sous réserve de la correspondance des fonctions et du programme applicable.",
     duree: "4 jours / 32h",
     prix: "1 800 €",
-    badge: "Essentielle transitaires",
+    badge: "Selon fonctions",
     color: "#003087",
   },
   {
     code: "DGR 7.1 Recurrent",
-    titre: "Renouvellement 7.1 (24 mois)",
-    desc: "Renouvellement obligatoire tous les 24 mois pour maintenir la certification 7.1 active. Mise à jour DGR dernière édition incluse.",
+    titre: "Actualisation DGR 7.1 (selon exigences)",
+    desc: "La périodicité, le contenu et la nécessité de la formation récurrente doivent être vérifiés selon les règles applicables et la fonction exercée.",
     duree: "3 jours / 24h",
     prix: "1 400 €",
     badge: "Renouvellement",
@@ -87,7 +87,7 @@ const FORMATIONS = [
   {
     code: "DGR 7.2 + 7.4",
     titre: "Agents cargo & manutention",
-    desc: "Pour les agents de fret en station cargo : acceptation, manutention et stockage des envois DGR. Complémentaire au 7.1 pour les équipes cargo.",
+    desc: "Parcours à définir selon les tâches d'acceptation, de manutention ou de stockage confiées aux personnels concernés.",
     duree: "2 jours / 16h",
     prix: "900 €",
     badge: "Cargo & handling",
@@ -112,10 +112,10 @@ export default function Page() {
             Formation IATA DGR<br />pour Transitaires
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 580, margin: "0 auto 12px" }}>
-            Catégories <strong>7.1 & 7.2</strong> — Certifiez vos équipes pour expédier légalement des marchandises dangereuses par avion.
+            Parcours DGR/CBTA adaptés aux <strong>tâches exercées</strong>, sous réserve des exigences applicables.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            Obligation OACI Annexe 18 · CBTA Provider certifié · Certificat valable 24 mois
+            Sources OACI/IATA, textes nationaux et exigences opérateur à vérifier par fonction
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#formations" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -127,11 +127,11 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Risques sans certification */}
+        {/* Exigences à clarifier selon les fonctions */}
         <section style={{ background: "#FFF3CD", borderBottom: "1px solid #FBBF24", padding: "32px 24px" }}>
           <div style={{ maxWidth: 900, margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", fontSize: 20, fontWeight: 700, marginBottom: 24, color: "#92400E" }}>
-              Sans certification DGR, votre activité de transitaire est en danger
+              Identifiez les exigences de formation propres à vos opérations DGR
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
               {RISKS.map((r) => (
@@ -183,10 +183,10 @@ export default function Page() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
-                { icon: "🏅", t: "1er CBTA Provider d'Algérie", d: "Seul centre IATA CBTA accrédité en Algérie — vos certificats sont reconnus par toutes les compagnies aériennes." },
+                { icon: "🏅", t: "Parcours par fonctions", d: "Les besoins de formation et de reconnaissance sont à vérifier selon les tâches, l'autorité et l'opérateur concernés." },
                 { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
-                { icon: "🏢", t: "Intra-entreprise possible", d: "Formateur IATA déplacé dans vos locaux pour former tout votre pôle export DGR en une session." },
-                { icon: "💶", t: "50% moins cher qu'en Europe", d: "Même certification IATA, même formateur accrédité, moitié prix par rapport à Paris ou Bruxelles." },
+                { icon: "🏢", t: "Intra-entreprise possible", d: "Modalités d'intervention et qualifications des formateurs à préciser dans la proposition adaptée à votre équipe." },
+                { icon: "💶", t: "Proposition sur devis", d: "Devis à confirmer selon le programme, la durée, les modalités et le nombre de participants." },
               ].map((r) => (
                 <div key={r.t} style={{ background: "white", borderRadius: 10, padding: "20px" }}>
                   <div style={{ fontSize: 30, marginBottom: 10 }}>{r.icon}</div>
@@ -202,11 +202,11 @@ export default function Page() {
         <section style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px" }}>
           <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Questions fréquentes — Transitaires</h2>
           {[
-            { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "Oui. Tout agent qui prépare, classe, emballe ou documente des envois DGR doit détenir un certificat DGR 7.1 en cours de validité (OACI Annexe 18, IATA DGR Section 1)." },
-            { q: "Quelle est la validité de la certification ?", a: "24 mois. À l'échéance, votre agent doit suivre la formation DGR 7.1 Recurrent pour renouveler son certificat." },
+            { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "La formation requise dépend des fonctions réellement exercées, du cadre applicable et des exigences de l'employeur ou de l'opérateur. La fonction 7.1 ne se déduit pas du seul métier de transitaire." },
+            { q: "Quelle est la validité de la certification ?", a: "La validité et l'éventuel recyclage doivent être établis selon les textes, les fonctions exercées et les exigences applicables. Aucune durée universelle n'est présumée." },
             { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
-            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Oui. KOST GROUP est un IATA CBTA Provider officiel. Le certificat émis est un certificat IATA reconnu par toutes les compagnies aériennes mondiales." },
-            { q: "Y a-t-il un examen à la fin ?", a: "Oui. L'examen CBTA est basé sur des compétences (Competency-Based Training and Assessment). Le taux de réussite de nos stagiaires dépasse 95 %." },
+            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Aucune reconnaissance universelle par les compagnies ne peut être garantie. Il convient de vérifier le type de certificat délivré, le périmètre du programme et les exigences du transporteur concerné." },
+            { q: "Y a-t-il un examen à la fin ?", a: "Les modalités d'évaluation dépendent du programme convenu. Aucun taux de réussite n'est affirmé sans preuves vérifiables." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#003087" }}>{faq.q}</summary>

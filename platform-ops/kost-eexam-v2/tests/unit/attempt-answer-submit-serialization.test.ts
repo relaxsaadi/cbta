@@ -308,6 +308,25 @@ test("#40: a late candidate submit is automatically classified by server expiry"
   assert.equal(JSON.parse(event.metadata_json).trigger, "candidate");
 });
 
+test("#40: stale expiry sweep cannot prematurely finalize a live attempt", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  // Models the deadline being extended after a cron preselection but before
+  // its BEGIN IMMEDIATE: the sweep trigger must recheck expiry in that lock.
+  const outcome = submitAttempt(f.attemptId, f.candidateId, { trigger: "expiry_sweep" });
+  assert.deepEqual(outcome, {
+    attemptId: f.attemptId, status: "in_progress", transitioned: false,
+  });
+  const row = f.db.prepare("SELECT status, submitted_at FROM attempts WHERE id = ?")
+    .get(f.attemptId) as { status: string; submitted_at: string | null };
+  assert.equal(row.status, "in_progress");
+  assert.equal(row.submitted_at, null);
+  const audit = f.db.prepare(
+    "SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action IN ('attempt_submit','attempt_auto_submit')"
+  ).get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 0);
+});
+
 test("#40: expiry sweep reports only its own winning transitions", async () => {
   const f = await fixture();
   const { sweepExpiredAttempts } = await import("../../lib/attempts");

@@ -75,13 +75,13 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
     ? [
         { icon: "🏆", title: "Task-specific training", text: "The relevant DGR function, assessment route and recognition requirements are verified for actual duties and applicable authorities and operators." },
         { icon: "💰", title: "Individual proposal", text: "Course price and scope are confirmed in a written quotation; no equivalent certificate or price saving is presumed." },
-        { icon: "🌍", title: "We come to you", text: `On-site training in ${data.pays} from 6 participants. No travel required. Our certified trainers travel across Africa.` },
+        { icon: "🌍", title: "Delivery conditions", text: `Delivery options in ${data.pays} depend on applicable local requirements, provider authorization and a validated written proposal.` },
         { icon: "📄", title: "Local invoicing", text: `Invoice in EUR, USD or local currency. Compatible with your accounting requirements in ${data.pays}.` },
       ]
     : [
         { icon: "🏆", title: "Formation selon fonctions", text: "La fonction, l'évaluation et les exigences de reconnaissance sont vérifiées selon les tâches et les textes applicables." },
         { icon: "💰", title: "Devis individualisé", text: "Le tarif et le contenu sont confirmés sur devis ; aucune équivalence de certificat ou économie chiffrée n'est présumée." },
-        { icon: "🌍", title: "Formation intra possible", text: `Nous venons dans votre entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Pas de déplacement requis pour vos équipes.` },
+        { icon: "🌍", title: "Conditions de délivrance", text: `Les modalités de formation ${data.paysPreposition} ${data.pays} dépendent des autorisations requises, des règles locales et d'une proposition validée.` },
         { icon: "📄", title: "Facturation adaptée", text: `Facture en EUR, USD ou monnaie locale. Compatible avec vos exigences comptables ${data.paysPreposition} ${data.pays}.` },
       ];
 
@@ -89,13 +89,13 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
     ? [
         { q: `Is the DGR / CBTA certificate recognized in ${data.pays}?`, a: `Recognition is not automatic. Requirements of ${data.autoriteRegionale}, the issuing entity and each operator must be checked for the specific programme.` },
         { q: "How long is the certificate valid?", a: "Validity and recurrent training must be verified against the current rules, actual function and programme; there is no blanket validity claim." },
-        { q: `Can you deliver training in ${data.pays}?`, a: `Yes. We organize intra-company training sessions in ${data.pays} from 6 participants. Our IATA-certified trainers travel to your site. Contact us for a quote.` },
+        { q: `Can you deliver training in ${data.pays}?`, a: `Delivery can be assessed after verifying required authorizations and applicable local rules. Please request a scoped written proposal before making arrangements.` },
         { q: "What is the examination pass rate?", a: "No success rate is claimed without verified participant records and a documented calculation method." },
       ]
     : [
         { q: `Un certificat DGR/CBTA est-il reconnu ${data.paysPreposition} ${data.pays} ?`, a: `Aucune reconnaissance automatique n'est garantie. Les exigences de ${data.autoriteRegionale}, du certificateur et de chaque opérateur doivent être vérifiées pour le programme concerné.` },
         { q: "Combien de temps dure la certification ?", a: "La validité et les besoins de recyclage dépendent de la fonction, du programme et des exigences en vigueur ; aucune durée universelle n'est présumée." },
-        { q: `Pouvez-vous former ${data.paysPreposition} ${data.pays} ?`, a: `Oui. Nous organisons des sessions intra-entreprise ${data.paysPreposition} ${data.pays} à partir de 6 participants. Nos formateurs IATA certifiés se déplacent sur votre site. Contactez-nous pour un devis.` },
+        { q: `Pouvez-vous former ${data.paysPreposition} ${data.pays} ?`, a: `Les modalités sont à étudier après vérification des autorisations nécessaires et des exigences locales. Demandez une proposition écrite adaptée avant toute organisation.` },
         { q: "Quel est le taux de réussite à l'examen ?", a: "Aucun taux de réussite n'est communiqué sans données vérifiées et méthode de calcul documentée." },
         { q: `Y a-t-il une session prochainement ${data.paysPreposition} ${data.pays} ?`, a: `Des sessions inter-entreprises ont lieu régulièrement à Alger. Pour ${data.pays}, nous organisons des sessions intra à partir de 6 participants. Consultez le planning ou contactez-nous.` },
       ];

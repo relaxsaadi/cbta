@@ -41,7 +41,7 @@ const faqSchema = {
       name: "Faut-il venir en Algérie pour la formation IATA DGR ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Pas nécessairement. Nous organisons des sessions à Alger, mais aussi des formations intra-entreprise (nous nous déplaçons dans votre pays) à partir de 6 participants. Demandez le devis intra dans le formulaire.",
+        text: "Pas nécessairement. Des sessions peuvent être organisées à Alger. Une formation intra-entreprise hors Algérie doit être étudiée pays par pays, sur devis et sous réserve des autorisations et conditions opérationnelles applicables.",
       },
     },
     {
@@ -73,7 +73,7 @@ const faqSchema = {
       name: "KOST GROUP se déplace-t-il pour les formations intra-entreprise ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. La proposition précise le formateur, les supports et les modalités d'évaluation. Vous fournissez la salle et la logistique locale.",
+        text: "Une intervention intra-entreprise peut être envisagée selon le pays, les disponibilités et les autorisations applicables. Le périmètre, le nombre de participants et les modalités doivent être confirmés par une proposition écrite ; aucune couverture géographique universelle n'est garantie.",
       },
     },
     {

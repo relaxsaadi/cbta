@@ -633,8 +633,14 @@ export function submitAttempt(
     }
     const expiry = Date.parse(attempt.expires_at);
     if (!Number.isFinite(expiry)) throw new AttemptError("La date d'expiration de cette tentative est invalide.");
-    const status: AttemptStatus = expiry <= Date.now() ? "auto_submitted" : "submitted";
     const trigger: SubmitTrigger = opts.trigger ?? "candidate";
+    const expired = expiry <= Date.now();
+    // An expiry sweep must never submit a still-active attempt. Its preselection
+    // can become stale if the deadline changes before this write lock is acquired.
+    if (trigger === "expiry_sweep" && !expired) {
+      return { attemptId, status: "in_progress", transitioned: false };
+    }
+    const status: AttemptStatus = expired ? "auto_submitted" : "submitted";
     db.prepare(`UPDATE attempts SET status = ?, submitted_at = ? WHERE id = ?`).run(status, nowIso(), attemptId);
     audit({
       actorUserId: trigger === "expiry_sweep" ? null : candidateUserId,

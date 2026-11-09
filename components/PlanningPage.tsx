@@ -171,7 +171,7 @@ const MONTHS: Month[] = [
         id: "71rec-sep",
         badge: "DGR 7.1 — Recurrent",
         badgeColor: "bg-yellow-500/15 text-yellow-400 border border-yellow-500/20",
-        name: "Renouvellement Certification DGR 7.1 (24 mois)",
+        name: "Formation récurrente DGR 7.1 (selon exigences applicables)",
         dates: "27 – 29 Sep 2026",
         days: "Dim – Mar",
         hours: "08h30 – 16h30",
@@ -230,7 +230,7 @@ const MONTHS: Month[] = [
         id: "73rec-oct",
         badge: "DGR 7.3 — Recurrent",
         badgeColor: "bg-yellow-500/15 text-yellow-400 border border-yellow-500/20",
-        name: "Renouvellement Certification DGR 7.3 (24 mois)",
+        name: "Formation récurrente DGR 7.3 (selon exigences applicables)",
         dates: "25 – 27 Oct 2026",
         days: "Dim – Mar",
         hours: "08h30 – 16h30",
@@ -302,7 +302,7 @@ const MONTHS: Month[] = [
         id: "71rec-nov",
         badge: "DGR 7.1 — Recurrent",
         badgeColor: "bg-yellow-500/15 text-yellow-400 border border-yellow-500/20",
-        name: "Renouvellement Certification DGR 7.1 (24 mois)",
+        name: "Formation récurrente DGR 7.1 (selon exigences applicables)",
         dates: "25 – 26 Nov 2026",
         days: "Mer – Jeu",
         hours: "08h30 – 16h30",
@@ -530,7 +530,7 @@ export default function PlanningPage() {
 
         {/* PRICE ANCHOR */}
         <div className="inline-flex flex-wrap items-center justify-center gap-3 bg-green-500/[0.08] border border-green-500/20 rounded-xl px-5 py-3 mb-2">
-          <span className="text-sm text-white/40 line-through">Comparaison à vérifier : <span className="text-red-400">—</span>/pers</span>
+          <span className="text-sm text-white/60">Programme, durée et tarification à confirmer pour chaque fonction.</span>
           <span className="text-green-400 text-lg">→</span>
           <span className="text-green-400 font-bold text-base">KOST GROUP : tarif à confirmer sur devis</span>
           <span className="bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full uppercase">Devis personnalisé</span>

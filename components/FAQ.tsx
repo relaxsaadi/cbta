@@ -14,7 +14,7 @@ const ITEMS = [
   },
   {
     q: "Faut-il venir en Algérie ?",
-    a: "Pas nécessairement. Nous organisons des sessions à Alger, mais aussi des formations intra-entreprise (nous nous déplaçons dans votre pays) à partir de 6 participants. Demandez le devis intra dans le formulaire.",
+    a: "Pas nécessairement. Des sessions peuvent être organisées à Alger. Une formation intra-entreprise hors Algérie doit être étudiée pays par pays, sur devis et sous réserve des autorisations et conditions opérationnelles applicables.",
   },
   {
     q: "Le certificat est-il valable combien de temps ?",
@@ -30,7 +30,7 @@ const ITEMS = [
   },
   {
     q: "Vous déplacez-vous pour les formations intra-entreprise ?",
-    a: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. La proposition précise le formateur, les supports et les modalités d'évaluation. Vous fournissez la salle et la logistique locale.",
+    a: "Une intervention intra-entreprise peut être envisagée selon le pays, les disponibilités et les autorisations applicables. Le périmètre, le nombre de participants et les modalités doivent être confirmés par une proposition écrite ; aucune couverture géographique universelle n'est garantie.",
   },
   {
     q: "Quels sont les délais d'inscription ?",

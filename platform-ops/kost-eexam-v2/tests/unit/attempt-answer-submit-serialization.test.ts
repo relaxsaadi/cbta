@@ -1,6 +1,8 @@
 import { before, test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { setupTestDb } from "./test-db";
 
 before(() => setupTestDb());
@@ -277,4 +279,144 @@ test("scenario subanswer writes reject forged IDs, malformed payloads and duplic
   assert.throws(() => saveScenarioSubanswer(f.attemptId, f.candidateId, f.questionId, "sq1", ["B"]),
     /Configuration du scénario publiée invalide/);
   assert.equal(read(), before, "ambiguous frozen IDs must not alter existing candidate evidence");
+});
+
+test("#40: forged early auto=true is voluntary and idempotent with truthful audit", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  const first = submitAttempt(f.attemptId, f.candidateId, { auto: true });
+  assert.deepEqual(first, { attemptId: f.attemptId, status: "submitted", transitioned: true });
+  const second = submitAttempt(f.attemptId, f.candidateId, { auto: true });
+  assert.deepEqual(second, { attemptId: f.attemptId, status: "submitted", transitioned: false });
+  const events = f.db.prepare("SELECT action FROM audit_logs WHERE target_id = ? AND action IN ('attempt_submit','attempt_auto_submit')")
+    .all(f.attemptId) as { action: string }[];
+  assert.deepEqual(events.map((r) => r.action), ["attempt_submit"]);
+});
+
+test("#40: a late candidate submit is automatically classified by server expiry", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  assert.deepEqual(submitAttempt(f.attemptId, f.candidateId, { auto: false }), {
+    attemptId: f.attemptId, status: "auto_submitted", transitioned: true,
+  });
+  const event = f.db.prepare("SELECT actor_user_id, actor_role, metadata_json FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'")
+    .get(f.attemptId) as { actor_user_id: number | null; actor_role: string | null; metadata_json: string };
+  assert.equal(event.actor_user_id, f.candidateId);
+  assert.equal(event.actor_role, "candidate");
+  assert.equal(JSON.parse(event.metadata_json).trigger, "candidate");
+});
+
+test("#40: stale expiry sweep cannot prematurely finalize a live attempt", async () => {
+  const f = await fixture();
+  const { submitAttempt } = await import("../../lib/attempts");
+  // Models the deadline being extended after a cron preselection but before
+  // its BEGIN IMMEDIATE: the sweep trigger must recheck expiry in that lock.
+  const outcome = submitAttempt(f.attemptId, f.candidateId, { trigger: "expiry_sweep" });
+  assert.deepEqual(outcome, {
+    attemptId: f.attemptId, status: "in_progress", transitioned: false,
+  });
+  const row = f.db.prepare("SELECT status, submitted_at FROM attempts WHERE id = ?")
+    .get(f.attemptId) as { status: string; submitted_at: string | null };
+  assert.equal(row.status, "in_progress");
+  assert.equal(row.submitted_at, null);
+  const audit = f.db.prepare(
+    "SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action IN ('attempt_submit','attempt_auto_submit')"
+  ).get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 0);
+});
+
+test("#40: expiry sweep reports only its own winning transitions", async () => {
+  const f = await fixture();
+  const { sweepExpiredAttempts } = await import("../../lib/attempts");
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  assert.equal(sweepExpiredAttempts().filter((r) => r.attemptId === f.attemptId).length, 1);
+  assert.equal(sweepExpiredAttempts().filter((r) => r.attemptId === f.attemptId).length, 0);
+  const event = f.db.prepare("SELECT actor_user_id, actor_role, metadata_json FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'")
+    .get(f.attemptId) as { actor_user_id: number | null; actor_role: string | null; metadata_json: string };
+  assert.equal(event.actor_user_id, null);
+  assert.equal(event.actor_role, null);
+  assert.equal(JSON.parse(event.metadata_json).trigger, "expiry_sweep");
+});
+
+type TransitionWorkerReport =
+  | { ok: true; transitioned?: boolean; status?: string; sweptIds?: number[] }
+  | { ok: false; error: string };
+
+function transitionWorker(mode: "manual" | "sweep", attemptId: number, candidateId: number): Promise<TransitionWorkerReport> {
+  const moduleUrl = pathToFileURL(resolve(import.meta.dirname, "../../lib/attempts.ts")).href;
+  const script = [
+    "import { submitAttempt, sweepExpiredAttempts } from " + JSON.stringify(moduleUrl) + ";",
+    "const [mode, attemptId, candidateId] = JSON.parse(process.env.KOST_TEST_TRANSITION_ARGS);",
+    "try {",
+    "  const outcome = mode === 'sweep' ? { sweptIds: sweepExpiredAttempts().map(r => r.attemptId) }",
+    "    : submitAttempt(attemptId, candidateId, { auto: false });",
+    "  process.stdout.write(JSON.stringify({ ok: true, ...outcome }));",
+    "} catch (error) {",
+    "  process.stdout.write(JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) }));",
+    "}",
+  ].join("\n");
+  return new Promise((resolvePromise, rejectPromise) => {
+    const child = spawn(process.execPath, ["--import", "tsx", "--input-type=module", "--eval", script], {
+      cwd: resolve(import.meta.dirname, "../.."),
+      env: { ...process.env, DB_PATH: process.env.DB_PATH,
+        KOST_TEST_TRANSITION_ARGS: JSON.stringify([mode, attemptId, candidateId]) },
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = ""; let stderr = "";
+    child.stdout.setEncoding("utf8");
+    child.stderr.setEncoding("utf8");
+    child.stdout.on("data", (chunk) => { stdout += chunk; });
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("error", rejectPromise);
+    child.on("close", (code) => {
+      if (code !== 0) {
+        rejectPromise(new Error("transition worker exited " + code + ": " + stderr));
+        return;
+      }
+      try { resolvePromise(JSON.parse(stdout) as TransitionWorkerReport); }
+      catch (error) {
+        rejectPromise(new Error("invalid worker output " + stdout + ": " + String(error) + " " + stderr));
+      }
+    });
+  });
+}
+
+test("#40: independent candidate processes report exactly one transition winner", async () => {
+  const f = await fixture();
+  const [a, b] = await Promise.all([
+    transitionWorker("manual", f.attemptId, f.candidateId),
+    transitionWorker("manual", f.attemptId, f.candidateId),
+  ]);
+  assert.equal(a.ok, true, JSON.stringify(a));
+  assert.equal(b.ok, true, JSON.stringify(b));
+  if (!a.ok || !b.ok) return;
+  assert.equal(Number(a.transitioned) + Number(b.transitioned), 1);
+  assert.equal(a.status, "submitted");
+  assert.equal(b.status, "submitted");
+  const audit = f.db.prepare("SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_submit'")
+    .get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 1);
+});
+
+test("#40: independent expired candidate/cron processes never double-count a transition", async () => {
+  const f = await fixture();
+  f.db.prepare("UPDATE attempts SET expires_at = ? WHERE id = ?")
+    .run(new Date(Date.now() - 30_000).toISOString(), f.attemptId);
+  const [manual, sweep] = await Promise.all([
+    transitionWorker("manual", f.attemptId, f.candidateId),
+    transitionWorker("sweep", f.attemptId, f.candidateId),
+  ]);
+  assert.equal(manual.ok, true, JSON.stringify(manual));
+  assert.equal(sweep.ok, true, JSON.stringify(sweep));
+  if (!manual.ok || !sweep.ok) return;
+  const cronWon = sweep.sweptIds?.includes(f.attemptId) ?? false;
+  assert.equal(Number(manual.transitioned) + Number(cronWon), 1);
+  const row = f.db.prepare("SELECT status FROM attempts WHERE id = ?").get(f.attemptId) as { status: string };
+  assert.equal(row.status, "auto_submitted");
+  const audit = f.db.prepare("SELECT COUNT(*) AS n FROM audit_logs WHERE target_id = ? AND action = 'attempt_auto_submit'")
+    .get(f.attemptId) as { n: number };
+  assert.equal(audit.n, 1);
 });

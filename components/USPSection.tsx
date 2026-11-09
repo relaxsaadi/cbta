@@ -8,8 +8,8 @@ const USPS = [
   },
   {
     icon: Globe,
-    title: "Même certificat IATA qu'à Bruxelles",
-    desc: "Identique à celui délivré dans les centres européens, mais à 50% du prix. Aucune différence de reconnaissance internationale.",
+    title: "Reconnaissance à vérifier",
+    desc: "Les équivalences de certificats, exigences d'acceptation et comparaisons de prix doivent être vérifiées selon le programme et le contexte.",
   },
   {
     icon: Users,

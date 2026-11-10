@@ -28,6 +28,14 @@ const BLOCKED_DGR_MARKETING_CLAIMS: Array<{ label: string; pattern: RegExp }> = 
     pattern: /\b(?:ao[uû]t|septembre)\s+2026\b/i,
   },
   {
+    label: "unsupported ANAC/IATA granted-approval claim (either word order)",
+    pattern: /\b(?:agr[eé][eé](?:e|es|s)?|approuv[eé](?:e|es|s)?|habilit[eé](?:e|es|s)?|autoris[eé](?:e|es|s)?|reconnu(?:e|es|s)?)\b.{0,100}\b(?:ANAC|IATA)\b|\b(?:ANAC|IATA)\b.{0,100}\b(?:agr[eé][eé](?:e|es|s)?|approuv[eé](?:e|es|s)?|habilit[eé](?:e|es|s)?|autoris[eé](?:e|es|s)?|reconnu(?:e|es|s)?)\b/i,
+  },
+  {
+    label: "unsupported first-or-only provider claim without brand qualifier",
+    pattern: /\b(?:1er|premier|premi[eè]re|seul|seule|unique)\s+(?:centre|organisme|provider|prestataire|fournisseur)\b/i,
+  },
+  {
     label: "unsupported punitive consequence claim",
     pattern: /\b(?:amende|interdiction\s+de\s+vol|responsabilit[eé]\s+p[eé]nale|suspension\s+de\s+vol)\b/i,
   },
@@ -44,7 +52,18 @@ Règles de conformité obligatoires :
 `;
 
 export function assertSafeDgrMarketingCopy(text: string): void {
-  const candidate = text.replace(/\s+/g, " ").trim();
+  // Marketing copy is HTML. Remove markup and decode common French HTML
+  // character references before applying checks so formatting cannot split
+  // a prohibited assertion into apparently unrelated tokens.
+  const candidate = text
+    .replace(/&eacute;/gi, "é")
+    .replace(/&egrave;/gi, "è")
+    .replace(/&ecirc;/gi, "ê")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&#(?:0*39|x0*27);/gi, "'")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   for (const { label, pattern } of BLOCKED_DGR_MARKETING_CLAIMS) {
     if (pattern.test(candidate)) {
       throw new Error(`[dgr-marketing] blocked generated copy: ${label}`);

@@ -11,6 +11,7 @@ on:
       - "app/**"
       - "components/**"
       - "lib/**"
+      - "scripts/test-dgr-marketing-claims.mjs"
       - "public/**"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -52,6 +53,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Typecheck
         run: pnpm exec tsc --noEmit
+      - name: Public DGR marketing-claim guard regressions
+        run: node scripts/test-dgr-marketing-claims.mjs
       - name: Production build (non-secret CI placeholders only)
         # Build-time public Supabase configuration is needed by legacy client
         # pages during prerender; these are inert placeholders, NOT deployment

@@ -52,5 +52,11 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Typecheck
         run: pnpm exec tsc --noEmit
-      - name: Production build
+      - name: Production build (non-secret CI placeholders only)
+        # Build-time public Supabase configuration is needed by legacy client
+        # pages during prerender; these are inert placeholders, NOT deployment
+        # credentials or proof of live integration/RBAC/regulatory readiness.
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://supabase-ci.invalid"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "public-ci-build-only-placeholder"
         run: pnpm run build

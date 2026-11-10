@@ -18,21 +18,21 @@ export function leadConfirmationEmail(lead: LeadPayload): {
 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
   <tr><td style="background:#ffffff;padding:28px;text-align:center;border-bottom:3px solid ${PRIMARY};">
     <img src="https://dgr.kostacademy.com/kost-group-logo-800.png" alt="KOST GROUP" width="240" height="auto" style="max-width:240px;height:auto;display:inline-block;"/>
-    <div style="font-size:12px;color:#5b6b80;margin-top:12px;letter-spacing:1px;text-transform:uppercase;">1er Centre CBTA Provider Certifié IATA en Algérie</div>
+    <div style="font-size:12px;color:#5b6b80;margin-top:12px;letter-spacing:1px;text-transform:uppercase;">Formations DGR / CBTA — périmètre à vérifier selon les tâches</div>
   </td></tr>
   <tr><td style="padding:36px 36px 16px 36px;">
     <h1 style="margin:0 0 16px;font-size:22px;color:${PRIMARY};">Bonjour ${escape(lead.prenom)},</h1>
     <p style="line-height:1.6;font-size:15px;margin:0 0 16px;">
-      Merci pour votre intérêt pour nos formations IATA DGR-CBTA.
+      Merci pour votre intérêt pour nos parcours de formation DGR / CBTA.
       Nous avons bien reçu votre demande concernant <strong>${escape(lead.formation)}</strong>.
     </p>
     <p style="line-height:1.6;font-size:15px;margin:0 0 24px;">
-      Un conseiller pédagogique vous contacte sous <strong>24 heures ouvrables</strong> pour vous transmettre :
+      Notre équipe examinera votre besoin et vous confirmera, selon les disponibilités et les exigences applicables :
     </p>
     <ul style="line-height:1.8;font-size:15px;padding-left:20px;margin:0 0 24px;">
-      <li>Le programme détaillé de la formation</li>
-      <li>Les prochaines dates de session</li>
-      <li>Un devis personnalisé en EUR ou USD</li>
+      <li>Le périmètre et le programme de formation adaptés aux tâches</li>
+      <li>Les dates et modalités disponibles, sous réserve de confirmation</li>
+      <li>Une proposition indiquant le prix et la devise applicables</li>
       <li>Les modalités d'inscription et de paiement</li>
     </ul>
     <div style="background:#f5f7fb;border-left:4px solid ${ACCENT};padding:16px 20px;border-radius:6px;margin:0 0 24px;">
@@ -48,8 +48,8 @@ export function leadConfirmationEmail(lead: LeadPayload): {
   </td></tr>
   <tr><td style="background:#0f1c2e;padding:24px 36px;color:#a8b3c4;font-size:12px;line-height:1.6;text-align:center;">
     KOST GROUP · 176 Cité Boushaki, Bab Ezzouar, Alger<br>
-    Certifié IATA — Vérifiable sur iata.org/cbta-center-registry<br>
-    Paiement EUR/USD via STRATEGIX (entité française)
+    Parcours et modalités de certification à confirmer par écrit<br>
+    Conditions de facturation et de paiement précisées dans la proposition
   </td></tr>
 </table>
 </td></tr></table>
@@ -57,10 +57,10 @@ export function leadConfirmationEmail(lead: LeadPayload): {
 
   const text = `Bonjour ${lead.prenom},
 
-Merci pour votre intérêt pour nos formations IATA DGR-CBTA.
+Merci pour votre intérêt pour nos parcours de formation DGR / CBTA.
 Nous avons bien reçu votre demande concernant ${lead.formation}.
 
-Un conseiller pédagogique vous contacte sous 24 heures ouvrables.
+Notre équipe examinera votre demande et confirmera les possibilités de formation et les conditions applicables.
 
 WhatsApp : +213 542 30 53 83
 

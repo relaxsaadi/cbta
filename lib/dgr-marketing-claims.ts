@@ -62,6 +62,10 @@ export function assertSafeDgrMarketingCopy(text: string): void {
     .replace(/&nbsp;/gi, " ")
     .replace(/&#(?:0*39|x0*27);/gi, "'")
     .replace(/<[^>]*>/g, " ")
+    // JavaScript word boundaries do not recognize accented letters as words.
+    // Fold accents so "agréé" and "certifié" cannot bypass regex boundaries.
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, " ")
     .trim();
   for (const { label, pattern } of BLOCKED_DGR_MARKETING_CLAIMS) {

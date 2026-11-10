@@ -47,26 +47,26 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
 
   const t = isEnglish
     ? {
-        heroTitle: `IATA DGR Training in ${data.pays}`,
-        heroSub: `IATA CBTA-certified training for dangerous goods by air — delivered locally in Africa`,
+        heroTitle: `DGR / CBTA training in ${data.pays}`,
+        heroSub: "Task-specific dangerous-goods training options, subject to applicable local requirements and written confirmation",
         whyTitle: `Why train in ${data.pays} with KOST GROUP?`,
-        obligTitle: `Regulatory obligation — ${data.autoriteRegionale}`,
+        obligTitle: `Applicable requirements — ${data.autoriteRegionale}`,
         obligText: "Training, recurrent training and recognition requirements must be checked against current applicable sources and actual duties; no universal 24-month validity is asserted.",
-        formationsTitle: "Available IATA DGR Formations",
+        formationsTitle: "DGR / CBTA pathways (scope to confirm)",
         savingsLabel: "Training scoped to actual duties",
-        ctaTitle: "Get a free quote in 24 hours",
+        ctaTitle: "Request a training proposal",
         ctaBtn: "Request a quote",
         faqTitle: "Frequently asked questions",
       }
     : {
-        heroTitle: `Formation IATA DGR ${data.paysPreposition} ${data.pays}`,
+        heroTitle: `Formation DGR / CBTA ${data.paysPreposition} ${data.pays}`,
         heroSub: "Formations DGR/CBTA selon les tâches réellement exercées et les exigences applicables",
         whyTitle: `Pourquoi choisir KOST GROUP pour votre formation DGR ${data.paysPreposition} ${data.pays} ?`,
-        obligTitle: `Obligation réglementaire — ${data.autoriteRegionale}`,
+        obligTitle: `Exigences applicables — ${data.autoriteRegionale}`,
         obligText: "Les exigences de formation, de recyclage et de reconnaissance doivent être vérifiées dans les textes applicables et selon les tâches réelles ; aucune validité universelle de 24 mois n'est présumée.",
-        formationsTitle: "Formations IATA DGR disponibles",
+        formationsTitle: "Parcours DGR / CBTA (périmètre à confirmer)",
         savingsLabel: "Formation adaptée aux tâches exercées",
-        ctaTitle: "Obtenez un devis gratuit en 24h",
+        ctaTitle: "Demandez une proposition de formation",
         ctaBtn: "Demander un devis",
         faqTitle: "Questions fréquentes",
       };
@@ -76,13 +76,13 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         { icon: "🏆", title: "Task-specific training", text: "The relevant DGR function, assessment route and recognition requirements are verified for actual duties and applicable authorities and operators." },
         { icon: "💰", title: "Individual proposal", text: "Course price and scope are confirmed in a written quotation; no equivalent certificate or price saving is presumed." },
         { icon: "🌍", title: "Delivery conditions", text: `Delivery options in ${data.pays} depend on applicable local requirements, provider authorization and a validated written proposal.` },
-        { icon: "📄", title: "Local invoicing", text: `Invoice in EUR, USD or local currency. Compatible with your accounting requirements in ${data.pays}.` },
+        { icon: "📄", title: "Invoicing terms", text: `Available currency, invoicing entity and any local requirements for ${data.pays} must be confirmed in writing before contracting.` },
       ]
     : [
         { icon: "🏆", title: "Formation selon fonctions", text: "La fonction, l'évaluation et les exigences de reconnaissance sont vérifiées selon les tâches et les textes applicables." },
         { icon: "💰", title: "Devis individualisé", text: "Le tarif et le contenu sont confirmés sur devis ; aucune équivalence de certificat ou économie chiffrée n'est présumée." },
         { icon: "🌍", title: "Conditions de délivrance", text: `Les modalités de formation ${data.paysPreposition} ${data.pays} dépendent des autorisations requises, des règles locales et d'une proposition validée.` },
-        { icon: "📄", title: "Facturation adaptée", text: `Facture en EUR, USD ou monnaie locale. Compatible avec vos exigences comptables ${data.paysPreposition} ${data.pays}.` },
+        { icon: "📄", title: "Facturation sur devis", text: `Devise, entité de facturation et exigences locales ${data.paysPreposition} ${data.pays} à confirmer par écrit avant engagement.` },
       ];
 
   const faqItems = isEnglish
@@ -97,7 +97,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         { q: "Combien de temps dure la certification ?", a: "La validité et les besoins de recyclage dépendent de la fonction, du programme et des exigences en vigueur ; aucune durée universelle n'est présumée." },
         { q: `Pouvez-vous former ${data.paysPreposition} ${data.pays} ?`, a: `Les modalités sont à étudier après vérification des autorisations nécessaires et des exigences locales. Demandez une proposition écrite adaptée avant toute organisation.` },
         { q: "Quel est le taux de réussite à l'examen ?", a: "Aucun taux de réussite n'est communiqué sans données vérifiées et méthode de calcul documentée." },
-        { q: `Y a-t-il une session prochainement ${data.paysPreposition} ${data.pays} ?`, a: `Des sessions inter-entreprises ont lieu régulièrement à Alger. Pour ${data.pays}, nous organisons des sessions intra à partir de 6 participants. Consultez le planning ou contactez-nous.` },
+        { q: `Y a-t-il une session prochainement ${data.paysPreposition} ${data.pays} ?`, a: `Aucune date ni nombre minimal de participants ne sont garantis ici. Les sessions éventuelles sont à confirmer selon le pays, les autorisations applicables et une offre écrite.` },
       ];
 
   return (
@@ -130,7 +130,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
               marginBottom: 20,
             }}
           >
-            IATA CBTA Provider Certifié · {t.savingsLabel}
+            DGR / CBTA · {t.savingsLabel}
           </div>
           <h1
             style={{
@@ -263,7 +263,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
             </table>
           </div>
           <p style={{ fontSize: 12, color: "#9CA3AF", marginTop: 10 }}>
-            * Formation intra-entreprise disponible {isEnglish ? `in ${data.pays}` : `${data.paysPreposition} ${data.pays}`} · Min. 6 participants · Devis personnalisé sous 24h
+            * {isEnglish ? "On-site delivery, minimum group size and quotation timeline depend on local authorizations and written confirmation." : "Formation sur site, effectif minimal et délai de devis soumis aux autorisations locales et à une confirmation écrite."}
           </p>
         </div>
       </section>
@@ -351,8 +351,8 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
           </h2>
           <p style={{ textAlign: "center", color: "#6B7280", fontSize: 14, marginBottom: 28 }}>
             {isEnglish
-              ? "Fill in the form. Our team responds within 24 hours with a personalized quote."
-              : "Remplissez le formulaire. Notre équipe vous répond sous 24h avec un devis personnalisé."}
+              ? "Tell us your team’s tasks and location; we will confirm the available scope and commercial conditions."
+              : "Décrivez les tâches et le lieu souhaité ; nous confirmerons les possibilités et conditions commerciales."}
           </p>
           <Suspense fallback={null}>
             <LeadForm />

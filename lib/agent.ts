@@ -3,9 +3,11 @@ import { generateText } from 'ai'
 import { supabase, SECTORS, type Lead, type LeadStatus } from './supabase'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Preview/build environments are not required to carry an outbound-email
+// credential. Avoid constructing Resend with an undefined key at module import.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'contact@dgr.kostacademy.com'
-const FROM_NAME = 'KOST GROUP — DGR IATA'
+const FROM_NAME = 'KOST GROUP — DGR/CBTA'
 
 // Score a prospect 1-10 with Claude
 export async function scoreProspect(lead: Lead): Promise<number> {
@@ -14,9 +16,9 @@ export async function scoreProspect(lead: Lead): Promise<number> {
 
   const { text } = await generateText({
     model: anthropic('claude-haiku-4-5-20251001'),
-    prompt: `Tu es un expert en prospection B2B pour KOST GROUP, premier centre IATA CBTA certifié d'Algérie.
+    prompt: `Tu es un expert en prospection B2B pour KOST GROUP, organisme proposant des formations DGR selon une approche CBTA en Algérie.
 
-Évalue ce prospect pour une formation DGR IATA (marchandises dangereuses) obligatoire.
+Évalue ce prospect pour une formation DGR liée au transport aérien de marchandises dangereuses.
 
 Entreprise: ${company.name}
 Pays: ${company.country}
@@ -26,7 +28,7 @@ Email disponible: ${company.email ? 'oui' : 'non'}
 Participants estimés: ${lead.participants_count}
 
 Critères de scoring:
-- Secteur airline/freight/handler = haute priorité (obligation IATA absolue)
+- Secteur airline/freight/handler = haute priorité potentielle
 - Pays Maroc/Sénégal/CIV/Cameroun = marchés prioritaires Afrique
 - Contact décideur (DRH, Directeur Ops, Responsable Formation) = plus de valeur
 - Email disponible = requis pour campagne
@@ -49,14 +51,14 @@ export async function generateEmail(lead: Lead, type: 'intro' | 'followup1' | 'f
   const contactName = company.contact_name ? `M./Mme ${company.contact_name.split(' ')[0]}` : 'Madame, Monsieur'
 
   const typePrompts = {
-    intro: `Email de premier contact — professionnel, court (150 mots max), axé obligation réglementaire IATA`,
-    followup1: `Relance J+3 — rappeler gentiment le premier email, ajouter une preuve sociale (Air Algérie, Banque d'Algérie parmi nos références), court (100 mots max)`,
-    followup2: `Relance J+7 finale — créer urgence (prochaine session bientôt, places limitées), très court (80 mots max), laisser une porte ouverte WhatsApp`,
+    intro: `Email de premier contact — professionnel, court (150 mots max), axé besoin de formation DGR`,
+    followup1: `Relance J+3 — rappeler gentiment le premier email et la disponibilité de formats adaptés aux équipes, court (100 mots max)`,
+    followup2: `Relance J+7 finale — très court (80 mots max), laisser une porte ouverte WhatsApp sans créer de fausse urgence`,
   }
 
   const { text } = await generateText({
     model: anthropic('claude-haiku-4-5-20251001'),
-    prompt: `Tu es le directeur commercial de KOST GROUP, premier centre IATA CBTA certifié d'Algérie (Agrément État N° 537).
+    prompt: `Tu es le directeur commercial de KOST GROUP, organisme proposant des formations DGR selon une approche CBTA en Algérie.
 
 Rédige un email de prospection B2B en français.
 
@@ -70,12 +72,10 @@ Destinataire:
 - Participants estimés: ${lead.participants_count}
 
 Contexte KOST GROUP:
-- 1er centre IATA CBTA certifié d'Algérie
-- Agrément État N° 537
-- Références: Air Algérie, Banque d'Algérie, Algérie Télécom, ALSTOM, + 80 entreprises
-- Formation DGR IATA Cat. 7.1 à 7.10 (obligatoire IATA Résolution 618)
-- Sessions intra-entreprise sur site
+- Formations DGR selon une approche CBTA
+- Sessions intra-entreprise sur site possibles
 - Contact: +213 542 30 53 83 | dgr.kostacademy.com
+- Ne revendiquer aucune certification, exclusivité, reconnaissance, agrément ou approbation ANAC/IATA qui ne soit pas explicitement étayée par une source validée
 
 Réponds en JSON strict avec ce format:
 {"subject": "...", "body": "..."}
@@ -90,14 +90,15 @@ Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy
     return JSON.parse(cleaned)
   } catch {
     return {
-      subject: `Formation DGR IATA obligatoire — ${company.name}`,
-      body: `${contactName},\n\nKOST GROUP, premier centre IATA CBTA certifié d'Algérie, propose des formations DGR IATA adaptées à votre secteur.\n\nCordialement,\nKOST GROUP\n+213 542 30 53 83\ndgr.kostacademy.com`,
+      subject: `Formation DGR — ${company.name}`,
+      body: `${contactName},\n\nKOST GROUP propose des formations DGR selon une approche CBTA, avec des formats adaptés aux équipes et aux opérations.\n\nCordialement,\nKOST GROUP\n+213 542 30 53 83\ndgr.kostacademy.com`,
     }
   }
 }
 
 // Send email via Resend
 async function sendEmail(to: string, subject: string, body: string): Promise<boolean> {
+  if (!resend) return false
   try {
     const { error } = await resend.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,

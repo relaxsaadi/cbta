@@ -216,7 +216,7 @@ export default function ExactMatchPage({
             <p className="text-white/90 leading-relaxed mb-8">
               {en ? (
                 <>
-                  Written reply only: the form on this page, email{" "}
+                  Contact us using the form on this page, email{" "}
                   <a className="underline font-semibold" href={`mailto:${CONTACT_EMAIL}`}>
                     {CONTACT_EMAIL}
                   </a>
@@ -224,7 +224,7 @@ export default function ExactMatchPage({
                 </>
               ) : (
                 <>
-                  Réponse écrite uniquement : le formulaire de cette page, l&apos;e-mail{" "}
+                  Contactez-nous via le formulaire de cette page, l&apos;e-mail{" "}
                   <a className="underline font-semibold" href={`mailto:${CONTACT_EMAIL}`}>
                     {CONTACT_EMAIL}
                   </a>

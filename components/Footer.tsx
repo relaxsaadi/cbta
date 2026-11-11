@@ -76,7 +76,10 @@ export default function Footer() {
               <li><Link href="/formation-dgr-senegal" className="hover:text-white">Formation DGR Sénégal</Link></li>
               <li><Link href="/formation-dgr-cote-ivoire" className="hover:text-white">Formation DGR Côte d'Ivoire</Link></li>
               <li><Link href="/formation-dgr-cameroun" className="hover:text-white">Formation DGR Cameroun</Link></li>
-              <li><Link href="/formation-dgr-afrique" className="hover:text-white">Formation DGR Afrique (Tunisie, Mali, Burkina Faso, Gabon...)</Link></li>
+              <li><Link href="/formation-dgr-afrique" className="hover:text-white">Formation DGR Afrique</Link></li>
+              <li><Link href="/formation-dgr-tunisie" className="hover:text-white">Formation DGR Tunisie</Link></li>
+              <li><Link href="/formation-dgr-mali" className="hover:text-white">Formation DGR Mali</Link></li>
+              <li><Link href="/formation-dgr-gabon" className="hover:text-white">Formation DGR Gabon</Link></li>
               <li><Link href="/formation-dgr-petrole-gaz" className="hover:text-white">Formation DGR Pétrole & Gaz</Link></li>
               <li><Link href="/formation-dgr-transitaires" className="hover:text-white">Formation DGR Transitaires</Link></li>
               <li><Link href="/iata-dangerous-goods-training-algeria" className="hover:text-white">IATA DGR Training Algeria</Link></li>

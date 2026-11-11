@@ -14,6 +14,9 @@ const NON_ALGERIA_PATHS = [
   "/formation-dgr-cote-ivoire",
   "/formation-dgr-cameroun",
   "/formation-dgr-afrique",
+  "/formation-dgr-tunisie",
+  "/cbta-dgr-training-africa",
+  "/iata-dgr-course-nigeria",
 ];
 
 export default function UrgenceBanner() {

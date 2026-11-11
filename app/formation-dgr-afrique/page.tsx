@@ -9,7 +9,13 @@ export const metadata: Metadata = {
   title: "Formation DGR / CBTA en Afrique — Périmètre par Fonction",
   description:
     "Parcours DGR / CBTA en Afrique. Les fonctions 7.1 à 7.10 sont déterminées à partir des tâches réelles, des sources applicables et du circuit de revue requis.",
-  alternates: { canonical: "/formation-dgr-afrique" },
+  alternates: {
+    canonical: "/formation-dgr-afrique",
+    languages: {
+      fr: "/formation-dgr-afrique",
+      en: "/cbta-dgr-training-africa",
+    },
+  },
   keywords: [
     "formation DGR Afrique",
     "formation marchandises dangereuses Afrique",
@@ -31,6 +37,7 @@ const PAYS = [
   { nom: "Sénégal", slug: "formation-dgr-senegal", capital: "Dakar", flag: "🇸🇳" },
   { nom: "Côte d'Ivoire", slug: "formation-dgr-cote-ivoire", capital: "Abidjan", flag: "🇨🇮" },
   { nom: "Cameroun", slug: "formation-dgr-cameroun", capital: "Douala", flag: "🇨🇲" },
+  { nom: "Tunisie", slug: "formation-dgr-tunisie", capital: "Tunis", flag: "🇹🇳" },
 ];
 
 export default function Page() {

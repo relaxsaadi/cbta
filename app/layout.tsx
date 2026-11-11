@@ -125,13 +125,6 @@ const orgSchema = {
   priceRange: "€€",
   currenciesAccepted: "DZD, EUR",
   paymentAccepted: "Cash, Bank Transfer",
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.3",
-    bestRating: "5",
-    worstRating: "1",
-    ratingCount: "12",
-  },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Formations DGR — Marchandises Dangereuses",

@@ -113,6 +113,8 @@ export default function Page() {
         { href: "/contact", label: "Contact" },
         { href: "/dgr-7-1", label: "DGR 7.1" },
         { href: "/dgr-7-3", label: "DGR 7.3" },
+        { href: "/formation-iata-dgr-cbta", label: "Formation IATA DGR CBTA" },
+        { href: "/formation-marchandises-dangereuses-algerie", label: "Marchandises dangereuses" },
       ]}
       crumbs={[
         { name: "Accueil", path: "" },

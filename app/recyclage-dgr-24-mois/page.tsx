@@ -12,6 +12,10 @@ export const metadata: Metadata = exactMatchMetadata({
   slug: "recyclage-dgr-24-mois",
   locale: "fr",
   keywords: ["recyclage DGR 24 mois", "recyclage DGR", "formation DGR récurrente", "CBTA recyclage"],
+  languages: {
+    fr: "/recyclage-dgr-24-mois",
+    en: "/iata-dgr-recurrent-training",
+  },
 });
 
 export default function Page() {
@@ -113,6 +117,7 @@ export default function Page() {
         { href: "/planning", label: "Planning" },
         { href: "/entreprises", label: "Entreprises" },
         { href: "/contact", label: "Contact" },
+        { href: "/iata-dgr-recurrent-training", label: "IATA DGR recurrent training" },
       ]}
       crumbs={[
         { name: "Accueil", path: "" },

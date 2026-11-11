@@ -111,6 +111,7 @@ export default function Page() {
         { href: "/entreprises", label: "Entreprises" },
         { href: "/contact", label: "Contact" },
         { href: "/a-propos", label: "À propos" },
+        { href: "/formation-iata-dgr-cbta", label: "Formation IATA DGR CBTA" },
       ]}
       crumbs={[
         { name: "Accueil", path: "" },

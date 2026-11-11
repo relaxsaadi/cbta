@@ -33,6 +33,10 @@ export default function Page() {
         codeIso: "DZ",
         langue: "fr",
         savingsVsParis: 0,
+        extraLinks: [
+          { href: "/formation-marchandises-dangereuses-algerie", label: "Marchandises dangereuses" },
+          { href: "/formation-dgr-alger", label: "Formation DGR Alger" },
+        ],
       }}
     />
   );

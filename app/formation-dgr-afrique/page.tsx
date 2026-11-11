@@ -38,6 +38,8 @@ const PAYS = [
   { nom: "Côte d'Ivoire", slug: "formation-dgr-cote-ivoire", capital: "Abidjan", flag: "🇨🇮" },
   { nom: "Cameroun", slug: "formation-dgr-cameroun", capital: "Douala", flag: "🇨🇲" },
   { nom: "Tunisie", slug: "formation-dgr-tunisie", capital: "Tunis", flag: "🇹🇳" },
+  { nom: "Mali", slug: "formation-dgr-mali", capital: "Bamako", flag: "🇲🇱" },
+  { nom: "Gabon", slug: "formation-dgr-gabon", capital: "Libreville", flag: "🇬🇦" },
 ];
 
 export default function Page() {

@@ -108,6 +108,9 @@ export default function Page() {
       links={[
         { href: "/cbta-dgr-training-africa", label: "CBTA DGR training Africa" },
         { href: "/iata-dangerous-goods-training-algeria", label: "IATA DGR training Algeria" },
+        { href: "/iata-dgr-course-ghana", label: "IATA DGR course Ghana" },
+        { href: "/iata-dgr-course-kenya", label: "IATA DGR course Kenya" },
+        { href: "/iata-dgr-recurrent-training", label: "IATA DGR recurrent training" },
         { href: "/formation-dgr-afrique", label: "Formation DGR Afrique (FR)" },
         { href: "/recyclage-dgr-24-mois", label: "Recyclage DGR 24 mois (FR)" },
         { href: "/entreprises", label: "Companies" },

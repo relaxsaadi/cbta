@@ -25,19 +25,6 @@ const nextConfig: NextConfig = {
         destination: "/dgr-7-3#recyclage",
         permanent: true,
       },
-      // Mali and Gabon have no public page. Send those URLs to the Africa hub
-      // until a dedicated page exists. Temporary, so a later page can replace it.
-      // Burkina Faso is left untouched: it has no separate link to redirect.
-      {
-        source: "/formation-dgr-mali",
-        destination: "/formation-dgr-afrique",
-        permanent: false,
-      },
-      {
-        source: "/formation-dgr-gabon",
-        destination: "/formation-dgr-afrique",
-        permanent: false,
-      },
     ];
   },
   async headers() {

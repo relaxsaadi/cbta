@@ -31,6 +31,7 @@ export type CountryData = {
   testimonialText?: string;
   keyFeature?: string;
   localContext?: CountryLocalContext;
+  extraLinks?: { href: string; label: string }[];
 };
 
 const DGR_FUNCTIONS = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
@@ -317,6 +318,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
               { href: "/dgr-7-1", label: "DGR 7.1" },
               { href: "/dgr-7-3", label: "DGR 7.3" },
               { href: "/contact", label: "Contact" },
+              ...(data.extraLinks ?? []),
             ].map((link) => (
               <Link
                 key={link.href}

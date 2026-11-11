@@ -105,6 +105,7 @@ export default function Page() {
       ]}
       links={[
         { href: "/formation-dgr-algerie", label: "Formation DGR Algérie" },
+        { href: "/formation-marchandises-dangereuses-algerie", label: "Marchandises dangereuses" },
         { href: "/reglementation-dgr-algerie", label: "Réglementation DGR Algérie" },
         { href: "/recyclage-dgr-24-mois", label: "Recyclage DGR 24 mois" },
         { href: "/it-anac-38-25-formation", label: "IT ANAC 38-25" },

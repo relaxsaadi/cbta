@@ -30,6 +30,13 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 - [ ] Independently verify server-side candidate/non-admin access restrictions, secure exam delivery and export, new-item provenance, and the production publication path. Making the repository private does not retract its existing public history.
 - [ ] Do not interpret earlier Moodle/staging imports, exam-bank draft counts, or passing structural checks as proof of confidential production item readiness.
 
+## A3. Public DGR regulatory claims / sector pages (critical content gate — #402)
+
+- [ ] Independently review and correct the current public **main** and deployed sector pages, especially pharmaceutical/biomedical and oil-and-gas: a job title, employer or sector does **not** by itself assign an IATA CBTA Function 7.1–7.10, determine training obligations, or establish approval/recognition by ANAC, IATA, carriers or clients. Validate any provider/accreditation/customer assertion with owner-authorized current evidence.
+- [ ] For statements about UN 3373, PI 650, Shipper's Declarations, dry ice and related packing/documentation, perform claim-specific review against the authorized current **IATA DGR 67th Edition 2026**, applicable addenda, operator variations and other binding rules. Until verified, record **SOURCE GAP / SOURCE CONFLICT / PENDING** explicitly; a public 66th Edition PI is a discrepancy lead, **not** 2026 Tier-A approval. Do not publish a categorical rule unsupported by direct current-edition evidence.
+- [ ] Reconcile visible text, FAQ, metadata, structured data/JSON-LD, social descriptions and machine-readable/SEO copy; ensure no unsupported universal certification, fixed validity, price/recognition or function-from-job claims remain.
+- [ ] Independently accept the corrected public content in [draft PR #401](https://github.com/relaxsaadi/cbta/pull/401), including exact-head lint/type/build, relevant UI/SEO regression checks and actual deployment verification, before declaring this gate closed. [Issue #402](https://github.com/relaxsaadi/cbta/issues/402) records identified defects on **main**; the unmerged draft PR's successful compile check is **not** a live fix, licensed-source verification or regulatory/human approval. Keep this gate distinct from confidential exam-item integrity (#340) and technical E-EXAM acceptance.
+
 ## B. Exam Workflow
 
 - [x] Candidate can authenticate and reach only their authorized exam. — verified 2026-08-25, live, `test_candidate` restricted to course 4

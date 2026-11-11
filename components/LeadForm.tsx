@@ -135,7 +135,8 @@ export default function LeadForm({
         p: parsed.data.pays,
         tx: txId,
       });
-      if (fObj) params.set("v", String(fObj.prixEur));
+      // Exact-match written-proposal pages must not put an unquoted price in the public URL.
+      if (showPrices && fObj) params.set("v", String(fObj.prixEur));
       router.push(`/merci?${params.toString()}`);
     } catch {
       setServerError("Connexion impossible. Vérifiez votre réseau.");

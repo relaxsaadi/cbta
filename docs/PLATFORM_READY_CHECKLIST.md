@@ -37,6 +37,14 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 - [ ] Reconcile visible text, FAQ, metadata, structured data/JSON-LD, social descriptions and machine-readable/SEO copy; ensure no unsupported universal certification, fixed validity, price/recognition or function-from-job claims remain.
 - [ ] Independently accept the corrected public content in [draft PR #401](https://github.com/relaxsaadi/cbta/pull/401), including exact-head lint/type/build, relevant UI/SEO regression checks and actual deployment verification, before declaring this gate closed. [Issue #402](https://github.com/relaxsaadi/cbta/issues/402) records identified defects on **main**; the unmerged draft PR's successful compile check is **not** a live fix, licensed-source verification or regulatory/human approval. Keep this gate distinct from confidential exam-item integrity (#340) and technical E-EXAM acceptance.
 
+## A4. New exact-match public DGR pages (critical content/UX gate — #404; 2026-11-11)
+
+- [ ] Treat [PR #403](https://github.com/relaxsaadi/cbta/pull/403), merged into the **draft handoff branch** at `ff45acb`, as new **unreleased** content, not accepted `main` or production. Review all 20 added exact-match DGR pages and shared metadata, FAQ, JSON-LD, `public/llms.txt` and sitemap before release; coordinate with existing sector-claim gate [#402](https://github.com/relaxsaadi/cbta/issues/402).
+- [ ] Validate every IATA-listing, ANAC-approval/reference/scope, 24-month recurrence, IT 38-25, in-person/virtual training location and territory claim against current authorized evidence, operator/local-authority rules and, where relevant, **direct IATA DGR 67th Edition 2026 Tier A**. Unverified cases remain **SOURCE GAP / CONFLICT / PENDING**; marketing claims never serve as question-bank Tier A or as human sign-off.
+- [ ] Fix and test **server-rendered** HTML language for English routes: `app/layout.tsx` emits `<html lang="fr">` and `SetHtmlLang` corrects it only after client hydration. Validate no-JS output, accessibility, hreflang and bilingual navigation.
+- [ ] Reconcile the new pages' **written-only** promise with shared `LeadForm` / `/merci` callback claims, French-only form UI on EN pages, and `showPrices={false}` while the redirect still appends the euro value as `v=`. Test actual successful submission paths without disrupting existing channels.
+- [ ] Require separate clean exact-head Next.js dependency install, TypeScript, build/lint, route/SEO/JSON-LD tests, form smoke, staging and deploy checks. On `ff45acb`, DGR structural workflows alone do **not** establish website build acceptance. Keep gate **PENDING** until evidence is attached to [#404](https://github.com/relaxsaadi/cbta/issues/404).
+
 ## B. Exam Workflow
 
 - [x] Candidate can authenticate and reach only their authorized exam. — verified 2026-08-25, live, `test_candidate` restricted to course 4

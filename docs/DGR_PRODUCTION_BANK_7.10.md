@@ -903,8 +903,9 @@ est limitée à un maximum de 20 batteries de rechange, incluant les
 batteries externes. Toutefois, l'exploitant peut approuver le transport de
 plus de 20 batteries de rechange, incluant les batteries externes." Both
 figures (15 AEP, 20 spare batteries) confirmed exactly.
-**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3,
-§2.3.5.8.4(c) (Tier A), 2026-08-25.
+**2026-11-12 superseding evidence-scope exception:** `SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED`. The historical 2026-08-25 DGR 67e/AM1 reading §§2.3.5.8.3/.4(c) supports a 15-PED / >20 spare-battery threshold but includes *external batteries* in that group. IATA operator guidance 2026-03-31, implementing an ICAO TI addendum effective 2026-03-27, instead separates personal-use power banks (max two) from ordinary spare batteries; see pp. 1, 4, 10 at https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf. The historical category phrasing cannot be taken as authorizing >2 personal power banks. This **potential scope/version conflict** does not prove the ordinary-spare-battery numeric statement is itself false. Pending direct licensed FR 67e/addendum, State/operator applicability, named qualified FR/date and independent EN/date. Keep historical citation below as an audit lead, not clearance; do not import or approve. No item answer changed.
+
+**FR status:** SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1077,7 +1078,7 @@ for a DGR-numbered requirement.
 | Q-7.10-009 | 3.4.1 Vérification documentaire — facture hypochlorite | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 58 + Practice Q19 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-010 | 3.4.2 Indices physiques — laquelle N'EST PAS un indice | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slides 62–64 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-011 | 5.1.1 Décision de contrôle — hors exceptions 2.3.2–2.3.5 | DRAFT — Tier A not attempted | MCQ | KOST F7.10 course slide 48 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.10-012 | 5.1.2 Seuils d'approbation AEP/batteries | SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED | MCQ | Historical DGR §§2.3.5.8.3/.4(c); 2026-03-27 power-bank addendum scope unresolved | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-013 | 7.1+7.2 Entités tenues au compte rendu (DGR 1.8) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 Note 3 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-014 | 7.3 Portée signalement MD non déclarées | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.2.1-2 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.10-015 | 7.3 ANAC (DGR 9.6.5) | PARTIALLY CONFIRMED (general mechanism); ANAC naming stays Tier B/administrative | True/False | DGR 67e §9.6.4/9.6.5 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

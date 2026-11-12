@@ -362,7 +362,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-12; no direct current item-specific DGR 67th Edition citation, historical confirmed-absence inference superseded; independent FR and EN review pending)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque), comment le cours définit-il le terme « Risque » ?"*
   - Options: **(Correct)** *"Le degré de probabilité (forte ou faible chance) qu'un danger quelconque cause réellement un dommage."* / *"Quelque chose qui pourrait potentiellement causer des dommages."* / *"Toute forme de liquide, de vapeur, de poussière, de fumées ou de gaz qui pourrait se déverser, fuir ou être mal utilisé."* / *"Un virus, une bactérie ou un champignon transmissible par morsure, coupure, ou par contamination au contact d'une personne infectée."*

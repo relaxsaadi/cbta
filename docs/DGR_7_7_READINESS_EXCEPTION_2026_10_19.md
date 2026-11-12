@@ -2,6 +2,10 @@
 
 **Scope:** KOST DGR/CBTA Stage 2B.1; PR #3; Function **7.7 — Équipage de conduite**. **DRAFT / PRE-PRODUCTION / NOT APPROVED.** This note records exact-head repository/CI evidence. It is not a re-examination of licensed IATA DGR text and is not an ANAC/IATA approval.
 
+## 2026-11-12 superseding Q-7.7-019 source-gap correction
+
+Historical `FR SOURCE GAP CONFIRMED (cross-applied)` incorrectly extended the limited Q-7.1-001 glossary/§1.0/targeted search to DGR-wide absence for independent Function 7.7 Q-7.7-019. **Effective state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**. The production-bank section and summary, own task 0.1.4 matrix, unapproved EN FR-status mirror, 453-row ledger and blocked import CSV now state the same fail-closed outcome. KOST course slides 31–34 remain Tier B only; qualified named dated FR/EN reviews and authorized direct IATA DGR 67th Edition 2026 verification remain outstanding. Historical CI counts below remain historical; no exam answer, approval, import, merge or deployment is represented.
+
 ## Independent task and question-source baseline
 
 - `docs/DGR_OFFICIAL_TASK_SET_7.7.md` records **27 independent CBTA leaf tasks**, based on IATA CBTA Training Guidance Ed.1 (2023), **TABLEAU 7.7.A**: Block 0 **18**, Block 6 (6.2) **5**, Block 7 **4**. This task-table evidence controls the Function 7.7 scope, but **does not verify claims against the 2026 IATA DGR 67th Edition**. Do not inherit Function 7.1's 44-task structure.

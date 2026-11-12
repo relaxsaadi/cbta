@@ -1,5 +1,9 @@
 # Function 7.9 — regulatory and bilingual readiness exception (2026-10-19)
 
+## 2026-11-12 new item-level conflict: Q-7.9-032
+
+This function's own question Q-7.9-032 historically used DGR 67th Edition/AM1 §§2.3.5.8.3 and 2.3.5.8.4(c) (2026-08-25) for operator-approval thresholds of >15 PED and >20 spare batteries, while including external batteries. [IATA's public operator guidance, 31 March 2026](https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf), discussing the ICAO TI addendum effective 27 March 2026, distinguishes personal-use power banks and limits them to two (pp. 1, 4, 10). The effective item state is now **`SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED`** until independently reviewed direct licensed 2026 FR DGR/addendum text, State/operator applicability, named qualified FR/date and separate EN/date support a scoped decision. No claim that ordinary spare-battery threshold itself is universally false. No question answer was changed; do not import or approve.
+
 **Scope:** KOST DGR/CBTA Stage 2B.1 / PR #3 / Function **7.9 (Personnel de cabine)**. **DRAFT / PRE-PRODUCTION / NOT APPROVED.** This is an exact-head CI and repository traceability audit, **not** a fresh reading of licensed IATA DGR 67th Edition text and not an IATA/ANAC approval.
 
 ## Function-specific authority and current draft

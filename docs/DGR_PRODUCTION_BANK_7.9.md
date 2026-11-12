@@ -2183,8 +2183,9 @@ est limitée à un maximum de 20 batteries de rechange, incluant les
 batteries externes. Toutefois, l'exploitant peut approuver le transport de
 plus de 20 batteries de rechange, incluant les batteries externes." Both
 figures (15 AEP, 20 spare batteries) confirmed exactly.
-**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3,
-§2.3.5.8.4(c) (Tier A), 2026-08-25.
+**2026-11-12 superseding evidence-scope exception:** `SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED`. The historical 2026-08-25 DGR 67e/AM1 reading §§2.3.5.8.3/.4(c) supports a 15-PED / >20 spare-battery threshold but includes *external batteries* in that group. IATA operator guidance 2026-03-31, implementing an ICAO TI addendum effective 2026-03-27, instead separates personal-use power banks (max two) from ordinary spare batteries; see pp. 1, 4, 10 at https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf. The historical category phrasing cannot be taken as authorizing >2 personal power banks. This **potential scope/version conflict** does not prove the ordinary-spare-battery numeric statement is itself false. Pending direct licensed FR 67e/addendum, State/operator applicability, named qualified FR/date and independent EN/date. Keep historical citation below as an audit lead, not clearance; do not import or approve. No item answer changed.
+
+**FR status:** SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -2528,7 +2529,7 @@ priority for Tier A re-verification, alongside `Q-7.9-034`. NEW STATUS: FROZEN F
 
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
-| Q-7.9-032 | 5.2.1 Seuils d'approbation AEP/batteries de rechange | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-032 | 5.2.1 Seuils d'approbation AEP/batteries de rechange | SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED | MCQ | Historical DGR §§2.3.5.8.3/.4(c); 2026-03-27 power-bank addendum scope unresolved | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-033 | 5.2.1 Facteurs d'autorisation de la glace carbonique | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.9 course slide 96 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-034 | 5.2.2 Batteries de rechange — cabine uniquement | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §2.3.5.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-035 | 6.2.1 Après confirmation de contamination | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.9 course slide 112 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

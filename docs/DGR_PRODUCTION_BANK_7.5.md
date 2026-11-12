@@ -1,5 +1,7 @@
 # DGR Stage 2B — Function 7.5 Production Bank (Batch 1)
 
+> **2026-11-12 superseding evidence-scope correction (Q-7.5-018):** Historical `FR SOURCE GAP CONFIRMED (cross-applied)` and the assertion of DGR-wide silence on danger/risk are **not established** by the limited Q-7.1-001 §1.0/Appendix A/term search. **Effective state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`.** KOST's flammable-liquid example remains Tier B, not positive or negative 67th Edition 2026 Tier-A proof. The 2026-08-29 wording below is historical. No authorized new reading, qualified dated FR or independent EN verification, answer change, approval or import is claimed.
+
 **Function 7.5**: *Personnel chargé d'accepter les bagages des passagers et
 des membres d'équipage, de gérer les zones d'embarquement des aéronefs et
 d'effectuer d'autres tâches impliquant un contact direct avec les passagers
@@ -32,8 +34,8 @@ inclusion), Q-7.5-030 (§1.0 definition), Q-7.5-038 (§1.4.1, emergency
 information is an operator duty, confirmed absent from any shipper list),
 Q-7.5-040 (§7.1.3.2(a)-(c), valid as worded, same reasoning as `Q-7.2-019`).
 
-**4 items partially confirmed / flagged:** Q-7.5-018 cross-applies the
-DGR-wide danger/risque silence; Q-7.5-019 has its three distractors
+**4 items partially confirmed / flagged:** Q-7.5-018 historically cross-applied limited glossary evidence
+as if proving DGR-wide danger/risque silence (superseded; unresolved); Q-7.5-019 has its three distractors
 confirmed absent from §1.4.1's operator list, but its own correct answer
 ("étiquetage = shipper duty") is not independently pinned to a specific
 current DGR clause (only the KOST slide's shipper wheel, §1.3.2's own
@@ -1373,9 +1375,11 @@ extractable answer text). Corroborated at a topic level by Practice Q1
 exemples, en citant des matières dangereuses...", closely matching this
 item's own worked-example framing) and Q4 (define Article/Substance), noted
 honestly as topic-level corroboration, not a verbatim copy.
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED.
 
 **Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.5 course, slide 33 (worked flammable-liquid/essence example), cross-checked against slides 31–32 (general Risque/Danger defin RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+
+**2026-11-12 superseding item audit:** The previous cross-applied gap assertion was based on a limited Q-7.1-001 glossary search, not complete 2026 DGR evidence for this question. The training-course example remains Tier B. Direct item-specific source checks and named qualified FR/date and independent EN/date are mandatory before any promotion; no import or approval.
 
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
@@ -1904,7 +1908,7 @@ the source does not draw, per binding caveat 6.
 | ID | Sub-task | FR status | Type | Current source basis (Tier) | EN status | Approval |
 |---|---|---|---|---|---|---|
 | Q-7.5-017 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-018 | 0.1.4 Danger/risque — exemple liquide inflammable | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-018 | 0.1.4 Danger/risque — exemple liquide inflammable | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | MCQ | Tier B KOST example only; limited glossary search does not prove DGR-wide silence | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-019 | 0.3.1 Responsabilités Expéditeur DGR 1.3 | DRAFT — distractors Tier A-confirmed absent from §1.4.1, correct answer's own citation unconfirmed | MCQ | DGR 67e §1.4.1 (p.11, distractors only) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-020 | 0.4.1 Neuf classes DGR 3.0.2 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §3.0.1.1 + §3.0.2 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-021 | 0.5.1 Décoder marquage UN/4G/Y30/S/13/CH | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §6.0.4.2.1(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

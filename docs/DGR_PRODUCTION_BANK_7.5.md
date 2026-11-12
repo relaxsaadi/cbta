@@ -798,8 +798,9 @@ figures (15 AEP, 20 spare batteries) and both operator-approval mechanisms
 confirmed exactly as stated in the correct answer; the swapped-numbers
 distractor and the "no approval ever required" distractor are each
 directly contradicted by this text.
-**FR status:** FROZEN FR / SOURCE VERIFIED — DGR 67e AM1 §2.3.5.8.3,
-§2.3.5.8.4(c) (Tier A), 2026-08-25.
+**2026-11-12 superseding safety/regulatory exception:** **`SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED`**. The 2026-08-25 authenticated DGR 67e/AM1 reading of §2.3.5.8.3 and §2.3.5.8.4(c) supported the historical 15 portable electronic devices / 20 spare batteries comparison. However, the 31 March 2026 IATA *Guidance Document for Operators — Changes Regarding Power Banks*, implementing the ICAO Technical Instructions addendum effective 27 March 2026, distinguishes **power banks** from other spare batteries and limits personal-use power banks to two. The item's original rationale explicitly included `batteries externes` under the >20 spare-battery operator-approval category: that unqualified carryover must not be used to teach approval of >2 power banks. This is a **potential scope/version conflict**, not proof that the correct choice about ordinary spares is universally false. Official public source: https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf (pp. 1, 4, 10, dated 2026-03-31). State implementation timing/operator variations and the authorized, current French 67e + applicable addendum text need direct qualified item-level verification; the separate EN terminology/translation review is not complete. Historical source notes below are preserved as audit history, not active sign-off. **Do not approve or import this item. No answer, options, live exam, licensed DGR source, credential or reviewer status changed.**
+
+**FR status:** SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
 
@@ -1063,7 +1064,7 @@ equivalent items).
 | Q-7.5-008 | 0.6.1 Bagage/fret contaminé | DRAFT — Tier A not attempted | MCQ | KOST F7.5 course slides 97–98 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-009 | 0.3.3 Divergence d'exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-010 | 5.1.1 Critères DGR 2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.5-011 | 5.1.2 Seuils d'approbation AEP/batteries | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.3, §2.3.5.8.4(c) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.5-011 | 5.1.2 Seuils d'approbation AEP/batteries | SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED | MCQ | Historical DGR 67e §§2.3.5.8.3/.4(c); 2026-03-27 ICAO power-bank addendum / IATA 2026-03-31 guidance: >20 spare-battery allowance does not automatically cover power banks | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-012 | 5.2.1 Hiérarchie des divergences appliquée | PARTIALLY CONFIRMED — most-restrictive-rule-wins principle consistent with §2.8.3.1/§2.8.1.1.2, but the named 4-level "OACI→IATA→État→Exploitant" hierarchy diagram itself not independently located in current DGR text | MCQ | DGR 67e AM1 §2.8 (partial) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-013 | 5.2.2 Seuil batterie installée (cadre WCHC borné) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.3.5.8.4(f) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.5-014 | 5.2.2 Marquage glace carbonique (2,5 kg) | FROZEN FR / SOURCE VERIFIED | True/False | KOST F7.5 course slide 92 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

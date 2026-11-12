@@ -1215,7 +1215,7 @@ different leaf.
 
 - **Sub-task:** 5.2.1 Appliquer les prescriptions des exploitants
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
+- **FR status:** `SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED` (2026-11-12 superseding FR reconciliation; separate EN review pending)
 - **FR text (verbatim from production bank):**
   - Stem: *"Selon le cours (Marchandises dangereuses transportées par les
     passagers et l'équipage, DGR 2.3.A — batteries au lithium), au-delà de
@@ -1246,6 +1246,7 @@ different leaf.
   English 67th Edition text this session. "Batteries de rechange" →
   **"spare batteries"**, a new candidate rendering added to this package's
   terminology table.
+- **2026-11-12 source-scope warning:** The historical FR/EN draft wording must not imply approval for more than two personal power banks. IATA 2026-03-31 operator guidance to ICAO 2026-03-27 addendum separately limits personal-use power banks: https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf. Direct authorized current FR source and State/operator scope checks and independent EN review are still required. No approved translation or answer change.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 

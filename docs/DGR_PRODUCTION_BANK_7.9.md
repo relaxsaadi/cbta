@@ -1,5 +1,7 @@
 # DGR Stage 2B — Function 7.9 Production Bank (Batch 1 + Batch 2)
 
+> **2026-11-12 current precedence: Q-7.9-022 / Q-7.9-023:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED. Historical Q-7.1-001 limited glossary/§1.0/targeted search did not establish whole-DGR absence. KOST F7.9 slides 31–33 are Tier B; direct licensed 2026 Tier A item evidence, qualified named dated FR and separate EN reviews missing. Both questions remain blocked from production import. Older reconciliation text below is historical, not current verification or approval. No exam text or answers changed.
+
 **Function 7.9**: *Personnel de cabine* (cabin crew) — per both KOST's own
 course title (*"DGR IATA CBTA - Fonction 7.9 — Equipage de cabine"*) and
 IATA's own Table 7.9.A heading, "**7.9 Fonction : Personnel de cabine**."
@@ -28,8 +30,8 @@ Q-7.9-025 (§1.4.1, eight-item operator list), Q-7.9-027 (§7.1.3.2(a)-(c)),
 Q-7.9-029 (§8.0.1.1), Q-7.9-036 (§9.6.1 Note 1), Q-7.9-039 (§9.5.1.2 — Doc
 9481 named explicitly).
 
-**2 items cross-apply the DGR-wide danger/risque silence:** Q-7.9-022 and
-Q-7.9-023 (abstract distinction and worked example respectively).
+**2 historically cross-applied danger/risque items, now unresolved:** Q-7.9-022 and
+Q-7.9-023 (abstract distinction and worked example) remain `SOURCE GAP UNRESOLVED`; no DGR-wide absence was established by the limited research.
 
 **22 items not attempted this pass** — no efficient cross-application
 available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
@@ -1424,7 +1426,9 @@ biological hazard examples, source of all three distractors). Corroborated
 only at a topic level by Practice Q3 ("Différencier un danger d'un risque
 avec des exemples..." — an open-ended question testing the same
 Danger/Risque distinction, not this specific definition-matching format).
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (effective 2026-11-12; historical DGR-wide absence unproven).
+
+**Evidence-scope correction (2026-11-12):** The historical Q-7.1-001 Appendix A/§1.0/targeted `Risque` search was limited; it did not establish DGR-wide silence or independently verify this Function 7.9 question. This item's own specific citation was not independently re-read this pass. KOST course slides are Tier B only. Direct current licensed IATA DGR 67th Edition 2026 item-specific evidence or a governed non-DGR pedagogical source decision is required, followed by named qualified FR reviewer/date and independent qualified EN reviewer/date; not import eligible.
 
 **Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.9 course, slide 31 (Risque definition) and slide 32 (Danger definition plus chemical/radiological/ biological hazard examples RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
 
@@ -1464,7 +1468,9 @@ here to avoid over-claiming a fact the slide itself only poses as an open
 exercise question). Corroborated only at a topic level by Practice Q3 (the
 same open-ended danger/risque-with-examples question), not a direct
 verbatim match to this specific liquide-inflammable example.
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (effective 2026-11-12; historical DGR-wide absence unproven).
+
+**Evidence-scope correction (2026-11-12):** The historical Q-7.1-001 Appendix A/§1.0/targeted `Risque` search was limited; it did not establish DGR-wide silence or independently verify this Function 7.9 question. This item's own specific citation was not independently re-read this pass. KOST course slides are Tier B only. Direct current licensed IATA DGR 67th Edition 2026 item-specific evidence or a governed non-DGR pedagogical source decision is required, followed by named qualified FR reviewer/date and independent qualified EN reviewer/date; not import eligible.
 
 **Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.9 course, slide 33 (worked flammable-liquid example), immediately followed by slide 34's own exercise ("Quels sont le danger  RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
 
@@ -1881,8 +1887,8 @@ this sub-task (no independent exam/practice cross-reference recorded).
 | Q-7.9-019 | 0.1.2 Doc 9284 (instructions techniques OACI) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-020 | 0.1.2 Nature du règlement IATA DGR | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.4 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-021 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-022 | 0.1.4 Définition du risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.9-023 | 0.1.4 Exemple liquide inflammable | FR SOURCE GAP CONFIRMED (cross-applied) | True/False | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-022 | 0.1.4 Définition du risque | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | MCQ | KOST F7.9 course slides 31–33 Tier B only; historical DGR-wide silence unproven; direct 2026 per-item Tier A verification pending | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.9-023 | 0.1.4 Exemple liquide inflammable | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | True/False | KOST F7.9 course slides 31–33 Tier B only; historical DGR-wide silence unproven; direct 2026 per-item Tier A verification pending | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-024 | 0.2.1 Accord de l'exploitant toujours requis (citation-safe) | DRAFT — Tier A not attempted | True/False | KOST F7.9 course slide 42 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-025 | 0.3.1 Huit responsabilités de l'Exploitant (DGR 1.4) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.9-026 | 0.3.3 Divergence de l'Exploitant — Air Algérie | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1, §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

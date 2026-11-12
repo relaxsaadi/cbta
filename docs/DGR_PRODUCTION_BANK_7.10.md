@@ -2782,6 +2782,8 @@ Approbation note, distractor 1's own real but different source, already
 Q-7.10-012's evidence), and slide 44 (lighter/match prohibition list,
 distractor 3's own real but different source, already Q-7.10-003's
 evidence). No direct exam/practice hit for this exact Exceptions list.
+**2026-11-12 distractor-level SOURCE CONFLICT — POWER_BANK_ADDENDUM_REVIEW_REQUIRED (unresolved):** The >15 AEP / >20 batteries distractor and its “real content” explanation reflect historical KOST slide 45, not a fresh item-specific reading of the current 67th Edition 2026. IATA's [31 March 2026 operator guidance](https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf) on the ICAO Technical Instructions addendum effective 27 March 2026 distinguishes personal-use power banks from ordinary spare batteries and limits the former to two. Accordingly, this distractor must **not** be taught as an unconditional 2026 authorization for >20 power banks; this warning does not declare the separate ordinary-spare-battery threshold universally false. The underlying DGR 1.2.7 stem and remaining distractors also require their own direct, authorized current-edition FR source check and independent qualified dated EN technical review. **Item's effective FR status remains DRAFT / SOURCE REQUIRED (NO import, NO APPROVED); question, options, answer key and rationale text are left unchanged pending review.**
+
 **FR status:** DRAFT — Tier B only. SOURCE REQUIRED for Tier A.
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.

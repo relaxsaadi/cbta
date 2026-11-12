@@ -391,7 +391,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-12; Q-7.1-001 historical DGR-wide absence not established; this item's own specific citation was not independently re-read this pass; named/date qualified FR review and separate qualified EN bilingual review pending)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque, exemple du liquide inflammable), laquelle des affirmations suivantes applique correctement les définitions du cours à l'exemple de l'essence ?"*
   - Options: **(Correct)** *"Le danger est l'inflammabilité de l'essence elle-même (le fait qu'elle puisse s'enflammer facilement) ; le risque est la probabilité qu'elle s'enflamme réellement pendant le transport aérien, par exemple si le contenant est mal fermé ou exposé à une source de chaleur."* / *"Le risque est l'inflammabilité de l'essence elle-même ; le danger est la probabilité qu'elle s'enflamme pendant le transport."* / *"Le danger et le risque désignent exactement la même notion et sont interchangeables dans cet exemple."* / *"Le danger de l'essence ne concerne que son transport par voie maritime, jamais son transport par voie aérienne."*

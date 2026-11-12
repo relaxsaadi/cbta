@@ -80,7 +80,7 @@ export default function Page() {
           title: "Comment demander une proposition écrite",
           paragraphs: [
             "Indiquez la ville des participants (Oran ou plusieurs sites), les tâches, le nombre de personnes, et la modalité préférée : intra à Oran, classe virtuelle, ou présentiel à Bab Ezzouar. Ajoutez si une session antérieure a déjà eu lieu et sous quel intitulé, sans considérer cet intitulé comme une fonction acquise.",
-            "La réponse est écrite : formulaire de la page, cbta@kostacademy.com, ou WhatsApp +213 542 305 383. Il n'y a pas de prise de rendez-vous par téléphone. La proposition confirme ensuite le périmètre et la modalité. Le cadrage pétrole et gaz ou transitaires peut être utile en complément si les tâches le justifient, sans attribution automatique.",
+            "La réponse est écrite : formulaire de la page, cbta@kostacademy.com, ou WhatsApp +213 542 305 383. Le formulaire peut donner lieu à un rappel pour préciser la demande. La proposition confirme ensuite le périmètre et la modalité. Le cadrage pétrole et gaz ou transitaires peut être utile en complément si les tâches le justifient, sans attribution automatique.",
           ],
         },
       ]}

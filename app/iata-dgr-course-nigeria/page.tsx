@@ -82,7 +82,7 @@ export default function Page() {
           id: "proposal",
           title: "How to request a written proposal",
           paragraphs: [
-            "Write the duties, the Nigerian cities involved, any operator or NCAA reference you already rely on, and whether a previous course exists. Use the form, email cbta@kostacademy.com, or WhatsApp +213 542 305 383. The reply is written. No phone appointment is offered.",
+            "Write the duties, the Nigerian cities involved, any operator or NCAA reference you already rely on, and whether a previous course exists. Use the form, email cbta@kostacademy.com, or WhatsApp +213 542 305 383. The reply is written. The form may lead to a callback to clarify the request.",
             "The proposal will name the CBTA functions to examine, the virtual delivery from Algiers, and the points that still need a local check. It will not state that the NCAA has approved the session.",
           ],
         },
@@ -102,7 +102,7 @@ export default function Page() {
         },
         {
           q: "How do we ask for a proposal?",
-          a: "In writing only: the form on this page, cbta@kostacademy.com, or WhatsApp +213 542 305 383.",
+          a: "To get started: the form on this page, cbta@kostacademy.com, or WhatsApp +213 542 305 383.",
         },
       ]}
       links={[

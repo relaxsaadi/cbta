@@ -103,7 +103,7 @@ export default function Page() {
         },
         {
           q: "How do we receive a proposal?",
-          a: "In writing: the form, cbta@kostacademy.com, or WhatsApp +213 542 305 383. No phone call is offered.",
+          a: "In writing: the form, cbta@kostacademy.com, or WhatsApp +213 542 305 383. The form may lead to a callback to clarify the request.",
         },
       ]}
       links={[

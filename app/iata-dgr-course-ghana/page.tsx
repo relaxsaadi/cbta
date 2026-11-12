@@ -72,7 +72,7 @@ export default function Page() {
           id: "proposal",
           title: "How to request a written proposal",
           paragraphs: [
-            "Send the duties, the Ghanaian cities, any GCAA or operator reference you already use, and whether a previous course exists. Use the form, email cbta@kostacademy.com, or WhatsApp +213 542 305 383. The reply is written. A phone appointment is not offered.",
+            "Send the duties, the Ghanaian cities, any GCAA or operator reference you already use, and whether a previous course exists. Use the form, email cbta@kostacademy.com, or WhatsApp +213 542 305 383. The reply is written. The form may lead to a callback to clarify the request.",
             "The proposal names the functions under review and the virtual delivery from Algiers. It will not state that the GCAA has approved the session.",
           ],
         },

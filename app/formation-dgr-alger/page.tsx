@@ -100,7 +100,7 @@ export default function Page() {
         },
         {
           q: "Comment recevoir une réponse ?",
-          a: "Par écrit uniquement : formulaire, cbta@kostacademy.com ou WhatsApp +213 542 305 383.",
+          a: "Pour commencer : formulaire, cbta@kostacademy.com ou WhatsApp +213 542 305 383.",
         },
       ]}
       links={[

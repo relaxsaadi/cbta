@@ -83,7 +83,7 @@ export default function Page() {
           title: "Comment demander une proposition écrite",
           paragraphs: [
             "Écrivez les tâches, les villes en Tunisie, le nombre de participants, la fonction pressentie s'il y en a une, et si une formation antérieure existe. Précisez que vous visez la classe virtuelle depuis Alger, le déplacement à Bab Ezzouar, ou que vous voulez seulement savoir si un présentiel en Tunisie est étudiable — il ne l'est qu'avec l'autorisation écrite IATA.",
-            "La réponse passe par le formulaire de la page, par cbta@kostacademy.com ou par WhatsApp +213 542 305 383. Elle est écrite. Aucun appel n'est proposé pour réserver la session.",
+            "La réponse passe par le formulaire de la page, par cbta@kostacademy.com ou par WhatsApp +213 542 305 383. Elle est écrite. Le formulaire peut donner lieu à un rappel pour préciser les besoins.",
           ],
         },
       ]}

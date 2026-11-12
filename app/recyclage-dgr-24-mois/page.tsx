@@ -85,7 +85,7 @@ export default function Page() {
           title: "Documents à préparer pour une proposition écrite",
           paragraphs: [
             "Préparez la liste des participants, leurs tâches actuelles, la fonction ou l'ancienne catégorie de la session précédente, la date de cette session, l'édition du DGR utilisée par l'entreprise si vous la connaissez, et toute exigence écrite de l'opérateur. Indiquez la modalité souhaitée. Ces éléments permettent une proposition cadrée. Ils ne sont pas exigés pour écrire : un message court suffit pour ouvrir l'échange.",
-            "Écrivez via le formulaire, à cbta@kostacademy.com, ou sur WhatsApp +213 542 305 383. La réponse est écrite. Aucun appel n'est proposé pour caler la session.",
+            "Écrivez via le formulaire, à cbta@kostacademy.com, ou sur WhatsApp +213 542 305 383. La réponse est écrite. Le formulaire peut donner lieu à un rappel pour préciser les besoins.",
           ],
         },
       ]}

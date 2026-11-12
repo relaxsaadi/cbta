@@ -77,7 +77,7 @@ export default function Page() {
           title: "How to request a written proposal",
           paragraphs: [
             "Prepare the participant list, current duties, the previous function or category, the date of that session, the DGR edition if you know it, and any written operator requirement. State the preferred delivery. A short message is enough to start.",
-            "Write through the form, to cbta@kostacademy.com, or on WhatsApp +213 542 305 383. The reply is written. A phone appointment is not offered. The French explanation of the same interval is on recyclage DGR 24 mois.",
+            "Write through the form, to cbta@kostacademy.com, or on WhatsApp +213 542 305 383. The reply is written. The form may lead to a callback to clarify the request. The French explanation of the same interval is on recyclage DGR 24 mois.",
           ],
         },
       ]}

@@ -72,7 +72,7 @@ export default function Page() {
           id: "proposal",
           title: "How to request a written proposal",
           paragraphs: [
-            "Write the duties, the Kenyan cities, the function you think may apply, and any previous training date. Use the form, cbta@kostacademy.com, or WhatsApp +213 542 305 383. The reply is written. A phone appointment is not offered.",
+            "Write the duties, the Kenyan cities, the function you think may apply, and any previous training date. Use the form, cbta@kostacademy.com, or WhatsApp +213 542 305 383. The reply is written. The form may lead to a callback to clarify the request.",
             "The proposal will name the functions to examine and the virtual delivery from Algiers. It will not state that the KCAA has approved the session.",
           ],
         },

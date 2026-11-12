@@ -312,7 +312,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (2026-11-12 evidence-scope correction; EN review still pending)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque — exemple du liquide inflammable), lequel des énoncés suivants illustre correctement cette distinction ?"*
   - Options: **(Correct)** *"Le danger est son inflammabilité (le fait qu'il puisse s'enflammer facilement) ; le risque est la probabilité qu'il s'enflamme réellement pendant le transport aérien (par ex. si le contenant est mal fermé ou exposé à une source de chaleur)."* / *"Le danger est la probabilité qu'il s'enflamme pendant le transport ; le risque est le fait qu'il puisse s'enflammer facilement."* / *"Le danger et le risque désignent tous deux la probabilité qu'un préjudice se produise en cas d'exposition."* / *"Le risque est éliminé dès lors que le liquide est classé Classe 3 ; seul le danger subsiste après la classification."*

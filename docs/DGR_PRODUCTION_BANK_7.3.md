@@ -1,5 +1,7 @@
 # DGR Stage 2B — Function 7.3 Production Bank (Batch 1)
 
+> **2026-11-12 source-evidence correction (Q-7.3-017):** the previously cross-applied confirmed DGR-wide danger/risque absence is **not established** by a directly checked item-specific source. Current status is `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`, with Tier B training basis only. The historical 2026-08-29 reconciliation note below is retained for audit, not a current verified finding. Stem, answers, distractors, scores, FR/EN review decisions and production import eligibility are not promoted.
+
 **Function 7.3**: *Personnel chargé de traiter ou d'accepter des expéditions
 de marchandises dangereuses.*
 
@@ -37,8 +39,8 @@ correspondence — exact match), Q-7.3-043 (§9.1.3.1(f), 10.7.2/7.2 labelling
 basis — exact match), Q-7.3-044 (§9.1.3.3 + Tableau 9.1.A, exact match).
 
 **4 items partially confirmed / flagged:** Q-7.3-017 and its pilot-level
-sibling both cross-apply the DGR-wide danger/risque silence (`Q-7.1-001`)
-— worked examples built on terms the current DGR does not itself define,
+sibling formerly inherited an unproven DGR-wide danger/risque-absence claim
+from `Q-7.1-001`; their worked examples remain Tier B,
 retained Tier B; Q-7.3-020 shares `Q-7.2-036`'s finding (refresher cadence
 confirmed, but the current competency-based training/evaluation framework
 in §1.5.1.1-1.5.2 differs from the drafted "test" framing — flag for
@@ -1199,9 +1201,9 @@ potentially cause harm).
 gasoline/essence). No direct exam hit — Exam Q12 (flash-point/boiling-point →
 packing group) tests a related but distinct classification fact, not this
 danger/risque distinction.
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (DGR-wide absence unproven).
 
-**Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.3 course slides 34–36 (definitions + worked flammable-liquid example), cross-checked slide 37 (exercise, gasoline/essence). N RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
+**Historical reconciliation (2026-08-29; superseded for Q-7.3-017 on 2026-11-12):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.3 course slides 34–36 (definitions + worked flammable-liquid example), cross-checked slide 37 (exercise, gasoline/essence). N RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
 
 **EN status:** BILINGUAL TECHNICAL REVIEW REQUIRED.
 **Approval:** PENDING REVIEWER + DATE.
@@ -1918,7 +1920,7 @@ finding.
 |---|---|---|---|---|---|---|
 | Q-7.3-015 | 0.1.2 Origine SCoETDG | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-016 | 0.1.3 DGR 1.2.4 | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §1.2.4(b) (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-017 | 0.1.4 Danger vs risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-017 | 0.1.4 Danger vs risque | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | MCQ | Tier B course only; DGR-wide absence not proven by direct 2026 item-specific evidence | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-018 | 0.2.1 Interdite en toute circonstance | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §2.1.1 (p.12 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-019 | 0.2.2 Prévention MD cachées | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 60 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-020 | 0.3.1 Formation DGR 1.5 | DRAFT — partially confirmed, flag for revision | True/False | DGR 67e §1.5.1.1-1.5.2 (p.11) — Tier A; framing likely outdated vs. current competency-based model | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

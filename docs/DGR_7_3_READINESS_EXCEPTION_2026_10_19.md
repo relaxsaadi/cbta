@@ -2,6 +2,11 @@
 
 **DRAFT / PRE-PRODUCTION / NOT APPROVED / NOT READY.**
 
+## 2026-11-12 evidence-scope correction — Q-7.3-017
+
+The historical cross-applied `FR SOURCE GAP CONFIRMED` conclusion inherited Q-7.1-001's limited glossary search. That search did not exhaustively assess “Danger” or prove the absence of all relevant wording in the current DGR. Accordingly **the current question-specific state is `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**, retaining Tier B educational basis only. The 2026-08-29 classification remains as a historical record, not terminal current-edition provenance. The bank stem/key, EN translation review, reviewer sign-off, staging assessments, production eligibility and run-time data have not been promoted. Qualified FR direct-source and independent EN review are still required.
+
+
 ## Function-specific baseline
 
 `docs/DGR_OFFICIAL_TASK_SET_7.3.md` independently records **33 leaf tasks** from IATA CBTA Guidance Ed.1 (2023) **TABLEAU 7.3.A** (PDF pp.28–29; Block 0=17, Blocks 3.1–3.3=12, Block 7=4), rather than any 7.1/7.2 template. Own blueprint: `docs/DGR_STAGE2A_FUNCTION_7.3_BLUEPRINT.md`; source/competency ledger: `docs/DGR_SOURCE_COMPETENCY_MATRIX_7.3.md`; draft bank: `docs/DGR_PRODUCTION_BANK_7.3.md` (**45 IDs**); separate unapproved EN draft: `docs/DGR_EN_REVIEW_PACKAGE_7.3.md`. The Stage 1 cross-validation also records a **local practice-book SOURCE GAP**: do not invent missing exercise-source support or classify this as a DGR-wide regulatory absence.

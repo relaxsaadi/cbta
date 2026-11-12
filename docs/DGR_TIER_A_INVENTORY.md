@@ -1,5 +1,8 @@
 # DGR Tier A Inventory — Second Tier A Phase (2026-08-25)
 
+> **2026-11-12 item-specific override — Function 7.8:** `Q-7.8-018` and `Q-7.8-036` have effective `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (NO production import). Historical assertions of complete DGR-wide absence based on Q-7.1-001 targeted glossary/§1.0 research are not proven; no independent current licensed 67th Edition 2026 item check or qualified named/date FR and EN reviews. See F7.8 production bank, task 0.1.4 matrix, EN status mirrors and both CSV ledgers. Historical totals below are not approval evidence.
+
+
 > **2026-11-12 item-level override — Function 7.7:** Historical confirmed DGR-wide silence and cross-function notes below are superseded for `Q-7.7-019`. Effective state: **`SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (non-importable)**. The limited Q-7.1-001 glossary/§1.0/targeted search cannot establish complete DGR absence for this independent F7.7 item. See its production bank, 0.1.4 matrix, unapproved EN mirror and reconciliation/import ledgers. Historical totals do not convey regulatory approval.
 
 > **2026-11-12 item-level override — Function 7.6:** The historical confirmed DGR-wide silence list and August totals below must not override current item status for `Q-7.6-018`. Q-7.1-001's limited §1.0/Appendix A/term search does not establish whole-DGR absence for this independent Function 7.6 question. Effective state: **`SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`; non-importable**. Consult the current F7.6 bank, matrix, FR reconciliation and import ledgers. Historical counts below are not a fresh approved-bank tally.

@@ -1,5 +1,7 @@
 # DGR Stage 2B — Function 7.8 Production Bank (Batch 1)
 
+> **2026-11-12 superseding evidence-scope correction — Q-7.8-018 and Q-7.8-036:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` for both. The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed. Historical conclusions below are preserved only as superseded audit history.
+
 **Function 7.8**: *Agents des opérations aériennes et régulateurs de vols*
 (per KOST's own course title slide) — IATA's own Table 7.8.A: "Personnel
 chargé des opérations aériennes et régulateurs de vols." KOST's
@@ -26,12 +28,7 @@ direct match, not just title-level), Q-7.8-009 (§7.2.2.2), Q-7.8-011
 (§3.0.3.1), Q-7.8-033 (§1.0), Q-7.8-035 (§1.1.3 OACI), Q-7.8-040
 (§1.5.1.3), Q-7.8-043 (§7.1.3.2(a)-(c)), Q-7.8-047 (§8.2.1).
 
-**3 items cross-apply already-established findings:** Q-7.8-010 shares
-`Q-7.2-028`'s §9.1.7 general-duty finding; Q-7.8-018 and Q-7.8-036
-(definitions of "Risque" and "Danger" respectively) both cross-apply the
-DGR-wide silence already confirmed for `Q-7.1-001` — the current DGR
-glossary excludes ordinary-sense terms by explicit policy and neither term
-has its own headword.
+**Historical cross-application (superseded for the two definition items):** Q-7.8-010 was associated with `Q-7.2-028`'s §9.1.7 general-duty finding. Q-7.8-018 (Risque) and Q-7.8-036 (Danger) were historically said to inherit DGR-wide silence from `Q-7.1-001`. That absence was not established by the limited glossary/§1.0/targeted-term evidence; the two independent items remain `SOURCE GAP UNRESOLVED`, not a confirmed DGR-wide absence. The 2026-08-25 batch description is historical, not a current verification or approval.
 
 **36 items not attempted this pass** — no efficient cross-application
 available. No content was fabricated; all remain `DRAFT`, Tier B, unchanged.
@@ -1421,7 +1418,9 @@ statement, but the wrong one for "Risque"):**
 flammable-liquid worked example), cross-checked against slide 34 (the
 course's own gasoline danger/risk exercise). Corroborated by practice Q4
 (differentiate danger/risque with named DG examples).
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (effective 2026-11-12; historical cross-applied claim superseded).
+
+**Evidence-scope correction (2026-11-12):** The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed.
 
 **Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.8 course, slides 31–33 (Risque/Danger definitions, chemical/radiation/biological hazard examples, flammable-liquid worked exa RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
 
@@ -2114,7 +2113,7 @@ entire p.106–111 pool, as already noted for 0.6.1/6.2.3 in Stage 1).
 |---|---|---|---|---|---|---|
 | Q-7.8-016 | 0.1.2 Organisme SCoETDG (cadre juridique) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-017 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-018 | 0.1.4 Définition du Risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-018 | 0.1.4 Définition du Risque | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | MCQ | Tier B KOST F7.8 course slides 31–33; DGR-wide absence not demonstrated; direct 2026 item-specific evidence pending | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-019 | 0.2.1 Exemple interdit en toute circonstance | FROZEN FR / SOURCE VERIFIED | MCQ | KOST F7.8 course slide 37 (DGR 4.2 table) | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-020 | 0.3.3 Exemple de divergence d'État (ITG) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.1.3 (ITG), §2.8.3.5 (AH) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-021 | 0.4.2 Groupe d'emballage I = très dangereuses | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §3.0.3.1 (p.307) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
@@ -2620,7 +2619,9 @@ no marked model answer). Real headroom remains in this leaf's own pool (1 of
 descriptions) was reviewed this session but not drafted as a separate item
 this pass, to avoid two items both anchored to the same single slide at only
 slightly different framings.
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (effective 2026-11-12; historical cross-applied claim superseded).
+
+**Evidence-scope correction (2026-11-12):** The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed.
 
 **Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.8 course, slide 32 (Danger definition plus chemical/radiation/biological hazard examples), cross-checked against slide 31 (Ri RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
 
@@ -3412,7 +3413,7 @@ entire p.106–111 pool).
 | Q-7.8-033 | 0.1.1 Définition réglementaire des MD (DGR 1.0) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.0 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-034 | 0.1.1 Distinction Article / Substance | DRAFT — Tier A not attempted | True/False | KOST F7.8 course slides 13–14 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-035 | 0.1.2 OACI codifie la Réglementation aérienne (DGR 1.1) | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.1.3 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.8-036 | 0.1.4 Définition du Danger | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.8-036 | 0.1.4 Définition du Danger | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | MCQ | Tier B KOST F7.8 course slides 31–33; DGR-wide absence not demonstrated; direct 2026 item-specific evidence pending | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-037 | 0.2.1 Définition d'une Dérogation (DGR 1.2.6) | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 38 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-038 | 0.2.2 Exemple de MD cachée — COMAT | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slide 49 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.8-039 | 0.3.1 Responsabilité de l'Acceptation | DRAFT — Tier A not attempted | MCQ | KOST F7.8 course slides 54–55 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

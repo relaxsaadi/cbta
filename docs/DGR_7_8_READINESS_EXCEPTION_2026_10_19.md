@@ -2,6 +2,10 @@
 
 **Scope:** KOST DGR/CBTA Stage 2B.1; PR #3; Function **7.8 — flight operations personnel / flight dispatchers**. **DRAFT / PRE-PRODUCTION / NOT APPROVED.** This is a repository and exact-head GitHub Actions audit, **not** a fresh reading of licensed IATA DGR 67th Edition 2026 text, qualified FR/EN signoff, or ANAC/IATA authorization.
 
+## 2026-11-12 superseding source-gap correction — Q-7.8-018 / Q-7.8-036
+
+Both items now have effective `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` status. The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed. The earlier quoted 12/17 CI findings remain 2026-10-19 historical snapshots and are not evidence of a current acceptance.
+
 ## Function-specific CBTA task authority and draft scope
 
 - `docs/DGR_OFFICIAL_TASK_SET_7.8.md` records **23 independently derived official leaf tasks** from the separately cross-validated **IATA CBTA Training Guidance Ed.1 (2023), TABLEAU 7.8.A** (PDF p.34 / printed p.30): **Block 0 = 18; Block 6.2 = 5; Block 7 = absent**. Do not invent a reporting Block 7 from local over-teaching, or copy Function 7.1's 44-task structure.

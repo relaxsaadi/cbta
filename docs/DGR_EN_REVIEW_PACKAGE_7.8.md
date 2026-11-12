@@ -602,7 +602,7 @@ Q-7.8-032).
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-12; historical DGR-wide absence not established; direct authorized 2026 Tier A item evidence and named dated FR verification pending; EN bilingual technical review separately required)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un
     risque), quelle est la définition correcte du terme « Risque » ?"*
@@ -1365,7 +1365,7 @@ are repeated in condensed form at each item below.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (current reconciliation mirror; EN review unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-12; historical DGR-wide absence not established; direct authorized 2026 Tier A item evidence and named dated FR verification pending; EN bilingual technical review separately required)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un
     risque), quelle est la définition correcte du terme « Danger » ?"*

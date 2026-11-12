@@ -2,6 +2,10 @@
 
 **Scope:** Stage 2B.1, PR #3, KOST DGR/CBTA Functions 7.1–7.10. This exception documents Function **7.6** only; **PRE-PRODUCTION / NOT APPROVED**. It records CI findings; it does not independently re-verify the licensed IATA DGR.
 
+## 2026-11-12 superseding Q-7.6-018 provenance correction
+
+Historical `FR SOURCE GAP CONFIRMED (cross-applied)` used Q-7.1-001's limited glossary/§1.0/targeted-term review to infer DGR-wide silence. That conclusion is not established. **Effective state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**, aligned in F7.6 bank, independent matrix, reconciliation and blocked import CSVs, and unapproved EN review package. The KOST Function 7.6 course worked example stays Tier B. No new licensed 2026 direct evidence, proved DGR absence, qualified dated FR/EN review, answer change, approval, import, merge or deployment is claimed. Historical CI counts below are preserved as earlier exact-head findings, not new verification.
+
 ## Exact-head evidence and independent task set
 
 - Exam-planning task authority: `docs/DGR_OFFICIAL_TASK_SET_7.6.md`, cross-validated from **IATA CBTA Training Guidance Ed.1 (2023), TABLEAU 7.6.A**, contains **28 distinct leaf tasks**: 18 in Block 0, 5 in Block 4 (4.1/4.3 only), 1 in Block 6 (6.1.6 only), and 4 in Block 7. This CBTA task-identity source is **not** direct Tier-A evidence for DGR 67th Edition 2026 regulatory claims. Do not copy Function 7.1's structure or infer universal task coverage from question counts.

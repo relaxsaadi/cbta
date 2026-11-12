@@ -1,5 +1,8 @@
 # DGR Tier A Inventory — Second Tier A Phase (2026-08-25)
 
+> **2026-11-12 item-level override — Function 7.6:** The historical confirmed DGR-wide silence list and August totals below must not override current item status for `Q-7.6-018`. Q-7.1-001's limited §1.0/Appendix A/term search does not establish whole-DGR absence for this independent Function 7.6 question. Effective state: **`SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`; non-importable**. Consult the current F7.6 bank, matrix, FR reconciliation and import ledgers. Historical counts below are not a fresh approved-bank tally.
+
+
 ## ⚠️ STATUS RECONCILIATION (added 2026-08-25, during Moodle integration / pre-audit data sync — read this before using any total below)
 
 **This file's "Current totals" line ("218 FROZEN…") reflects topic/

@@ -1,5 +1,8 @@
 # DGR Tier A Inventory — Second Tier A Phase (2026-08-25)
 
+> **2026-11-12 item-specific precedence — Function 7.9:** `Q-7.9-022` and `Q-7.9-023` are `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (not importable). The old program-wide DGR silence inference based on Q-7.1-001 Appendix A/§1.0/targeted `Risque` research is not proof of whole-DGR absence. KOST slides 31–33 remain Tier B; direct per-item current 2026 Tier A and separately named/date qualified FR/EN reviews are pending. Historical tables below are not production approval.
+
+
 > **2026-11-12 item-specific override — Function 7.8:** `Q-7.8-018` and `Q-7.8-036` have effective `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (NO production import). Historical assertions of complete DGR-wide absence based on Q-7.1-001 targeted glossary/§1.0 research are not proven; no independent current licensed 67th Edition 2026 item check or qualified named/date FR and EN reviews. See F7.8 production bank, task 0.1.4 matrix, EN status mirrors and both CSV ledgers. Historical totals below are not approval evidence.
 
 

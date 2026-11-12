@@ -677,7 +677,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-12; historical whole-DGR absence not established; this item's own specific citation was not independently re-read this pass; no named/date qualified FR verification; EN technical review remains separate and unapproved)
 - **FR text:**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un
     risque), laquelle des affirmations suivantes correspond à la définition
@@ -717,7 +717,7 @@ record behind each item.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** True/False
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-12; historical whole-DGR absence not established; this item's own specific citation was not independently re-read this pass; no named/date qualified FR verification; EN technical review remains separate and unapproved)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (exemple du liquide
     inflammable), le danger correspondant à un liquide inflammable est son

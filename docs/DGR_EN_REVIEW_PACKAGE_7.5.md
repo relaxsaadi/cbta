@@ -329,7 +329,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (mirrors current FR reconciliation; EN review remains separate)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (2026-11-12 effective FR status; Tier B example, no direct DGR-wide silence proof; independent EN review still required)
 - **FR text:**
   - Stem: *"Selon le cours (exemple travaillé — liquide inflammable), laquelle des propositions suivantes illustre correctement le « risque » (par opposition au « danger ») associé au transport aérien d'un liquide inflammable comme l'essence ?"*
   - Options: **(Correct)** *"La probabilité que le liquide s'enflamme pendant le transport aérien — par exemple si son contenant est mal fermé, ou s'il est exposé au soleil ou à une source de chaleur."* / *"Le fait que le liquide puisse s'enflammer facilement, c'est-à-dire son inflammabilité elle-même."* / *"Le virus, la bactérie ou le champignon susceptible de contaminer le liquide."* / *"Le rayon X, le rayon gamma, l'UV ou le micro-onde émis lors du transport du liquide."*

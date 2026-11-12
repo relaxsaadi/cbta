@@ -1,5 +1,7 @@
 # DGR Stage 2B — Function 7.4 Production Bank (Batch 1)
 
+> **2026-11-12 source-evidence correction (Q-7.4-027):** The 2026-08-29 cross-applied `FR SOURCE GAP CONFIRMED` / categorical DGR-wide danger–risk silence conclusion is **not demonstrated** by the limited Q-7.1-001 glossary search. Current item status is `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`. The course example remains Tier B; the historical reconciliation below is retained solely as an audit record. No new authorized 67th Edition 2026 reading, qualified FR verification, separate EN review, question/answer alteration, exam import or deployment is claimed.
+
 **Function 7.4**: *Personnel chargé de manutentionner le fret dans un
 entrepôt, de charger et décharger des unités de chargement (UC), et de
 charger et décharger des compartiments de fret des aéronefs.*
@@ -37,7 +39,7 @@ doesn't claim exhaustiveness, same reasoning as `Q-7.2-019`).
 confirmed via §2.3.0.1; the cargo-side comparative framing is not itself a
 single verbatim DGR quote, more a structural inference from §2.1 + general
 applicability — not silently certified as a specific citation), Q-7.4-027
-(cross-applies the DGR-wide danger/risque silence, `Q-7.1-001`), Q-7.4-042
+(historically inherited `Q-7.1-001` glossary search; full-DGR absence unproven, `SOURCE GAP UNRESOLVED`), Q-7.4-042
 (likely shares `Q-7.2-036`'s competency-based-training-framework finding —
 not independently re-confirmed this pass for this specific item's wording).
 
@@ -1698,7 +1700,7 @@ source de chaleur."
 **Source basis:** Tier B — KOST Function 7.4 course, slides 31–33 (danger/
 risque definitions and worked flammable-liquid example). No direct exam/
 practice hit for this specific definitional-distinction fact.
-**FR status:** FR SOURCE GAP CONFIRMED (cross-applied).
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (2026-11-12 evidence-scope correction; historical 2026-08-29 conclusion superseded).
 
 **Reconciliation (2026-08-29):** OLD STATUS: DRAFT — Tier B only. SOURCE REQUIRED for Tier A. NEW STATUS: FR SOURCE GAP CONFIRMED (cross-applied) SOURCE: Tier B — KOST Function 7.4 course, slides 31–33 (danger/ risque definitions and worked flammable-liquid example). No direct exam/ practice hit for thi RATIONALE: Existing per-item citation already present in this item's own summary-table row (prior batch process; never mirrored into this item's own prose FR-status field). A representative sample of this citation pattern (Q-7.3-001 §1.0, Q-7.4-002 §1.1.2, Q-7.5-002 §1.1.3, Q-7.9-004 §3.0.1.1, Q-7.3-030 §9.1.3.1, Q-7.10-024 §8.0.1.1) was independently spot-verified against the live IATA DGR 67th Ed./AM1 Bookshelf on 2026-08-29 and found to exactly match current DGR text in every case checked. This item's own specific citation was not independently re-read this pass but follows the same verified batch pattern; the table-row citation is used as-is.
 
@@ -2143,7 +2145,7 @@ mistakes the distractor's mention of "l'agent des opérations aériennes" or
 | Q-7.4-024 | 6.3.3 Fuite/dommage constaté — réponse | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | True/False | KOST F7.4 course slide 103 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-025 | 6.3.1 Contrôle emplacement de chargement | DRAFT — Tier B only, SOURCE REQUIRED for Tier A | MCQ | KOST F7.4 course slide 102 ¶2 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-026 | 0.1.3 Champ d'application DGR 1.2.1 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.2.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.4-027 | 0.1.4 Distinction danger/risque | FR SOURCE GAP CONFIRMED (cross-applied) | MCQ | DGR silent on danger/risque — Tier A; item retained Tier B | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.4-027 | 0.1.4 Distinction danger/risque | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED | MCQ | Tier B KOST slides 31–33; limited DGR glossary search does not establish DGR-wide absence | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-028 | 0.2.2 MD de la propriété de l'exploitant | STALE CITATION / SOURCE CONFLICT | MCQ | DGR 67e AM1 §2.5.1.1-.1.5, §2.5.2 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-029 | 0.3.1 Responsabilités Exploitant DGR 1.4 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §1.4.1 (p.11) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.4-030 | 0.3.3 Divergence de l'Exploitant DGR 2.8.3 | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e AM1 §2.8.3.1 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

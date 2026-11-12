@@ -474,7 +474,7 @@ rationale — only the FR text (verbatim) and its EN translation.
 
 - **Sub-task:** 0.1.4 Faire la distinction entre un danger et un risque
 - **Type:** MCQ, single-answer
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (2026-11-12; historical cross-applied DGR-wide absence unproven; EN review pending)
 - **Source (production bank):** KOST F7.4 course, slides 31–33
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Faire la distinction entre un danger et un risque — exemple du liquide inflammable), laquelle des affirmations suivantes illustre correctement la différence entre le danger et le risque ?"*

@@ -2,6 +2,10 @@
 
 **Scope:** Stage 2B.1, PR #3, Functions 7.1–7.10 program; this exception covers Function 7.4 only. **Status: PRE-PRODUCTION / NOT APPROVED.**
 
+## 2026-11-12 evidence-scope correction — Q-7.4-027
+
+The historical `FR SOURCE GAP CONFIRMED` statement was cross-applied from Q-7.1-001, where the recorded 2026 source check covered §1.0, Appendice A and a targeted glossary search, **not** an exhaustive current-edition review of the entire DGR. This cannot substantiate a categorical DGR-wide absence. Current item state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`; the KOST example remains Tier B and blocked from production import. The 2026-08-29 status persists solely as audit history. Direct authorized IATA DGR 67e 2026 item-specific FR verification, a named qualified FR reviewer/date and separate qualified EN bilingual review remain outstanding. No question/key, deployed exam, licensed text, `APPROVED` status or runtime import has been changed.
+
 ## Verified evidence / baseline
 
 - Canonical Function 7.4 task set: `docs/DGR_OFFICIAL_TASK_SET_7.4.md`, **37 official leaf tasks** from Function 7.4's own TABLEAU 7.4.A (Blocks 0, 4, 6, 7); do not substitute Function 7.1's task breakdown.

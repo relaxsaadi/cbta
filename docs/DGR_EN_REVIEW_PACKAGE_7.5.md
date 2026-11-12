@@ -223,7 +223,7 @@ file's fuller sourcing notes.
 
 - **Sub-task:** 5.1.2 Appliquer les prescriptions d'approbation
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED` (mirrors current FR reconciliation; EN review remains separate)
+- **FR status:** `SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED` (mirrors superseding FR reconciliation; EN review remains separate)
 - **FR text:**
   - Stem: *"Selon le cours (DGR 2.3.A — note relative à l'approbation de l'exploitant), laquelle des affirmations suivantes est correcte ?"*
   - Options: **(Correct)** *"L'exploitant peut approuver le transport de plus de 15 appareils électroniques portables (AEP), et le transport de plus de 20 batteries."* / *"L'exploitant peut approuver le transport de plus de 20 AEP, et de plus de 15 batteries."* / *"Aucune approbation de l'exploitant n'est jamais requise, quel que soit le nombre d'AEP ou de batteries transportés."* / *"L'approbation de l'exploitant ne concerne que les batteries, jamais les AEP eux-mêmes."*
@@ -231,6 +231,7 @@ file's fuller sourcing notes.
   - Stem: *"Per the course (DGR 2.3.A — note on operator approval), which of the following statements is correct?"*
   - Options: **(Correct)** *"The operator may approve the carriage of more than 15 portable electronic devices (PEDs), and the carriage of more than 20 batteries."* / *"The operator may approve the carriage of more than 20 PEDs, and more than 15 batteries."* / *"No operator approval is ever required, regardless of the number of PEDs or batteries carried."* / *"Operator approval concerns only the batteries, never the PEDs themselves."*
 - **Terminology decision — FLAGGED:** "AEP" (Appareils Électroniques Portables) → **"PED" (Portable Electronic Devices)**, the standard IATA English term; not independently verified against a supplied English 67th Edition text this session. Applied consistently everywhere "AEP" appears in this bank (see also Q-7.5-013's related but distinct battery-threshold item, which does not itself use the AEP/PED acronym).
+- **2026-11-12 source-scope warning:** The draft translation repeats the old operator-approval comparison but must NOT be construed as authorizing more than two personal power banks. IATA operator guidance of 2026-03-31, addressing the ICAO addendum effective 2026-03-27, separates power banks from spare batteries (https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf). Historic §2.3.5.8.3/.4(c) citations are evidence leads only; independent qualified FR 2026 text/addendum and state applicability checks and distinct EN review are required. No EN equivalence or regulatory approval asserted.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 

@@ -277,7 +277,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
 
 - **Sub-task:** 5.1.2 Appliquer les prescriptions d'approbation
 - **Type:** MCQ, single-answer
-- **FR status:** `FROZEN FR / SOURCE VERIFIED` (unchanged)
+- **FR status:** `SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED` (2026-11-12 superseding FR reconciliation; separate EN review pending)
 - **Restriction carried over from the production bank:** this item tests
   only the specific AEP/battery-quantity threshold fact — the EN
   translation must not introduce a fabricated worked approval-application
@@ -289,6 +289,7 @@ Function 7.7's own EN translation verbatim, for cross-function consistency.
   - Stem: *"Per the course (DGR 2.3.A — note on operator approval), which of the following statements is correct?"*
   - Options: **(Correct)** *"The operator may approve the carriage of more than 15 portable electronic devices (PEDs), and the carriage of more than 20 batteries."* / *"The operator may approve the carriage of more than 20 PEDs, and more than 15 batteries."* / *"No operator approval is ever required, regardless of the number of PEDs or batteries carried."* / *"Operator approval concerns only batteries, never the PEDs themselves."*
 - **Terminology decision:** "appareils électroniques portables (AEP)" → **"portable electronic devices (PEDs)"**, standard IATA acronym.
+- **2026-11-12 source-scope warning:** The historical FR/EN draft wording must not imply approval for more than two personal power banks. IATA 2026-03-31 operator guidance to ICAO 2026-03-27 addendum separately limits personal-use power banks: https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf. Direct authorized current FR source and State/operator scope checks and independent EN review are still required. No approved translation or answer change.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
 

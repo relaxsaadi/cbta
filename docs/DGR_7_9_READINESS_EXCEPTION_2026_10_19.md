@@ -1,5 +1,10 @@
 # Function 7.9 — regulatory and bilingual readiness exception (2026-10-19)
 
+## 2026-11-12 superseding regulatory evidence correction — Q-7.9-022 / Q-7.9-023
+
+Both items are now effectively **`SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**, not `FR SOURCE GAP CONFIRMED`. The Q-7.1-001 historical Appendice A / §1.0 / targeted `Risque` search was limited; it did not prove DGR-wide absence of danger/risque treatment or independently check these F7.9 items. KOST slides 31–33 are Tier B course material. Direct authorized current IATA DGR 67th Edition 2026 Tier A item evidence or a governed, explicitly non-DGR pedagogical source decision is required, along with a named qualified FR reviewer/date and separate qualified EN reviewer/date. Their prior cross-applied August statuses are audit history, not current signoff. No answer/stem/distractor, approval, import or deployment changed; both remain blocked from secure production exams.
+
+
 ## 2026-11-12 new item-level conflict: Q-7.9-032
 
 This function's own question Q-7.9-032 historically used DGR 67th Edition/AM1 §§2.3.5.8.3 and 2.3.5.8.4(c) (2026-08-25) for operator-approval thresholds of >15 PED and >20 spare batteries, while including external batteries. [IATA's public operator guidance, 31 March 2026](https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf), discussing the ICAO TI addendum effective 27 March 2026, distinguishes personal-use power banks and limits them to two (pp. 1, 4, 10). The effective item state is now **`SOURCE CONFLICT — 2026 POWER_BANK_ADDENDUM_REVIEW_REQUIRED`** until independently reviewed direct licensed 2026 FR DGR/addendum text, State/operator applicability, named qualified FR/date and separate EN/date support a scoped decision. No claim that ordinary spare-battery threshold itself is universally false. No question answer was changed; do not import or approve.

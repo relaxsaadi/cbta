@@ -1,5 +1,7 @@
 # DGR Tier A Inventory — Second Tier A Phase (2026-08-25)
 
+> **2026-11-12 originating-item precedence — Function 7.1:** `Q-7.1-001` is `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` and **not importable**. Appendix A, §1.0 and a limited historical `Risque` search do not prove DGR-wide absence; `Danger` was not exhaustively checked. The former `FR SOURCE GAP CONFIRMED` / `DGR silent by design` conclusion below is archival only and must not be used as a terminal regulatory claim. Tier B/C course pedagogy is not licensed 2026 Tier A proof. Named qualified FR and independent EN reviewer/date are pending. See current Stage 2B status, Function 7.1 matrix and both CSV ledgers.
+
 > **2026-11-12 item-specific override — Function 7.10:** `Q-7.10-019` is `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (not importable), not a confirmed DGR-wide absence. The Q-7.1-001 historical glossary/§1.0/targeted search does not establish full-book silence. KOST F7.10 slides 31–34 remain Tier B only; item-specific licensed 67th Edition 2026 Tier A and named dated qualified FR/independent EN reviews are pending. Historical totals below do not imply approved exams.
 
 

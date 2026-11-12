@@ -50,16 +50,16 @@ as a reviewer decision.
 
 ### Q-7.1-001 — Danger vs. risque
 
-- **FR status:** `FR SOURCE GAP CONFIRMED — DGR silent by design; Tier B/C basis retained` (`docs/DGR_STAGE_2B_STATUS.md` row Q-7.1-001)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (`docs/DGR_STAGE_2B_STATUS.md` row Q-7.1-001)
 - **Type:** Pilot item — exact interaction format not recorded in source docs; drafted below as a definition-comparison item for translation purposes only. Confirm actual format against the live copy.
-- **Source basis:** Appendice A Généralités (p.703) + §1.0 Note (p.11) — confirms the DGR glossary has **no** "Danger"/"Risque" headword by explicit editorial policy (ordinary/dictionary-sense terms excluded). Underlying content basis is Tier B (KOST Function 7.1 course) / Tier C (generic DG competency framework), per Stage 2A sub-task `0.1.4 Danger vs risque` — see `docs/DGR_NEXT_SOURCE_REQUEST.md` for the original Tier B phrasing this gloss is built from.
+- **Source basis:** Appendice A Généralités (p.703), §1.0 Note (p.11), and a limited historical `Risque` search support a glossary-scope observation, **not** absence throughout the DGR 67th Edition 2026. The item lacks direct authoritative current evidence for its own regulatory claim. Instructional basis stays Tier B (KOST Function 7.1 course) / Tier C (generic DG competency framework), per Stage 2A sub-task `0.1.4 Danger vs risque`; see `docs/DGR_NEXT_SOURCE_REQUEST.md`.
 - **FR working gloss (reconstructed — NOT DGR-glossary-sourced):**
   - Stem: *"Dans le contexte du transport des marchandises dangereuses, quelle est la distinction entre le « danger » et le « risque » ?"*
   - Correct answer: *"Le danger désigne une source potentielle de dommage à la santé, à la sécurité, aux biens ou à l'environnement ; le risque désigne le degré de probabilité que ce danger cause réellement un dommage."*
 - **EN draft translation:**
   - Stem: *"In the context of dangerous goods transport, what is the distinction between 'danger' (hazard) and 'risque' (risk)?"*
   - Correct answer: *"'Danger' (hazard) refers to a potential source of harm to health, safety, property, or the environment; 'risque' (risk) refers to the degree of probability that this hazard will actually cause harm."*
-- **Precision note carried into EN:** This is **not** an IATA DGR glossary definition — the current 67th Edition/Addendum 1 does not define either term (confirmed Tier A absence). The EN item's source-basis field must read Tier B (KOST course) / Tier C (generic framework), exactly as the FR side does. Do not let the EN draft or exam metadata cite "IATA DGR Glossary/Appendix A" as its authority.
+- **Precision note carried into EN:** This is **not verified** as an IATA DGR glossary definition; the historical limited search did **not** prove DGR-wide silence. This item stays `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`, and the EN draft is not a qualified bilingual review. Preserve the Tier B/C instructional basis, prohibit import, and require direct current evidence or governed non-DGR disposition plus separate named and dated qualified FR and EN review before any approval.
 - **Terminology decision:** primary EN gloss for "danger" here is **"hazard"** (the standard English safety-science pairing is "hazard vs. risk," matching the Tier B definitions used), with "danger" kept parenthetically since it is also a valid literal cognate. Reviewer should confirm which of the two English words KOST's own English-language materials (if any exist) actually use.
 - **EN status:** `BILINGUAL TECHNICAL REVIEW REQUIRED`
 - **Approval:** `PENDING REVIEWER + DATE`
@@ -442,7 +442,7 @@ by a real named qualified human, the item's EN status stays
 
 - **19/19** currently drafted Function 7.1 items now have a durable EN draft
   review-package entry; **0/19** are claimed reviewed in this update.
-- Q-7.1-001 retains its explicit Tier-A-silent / Tier-B/C source basis and
+- Q-7.1-001 retains a Tier-A-unresolved / Tier-B/C instructional basis and
   cannot be promoted merely because an EN draft exists.
 - Q-7.1-002 through Q-7.1-019 retain their recorded current FR source states;
   Q-7.1-013–019 were translated from the authoritative production-bank text,

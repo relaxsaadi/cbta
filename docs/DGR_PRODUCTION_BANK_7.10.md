@@ -1,4 +1,4 @@
-# DGR Stage 2B — Function 7.10 Production Bank (Batch 1 + Batch 2)
+# DGR Stage 2B — Function 7.10 Production Bank (Batches 1–3; 44 provisional items)
 
 > **2026-11-12 effective evidence-scope correction — Q-7.10-019:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`. Historical cross-application of Q-7.1-001's limited Appendix A/§1.0/targeted `Risque` search did not prove DGR-wide silence. The KOST F7.10 flammable-liquid example is Tier B; direct licensed IATA DGR 67th Edition 2026 per-item evidence, named qualified dated FR review and separate EN qualified dated review remain missing. Not eligible for secure exam import; no exam stem, option, key, approval or deployment modified. Historical August conclusions below are not current signoff.
 

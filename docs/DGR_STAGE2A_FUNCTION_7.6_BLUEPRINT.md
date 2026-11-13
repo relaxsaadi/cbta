@@ -1,5 +1,7 @@
 # DGR Stage 2A — Function 7.6 — Exam Blueprint (PROVISIONAL / CEILING)
 
+> **Historical blueprint vs. current bank (2026-11-13):** This Stage 2A document records the original source-yield ceiling (**89**, not a quota) across Function 7.6's own **28** CBTA leaf tasks. Its statements that no question was drafted *in this pass* and that drafting would begin later refer only to that historical blueprint pass. The separate Stage 2B bank now contains **56 provisional questions across Batches 1–3** (`Q-7.6-001`–`Q-7.6-056`), all **non-importable** under `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`. Tasks `0.3.2` and `4.3.3` remain official tasks with local teaching-source `SOURCE GAP` dispositions and no corresponding production question; these do **not** establish a DGR-wide absence. Before any promotion, require direct item-specific current IATA DGR 67th Edition 2026 Tier-A evidence or an explicit unresolved `SOURCE GAP`/`SOURCE CONFLICT` disposition, named qualified dated FR source verification, independent qualified dated EN bilingual review, and final authorized approval. Current per-item authority remains the reconciliation CSVs and exact-head CI, not historical blueprint prose. No ANAC/IATA approval, production import or platform readiness is implied.
+
 **Function 7.6**: *Personnel chargé de la planification du chargement des
 aéronefs* — IATA's own Table 7.6.A: "Personnel responsable de planifier la
 répartition du chargement (bagages, poste et fret) dans les compartiments de

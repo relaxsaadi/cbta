@@ -82,7 +82,7 @@ export async function POST(req: Request) {
             <tr><td style="padding:4px 12px 4px 0;color:#666">Catégorie DGR</td><td>${escapeHtml(categorie_dgr) || '—'}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#666">Session souhaitée</td><td><strong>${session_souhaitee === 'aout' ? '18-22 Août 2026 ⭐' : '15-19 Septembre 2026'}</strong></td></tr>
             ${message ? `<tr><td style="padding:4px 12px 4px 0;color:#666">Message</td><td>${escapeHtml(message)}</td></tr>` : ''}
-            <tr><td style="padding:4px 12px 4px 0;color:#666">Source</td><td>${source || 'direct'}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#666">Source</td><td>${escapeHtml(source || 'direct')}</td></tr>
           </table>
           <hr style="margin:20px 0;border:none;border-top:1px solid #eee"/>
           <p style="font-size:12px;color:#999">

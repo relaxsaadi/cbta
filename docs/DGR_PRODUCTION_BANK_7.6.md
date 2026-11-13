@@ -1,6 +1,8 @@
-# DGR Stage 2B — Function 7.6 Production Bank (Batch 1)
+# DGR Stage 2B — Function 7.6 Production Bank (Batches 1–3, Q-7.6-001–056)
 
 > **2026-11-12 superseding evidence-scope correction — Q-7.6-018:** A historical `FR SOURCE GAP CONFIRMED (cross-applied)` and DGR-wide danger/risk absence claim are **not established** by the limited Q-7.1-001 glossary/§1.0/term search. Effective state **`SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**. The KOST F7.6 course worked example remains Tier B only; direct current IATA DGR 67th Edition 2026 presence/absence is unverified for this exact item. Historical 2026-08-29 findings below are retained solely for audit. No answer change, licensed source extraction, qualified dated FR/EN review, approval, import or deployment is claimed.
+
+> **Document scope and effective-state precedence (2026-11-13):** This file contains **all three batches**: Batch 1 (`Q-7.6-001`–`015`), Batch 2 (`016`–`033`), and Batch 3 (`034`–`056`). Batch-specific drafting-time `DRAFT` assertions and historical summary-table `FROZEN FR` labels are retained for traceability, **not as current per-item release authorization**. For current effective FR evidence limitations and import eligibility, reconcile each item against `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`, and the exact-head CI. Independent qualified, dated FR/EN review and final approval remain outstanding; no item is cleared for production import.
 
 **Function 7.6**: *Personnel chargé de la planification du chargement des
 aéronefs* (per KOST's own course title) — IATA's own Table 7.6.A: "Personnel

@@ -21,3 +21,17 @@ assert.doesNotMatch(
   'Unescaped source would allow HTML injection into internal notifications'
 );
 console.log('Lead email HTML source-escaping regression: PASS');
+
+\n// #406 privacy regression: provider error payloads and prospect PII must not
+// be emitted to application logs, including after a failed DB insert.
+assert.match(route, /supabasePersisted:\\s*!error/, 'log persistence outcome without claiming unconditional success');
+assert.doesNotMatch(route, /console\\.info\\([^
+]*\\{\\s*email\\b/, 'do not log prospect email at request completion');
+assert.doesNotMatch(route, /console\\.error\\([^
+]*error\\.message/, 'DB error messages may disclose personal data');
+assert.doesNotMatch(route, /console\\.error\\([^
+]*ghlData/, 'GHL error payload may disclose personal data');
+assert.doesNotMatch(route, /console\\.info\\([^
+]*ghlData/, 'do not log provider contact identifiers');
+assert.doesNotMatch(route, /await ghlRes\\.json\\(\\)/, 'provider response body is not needed for logging');
+console.log('Lead PII-safe diagnostics regression: PASS');

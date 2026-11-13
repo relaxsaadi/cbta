@@ -1425,7 +1425,8 @@ slide's own employer-responsibility sentence) — no duplication. No direct
 exam/practice-book hit, consistent with Stage 1's own finding. Note: this
 is sub-task 0.6.2's only allowed item — blueprint ceiling is 1 (generic-
 awareness only) — no second item should be drafted against it.
-**FR status:** FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25):
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (2026-11-13). The 2026-08-25 §9.5.1.2 check was section-specific. Its reported mismatch with the employee emergency-information duty does not prove absence of that duty elsewhere in the current IATA DGR 67th Edition 2026. This question remains a Tier B course-based draft until direct item-specific 2026 FR source evidence, named qualified FR review/date, and separate EN technical review/date. No import or APPROVED status.
+**Historical 2026-08-25 conclusion (superseded for present evidence sufficiency):** FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25):
 §9.5.1.2 read in full this session confirms it covers only the operator's
 duty to
 keep ICAO Doc 9481 (or equivalent) emergency-response guidance available
@@ -1771,7 +1772,7 @@ with `Q-7.2-024`); treat as the same provision rather than a separate DGR
 | Q-7.2-019 | 0.5.1 Critères de marquage | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §7.1.3.2 (p.688 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-020 | 0.5.3 Contenu LTA (DGR 8.2) | FROZEN FR / SOURCE VERIFIED (confirmed during F7.3 research) | MCQ | DGR 67e §8.2.1 (p.690 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-021 | 0.6.1 Première action d'urgence | FR SOURCE GAP CONFIRMED (expanded search: citation stale AND 5-step content not located anywhere in current DGR, incl. §9.3.6) | MCQ | Not located in current DGR — Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.2-022 | 0.6.2 Info employés exploitant | FR SOURCE GAP CONFIRMED (§9.5.1.2 confirmed to cover a different topic — pilot-in-command access to ICAO Doc 9481; this claim not located elsewhere) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.2-022 | 0.6.2 Info employés exploitant | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (2026-11-13; direct source recheck pending) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-023 | 3.4.1 Demande SDS | PARTIALLY CONFIRMED — mechanism + "Not Restricted" term Tier A-confirmed, SDS example itself Tier B | MCQ | DGR 67e §9.1.1.2 + §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-024 | 3.4.2 Avertissement consommateur | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.2-025 | 7.1+7.2 Qui/à qui | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

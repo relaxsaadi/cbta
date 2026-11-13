@@ -1,5 +1,7 @@
 # DGR 67e — Source Register for Stage 2B.1
 
+> **2026-11-13 superseding item evidence correction — Q-7.2-045:** This question tests the contact-response step on KOST Function 7.2 slide 89, not the first-action step in Q-7.2-021 (slide 88). The historical priority-item §9.5.1.2/§9.3.6 search and other-item representative Bookshelf spot checks did not independently reread the tested claim or justify a final DGR-wide absence finding for Q-7.2-045. Its effective status is `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`, import `NO`, not approved. Historical confirmed-gap text below remains solely for audit; direct current 67th Edition 2026 evidence plus named dated qualified FR and independent EN review are outstanding.
+
 > **2026-11-12 superseding evidence-scope correction:** The historical Q-7.1-001 glossary search was limited, not proof of DGR-wide silence. Its cross-application to Q-7.3-017 is not sufficient to declare a confirmed regulatory source gap. The historical search record remains below. No new licensed reading, FR/EN qualified sign-off, approval or exam import is implied.
 
 This register stores concise regulatory source locations and validation conclusions. It must not contain large copied passages from licensed publications.

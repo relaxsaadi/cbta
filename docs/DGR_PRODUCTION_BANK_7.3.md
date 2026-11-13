@@ -2419,7 +2419,8 @@ distinct employer-obligation clause rather than the general 5-step
 procedure content (0.6.1) or NOTOC (0.6.1). Not cited by any prior batch
 item. No direct exam hit at this generic-awareness level, consistent with
 the blueprint's own framing of this sub-task as thin/minimal.
-**FR status:** FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25):
+**FR status:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (2026-11-13). The 2026-08-25 §9.5.1.2 check was section-specific. Its reported mismatch with the employee emergency-information duty does not prove absence of that duty elsewhere in the current IATA DGR 67th Edition 2026. This question remains a Tier B course-based draft until direct item-specific 2026 FR source evidence, named qualified FR review/date, and separate EN technical review/date. No import or APPROVED status.
+**Historical 2026-08-25 conclusion (superseded for present evidence sufficiency):** FR SOURCE GAP CONFIRMED (expanded search, 2026-08-25):
 same finding as `Q-7.2-022` — current §9.5.1.2, read in full this
 session,
 covers only the operator's duty to keep ICAO Doc 9481 emergency-response
@@ -2693,7 +2694,7 @@ corroborates the general separation topic, not this exact rule.
 | Q-7.3-036 | 0.5.2 Étiquettes de danger chimique | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.7 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-037 | 0.6.1 Colis endommagé — conduite à tenir | DRAFT — Tier A not attempted | MCQ | KOST F7.3 course slide 183 | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-038 | 0.6.1 Support documentaire du NOTOC | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e AM1 §9.5.1.1.6 — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
-| Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | FR SOURCE GAP CONFIRMED (same finding as Q-7.2-022 — §9.5.1.2 covers a different topic, this claim not located elsewhere) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
+| Q-7.3-039 | 0.6.2 Responsabilité employeur (générique) | SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED (2026-11-13; direct source recheck pending) | True/False | DGR 67e AM1 §9.5.1.2 (confirms different topic) — Tier A search, content Tier B retained | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-040 | 7.1 Destinataires signalement accident | FROZEN FR / SOURCE VERIFIED | MCQ | DGR 67e §9.6.1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-041 | 7.2 Portée signalement incident (exemptions) | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.6.1 Note 1 (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |
 | Q-7.3-042 | 3.2.1 Marques conformes à la DGD | FROZEN FR / SOURCE VERIFIED | True/False | DGR 67e §9.1.3.1(c) (p.693 area) — Tier A | BILINGUAL TECHNICAL REVIEW REQUIRED | PENDING REVIEWER + DATE |

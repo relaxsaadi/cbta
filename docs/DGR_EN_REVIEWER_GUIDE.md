@@ -119,13 +119,16 @@ Functions 7.1–7.10). For each item, the review checks:
 
 ## 3. How to record a completed review for one item
 
-Every package's "Reviewer instructions and checklist" section defines the
-same sign-off format. Do not invent a different one. Per item:
+The current controlled-reviewer requirements in `docs/DGR_REVIEWER_REGISTRY.md` and the four-gate sequence in `docs/DGR_REVIEWER_SIGNOFF_WORKFLOW.md` take precedence over older per-function package templates. Before recording a terminal bilingual review, the owner must have admitted the actual qualified, bilingual human reviewer with `OWNER VERIFIED`, `Active=YES`, a `qualification-ref=`, a `bilingual-ref=`, and a real admission date. Record the matching `reviewer-id=DGR-RVW-####` in the terminal status. Do not place scans, licensed IATA text, personal credential numbers, or secrets in GitHub.
+
+Use the per-item checklist below alongside the package's task-specific checks:
 
 ```
 Item: Q-7.X-0YY
-Reviewer name (qualified bilingual DGR instructor): ____________________
+Reviewer name (exact admitted human name): ____________________
+Reviewer ID (DGR-RVW-####, owner-verified active registry entry): ____________________
 Reviewer DGR/CBTA role or credential: ____________________
+Bilingual qualification references recorded in controlled registry: YES / NO
 Review date (YYYY-MM-DD): ____________________
 Verified against live-administered FR item text (not just this draft): YES / NO
 Regulatory accuracy — FR: PASS / FAIL / CONDITIONAL — notes: ____________
@@ -134,7 +137,7 @@ Meaning-equivalence FR↔EN: PASS / FAIL / CONDITIONAL — notes: ____________
 Terminology consistency: PASS / FAIL / CONDITIONAL — notes: ____________
 Distractor plausibility (EN): PASS / FAIL / CONDITIONAL — notes: ____________
 Final status: BILINGUAL TECHNICAL REVIEW COMPLETE / REVISION REQUIRED (specify)
-Approval: [Named reviewer] + [Date]
+Program approval: PENDING REVIEWER + DATE (unless independent final gate is completed and synchronized)
 ```
 
 **Exactly what to change, and where:**
@@ -142,18 +145,12 @@ Approval: [Named reviewer] + [Date]
 - In the relevant `docs/DGR_EN_REVIEW_PACKAGE_7.X.md` file, find the
   item's `- **EN status:**` line (currently `BILINGUAL TECHNICAL REVIEW
   REQUIRED` for every item in every package) and change it to
-  `BILINGUAL TECHNICAL REVIEW COMPLETE (reviewed by <full name>, <DGR/CBTA
-  role or credential>, <YYYY-MM-DD>)` **only if every one of the five
+  `BILINGUAL TECHNICAL REVIEW COMPLETE (reviewed by <exact registry full name>, reviewer-id=DGR-RVW-####, <bilingual DGR/CBTA role or credential FR/EN>, <YYYY-MM-DD>)` **only if every one of the five
   PASS/FAIL/CONDITIONAL checks above is PASS**. If any check is FAIL or
   CONDITIONAL, the status becomes `REVISION REQUIRED` with your notes on
   what needs to change, and the item goes back to drafting — it does not
   become "complete with caveats."
-- Find the item's `- **Approval:**` line (currently `PENDING REVIEWER +
-  DATE`) and replace it with **your real name, qualification and the real
-  date** you completed the EN review — e.g. `Approval: Jane Doe,
-  DGR/CBTA Instructor (IATA cert. #XXXXX) — 2026-09-03`. This package
-  field records the EN reviewer event; it does not by itself change the
-  item's program-level Approval state to `APPROVED`.
+- Leave the item's `- **Approval:**` line at `PENDING REVIEWER + DATE` when recording **only** the EN bilingual reviewer event. That event belongs in the EN status/sign-off evidence, with the exact admitted reviewer name, ID, role and real date. Only the independent final Gate 4 sign-off may set `APPROVED — <exact registry full name>, reviewer-id=DGR-RVW-####, <YYYY-MM-DD>`, and only after item-specific direct current Tier A evidence, FR qualified technical sign-off, and separate EN review are all complete and synchronized with the bank/status artifacts. A per-function package's historical instruction to put a reviewer name in the Approval field is superseded by this canonical rule.
 - **Never fabricate a reviewer name, qualification or date, and never
   backdate or postdate.** The date must be a real calendar date on which
   the review actually occurred. If you are reviewing on behalf of someone

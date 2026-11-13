@@ -1,4 +1,6 @@
-# DGR Stage 2B — Function 7.2 Production Bank (Batch 1)
+# DGR Stage 2B — Function 7.2 Production Bank (Batches 1–3; 49 provisional items)
+
+> **Document inventory and release-state precedence (2026-11-13):** This file contains Batches 1–3, with **49 provisional questions** (`Q-7.2-001`–`Q-7.2-049`), not only Batch 1. Historical batch-specific `DRAFT` and `FROZEN FR / SOURCE VERIFIED` statements reflect earlier drafting/Bookshelf checks; they do **not** establish direct item-specific IATA DGR 67th Edition 2026 Tier-A provenance or qualified dated FR/EN review. The per-item effective provenance and import decisions must be checked against `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`, and exact-head CI. **All 49 remain non-importable; no `APPROVED` status is established.** Named qualified FR source verification and separate EN bilingual review, both dated, are outstanding. This is a documentation-only correction, not a change to stems, keys, source evidence, reviewer records, or release authorization.
 
 **Function 7.2**: *Personnel chargé de traiter ou d'accepter des marchandises
 dangereuses présentées comme du fret général.*

@@ -1,5 +1,7 @@
 # DGR Stage 2A — Function 7.7 — Exam Blueprint (PROVISIONAL / CEILING)
 
+> **Chronology and release interpretation (2026-11-13):** This is the original *pre-drafting* Function 7.7 source-yield ceiling (**85**, not a quota) derived from its own **27 official leaf tasks**. The separate Stage 2B bank now contains **53 draft items across Batches 1–3**; statements below about questions not yet being drafted or future drafting steps describe the historical Stage 2A scope, not today's bank inventory. Task `0.3.2` remains a local teaching-source `SOURCE GAP` with no question; task `6.2.1` remains thinly supported and also has no production question. These are **not** DGR-wide confirmed absences. Current per-item regulatory and import status is controlled by `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv` and exact-head CI. No item is eligible for production without direct current 67th Edition 2026 Tier-A evidence, separate qualified dated FR and EN verification, final approval, and secure assessment confidentiality.
+
 **Function 7.7**: *Équipage de conduite* (flight crew / pilots).
 
 **Status: PROVISIONAL — SUBJECT TO SOURCE-ITEM DRAFTING, TIER A REGULATORY

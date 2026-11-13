@@ -1,4 +1,4 @@
-# DGR Stage 2B — Function 7.8 Production Bank (Batch 1)
+# DGR Stage 2B — Function 7.8 Production Bank (Batches 1–3; 51 provisional items)
 
 > **2026-11-12 superseding evidence-scope correction — Q-7.8-018 and Q-7.8-036:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` for both. The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed. Historical conclusions below are preserved only as superseded audit history.
 

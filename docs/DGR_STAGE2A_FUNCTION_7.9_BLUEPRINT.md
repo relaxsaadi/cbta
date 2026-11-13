@@ -10,8 +10,7 @@ GATING, QUALIFIED-INSTRUCTOR VALIDATION, AND ANAC ACCEPTANCE.** Every count
 below is a **source-yield ceiling**, not a target to pad toward — per the
 standing rule in `.claude/rules/dgr-stage2b.md` and
 `docs/FULL_PROGRAM_READINESS_SCOPE.md`: *"Source-supported production-bank
-scope/ceiling established; no arbitrary quota filling."* No question is
-drafted in this pass. This blueprint is built on the cross-validated Stage 1
+scope/ceiling established; no arbitrary quota filling."* No question was drafted during this historical Stage 2A blueprint pass; the subsequently recorded Stage 2B bank now contains 39 provisional items across three batches (`Q-7.9-001`–`Q-7.9-039`). All 39 remain non-importable pending direct current Tier A evidence and separately qualified, dated human FR source and EN bilingual reviews. This blueprint is built on the cross-validated Stage 1
 enumeration in `docs/DGR_STAGE1_FUNCTION_7.9_DRAFT.md` (status:
 CROSS-VALIDATED, confirmed by
 `docs/DGR_STAGE1_FUNCTION_7.9_CROSSVALIDATION.md` — 24 leaf sub-tasks, one

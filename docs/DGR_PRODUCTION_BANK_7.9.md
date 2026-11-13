@@ -1,4 +1,4 @@
-# DGR Stage 2B — Function 7.9 Production Bank (Batch 1 + Batch 2)
+# DGR Stage 2B — Function 7.9 Production Bank (Batches 1–3; 39 provisional items)
 
 > **2026-11-12 current precedence: Q-7.9-022 / Q-7.9-023:** SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED. Historical Q-7.1-001 limited glossary/§1.0/targeted search did not establish whole-DGR absence. KOST F7.9 slides 31–33 are Tier B; direct licensed 2026 Tier A item evidence, qualified named dated FR and separate EN reviews missing. Both questions remain blocked from production import. Older reconciliation text below is historical, not current verification or approval. No exam text or answers changed.
 

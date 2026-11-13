@@ -22,16 +22,30 @@ assert.doesNotMatch(
 );
 console.log('Lead email HTML source-escaping regression: PASS');
 
-\n// #406 privacy regression: provider error payloads and prospect PII must not
-// be emitted to application logs, including after a failed DB insert.
-assert.match(route, /supabasePersisted:\\s*!error/, 'log persistence outcome without claiming unconditional success');
-assert.doesNotMatch(route, /console\\.info\\([^
-]*\\{\\s*email\\b/, 'do not log prospect email at request completion');
-assert.doesNotMatch(route, /console\\.error\\([^
-]*error\\.message/, 'DB error messages may disclose personal data');
-assert.doesNotMatch(route, /console\\.error\\([^
-]*ghlData/, 'GHL error payload may disclose personal data');
-assert.doesNotMatch(route, /console\\.info\\([^
-]*ghlData/, 'do not log provider contact identifiers');
-assert.doesNotMatch(route, /await ghlRes\\.json\\(\\)/, 'provider response body is not needed for logging');
+// #406 privacy regression: never emit untrusted provider payloads or prospect
+// contact fields through request diagnostics, even after a failed DB insert.
+assert.match(
+  route, /supabasePersisted:\s*!error/,
+  'the diagnostic must report DB persistence truthfully'
+);
+assert.doesNotMatch(
+  route, /console\.info\([^\n]*\{\s*email\b/,
+  'do not log prospect email at request completion'
+);
+assert.doesNotMatch(
+  route, /console\.error\([^\n]*error\.message/,
+  'DB error details may disclose personal data'
+);
+assert.doesNotMatch(
+  route, /console\.error\([^\n]*ghlData/,
+  'GHL response bodies may disclose personal data'
+);
+assert.doesNotMatch(
+  route, /console\.info\([^\n]*ghlData/,
+  'do not log provider contact identifiers'
+);
+assert.doesNotMatch(
+  route, /await ghlRes\.json\(\)/,
+  'do not parse unused provider response bodies solely for logging'
+);
 console.log('Lead PII-safe diagnostics regression: PASS');

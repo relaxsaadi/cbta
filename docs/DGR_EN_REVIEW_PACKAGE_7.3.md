@@ -791,7 +791,7 @@ Tier A`).
 
 - **Sub-task:** 0.6.2 Comprendre les exigences d'intervention d'urgence de l'employeur
 - **Type:** True/False
-- **FR status:** `FR SOURCE GAP CONFIRMED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (2026-11-13; former §9.5.1.2 section mismatch does not establish DGR-wide absence; FR source and EN human reviews pending)
 - **FR text:**
   - Statement: *"Vrai ou Faux : selon le cours (Information sur l'intervention d'urgence — DGR 9.5.1.2), il incombe à l'exploitant d'informer tous ses employés des procédures d'intervention d'urgence, lesquelles doivent être disponibles partout où des marchandises dangereuses sont manipulées."*
   - Correct answer: **Vrai**

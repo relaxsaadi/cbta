@@ -88,6 +88,8 @@ function inspectCsv(text, label, idHeader) {
   }
 
   const idIndex = headers.indexOf(idHeader);
+  const functionIndex = headers.indexOf('function');
+  const seenIds = new Map();
   if (idIndex === -1) {
     issues.push(`${label}: missing required header ${idHeader}`);
     return issues;
@@ -107,8 +109,18 @@ function inspectCsv(text, label, idHeader) {
       continue;
     }
 
-    if (!/^Q-7\.(?:10|[1-9])-\d{3}$/i.test(id)) {
+    const normalizedId = id.toUpperCase();
+    if (seenIds.has(normalizedId)) {
+      issues.push(`${label}: CSV row ${csvRow} duplicates ${idHeader} ${id} from row ${seenIds.get(normalizedId)}`);
+    } else {
+      seenIds.set(normalizedId, csvRow);
+    }
+
+    const match = /^Q-(7\.(?:10|[1-9]))-\d{3}$/i.exec(id);
+    if (!match) {
       issues.push(`${label}: CSV row ${csvRow} has invalid question id ${id}`);
+    } else if (functionIndex >= 0 && (values[functionIndex] ?? '').trim() !== match[1]) {
+      issues.push(`${label}: CSV row ${csvRow} FUNCTION does not match question ID ${id}`);
     }
   }
 
@@ -123,6 +135,8 @@ function runSelfTest() {
   const longRow = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,YES,EXTRA\r\n';
   const quoteInsideUnquoted = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,YE"S"\r\n';
   const trailingAfterQuoted = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,"YES"NO\r\n';
+  const duplicateId = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\nQ-7.3-040,7.3,YES\r\n';
+  const wrongFunction = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.2,YES\r\n';
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');
@@ -162,6 +176,13 @@ function runSelfTest() {
   }
   if (!trailingAfterQuoteRejected) {
     throw new Error('Regression fixture failed: trailing text after a closing quote was not rejected.');
+  }
+
+  if (!inspectCsv(duplicateId, 'fixture.csv', 'kost_id').some((issue) => /duplicates kost_id Q-7\.3-040 from row 2/i.test(issue))) {
+    throw new Error('Regression fixture failed: duplicate question ID was accepted.');
+  }
+  if (!inspectCsv(wrongFunction, 'fixture.csv', 'kost_id').some((issue) => /FUNCTION does not match question ID/i.test(issue))) {
+    throw new Error('Regression fixture failed: question ID/FUNCTION mismatch was accepted.');
   }
 
   console.log('PASS: import/reconciliation CSV structural regression fixtures');

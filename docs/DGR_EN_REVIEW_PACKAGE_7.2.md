@@ -967,7 +967,7 @@ unchanged and still entirely open for every item below.
 ### Q-7.2-045 — Procédure en cas de contact corporel avec le contenu d'un colis de MD
 
 - **Sub-task:** 0.6.1 Créer une sensibilisation aux procédures d'urgence générales
-- **FR status:** `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (unchanged)
+- **FR status:** `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` (effective 2026-11-13; historical `FR SOURCE GAP CONFIRMED` not supported by direct per-item 2026 IATA DGR evidence; NOT APPROVED / NO IMPORT)
 - **Type:** MCQ, single-answer
 - **FR text (verbatim):**
   - Stem: *"Selon le cours (Procédures d'urgence générales — étape 5), que doit faire une personne dont le corps ou les vêtements sont entrés en contact avec le contenu d'un colis de marchandises dangereuses ?"*

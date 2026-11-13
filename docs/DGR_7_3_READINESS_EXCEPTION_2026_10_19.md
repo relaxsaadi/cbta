@@ -1,5 +1,9 @@
 # Function 7.3 — Stage 2B.1 regulatory/bilingual exception (2026-10-19)
 
+## 2026-11-13 provenance correction — Q-7.3-039
+
+The previous `FR SOURCE GAP CONFIRMED` label reused a historical §9.5.1.2 section-specific mismatch; for 7.3 it also cross-applied the 7.2 conclusion. Such a finding does not establish the claimed employer/employee duty is absent throughout the current 67th Edition 2026. Correct current state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`. The original record remains historical, not direct item-specific Tier A evidence. Tier B course basis only; no question/answer change, approval, EN sign-off, or eligibility for import. Named, qualified FR verifier/date and a separate EN technical reviewer/date remain required.
+
 **DRAFT / PRE-PRODUCTION / NOT APPROVED / NOT READY.**
 
 ## 2026-11-12 evidence-scope correction — Q-7.3-017

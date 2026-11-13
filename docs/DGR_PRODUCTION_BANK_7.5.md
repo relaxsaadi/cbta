@@ -1,4 +1,4 @@
-# DGR Stage 2B — Function 7.5 Production Bank (Batch 1)
+# DGR Stage 2B — Function 7.5 Production Bank (Batches 1–3)
 
 > **2026-11-12 superseding evidence-scope correction (Q-7.5-018):** Historical `FR SOURCE GAP CONFIRMED (cross-applied)` and the assertion of DGR-wide silence on danger/risk are **not established** by the limited Q-7.1-001 §1.0/Appendix A/term search. **Effective state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`.** KOST's flammable-liquid example remains Tier B, not positive or negative 67th Edition 2026 Tier-A proof. The 2026-08-29 wording below is historical. No authorized new reading, qualified dated FR or independent EN verification, answer change, approval or import is claimed.
 

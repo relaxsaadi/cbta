@@ -45,8 +45,8 @@ were.
 **Function 7.5 does not have this problem, exactly like Function 7.3
 before it.** The FR question text for every one of these 44 items — stem,
 every answer option, the marked correct answer, and its source citation —
-is already stored **verbatim** in `docs/DGR_PRODUCTION_BANK_7.5.md` (Batch
-1 and Batch 2, both drafted from the actual KOST Function 7.5 course PDF,
+is already stored **verbatim** in `docs/DGR_PRODUCTION_BANK_7.5.md` (Batches
+1–3, drafted from the actual KOST Function 7.5 course PDF,
 slide-cited). This package translates that **actual, already-written FR
 text directly** — no reconstruction, no gloss, no working-approximation
 step. The FR text quoted below is copied verbatim (stem + options, or

@@ -1,5 +1,7 @@
 # DGR Stage 2A — Function 7.2 — Exam Blueprint (PROVISIONAL / CEILING)
 
+> **Historical blueprint vs. current bank (2026-11-13):** This Stage 2A document records the original source-yield ceiling (**89**, not a quota) for Function 7.2's own **23** CBTA leaf tasks. Its statements that no question was drafted *in this pass* describe only that earlier blueprint pass. The separate Stage 2B bank now contains **49 provisional items in three batches** (`Q-7.2-001`–`Q-7.2-049`), all **non-importable** under `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`. An item needs direct current IATA DGR 67th Edition 2026 Tier-A claim/answer evidence or an explicit unresolved `SOURCE GAP`/`SOURCE CONFLICT` disposition, named qualified dated FR source verification, independent qualified dated EN bilingual review, and final authorized approval before production. Consult the per-item reconciliation CSV and exact-head CI; this historical blueprint is not a certification or an approval.
+
 **Function 7.2**: *Personnel chargé de traiter ou d'accepter des marchandises
 dangereuses présentées comme du fret général.*
 

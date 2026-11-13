@@ -76,7 +76,7 @@ function normalizeHeader(value) {
   return value.trim().toLowerCase();
 }
 
-function inspectCsv(text, label, idHeader) {
+function inspectCsv(text, label, idHeader, collectedIds = null) {
   const rows = parseCsv(text, label);
   if (rows.length === 0) return [`${label}: empty CSV`];
 
@@ -90,6 +90,9 @@ function inspectCsv(text, label, idHeader) {
   const idIndex = headers.indexOf(idHeader);
   const functionIndex = headers.indexOf('function');
   const seenIds = new Map();
+  if (functionIndex === -1) {
+    issues.push(`${label}: missing required header function`);
+  }
   if (idIndex === -1) {
     issues.push(`${label}: missing required header ${idHeader}`);
     return issues;
@@ -110,6 +113,7 @@ function inspectCsv(text, label, idHeader) {
     }
 
     const normalizedId = id.toUpperCase();
+    if (collectedIds) collectedIds.add(normalizedId);
     if (seenIds.has(normalizedId)) {
       issues.push(`${label}: CSV row ${csvRow} duplicates ${idHeader} ${id} from row ${seenIds.get(normalizedId)}`);
     } else {
@@ -127,6 +131,22 @@ function inspectCsv(text, label, idHeader) {
   return issues;
 }
 
+// Both controlled registries must describe the same complete provisional item set.
+// Without this check, deleting a NO/blocked row from only one CSV can pass
+// the import-eligibility checks while silently losing an audit record.
+function compareIdSets(leftIds, rightIds, leftLabel, rightLabel) {
+  const issues = [];
+  const onlyLeft = [...leftIds].filter((id) => !rightIds.has(id)).sort();
+  const onlyRight = [...rightIds].filter((id) => !leftIds.has(id)).sort();
+  if (onlyLeft.length) {
+    issues.push(`${rightLabel}: missing ${onlyLeft.length} question ID(s) from ${leftLabel}: ${onlyLeft.slice(0, 10).join(', ')}${onlyLeft.length > 10 ? ', ...' : ''}`);
+  }
+  if (onlyRight.length) {
+    issues.push(`${leftLabel}: missing ${onlyRight.length} question ID(s) from ${rightLabel}: ${onlyRight.slice(0, 10).join(', ')}${onlyRight.length > 10 ? ', ...' : ''}`);
+  }
+  return issues;
+}
+
 function runSelfTest() {
   const good = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,YES\r\n';
   const goodQuoted = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,"YES"\r\n';
@@ -137,6 +157,7 @@ function runSelfTest() {
   const trailingAfterQuoted = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,"YES"NO\r\n';
   const duplicateId = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\nQ-7.3-040,7.3,YES\r\n';
   const wrongFunction = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.2,YES\r\n';
+  const missingFunctionHeader = 'KOST_ID,IMPORT_ELIGIBLE\r\nQ-7.3-040,NO\r\n';
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');
@@ -185,6 +206,23 @@ function runSelfTest() {
     throw new Error('Regression fixture failed: question ID/FUNCTION mismatch was accepted.');
   }
 
+  if (!inspectCsv(missingFunctionHeader, 'fixture.csv', 'kost_id').some((issue) => /missing required header function/i.test(issue))) {
+    throw new Error('Regression fixture failed: missing FUNCTION column was accepted.');
+  }
+
+  const matching = new Set(['Q-7.3-040', 'Q-7.3-041']);
+  if (compareIdSets(matching, new Set(matching), 'reconciliation', 'import').length !== 0) {
+    throw new Error('Regression fixture failed: matching item sets were rejected.');
+  }
+  const missingImport = compareIdSets(matching, new Set(['Q-7.3-040']), 'reconciliation', 'import');
+  if (!missingImport.some((issue) => /Q-7\.3-041/.test(issue))) {
+    throw new Error('Regression fixture failed: dropped blocked/import-ineligible item was not detected.');
+  }
+  const extraImport = compareIdSets(new Set(['Q-7.3-040']), matching, 'reconciliation', 'import');
+  if (!extraImport.some((issue) => /Q-7\.3-041/.test(issue))) {
+    throw new Error('Regression fixture failed: extra import item without reconciliation was not detected.');
+  }
+
   console.log('PASS: import/reconciliation CSV structural regression fixtures');
 }
 
@@ -195,6 +233,7 @@ if (process.argv.includes('--test')) {
 
 const root = process.cwd();
 const issues = [];
+const idsByArtifact = new Map();
 
 for (const artifact of ARTIFACTS) {
   const absolute = path.join(root, artifact.path);
@@ -204,10 +243,21 @@ for (const artifact of ARTIFACTS) {
   }
 
   try {
-    issues.push(...inspectCsv(fs.readFileSync(absolute, 'utf8'), artifact.path, artifact.idHeader));
+    const ids = new Set();
+    issues.push(...inspectCsv(fs.readFileSync(absolute, 'utf8'), artifact.path, artifact.idHeader, ids));
+    idsByArtifact.set(artifact.path, ids);
   } catch (error) {
     issues.push(`${artifact.path}: parse failure: ${error.message}`);
   }
+}
+
+if (issues.length === 0 && idsByArtifact.size === ARTIFACTS.length) {
+  issues.push(...compareIdSets(
+    idsByArtifact.get(ARTIFACTS[0].path),
+    idsByArtifact.get(ARTIFACTS[1].path),
+    ARTIFACTS[0].path,
+    ARTIFACTS[1].path,
+  ));
 }
 
 if (issues.length > 0) {
@@ -216,4 +266,4 @@ if (issues.length > 0) {
   process.exit(1);
 }
 
-console.log('PASS: import/reconciliation CSV rows have strict quoting, stable width, valid IDs, and no non-empty blank-ID rows.');
+console.log('PASS: import/reconciliation CSVs have strict quoting, stable widths, function-bound unique IDs, and identical item populations.');

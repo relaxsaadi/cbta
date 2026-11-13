@@ -22,9 +22,11 @@ substantive corrections found on second pass).
 qualification levels apply here.** Function 7.6 has the leanest sub-task
 count found in this program so far (28, vs. 44/23/33/37/25 for
 7.1/7.2/7.3/7.4/7.5), consistent with its 1-day course duration, and an
-own-terms block/sub-block selection (Block 0 = 18 items with no gap; Block 4
-activates only sub-blocks 4.1+4.3, not 4.2; Block 6 activates only leaf
-6.1.6; Block 7 = 4 items at ★★, not ★). This blueprint's own total must not
+own-terms block/sub-block selection (Block 0 = 18 official leaf tasks,
+including the local teaching-source `SOURCE GAP` at 0.3.2; Block 4
+activates only sub-blocks 4.1+4.3, not 4.2, with a second local source
+gap at 4.3.3; Block 6 activates only leaf 6.1.6; Block 7 = 4 items
+at ★★, not ★). This blueprint's own total must not
 be assumed to predict any function still to come.
 
 ## Method

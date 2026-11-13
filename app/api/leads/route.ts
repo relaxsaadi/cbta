@@ -53,8 +53,9 @@ export async function POST(req: Request) {
   })
 
   if (error) {
-    // Table might not exist yet — log and continue
-    console.error('[leads] Supabase insert error:', error.message)
+    // Insert errors can contain personal data (e.g., duplicate email details).
+    // Keep only the non-PII database error code in application logs.
+    console.error('[leads] Supabase insert failed:', { code: error.code || 'unknown' })
   }
 
   // Notify via Resend if configured
@@ -82,7 +83,7 @@ export async function POST(req: Request) {
             <tr><td style="padding:4px 12px 4px 0;color:#666">Catégorie DGR</td><td>${escapeHtml(categorie_dgr) || '—'}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#666">Session souhaitée</td><td><strong>${session_souhaitee === 'aout' ? '18-22 Août 2026 ⭐' : '15-19 Septembre 2026'}</strong></td></tr>
             ${message ? `<tr><td style="padding:4px 12px 4px 0;color:#666">Message</td><td>${escapeHtml(message)}</td></tr>` : ''}
-            <tr><td style="padding:4px 12px 4px 0;color:#666">Source</td><td>${source || 'direct'}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#666">Source</td><td>${escapeHtml(source || 'direct')}</td></tr>
           </table>
           <hr style="margin:20px 0;border:none;border-top:1px solid #eee"/>
           <p style="font-size:12px;color:#999">
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
         `,
         reply_to: String(email),
       }),
-    }).catch(err => console.error('[leads] Resend error:', err))
+    }).catch(() => console.error('[leads] Resend transport error'))
   }
 
   // Sync to GoHighLevel CRM
@@ -120,17 +121,20 @@ export async function POST(req: Request) {
         body: JSON.stringify(ghlPayload),
       })
 
-      const ghlData = await ghlRes.json()
+      // Provider response bodies may echo prospect names, emails and phones.
+      // Status is sufficient for non-sensitive diagnostics.
       if (!ghlRes.ok) {
-        console.error('[leads] GHL error:', ghlData)
+        console.error('[leads] GHL HTTP error:', { status: ghlRes.status })
       } else {
-        console.info('[leads] GHL contact créé:', ghlData?.contact?.id)
+        console.info('[leads] GHL sync completed')
       }
-    } catch (err) {
-      console.error('[leads] GHL sync failed:', err)
+    } catch {
+      console.error('[leads] GHL transport error')
     }
   }
 
-  console.info('[leads] inscription enregistrée:', { email, session_souhaitee, entreprise })
+  // Do not log prospect PII or claim DB registration success when insert failed.
+  // Response success policy remains unchanged pending #406 business decision.
+  console.info('[leads] request processed:', { supabasePersisted: !error })
   return NextResponse.json({ ok: true })
 }

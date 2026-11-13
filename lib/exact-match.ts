@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 export const SITE = "https://dgr.kostacademy.com";
 
 export const OFFICIAL_FR =
-  "centre CBTA référencé IATA, agréé ANAC pour les fonctions 7.1 à 7.10, réf. ANAC/DSOA/SAL-DGR/01/2026";
+  "centre de formation DGR/CBTA dont les habilitations applicables doivent être vérifiées pour la prestation envisagée";
 
 export const OFFICIAL_EN =
-  "CBTA centre listed by IATA and approved by ANAC for functions 7.1 to 7.10, ref. ANAC/DSOA/SAL-DGR/01/2026";
+  "DGR/CBTA training centre whose applicable authorizations must be verified for the proposed course";
 
 export const CONTACT_EMAIL = "cbta@kostacademy.com";
 export const WHATSAPP_DISPLAY = "+213 542 305 383";

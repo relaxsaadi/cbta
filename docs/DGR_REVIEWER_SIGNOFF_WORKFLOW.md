@@ -4,6 +4,7 @@ This file defines the full gate sequence a question-bank item must pass
 through to reach `APPROVED`, and the exact sign-off mechanics for each
 gate. It complements, and does not replace:
 
+- `docs/DGR_REVIEWER_REGISTRY.md` — the binding controlled-admission and reviewer-id format for all terminal sign-offs.
 - `docs/DGR_EN_REVIEWER_GUIDE.md` — the bilingual (EN) reviewer's own
   onboarding guide and per-item sign-off format.
 - `docs/DGR_EN_TERMINOLOGY_MASTER.md` — the cross-function terminology
@@ -13,6 +14,8 @@ gate. It complements, and does not replace:
 - `docs/RECOVERED_STAGE2A_CONTEXT.md`'s "Binding source restrictions
   recovered" (10 numbered rules) — restrictions 8, 9, and 10 are the direct
   origin of this workflow's gate structure.
+
+**Reviewer identity gate (current canonical rule):** every terminal FR technical review, EN bilingual review, and final `APPROVED` record must name an active, `OWNER VERIFIED` human in `docs/DGR_REVIEWER_REGISTRY.md`, include exactly one matching `reviewer-id=DGR-RVW-####`, and carry the real date and applicable qualification/bilingual evidence references in the admitted reviewer record. Older name/role/date-only examples in historical per-function packages are not sufficient. Never add a fictional reviewer, credential, or approval to make a check pass.
 
 **This file is preparation only.** No item's status is changed by writing
 it. No reviewer has been named or engaged. Zero items anywhere in the
@@ -82,7 +85,7 @@ workflow does not presume it either way.
 
 **Recording the sign-off:** append to the item's FR status field, e.g.
 `FROZEN FR / SOURCE VERIFIED — FR TECHNICAL REVIEW COMPLETE (reviewed by
-<full name>, <DGR/CBTA role or credential>, <YYYY-MM-DD>)`.
+<exact registry full name>, reviewer-id=DGR-RVW-####, <DGR/CBTA role or credential>, <YYYY-MM-DD>)`.
 
 ### Gate 3 — EN bilingual reviewer sign-off
 
@@ -96,7 +99,7 @@ either way.
 
 **Recording the sign-off:** change the item's EN status field from
 `BILINGUAL TECHNICAL REVIEW REQUIRED` to `BILINGUAL TECHNICAL REVIEW
-COMPLETE (reviewed by <full name>, <bilingual DGR/CBTA role or credential>,
+COMPLETE (reviewed by <exact registry full name>, reviewer-id=DGR-RVW-####, <bilingual DGR/CBTA role or credential FR/EN>,
 <YYYY-MM-DD>)`. The qualification is recorded explicitly so the durable
 artifact proves that the reviewer was not merely named, but identified in
 the qualified DGR/bilingual role required by this gate.
@@ -105,7 +108,7 @@ the qualified DGR/bilingual role required by this gate.
 
 **What:** Once Gates 1–3 are all individually complete and recorded for
 one item, the item's Approval field changes from `PENDING REVIEWER +
-DATE` to `APPROVED — <reviewer name>, <YYYY-MM-DD>` (the reviewer name
+DATE` to `APPROVED — <exact registry full name>, reviewer-id=DGR-RVW-####, <YYYY-MM-DD>` (the reviewer name
 here should be whoever takes final accountability for the item as a
 whole — often, but not necessarily, the Gate 2 FR reviewer). The date must
 be the real sign-off date: a valid calendar date that is not in the

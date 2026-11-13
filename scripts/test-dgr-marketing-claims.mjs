@@ -38,4 +38,12 @@ for (const text of forbidden) {
 for (const text of permitted) {
   assert.doesNotThrow(() => assertSafeDgrMarketingCopy(text), text);
 }
+// The shared public footer is static JSX and bypasses the generated-copy guard.
+// A registry link must not imply unsupported first-provider status or that all
+// KOST DGR training is "official" absent separately verified current evidence.
+const footer = readFileSync(resolve("components/Footer.tsx"), "utf8");
+assert.doesNotMatch(footer, /1\s*<sup>er<\/sup>\s*CBTA Provider IATA/i);
+assert.doesNotMatch(footer, /Formations DGR officielles/i);
+assert.match(footer, /Consulter le registre IATA des centres CBTA/);
+
 console.log("PASS: DGR marketing-copy claim guard regression cases");

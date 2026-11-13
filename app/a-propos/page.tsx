@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "À propos de KOST GROUP",
     description:
-      "Premier centre IATA CBTA Provider certifié en Algérie. Certification DGR officielle pour l'Afrique francophone.",
+      "Centre IATA CBTA Provider en Algérie. Formations DGR adaptées aux fonctions exercées en Afrique francophone.",
     url: "/a-propos",
   },
 };
@@ -27,7 +27,7 @@ const orgSchema = {
   logo: `${siteUrl}/kost-group-logo.svg`,
   image: `${siteUrl}/og-image.jpg`,
   description:
-    "Premier centre IATA CBTA Provider certifié en Algérie, proposant les formations DGR (Marchandises Dangereuses) officielles pour l'aviation et le fret aérien en Afrique francophone.",
+    "Centre IATA CBTA Provider en Algérie proposant des formations CBTA pour les fonctions du transport aérien de marchandises dangereuses.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki",
@@ -133,9 +133,9 @@ export default function AProposPage() {
           </h2>
           <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed space-y-4">
             <p>
-              En Algérie et en Afrique francophone, se former à l'IATA DGR revenait, jusqu'à
-              récemment, à se déplacer jusqu'à Bruxelles ou Paris pour une formation facturée
-              entre 3 000 et 5 000 euros. KOST GROUP a été fondé pour rompre avec cette réalité.
+              Pour certains professionnels d'Afrique francophone, une formation spécialisée DGR
+              implique un déplacement et des frais supplémentaires. KOST GROUP propose
+              des parcours de formation accessibles depuis Alger.
             </p>
             <p>
               En obtenant la certification IATA CBTA Provider — la seule en Algérie, vérifiable
@@ -148,15 +148,14 @@ export default function AProposPage() {
               >
                 iata.org/cbta-center-registry
               </a>{" "}
-              — nous proposons les 12 formations IATA DGR officielles à partir de 650 €, avec
-              le même certificat qu'à Bruxelles, valide auprès des 300+ compagnies aériennes
-              membres IATA.
+              — nous proposons des formations fondées sur les fonctions CBTA 7.1 à 7.10.
+              Le périmètre, les tarifs, les modalités d'évaluation et la reconnaissance
+              des attestations sont à confirmer selon le programme et l'organisme concerné.
             </p>
             <p>
               Nos formations couvrent tous les rôles réglementés : expéditeurs, agents de fret,
-              handling, équipages, dispatchers, agents de sûreté. Sessions en présentiel à Alger
-              ou en intra-entreprise dans toute l'Afrique francophone (Maroc, Sénégal, Tunisie,
-              Côte d'Ivoire, Cameroun, Gabon…).
+              handling, équipages, dispatchers, agents de sûreté. Sessions en présentiel à Alger ou en intra-entreprise dans les pays desservis,
+              sous réserve des conditions et autorisations locales applicables.
             </p>
           </div>
         </section>
@@ -169,10 +168,10 @@ export default function AProposPage() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { num: "13", label: "Formations DGR certifiées IATA" },
-                { num: "95%+", label: "Taux de réussite examen IATA" },
-                { num: "9", label: "Pays couverts en Afrique" },
-                { num: "24 mois", label: "Validité du certificat IATA" },
+                { num: "7.1–7.10", label: "Fonctions CBTA couvertes dans le catalogue" },
+                { num: "Par fonction", label: "Évaluation selon les tâches exercées" },
+                { num: "FR / EN", label: "Langues à confirmer par session" },
+                { num: "À vérifier", label: "Exigences de formation récurrente" },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -264,12 +263,12 @@ export default function AProposPage() {
               {
                 icon: BadgeCheck,
                 title: "IATA CBTA Provider — seul en Algérie",
-                desc: "Certification vérifiable sur iata.org/cbta-center-registry. Le certificat délivré est identique à celui obtenu à Bruxelles.",
+                desc: "Statut de prestataire à vérifier sur le registre IATA. La reconnaissance des attestations dépend de l’employeur, de l’opérateur et de l’autorité compétente.",
               },
               {
                 icon: Award,
-                title: "Retake gratuit si échec",
-                desc: "Si vous ne réussissez pas l'examen IATA du premier coup, nous vous offrons une session de rattrapage sans frais supplémentaires.",
+                title: "Modalités de rattrapage",
+                desc: "Les conditions de rattrapage et les éventuels frais sont précisés dans la convention de formation applicable.",
               },
               {
                 icon: Users,
@@ -278,8 +277,8 @@ export default function AProposPage() {
               },
               {
                 icon: Globe,
-                title: "Manuel IATA 2026 inclus",
-                desc: "Chaque participant reçoit le manuel IATA DGR 67e édition (valeur 180 €) inclus dans le prix de la formation.",
+                title: "Supports pédagogiques",
+                desc: "Les supports sous licence et leur éventuelle fourniture sont précisés dans le programme et le devis de la session.",
               },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="flex gap-4 p-5 bg-[#f7f9fc] rounded-xl border border-gray-100">

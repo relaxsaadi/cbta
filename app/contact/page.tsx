@@ -10,12 +10,12 @@ import TrackedLink from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contactez KOST GROUP pour une formation IATA DGR à Alger. WhatsApp, formulaire, téléphone — réponse sous 24h.",
+    "Contactez KOST GROUP au sujet des formations DGR/CBTA à Alger. WhatsApp, formulaire et téléphone ; modalités et disponibilités à confirmer.",
   alternates: { canonical: "/contact" },
   openGraph: {
     title: "Contacter KOST GROUP — Formation IATA DGR",
     description:
-      "Réponse sous 24h · WhatsApp +213 542 30 53 83 · Bab Ezzouar, Alger",
+      "Contact et renseignements DGR/CBTA · WhatsApp +213 542 30 53 83 · Bab Ezzouar, Alger",
     url: "/contact",
   },
 };
@@ -50,7 +50,7 @@ export default function ContactPage() {
               Contactez-nous
             </h1>
             <p className="text-white/70 text-base max-w-xl">
-              Réponse sous 24h · Devis gratuit · Sessions disponibles Juillet – Décembre 2026
+              Contactez-nous pour confirmer les dates, les disponibilités et les modalités des prochaines sessions.
             </p>
           </div>
         </section>

@@ -485,8 +485,7 @@ not silently left as an open stale-citation flag.
 
 ## Pending source targets
 
-_Pilot (Q-7.1-001–012): none — Q-7.1-001 was the last open pilot item; see
-above for its resolution._
+_Pilot (Q-7.1-001–012): Q-7.1-001 remains `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` following the 2026-11-12 evidence-scope correction; the earlier limited glossary check did not prove DGR-wide absence. No qualified FR/EN sign-off or import is implied. The other pilot items retain their separately documented source states; see the item entries above._
 
 _Production bank Batch 1 (Q-7.1-013–019): none — all 7 Tier A verified
 2026-08-25 (see per-item entries above). Function 7.1 Batch 1 is fully

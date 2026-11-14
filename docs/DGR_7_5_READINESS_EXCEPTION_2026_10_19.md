@@ -2,6 +2,12 @@
 
 **DRAFT / PRE-PRODUCTION / NOT APPROVED / NOT READY.** This note documents GitHub CI/repository audit only. It is **not** a direct reading of licensed IATA DGR 67th Edition 2026, a claim that an answer is wrong, a human signoff, or proof of IATA/ANAC authorization.
 
+## 2026-11-14 superseding exact-head CI reconciliation — FR/EN status mirrors
+
+At PR #3 head `51ec3b909265b498df35f5e59b30bcd09cfca480`, the [Full DGR readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/43633221728) reports **16** overlapping bank/EN items with stale or missing effective FR-status mirrors, **not 17**: `Q-7.5-002`, `006`, `007`, `010`, `012`, `015`, `016`, `017`, `020`, `025`, `027`, `028`, `029`, `030`, `038`, `040`. The 17-item list in the historical snapshot below remains historical evidence, not the current count.
+
+`Q-7.5-018` no longer appears **in this specific FR-status mirror mismatch category**; the current FR bank and separate EN draft package both carry `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`. It remains **unverified, not independently EN-approved and non-importable**. This is not evidence that the 2026 DGR has no applicable rule or that the question has been approved. The same exact-head CI still reports **12** historically FROZEN items relying on non-item-specific Tier-A provenance. No licensed DGR text, human FR/EN signoff, answer, import eligibility, or runtime state is changed by this documentation reconciliation.
+
 ## 2026-11-12 superseding Q-7.5-018 finding
 
 The historical definitive `FR SOURCE GAP CONFIRMED (cross-applied)` classification overstated the limited §1.0/Appendix A/targeted-term review inherited from Q-7.1-001. Effective item state: **`SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**; mirrored in the bank, matrix, FR CSV, blocked V2 import CSV and separate EN draft package. The course example remains Tier B. No new 2026 licensed direct item check, complete DGR-wide absence finding, qualified dated FR/EN reviewer, changed answer, approval, import or deployment is claimed.
@@ -14,7 +20,7 @@ The item concerning operator approval for more than 15 PED / more than 20 spare 
 
 Function 7.5 has its **own 25 official leaf tasks** from TABLEAU 7.5.A, recorded in `docs/DGR_OFFICIAL_TASK_SET_7.5.md`; it is not Function 7.1's task model. Consult `docs/DGR_STAGE2A_FUNCTION_7.5_BLUEPRINT.md`, `docs/DGR_SOURCE_COMPETENCY_MATRIX_7.5.md`, `docs/DGR_PRODUCTION_BANK_7.5.md` (**44** draft IDs, Q-7.5-001–044) and separate `docs/DGR_EN_REVIEW_PACKAGE_7.5.md` (translations drafted, not independently approved).
 
-## Exact-head findings
+## Historical exact-head findings (2026-10-19 snapshot)
 
 At PR #3 head `47343df68e4a4ea301c68651d13241be6d55cfbb`, the [Direct item Tier-A provenance check](https://github.com/relaxsaadi/cbta/actions/runs/39223102579/job/117962829428) and [Full DGR readiness check](https://github.com/relaxsaadi/cbta/actions/runs/39223097425/job/117962995265) failed.
 

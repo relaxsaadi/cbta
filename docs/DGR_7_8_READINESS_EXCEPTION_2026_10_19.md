@@ -2,6 +2,16 @@
 
 **Scope:** KOST DGR/CBTA Stage 2B.1; PR #3; Function **7.8 — flight operations personnel / flight dispatchers**. **DRAFT / PRE-PRODUCTION / NOT APPROVED.** This is a repository and exact-head GitHub Actions audit, **not** a fresh reading of licensed IATA DGR 67th Edition 2026 text, qualified FR/EN signoff, or ANAC/IATA authorization.
 
+## 2026-11-14 current exact-head CI reconciliation — FR/EN mirror count (15, not 17)
+
+At PR #3 HEAD `d4f1798c3ad91fb9272ba315663380d688682f38`, the [DGR regulatory readiness CI run](https://github.com/relaxsaadi/cbta/actions/runs/43617577001), **Full DGR readiness** job, reports **15** Function 7.8 bank/EN entries with missing, unclassified or stale **mirrored FR status**, not the **17** entries recorded in the historical 2026-10-19 snapshot below:
+
+`Q-7.8-007`, `Q-7.8-008`, `Q-7.8-009`, `Q-7.8-011`, `Q-7.8-016`, `Q-7.8-017`, `Q-7.8-021`, `Q-7.8-027`, `Q-7.8-033`, `Q-7.8-035`, `Q-7.8-040`, `Q-7.8-043`, `Q-7.8-046`, `Q-7.8-047`, `Q-7.8-050`.
+
+`Q-7.8-018` and `Q-7.8-036` are **not** in this *specific current FR-status-mirror drift class*, but **remain SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED**. Their exclusion does **not** signify verified absence, qualified source review or independent EN approval. The same exact-head CI still reports **12** historically FROZEN items lacking adequately individualized Tier-A provenance (the 12-item list below); the 15 and 12 groups overlap and must not be added as distinct defects. The broader affirmative per-item evidence gate also fails.
+
+This is a documentation-only correction of the live exception count. Keep all 51 Function 7.8 draft questions **not importable**. The task set remains independently derived from TABLEAU 7.8.A (23 leaf tasks; Block 0=18, Block 6.2=5, no Block 7). No current-edition DGR regulatory rule, question wording, answer, FR review, EN review, approval or deployment was established or changed. The dated 17-entry evidence below is preserved as a historical audit snapshot, **not the current count**.
+
 ## 2026-11-12 superseding source-gap correction — Q-7.8-018 / Q-7.8-036
 
 Both items now have effective `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` status. The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed. The earlier quoted 12/17 CI findings remain 2026-10-19 historical snapshots and are not evidence of a current acceptance.

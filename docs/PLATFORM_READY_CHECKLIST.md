@@ -6,6 +6,10 @@ This checklist defines the end condition for the project. Do **not** claim `PLAT
 
 ## A. Regulatory / Question Bank
 
+> **2027 edition-transition watch (2026-11-14; prospective, NOT approval):** IATA's [official DGR documentation](https://www.iata.org/dgr-updates) states that the **68th Edition (2027)** electronic DGR is already available but **takes effect on 2027-01-01**; see also IATA's [2026-09-07 publication announcement](https://www.iata.org/en/pressroom/2026-releases/09-07-iata-releases-2027-cargo-ground-operations-manuals/). The applicable 2026 verification baseline remains the **67th Edition (2026)** as of this note. A 2027 summary or the ICAO updates must **not** be passed off as direct, item-specific current-2026 Tier A evidence. This watch does not alter any item, reviewer, import or readiness status.
+
+- [ ] **Before any production exam release or use on/after 2027-01-01**, independently rebaseline **each Function 7.1–7.10** against the DGR edition then in force (including applicable addenda and State/Operator Variations). Recheck each regulatory question's claim, correct answer, distractors and locators; reperform qualified dated FR verification, separate dated EN review, confidential-item eligibility and release/CI gates as appropriate. Do not mechanically carry forward 2026 item approvals, treat a public significant-changes summary as the licensed 68th Edition, or silently overwrite historical 2026 evidence. This is a **future-effective-date gate**, not a claim that the 2027 edition governs November 2026 exams.
+
 **Separate fail-closed checks for Functions 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9 and 7.10 — not a Function 7.1 template:**
 
 - [ ] For **each** function, verify its own current CBTA task set, source/competency matrix and Stage 2A blueprint before judging question coverage. Do not copy Function 7.1's 44-subtask structure or mechanically assign functions by job title/sector.

@@ -298,6 +298,19 @@ export const FORMATIONS: Formation[] = [
 export const getFormationBySlug = (slug: string): Formation | undefined =>
   FORMATIONS.find((f) => f.slug === slug);
 
+/**
+ * Catalogue rows that have no App Router page of their own.
+ * They resolve to the existing function page, at the recyclage anchor.
+ */
+export const FORMATION_PAGE_ALIASES: Record<string, string> = {
+  "dgr-7-1-recurrent": "/dgr-7-1#recyclage",
+  "dgr-7-3-recurrent": "/dgr-7-3#recyclage",
+};
+
+export function getFormationHref(slug: string): string {
+  return FORMATION_PAGE_ALIASES[slug] ?? `/${slug}`;
+}
+
 export const COUNTRIES = [
   { code: "DZ", name: "Algérie", flag: "🇩🇿" },
   { code: "MA", name: "Maroc", flag: "🇲🇦" },

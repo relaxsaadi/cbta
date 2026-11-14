@@ -2,6 +2,16 @@
 
 **Scope:** Stage 2B.1, PR #3, KOST DGR/CBTA Functions 7.1–7.10. This exception documents Function **7.6** only; **PRE-PRODUCTION / NOT APPROVED**. It records CI findings; it does not independently re-verify the licensed IATA DGR.
 
+## 2026-11-14 exact-head FR/EN mirror count reconciliation (18, not historical 19)
+
+At PR #3 HEAD `ccf226ab0fcb27f62ac567e8512de3672737d2fe`, the completed [DGR regulatory readiness run 43627222015](https://github.com/relaxsaadi/cbta/actions/runs/43627222015), **Full DGR readiness** job `132545790953` (2026-11-14), reports **18** overlapping Function 7.6 bank/EN entries with stale, missing, or unclassifiable mirrored **FR status**, rather than the **19** from the historical 2026-10-19 snapshot preserved below. The current set is:
+
+`Q-7.6-005`, `007`, `009`, `011`, `012`, `013`, `015`, `016`, `017`, `020`, `023`, `025`, `038`, `040`, `043`, `044`, `045`, `046` (short suffixes in this list retain the `Q-7.6-` prefix).
+
+**`Q-7.6-018` is no longer in this particular FR-status-mirror mismatch set**, following the effective-state correction of 2026-11-12. It nonetheless **remains `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**, not independently verified against the licensed current 2026 DGR. Do not infer that its teaching-level Tier-B danger/risk example has become DGR-verified or eligible for approval/import. The same exact-head full-readiness CI still flags **13** Function 7.6 historically `FROZEN FR / SOURCE VERIFIED` items with insufficiently individualized Tier-A support; these sets overlap and must not be added as independent defects. The separate affirmative direct-evidence gate also fails.
+
+This is a **documentation-only correction of the current CI classification count**. Function 7.6's own 28-leaf official task set, provisional 89-question source ceiling, 56 draft items and independent FR matrix/EN package remain unchanged; **all 56 items remain non-importable**. Direct item-specific IATA DGR 67th Edition 2026 evidence (including answers/distractors), a named qualified FR reviewer and date, separate qualified dated EN technical review, and final controlled approval are still required. Historical findings below remain intact for audit; no question, answer, source artifact, reviewer admission, security setting, merge or deployment is changed by this note.
+
 ## 2026-11-12 superseding Q-7.6-018 provenance correction
 
 Historical `FR SOURCE GAP CONFIRMED (cross-applied)` used Q-7.1-001's limited glossary/§1.0/targeted-term review to infer DGR-wide silence. That conclusion is not established. **Effective state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`**, aligned in F7.6 bank, independent matrix, reconciliation and blocked import CSVs, and unapproved EN review package. The KOST Function 7.6 course worked example stays Tier B. No new licensed 2026 direct evidence, proved DGR absence, qualified dated FR/EN review, answer change, approval, import, merge or deployment is claimed. Historical CI counts below are preserved as earlier exact-head findings, not new verification.

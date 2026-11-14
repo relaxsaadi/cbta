@@ -35,6 +35,7 @@ This register stores concise regulatory source locations and validation conclusi
 - Language: French
 - Addendum state: Addendum 1 integrated
 - Specific addendum delta: NOT DETERMINED unless separately established
+- Supplemental official ICAO 2026 update watch (not IATA per-item Tier A and not approval): see [`DGR_ICAO_2026_SOURCE_UPDATE_WATCH_2026-11-14.md`](DGR_ICAO_2026_SOURCE_UPDATE_WATCH_2026-11-14.md), covering 27 March 2026 Addendum No. 1 / 7 May 2026 Corrigendum No. 2 and the need to independently reconcile any affected current IATA 67th Edition question claims
 
 ## Verified references
 

@@ -1,5 +1,11 @@
 # Function 7.2 — Stage 2B.1 source and bilingual exceptions (2026-10-19)
 
+## 2026-11-14 exact-head reconciliation — current diagnostic precedence
+
+At PR #3 head `6b5ed21b478c6fa521bb16ed2f7cc674f40ae14b`, the [Full DGR readiness CI run](https://github.com/relaxsaadi/cbta/actions/runs/43574521664) still **fails**. It reports **4** historically FROZEN Function 7.2 items with representative/non-individualized Tier-A evidence (`Q-7.2-035`, `039`, `044`, `049`) and **10** overlapping bank/EN-package FR-status mirrors (`Q-7.2-003`, `006`, `023`, `028`, `031`, `035`, `037`, `039`, `044`, `049`). The **11** EN-mirror exceptions documented below are an earlier exact-head snapshot, **not the current CI count**: `Q-7.2-045` is no longer in this particular mirror warning, but remains `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` in the current per-item reconciliation register. Its omission from this warning is **not** clearance, qualified review, approval, or import eligibility.
+
+The Function 7.2 baseline remains **23** own-function CBTA leaf tasks and **49** provisional items, all `IMPORT_ELIGIBLE=NO`. Current source-specific direct IATA DGR 67th Edition 2026 evidence, named dated qualified FR verification and independent EN bilingual review are not established by this diagnostic correction. This note does not modify any question, key, evidence, reviewer, or import CSV. Re-evaluate against future exact-head CI rather than carrying forward any fixed count.
+
 ## 2026-11-13 provenance correction — Q-7.2-022
 
 The previous `FR SOURCE GAP CONFIRMED` label reused a historical §9.5.1.2 section-specific mismatch; for 7.3 it also cross-applied the 7.2 conclusion. Such a finding does not establish the claimed employer/employee duty is absent throughout the current 67th Edition 2026. Correct current state: `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`. The original record remains historical, not direct item-specific Tier A evidence. Tier B course basis only; no question/answer change, approval, EN sign-off, or eligibility for import. Named, qualified FR verifier/date and a separate EN technical reviewer/date remain required.

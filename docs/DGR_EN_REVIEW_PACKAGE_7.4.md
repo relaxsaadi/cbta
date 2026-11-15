@@ -1,5 +1,7 @@
 # DGR EN Review Package — Function 7.4 (Q-7.4-001 – Q-7.4-053)
 
+> **Current status precedence — 2026-11-15 (documentation only):** This EN package is a translation/reviewer *draft*, not an independent FR regulatory sign-off. Its original blanket statement that all 53 Function 7.4 items "remain DRAFT" describes the earlier drafting baseline, **not** the later bank's historical `FROZEN FR / SOURCE VERIFIED` labels or effective release state. At the audited PR #3 head `415b12f2f5863ffda43af9872b9e5d99576afb52`, [full regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/43670162294) identifies **10 historically FROZEN items without sufficiently direct individual Tier-A provenance** and **13 stale/missing FR-status mirrors** in this EN package. The independent Function 7.4 task set is **37 tasks**, with **53 provisional questions, none approved or importable**. The unresolved `Q-7.4-027` source gap and `Q-7.4-008` / `Q-7.4-028` source conflicts remain blocked. Consult `docs/DGR_7_4_READINESS_EXCEPTION_2026_10_18.md`, `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, and `docs/DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv` for authoritative current reconciliation; any `FROZEN` wording elsewhere in this historical package is **not** valid per-item evidence of DGR 67th Edition 2026 or human approval. Qualified named/date-stamped FR verification and separate qualified named/date-stamped EN review are still required. No question or answer is altered by this note.
+
 Prepared as bilingual (FR→EN) draft translation material for all 53
 currently-drafted Function 7.4 production-bank items (Batch 1:
 `Q-7.4-001`–`016`; Batch 2: `Q-7.4-017`–`035`; Batch 3: `Q-7.4-036`–`053`).
@@ -18,11 +20,14 @@ not a substitute for that review.**
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
   rules 4–5.
-- **Critical: this package does NOT change any item's FR status.** Unlike
-  Function 7.1's pilot (12 items already `FROZEN FR / SOURCE VERIFIED`
-  before their EN package was built), **all 53 Function 7.4 items remain
-  `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`**, exactly as recorded
-  in `docs/DGR_PRODUCTION_BANK_7.4.md`. Per `.claude/rules/dgr-stage2b.md`
+- **Critical: this package does NOT change any item's FR status.** The
+  original EN drafting baseline for Function 7.4 consisted of 53 Tier-B
+  `DRAFT` items, unlike the Function 7.1 pilot. Later historical records
+  in `docs/DGR_PRODUCTION_BANK_7.4.md` include `FROZEN FR / SOURCE VERIFIED`
+  labels, but their direct per-item Tier-A support remains subject to the
+  current reconciliation and CI failures noted above. Do not interpret this
+  package's original blanket DRAFT statement or those historical FROZEN
+  labels as current FR verification or import eligibility. Per `.claude/rules/dgr-stage2b.md`
   rule 5 (FR source verification and EN bilingual technical review are
   **separate gates**), drafting this EN package in parallel with — rather
   than after — Tier A FR verification is permitted, but it means **two

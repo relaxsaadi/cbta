@@ -1,5 +1,8 @@
 # DGR/CBTA Bilingual EN Review — Reviewer Guide
 
+> **Current controlled-review override — 2026-11-15 / [release blocker #340](https://github.com/relaxsaadi/cbta/issues/340):** This repository and its 7.1–7.10 answer-key-bearing bank/review packages are public. Treat their item text, keys and rationales as **historical, exposed drafting material**, not a confidential summative/certification exam pool. The instructions below describing edits to public per-item packages are **historical format examples only**, not authorization to commit reviewed items, new questions/keys, revised confidential answers, licensed IATA content or private reviewer credentials to GitHub. Conduct new item/EN reviews and preserve signed evidence in an **owner-authorized access-controlled workspace** with auditability; publish only independently cleared, non-sensitive status references where appropriate. Any later production pool must pass separate confidential-item eligibility, direct current-edition Tier-A, named qualified dated FR/EN reviews and runtime publication gates. This note changes no item, key, approval, import flag or deployed exam.
+
+
 **Read this first if you are the qualified bilingual DGR reviewer picking
 up this work for the first time.** It explains what this review is, what
 it is not, where everything lives, and exactly how to record a completed
@@ -140,11 +143,11 @@ Final status: BILINGUAL TECHNICAL REVIEW COMPLETE / REVISION REQUIRED (specify)
 Program approval: PENDING REVIEWER + DATE (unless independent final gate is completed and synchronized)
 ```
 
-**Exactly what to change, and where:**
+**Historical status-format template — apply only inside the owner-approved controlled reviewer record, NOT by editing public answer-key-bearing packages:**
 
-- In the relevant `docs/DGR_EN_REVIEW_PACKAGE_7.X.md` file, find the
-  item's `- **EN status:**` line (currently `BILINGUAL TECHNICAL REVIEW
-  REQUIRED` for every item in every package) and change it to
+- In the controlled per-item review record, map the historical public package's
+  `- **EN status:**` field (draft baseline: `BILINGUAL TECHNICAL REVIEW
+  REQUIRED`) to
   `BILINGUAL TECHNICAL REVIEW COMPLETE (reviewed by <exact registry full name>, reviewer-id=DGR-RVW-####, <bilingual DGR/CBTA role or credential FR/EN>, <YYYY-MM-DD>)` **only if every one of the five
   PASS/FAIL/CONDITIONAL checks above is PASS**. If any check is FAIL or
   CONDITIONAL, the status becomes `REVISION REQUIRED` with your notes on
@@ -159,17 +162,20 @@ Program approval: PENDING REVIEWER + DATE (unless independent final gate is comp
   happens. An anonymous, unqualified, impossible-dated, future-dated or
   undated sign-off is not accepted anywhere in this program
   (`.claude/rules/dgr-stage2b.md` rule 4).
-- If your review changes the terminology decision for a term already
-  covered by `docs/DGR_EN_TERMINOLOGY_MASTER.md` Part A or B, **also**
-  update the master file's entry for that term (note your resolution and
-  the date), and check whether the same term needs the same fix applied
-  in every other package the master file lists as affected — that
-  propagation is the entire point of resolving it once in the master
-  file rather than n times.
-- **This guide does not itself change any item's status.** Only an actual
-  named, qualified, dated sign-off recorded in the package file (as above)
-  changes an item's EN review status. Reading this guide, or reading the
-  master terminology file, closes nothing by itself.
+- If your review changes a shared terminology decision recorded in
+  `docs/DGR_EN_TERMINOLOGY_MASTER.md` Part A or B, record the resolution,
+  source/evidence reference and actual date in the controlled workspace,
+  and cross-check all affected functions. A separately cleared, non-sensitive
+  public terminology summary may be updated later; do **not** propagate
+  revised confidential question text, answer keys, licensed source extracts
+  or reviewer credentials back into public packages.
+- **This guide does not itself change any item's status.** An EN review
+  becomes complete only when the owner's controlled register records the
+  actual admitted qualified human reviewer, evidence and date, with the
+  appropriate audit trail and independently verified item binding. The
+  public draft package is **not** the approval system of record. Reading
+  this guide, editing a public status label, or reading the terminology
+  master closes no release gate.
 
 ---
 
@@ -195,10 +201,11 @@ One reasonable sequence, if you have no other preference:
    it matches how the packages were built and cross-referenced, but there
    is no dependency forcing that order once the shared terminology
    questions in steps 1–3 are settled.
-5. Within a function, the pilot/Batch 1 items are generally the
-   highest-confidence FR-side items (frozen/source-verified in Function
-   7.1's case) — reviewing those first may build useful pattern-familiarity
-   before the later, larger batches.
+5. Within a function, older pilot/Batch 1 items may be useful for
+   reviewer familiarization, but historical `FROZEN`/`SOURCE VERIFIED`
+   labels are **not** sufficient current direct Tier-A evidence or permission
+   to reuse already-public keys for a confidential exam. Use the exact-head
+   evidence checks and item-specific source records.
 
 ---
 
@@ -210,11 +217,11 @@ review alone — no matter how many items are reviewed or how thoroughly.**
 `APPROVED` requires named, qualified where applicable, dated sign-off on
 all three separate gates (FR Tier A verification, FR technical reviewer
 sign-off, EN bilingual review sign-off) as described in section 1 above.
-If you are unsure whether an item's FR Tier A verification is already
-complete, check `docs/DGR_SOURCE_REGISTER.md` and
-`docs/DGR_STAGE_2B_STATUS.md` (Function 7.1) or the relevant function's
-row in `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md` (Functions 7.2–7.10) — as
-of this guide's preparation, Tier A verification is either not started or
-only partially complete for every function, so assume it is still
-required unless one of those files explicitly says otherwise for the
-specific item in front of you.
+If you are unsure whether an item's FR Tier A verification is complete,
+consult its item-specific, controlled direct 67th Edition 2026 evidence and
+current exact-head provenance/readiness results together with the qualified
+reviewer registry. The historical public source register, pilot status and
+program tracker are navigational records, **not** sufficient current approval
+or source-of-record evidence; do not treat a legacy `FROZEN` label as clearance.
+All production eligibility and review gates remain open until accepted
+independently, including #340 confidentiality containment.

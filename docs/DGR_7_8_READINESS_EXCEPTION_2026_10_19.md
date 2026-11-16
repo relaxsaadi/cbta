@@ -2,6 +2,16 @@
 
 **Scope:** KOST DGR/CBTA Stage 2B.1; PR #3; Function **7.8 — flight operations personnel / flight dispatchers**. **DRAFT / PRE-PRODUCTION / NOT APPROVED.** This is a repository and exact-head GitHub Actions audit, **not** a fresh reading of licensed IATA DGR 67th Edition 2026 text, qualified FR/EN signoff, or ANAC/IATA authorization.
 
+## 2026-11-16 strict affirmative-evidence CI reconciliation — 27 affected items (not just 12 historically FROZEN)
+
+At draft PR #3 head `c0aeaa3e5d0460e793ae91a90a0781c823b1ce1f`, the completed [direct Tier-A provenance CI run 43798181288](https://github.com/relaxsaadi/cbta/actions/runs/43798181288), **Direct item Tier-A provenance** job `133071733472`, reports **27 distinct Function 7.8 question IDs** under the stricter **affirmative current-edition per-item evidence** diagnostic (cross-applied/representative/batch evidence or absent item-specific edition binding). The [regulatory readiness CI run 43798181190](https://github.com/relaxsaadi/cbta/actions/runs/43798181190), **Full DGR readiness** job `133071809685`, independently reproduces those 27 IDs. **The earlier 12-item FROZEN-source diagnostic is a subset**, not a complete list of Function 7.8 evidence remediations.
+
+**All 27 affected IDs:** `Q-7.8-001`, `006`, `007`, `008`, `009`, `010`, `011`, `012`, `016`, `017`, `019`, `020`, `021`, `022`, `023`, `024`, `025`, `028`, `033`, `035`, `040`, `041`, `042`, `043`, `045`, `047`, `049` (short suffixes carry the `Q-7.8-` prefix).
+
+**15 additional IDs not included in the 12-item FROZEN list:** `Q-7.8-001`, `006`, `010`, `012`, `019`, `020`, `022`, `023`, `024`, `025`, `028`, `041`, `042`, `045`, `049`. Within the 27, **five** (`Q-7.8-010`, `019`, `028`, `042`, `045`) also lack an explicit **item-specific IATA DGR 67th Edition 2026 binding** in this diagnostic. These categories overlap; do not sum counts. The separately reported **15** FR/EN mirrored-FR-status divergences likewise overlap and remain unresolved.
+
+These are **provenance/metadata release blockers, not a determination that 27 answers are factually wrong**. Resolve each regulatory assertion, answer and material distractor with direct authenticated applicable 2026 DGR Tier-A evidence, exact locator, source language and binding, and qualified named/date FR review followed by independent qualified named/date EN review. Keep `Q-7.8-018` and `Q-7.8-036` at **SOURCE GAP UNRESOLVED**; their absence from this particular 27-item *terminal-regulatory-state* set is **not evidence of verified DGR absence** or import eligibility. Any contradiction stays `SOURCE CONFLICT` pending resolution. The function-specific 23-task CBTA authority, 51 drafted questions and unapproved import holds are unchanged. No source text, answer, reviewer admission, `APPROVED` flag, eligibility, security control, runtime or deployment has been altered by this documentation update.
+
 ## 2026-11-14 current exact-head CI reconciliation — FR/EN mirror count (15, not 17)
 
 At PR #3 HEAD `d4f1798c3ad91fb9272ba315663380d688682f38`, the [DGR regulatory readiness CI run](https://github.com/relaxsaadi/cbta/actions/runs/43617577001), **Full DGR readiness** job, reports **15** Function 7.8 bank/EN entries with missing, unclassified or stale **mirrored FR status**, not the **17** entries recorded in the historical 2026-10-19 snapshot below:

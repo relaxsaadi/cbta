@@ -2,6 +2,19 @@
 
 **Scope:** Stage 2B.1, PR #3, KOST DGR/CBTA Functions 7.1–7.10. This exception documents Function **7.6** only; **PRE-PRODUCTION / NOT APPROVED**. It records CI findings; it does not independently re-verify the licensed IATA DGR.
 
+## 2026-11-16 strict direct Tier-A evidence diagnostic reconciliation — 31 distinct items (13 FROZEN subset)
+
+At PR #3 exact head `c82bf8f6fcbe8329f4e138e1dc55a47aabaae258`, the completed [DGR direct Tier-A provenance run 43805320529, job 133094643840](https://github.com/relaxsaadi/cbta/actions/runs/43805320529/job/133094643840) executes both the narrow source-verified provenance check and the stricter affirmative direct-current-edition evidence check. The **narrow** check continues to identify **13** historically `FROZEN FR / SOURCE VERIFIED` items with insufficient individual evidence (listed below). The **stricter** check flags **31 distinct Function 7.6 terminal-state question IDs** whose evidence wording remains representative/batch/cross-applied or otherwise non-direct. Those 31 IDs are:
+
+`Q-7.6-002`, `003`, `004`, `005`, `006`, `007`, `008`, `010`, `011`, `012`, `015`, `016`, `017`, `020`, `022`, `023`, `024`, `025`, `027`, `029`, `030`, `031`, `032`, `036`, `040`, `042`, `043`, `046`, `052`, `055`, `056` (short suffixes retain the `Q-7.6-` prefix).
+
+The **18 additional items beyond the narrow 13-item subset** are `Q-7.6-002`, `003`, `004`, `006`, `008`, `010`, `022`, `024`, `027`, `029`, `030`, `031`, `032`, `036`, `042`, `052`, `055`, `056`. Within the 31, **10** items also lack explicit per-item `IATA DGR 67th Edition 2026` binding: `Q-7.6-006`, `008`, `010`, `027`, `029`, `032`, `036`, `052`, `055`, `056`. These are overlapping diagnostics, not additive defect counts, and **do not by themselves establish that a question's answer is incorrect**.
+
+The separate [exact-head regulatory readiness run 43805320503](https://github.com/relaxsaadi/cbta/actions/runs/43805320503), Full DGR readiness job `133094770792`, still reports **13 narrow FROZEN provenance blockers and 18 bank↔EN FR-status mirror discrepancies**. The historical 19-mismatch count below is not current. Retain `Q-7.6-001` as `SOURCE CONFLICT`, `Q-7.6-018` as `SOURCE GAP UNRESOLVED`, and unmapped official tasks `0.3.2` and `4.3.3` as source gaps; the strict 31-item list does **not** supersede these independent holds.
+
+Remediation requires per-question claim/answer/distractor-level direct, licensed IATA DGR 67th Edition 2026 plus applicable addendum evidence, effective FR state reconciliation, independent qualified dated EN review, and named qualified dated approval before any import/production promotion. **All 56 items remain non-importable, with 0 APPROVED**. No new direct licensed DGR check, reviewer verification, answer correction, ANAC/IATA approval or platform acceptance occurred in this report. This correction changes documentation only, and does not resolve Moodle/console, RBAC, audit, security, deployment or backup/recovery gates.
+
+
 ## 2026-11-14 exact-head FR/EN mirror count reconciliation (18, not historical 19)
 
 At PR #3 HEAD `ccf226ab0fcb27f62ac567e8512de3672737d2fe`, the completed [DGR regulatory readiness run 43627222015](https://github.com/relaxsaadi/cbta/actions/runs/43627222015), **Full DGR readiness** job `132545790953` (2026-11-14), reports **18** overlapping Function 7.6 bank/EN entries with stale, missing, or unclassifiable mirrored **FR status**, rather than the **19** from the historical 2026-10-19 snapshot preserved below. The current set is:

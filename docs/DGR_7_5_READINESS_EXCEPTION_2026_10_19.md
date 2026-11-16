@@ -2,6 +2,19 @@
 
 **DRAFT / PRE-PRODUCTION / NOT APPROVED / NOT READY.** This note documents GitHub CI/repository audit only. It is **not** a direct reading of licensed IATA DGR 67th Edition 2026, a claim that an answer is wrong, a human signoff, or proof of IATA/ANAC authorization.
 
+## 2026-11-16 strict direct Tier-A diagnostic reconciliation — 20 distinct items (12 FROZEN subset)
+
+At PR #3 exact head `c82bf8f6fcbe8329f4e138e1dc55a47aabaae258`, the completed [DGR direct Tier-A provenance run 43805320529, job 133094643840](https://github.com/relaxsaadi/cbta/actions/runs/43805320529/job/133094643840) confirms that the **narrow FROZEN/source-verified** check still flags **12** Function 7.5 items, but the **stricter affirmative direct-current-edition** diagnostic flags **20 distinct terminal-state Function 7.5 item IDs** with representative/batch/cross-applied or otherwise non-direct evidence wording:
+
+`Q-7.5-002`, `006`, `007`, `009`, `010`, `013`, `014`, `015`, `017`, `020`, `021`, `022`, `028`, `029`, `030`, `036`, `038`, `040`, `041`, `044` (short suffixes retain the `Q-7.5-` prefix).
+
+The **8 additional strict-diagnostic IDs** beyond the historical narrow twelve are `Q-7.5-009`, `013`, `014`, `021`, `022`, `036`, `041`, `044`. Among the 20, **`Q-7.5-014` and `Q-7.5-041` also lack explicit per-item IATA DGR 67th Edition 2026 binding**. These categories overlap; they do not prove that the answers themselves are wrong.
+
+The separate completed [Full DGR readiness run 43805320503](https://github.com/relaxsaadi/cbta/actions/runs/43805320503), job `133094770792`, continues to flag **16** bank/EN FR-status mirror discrepancies, not the historical 17. The unresolved `Q-7.5-018` source gap, `Q-7.5-011` 2026 power-bank addendum conflict and `Q-7.5-026` task 5.2.2 conflict remain separately held; none is silently cleared by the strict diagnostic list.
+
+Each affected item needs direct authenticated IATA DGR 67th Edition 2026 plus applicable addendum evidence for its actual claim, correct answer and distractors, with precise locator/source-language trace, effective FR reconciliation, separate qualified dated EN technical review and named qualified dated final approval. **All 44 draft items remain non-importable, with 0 APPROVED**. This is an evidence-inventory/documentation clarification, not newly verified licensed-source content, review signoff, changed question/answer, import, deployment, regulatory recognition or technical platform acceptance.
+
+
 ## 2026-11-14 superseding exact-head CI reconciliation — FR/EN status mirrors
 
 At PR #3 head `51ec3b909265b498df35f5e59b30bcd09cfca480`, the [Full DGR readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/43633221728) reports **16** overlapping bank/EN items with stale or missing effective FR-status mirrors, **not 17**: `Q-7.5-002`, `006`, `007`, `010`, `012`, `015`, `016`, `017`, `020`, `025`, `027`, `028`, `029`, `030`, `038`, `040`. The 17-item list in the historical snapshot below remains historical evidence, not the current count.

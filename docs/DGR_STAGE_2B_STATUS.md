@@ -25,8 +25,19 @@ until a named qualified bilingual DGR instructor completes the sign-off
 format in that file. The FR text used to build the EN drafts is a
 reconstructed working gloss (from documented source-basis conclusions),
 not a verbatim transcription of the live-administered pilot copy — see
-that file's Critical Provenance Note. Q-7.1-013–019 (Batch 1) are
-explicitly out of scope for this EN package.
+that file's Critical Provenance Note. **Historical scope at 2026-08-25:**
+Q-7.1-013–019 (Batch 1) were not yet covered by this EN package.
+
+**Current EN draft coverage clarification (2026-11-17):**
+`docs/DGR_EN_REVIEW_PACKAGE_7.1.md` now contains provisional English drafts
+for **all 19** Function 7.1 items. Q-7.1-001–012 use reconstructed FR
+working glosses, **not** the authoritative verbatim pilot text;
+Q-7.1-013–019 use the FR production-bank source-of-record wording.
+Draft availability is not a bilingual technical review: all seven Batch 1
+items remain `BILINGUAL TECHNICAL REVIEW REQUIRED` with
+`PENDING REVIEWER + DATE`. No named qualified EN review, final approval,
+regulatory evidence promotion, or production-import eligibility follows
+from this editorial reconciliation.
 
 ## Production bank expansion — Batch 1 (Q-7.1-013–Q-7.1-019)
 

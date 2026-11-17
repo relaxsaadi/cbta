@@ -66,5 +66,5 @@
 - `2.4.3` remains labels-only for the current verified item; marks and PSN/UN rules are separate.
 - Class 7 content is mapped only where the official task wording fits; its presence does not expand unrelated leaves.
 - Direct 67th Edition 2026 locators above are evidence leads, not blanket human `SOURCE VERIFIED` promotions. Every regulatory fact and distractor still requires item-specific traceability.
-- FR source verification and EN bilingual review remain independent. The existing Q-7.1-001–012 EN package is a draft based on reconstructed FR working glosses, not completed bilingual review; Q-7.1-013–019 remain outside that package.
+- FR source verification and EN bilingual review remain independent. `docs/DGR_EN_REVIEW_PACKAGE_7.1.md` contains preparatory EN drafts for all 19 items (`Q-7.1-001`–`Q-7.1-019`): Q-7.1-001–012 rely on reconstructed FR working glosses rather than verified verbatim live-administered pilot text; Q-7.1-013–019 were drafted from the recorded production-bank FR wording. These are translation drafts, not qualified bilingual reviews. All 19 require separate qualified EN technical review; none is `APPROVED`.
 - No `APPROVED` state is present without a named qualified reviewer and an ISO review date.

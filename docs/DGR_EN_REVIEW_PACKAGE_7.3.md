@@ -58,10 +58,11 @@ record.
 
 This removes one entire category of reviewer work that Function 7.1's
 package required (provenance cross-checking against a live external system).
-It does **not** remove the FR Tier A verification task — every item's FR
-text is still Tier B only (KOST course material, not yet checked against the
-current IATA DGR 67th Edition/Addendum 1 text) — nor does it remove the EN
-bilingual technical review task this package exists to prepare for.
+It does **not** remove the FR Tier A verification task — KOST's 66th-edition
+course is Tier B source material, and every regulatory claim still needs
+current-edition item-specific evidence. Historical per-item FR labels are not
+themselves direct 67th Edition 2026 verification — nor does it remove the
+independent EN bilingual technical review task this package prepares for.
 
 ---
 
@@ -624,10 +625,10 @@ file's fuller sourcing notes.
 **What to check, per item:**
 
 1. **Source-text fidelity check first:** confirm the FR text quoted in this package matches `docs/DGR_PRODUCTION_BANK_7.3.md` exactly (this package copies it verbatim, but a copy error is always possible — check before relying on either).
-2. **Regulatory accuracy — FR:** independent of this package, every item's FR status remains `DRAFT — Tier B only`. This package's translation review does not substitute for, accelerate, or presuppose the outcome of that separate Tier A verification (`.claude/rules/dgr-stage2b.md` rule 5) — do not mark FR status based on anything in this file.
+2. **Regulatory accuracy — FR:** check the effective item-specific FR state in `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR production bank and exact-head direct Tier-A CI. Historical `FROZEN FR / SOURCE VERIFIED` labels are evidence leads, not automatic confirmation of direct current IATA DGR 67th Edition 2026 verification. This EN package does not change FR source status or close the separate FR evidence gate (`.claude/rules/dgr-stage2b.md` rule 5).
 3. **Regulatory accuracy — EN:** confirm the EN draft's terminology and facts against the current English-language IATA DGR 67th Edition text, resolving every item flagged "unverified"/"FLAGGED" in the terminology table (the "dérogation"→"Exemption" candidate across four items; the "divergence"→"Variation" candidate across four items; Q-7.3-015's "SCoETDG"→"UNCETDG" acronym; Q-7.3-022's high/medium/minor-danger caption wording; Q-7.3-008's TACT/CSC 600(a) acronyms).
 4. **Meaning-equivalence FR↔EN:** confirm the EN stem, correct answer, and every distractor carry the same regulatory meaning as the FR side — not a loose paraphrase. Pay special attention to items whose correct answer hinges on a single qualifying word (Q-7.3-001's "ou," Q-7.3-005/016/020's "sans exception"/"même ceux qui," Q-7.3-023's "facultative," Q-7.3-032's "sans aucune divergence").
-5. **Terminology consistency:** confirm EN terms match the terminology table and are used consistently across all 32 items (e.g., "Packing Group" not "packaging group"; "Special Provision" not "special clause"; "State/Operator variation" reserved for the technical DGR 2.8 sense, not used loosely for Q-7.3-007/010/023's generic "divergence").
+5. **Terminology consistency:** confirm EN terms match the terminology table and are used consistently across all 45 items (Batches 1–3) (e.g., "Packing Group" not "packaging group"; "Special Provision" not "special clause"; "State/Operator variation" reserved for the technical DGR 2.8 sense, not used loosely for Q-7.3-007/010/023's generic "divergence").
 6. **Distractor plausibility in English:** confirm each EN distractor remains plausible-but-wrong to an English-speaking candidate — a distractor that only "sounds wrong" in French, or that becomes obviously wrong for an EN-specific reason (e.g., an idiom that doesn't translate), should be flagged for revision.
 7. **No item drifts from its FR source citation:** cross-check each item's EN draft against its full sourcing note (slide numbers, DGR section references, distractor rationale) in `docs/DGR_PRODUCTION_BANK_7.3.md` — the EN translation must not introduce a fact, threshold, or exception not present in the cited FR source.
 8. **Course-vs-current-edition caveat:** `docs/DGR_PRODUCTION_BANK_7.3.md` notes the KOST course is built on the DGR **66th Edition**, not the 67th/Addendum 1 baseline this repository otherwise targets. Every "DGR x.y.z" section number in both the FR and EN text is Tier B (as displayed on the KOST slide), not independently re-verified as still-current numbering. The bilingual reviewer's terminology check does not resolve this — it remains open for whoever performs FR Tier A verification.
@@ -697,8 +698,7 @@ package, EN-drafted) item.
 The same status discipline stated at the top of this package applies
 unchanged to every item below: no `BILINGUAL TECHNICAL REVIEW COMPLETE` or
 `APPROVED` status, no named reviewer, no review date, and no change to any
-item's separate FR status (`DRAFT — Tier B only, SOURCE REQUIRED for
-Tier A`).
+item's separate FR status (read the effective state in the per-item reconciliation; the older blanket `DRAFT` statement is historical).
 
 ### Q-7.3-033 — Portée du marquage de spécification ONU (DGR 6.0.4.0.1)
 

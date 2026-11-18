@@ -16,7 +16,7 @@ aérien, screening" audience. **This is the tenth and final function in the
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** It mirrors the current conservative reconciliation state only. Effective mirror counts for Function 7.10 are **19 DRAFT, 11 FROZEN, 13 TIER_A_PROVENANCE_UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED, and 1 SOURCE CONFLICT**. FR source verification and EN bilingual technical review are **separate gates** — this package closes neither gate and does not convert any FR evidence state into approval.
+- **This package does not change any item's FR status.** The 44 item-level `FR status` entries below are **EN-package mirrors**, not the authoritative reconciled FR states. An exact count of these mirrors on this branch is **19 DRAFT, 10 FROZEN, 12 TIER_A_PROVENANCE_UNRESOLVED / DIRECT_ITEM_EVIDENCE_REQUIRED, 2 SOURCE CONFLICT and 1 SOURCE GAP**; the previous 19/11/13/1 header counts were stale. At PR #3 head `4747d7b8`, regulatory CI still reports **12 FR/EN status-mirror divergences** for Function 7.10. Use `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR production bank and exact-head CI for each effective FR state. Neither these mirror counts nor a historical `FROZEN` label establish direct current IATA DGR 67th Edition 2026 Tier-A evidence, qualified dated FR verification, separate EN bilingual review or approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`

@@ -1114,11 +1114,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    package matches `docs/DGR_PRODUCTION_BANK_7.8.md` exactly (this package
    copies it verbatim, but a copy error is always possible — check before
    relying on either).
-2. **Regulatory accuracy — FR:** independent of this package, every item's
-   FR status remains `DRAFT — Tier B only`. This package's translation
-   review does not substitute for, accelerate, or presuppose the outcome of
-   that separate Tier A verification (`.claude/rules/dgr-stage2b.md` rule
-   5) — do not mark FR status based on anything in this file.
+2. **Regulatory accuracy — FR:** check the effective item-specific FR state in `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR production bank and exact-head direct Tier-A CI. Historical `FROZEN FR / SOURCE VERIFIED` labels are evidence leads, not automatic confirmation of direct current IATA DGR 67th Edition 2026 verification. This EN package does not change FR source status or close the separate FR evidence gate (`.claude/rules/dgr-stage2b.md` rule 5).
 3. **Regulatory accuracy — EN:** confirm the EN draft's terminology and
    facts against the current English-language IATA DGR 67th Edition text,
    resolving every item flagged "unverified"/"FLAGGED" in the terminology
@@ -1154,7 +1150,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    stay at the generic-awareness level, not sharpened into a step-ordering
    test.
 7. **Terminology consistency:** confirm EN terms match the terminology
-   table and are used consistently across all 32 items (e.g., "Packing
+   table and are used consistently across all 51 items (Batches 1–3) (e.g., "Packing
    Group" not "packaging group"; "State variation" reserved for the DGR 2.8
    technical sense; "NOTOC" never re-expanded or re-translated mid-item;
    "air traffic services" and "air traffic control (ATC)" kept as the two

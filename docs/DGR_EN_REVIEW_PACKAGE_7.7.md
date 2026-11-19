@@ -12,9 +12,7 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** Its per-item FR-status fields mirror the current conservative reconciliation state only; they do not promote Tier-A evidence, bilingual review, or approval. Per `.claude/rules/
-  dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
-  review are **separate gates** — closing neither gate for any item here.
+- **FR source-of-record and EN status mirrors (2026-11-19; documentation only):** This draft translation does not change any item's authoritative FR status. Its per-item `FR status` entries are historical EN-package mirrors, **not** guaranteed copies of current reconciled FR states. At PR #3 head `4747d7b817fd288adff19fe836a94d15b1d5d672`, [full regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716488) reports **19** Function 7.7 items with stale, missing or unclassified FR-status mirrors. Reconcile each item against `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, its FR production-bank record and exact-head CI before relying on the EN field; do **not** copy historical `FROZEN FR / SOURCE VERIFIED` solely to satisfy a mirror check. Direct authorized current IATA DGR 67th Edition 2026 item-specific Tier-A evidence, explicit SOURCE GAP/CONFLICT handling, qualified dated FR review, separate qualified dated EN bilingual review and final approval remain independent fail-closed gates. This note does not change question text, source status, import eligibility or approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`

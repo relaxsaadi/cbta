@@ -111,14 +111,20 @@ function inspectCsv(text, label, idHeader, collectedIds = null) {
       issues.push(`${label}: CSV row ${csvRow} has ${values.length} columns; expected ${headers.length}`);
     }
 
-    // A NO import decision needs a durable reason even for historically FROZEN
-    // items. An empty blocker must never look like implicit clearance.
-    if (idHeader === 'kost_id' && eligibilityIndex >= 0
-      && (values[eligibilityIndex] ?? '').trim().toUpperCase() === 'NO') {
-      if (blockerIndex === -1) {
-        issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO is missing required BLOCKER header`);
-      } else if (!(values[blockerIndex] ?? '').trim()) {
-        issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO has blank BLOCKER`);
+    // Import eligibility is a controlled YES/NO decision, never a free-text
+    // flag. Blank/unknown values must not bypass NO-hold validation.
+    if (idHeader === 'kost_id' && eligibilityIndex >= 0) {
+      const eligibility = (values[eligibilityIndex] ?? '').trim().toUpperCase();
+      if (eligibility !== 'YES' && eligibility !== 'NO') {
+        issues.push(`${label}: CSV row ${csvRow} has invalid IMPORT_ELIGIBLE; expected YES or NO`);
+      } else if (eligibility === 'NO') {
+        // A NO import decision needs a durable reason even for historically
+        // FROZEN items. An empty blocker must never imply clearance.
+        if (blockerIndex === -1) {
+          issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO is missing required BLOCKER header`);
+        } else if (!(values[blockerIndex] ?? '').trim()) {
+          issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO has blank BLOCKER`);
+        }
       }
     }
 
@@ -178,6 +184,8 @@ function runSelfTest() {
   const heldWithoutBlockerHeader = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\n';
   const heldWithoutEligibilityHeader = 'KOST_ID,FUNCTION,BLOCKER\r\nQ-7.3-040,7.3,reason\r\n';
   const heldWithBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,NO,qualified human FR/EN review pending\r\n';
+  const blankEligibility = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,,reason\r\n';
+  const unknownEligibility = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,PENDING,reason\r\n';
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');
@@ -243,6 +251,12 @@ function runSelfTest() {
   if (!inspectCsv(heldWithoutEligibilityHeader, 'fixture.csv', 'kost_id')
     .some((issue) => /missing required header import_eligible/.test(issue))) {
     throw new Error('Regression fixture failed: dropping IMPORT_ELIGIBLE column bypassed the import hold.');
+  }
+  for (const [label, fixture] of [['blank', blankEligibility], ['unknown', unknownEligibility]]) {
+    if (!inspectCsv(fixture, 'fixture.csv', 'kost_id')
+      .some((issue) => /invalid IMPORT_ELIGIBLE; expected YES or NO/.test(issue))) {
+      throw new Error(`Regression fixture failed: ${label} IMPORT_ELIGIBLE decision was accepted.`);
+    }
   }
 
   const matching = new Set(['Q-7.3-040', 'Q-7.3-041']);

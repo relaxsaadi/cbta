@@ -170,8 +170,8 @@ function runSelfTest() {
   const duplicateId = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\nQ-7.3-040,7.3,YES\r\n';
   const wrongFunction = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.2,YES\r\n';
   const missingFunctionHeader = 'KOST_ID,IMPORT_ELIGIBLE\r\nQ-7.3-040,NO\r\n';
-  const heldNoBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\\r\\nQ-7.3-040,7.3,NO,\\r\\n';
-  const heldWithBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\\r\\nQ-7.3-040,7.3,NO,qualified human FR/EN review pending\\r\\n';
+  const heldNoBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,NO,\r\n';
+  const heldWithBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,NO,qualified human FR/EN review pending\r\n';
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');

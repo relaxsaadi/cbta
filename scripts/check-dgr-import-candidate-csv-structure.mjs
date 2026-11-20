@@ -106,6 +106,18 @@ function inspectCsv(text, label, idHeader, collectedIds = null) {
       issues.push(`${label}: CSV row ${csvRow} has ${values.length} columns; expected ${headers.length}`);
     }
 
+    // A NO import decision needs a durable reason even for historically FROZEN
+    // items. An empty blocker must never look like implicit clearance.
+    if (idHeader === 'kost_id') {
+      const eligibilityIndex = headers.indexOf('import_eligible');
+      const blockerIndex = headers.indexOf('blocker');
+      if (eligibilityIndex >= 0 && blockerIndex >= 0
+        && (values[eligibilityIndex] ?? '').trim().toUpperCase() === 'NO'
+        && !(values[blockerIndex] ?? '').trim()) {
+        issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO has blank BLOCKER`);
+      }
+    }
+
     const id = (values[idIndex] ?? '').trim();
     if (!id) {
       issues.push(`${label}: CSV row ${csvRow} is non-empty but ${idHeader} is blank`);
@@ -158,6 +170,8 @@ function runSelfTest() {
   const duplicateId = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\nQ-7.3-040,7.3,YES\r\n';
   const wrongFunction = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.2,YES\r\n';
   const missingFunctionHeader = 'KOST_ID,IMPORT_ELIGIBLE\r\nQ-7.3-040,NO\r\n';
+  const heldNoBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\\r\\nQ-7.3-040,7.3,NO,\\r\\n';
+  const heldWithBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\\r\\nQ-7.3-040,7.3,NO,qualified human FR/EN review pending\\r\\n';
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');
@@ -208,6 +222,13 @@ function runSelfTest() {
 
   if (!inspectCsv(missingFunctionHeader, 'fixture.csv', 'kost_id').some((issue) => /missing required header function/i.test(issue))) {
     throw new Error('Regression fixture failed: missing FUNCTION column was accepted.');
+  }
+
+  if (!inspectCsv(heldNoBlocker, 'fixture.csv', 'kost_id').some((issue) => /NO has blank BLOCKER/.test(issue))) {
+    throw new Error('Regression fixture failed: blocked import row without reason was accepted.');
+  }
+  if (inspectCsv(heldWithBlocker, 'fixture.csv', 'kost_id').length !== 0) {
+    throw new Error('Regression fixture failed: blocked import row with documented reason was rejected.');
   }
 
   const matching = new Set(['Q-7.3-040', 'Q-7.3-041']);

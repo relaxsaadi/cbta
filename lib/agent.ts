@@ -99,20 +99,28 @@ Signe toujours: Cordialement,\\nKOST GROUP\\n+213 542 30 53 83\\ndgr.kostacademy
 // Send email via Resend
 async function sendEmail(to: string, subject: string, body: string): Promise<boolean> {
   try {
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to,
       subject,
       text: body,
     })
-    return !error
+    // A missing provider message ID is not evidence that a send was accepted.
+    return !error && typeof data?.id === 'string' && data.id.length > 0
   } catch {
     return false
   }
 }
 
 // Main agent: process new leads
-export async function processNewLeads(limit = 10): Promise<{ processed: number; sent: number; skipped: number }> {
+export async function processNewLeads(limit = 10): Promise<{ processed: number; sent: number; skipped: number; disabled?: boolean }> {
+  // A valid cron or dashboard credential authorizes invocation, not outbound email.
+  // Stay read/write/send-inert until the deployment owner explicitly enables
+  // autonomous outreach after reviewing consent, claims and send controls.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return { processed: 0, sent: 0, skipped: 0, disabled: true }
+  }
+
   const { data: leads } = await supabase
     .from('leads')
     .select('*, company:companies(*)')
@@ -154,34 +162,48 @@ export async function processNewLeads(limit = 10): Promise<{ processed: number; 
     const email = await generateEmail(lead, 'intro')
     const ok = await sendEmail(lead.company.email, email.subject, email.body)
 
-    // Log in email_logs
+    // A rejected or uncertain provider response is NOT proof of a recipient bounce.
+    // Leave the lead new and do not schedule a follow-up or claim an email was sent.
+    // A timeout after provider acceptance remains uncertain and needs a durable
+    // idempotency/outbox + delivery reconciliation design before release.
+    if (!ok) {
+      skipped++
+      continue
+    }
+
+    // Provider API acceptance is not proof of recipient delivery.
     await supabase.from('email_logs').insert({
       lead_id: lead.id,
       subject: email.subject,
       body: email.body,
-      status: ok ? 'sent' : 'bounced',
+      status: 'sent',
       sent_at: new Date().toISOString(),
     })
 
-    // Update lead
+    // Existing CRM uses 'contacted' for provider-accepted outbound requests.
+    // Do not assert that an actual delivery took place.
     await supabase.from('leads').update({
       status: 'contacted' as LeadStatus,
       value_eur: lead.participants_count * 800,
-      notes: (lead.notes || '') + `\n[Agent] Score ${score}/10 — Email envoyé ${new Date().toLocaleDateString('fr-FR')}`,
-      next_action: 'Relance J+3 automatique',
+      notes: (lead.notes || '') + `\n[Agent] Score ${score}/10 — Requête acceptée par le prestataire email ${new Date().toLocaleDateString('fr-FR')} (livraison non confirmée)`,
+      next_action: 'Vérifier livraison avant relance J+3',
       next_action_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       updated_at: new Date().toISOString(),
     }).eq('id', lead.id)
 
-    if (ok) sent++
-    else skipped++
+    sent++
   }
 
   return { processed: leads.length, sent, skipped }
 }
 
 // Follow-up agent: J+3 and J+7
-export async function processFollowups(): Promise<{ j3: number; j7: number }> {
+export async function processFollowups(): Promise<{ j3: number; j7: number; disabled?: boolean }> {
+  // Do not read, mutate, or send follow-ups when autonomous outreach is off.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return { j3: 0, j7: 0, disabled: true }
+  }
+
   const now = new Date()
   const j3 = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString()
   const j7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()

@@ -121,14 +121,23 @@ async function runFollowupAgent() {
 }
 
 export async function POST() {
+  // Human authentication does not by itself authorize autonomous bulk follow-ups.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Batch outbound is disabled' }, { status: 503 })
+  }
   after(runFollowupAgent)
   return NextResponse.json({ status: 'started', message: 'Agent relance lancé en arrière-plan' })
 }
 
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== process.env.CRON_SECRET) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  // A valid cron credential does not authorize autonomous follow-up email.
+  // Keep the scheduled batch inert unless the deployment owner explicitly opts in.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Scheduled outbound is disabled' }, { status: 503 })
   }
   after(runFollowupAgent)
   return NextResponse.json({ status: 'started' })

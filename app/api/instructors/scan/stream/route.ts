@@ -1,13 +1,13 @@
 import { NextRequest } from 'next/server'
+import { requireDashboardRequest } from '@/lib/dashboard-auth'
 import { getSupabase } from '@/lib/supabase'
 import { scanCbtaInstructors } from '@/lib/instructor-scanner'
 
 export const maxDuration = 300
 
 export async function GET(req: NextRequest) {
-  if (req.nextUrl.searchParams.get('secret') !== process.env.CRON_SECRET) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+  const denied = requireDashboardRequest(req)
+  if (denied) return denied
 
   const countriesParam = req.nextUrl.searchParams.get('countries')
   const targetCountries = countriesParam ? countriesParam.split(',').map(c => c.trim()).filter(Boolean) : undefined

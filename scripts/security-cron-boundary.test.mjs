@@ -245,7 +245,7 @@ test('RELEASE HOLD: LinkedIn draft generation cannot create a false contacted/se
   assert.match(code, /sent:\s*0/)
   assert.match(code, /messaged:\s*0/, 'legacy sent-count field must remain explicitly zero')
   assert.doesNotMatch(code, /messaged:\s*results\.length/, 'draft generation must never be reported as sent')
-  assert.match(code, /generated:\s*0,\s*sent:\s*0,\s*prospects:\s*\[\]/)
+  assert.match(code, /generated:\s*0,\s*sent:\s*0,\s*messaged:\s*0,\s*prospects:\s*\[\]/)
   assert.doesNotMatch(code, /status:\s*['"]contacted['"]/, 'generated drafts are not confirmed outreach')
   assert.doesNotMatch(code, /LinkedIn message envoyé/, 'do not write a false sent note')
   const middleware = source('middleware.ts')

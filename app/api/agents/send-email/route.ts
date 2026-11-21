@@ -149,6 +149,11 @@ export async function GET(req: NextRequest) {
   if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  // A valid cron credential does not authorize autonomous outbound email.
+  // Keep the scheduled batch inert unless the deployment owner explicitly opts in.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Scheduled outbound is disabled' }, { status: 503 })
+  }
   after(runDailyBlitz)
   return NextResponse.json({ status: 'started' })
 }

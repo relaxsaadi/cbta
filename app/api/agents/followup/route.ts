@@ -121,6 +121,10 @@ async function runFollowupAgent() {
 }
 
 export async function POST() {
+  // Human authentication does not by itself authorize autonomous bulk follow-ups.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Batch outbound is disabled' }, { status: 503 })
+  }
   after(runFollowupAgent)
   return NextResponse.json({ status: 'started', message: 'Agent relance lancé en arrière-plan' })
 }

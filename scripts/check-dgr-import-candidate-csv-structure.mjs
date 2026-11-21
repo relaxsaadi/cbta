@@ -89,7 +89,12 @@ function inspectCsv(text, label, idHeader, collectedIds = null) {
 
   const idIndex = headers.indexOf(idHeader);
   const functionIndex = headers.indexOf('function');
+  const eligibilityIndex = headers.indexOf('import_eligible');
+  const blockerIndex = headers.indexOf('blocker');
   const seenIds = new Map();
+  if (idHeader === 'kost_id' && eligibilityIndex === -1) {
+    issues.push(`${label}: missing required header import_eligible`);
+  }
   if (functionIndex === -1) {
     issues.push(`${label}: missing required header function`);
   }
@@ -104,6 +109,23 @@ function inspectCsv(text, label, idHeader, collectedIds = null) {
 
     if (values.length !== headers.length) {
       issues.push(`${label}: CSV row ${csvRow} has ${values.length} columns; expected ${headers.length}`);
+    }
+
+    // Import eligibility is a controlled YES/NO decision, never a free-text
+    // flag. Blank/unknown values must not bypass NO-hold validation.
+    if (idHeader === 'kost_id' && eligibilityIndex >= 0) {
+      const eligibility = (values[eligibilityIndex] ?? '').trim().toUpperCase();
+      if (eligibility !== 'YES' && eligibility !== 'NO') {
+        issues.push(`${label}: CSV row ${csvRow} has invalid IMPORT_ELIGIBLE; expected YES or NO`);
+      } else if (eligibility === 'NO') {
+        // A NO import decision needs a durable reason even for historically
+        // FROZEN items. An empty blocker must never imply clearance.
+        if (blockerIndex === -1) {
+          issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO is missing required BLOCKER header`);
+        } else if (!(values[blockerIndex] ?? '').trim()) {
+          issues.push(`${label}: CSV row ${csvRow} IMPORT_ELIGIBLE=NO has blank BLOCKER`);
+        }
+      }
     }
 
     const id = (values[idIndex] ?? '').trim();
@@ -158,6 +180,12 @@ function runSelfTest() {
   const duplicateId = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\nQ-7.3-040,7.3,YES\r\n';
   const wrongFunction = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.2,YES\r\n';
   const missingFunctionHeader = 'KOST_ID,IMPORT_ELIGIBLE\r\nQ-7.3-040,NO\r\n';
+  const heldNoBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,NO,\r\n';
+  const heldWithoutBlockerHeader = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE\r\nQ-7.3-040,7.3,NO\r\n';
+  const heldWithoutEligibilityHeader = 'KOST_ID,FUNCTION,BLOCKER\r\nQ-7.3-040,7.3,reason\r\n';
+  const heldWithBlocker = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,NO,qualified human FR/EN review pending\r\n';
+  const blankEligibility = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,,reason\r\n';
+  const unknownEligibility = 'KOST_ID,FUNCTION,IMPORT_ELIGIBLE,BLOCKER\r\nQ-7.3-040,7.3,PENDING,reason\r\n';
 
   if (inspectCsv(good, 'fixture.csv', 'kost_id').length !== 0) {
     throw new Error('Regression fixture failed: valid CSV was rejected.');
@@ -208,6 +236,27 @@ function runSelfTest() {
 
   if (!inspectCsv(missingFunctionHeader, 'fixture.csv', 'kost_id').some((issue) => /missing required header function/i.test(issue))) {
     throw new Error('Regression fixture failed: missing FUNCTION column was accepted.');
+  }
+
+  if (!inspectCsv(heldNoBlocker, 'fixture.csv', 'kost_id').some((issue) => /NO has blank BLOCKER/.test(issue))) {
+    throw new Error('Regression fixture failed: blocked import row without reason was accepted.');
+  }
+  if (inspectCsv(heldWithBlocker, 'fixture.csv', 'kost_id').length !== 0) {
+    throw new Error('Regression fixture failed: blocked import row with documented reason was rejected.');
+  }
+  if (!inspectCsv(heldWithoutBlockerHeader, 'fixture.csv', 'kost_id')
+    .some((issue) => /NO is missing required BLOCKER header/.test(issue))) {
+    throw new Error('Regression fixture failed: dropping BLOCKER column bypassed a NO import hold.');
+  }
+  if (!inspectCsv(heldWithoutEligibilityHeader, 'fixture.csv', 'kost_id')
+    .some((issue) => /missing required header import_eligible/.test(issue))) {
+    throw new Error('Regression fixture failed: dropping IMPORT_ELIGIBLE column bypassed the import hold.');
+  }
+  for (const [label, fixture] of [['blank', blankEligibility], ['unknown', unknownEligibility]]) {
+    if (!inspectCsv(fixture, 'fixture.csv', 'kost_id')
+      .some((issue) => /invalid IMPORT_ELIGIBLE; expected YES or NO/.test(issue))) {
+      throw new Error(`Regression fixture failed: ${label} IMPORT_ELIGIBLE decision was accepted.`);
+    }
   }
 
   const matching = new Set(['Q-7.3-040', 'Q-7.3-041']);

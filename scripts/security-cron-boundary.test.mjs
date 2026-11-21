@@ -241,9 +241,10 @@ test('RELEASE HOLD: scheduled and batch DGR email routes default to no outbound 
 
 test('RELEASE HOLD: LinkedIn draft generation cannot create a false contacted/sent state', () => {
   const code = source('app/api/agents/linkedin-outreach/route.ts')
-  assert.doesNotMatch(code, /\bmessaged\s*:/, 'draft generation must not be reported as sent')
   assert.match(code, /generated:\s*results\.length/)
   assert.match(code, /sent:\s*0/)
+  assert.match(code, /messaged:\s*0/, 'legacy sent-count field must remain explicitly zero')
+  assert.doesNotMatch(code, /messaged:\s*results\.length/, 'draft generation must never be reported as sent')
   assert.match(code, /generated:\s*0,\s*sent:\s*0,\s*prospects:\s*\[\]/)
   assert.doesNotMatch(code, /status:\s*['"]contacted['"]/, 'generated drafts are not confirmed outreach')
   assert.doesNotMatch(code, /LinkedIn message envoyé/, 'do not write a false sent note')

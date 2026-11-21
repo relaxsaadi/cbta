@@ -193,3 +193,27 @@ test('RELEASE HOLD: provider success requires a nonempty provider message ID', (
   assert.match(sendFn, /return !error && typeof data\?\.id === 'string' && data\.id\.length > 0/,
     'do not report successful API acceptance without a provider-assigned ID')
 })
+
+
+test('RELEASE HOLD: scheduled DGR email GET routes default to no outbound work', () => {
+  const cases = [
+    ['app/api/agents/send-email/route.ts', 'runDailyBlitz'],
+    ['app/api/agents/followup/route.ts', 'runFollowupAgent'],
+  ]
+  for (const [filename, runner] of cases) {
+    const code = source(filename)
+    const start = code.indexOf('export async function GET(')
+    assert.ok(start >= 0, filename + ' must expose the scheduled GET handler')
+    const handler = code.slice(start)
+    const auth = handler.indexOf("req.headers.get('authorization')")
+    const disabled = handler.indexOf("if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true')")
+    const dispatch = handler.indexOf('after(' + runner + ')')
+    assert.ok(auth >= 0 && disabled > auth && dispatch > disabled,
+      filename + ' must authenticate, then default-deny autonomous sends, before dispatch')
+    assert.match(
+      handler.slice(disabled, dispatch),
+      /return NextResponse\.json\(\{ error: 'Scheduled outbound is disabled' \}, \{ status: 503 \}\)/,
+      filename + ' must return a non-success response while scheduled outbound is disabled'
+    )
+  }
+})

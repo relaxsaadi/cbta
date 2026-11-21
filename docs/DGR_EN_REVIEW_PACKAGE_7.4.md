@@ -1012,12 +1012,14 @@ sufficient for `APPROVED`.
 
 - 53/53 currently-drafted Function 7.4 items translated to EN draft status
   (Batch 1+2: 35 items; Batch 3: 18 items, `Q-7.4-036`–`053`). 0/53 reviewed.
-- All 53 items remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A` on
-  the FR side, unchanged by this package — Tier A FR verification and
-  bilingual EN review are tracked as two fully separate, both-still-open
-  gates for every item here (a different starting point from Function 7.1's
-  12 pilot items, which were already FR-terminal before their EN package was
-  built).
+- **Historical drafting snapshot:** the original EN package treated all
+  53 FR items as `DRAFT — Tier B only`. This is not an effective per-item
+  status determination. At PR #3 exact head (2026-11-18), strict CI flags
+  25 items for direct Tier-A provenance (including 10 historically FROZEN)
+  and 13 stale/missing FR-to-EN status mirrors. Consult the per-item
+  reconciliation CSV, FR bank and exact-head CI instead of this summary;
+  no FR verification, qualified EN review or approval is conferred here.
+  Exact-head scope: PR #3 at `4747d7b817fd288adff19fe836a94d15b1d5d672` (2026-11-18), [direct Tier-A CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716557) and [regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716488). These are diagnostics, not fresh authorized readings of licensed IATA material.
 - Every FR stem/option shown above is copied verbatim from
   `docs/DGR_PRODUCTION_BANK_7.4.md` (Batches 1, 2, and 3) — no working gloss
   was reconstructed, unlike Function 7.1's pilot package.

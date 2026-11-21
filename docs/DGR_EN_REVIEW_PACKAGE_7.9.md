@@ -15,14 +15,17 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR source-of-record status.** The
-  per-item `FR status` fields below mirror the current reconciliation
-  conservatively: directly verified current-edition evidence may remain
-  `FROZEN`, partial or non-item-specific evidence is held `UNRESOLVED`,
-  explicit conflicts remain `SOURCE CONFLICT`, and source-required items
-  remain `DRAFT`. Per `.claude/rules/dgr-stage2b.md` rule 5, FR source
-  verification and EN bilingual technical review are **separate gates**;
-  this package does not promote EN review or approval.
+- **Current FR-status precedence (2026-11-18):** the `FR status` fields
+  reproduced below are not guaranteed to mirror the latest reconciliation.
+  At PR #3 exact head, strict CI flags **22 items for direct Tier-A
+  provenance (including 14 historically FROZEN)** and **16 stale/missing
+  FR-to-EN status mirrors**. Check every tested claim against
+  `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR production
+  bank and exact-head CI; historic `FROZEN` is not independently verified
+  current-edition Tier-A evidence, and `SOURCE GAP`/`SOURCE CONFLICT` remain
+  blocking. Exact-head scope: PR #3 at `4747d7b817fd288adff19fe836a94d15b1d5d672` (2026-11-18), [direct Tier-A CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716557) and [regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716488). These are diagnostics, not fresh authorized readings of licensed IATA material.
+  Per `.claude/rules/dgr-stage2b.md` rule 5, FR verification and qualified
+  EN review are separate gates; this package promotes neither.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -1149,10 +1152,11 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
   needed — every FR stem, option set, and statement above is copied verbatim
   from `docs/DGR_PRODUCTION_BANK_7.9.md`, itself sourced verbatim (with
   printed slide citations) from the actual KOST Function 7.9 course PDF.
-- All 39 items' FR status fields mirror the current reconciliation
-  conservatively and are unchanged by EN translation review. FR source
-  verification and EN bilingual review remain separate gates under
-  `.claude/rules/dgr-stage2b.md` rule 5.
+- The FR labels below are historical EN-package mirrors: **16 are
+  stale/missing** versus effective FR states in exact-head CI. Follow the
+  per-item reconciliation CSV, FR bank and strict Tier-A CI; completing
+  translation drafting changes no item's FR verification, EN human review
+  or approval (rule 5).
 - 4 terminology points are explicitly flagged unverified for the reviewer:
   the "allumettes chimiques"→"'strike-anywhere' matches" candidate
   (Q-7.9-002); the "accord multilatéral de trafic intercompagnies"→"IATA
@@ -1186,11 +1190,12 @@ drafted in `docs/DGR_PRODUCTION_BANK_7.9.md`'s own "## Batch 3" section
 Same status discipline as the header at the top of this file: **no item
 below may be marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or `APPROVED`**;
 every item carries status `BILINGUAL TECHNICAL REVIEW REQUIRED` and
-approval `PENDING REVIEWER + DATE`; no item's FR status changes — all 8
-remain `DRAFT — Tier B only, SOURCE REQUIRED for Tier A`, exactly as
-recorded in `docs/DGR_PRODUCTION_BANK_7.9.md`'s own Batch 3 section, per
-`.claude/rules/dgr-stage2b.md` rule 5 (FR/EN are separate gates). The FR
-text below is copied verbatim from `docs/DGR_PRODUCTION_BANK_7.9.md`'s
+approval `PENDING REVIEWER + DATE`; no item's FR status changes.
+**Historical Batch 3 FR snapshot:** the eight-item drafting pass originally
+recorded a blanket `DRAFT — Tier B only` status, which is not authoritative
+current per-item verification. Consult the reconciliation CSV, FR bank and
+strict Tier-A CI; FR/EN are separate gates under `.claude/rules/dgr-stage2b.md`
+rule 5. The FR text below is copied verbatim from the production bank's
 Batch 3 entries — no reconstruction, no gloss.
 
 Two items in this batch (`Q-7.9-034`, `Q-7.9-039`) are **image-sourced**:
@@ -1479,11 +1484,13 @@ different leaf.
 - 8/8 Batch 3 items translated to EN draft status (`Q-7.9-032`–`039`).
   Combined with Batches 1 and 2, **39/39 Function 7.9 items** now have an
   EN draft translation. 0/39 reviewed.
-- All 8 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this pass, per `.claude/rules/dgr-stage2b.md` rule
-  5 (FR source verification and EN bilingual review are separate gates).
-  This translation pass changes no item's FR status and closes no gate in
-  `docs/DGR_STAGE_2B_STATUS.md` or `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`.
+- **Historical Batch 3 FR snapshot:** all eight items were originally
+  described together as `DRAFT — Tier B only`; current FR provenance is
+  item-specific, not established by this historical label. See the
+  reconciliation CSV, FR bank and strict exact-head Tier-A CI. This EN
+  drafting pass changes no FR verification or EN review state, and closes
+  no gate in `docs/DGR_STAGE_2B_STATUS.md` or
+  `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`.
 - 2 terminology points are newly flagged/added for the reviewer: the
   "AEP"→"PED" (Portable Electronic Devices) candidate (Q-7.9-032,
   Q-7.9-034 — same flag already carried from Function 7.5's Q-7.5-011 and

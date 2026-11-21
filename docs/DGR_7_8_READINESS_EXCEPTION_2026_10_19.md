@@ -1,0 +1,62 @@
+# Function 7.8 — regulatory and bilingual readiness exception (2026-10-19)
+
+**Scope:** KOST DGR/CBTA Stage 2B.1; PR #3; Function **7.8 — flight operations personnel / flight dispatchers**. **DRAFT / PRE-PRODUCTION / NOT APPROVED.** This is a repository and exact-head GitHub Actions audit, **not** a fresh reading of licensed IATA DGR 67th Edition 2026 text, qualified FR/EN signoff, or ANAC/IATA authorization.
+
+## 2026-11-16 strict affirmative-evidence CI reconciliation — 27 affected items (not just 12 historically FROZEN)
+
+At draft PR #3 head `c0aeaa3e5d0460e793ae91a90a0781c823b1ce1f`, the completed [direct Tier-A provenance CI run 43798181288](https://github.com/relaxsaadi/cbta/actions/runs/43798181288), **Direct item Tier-A provenance** job `133071733472`, reports **27 distinct Function 7.8 question IDs** under the stricter **affirmative current-edition per-item evidence** diagnostic (cross-applied/representative/batch evidence or absent item-specific edition binding). The [regulatory readiness CI run 43798181190](https://github.com/relaxsaadi/cbta/actions/runs/43798181190), **Full DGR readiness** job `133071809685`, independently reproduces those 27 IDs. **The earlier 12-item FROZEN-source diagnostic is a subset**, not a complete list of Function 7.8 evidence remediations.
+
+**All 27 affected IDs:** `Q-7.8-001`, `006`, `007`, `008`, `009`, `010`, `011`, `012`, `016`, `017`, `019`, `020`, `021`, `022`, `023`, `024`, `025`, `028`, `033`, `035`, `040`, `041`, `042`, `043`, `045`, `047`, `049` (short suffixes carry the `Q-7.8-` prefix).
+
+**15 additional IDs not included in the 12-item FROZEN list:** `Q-7.8-001`, `006`, `010`, `012`, `019`, `020`, `022`, `023`, `024`, `025`, `028`, `041`, `042`, `045`, `049`. Within the 27, **five** (`Q-7.8-010`, `019`, `028`, `042`, `045`) also lack an explicit **item-specific IATA DGR 67th Edition 2026 binding** in this diagnostic. These categories overlap; do not sum counts. The separately reported **15** FR/EN mirrored-FR-status divergences likewise overlap and remain unresolved.
+
+These are **provenance/metadata release blockers, not a determination that 27 answers are factually wrong**. Resolve each regulatory assertion, answer and material distractor with direct authenticated applicable 2026 DGR Tier-A evidence, exact locator, source language and binding, and qualified named/date FR review followed by independent qualified named/date EN review. Keep `Q-7.8-018` and `Q-7.8-036` at **SOURCE GAP UNRESOLVED**; their absence from this particular 27-item *terminal-regulatory-state* set is **not evidence of verified DGR absence** or import eligibility. Any contradiction stays `SOURCE CONFLICT` pending resolution. The function-specific 23-task CBTA authority, 51 drafted questions and unapproved import holds are unchanged. No source text, answer, reviewer admission, `APPROVED` flag, eligibility, security control, runtime or deployment has been altered by this documentation update.
+
+## 2026-11-14 current exact-head CI reconciliation — FR/EN mirror count (15, not 17)
+
+At PR #3 HEAD `d4f1798c3ad91fb9272ba315663380d688682f38`, the [DGR regulatory readiness CI run](https://github.com/relaxsaadi/cbta/actions/runs/43617577001), **Full DGR readiness** job, reports **15** Function 7.8 bank/EN entries with missing, unclassified or stale **mirrored FR status**, not the **17** entries recorded in the historical 2026-10-19 snapshot below:
+
+`Q-7.8-007`, `Q-7.8-008`, `Q-7.8-009`, `Q-7.8-011`, `Q-7.8-016`, `Q-7.8-017`, `Q-7.8-021`, `Q-7.8-027`, `Q-7.8-033`, `Q-7.8-035`, `Q-7.8-040`, `Q-7.8-043`, `Q-7.8-046`, `Q-7.8-047`, `Q-7.8-050`.
+
+`Q-7.8-018` and `Q-7.8-036` are **not** in this *specific current FR-status-mirror drift class*, but **remain SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED**. Their exclusion does **not** signify verified absence, qualified source review or independent EN approval. The same exact-head CI still reports **12** historically FROZEN items lacking adequately individualized Tier-A provenance (the 12-item list below); the 15 and 12 groups overlap and must not be added as distinct defects. The broader affirmative per-item evidence gate also fails.
+
+This is a documentation-only correction of the live exception count. Keep all 51 Function 7.8 draft questions **not importable**. The task set remains independently derived from TABLEAU 7.8.A (23 leaf tasks; Block 0=18, Block 6.2=5, no Block 7). No current-edition DGR regulatory rule, question wording, answer, FR review, EN review, approval or deployment was established or changed. The dated 17-entry evidence below is preserved as a historical audit snapshot, **not the current count**.
+
+## 2026-11-12 superseding source-gap correction — Q-7.8-018 / Q-7.8-036
+
+Both items now have effective `SOURCE GAP UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED` status. The historical Q-7.1-001 Appendix A / §1.0 / targeted `Risque` search was limited, and did not establish whole-DGR silence or separately verify either Function 7.8 item. Current licensed 2026 IATA DGR 67th Edition direct item-specific evidence of presence/absence is missing; KOST Function 7.8 slides 31–33 remain Tier B course context only. No authorized qualified named/date FR source review or separate EN bilingual review is recorded. Both items remain non-importable; no wording, answer, approval or deployment changed. The earlier quoted 12/17 CI findings remain 2026-10-19 historical snapshots and are not evidence of a current acceptance.
+
+## Function-specific CBTA task authority and draft scope
+
+- `docs/DGR_OFFICIAL_TASK_SET_7.8.md` records **23 independently derived official leaf tasks** from the separately cross-validated **IATA CBTA Training Guidance Ed.1 (2023), TABLEAU 7.8.A** (PDF p.34 / printed p.30): **Block 0 = 18; Block 6.2 = 5; Block 7 = absent**. Do not invent a reporting Block 7 from local over-teaching, or copy Function 7.1's 44-task structure.
+- Separate source-governed artifacts exist: `docs/DGR_STAGE2A_FUNCTION_7.8_BLUEPRINT.md` (provisional *source-yield ceiling*, not a quota), `docs/DGR_SOURCE_COMPETENCY_MATRIX_7.8.md`, `docs/DGR_PRODUCTION_BANK_7.8.md` (**51 drafted items**), and `docs/DGR_EN_REVIEW_PACKAGE_7.8.md` (**51 matching draft EN item IDs**).
+- The source/competency matrix records local gaps separately from current-edition rule verification. **Task 0.3.2** is a local source limitation; do not infer current IATA DGR text from that local gap. Older **66th Edition-related Tier B** course slides and past representative/cross-applied checks cannot establish direct per-item **67th Edition 2026 Tier-A** support.
+
+## Exact-head test evidence and unresolved regulatory claims
+
+Audited PR #3 HEAD `864afaa03c982cd6a409cc84fcf18592372fbaac` (2026-10-19). The [DGR regulatory readiness run #548](https://github.com/relaxsaadi/cbta/actions/runs/39182766947) and [DGR direct Tier-A provenance run #232](https://github.com/relaxsaadi/cbta/actions/runs/39182766679) **FAIL**; these are test-policy failures, **not** proof that the underlying answers are incorrect.
+
+**12** Function 7.8 items still have `FROZEN FR / SOURCE VERIFIED` labels despite representative or insufficiently individualized 2026 Tier-A evidence:
+
+`Q-7.8-007`, `Q-7.8-008`, `Q-7.8-009`, `Q-7.8-011`, `Q-7.8-016`, `Q-7.8-017`, `Q-7.8-021`, `Q-7.8-033`, `Q-7.8-035`, `Q-7.8-040`, `Q-7.8-043`, `Q-7.8-047`.
+
+**Two additional direct-evidence exceptions:** `Q-7.8-018` and `Q-7.8-036` assert `FR SOURCE GAP CONFIRMED` without item-specific affirmative evidence sufficient to establish the claimed *regulatory absence*. Treat these as unresolved source-classification questions, not confirmed DGR absences. Local pedagogical definitions may require a separately governed non-DGR source; do not fabricate a DGR rule.
+
+The stricter affirmative-evidence job additionally flags other terminal-state source assertions on this function as cross-applied, batch-derived, or missing explicit item-specific current-edition binding. Its wider finding is **not** limited to the 12 frozen items and must be resolved item-by-item.
+
+## FR-status mirror and independent EN review
+
+The same exact-head full-readiness job reports **17** overlapping Function 7.8 entries with missing, unclassified, or stale **EN-package mirrored FR status**:
+
+`Q-7.8-007`, `Q-7.8-008`, `Q-7.8-009`, `Q-7.8-011`, `Q-7.8-016`, `Q-7.8-017`, `Q-7.8-018`, `Q-7.8-021`, `Q-7.8-027`, `Q-7.8-033`, `Q-7.8-035`, `Q-7.8-036`, `Q-7.8-040`, `Q-7.8-043`, `Q-7.8-046`, `Q-7.8-047`, `Q-7.8-050`.
+
+These findings **overlap** the 12-item Tier-A list; do not add them as 29 distinct errors. **Do not blindly copy a potentially over-promoted FROZEN state into EN** just to satisfy the checker. First reconcile effective FR claim/source state against direct evidence, matrix, bank, and import-control CSV; only then update the EN package's *FR status mirror*. Actual `BILINGUAL TECHNICAL REVIEW REQUIRED` is independent and remains pending.
+
+## Remediation and release gates
+
+1. For every regulatory claim, correct answer and material distractor, bind the exact current **IATA DGR 67th Edition 2026** source/version/locator and access-controlled evidence record to the **specific item**; keep qualified reviewer identity and verification date independently auditable. If evidence is unavailable/contradictory, retain explicit `SOURCE GAP` / `SOURCE CONFLICT` or `TIER_A_PROVENANCE_UNRESOLVED`; do not claim verified absence without affirmative support.
+2. Verify the French source claims with a **named qualified FR reviewer + date**; separately commission English bilingual technical review and record its **named qualified reviewer + date**. No item can become `APPROVED` from an automated check or copied source claim.
+3. Keep import/production eligibility **NO** until direct provenance, FR/EN approvals, and safety gates are real; reconcile already-imported runtime records separately if any exist. Never overwrite historical answers, scores, or audit trails to achieve a green check.
+4. Keep PR #3 **DRAFT**. A green task/CSV structure test is not an exam security, historical integrity, deployment, recovery, or regulatory-readiness proof. The failed Vercel target for the commercial `kost-funnel` website is **not evidence of Moodle/E-EXAM deployment failure**; verify platform deployments separately.
+
+**Outcome:** **NOT READY**. This document records unresolved evidence and status consistency; it changes no question, correct answer, review status, regulatory fact, secret, or ANAC/IATA claim.

@@ -1,0 +1,78 @@
+name: DGR controlled reviewer admission
+
+on:
+  push:
+    branches:
+      - main
+      - ai/dgr-stage2b-handoff
+    paths:
+      - "docs/DGR_**"
+      - "docs/RECOVERED_STAGE2A_CONTEXT.md"
+      - "scripts/check-dgr-controlled-reviewer-registry.mjs"
+      - "scripts/check-dgr-reviewer-qualification-evidence.mjs"
+      - "scripts/check-dgr-reviewer-qualification-evidence-reference.mjs"
+      - "scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs"
+      - ".github/workflows/dgr-controlled-reviewer-registry.yml"
+  pull_request:
+    paths:
+      - "docs/DGR_**"
+      - "docs/RECOVERED_STAGE2A_CONTEXT.md"
+      - "scripts/check-dgr-controlled-reviewer-registry.mjs"
+      - "scripts/check-dgr-reviewer-qualification-evidence.mjs"
+      - "scripts/check-dgr-reviewer-qualification-evidence-reference.mjs"
+      - "scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs"
+      - ".github/workflows/dgr-controlled-reviewer-registry.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  controlled-reviewer-registry:
+    name: Controlled reviewer registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # pull_request events otherwise checkout GitHub's synthetic merge ref;
+          # readiness evidence is intentionally scoped to the exact PR head.
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Controlled reviewer-reference regression fixtures
+        run: node scripts/check-dgr-controlled-reviewer-registry.mjs --test
+
+      - name: Controlled reviewer-reference consistency gate
+        if: always()
+        run: node scripts/check-dgr-controlled-reviewer-registry.mjs
+
+      - name: Active reviewer qualification-evidence regression fixtures
+        if: always()
+        run: node scripts/check-dgr-reviewer-qualification-evidence.mjs --test
+
+      - name: Active reviewer qualification-evidence consistency gate
+        if: always()
+        run: node scripts/check-dgr-reviewer-qualification-evidence.mjs
+
+      - name: Reviewer qualification evidence-reference regression fixtures
+        if: always()
+        run: node scripts/check-dgr-reviewer-qualification-evidence-reference.mjs --test
+
+      - name: Reviewer qualification evidence-reference consistency gate
+        if: always()
+        run: node scripts/check-dgr-reviewer-qualification-evidence-reference.mjs
+
+      - name: Reviewer bilingual evidence-reference regression fixtures
+        if: always()
+        run: node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs --test
+
+      - name: Reviewer bilingual evidence-reference consistency gate
+        if: always()
+        run: node scripts/check-dgr-reviewer-bilingual-evidence-reference.mjs

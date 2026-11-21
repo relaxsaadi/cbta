@@ -1,32 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { assertSafeDgrMarketingCopy, SAFE_DGR_MARKETING_RULES } from '@/lib/dgr-marketing-claims'
 
-const DAYS_LEFT = Math.max(0, Math.ceil((new Date('2026-09-30').getTime() - Date.now()) / 86400000))
-
-const CATEGORIES_BY_SECTOR: Record<string, string[]> = {
-  airline:           ['Cat. 7.3 — Acceptation cargo DGR', 'Cat. 7.1 — Expéditeurs', 'Cat. 7.5 — Personnel au sol', 'Cat. 1 — Pilotes & cabin crew'],
-  ground_handler:    ['Cat. 7.5 — Personnel au sol', 'Cat. 7.3 — Acceptation cargo DGR', 'Cat. 7.4 — Personnel piste'],
-  freight_forwarder: ['Cat. 7.1 — Expéditeurs DGR', 'Cat. 7.6 — Agents de fret', 'Cat. 7.3 — Acceptation'],
-  oil_gas:           ['Cat. 7.1 — Expéditeurs', 'Cat. 7.5 — Personnel au sol', 'Cat. 7.6 — Agents de fret'],
-  courier:           ['Cat. 7.1 — Expéditeurs DGR', 'Cat. 7.3 — Acceptation', 'Cat. 7.6 — Agents de fret'],
-  pharma:            ['Cat. 7.1 — Expéditeurs DGR', 'Cat. 7.6 — Agents de fret', 'Cat. 7.5 — Personnel au sol'],
-  airport_authority: ['Cat. 7.5 — Personnel au sol', 'Cat. 7.4 — Personnel piste', 'Cat. 7.3 — Acceptation cargo'],
+function normalizeFunctions(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter((item) => /^7\.(?:10|[1-9])(?:\b|\s|[-—:])/.test(item))
 }
 
-const PRICING = {
-  individual: 450,    // EUR per person
-  group5: 380,        // EUR per person (5+)
-  group10: 320,       // EUR per person (10+)
-  urgency_discount: 50, // EUR discount for booking before Aug 15
+function normalizeSessions(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter(Boolean)
 }
 
 export async function POST(req: NextRequest) {
-  const { prospect, headcount = 5 } = await req.json()
+  const body = await req.json().catch(() => ({}))
+  const { prospect, headcount, commercialTerms } = body
 
-  const categories = CATEGORIES_BY_SECTOR[prospect.sector] || ['Cat. 7.1 — Expéditeurs DGR', 'Cat. 7.3 — Acceptation cargo']
-  const pricePerPerson = headcount >= 10 ? PRICING.group10 : headcount >= 5 ? PRICING.group5 : PRICING.individual
-  const urgencyPrice = pricePerPerson - PRICING.urgency_discount
-  const totalNormal = pricePerPerson * headcount
-  const totalUrgency = urgencyPrice * headcount
+  if (!prospect?.company_name) {
+    return NextResponse.json({ error: 'Prospect/company_name is required' }, { status: 400 })
+  }
+
+  const functions = normalizeFunctions(body.functions)
+  const sessions = normalizeSessions(body.sessions)
+  const commercialTermsText = typeof commercialTerms === 'string' && commercialTerms.trim()
+    ? commercialTerms.trim()
+    : 'Aucun tarif ou terme commercial vérifié fourni — indiquer « sur devis » et ne créer aucun chiffre.'
+  const headcountText = Number.isFinite(Number(headcount)) && Number(headcount) > 0
+    ? String(Number(headcount))
+    : 'non confirmé'
+  const functionsText = functions.length
+    ? functions.join(', ')
+    : 'Aucune fonction validée fournie — ne pas recommander de fonction ; indiquer qu’elle sera déterminée après analyse du poste et de la table de tâches CBTA applicable.'
+  const sessionsText = sessions.length
+    ? sessions.join(' ; ')
+    : 'Aucune session confirmée fournie — ne pas inventer de date.'
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -40,42 +52,32 @@ export async function POST(req: NextRequest) {
       max_tokens: 2000,
       messages: [{
         role: 'user',
-        content: `Génère une proposition commerciale professionnelle en HTML (corps seulement, style inline) pour:
+        content: `Génère une proposition commerciale professionnelle en HTML (corps seulement, style inline) pour :
 
-CLIENT: ${prospect.company_name}
-CONTACT: ${prospect.decision_maker_name}, ${prospect.decision_maker_title}
-SECTEUR: ${prospect.sector}
-EFFECTIF ESTIMÉ: ${prospect.estimated_staff || 'NC'} personnes
-CATÉGORIES RECOMMANDÉES: ${categories.join(', ')}
-NOMBRE DE PERSONNES À FORMER: ${headcount}
+CLIENT : ${prospect.company_name}
+CONTACT : ${prospect.decision_maker_name || 'non confirmé'}, ${prospect.decision_maker_title || 'fonction non confirmée'}
+SECTEUR : ${prospect.sector || 'non confirmé'}
+EFFECTIF À FORMER : ${headcountText}
+FONCTIONS CBTA VALIDÉES FOURNIES : ${functionsText}
+SESSIONS CONFIRMÉES FOURNIES : ${sessionsText}
+TERMES COMMERCIAUX VÉRIFIÉS FOURNIS : ${commercialTermsText}
 
-PRESTATAIRE: KOST GROUP — 1er centre IATA CBTA certifié d'Algérie
-CONTACT KOST: Karim Saadi | kostgroupe@gmail.com | +213 542 30 53 83 | dgr.kostacademy.com
+PRESTATAIRE : KOST GROUP — organisme de formation DGR/CBTA
+CONTACT KOST : Karim Saadi | kostgroupe@gmail.com | +213 542 30 53 83 | dgr.kostacademy.com
 
-TARIFS:
-- Tarif individuel: ${PRICING.individual} EUR/personne
-- Groupe 5-9 personnes: ${PRICING.group5} EUR/personne
-- Groupe 10+ personnes: ${PRICING.group10} EUR/personne
-- OFFRE SPÉCIALE avant 15 août: -${PRICING.urgency_discount} EUR/personne → ${urgencyPrice} EUR/personne
-- Total pour ${headcount} personnes: ${totalNormal} EUR (ou ${totalUrgency} EUR si inscription avant 15 août)
-
-SESSIONS DISPONIBLES:
-- Session Août 2026: 18-22 août (PLACES LIMITÉES — il reste ${DAYS_LEFT} jours)
-- Session Septembre 2026: 15-19 septembre (dernière session avant deadline IATA)
-
-OBLIGATION LÉGALE: Échéance IATA septembre 2026 — risque de suspension opérationnelle
-
-HTML requis:
-- Entête avec logo KOST GROUP (texte, fond #0f2557)
-- Section "Objet de la proposition"
-- Section "Vos obligations IATA" (spécifique à leur secteur)
-- Section "Notre solution" (CBTA, certifications, taux réussite 95%)
-- Tableau des formations recommandées avec catégories + durée + prix
-- Section "Offre commerciale" avec tableau de prix + offre early bird
-- Section "Prochaines sessions" avec dates
-- CTA rouge : "Confirmer l'inscription — Session Août 2026"
+HTML requis :
+- Entête KOST GROUP
+- Section « Objet de la proposition »
+- Section « Besoin à qualifier » : décrire uniquement les éléments fournis, sans inventer d'obligation, de fonction CBTA ou de sanction
+- Section « Périmètre de formation » : utiliser uniquement les fonctions explicitement fournies ci-dessus ; sinon écrire que le périmètre sera déterminé après analyse validée
+- Section « Offre commerciale » : reprendre uniquement les termes commerciaux explicitement fournis ; sinon « sur devis »
+- Section « Sessions » : reprendre uniquement les sessions explicitement fournies ; sinon ne pas afficher de date
+- CTA neutre : « Valider le périmètre et recevoir l'offre finale »
 - Pied de page avec coordonnées KOST
-- Style: professionnel, sobre, couleurs #0f2557 (bleu) + #dc2626 (rouge urgent)
+- Style professionnel et sobre
+${SAFE_DGR_MARKETING_RULES}
+
+IMPORTANT : ne calcule, n'invente ni ne complète aucun prix, remise, taux de réussite, durée, date, catégorie/fonction, échéance réglementaire, sanction, certification, agrément ou approbation absent des données d'entrée.
 
 Réponds UNIQUEMENT avec le HTML (pas de markdown, pas d'explication).`,
       }],
@@ -85,16 +87,25 @@ Réponds UNIQUEMENT avec le HTML (pas de markdown, pas d'explication).`,
   const data = await res.json()
   const html = data.content?.[0]?.text || ''
 
+  try {
+    assertSafeDgrMarketingCopy(html)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Proposition bloquée par le garde de conformité', detail: String(error) },
+      { status: 422 }
+    )
+  }
+
   return NextResponse.json({
     html,
     summary: {
       company: prospect.company_name,
-      contact: prospect.decision_maker_name,
-      headcount,
-      categories,
-      total_normal: totalNormal,
-      total_early_bird: totalUrgency,
-      sessions: ['18-22 août 2026', '15-19 septembre 2026'],
+      contact: prospect.decision_maker_name || null,
+      headcount: headcountText === 'non confirmé' ? null : Number(headcountText),
+      functions,
+      categories: functions,
+      sessions,
+      commercial_terms_provided: commercialTermsText !== 'Aucun tarif ou terme commercial vérifié fourni — indiquer « sur devis » et ne créer aucun chiffre.',
     },
   })
 }

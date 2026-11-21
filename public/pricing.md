@@ -1,56 +1,38 @@
-# Pricing — KOST GROUP (Formations IATA DGR)
+# DGR / CBTA — cadrage commercial KOST GROUP
 
-> Certification IATA DGR délivrée par KOST GROUP, seul centre IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059). Paiement en EUR ou USD, facturation officielle France (STRATEGIX) ou Algérie.
+Ce document public ne constitue pas une preuve d'agrément, de certification, de reconnaissance universelle ou d'approbation ANAC/IATA.
 
-## Initial
+## Principe de cadrage
 
-| Formation | Public cible | Durée | Prix EUR | Prix USD |
-|---|---|---|---|---|
-| DGR 7.1 Initial | Expéditeurs, packers, freight forwarders | 4 jours / 32h | 1 800 | 1 950 |
-| DGR 7.3 Initial | Agents d'acceptation cargo | 5 jours / 40h | 2 100 | 2 280 |
+Les fonctions DGR / CBTA 7.1 à 7.10 sont étudiées indépendamment à partir des tâches réellement exercées, de la table de tâches applicable et des sources courantes requises. Un intitulé de poste ne suffit pas à attribuer une fonction.
 
-## Recurrent (renouvellement biennal)
+| Fonction | Périmètre commercial public |
+|---|---|
+| 7.1 | À confirmer après analyse des tâches et sources applicables |
+| 7.2 | À confirmer après analyse des tâches et sources applicables |
+| 7.3 | À confirmer après analyse des tâches et sources applicables |
+| 7.4 | À confirmer après analyse des tâches et sources applicables |
+| 7.5 | À confirmer après analyse des tâches et sources applicables |
+| 7.6 | À confirmer après analyse des tâches et sources applicables |
+| 7.7 | À confirmer après analyse des tâches et sources applicables |
+| 7.8 | À confirmer après analyse des tâches et sources applicables |
+| 7.9 | À confirmer après analyse des tâches et sources applicables |
+| 7.10 | À confirmer après analyse des tâches et sources applicables |
 
-| Formation | Public cible | Durée | Prix EUR | Prix USD |
-|---|---|---|---|---|
-| DGR 7.1 Recurrent | Expéditeurs, packers, freight forwarders | 3 jours / 24h | 1 400 | 1 520 |
-| DGR 7.3 Recurrent | Agents d'acceptation cargo | 3 jours / 18h | 1 500 | 1 630 |
+## Prix, durée, validité et délivrance
 
-## Spécialisées
+Les prix, durées, modalités d'évaluation, conditions de délivrance, validités et éventuelles remises doivent être confirmés dans une proposition ou un document commercial à jour après validation du périmètre. Ce fichier ne publie pas de chiffre par défaut lorsque sa source commerciale ou réglementaire courante n'est pas établie ici.
 
-| Formation | Public cible | Durée | Prix EUR | Prix USD |
-|---|---|---|---|---|
-| DGR 7.2 | Agents de fret général, handlers | 2 jours / 16h | 900 | 980 |
-| DGR 7.4 | Personnel sol et cargo (ramp, ground handling) | 2 jours / 16h | 900 | 980 |
-| DGR 7.5 | Agents d'enregistrement, check-in | 2 jours / 16h | 850 | 920 |
-| DGR 7.6 | Loadmasters, load planners | 1 jour / 8h | 650 | 700 |
-| DGR 7.7 | Pilotes et copilotes | 1 jour / 8h | 650 | 700 |
-| DGR 7.8 | Dispatchers, opérations de vol | 1 jour / 8h | 650 | 700 |
-| DGR 7.9 | Personnel navigant de cabine (PNC) | 1 jour / 8h | 650 | 700 |
-| DGR 7.10 | Agents de sûreté aérien, screening | 1 jour / 8h | 650 | 700 |
+## Garde-fous réglementaires
 
-## Inclus dans chaque tarif
-
-- Formation présentielle, formateur certifié IATA
-- Manuel IATA DGR 2026 (67e édition)
-- Examen officiel IATA inclus
-- Reprise d'examen gratuite en cas d'échec au premier essai
-- Certificat numérique vérifiable, valide 24 mois
-
-## Remises disponibles
-
-- Early Bird : −10% (inscription 30 jours avant la session)
-- Pack Duo : −12% (2 inscriptions simultanées)
-- Groupe intra-entreprise (4+ participants) : −15% à −25% selon volume
-- Fidélité renouvellement : −8% (anciens certifiés KOST)
-- Cumulables entre elles (voir https://dgr.kostacademy.com/promos)
-
-## Formation intra-entreprise / groupe
-
-Devis sur mesure, déplacement formateur inclus en Algérie (hors Algérie : Maroc, Tunisie, Sénégal, Côte d'Ivoire sur demande). Contact : voir ci-dessous.
+- Une affirmation réglementaire nécessite une preuve courante faisant autorité directement rattachée au point concerné.
+- Un manque de preuve reste `SOURCE GAP` ; une contradiction reste `SOURCE CONFLICT` jusqu'à résolution.
+- La vérification FR et la revue EN bilingue sont distinctes lorsqu'elles sont requises.
+- Aucun statut `APPROVED` de production ne doit être utilisé sans reviewer qualifié nommé et date de revue.
+- La structure de la fonction 7.1 ne doit pas être copiée mécaniquement vers une autre fonction.
 
 ## Contact
 
 - Site : https://dgr.kostacademy.com
 - WhatsApp : +213 542 30 53 83
-- Devis groupe : https://dgr.kostacademy.com/entreprises
+- Demande entreprise : https://dgr.kostacademy.com/entreprises

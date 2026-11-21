@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Phone, Clock, Linkedin, BadgeCheck } from "lucide-react";
+import { MapPin, Phone, Clock, Linkedin } from "lucide-react";
 import { PHONE_DISPLAY } from "@/lib/formations";
 import { trackPhoneClick } from "@/lib/tracking";
 
@@ -22,19 +22,18 @@ export default function Footer() {
               />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              1<sup>er</sup> CBTA Provider IATA en Algérie. Formations DGR officielles pour l'aviation et le fret aérien.
+              Formations DGR/CBTA pour les professionnels de l'aviation et du fret aérien. Le périmètre et les reconnaissances applicables sont à vérifier.
             </p>
             <div className="mt-4 inline-flex items-center gap-2 text-xs text-gray-400">
-              <BadgeCheck className="h-4 w-4 text-[#F39C12]" aria-hidden />
               <span>
-                Vérifiable sur{" "}
+                Consulter le registre IATA des centres CBTA :{" "}
                 <a
                   href="https://www.iata.org/en/training/cbta-center-registry/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline hover:text-white"
                 >
-                  iata.org/cbta-center-registry
+                  registre CBTA IATA
                 </a>
               </span>
             </div>
@@ -76,7 +75,10 @@ export default function Footer() {
               <li><Link href="/formation-dgr-senegal" className="hover:text-white">Formation DGR Sénégal</Link></li>
               <li><Link href="/formation-dgr-cote-ivoire" className="hover:text-white">Formation DGR Côte d'Ivoire</Link></li>
               <li><Link href="/formation-dgr-cameroun" className="hover:text-white">Formation DGR Cameroun</Link></li>
-              <li><Link href="/formation-dgr-afrique" className="hover:text-white">Formation DGR Afrique (Tunisie, Mali, Burkina Faso, Gabon...)</Link></li>
+              <li><Link href="/formation-dgr-afrique" className="hover:text-white">Formation DGR Afrique</Link></li>
+              <li><Link href="/formation-dgr-tunisie" className="hover:text-white">Formation DGR Tunisie</Link></li>
+              <li><Link href="/formation-dgr-mali" className="hover:text-white">Formation DGR Mali</Link></li>
+              <li><Link href="/formation-dgr-gabon" className="hover:text-white">Formation DGR Gabon</Link></li>
               <li><Link href="/formation-dgr-petrole-gaz" className="hover:text-white">Formation DGR Pétrole & Gaz</Link></li>
               <li><Link href="/formation-dgr-transitaires" className="hover:text-white">Formation DGR Transitaires</Link></li>
               <li><Link href="/iata-dangerous-goods-training-algeria" className="hover:text-white">IATA DGR Training Algeria</Link></li>

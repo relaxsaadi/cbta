@@ -13,6 +13,20 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
+  async redirects() {
+    return [
+      {
+        source: "/dgr-7-1-recurrent",
+        destination: "/dgr-7-1#recyclage",
+        permanent: true,
+      },
+      {
+        source: "/dgr-7-3-recurrent",
+        destination: "/dgr-7-3#recyclage",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     // Content-Security-Policy — every domain below is authorized because it is
     // actually loaded by the site today. No nonce system is in place, so

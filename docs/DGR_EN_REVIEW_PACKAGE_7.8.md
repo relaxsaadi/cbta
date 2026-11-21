@@ -15,13 +15,7 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR source-of-record status.** The
-  per-item `FR status` fields below mirror the current reconciliation
-  conservatively: direct current-edition evidence may remain `FROZEN`,
-  partial or explicitly non-direct evidence is held `UNRESOLVED`, and
-  source-required items remain `DRAFT`. Per `.claude/rules/dgr-stage2b.md`
-  rule 5, FR source verification and EN bilingual technical review are
-  **separate gates**; this package does not promote EN review or approval.
+- **FR source-of-record and EN status mirrors (2026-11-19; documentation only):** This draft translation does not change any item's authoritative FR status. Its per-item `FR status` entries are historical EN-package mirrors, **not** guaranteed copies of current reconciled FR states. At PR #3 head `4747d7b817fd288adff19fe836a94d15b1d5d672`, [full regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716488) reports **15** Function 7.8 items with stale, missing or unclassified FR-status mirrors. Reconcile each item against `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, its FR production-bank record and exact-head CI before relying on the EN field; do **not** copy historical `FROZEN FR / SOURCE VERIFIED` solely to satisfy a mirror check. Direct authorized current IATA DGR 67th Edition 2026 item-specific Tier-A evidence, explicit SOURCE GAP/CONFLICT handling, qualified dated FR review, separate qualified dated EN bilingual review and final approval remain independent fail-closed gates. This note does not change question text, source status, import eligibility or approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -1114,11 +1108,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    package matches `docs/DGR_PRODUCTION_BANK_7.8.md` exactly (this package
    copies it verbatim, but a copy error is always possible — check before
    relying on either).
-2. **Regulatory accuracy — FR:** independent of this package, every item's
-   FR status remains `DRAFT — Tier B only`. This package's translation
-   review does not substitute for, accelerate, or presuppose the outcome of
-   that separate Tier A verification (`.claude/rules/dgr-stage2b.md` rule
-   5) — do not mark FR status based on anything in this file.
+2. **Regulatory accuracy — FR:** check the effective item-specific FR state in `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR production bank and exact-head direct Tier-A CI. Historical `FROZEN FR / SOURCE VERIFIED` labels are evidence leads, not automatic confirmation of direct current IATA DGR 67th Edition 2026 verification. This EN package does not change FR source status or close the separate FR evidence gate (`.claude/rules/dgr-stage2b.md` rule 5).
 3. **Regulatory accuracy — EN:** confirm the EN draft's terminology and
    facts against the current English-language IATA DGR 67th Edition text,
    resolving every item flagged "unverified"/"FLAGGED" in the terminology
@@ -1154,7 +1144,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    stay at the generic-awareness level, not sharpened into a step-ordering
    test.
 7. **Terminology consistency:** confirm EN terms match the terminology
-   table and are used consistently across all 32 items (e.g., "Packing
+   table and are used consistently across all 51 items (Batches 1–3) (e.g., "Packing
    Group" not "packaging group"; "State variation" reserved for the DGR 2.8
    technical sense; "NOTOC" never re-expanded or re-translated mid-item;
    "air traffic services" and "air traffic control (ATC)" kept as the two

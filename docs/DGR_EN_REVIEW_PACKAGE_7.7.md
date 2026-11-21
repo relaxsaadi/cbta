@@ -12,9 +12,7 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** Its per-item FR-status fields mirror the current conservative reconciliation state only; they do not promote Tier-A evidence, bilingual review, or approval. Per `.claude/rules/
-  dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
-  review are **separate gates** — closing neither gate for any item here.
+- **FR source-of-record and EN status mirrors (2026-11-19; documentation only):** This draft translation does not change any item's authoritative FR status. Its per-item `FR status` entries are historical EN-package mirrors, **not** guaranteed copies of current reconciled FR states. At PR #3 head `4747d7b817fd288adff19fe836a94d15b1d5d672`, [full regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716488) reports **19** Function 7.7 items with stale, missing or unclassified FR-status mirrors. Reconcile each item against `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, its FR production-bank record and exact-head CI before relying on the EN field; do **not** copy historical `FROZEN FR / SOURCE VERIFIED` solely to satisfy a mirror check. Direct authorized current IATA DGR 67th Edition 2026 item-specific Tier-A evidence, explicit SOURCE GAP/CONFLICT handling, qualified dated FR review, separate qualified dated EN bilingual review and final approval remain independent fail-closed gates. This note does not change question text, source status, import eligibility or approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -715,11 +713,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    package matches `docs/DGR_PRODUCTION_BANK_7.7.md` exactly (this package
    copies it verbatim, but a copy error is always possible — check before
    relying on either).
-2. **Regulatory accuracy — FR:** independent of this package, every item's
-   FR status remains `DRAFT — Tier B only`. This package's translation
-   review does not substitute for, accelerate, or presuppose the outcome of
-   that separate Tier A verification (`.claude/rules/dgr-stage2b.md` rule
-   5) — do not mark FR status based on anything in this file.
+2. **Regulatory accuracy — FR:** check the effective item-specific FR state in `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR production bank and exact-head direct Tier-A CI. Historical `FROZEN FR / SOURCE VERIFIED` labels are evidence leads, not automatic confirmation of direct current IATA DGR 67th Edition 2026 verification. This EN package does not change FR source status or close the separate FR evidence gate (`.claude/rules/dgr-stage2b.md` rule 5).
 3. **Regulatory accuracy — EN:** confirm the EN draft's terminology and
    facts against the current English-language IATA DGR 67th Edition text,
    resolving every item flagged "unverified"/"FLAGGED" in the terminology
@@ -743,7 +737,7 @@ other role may close this gate (`.claude/rules/dgr-stage2b.md` rule 4).
    softened into plausible truths; Q-7.7-012 must not be read as testing a
    classification-stage primary/subsidiary-hazard determination method.
 6. **Terminology consistency:** confirm EN terms match the terminology
-   table and are used consistently across the 33 Batch 1–2 items (e.g., "Packing
+   table and are used consistently across all 53 items (Batches 1–3) (e.g., "Packing
    Group" not "packaging group"; "State variation" reserved for the DGR 2.8
    technical sense; "NOTOC" never re-expanded or re-translated mid-item).
 7. **Distractor plausibility in English:** confirm each EN distractor
@@ -799,10 +793,10 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
   needed — every FR stem, option set, and statement above is copied verbatim
   from `docs/DGR_PRODUCTION_BANK_7.7.md`, itself sourced verbatim (with
   printed slide citations) from the actual KOST Function 7.7 course PDF.
-- All 33 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5 (FR source verification and EN bilingual review are separate
-  gates).
+- **Historical Batch 1–2 FR snapshot:** the original 33-item drafting pass
+  labeled all items `DRAFT — Tier B only`. That blanket label is not a
+  current per-item determination. Consult the reconciliation CSV, FR bank
+  and exact-head direct Tier-A CI; EN review remains separately pending.
 - 5 terminology points are explicitly flagged unverified for the reviewer:
   the "agent des opérations aériennes"→"flight operations officer"
   candidate (Q-7.7-011); the "accord multilatéral de trafic
@@ -1382,9 +1376,10 @@ be resolved consistently across both items.
   own Batch 3 section, itself sourced verbatim (with printed slide
   citations) from the actual KOST Function 7.7 course PDF, re-extracted this
   session with `pdftotext -layout`.
-- All 20 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this batch, per `.claude/rules/dgr-stage2b.md` rule
-  5 (FR source verification and EN bilingual review are separate gates).
+- **Historical Batch 3 FR snapshot:** the 20-item drafting pass originally
+  recorded `DRAFT — Tier B only` for these items. It is not current
+  regulatory verification. Use each item's reconciliation/FR-bank state;
+  this EN package cannot change that state or close EN human review.
 - No item in this batch is marked `BILINGUAL TECHNICAL REVIEW COMPLETE` or
   `APPROVED`. No qualified bilingual reviewer has been named. No review
   date has been recorded.

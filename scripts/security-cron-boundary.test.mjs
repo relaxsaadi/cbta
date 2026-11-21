@@ -195,25 +195,45 @@ test('RELEASE HOLD: provider success requires a nonempty provider message ID', (
 })
 
 
-test('RELEASE HOLD: scheduled DGR email GET routes default to no outbound work', () => {
+test('RELEASE HOLD: scheduled and batch DGR email routes default to no outbound work', () => {
   const cases = [
     ['app/api/agents/send-email/route.ts', 'runDailyBlitz'],
     ['app/api/agents/followup/route.ts', 'runFollowupAgent'],
   ]
   for (const [filename, runner] of cases) {
     const code = source(filename)
-    const start = code.indexOf('export async function GET(')
-    assert.ok(start >= 0, filename + ' must expose the scheduled GET handler')
-    const handler = code.slice(start)
-    const auth = handler.indexOf("req.headers.get('authorization')")
-    const disabled = handler.indexOf("if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true')")
-    const dispatch = handler.indexOf('after(' + runner + ')')
-    assert.ok(auth >= 0 && disabled > auth && dispatch > disabled,
-      filename + ' must authenticate, then default-deny autonomous sends, before dispatch')
+    const getStart = code.indexOf('export async function GET(')
+    assert.ok(getStart >= 0, filename + ' must expose the scheduled GET handler')
+    const getHandler = code.slice(getStart)
+    const auth = getHandler.indexOf("req.headers.get('authorization')")
+    const getDisabled = getHandler.indexOf("if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true')")
+    const getDispatch = getHandler.indexOf('after(' + runner + ')')
+    assert.ok(auth >= 0 && getDisabled > auth && getDispatch > getDisabled,
+      filename + ' scheduled GET must authenticate, default-deny, then dispatch')
     assert.match(
-      handler.slice(disabled, dispatch),
+      getHandler.slice(getDisabled, getDispatch),
       /return NextResponse\.json\(\{ error: 'Scheduled outbound is disabled' \}, \{ status: 503 \}\)/,
-      filename + ' must return a non-success response while scheduled outbound is disabled'
+      filename + ' scheduled GET must return 503 while autonomous outbound is disabled'
+    )
+
+    const postStart = code.indexOf('export async function POST(')
+    assert.ok(postStart >= 0, filename + ' must expose its human POST handler')
+    const postHandler = code.slice(postStart)
+    const postDisabled = postHandler.indexOf("if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true')")
+    const postDispatch = postHandler.indexOf('after(' + runner + ')')
+    if (filename.endsWith('/send-email/route.ts')) {
+      const singleManual = postHandler.indexOf('if (body.prospect && body.prospect.contact_email)')
+      const singleReturn = postHandler.indexOf('return NextResponse.json({', singleManual)
+      assert.ok(singleManual >= 0 && singleReturn > singleManual && postDisabled > singleReturn && postDispatch > postDisabled,
+        'single-recipient manual send stays separate; batch POST must default-deny before dispatch')
+    } else {
+      assert.ok(postDisabled >= 0 && postDispatch > postDisabled,
+        filename + ' batch POST must default-deny before dispatch')
+    }
+    assert.match(
+      postHandler.slice(postDisabled, postDispatch),
+      /return NextResponse\.json\(\{ error: 'Batch outbound is disabled' \}, \{ status: 503 \}\)/,
+      filename + ' batch POST must return 503 while autonomous outbound is disabled'
     )
   }
 })

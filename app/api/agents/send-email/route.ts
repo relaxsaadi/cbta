@@ -138,7 +138,10 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // Batch daily blitz — fire and forget
+  // Batch daily blitz — autonomous bulk outreach remains opt-in only.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Batch outbound is disabled' }, { status: 503 })
+  }
   after(runDailyBlitz)
   return NextResponse.json({ status: 'started', message: 'Blitz email lancé en arrière-plan' })
 }

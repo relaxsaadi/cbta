@@ -78,7 +78,7 @@ async function runLinkedInBlitz(limit = 10) {
       .order('score', { ascending: false })
       .limit(limit)
 
-    if (!fallback?.length) return { generated: 0, sent: 0, prospects: [] }
+    if (!fallback?.length) return { generated: 0, sent: 0, messaged: 0, prospects: [] }
 
     return processLinkedIn(fallback, supabase)
   }
@@ -101,7 +101,8 @@ async function processLinkedIn(prospects: Record<string, unknown>[], supabase: R
   }
 
   // This route generates drafts only; it never sends LinkedIn messages.
-  return { generated: results.length, sent: 0, prospects: results }
+  // Keep the legacy sent-count field at zero for response compatibility.
+  return { generated: results.length, sent: 0, messaged: 0, prospects: results }
 }
 
 // POST — generate messages for a batch (returns results, doesn't auto-send — user copies+sends)

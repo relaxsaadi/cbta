@@ -7,7 +7,22 @@ export type Formation = {
   prixEur: number;
   prixUsd: number;
   category: "initial" | "recurrent" | "specialise";
-  description: "Programme à définir à partir de la table de tâches CBTA applicable, des sources courantes et des exigences de l’État et de l’exploitant. Ne pas déduire la fonction du seul intitulé de poste.",
+  description: string;
+  programme: string[];
+  postes: string[];
+};
+
+export const FORMATIONS: Formation[] = [
+  {
+    slug: "dgr-7-1",
+    code: "DGR 7.1 Initial",
+    title: "Préparation des expéditions de marchandises dangereuses",
+    publicCible: "À définir après analyse des tâches réelles et des exigences applicables",
+    duree: "À confirmer dans le programme",
+    prixEur: 0,
+    prixUsd: 0,
+    category: "initial",
+    description: "Programme à définir à partir de la table de tâches CBTA applicable, des sources courantes et des exigences de l’État et de l’exploitant. Ne pas déduire la fonction du seul intitulé de poste.",
     programme: [
       "Tâches et objectifs à confirmer dans la table CBTA actuelle de cette fonction",
       "Sources réglementaires et variations de l’État/opérateur à vérifier",

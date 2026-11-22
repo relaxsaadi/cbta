@@ -18,10 +18,10 @@ export default function FormationsTable() {
             Catalogue complet
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f1c2e] mb-3">
-            Les 12 formations IATA DGR-CBTA
+            Programmes de formation par fonction et tâche
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            Toutes les fonctions de la 7.1 à la 7.10, en initial et en recurrent. Choisissez la formation correspondant à votre fonction.
+            Le périmètre n'est pas attribué automatiquement à partir d'un métier. Les tâches réellement exercées, les sources applicables et les exigences de l'État et de l'exploitant sont examinées avant de proposer un parcours initial ou récurrent.
           </p>
 
           {/* Toggle */}

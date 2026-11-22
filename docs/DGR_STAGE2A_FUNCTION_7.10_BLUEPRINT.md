@@ -21,6 +21,18 @@ minor, non-substantive corrections found on second pass — a "fret"
 recount and a Cadre CBTA "sûreté" word-count precision fix — neither
 changing any structural or count conclusion).
 
+**2026-11-20 source-scope correction (not a new regulatory approval):**
+This historical Stage 2A ceiling document predates the 2026 power-bank
+source-conflict findings. Binding caveat 2 below now explicitly supersedes
+the old suggestion that the course's >15 AEP / >20 battery threshold can
+itself support a current DGR 2026 question. The relevant unresolved items
+and distinct battery/power-bank scopes are traced in
+[`DGR_7_10_READINESS_EXCEPTION_2026_10_19.md`](DGR_7_10_READINESS_EXCEPTION_2026_10_19.md).
+IATA's [31 March 2026 public operator guidance](https://www.iata.org/contentassets/90f8038b0eea42069554b2f4530f49ea/guidance-to-operators---power-banks.pdf)
+is an applicability/conflict lead, **not a substitute for licensed DGR
+67th Edition 2026 Tier A item verification**. No questions, answer keys,
+status, approval, source review or import eligibility are changed.
+
 **Do not assume any other function's counts, block structure, or
 qualification levels apply here.** Function 7.10 has its own block set
 (0/3/5/7, not 0/1/2, 0/3/7, 0/4/6/7, 0/6.2/7, or 0/5.2/6.2/7 as seen in
@@ -82,12 +94,24 @@ sitting.
    baggage-specific "L'exploitant peut approuver le transport de plus de
    15 AEP / de plus de 20 batteries" note), independently re-confirmed;
    zero exam/practice cross-reference for either the "approb*" or
-   "approuv*" word form, independently re-checked. **The one permitted
-   item in this pool may test only the general "an approval exists and is
-   granted by the États concernés" concept, or the specific
-   AEP/battery-quantity threshold fact from p.45 — it must never fabricate
-   a worked application procedure (e.g., how to request or process an
-   approval) that the course does not teach.**
+   "approuv*" word form, independently re-checked. **Effective
+   2026-11-20 drafting restriction (supersedes the historical threshold-item
+   option):** the >15 AEP / >20 batteries note on the historical course slide
+   is **Tier B course evidence only**, not a validated current-2026 rule
+   for every battery category. In particular, the ICAO Technical Instructions
+   addendum effective 2026-03-27, described in IATA's 2026-03-31 public
+   operator guidance, treats personal-use power banks separately from other
+   spare batteries. Function 7.10's Q-7.10-012 and Q-7.10-038 already carry
+   unresolved item/distractor-level SOURCE CONFLICT states in
+   `docs/DGR_7_10_READINESS_EXCEPTION_2026_10_19.md`; neither is cleared
+   by this blueprint. The one-item ceiling is **not** permission to use the
+   historical quantity thresholds as a correct answer or distractor.
+   Drafting may examine the general approval mechanism only as an
+   unverified candidate topic until direct item-specific licensed IATA DGR
+   67th Edition 2026 plus applicable addendum/State/Operator variations are
+   reconciled. Do not fabricate a worked application procedure the course
+   does not teach. Named qualified dated FR verification, separate EN
+   review and the confidential-import gate remain mandatory.
 3. **0.2.1/0.2.3 and 5.1.1 share their evidence base** (the general
    prohibited-DG/Table-2.3.A passenger-provisions content, pp.36–57).
    Kept as separate pools because Table 7.10.A lists them as genuinely

@@ -160,7 +160,7 @@ export default function Page() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
                 { icon: "🏅", t: "Périmètre défini par les tâches", d: "Le programme est construit à partir des opérations réellement confiées, sans attribuer automatiquement une fonction à un métier." },
-                { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
+                { icon: "📅", t: "Sessions selon planning confirmé", d: "Les dates et disponibilités sont communiquées après confirmation du programme et de la proposition." },
                 { icon: "🏢", t: "Modalités intra-entreprise", d: "Le lieu, la durée, les moyens pédagogiques et les conditions logistiques sont précisés dans le programme et le devis." },
                 { icon: "💶", t: "Devis transparent", d: "Le prix est communiqué après définition du périmètre, de la durée et des modalités de la session." },
               ].map((r) => (
@@ -180,7 +180,7 @@ export default function Page() {
           {[
             { q: "Tous mes agents export relèvent-ils de la même fonction CBTA ?", a: "Non. Un intitulé de poste ou l'appartenance au service export ne suffit pas à attribuer une fonction. Il faut recenser les tâches réellement confiées, puis vérifier les exigences actuelles de l'État et de l'exploitant." },
             { q: "Quelle est la périodicité de formation récurrente ?", a: "Elle dépend des règles applicables, des tâches et des exigences de l'État et de l'exploitant. La périodicité doit être vérifiée dans les sources en vigueur avant toute planification." },
-            { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
+            { q: "Peut-on former toute l'équipe en une semaine ?", a: "La faisabilité, le lieu, les déplacements, la capacité du groupe et la durée sont confirmés dans une proposition écrite après cadrage du besoin." },
             { q: "Le document délivré est-il automatiquement accepté par toutes les compagnies ?", a: "Aucune acceptation universelle ne doit être présumée. Vérifiez le statut et le périmètre du prestataire dans les registres officiels, puis confirmez l'acceptation du document auprès de l'exploitant et de l'autorité concernés." },
             { q: "Quelles sont les modalités d'évaluation ?", a: "Elles sont précisées dans le programme et le devis. Le type d'évaluation, les critères, le statut du document délivré et les éventuelles conditions de reprise sont communiqués avant inscription." },
           ].map((faq) => (

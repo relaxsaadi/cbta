@@ -157,9 +157,9 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                 <div className="text-xs uppercase tracking-wider text-[#F39C12] font-bold mb-2">
                   Prochaines sessions
                 </div>
-                <div className="font-bold text-lg">Juillet – Décembre 2026</div>
+                <div className="font-bold text-lg">Planning à confirmer</div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Sessions toutes les 4–6 semaines à Alger
+                  Aucune date ni périodicité de session n'est confirmée ici.
                 </p>
                 <Link
                   href="/planning"
@@ -181,12 +181,12 @@ export default function DGRPage({ formation }: { formation: Formation }) {
             <div className="card">
               <ul className="space-y-3">
                 {[
-                  "Formation présentielle avec formateur IATA certifié",
-                  "Manuel IATA DGR 2026 (67e édition)",
+                  "Intervenants et qualifications à confirmer dans le programme écrit",
+                  "Référentiel documentaire, édition et accès à confirmer avant la session",
                   "Évaluation CBTA selon programme et modalités vérifiées",
                   "Document délivré et modalités de vérification à confirmer avant inscription",
                   "Exercices pratiques et cas réels",
-                  "Facturation officielle France ou Algérie",
+                  "Entité de facturation et modalités à confirmer dans la proposition écrite",
                 ].map((t) => (
                   <li key={t} className="flex gap-3 items-start">
                     <span className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#F39C12] text-white mt-0.5">

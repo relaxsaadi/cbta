@@ -46,4 +46,18 @@ assert.doesNotMatch(footer, /1\s*<sup>er<\/sup>\s*CBTA Provider IATA/i);
 assert.doesNotMatch(footer, /Formations DGR officielles/i);
 assert.match(footer, /Consulter le registre IATA des centres CBTA/);
 
+// Static About page content bypasses the generated-copy helper at runtime.
+// Keep its visible copy and structured metadata free of unverified provider,
+// accreditation, exclusivity and success-rate assertions.
+const aboutPage = readFileSync(resolve("app/a-propos/page.tsx"), "utf8");
+assert.doesNotThrow(
+  () => assertSafeDgrMarketingCopy(aboutPage),
+  "static About page must pass the public DGR claim guard"
+);
+assert.doesNotMatch(
+  aboutPage,
+  /IATA CBTA Provider|Premier centre IATA|la seule en Algérie|95%|certifié IATA|formateur agréé/i,
+  "static About page must not reintroduce unsupported provider or success-rate claims"
+);
+
 console.log("PASS: DGR marketing-copy claim guard regression cases");

@@ -251,7 +251,7 @@ export default function PlanningPage() {
             Ce que vous obtenez avec chaque formation
           </div>
           {[
-            { icon: "📘", label: "Références documentaires et accès aux sources applicables", val: "Valeur : 180 €" },
+            { icon: "📘", label: "Références documentaires et accès aux sources applicables", val: "Selon proposition écrite" },
             { icon: "🏆", label: "Évaluation et document délivré selon conditions confirmées", val: "À confirmer" },
             { icon: "👨‍🏫", label: "Intervenants et qualifications communiqués avant la session", val: "Inclus" },
             { icon: "🍽️", label: "Hébergement & restauration (si déplacement)", val: "Inclus" },

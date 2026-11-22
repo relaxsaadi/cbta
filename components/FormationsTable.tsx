@@ -18,10 +18,10 @@ export default function FormationsTable() {
             Catalogue complet
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f1c2e] mb-3">
-            Les 12 formations IATA DGR-CBTA
+            Programmes de formation par fonction et tâche
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            Toutes les fonctions de la 7.1 à la 7.10, en initial et en recurrent. Choisissez la formation correspondant à votre fonction.
+            Le périmètre n'est pas attribué automatiquement à partir d'un métier. Les tâches réellement exercées, les sources applicables et les exigences de l'État et de l'exploitant sont examinées avant de proposer un parcours initial ou récurrent.
           </p>
 
           {/* Toggle */}
@@ -65,15 +65,7 @@ export default function FormationsTable() {
                 <th className="text-left p-4 font-semibold">Fonction</th>
                 <th className="text-left p-4 font-semibold">Public</th>
                 <th className="text-left p-4 font-semibold">Durée</th>
-                {!isEntreprise && (
-                  <>
-                    <th className="text-right p-4 font-semibold">Prix EUR</th>
-                    <th className="text-right p-4 font-semibold">Prix USD</th>
-                  </>
-                )}
-                {isEntreprise && (
-                  <th className="text-right p-4 font-semibold">Tarif</th>
-                )}
+                <th className="text-right p-4 font-semibold">Tarif</th>
                 <th className="text-center p-4 font-semibold">Action</th>
               </tr>
             </thead>
@@ -93,23 +85,11 @@ export default function FormationsTable() {
                   <td className="p-4 text-gray-700 whitespace-nowrap">
                     {f.duree}
                   </td>
-                  {!isEntreprise && (
-                    <>
-                      <td className="p-4 text-right font-bold text-[#0f1c2e]">
-                        {f.prixEur.toLocaleString("fr-FR")} €
-                      </td>
-                      <td className="p-4 text-right text-gray-600">
-                        {f.prixUsd.toLocaleString("fr-FR")} $
-                      </td>
-                    </>
-                  )}
-                  {isEntreprise && (
-                    <td className="p-4 text-right">
-                      <span className="inline-block text-xs font-semibold text-[#003D7A] bg-blue-50 px-2 py-1 rounded-full whitespace-nowrap">
-                        Sur devis
-                      </span>
-                    </td>
-                  )}
+                  <td className="p-4 text-right">
+                    <span className="inline-block text-xs font-semibold text-[#003D7A] bg-blue-50 px-2 py-1 rounded-full whitespace-nowrap">
+                      Sur devis
+                    </span>
+                  </td>
                   <td className="p-4 text-center">
                     <a
                       href="#contact"
@@ -138,20 +118,9 @@ export default function FormationsTable() {
                   <div className="text-gray-600 text-sm mt-1">{f.title}</div>
                 </div>
                 <div className="text-right shrink-0">
-                  {!isEntreprise ? (
-                    <>
-                      <div className="font-bold text-[#0f1c2e]">
-                        {f.prixEur.toLocaleString("fr-FR")} €
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {f.prixUsd.toLocaleString("fr-FR")} $
-                      </div>
-                    </>
-                  ) : (
-                    <span className="inline-block text-xs font-semibold text-[#003D7A] bg-blue-50 px-2 py-1 rounded-full">
-                      Sur devis
-                    </span>
-                  )}
+                  <span className="inline-block text-xs font-semibold text-[#003D7A] bg-blue-50 px-2 py-1 rounded-full">
+                    Sur devis
+                  </span>
                 </div>
               </div>
               <div className="text-xs text-gray-500 mb-3">

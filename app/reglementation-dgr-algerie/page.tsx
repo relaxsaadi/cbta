@@ -9,7 +9,7 @@ import LeadForm from "@/components/LeadForm";
 export const metadata: Metadata = {
   title: "Réglementation DGR Algérie — Décret 21-253 & ANAC",
   description:
-    "Le Décret 21-253 impose à l'ANAC le contrôle des formations DGR en Algérie. Cadre légal complet, sources officielles, et solution CBTA certifiée IATA.",
+    "Repères sur le contrôle des programmes de formation liés au transport aérien de marchandises dangereuses, à lire avec le texte officiel et les exigences applicables.",
   alternates: { canonical: "/reglementation-dgr-algerie" },
   keywords: [
     "décret 21-253 marchandises dangereuses",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Réglementation DGR en Algérie — Décret 21-253 & ANAC",
     description:
-      "Le cadre légal complet, sourcé au Journal Officiel : obligation de contrôle ANAC des formations marchandises dangereuses (Décret 21-253, Art. 14).",
+      "Repères documentaires sur le contrôle ANAC prévu par le Décret exécutif n°21-253 ; le périmètre de chaque obligation doit être vérifié dans le texte complet et les règles applicables.",
     url: "https://dgr.kostacademy.com/reglementation-dgr-algerie",
   },
 };
@@ -49,10 +49,10 @@ const faqSchema = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Existe-t-il une obligation légale de formation DGR en Algérie ?",
+      name: "Que prévoit le Décret 21-253 concernant les programmes de formation DGR ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Oui. Le Décret exécutif n°21-253 du 6 juin 2021 (Journal Officiel n°46) impose à l'ANAC, dans son article 14, « l'examen et l'évaluation des procédures et des programmes de formation des exploitants des services aériens pour le transport de marchandises dangereuses ». L'Annexe 1 du même décret exige que l'inspecteur en exploitation technique maîtrise la « réglementation de transport aérien de marchandises dangereuses ».",
+        text: "L'article 14 vise l'examen et l'évaluation, par l'ANAC, des procédures et programmes de formation des exploitants des services aériens pour le transport de marchandises dangereuses. Cet extrait ne suffit pas à conclure que chaque salarié d'un transitaire ou chaque agent cargo relève automatiquement d'une fonction 7.1. Le périmètre individuel doit être déterminé à partir des tâches, du texte complet, des règles de l'État et des exigences de l'exploitant.",
       },
     },
     {
@@ -65,10 +65,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Le format CBTA est-il obligatoire pour les formations DGR ?",
+      name: "Comment vérifier si un parcours CBTA est applicable ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Le CBTA (Competency-Based Training and Assessment) est le format défini par l'OACI (Annexe 18, Décision DGP/27) et repris par la réglementation IATA DGR (section 1.5) comme standard international de référence pour la formation aux marchandises dangereuses. KOST GROUP est le premier centre CBTA Provider certifié IATA en Algérie.",
+        text: "Le CBTA est une approche fondée sur les compétences utilisée dans les cadres de formation aux marchandises dangereuses. Son application précise, les tâches concernées et les modalités d'évaluation doivent être vérifiées dans les éditions officielles en vigueur, les variations de l'État et les exigences de l'exploitant. Cette page ne constitue ni une décision juridique ni une validation de prestataire.",
       },
     },
   ],
@@ -102,9 +102,7 @@ export default function ReglementationPage() {
               Réglementation du transport de marchandises dangereuses en Algérie
             </h1>
             <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
-              Le Décret exécutif n°21-253 impose à l'ANAC une obligation légale de contrôle des
-              formations DGR. Voici les textes exacts, sourcés au Journal Officiel — vérifiables
-              par vous-même.
+              Le Décret exécutif n°21-253 décrit notamment des missions de contrôle relatives aux programmes de formation des exploitants des services aériens pour le transport de marchandises dangereuses. Les extraits ci-dessous doivent être lus dans le texte complet ; ils ne déterminent pas à eux seuls les fonctions applicables à chaque salarié ou prestataire.
             </p>
           </div>
         </section>
@@ -180,21 +178,13 @@ export default function ReglementationPage() {
         <section className="bg-gray-50 py-14">
           <div className="container-x max-w-3xl">
             <h2 className="text-2xl font-extrabold text-[#0f1c2e] mb-4">
-              2. L'exigence internationale : Annexe 18 OACI et standard IATA CBTA
+              2. Repères internationaux : formation fondée sur les compétences
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Le CBTA (Competency-Based Training and Assessment — formation et évaluation axées
-              sur les compétences) est le format défini au niveau international par l'OACI
-              (Décision DGP/27, s'inscrivant dans le cadre de l'Annexe 18 de la Convention relative
-              à l'aviation civile internationale) et repris par la réglementation IATA DGR (section
-              1.5) comme standard de référence pour la formation au transport aérien de
-              marchandises dangereuses.
+              Le CBTA (Competency-Based Training and Assessment) est une approche fondée sur les compétences. Pour déterminer les tâches, objectifs et modalités applicables, il faut consulter les textes officiels actuels de l'OACI et de l'IATA, les variations de l'État et les exigences de l'exploitant. Toute référence réglementaire utilisée dans un programme doit être identifiée précisément et vérifiée dans son édition applicable.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              Concrètement : un certificat DGR délivré selon l'ancien modèle par catégories (1 à
-              12) et un certificat CBTA ne couvrent pas la même reconnaissance internationale.
-              Vérifiez toujours le format exact de la certification proposée par un centre de
-              formation avant de vous engager.
+              Ne déduisez pas la portée ou la reconnaissance d'un document à partir de son seul intitulé. Vérifiez le contenu, le périmètre de tâches, le statut du prestataire et l'acceptation du document auprès de l'autorité et de l'exploitant concernés.
             </p>
           </div>
         </section>
@@ -202,13 +192,10 @@ export default function ReglementationPage() {
         {/* Positionnement KOST */}
         <section className="container-x max-w-3xl py-14">
           <h2 className="text-2xl font-extrabold text-[#0f1c2e] mb-4">
-            3. KOST GROUP — Premier centre CBTA Provider certifié IATA en Algérie
+            3. Offre de formation KOST GROUP
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Face à cette double obligation — contrôle ANAC (Décret 21-253) et standard
-            international CBTA (OACI/IATA) — KOST GROUP est le premier centre de formation en
-            Algérie certifié IATA CBTA Provider, permettant à vos équipes d'obtenir une
-            certification reconnue sans déplacement à l'étranger.
+            KOST GROUP propose des formations et un accompagnement sur les marchandises dangereuses en transport aérien. Le programme et son périmètre sont définis à partir des tâches réellement exercées et des sources applicables. Toute mention d'un référencement IATA doit être vérifiée directement dans le registre officiel et ne vaut pas, à elle seule, approbation ANAC ni acceptation automatique par un exploitant.
           </p>
           <p className="text-sm text-gray-500">
             Vérifiez notre statut directement sur le{" "}
@@ -231,7 +218,7 @@ export default function ReglementationPage() {
               Votre formation DGR est-elle conforme ?
             </h2>
             <p className="text-white/70 leading-relaxed">
-              Demandez un audit gratuit de vos obligations réglementaires — réponse sous 24h.
+              Demandez un échange de cadrage sur vos tâches, vos sources et vos besoins de formation. Cette démarche ne constitue pas un audit juridique ou une validation de conformité.
             </p>
           </div>
           <div className="container-x max-w-xl">

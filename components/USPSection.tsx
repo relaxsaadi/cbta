@@ -3,23 +3,23 @@ import { Award, Globe, Users, FileCheck } from "lucide-react";
 const USPS = [
   {
     icon: Award,
-    title: "1er CBTA Provider IATA en Algérie",
-    desc: "Officiellement certifié et vérifiable sur le registre IATA des centres CBTA. Pas un partenaire — un centre titulaire.",
+    title: "Approche CBTA centrée sur les tâches",
+    desc: "Le périmètre est établi à partir des activités réellement exercées, et non du seul intitulé de poste ou du secteur d'activité.",
   },
   {
     icon: Globe,
-    title: "Même certificat IATA qu'à Bruxelles",
-    desc: "Identique à celui délivré dans les centres européens, mais à 50% du prix. Aucune différence de reconnaissance internationale.",
+    title: "Sources et limites explicites",
+    desc: "Les références, l'édition applicable et les éventuelles sources manquantes ou contradictoires sont identifiées avant validation du programme.",
   },
   {
     icon: Users,
-    title: "Formateurs internationaux certifiés IATA",
-    desc: "Instructeurs ayant suivi le cursus Train-the-Trainer IATA, avec expérience opérationnelle en compagnie aérienne et fret.",
+    title: "Qualifications documentées",
+    desc: "Les intervenants, leurs qualifications et leur périmètre sont présentés dans le programme avant la session.",
   },
   {
     icon: FileCheck,
-    title: "Paiement sécurisé via STRATEGIX",
-    desc: "Facturation officielle EUR ou USD via notre entité française STRATEGIX. Conforme pour les services financiers de votre entreprise.",
+    title: "Modalités contractuelles claires",
+    desc: "Durée, prix, modalités d'évaluation et documents éventuellement délivrés sont précisés dans le devis et le programme.",
   },
 ];
 
@@ -32,7 +32,7 @@ export default function USPSection() {
             Pourquoi KOST GROUP
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f1c2e]">
-            Le bon choix pour votre certification IATA
+            Un accompagnement transparent pour votre formation
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-2">

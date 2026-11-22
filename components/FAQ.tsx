@@ -5,40 +5,40 @@ import { ChevronDown } from "lucide-react";
 
 const ITEMS = [
   {
-    q: "Est-ce reconnu dans mon pays (Maroc, Sénégal, Tunisie, Côte d'Ivoire) ?",
-    a: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par l'autorité de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
+    q: "Comment vérifier le périmètre et l'acceptation d'une formation ?",
+    a: "L'acceptation dépend du programme suivi, des tâches réellement exercées, des règles de l'État et des exigences de l'exploitant concerné. Vérifiez le statut et le périmètre du prestataire dans les registres officiels, puis confirmez l'acceptation du document délivré auprès de l'autorité ou de l'exploitant concerné. Un référencement CBTA ne vaut pas approbation ANAC ni reconnaissance automatique par toutes les compagnies aériennes.",
   },
   {
     q: "Comment payer depuis l'Afrique ?",
-    a: "Plusieurs options : virement bancaire EUR ou USD vers notre compte STRATEGIX (entité française), ou virement local en Algérie. Nous émettons une facture officielle conforme aux exigences comptables de votre pays. Paiements échelonnés possibles pour les groupes.",
+    a: "Les moyens de paiement, l’entité de facturation, les documents comptables et les éventuels échéanciers sont confirmés par écrit dans la proposition applicable avant toute inscription.",
   },
   {
     q: "Faut-il venir en Algérie ?",
-    a: "Pas nécessairement. Nous organisons des sessions à Alger, mais aussi des formations intra-entreprise (nous nous déplaçons dans votre pays) à partir de 6 participants. Demandez le devis intra dans le formulaire.",
+    a: "Les modalités de déplacement et de formation hors du lieu habituel dépendent du pays, des autorisations applicables, des disponibilités et d’une proposition écrite. Elles ne sont pas garanties par défaut.",
   },
   {
-    q: "Le certificat est-il valable combien de temps ?",
-    a: "24 mois (2 ans) à compter de la date de réussite à l'examen IATA. Un recyclage CBTA (recurrent) est obligatoire avant cette échéance pour maintenir la qualification.",
+    q: "Comment déterminer l'échéance de formation récurrente ?",
+    a: "La périodicité dépend des exigences applicables à la fonction et aux tâches, des règles de l'État et de l'exploitant, ainsi que de l'édition réglementaire en vigueur. Ne présumez pas d'une durée universelle : vérifiez l'échéance applicable avant de planifier le récurrent.",
   },
   {
     q: "Peut-on commencer sans expérience préalable en marchandises dangereuses ?",
-    a: "Oui pour les formations Initial (7.1, 7.3 Initial). La formation est conçue pour amener un participant sans prérequis au niveau d'expert opérationnel. Les sessions Recurrent supposent en revanche une certification active arrivant à échéance.",
+    a: "Les prérequis et le parcours initial dépendent des tâches confiées et du programme applicable. Le périmètre doit être établi à partir des activités réelles, puis confirmé avec l'employeur et, lorsque nécessaire, l'exploitant ou l'autorité compétente.",
   },
   {
     q: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",
-    a: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard obligatoire pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion — c'est la seule reconnue par les 300+ compagnies aériennes membres de l'IATA et exigée par l'ANAC en Algérie. Si votre activité touche au transport aérien, c'est cette certification qu'il vous faut, pas une formation HSE générique.",
+    a: "Les formations HSE ou ADR et les formations relatives au transport aérien répondent à des cadres différents. Pour le fret aérien, les compétences à couvrir se déterminent selon les tâches réellement exercées et les exigences actuelles de l'État et de l'exploitant. Un intitulé de poste ou le seul fait de travailler dans le fret ne suffit pas à attribuer automatiquement une fonction CBTA.",
   },
   {
     q: "Vous déplacez-vous pour les formations intra-entreprise ?",
-    a: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. Nous prenons en charge le formateur, les supports, l'examen IATA officiel. Vous fournissez la salle et la logistique locale.",
+    a: "Les modalités intra-entreprise, le lieu, les supports et les modalités d'évaluation sont définis dans le programme et le devis. Le statut de l'évaluation et les documents éventuellement délivrés sont précisés avant toute inscription.",
   },
   {
     q: "Quels sont les délais d'inscription ?",
-    a: "Les sessions ouvrent toutes les 4 à 6 semaines. Le délai conseillé entre inscription et formation est de 2 semaines pour valider le paiement et l'émission de la facture. Sessions urgentes possibles sur demande.",
+    a: "Les dates, délais d’inscription et possibilités de session urgente sont à confirmer dans le planning et la proposition en vigueur. Aucune périodicité ni délai n’est garanti ici.",
   },
   {
     q: "La formation est en français ou en anglais ?",
-    a: "Les deux. Sessions standards en français. Nous proposons aussi des sessions en anglais sur demande, notamment pour les compagnies aériennes opérant en environnement bilingue.",
+    a: "La langue de la session et la disponibilité d’un intervenant compétent dans cette langue doivent être confirmées avant inscription.",
   },
 ];
 

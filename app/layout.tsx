@@ -19,11 +19,11 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Formation IATA DGR Algérie | Certificat Officiel CBTA",
+    default: "Formation marchandises dangereuses aérien | DGR & CBTA — Algérie",
     template: "%s — KOST GROUP",
   },
   description:
-    "Seul centre IATA CBTA Provider certifié d'Algérie. Formations DGR 7.1 à 7.10, reconnues par 300+ compagnies. Sessions régulières, devis gratuit sous 24h.",
+    "Formations sur les marchandises dangereuses en transport aérien. Le périmètre est déterminé selon les tâches réelles et les exigences applicables de l'État et de l'exploitant.",
   keywords: [
     "Formation IATA DGR",
     "CBTA",
@@ -58,15 +58,15 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: siteUrl,
     siteName: "KOST GROUP",
-    title: "Formation DGR IATA Algérie — 1er Centre CBTA Certifié",
+    title: "Formation DGR & CBTA — KOST GROUP",
     description:
-      "Certification IATA DGR à Alger. Seul centre CBTA Provider certifié IATA en Algérie. Reconnu par 300+ compagnies. Sessions mensuelles, places limitées.",
+      "Formation et accompagnement sur les marchandises dangereuses en transport aérien. Périmètre défini selon les tâches, les règles applicables et les exigences de l'exploitant.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "KOST GROUP — 1er Centre CBTA Provider Certifié IATA en Algérie",
+        alt: "KOST GROUP — formation marchandises dangereuses et CBTA",
       },
     ],
   },
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Formation IATA DGR-CBTA — KOST GROUP",
     description:
-      "1er Centre CBTA Provider Certifié IATA en Algérie. Certificat IATA officiel.",
+      "Formation DGR et approche CBTA : périmètre et modalités précisés dans le programme.",
     images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
@@ -99,7 +99,7 @@ const orgSchema = {
   },
   image: `${siteUrl}/og-image.jpg`,
   description:
-    "1er Centre CBTA Provider Certifié IATA en Algérie. Formations IATA DGR (marchandises dangereuses) 7.1 à 7.10 pour les professionnels de l'aviation et du fret aérien en Afrique francophone.",
+    "Organisme proposant des formations sur les marchandises dangereuses en transport aérien. Les fonctions et tâches à couvrir sont déterminées à partir des activités réelles et des exigences applicables.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki, Bab Ezzouar",
@@ -125,13 +125,6 @@ const orgSchema = {
   priceRange: "€€",
   currenciesAccepted: "DZD, EUR",
   paymentAccepted: "Cash, Bank Transfer",
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.3",
-    bestRating: "5",
-    worstRating: "1",
-    ratingCount: "12",
-  },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Formations IATA DGR — Marchandises Dangereuses",
@@ -142,7 +135,7 @@ const orgSchema = {
           "@type": "Course",
           name: "Formation IATA DGR Catégorie 7 — Initial",
           description:
-            "Formation initiale aux marchandises dangereuses IATA DGR en 3 jours. Catégories 7.1 à 7.5. Certification officielle IATA.",
+            "Formation initiale sur les marchandises dangereuses en transport aérien. Les tâches, objectifs et modalités d'évaluation sont définis dans le programme applicable.",
           provider: { "@type": "Organization", name: "KOST GROUP" },
         },
       },
@@ -152,13 +145,13 @@ const orgSchema = {
           "@type": "Course",
           name: "Formation IATA DGR Recyclage — Recurrent",
           description:
-            "Recyclage biennal IATA DGR pour maintenir la certification. Catégories 7.1 à 7.10. Format CBTA accrédité.",
+            "Formation récurrente selon les exigences applicables à la fonction, aux tâches, à l'État et à l'exploitant concernés.",
           provider: { "@type": "Organization", name: "KOST GROUP" },
         },
       },
     ],
   },
-  areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "ML", "BF", "GA"],
+  areaServed: ["DZ"],
   sameAs: [
     "https://www.linkedin.com/company/kost-group",
     "https://www.facebook.com/p/Kost-Groupe-Academy-100067440295455/",

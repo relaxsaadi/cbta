@@ -8,22 +8,22 @@ import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR IATA Entreprises & Grands Comptes — Intra & Groupe",
+  title: "Formation DGR / CBTA pour entreprises — Intra & Groupe",
   description:
-    "Formation IATA DGR intra-entreprise et groupe pour grands comptes en Algérie. Seul centre IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059). Sonatrach, Air Algérie, TotalEnergies.",
+    "Formation DGR CBTA sur mesure pour les entreprises en Algérie : besoins définis selon les tâches et fonctions exercées, modalités de formation sur devis.",
   alternates: { canonical: "/entreprises" },
   keywords: [
     "formation DGR entreprises Algérie",
-    "formation IATA DGR grands comptes",
+    "formation DGR CBTA entreprises",
     "formation DGR intra entreprise",
-    "IATA DGR Sonatrach",
-    "certification DGR marchés publics Algérie",
-    "gré à gré formation DGR décret 15-247",
+    "formation marchandises dangereuses entreprise",
+    "formation DGR secteur public Algérie",
+    "formation DGR entreprises secteur public",
   ],
   openGraph: {
     title: "Formation DGR IATA Entreprises — KOST GROUP",
     description:
-      "Formations DGR pour grands comptes. Seul prestataire IATA CBTA Provider certifié en Algérie.",
+      "Cadrage des besoins de formation selon les tâches, les sources et les exigences applicables.",
     url: "https://dgr.kostacademy.com/entreprises",
   },
 };
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "Formation DGR IATA Intra-Entreprise — Grands Comptes",
+  name: "Formation DGR / CBTA intra-entreprise — besoins à cadrer",
   description:
-    "Service de formation IATA DGR (marchandises dangereuses) dédié aux entreprises et grands comptes en Algérie et Afrique. Formations intra-site, certification CBTA individuelle, conformité Décret 15-247.",
+    "Service de formation DGR CBTA pour les entreprises en Algérie et en Afrique. Besoins étudiés fonction par fonction ; interventions sur site sous réserve des autorisations applicables.",
   provider: {
     "@type": "EducationalOrganization",
     name: "KOST GROUP",
@@ -46,75 +46,71 @@ const JSON_LD = {
       postalCode: "16024",
     },
   },
-  areaServed: ["DZ", "MA", "TN", "SN", "CI", "CM", "GA"],
+  areaServed: ["DZ"],
   serviceType: "Formation professionnelle DGR IATA",
-  hasCredential: {
-    "@type": "EducationalOccupationalCredential",
-    name: "IATA CBTA Provider n°CBTA-PR-25-0059",
-  },
 };
 
 const SECTEURS = [
   {
     icon: "🛢️",
     titre: "Oil & Gas",
-    entreprises: "Sonatrach, TotalEnergies, Eni, Halliburton",
-    potentiel: "20 – 50 M DZD / an",
+    entreprises: "Équipes et prestataires du secteur énergétique",
+    potentiel: "À déterminer après cadrage",
     couleur: "#7c3800",
     fond: "#fff8f0",
     bordure: "#fcd34d",
-    categories: ["Classe 2 — Gaz comprimés (LPG, propane)", "Classe 3 — Liquides inflammables", "Classe 8 — Corrosifs (acides de forage)"],
+    categories: ["Tâches et matières à identifier", "Sources et variations à vérifier", "Périmètre à confirmer avec l'exploitant"],
   },
   {
     icon: "✈️",
     titre: "Aviation & Cargo",
-    entreprises: "Air Algérie Cargo, Tassili Airlines, agents IATA",
-    potentiel: "15 – 30 M DZD / an",
+    entreprises: "Équipes cargo et prestataires opérationnels",
+    potentiel: "À déterminer après cadrage",
     couleur: "#003087",
     fond: "#eff6ff",
     bordure: "#93c5fd",
-    categories: ["DGR Cat. 7 — Acceptation cargo", "DGR Cat. 6 — Passagers & équipages", "DGR Cat. 8 — Handling en escale"],
+    categories: ["Acceptation des DG — fonctions selon tâches réelles", "Passagers et équipages — fonctions selon responsabilités", "Handling et escale — compétences selon activités"],
   },
   {
     icon: "🏛️",
     titre: "Institutionnel & Défense",
-    entreprises: "Douanes, Armée, hôpitaux, universités",
-    potentiel: "5 – 15 M DZD / an",
+    entreprises: "Organismes et établissements",
+    potentiel: "À déterminer après cadrage",
     couleur: "#166534",
     fond: "#f0fdf4",
     bordure: "#86efac",
-    categories: ["Classe 6.2 — Matières infectieuses", "Classe 7 — Matières radioactives", "Classe 9 — Matières diverses (piles Li)"],
+    categories: ["Activités et responsabilités à recenser", "Sources réglementaires à vérifier", "Exigences de l'État et de l'opérateur à confirmer"],
   },
 ];
 
 const AVANTAGES = [
   {
     icon: "✅",
-    titre: "Seul centre IATA CBTA Provider certifié en Algérie",
-    desc: "Numéro d'accréditation officiel IATA : CBTA-PR-25-0059, vérifiable sur le registre officiel IATA CBTA Center Registry. Nos certificats sont reconnus par toutes les compagnies aériennes membres IATA.",
+    titre: "Statut du prestataire et périmètre à vérifier",
+    desc: "Statut de prestataire CBTA à vérifier dans le registre IATA. Les attestations sont soumises aux exigences de l’employeur, de l’opérateur et de l’autorité compétente.",
   },
   {
     icon: "📋",
-    titre: "Accréditation ANAC en cours de finalisation",
-    desc: "En parallèle de notre certification IATA CBTA, notre dossier d'accréditation ANAC est en phase finale — nous vous tenons informés de sa validation officielle.",
+    titre: "Exigences nationales et autorisations à vérifier",
+    desc: "Les justificatifs ANAC actualisés et le périmètre applicable à chaque fonction et prestation sont à vérifier avant contractualisation ; aucun statut n’est présumé par cette page.",
   },
   {
     icon: "🚁",
     titre: "Formation sur votre site, partout en Algérie et en Afrique",
-    desc: "Sessions intra-entreprise à Hassi Messaoud, bases aériennes, bureaux d'Alger, ou dans tout pays d'Afrique francophone à la demande.",
+    desc: "Sessions intra-entreprise possibles sur devis, sous réserve des autorisations locales et conditions logistiques applicables.",
   },
   {
     icon: "📄",
-    titre: "Facturation conforme marchés publics",
-    desc: "Factures pro forma, bon de commande, PV de formation, attestations individuelles CBTA — tous les justificatifs requis pour votre comptabilité publique ou privée.",
+    titre: "Documents administratifs selon le contrat",
+    desc: "Les documents administratifs remis sont listés dans le devis ou le contrat ; les exigences propres à l'acheteur doivent être confirmées avant contractualisation.",
   },
 ];
 
 const ETAPES = [
   {
     num: "01",
-    titre: "Audit DGR gratuit",
-    desc: "Nous analysons vos activités et identifions exactement quels postes de votre organisation sont soumis à l'obligation de certification DGR (Décret 15-247, Art. 22). Résultat : liste nominative des agents à former et catégorie DGR requise.",
+    titre: "Cadrage des tâches et du besoin",
+    desc: "Nous recueillons les tâches réellement exercées, identifions les sources à vérifier et préparons une proposition de périmètre à faire valider par votre responsable conformité, l'exploitant et, si nécessaire, l'autorité compétente. Ce cadrage n'est pas un audit juridique.",
   },
   {
     num: "02",
@@ -123,39 +119,39 @@ const ETAPES = [
   },
   {
     num: "03",
-    titre: "Formation + certification IATA CBTA individuelle",
-    desc: "Chaque participant reçoit son certificat IATA CBTA nominatif, valide 24 mois, reconnue à l'international. Vous recevez un rapport de conformité remis à votre direction et utilisable lors d'audits.",
+    titre: "Formation et évaluation selon le programme confirmé",
+    desc: "Les résultats et attestations individuels suivent les modalités du programme convenu. La validité, les recyclages et l’acceptation relèvent des exigences applicables ; un document de suivi peut être fourni.",
   },
 ];
 
 const ROI_ROWS = [
   {
-    item: "Formation DGR 7.1 (5 agents)",
-    cout: "~250 000 DZD",
+    item: "Cadrage du périmètre de formation pour une équipe",
+    cout: "Sur devis",
     risque: "—",
     classe: "light",
   },
   {
-    item: "Amende ANAC — expédition sans certification",
+    item: "Exigences et conséquences réglementaires éventuelles",
     cout: "—",
-    risque: "500 000 – 2 000 000 DZD",
+    risque: "À vérifier dans les sources applicables",
     classe: "risk",
   },
   {
-    item: "Incident cargo DGR en vol — responsabilité civile",
+    item: "Analyse des risques opérationnels liés aux tâches confiées",
     cout: "—",
-    risque: "Illimité + suspension d'activité",
+    risque: "À évaluer selon les faits et les règles applicables",
     classe: "risk",
   },
   {
-    item: "Perte de contrat cargo faute de certification",
+    item: "Documents et critères d'acceptation de l'exploitant",
     cout: "—",
-    risque: "Perte marché + pénalités",
+    risque: "À confirmer auprès de l'exploitant et de l'acheteur",
     classe: "risk",
   },
   {
-    item: "Recertification 24 mois (obligatoire)",
-    cout: "~150 000 DZD",
+    item: "Formation récurrente si requise",
+    cout: "Sur devis",
     risque: "—",
     classe: "light",
   },
@@ -186,10 +182,10 @@ export default function Page() {
             Intra &amp; Groupe
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 }}>
-            Premier centre CBTA Provider certifié IATA en Algérie (n°CBTA-PR-25-0059). Formations sur site ou dans notre centre.
+            Nous étudions les besoins de formation des entreprises à partir des tâches réellement exercées. Le statut du prestataire, son périmètre et les documents délivrés doivent être vérifiés avant contractualisation.
           </p>
           <p style={{ fontSize: 13, opacity: 0.65, marginBottom: 36 }}>
-            Accréditation ANAC en cours de finalisation · Certificats individuels reconnus IATA
+            Statut du prestataire, autorisations nationales et acceptation des documents à vérifier sur justificatifs
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
@@ -246,7 +242,7 @@ export default function Page() {
               Secteurs &amp; grands comptes prioritaires
             </h2>
             <p style={{ textAlign: "center", color: "#666", marginBottom: 40, fontSize: 15 }}>
-              CA potentiel estimé basé sur les effectifs soumis à certification DGR obligatoire
+              Estimations commerciales indicatives ; besoins réels à déterminer selon les fonctions exercées
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
               {SECTEURS.map((s) => (
@@ -291,7 +287,7 @@ export default function Page() {
             Notre processus en 3 étapes
           </h2>
           <p style={{ textAlign: "center", color: "#666", marginBottom: 44, fontSize: 15 }}>
-            De l&apos;audit à la certification — un accompagnement clé en main
+            Du cadrage des tâches à la proposition de programme — modalités à confirmer
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {ETAPES.map((e, i) => (
@@ -338,7 +334,7 @@ export default function Page() {
               Coût de la formation vs coût de la non-conformité
             </h2>
             <p style={{ textAlign: "center", color: "#666", marginBottom: 36, fontSize: 15 }}>
-              La certification DGR n&apos;est pas une dépense — c&apos;est une protection légale et financière
+              La formation adaptée soutient la maîtrise des risques, sans garantir une conformité ou un résultat
             </p>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", background: "white", borderRadius: 12, overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
@@ -367,7 +363,7 @@ export default function Page() {
               </table>
             </div>
             <p style={{ textAlign: "center", fontSize: 12, color: "#94a3b8", marginTop: 12 }}>
-              * Amendes indicatives basées sur le Décret 15-247 et jurisprudence ANAC. Les incidents DGR peuvent engager la responsabilité pénale des dirigeants.
+              Les conséquences juridiques et financières éventuelles doivent être évaluées sur la base des textes applicables et des faits ; cette page ne constitue pas un avis juridique.
             </p>
           </div>
         </section>
@@ -382,7 +378,7 @@ export default function Page() {
               Formation intra ou groupe — réponse sous 24h avec proposition commerciale et calendrier.
             </p>
             <p style={{ opacity: 0.55, fontSize: 12 }}>
-              Facturation marchés publics · Pro forma disponible · Gré à gré Art. 49
+              Facturation marchés publics · Pro forma disponible · Modalités de commande à confirmer selon le cadre applicable
             </p>
           </div>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>

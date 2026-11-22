@@ -4,10 +4,10 @@ import Image from "next/image";
 import { Award, CheckCircle, Globe } from "lucide-react";
 
 const CREDS = [
-  "Certifié IATA CBTA Instructor & Evaluator",
-  "15+ années dans le fret aérien international",
-  "Ancien agent acceptation DGR — compagnie aérienne",
-  "Formateur agréé Algérie · Maroc · Afrique francophone",
+  "Qualifications des intervenants communiquées avant la session",
+  "Périmètre d'intervention défini par les tâches du programme",
+  "Références et édition réglementaires identifiées",
+  "Modalités d'évaluation et documents délivrés précisés par écrit",
 ];
 
 export default function TrainerBio() {
@@ -19,7 +19,7 @@ export default function TrainerBio() {
             Votre formateur
           </p>
           <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A]">
-            Une expertise IATA issue du terrain
+            Un encadrement pédagogique documenté
           </h2>
         </div>
 
@@ -34,7 +34,7 @@ export default function TrainerBio() {
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-col md:flex-row md:items-center gap-2 mb-1">
               <h3 className="text-xl font-extrabold text-[#0f1c2e]">
-                Formateur Principal IATA DGR CBTA
+                Équipe pédagogique — marchandises dangereuses aérien
               </h3>
               <span className="inline-flex items-center gap-1 rounded-full bg-[#F39C12]/15 border border-[#F39C12]/30 px-3 py-0.5 text-xs font-bold text-[#b87400]">
                 <Award className="h-3 w-3" aria-hidden />
@@ -46,7 +46,7 @@ export default function TrainerBio() {
               Alger, Algérie · Déplacements Afrique francophone
             </p>
             <p className="text-gray-700 leading-relaxed mb-6 max-w-xl">
-              Praticien du fret aérien international, formateur certifié IATA et instructeur CBTA agréé. Sa formation académique en sécurité aéronautique et son expérience en acceptation cargo dangereux lui permettent de transmettre exactement ce que les examinateurs IATA attendent — pas seulement la théorie, mais les réflexes opérationnels qui font réussir les apprenants dès le premier examen.
+              Les intervenants et leurs qualifications sont présentés dans le programme et le devis. Les fonctions, tâches, références et modalités d'évaluation sont définies avant la session. Une mention de référencement auprès d'un organisme ne vaut pas approbation d'une autorité nationale ni acceptation automatique par un exploitant.
             </p>
             <ul className="space-y-2 text-sm text-left">
               {CREDS.map((c) => (
@@ -61,7 +61,7 @@ export default function TrainerBio() {
 
         {/* Note transparence E-E-A-T */}
         <p className="text-center text-xs text-gray-400 mt-4">
-          Le numéro CBTA Provider de KOST GROUP est vérifiable sur{" "}
+          Toute mention d'un référencement IATA doit être vérifiée directement dans le registre officiel ; elle ne vaut pas approbation ANAC ni reconnaissance automatique par un exploitant. Consultez{" "}
           <a
             href="https://www.iata.org/en/training/cbta-center-registry/"
             target="_blank"

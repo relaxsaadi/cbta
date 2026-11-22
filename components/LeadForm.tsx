@@ -129,7 +129,7 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
         p: parsed.data.pays,
         tx: txId,
       });
-      if (fObj) params.set("v", String(fObj.prixEur));
+      if (fObj && fObj.prixEur > 0) params.set("v", String(fObj.prixEur));
       router.push(`/merci?${params.toString()}`);
     } catch {
       setServerError("Connexion impossible. Vérifiez votre réseau.");
@@ -152,10 +152,10 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8 text-white">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
-              Recevez le programme détaillé et un rappel sous 24h
+              Recevez le programme détaillé et une réponse de notre équipe
             </h2>
             <p className="text-white/85 text-lg">
-              Un conseiller pédagogique vous contacte sous 24 heures ouvrables.
+              Notre équipe examine votre demande et vous confirme les prochaines étapes selon les disponibilités.
             </p>
           </div>
           <form
@@ -308,7 +308,7 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
               >
                 {FORMATIONS.map((f) => (
                   <option key={f.slug} value={f.code}>
-                    {f.code} — {f.title} ({f.prixEur.toLocaleString("fr-FR")} €)
+                    {f.code} — {f.title} (sur devis)
                   </option>
                 ))}
               </select>

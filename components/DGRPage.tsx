@@ -60,16 +60,7 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                   value={formation.publicCible}
                 />
                 <Stat icon={Clock} label="Durée" value={formation.duree} />
-                <Stat
-                  icon={Award}
-                  label="Prix EUR"
-                  value={`${formation.prixEur.toLocaleString("fr-FR")} €`}
-                />
-                <Stat
-                  icon={Award}
-                  label="Prix USD"
-                  value={`${formation.prixUsd.toLocaleString("fr-FR")} $`}
-                />
+                <Stat icon={Award} label="Tarif" value="Sur devis" />
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a href="#formulaire" className="btn-primary">
@@ -150,7 +141,7 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                 </div>
                 <div className="font-bold text-lg">Présentiel</div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Sessions à Alger ou intra-entreprise dans votre pays (à partir de 6 participants)
+                  Modalités à confirmer pour la fonction concernée ; tout présentiel hors Algérie dépend des autorisations et exigences applicables
                 </p>
               </div>
               <div className="card text-center">
@@ -159,16 +150,16 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                 </div>
                 <div className="font-bold text-lg">Alger ou sur site</div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Bab Ezzouar, Algérie · Déplacement possible Maroc, Sénégal, Côte d'Ivoire et toute Afrique francophone
+                  Bab Ezzouar, Algérie · Toute intervention extérieure nécessite une validation préalable des conditions applicables
                 </p>
               </div>
               <div className="card text-center">
                 <div className="text-xs uppercase tracking-wider text-[#F39C12] font-bold mb-2">
                   Prochaines sessions
                 </div>
-                <div className="font-bold text-lg">Juillet – Décembre 2026</div>
+                <div className="font-bold text-lg">Planning à confirmer</div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Sessions toutes les 4–6 semaines à Alger
+                  Aucune date ni périodicité de session n'est confirmée ici.
                 </p>
                 <Link
                   href="/planning"
@@ -190,12 +181,12 @@ export default function DGRPage({ formation }: { formation: Formation }) {
             <div className="card">
               <ul className="space-y-3">
                 {[
-                  "Formation présentielle avec formateur IATA certifié",
-                  "Manuel IATA DGR 2026 (67e édition)",
-                  "Examen IATA officiel CBTA",
-                  "Certificat IATA numérique vérifiable en ligne",
+                  "Intervenants et qualifications à confirmer dans le programme écrit",
+                  "Référentiel documentaire, édition et accès à confirmer avant la session",
+                  "Évaluation CBTA selon programme et modalités vérifiées",
+                  "Document délivré et modalités de vérification à confirmer avant inscription",
                   "Exercices pratiques et cas réels",
-                  "Facturation officielle France ou Algérie",
+                  "Entité de facturation et modalités à confirmer dans la proposition écrite",
                 ].map((t) => (
                   <li key={t} className="flex gap-3 items-start">
                     <span className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#F39C12] text-white mt-0.5">
@@ -225,16 +216,16 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                   q: "Faut-il un prérequis pour cette formation ?",
                   a:
                     formation.category === "recurrent"
-                      ? "Oui — il faut être titulaire d'une certification 7.x active arrivant à échéance."
-                      : "Non, la formation initiale est ouverte à tout professionnel concerné par les marchandises dangereuses dans son activité.",
+                      ? "Les prérequis de formation récurrente doivent être vérifiés en fonction du dossier, des tâches et du programme applicables."
+                      : "Les prérequis sont définis pour la fonction et les tâches exercées ; ils doivent être vérifiés avant inscription.",
                 },
                 {
                   q: "Quelle est la durée de validité du certificat ?",
-                  a: "24 mois. Un recyclage CBTA est obligatoire avant cette date.",
+                  a: "La validité et les exigences de formation récurrente doivent être vérifiées selon les sources, les tâches et les règles applicables.",
                 },
                 {
                   q: "Le certificat est-il reconnu hors Algérie ?",
-                  a: "Oui — le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA et toutes les autorités de l'aviation civile.",
+                  a: "La reconnaissance n'est pas universelle par défaut : elle doit être confirmée auprès de l'autorité et de l'opérateur concernés.",
                 },
               ].map((it, i) => (
                 <details

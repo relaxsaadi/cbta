@@ -5,30 +5,30 @@ import { trackWhatsApp } from "@/lib/tracking";
 const SECTORS = [
   {
     icon: "🛢️",
-    name: "Oil & Gas",
-    clients: "Sonatrach, TotalEnergies",
-    stat: "340+ agents formés/an",
-    categories: "Cat. 7.4, 7.9",
+    name: "Énergie et industrie",
+    clients: "Équipes et prestataires du secteur",
+    stat: "Analyse des tâches préalable",
+    categories: "Fonctions à déterminer",
     description:
-      "Pétrole, gaz, produits chimiques inflammables — conformité IATA obligatoire pour les équipes fret et logistique.",
+      "Le secteur d'activité ne suffit pas à attribuer une fonction CBTA. Les tâches réellement exercées et les conditions de transport sont examinées avant toute proposition.",
   },
   {
     icon: "✈️",
-    name: "Aviation & Cargo",
-    clients: "Air Algérie, compagnies aériennes",
-    stat: "Obligation IOSA/ACC3",
-    categories: "Cat. 7.3, 7.4, 7.6",
+    name: "Aviation et fret",
+    clients: "Équipes cargo et opérations",
+    stat: "Périmètre à confirmer",
+    categories: "Fonctions à déterminer",
     description:
-      "Acceptation, chargement et manutention des marchandises dangereuses — qualification requise pour rester en conformité IATA.",
+      "Les compétences à couvrir dépendent des opérations confiées, des règles applicables et des exigences de l'exploitant concerné.",
   },
   {
     icon: "🏛️",
-    name: "Secteur public & institutionnel",
-    clients: "DGPC, ANAC, ministères",
-    stat: "Décret 15-247 gré à gré",
-    categories: "Cat. 7.1",
+    name: "Secteur public et institutionnel",
+    clients: "Organismes et établissements",
+    stat: "Cadrage documentaire",
+    categories: "Sources à vérifier",
     description:
-      "Seul centre CBTA Provider certifié IATA en Algérie — accréditation ANAC en cours de finalisation.",
+      "Le programme, le cadre de commande et les éventuelles exigences d'autorisation sont vérifiés séparément avant toute offre institutionnelle.",
   },
 ];
 
@@ -43,7 +43,7 @@ const ADVANTAGES = [
   },
   {
     icon: "🎓",
-    text: "Certificats IATA CBTA individuels nominatifs",
+    text: "Documents délivrés selon le programme, le statut applicable et le périmètre confirmé",
   },
   {
     icon: "📄",
@@ -67,8 +67,7 @@ export default function B2BSection() {
             Formation DGR Intra-Entreprise — Pour les Grands Comptes
           </h2>
           <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-            Sonatrach, Air Algérie, TotalEnergies, compagnies pétrolières —
-            nous formons vos équipes directement sur site
+            Nous étudions les besoins de formation des équipes selon les tâches réellement exercées et les exigences applicables.
           </p>
         </div>
 
@@ -122,7 +121,7 @@ export default function B2BSection() {
             href="/#contact"
             className="inline-flex items-center justify-center gap-2 bg-[#F39C12] hover:bg-[#e08e10] text-white font-bold py-4 px-8 rounded-xl transition-colors text-center"
           >
-            Demander un audit DGR gratuit
+            Demander un cadrage de formation
           </a>
           <a
             href={WHATSAPP_URL}

@@ -6,9 +6,9 @@ import WhatsAppSticky from "@/components/WhatsAppSticky";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR en Afrique — Centre CBTA Certifié pour toute l'Afrique",
+  title: "Formation DGR / CBTA en Afrique — périmètre à confirmer",
   description:
-    "KOST GROUP, 1er centre IATA CBTA Provider certifié d'Algérie, forme les professionnels du transport aérien dans toute l'Afrique : Maroc, Sénégal, Côte d'Ivoire, Cameroun, Gabon, Mali.",
+    "KOST GROUP propose des parcours de formation DGR / CBTA. Le périmètre, la disponibilité et les autorisations doivent être confirmés pour chaque pays et chaque programme.",
   alternates: { canonical: "/formation-dgr-afrique" },
   keywords: [
     "formation IATA DGR Afrique",
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     "centre IATA Afrique",
   ],
   openGraph: {
-    title: "Formation IATA DGR en Afrique — KOST GROUP",
+    title: "Formation DGR / CBTA en Afrique — KOST GROUP",
     description:
-      "1er centre IATA CBTA certifié d'Algérie. Formation DGR pour toute l'Afrique francophone et au-delà.",
+      "Informations sur les parcours DGR / CBTA, sous réserve des exigences et conditions locales applicables.",
     url: "https://dgr.kostacademy.com/formation-dgr-afrique",
   },
 };
@@ -40,9 +40,9 @@ const PAYS = [
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
-  name: "KOST GROUP — Centre IATA CBTA",
+  name: "KOST GROUP — formation DGR / CBTA",
   description:
-    "Premier centre IATA CBTA Provider certifié d'Algérie, spécialisé dans la formation DGR (Dangerous Goods Regulations) pour toute l'Afrique.",
+    "Organisme proposant des formations sur les marchandises dangereuses en transport aérien ; le périmètre et les modalités sont définis selon les tâches et exigences applicables.",
   url: "https://dgr.kostacademy.com",
   telephone: "+213542305383",
   address: {
@@ -51,7 +51,7 @@ const JSON_LD = {
     addressLocality: "Alger",
     postalCode: "16024",
   },
-  areaServed: ["DZ", "MA", "SN", "CI", "CM", "GA", "ML", "TN"],
+  areaServed: ["DZ"],
 };
 
 export default function Page() {
@@ -65,12 +65,12 @@ export default function Page() {
       <main style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" }}>
         {/* Hero */}
         <section style={{ background: "linear-gradient(135deg, #003087 0%, #0052cc 100%)", color: "white", padding: "80px 24px", textAlign: "center" }}>
-          <p style={{ fontSize: 14, letterSpacing: 2, opacity: 0.8, marginBottom: 12 }}>IATA CBTA PROVIDER CERTIFIÉ</p>
+          <p style={{ fontSize: 14, letterSpacing: 2, opacity: 0.8, marginBottom: 12 }}>FORMATION DGR / CBTA — PÉRIMÈTRE À CONFIRMER</p>
           <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", fontWeight: 700, margin: "0 0 16px" }}>
             Formation IATA DGR en Afrique
           </h1>
           <p style={{ fontSize: 18, opacity: 0.9, maxWidth: 600, margin: "0 auto 32px" }}>
-            Le premier centre CBTA certifié d&apos;Algérie au service de toute l&apos;Afrique —
+            Des parcours DGR / CBTA à définir selon les tâches, les sources et les conditions locales —
             formations CBTA adaptées aux tâches exercées, avec évaluation des compétences.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
@@ -114,7 +114,7 @@ export default function Page() {
         <section style={{ background: "#f8fafc", padding: "60px 24px" }}>
           <div style={{ maxWidth: 900, margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", fontSize: 28, fontWeight: 700, marginBottom: 40 }}>
-              Pourquoi choisir KOST GROUP pour toute l&apos;Afrique ?
+              Préparer un besoin de formation dans un pays donné
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 20 }}>
               {[
@@ -136,10 +136,10 @@ export default function Page() {
         {/* CTA */}
         <section style={{ background: "#003087", color: "white", padding: "60px 24px", textAlign: "center" }}>
           <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>
-            Demandez un devis gratuit pour votre pays
+            Demandez une étude de faisabilité pour votre pays
           </h2>
           <p style={{ opacity: 0.9, marginBottom: 28 }}>
-            Réponse sous 24h — sessions inter ou intra-entreprise disponibles dans toute l&apos;Afrique
+            Disponibilité, autorisations locales, lieu, calendrier et modalités à confirmer pour chaque pays avant engagement
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="/#contact" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>

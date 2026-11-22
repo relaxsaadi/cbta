@@ -12,10 +12,10 @@ export default function Guarantee() {
             Garantie KOST GROUP
           </h2>
           <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto">
-            Si vous ne réussissez pas l'examen IATA du premier coup, nous vous offrons une <strong className="text-[#003D7A]">session de rattrapage gratuite</strong>.
+            Si vous ne réussissez pas l'évaluation prévue au programme, nous proposons une <strong className="text-[#003D7A]">session de rattrapage gratuite</strong>, selon les conditions écrites au devis.
           </p>
           <p className="text-sm text-gray-500 mt-4">
-            Notre taux de réussite à l'examen IATA dépasse 95%. Cette garantie reflète notre engagement à votre certification.
+            Les modalités de rattrapage, les frais éventuels et les conditions d'éligibilité sont confirmés par écrit avant l'inscription. Aucun taux de réussite n'est garanti.
           </p>
         </div>
       </div>

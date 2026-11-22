@@ -8,9 +8,9 @@ import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Formation DGR Transitaires Algérie — Cat. 7.1 & 7.2",
+  title: "Formation marchandises dangereuses — transitaires et fret aérien",
   description:
-    "Formation IATA DGR pour transitaires et agents de fret en Algérie. Catégories 7.1 & 7.2, CBTA Provider certifié, reconnu par 300+ compagnies. Devis sous 24h.",
+    "Formation et accompagnement sur les marchandises dangereuses en transport aérien. Le périmètre est défini selon les tâches réellement exercées et les exigences applicables.",
   alternates: { canonical: "/formation-dgr-transitaires" },
   keywords: [
     "formation DGR transitaires",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR pour Transitaires — KOST GROUP",
     description:
-      "DGR 7.1 & 7.2 certifiés CBTA pour transitaires, commissionnaires en douane et agents de fret aérien.",
+      "Programme établi après analyse des tâches, des sources applicables et des exigences de l'État et de l'exploitant.",
     url: "https://dgr.kostacademy.com/formation-dgr-transitaires",
   },
 };
@@ -30,70 +30,44 @@ export const metadata: Metadata = {
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "Formation IATA DGR pour Transitaires (Catégories 7.1 & 7.2)",
+  name: "Formation sur les marchandises dangereuses en transport aérien",
   description:
-    "Formation obligatoire IATA DGR pour les transitaires, commissionnaires en douane et agents de fret aérien. Couvre les catégories 7.1 (expéditeurs) et 7.2 (agents cargo).",
+    "Programme de formation défini après analyse des tâches réellement exercées et vérification des exigences réglementaires, de l'État et de l'exploitant concernés.",
   provider: {
     "@type": "EducationalOrganization",
     name: "KOST GROUP",
     url: "https://dgr.kostacademy.com",
   },
-  courseCode: "DGR-7.1-7.2",
   availableLanguage: "fr",
-  occupationalCredentialAwarded: "Certificat IATA DGR-CBTA",
-  offers: {
-    "@type": "Offer",
-    price: "900",
-    priceCurrency: "EUR",
-    availability: "https://schema.org/InStock",
-  },
 };
 
 const RISKS = [
   {
-    icon: "⚠️",
-    title: "Amende & suspension",
-    text: "Un transitaire qui expédie des marchandises dangereuses sans personnel certifié DGR risque une suspension d'accréditation cargo et des amendes DGAC/ANAC.",
+    icon: "📋",
+    title: "Identifier les tâches",
+    text: "Décrivez les opérations réellement réalisées par chaque personne : préparation, documentation, acceptation, manutention, chargement ou autres activités.",
+  },
+  {
+    icon: "📚",
+    title: "Vérifier les exigences",
+    text: "Les compétences requises dépendent des tâches, des règles en vigueur, des variations de l'État et des procédures de l'exploitant.",
   },
   {
     icon: "✈️",
-    title: "Refus en compagnie",
-    text: "Les compagnies aériennes refusent systématiquement les envois DGR dont le transitaire n'a pas de personnel certifié DGR 7.1 en poste.",
-  },
-  {
-    icon: "📋",
-    title: "Responsabilité pénale",
-    text: "En cas d'incident DGR, la responsabilité civile et pénale de l'expéditeur — et donc du transitaire signataire — est directement engagée.",
+    title: "Confirmer le périmètre",
+    text: "Avant de choisir une formation ou de planifier un envoi, confirmez le périmètre applicable auprès de l'employeur, de l'exploitant et, si nécessaire, de l'autorité compétente.",
   },
 ];
 
 const FORMATIONS = [
   {
-    code: "DGR 7.1 Initial",
-    titre: "Expéditeurs & Transitaires",
-    desc: "Formation complète pour toute personne qui prépare, classe, emballe, étiquette et documente des envois de marchandises dangereuses. La formation de référence pour les transitaires.",
-    duree: "4 jours / 32h",
-    prix: "1 800 €",
-    badge: "Essentielle transitaires",
+    code: "Analyse préalable",
+    titre: "Cartographie des tâches et du périmètre",
+    desc: "Les fonctions CBTA ne sont pas attribuées à partir du seul intitulé de poste ou du secteur. Le programme est proposé après examen des tâches réelles, des sources applicables et des exigences de l'État et de l'exploitant.",
+    duree: "À définir",
+    prix: "Sur devis",
+    badge: "Avant inscription",
     color: "#003087",
-  },
-  {
-    code: "DGR 7.1 Recurrent",
-    titre: "Renouvellement 7.1 (24 mois)",
-    desc: "Renouvellement obligatoire tous les 24 mois pour maintenir la certification 7.1 active. Mise à jour DGR dernière édition incluse.",
-    duree: "3 jours / 24h",
-    prix: "1 400 €",
-    badge: "Renouvellement",
-    color: "#0052cc",
-  },
-  {
-    code: "DGR 7.2 + 7.4",
-    titre: "Agents cargo & manutention",
-    desc: "Pour les agents de fret en station cargo : acceptation, manutention et stockage des envois DGR. Complémentaire au 7.1 pour les équipes cargo.",
-    duree: "2 jours / 16h",
-    prix: "900 €",
-    badge: "Cargo & handling",
-    color: "#0066cc",
   },
 ];
 
@@ -111,13 +85,13 @@ export default function Page() {
         <section style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #003087 100%)", color: "white", padding: "80px 24px", textAlign: "center" }}>
           <p style={{ fontSize: 13, letterSpacing: 2, opacity: 0.7, marginBottom: 12, textTransform: "uppercase" }}>Secteur Transitaires & Fret Aérien</p>
           <h1 style={{ fontSize: "clamp(26px, 4.5vw, 44px)", fontWeight: 700, margin: "0 0 16px", lineHeight: 1.2 }}>
-            Formation IATA DGR<br />pour Transitaires
+            Formation marchandises dangereuses<br />pour les activités de transit et de fret
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 580, margin: "0 auto 12px" }}>
-            Catégories <strong>7.1 & 7.2</strong> — Certifiez vos équipes pour expédier légalement des marchandises dangereuses par avion.
+            Le périmètre de formation est déterminé à partir des tâches réellement exercées et des exigences applicables au transport aérien.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            Obligation OACI Annexe 18 · CBTA Provider certifié · Certificat valable 24 mois
+            Tâches, références réglementaires et modalités à confirmer avant la session
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#formations" style={{ background: "white", color: "#003087", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -133,7 +107,7 @@ export default function Page() {
         <section style={{ background: "#FFF3CD", borderBottom: "1px solid #FBBF24", padding: "32px 24px" }}>
           <div style={{ maxWidth: 900, margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", fontSize: 20, fontWeight: 700, marginBottom: 24, color: "#92400E" }}>
-              Sans certification DGR, votre activité de transitaire est en danger
+              Avant toute formation, identifiez les tâches et vérifiez les exigences applicables
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16 }}>
               {RISKS.map((r) => (
@@ -185,10 +159,10 @@ export default function Page() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 16 }}>
               {[
-                { icon: "🏅", t: "1er CBTA Provider d'Algérie", d: "Seul centre IATA CBTA accrédité en Algérie — vos certificats sont reconnus par toutes les compagnies aériennes." },
+                { icon: "🏅", t: "Périmètre défini par les tâches", d: "Le programme est construit à partir des opérations réellement confiées, sans attribuer automatiquement une fonction à un métier." },
                 { icon: "📅", t: "Sessions régulières à Alger", d: "Planning de sessions ouvertes tout au long de l'année. Inscrivez un ou plusieurs agents sans attendre." },
-                { icon: "🏢", t: "Intra-entreprise possible", d: "Formateur IATA déplacé dans vos locaux pour former tout votre pôle export DGR en une session." },
-                { icon: "💶", t: "50% moins cher qu'en Europe", d: "Même certification IATA, même formateur accrédité, moitié prix par rapport à Paris ou Bruxelles." },
+                { icon: "🏢", t: "Modalités intra-entreprise", d: "Le lieu, la durée, les moyens pédagogiques et les conditions logistiques sont précisés dans le programme et le devis." },
+                { icon: "💶", t: "Devis transparent", d: "Le prix est communiqué après définition du périmètre, de la durée et des modalités de la session." },
               ].map((r) => (
                 <div key={r.t} style={{ background: "white", borderRadius: 10, padding: "20px" }}>
                   <div style={{ fontSize: 30, marginBottom: 10 }}>{r.icon}</div>
@@ -204,11 +178,11 @@ export default function Page() {
         <section style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px" }}>
           <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Questions fréquentes — Transitaires</h2>
           {[
-            { q: "Tous mes agents export doivent-ils être certifiés DGR ?", a: "Oui. Tout agent qui prépare, classe, emballe ou documente des envois DGR doit détenir un certificat DGR 7.1 en cours de validité (OACI Annexe 18, IATA DGR Section 1)." },
-            { q: "Quelle est la validité de la certification ?", a: "24 mois. À l'échéance, votre agent doit suivre la formation DGR 7.1 Recurrent pour renouveler son certificat." },
+            { q: "Tous mes agents export relèvent-ils de la même fonction CBTA ?", a: "Non. Un intitulé de poste ou l'appartenance au service export ne suffit pas à attribuer une fonction. Il faut recenser les tâches réellement confiées, puis vérifier les exigences actuelles de l'État et de l'exploitant." },
+            { q: "Quelle est la périodicité de formation récurrente ?", a: "Elle dépend des règles applicables, des tâches et des exigences de l'État et de l'exploitant. La périodicité doit être vérifiée dans les sources en vigueur avant toute planification." },
             { q: "Peut-on former toute l'équipe en une semaine ?", a: "Oui, en intra-entreprise. Le formateur KOST se déplace dans vos locaux et forme jusqu'à 10-12 agents simultanément." },
-            { q: "Le certificat KOST est-il reconnu par Air Algérie, Cargolux, etc. ?", a: "Oui. KOST GROUP est un IATA CBTA Provider officiel. Le certificat émis est un certificat IATA reconnu par toutes les compagnies aériennes mondiales." },
-            { q: "Y a-t-il un examen à la fin ?", a: "Oui. L'examen CBTA est basé sur des compétences (Competency-Based Training and Assessment). Le taux de réussite de nos stagiaires dépasse 95 %." },
+            { q: "Le document délivré est-il automatiquement accepté par toutes les compagnies ?", a: "Aucune acceptation universelle ne doit être présumée. Vérifiez le statut et le périmètre du prestataire dans les registres officiels, puis confirmez l'acceptation du document auprès de l'exploitant et de l'autorité concernés." },
+            { q: "Quelles sont les modalités d'évaluation ?", a: "Elles sont précisées dans le programme et le devis. Le type d'évaluation, les critères, le statut du document délivré et les éventuelles conditions de reprise sont communiqués avant inscription." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#003087" }}>{faq.q}</summary>
@@ -220,8 +194,8 @@ export default function Page() {
         {/* Formulaire */}
         <section style={{ background: "#003087", padding: "60px 24px" }}>
           <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", color: "white", marginBottom: 32 }}>
-            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>Devis gratuit pour votre entreprise</h2>
-            <p style={{ opacity: 0.9, fontSize: 15 }}>Indiquez le nombre d&apos;agents à certifier — nous vous envoyons un devis sous 24h.</p>
+            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>Cadrage de formation pour votre entreprise</h2>
+            <p style={{ opacity: 0.9, fontSize: 15 }}>Décrivez les tâches de vos équipes et le contexte d'exploitation pour recevoir une proposition de périmètre et de programme.</p>
           </div>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>
             <Suspense fallback={null}>

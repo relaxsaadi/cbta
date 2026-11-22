@@ -129,7 +129,7 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
         p: parsed.data.pays,
         tx: txId,
       });
-      if (fObj) params.set("v", String(fObj.prixEur));
+      if (fObj && fObj.prixEur > 0) params.set("v", String(fObj.prixEur));
       router.push(`/merci?${params.toString()}`);
     } catch {
       setServerError("Connexion impossible. Vérifiez votre réseau.");
@@ -308,7 +308,7 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
               >
                 {FORMATIONS.map((f) => (
                   <option key={f.slug} value={f.code}>
-                    {f.code} — {f.title} ({f.prixEur.toLocaleString("fr-FR")} €)
+                    {f.code} — {f.title} (sur devis)
                   </option>
                 ))}
               </select>

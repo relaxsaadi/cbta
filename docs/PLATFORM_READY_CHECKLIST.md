@@ -169,3 +169,17 @@ The four gates above were corrected from `PASS` to `PENDING` because their own e
 - Q-7.1-008: current Table 2.6.A evidence retrieved; FR source-verified, but one unsupported distractor must be revised before production.
 - Q-7.1-001: glossary location known (Appendice A, p.703), but direct entries still required.
 - Pilot FR source verification: 11/12 at the latest pushed evidence snapshot.
+
+## Additional public-source exposure scan (2026-11-22; owner-blocking)
+
+On the public handoff head `4b077f402987cc3313b61b962f4c8ea95e74d4d8`, a non-disclosing scan of the 453-row V2 import-candidate CSV and 453-row per-item reconciliation CSV found **42 quoted Bookshelf/DGR reference fields** across Functions 7.2–7.10. The per-function counts are 7.2: 8; 7.3: 5; 7.4: 5; 7.5: 8; 7.6: 2; 7.7: 1; 7.8: 7; 7.9: 2; 7.10: 4. The same 42 question IDs occur in both CSV artifacts.
+
+**35 of those quoted substrings** were found as exact substrings in the public production-bank Markdown files for Functions 7.2–7.10 (per-function matches: 6, 5, 4, 7, 2, 1, 5, 1, 4). Seven quoted references did not match that bank-file scan; this does not establish that they are safe. One additional unquoted 278-character reference for Q-7.10-038 requires manual source/licensing review. The Function 7.1 production-bank scan found no occurrence of the same Bookshelf evidence phrase.
+
+This is a **probable licensed-source-text exposure**, separate from the existing answer-key confidentiality gate. No licensed text is reproduced in this checklist. Treat the affected public artifacts as exposed, not as a restricted evidence store. Do not use exposed items for secure summative/certification assessments.
+
+Owner-controlled actions: inventory branch tips, history, artifacts, forks/mirrors and staging/Moodle pools; move authorized source evidence and production items to restricted storage; re-verify each item against the licensed current DGR without copying source text into public files; classify unsupported claims as SOURCE GAP or SOURCE CONFLICT; keep IMPORT_ELIGIBLE=NO; quarantine exposed items and document the replacement pool. Any Git-history rewrite or visibility/storage change requires owner authorization and coordinated preservation/retirement planning. A new commit or private-repository setting cannot recall copies already fetched.
+
+A separate PR #413 tip correction replaced the Q-7.3-029 quoted reference with the non-verbatim locator already present on the handoff and restored its explicit NO IMPORT action. Its historical public commit remains accessible; the correction does not resolve history exposure or the other quoted references.
+
+**No question, answer, source conclusion, reviewer decision, import flag, runtime data or approval changed during this scan.** All 453 current import candidates remain `IMPORT_ELIGIBLE=NO`. This finding does not establish IATA/ANAC approval or clear any technical/regulatory release gate.

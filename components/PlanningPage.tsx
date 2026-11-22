@@ -279,22 +279,22 @@ export default function PlanningPage() {
           KOST GROUP propose des formations DGR/CBTA dont le périmètre doit être confirmé à partir des tâches réellement exercées, des sources courantes applicables et du circuit de revue. Les modalités de session, de délivrance, de reconnaissance et d'évaluation sont à confirmer dans une proposition écrite.
         </p>
         <p className="mb-6">
-          Les formations couvrent toutes les fonctions réglementées : préparation des expéditions (<Link href="/dgr-7-1" className="text-yellow-400 hover:underline">DGR 7.1</Link>), acceptation cargo (<Link href="/dgr-7-3" className="text-yellow-400 hover:underline">DGR 7.3</Link>), personnel sol (<Link href="/dgr-7-4" className="text-yellow-400 hover:underline">DGR 7.4</Link>), enregistrement (<Link href="/dgr-7-5" className="text-yellow-400 hover:underline">DGR 7.5</Link>), équipages (<Link href="/dgr-7-7" className="text-yellow-400 hover:underline">DGR 7.7</Link>) et personnels navigants de cabine (<Link href="/dgr-7-9" className="text-yellow-400 hover:underline">DGR 7.9</Link>). Sessions intra-entreprise disponibles dès 4 participants.
+          Chaque fonction CBTA 7.1 à 7.10 doit être examinée séparément à partir de sa propre table de tâches, des sources applicables et des activités réellement exercées. Le périmètre, les modalités intra-entreprise et le nombre minimal de participants sont confirmés dans une proposition écrite.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 not-italic">
           {[
-            { label: "DGR 7.1 Initial", href: "/dgr-7-1", price: "1 800 €" },
-            { label: "DGR 7.1 Recurrent", href: "/dgr-7-1-recurrent", price: "1 400 €" },
-            { label: "DGR 7.2", href: "/dgr-7-2", price: "900 €" },
-            { label: "DGR 7.3 Initial", href: "/dgr-7-3", price: "2 100 €" },
-            { label: "DGR 7.3 Recurrent", href: "/dgr-7-3-recurrent", price: "1 500 €" },
-            { label: "DGR 7.4", href: "/dgr-7-4", price: "900 €" },
-            { label: "DGR 7.5", href: "/dgr-7-5", price: "850 €" },
-            { label: "DGR 7.6", href: "/dgr-7-6", price: "650 €" },
-            { label: "DGR 7.7", href: "/dgr-7-7", price: "650 €" },
-            { label: "DGR 7.8", href: "/dgr-7-8", price: "650 €" },
-            { label: "DGR 7.9", href: "/dgr-7-9", price: "650 €" },
-            { label: "DGR 7.10", href: "/dgr-7-10", price: "650 €" },
+            { label: "DGR 7.1 Initial", href: "/dgr-7-1", price: "Sur devis" },
+            { label: "DGR 7.1 Recurrent", href: "/dgr-7-1-recurrent", price: "Sur devis" },
+            { label: "DGR 7.2", href: "/dgr-7-2", price: "Sur devis" },
+            { label: "DGR 7.3 Initial", href: "/dgr-7-3", price: "Sur devis" },
+            { label: "DGR 7.3 Recurrent", href: "/dgr-7-3-recurrent", price: "Sur devis" },
+            { label: "DGR 7.4", href: "/dgr-7-4", price: "Sur devis" },
+            { label: "DGR 7.5", href: "/dgr-7-5", price: "Sur devis" },
+            { label: "DGR 7.6", href: "/dgr-7-6", price: "Sur devis" },
+            { label: "DGR 7.7", href: "/dgr-7-7", price: "Sur devis" },
+            { label: "DGR 7.8", href: "/dgr-7-8", price: "Sur devis" },
+            { label: "DGR 7.9", href: "/dgr-7-9", price: "Sur devis" },
+            { label: "DGR 7.10", href: "/dgr-7-10", price: "Sur devis" },
           ].map((f) => (
             <Link
               key={f.href}
@@ -389,8 +389,8 @@ export default function PlanningPage() {
           <div className="flex flex-col items-center gap-2">
             <div className="flex flex-wrap justify-center gap-3 text-xs text-white/30">
               {[
-                "✅ Paiement sécurisé via Strategix France",
-                "✅ Facture officielle",
+                "Moyens de paiement à confirmer dans la proposition",
+                "Entité de facturation et documents à confirmer dans la proposition",
                 "✅ Modalités de délivrance à confirmer",
               ].map((item) => (
                 <span key={item}>{item}</span>

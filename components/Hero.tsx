@@ -16,19 +16,19 @@ export default function Hero() {
         <div className="animate-fade-in-up flex flex-col items-start gap-6 max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-sm font-medium">
             <BadgeCheck className="h-4 w-4 text-[#F39C12]" aria-hidden />
-            <span>IATA CBTA Provider — Officiellement certifié</span>
+            <span>Formation DGR / CBTA — périmètre défini par tâches</span>
           </div>
 
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-            Formation DGR-CBTA<br />
-            <span className="text-[#F39C12]">Certifiée IATA</span>
+            Formation marchandises dangereuses<br />
+            <span className="text-[#F39C12]">Transport aérien · approche CBTA</span>
             <span className="block text-2xl md:text-4xl lg:text-5xl mt-2 font-bold opacity-95">
-              1er Centre CBTA Provider Certifié IATA en Algérie
+              Compétences et tâches ciblées
             </span>
           </h1>
 
           <p className="text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl">
-            Certificat IATA officiel reconnu par <strong className="text-white">300+ compagnies aériennes</strong> · Valide <strong className="text-white">24 mois</strong> · Formateurs internationaux certifiés.
+            Le programme est défini à partir des tâches réellement exercées et des exigences applicables de l'État et de l'exploitant. Le périmètre et les documents délivrés sont précisés avant inscription.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto pt-2">
@@ -56,7 +56,7 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 text-sm text-white/80">
             <div className="inline-flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[#F39C12]" aria-hidden />
-              <span>1er certifié IATA en Algérie</span>
+              <span>Périmètre et sources vérifiés avant la session</span>
             </div>
             <div className="inline-flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[#F39C12]" aria-hidden />
@@ -72,11 +72,11 @@ export default function Hero() {
         {/* IATA CBTA Provider badge */}
         <div
           className="animate-fade-in-scale hidden lg:block absolute right-8 top-32 w-48 h-48 rounded-2xl bg-white/95 backdrop-blur-md p-3 shadow-2xl"
-          aria-label="Badge IATA Competency Training & Assessment Center Provider"
+          aria-label="Visuel de référence CBTA — vérifier le statut et le périmètre au registre officiel"
         >
           <Image
             src="/iata-cbta-provider.png"
-            alt="IATA Competency Training & Assessment Center Provider"
+            alt="Visuel de référence CBTA — vérifier le statut et le périmètre au registre officiel"
             width={192}
             height={192}
             priority

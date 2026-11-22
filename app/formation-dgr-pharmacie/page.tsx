@@ -10,7 +10,7 @@ import TrackedLink from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Formation IATA DGR Pharmacie & Biomédical — Glace Sèche, UN 3373",
   description:
-    "Formation IATA DGR pour le secteur pharmaceutique et biomédical : glace sèche (PI 954), substances biologiques UN 3373, matières infectieuses UN 2814/2900. Centre CBTA certifié en Algérie.",
+    "Formation DGR pour équipes pharmaceutiques et biomédicales : analyse des tâches réelles et des produits transportés. Classification et obligations à confirmer selon la réglementation applicable.",
   alternates: { canonical: "/formation-dgr-pharmacie" },
   keywords: [
     "formation DGR pharmacie",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR Pharmacie & Biomédical — KOST GROUP",
     description:
-      "Formation IATA DGR spécialisée pharma : glace sèche (PI 954), UN 3373, UN 2814. Compliance cold chain aérienne.",
+      "Formation DGR pour la chaîne du froid pharmaceutique et les expéditions biomédicales, avec analyse préalable des marchandises et fonctions concernées.",
     url: "https://dgr.kostacademy.com/formation-dgr-pharmacie",
   },
 };
@@ -40,36 +40,35 @@ const JSON_LD = {
   },
   courseCode: "DGR-PHARMA",
   availableLanguage: "fr",
-  occupationalCredentialAwarded: "Certificat IATA DGR-CBTA",
 };
 
 const PRODUITS = [
   {
     code: "UN 1845",
     label: "Glace sèche (dry ice)",
-    pi: "Instruction PI 954",
-    desc: "Utilisée pour le transport de vaccins, médicaments thermosensibles, produits biologiques. Réglementation stricte sur les quantités et l'emballage.",
+    pi: "Référence DGR à vérifier",
+    desc: "Utilisée pour le transport de vaccins, médicaments thermosensibles, produits biologiques. Conditions de transport, de refroidissement et d'emballage à confirmer pour chaque envoi.",
     color: "#0052cc",
   },
   {
     code: "UN 3373",
     label: "Substances biologiques Cat. B",
-    pi: "Instruction PI 650",
-    desc: "Échantillons diagnostiques, cultures cellulaires, sang, tissus non infectieux. Emballage P650, étiquette UN 3373 obligatoire.",
+    pi: "Référence DGR à vérifier",
+    desc: "Certains échantillons peuvent relever de cette catégorie. La classification, l'emballage, le marquage et les documents sont à vérifier selon le cas.",
     color: "#00875a",
   },
   {
     code: "UN 2814 / 2900",
     label: "Matières infectieuses Cat. A",
-    pi: "Instruction PI 602",
-    desc: "Agents pathogènes présentant un risque grave pour la santé humaine (Cat. A) ou animale (Cat. B/2900). Exigences strictes IATA DGR.",
+    pi: "Référence DGR à vérifier",
+    desc: "La classification exacte, les restrictions et l'instruction d'emballage applicable doivent être confirmées avant toute expédition.",
     color: "#de350b",
   },
   {
     code: "Classe 2.2",
     label: "Azote liquide",
-    pi: "Instruction PI 202",
-    desc: "Transport d'échantillons biologiques conservés à ultra-basse température. Réglementé comme gaz non inflammable non toxique.",
+    pi: "Référence DGR à vérifier",
+    desc: "Les conditions applicables dépendent notamment du conditionnement et de l'utilisation du réfrigérant.",
     color: "#6554c0",
   },
 ];
@@ -91,10 +90,10 @@ export default function Page() {
             Formation IATA DGR<br />Pharmacie & Biomédical
           </h1>
           <p style={{ fontSize: 17, opacity: 0.9, maxWidth: 600, margin: "0 auto 12px" }}>
-            Glace sèche · UN 3373 · UN 2814 · Azote liquide — Certifiez vos équipes pour l&apos;expédition aérienne de produits pharmaceutiques et biologiques.
+            Glace sèche · UN 3373 · matières infectieuses · réfrigérants — identifiez les compétences requises pour les tâches réellement exercées.
           </p>
           <p style={{ fontSize: 14, opacity: 0.7, marginBottom: 32 }}>
-            CBTA Provider certifié · Conformité IATA DGR dernière édition · Algérie & Afrique
+            Approche CBTA selon les tâches · Documents réglementaires à vérifier · Modalités sur demande
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="#contact" style={{ background: "white", color: "#003d1a", padding: "14px 28px", borderRadius: 8, fontWeight: 700, textDecoration: "none" }}>
@@ -112,7 +111,7 @@ export default function Page() {
             Produits pharmaceutiques réglementés DGR
           </h2>
           <p style={{ textAlign: "center", color: "#666", marginBottom: 36 }}>
-            Ces produits nécessitent une formation DGR obligatoire pour l&apos;expédition aérienne
+            La classification, les conditions d&apos;expédition et les besoins de formation doivent être examinés pour chaque situation
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
             {PRODUITS.map((p) => (
@@ -130,14 +129,14 @@ export default function Page() {
         <section style={{ background: "#f0fff4", padding: "50px 24px" }}>
           <div style={{ maxWidth: 860, margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 28 }}>
-              Qui doit être certifié dans une entreprise pharmaceutique ?
+              Quelles activités faut-il analyser avant de choisir une fonction CBTA ?
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
               {[
-                { poste: "Responsable supply chain pharma", cat: "DGR 7.1", desc: "Valide et signe tous les envois DGR de l'entreprise." },
-                { poste: "Agent export laboratoire", cat: "DGR 7.1", desc: "Prépare les envois d'échantillons et produits biologiques." },
-                { poste: "Coursier biomédical", cat: "DGR 7.1 / 7.2", desc: "Transport d'échantillons diagnostiques (UN 3373) au quotidien." },
-                { poste: "Responsable quality cold chain", cat: "DGR 7.1 sensibilisation", desc: "Doit connaître les exigences d'emballage et de documentation." },
+                { poste: "Responsable supply chain pharma", cat: "À déterminer", desc: "Analyser les responsabilités réelles en préparation, contrôle et documentation des expéditions." },
+                { poste: "Agent export laboratoire", cat: "À déterminer", desc: "Identifier les tâches effectivement assurées et le niveau de compétence nécessaire." },
+                { poste: "Coursier biomédical", cat: "À déterminer", desc: "Décrire les opérations de transport et de manutention réalisées avant toute attribution de fonction." },
+                { poste: "Responsable qualité chaîne du froid", cat: "À déterminer", desc: "Préciser les contrôles et décisions exercés pour établir un programme adapté." },
               ].map((p) => (
                 <div key={p.poste} style={{ background: "white", borderRadius: 10, padding: "18px", border: "1px solid #a7f3d0" }}>
                   <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{p.poste}</div>
@@ -152,13 +151,13 @@ export default function Page() {
         {/* Erreurs fréquentes */}
         <section style={{ maxWidth: 860, margin: "0 auto", padding: "60px 24px" }}>
           <h2 style={{ textAlign: "center", fontSize: 22, fontWeight: 700, marginBottom: 28 }}>
-            Erreurs fréquentes en pharma/biomédical
+            Points à vérifier avant toute expédition
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { e: "Glace sèche non déclarée", s: "La glace sèche est réglementée DGR dès qu'elle est utilisée comme réfrigérant dans un envoi. Son omission entraîne le refus de l'envoi par la compagnie aérienne." },
-              { e: "UN 3373 sans emballage P650", s: "L'emballage P650 est obligatoire pour tous les échantillons biologiques catégorie B. Un simple emballage «biohazard» commercial n'est pas conforme IATA." },
-              { e: "Déclaration d'expéditeur absente", s: "Toute expédition DGR doit être accompagnée d'une Shipper's Declaration for Dangerous Goods (SDG) correctement remplie et signée par un agent certifié 7.1." },
+              { e: "Glace sèche : conditions variables", s: "Vérifier les quantités, le conditionnement, le marquage, la documentation et les variations de l'exploitant pour le cas concerné." },
+              { e: "UN 3373 : classification et emballage", s: "Confirmer la classification réelle et les exigences de l'instruction d'emballage applicable dans la DGR 67e édition 2026." },
+              { e: "Documentation : pas de règle universelle", s: "La nécessité d'une Shipper's Declaration ne peut pas être déduite de la seule présence de marchandises dangereuses. Vérifier le régime applicable à chaque envoi, notamment UN 3373, avec les sources DGR 2026 autorisées." },
             ].map((item) => (
               <div key={item.e} style={{ display: "flex", gap: 16, background: "#fff5f5", borderRadius: 10, padding: "16px 20px", border: "1px solid #fecaca" }}>
                 <div style={{ flexShrink: 0, fontWeight: 800, color: "#dc2626", fontSize: 18 }}>✗</div>
@@ -175,10 +174,10 @@ export default function Page() {
         <section style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px 60px" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 28, textAlign: "center" }}>FAQ — DGR Pharmacie</h2>
           {[
-            { q: "La formation DGR est-elle obligatoire pour envoyer des médicaments par avion ?", a: "Oui, si les médicaments entrent dans la classification DGR (inflammables, toxiques, biologiques, etc.). Tout expéditeur doit avoir un agent certifié DGR 7.1 qui prépare et signe l'envoi." },
-            { q: "Comment expédier des vaccins thermosensibles par avion ?", a: "Les vaccins conservés sur glace sèche sont classés DGR. L'expéditeur doit être certifié 7.1, utiliser l'emballage réglementaire, et remplir une Shipper's Declaration (SDG). La formation couvre ces procédures." },
-            { q: "Les échantillons de sang ou de tissus nécessitent-ils une certification DGR ?", a: "Oui. Les échantillons biologiques catégorie B sont classés UN 3373 — expédition soumise à l'instruction d'emballage P650 et à une Shipper's Declaration. Une formation DGR 7.1 est requise." },
-            { q: "Peut-on former les équipes dans les locaux d'un laboratoire pharmaceutique ?", a: "Oui, KOST GROUP propose des formations intra-entreprise dans vos locaux. C'est souvent plus efficace pour contextualiser la formation à vos produits spécifiques (catalogue DGR de votre labo)." },
+            { q: "Comment définir la formation DGR adaptée à une équipe pharmaceutique ?", a: "Il faut identifier les produits concernés, les tâches réellement exercées et les obligations applicables. Une fonction CBTA ne se déduit pas automatiquement du titre du poste." },
+            { q: "Comment préparer un envoi sous chaîne du froid ?", a: "L'analyse porte notamment sur le produit, le réfrigérant, son conditionnement et les exigences documentaires du transporteur. Les prescriptions doivent être confirmées dans la DGR 67e édition 2026 et ses mises à jour." },
+            { q: "Une déclaration d'expéditeur est-elle toujours exigée pour UN 3373 ?", a: "Non, aucune exigence universelle ne doit être présumée. La classification, les instructions d'emballage et les documents requis doivent être vérifiés pour l'envoi concerné dans les textes applicables en 2026." },
+            { q: "Une session intra-entreprise est-elle envisageable ?", a: "Une session peut être étudiée selon les besoins de formation, les moyens disponibles et les autorisations applicables. Les conditions sont confirmées par écrit avant engagement." },
           ].map((faq) => (
             <details key={faq.q} style={{ borderBottom: "1px solid #e5e7eb", padding: "16px 0" }}>
               <summary style={{ fontWeight: 600, cursor: "pointer", fontSize: 15, color: "#00875a" }}>{faq.q}</summary>
@@ -190,7 +189,7 @@ export default function Page() {
         {/* Formulaire */}
         <section id="contact" style={{ background: "#003d1a", padding: "60px 24px" }}>
           <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", color: "white", marginBottom: 32 }}>
-            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>Devis gratuit pour votre laboratoire</h2>
+            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>Demander une proposition pour votre laboratoire</h2>
             <p style={{ opacity: 0.8, fontSize: 14 }}>Précisez vos produits (glace sèche, UN 3373…) — nous adaptons la formation à votre activité.</p>
           </div>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>

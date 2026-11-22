@@ -1,6 +1,6 @@
 # Pricing — KOST GROUP (Formations IATA DGR)
 
-> Certification IATA DGR délivrée par KOST GROUP, seul centre IATA CBTA Provider certifié en Algérie (n°CBTA-PR-25-0059). Paiement en EUR ou USD, facturation officielle France (STRATEGIX) ou Algérie.
+> Formations DGR/CBTA proposées par KOST GROUP. La voie de délivrance, les autorisations et modalités applicables doivent être confirmées sur l'offre écrite. Conditions de paiement et de facturation à confirmer.
 
 ## Initial
 
@@ -33,9 +33,9 @@
 
 - Formation présentielle, formateur certifié IATA
 - Manuel IATA DGR 2026 (67e édition)
-- Examen officiel IATA inclus
+- Évaluation prévue selon le programme et les modalités confirmées dans l'offre
 - Reprise d'examen gratuite en cas d'échec au premier essai
-- Certificat numérique vérifiable, valide 24 mois
+- Document délivré, validité et vérifiabilité à confirmer selon le programme et les exigences applicables
 
 ## Remises disponibles
 

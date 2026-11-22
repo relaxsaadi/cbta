@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 const ITEMS = [
   {
     q: "Est-ce reconnu dans mon pays (Maroc, Sénégal, Tunisie, Côte d'Ivoire) ?",
-    a: "Oui. Le certificat IATA CBTA est universel et reconnu par les 300+ compagnies aériennes membres de l'IATA, ainsi que par l'autorité de l'aviation civile de chaque pays : ANAC en Algérie, DGAC au Maroc, OACA en Tunisie, ANACIM au Sénégal, ANAC en Côte d'Ivoire, CCAA au Cameroun, et ANAC au Mali, au Burkina Faso et au Gabon. Notre numéro CBTA Provider est vérifiable sur iata.org/cbta-center-registry.",
+    a: "La reconnaissance dépend des exigences de chaque autorité, opérateur et employeur. Le périmètre et les modalités de la formation doivent être vérifiés avant inscription.",
   },
   {
     q: "Comment payer depuis l'Afrique ?",
@@ -14,23 +14,23 @@ const ITEMS = [
   },
   {
     q: "Faut-il venir en Algérie ?",
-    a: "Pas nécessairement. Nous organisons des sessions à Alger, mais aussi des formations intra-entreprise (nous nous déplaçons dans votre pays) à partir de 6 participants. Demandez le devis intra dans le formulaire.",
+    a: "Pas nécessairement. Des sessions peuvent être organisées à Alger. Une formation intra-entreprise hors Algérie doit être étudiée pays par pays, sur devis et sous réserve des autorisations et conditions opérationnelles applicables.",
   },
   {
     q: "Le certificat est-il valable combien de temps ?",
-    a: "24 mois (2 ans) à compter de la date de réussite à l'examen IATA. Un recyclage CBTA (recurrent) est obligatoire avant cette échéance pour maintenir la qualification.",
+    a: "La validité et les besoins de formation récurrente dépendent des fonctions exercées et des exigences applicables. Ces conditions doivent être vérifiées pour chaque parcours.",
   },
   {
     q: "Peut-on commencer sans expérience préalable en marchandises dangereuses ?",
-    a: "Oui pour les formations Initial (7.1, 7.3 Initial). La formation est conçue pour amener un participant sans prérequis au niveau d'expert opérationnel. Les sessions Recurrent supposent en revanche une certification active arrivant à échéance.",
+    a: "Les prérequis et le parcours de formation dépendent des tâches exercées et du programme concerné. Le niveau requis est vérifié avant inscription.",
   },
   {
     q: "Quelle différence entre une formation matières dangereuses générale et la formation DGR IATA ?",
-    a: "Une formation matières/produits dangereux généraliste (HSE, stockage, transport routier ADR) ne couvre pas les exigences spécifiques au fret aérien. La formation DGR (Dangerous Goods Regulations) IATA est le standard obligatoire pour tout expéditeur, transitaire ou agent cargo qui manipule des marchandises dangereuses transportées par avion — c'est la seule reconnue par les 300+ compagnies aériennes membres de l'IATA et exigée par l'ANAC en Algérie. Si votre activité touche au transport aérien, c'est cette certification qu'il vous faut, pas une formation HSE générique.",
+    a: "Une formation généraliste HSE ou ADR ne remplace pas les exigences propres au transport aérien. Le parcours DGR/CBTA doit correspondre aux tâches réellement exercées et aux règles applicables. La reconnaissance d'un certificat se vérifie séparément auprès de l'autorité ou de l'opérateur concerné.",
   },
   {
     q: "Vous déplacez-vous pour les formations intra-entreprise ?",
-    a: "Oui, à partir de 6 participants nous nous déplaçons dans tous les pays d'Afrique francophone. Nous prenons en charge le formateur, les supports, l'examen IATA officiel. Vous fournissez la salle et la logistique locale.",
+    a: "Une intervention intra-entreprise peut être envisagée selon le pays, les disponibilités et les autorisations applicables. Le périmètre, le nombre de participants et les modalités doivent être confirmés par une proposition écrite ; aucune couverture géographique universelle n'est garantie.",
   },
   {
     q: "Quels sont les délais d'inscription ?",

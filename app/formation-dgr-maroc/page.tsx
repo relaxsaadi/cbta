@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CountryLandingPage from "@/components/CountryLandingPage";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR au Maroc — Centre CBTA Certifié Afrique",
+  title: "Formation DGR / CBTA au Maroc — KOST GROUP",
   description:
-    "Formation IATA DGR-CBTA certifiée pour les professionnels du Maroc. Sessions à Casablanca ou intra-entreprise. Conforme DGAC Maroc & OACI. Certificat valable 24 mois.",
+    "Parcours de formation DGR / CBTA au Maroc à définir selon les tâches exercées. Sources, autorisations, évaluation et modalités à vérifier avant inscription.",
   alternates: { canonical: "/formation-dgr-maroc" },
   keywords: [
     "formation IATA DGR Maroc",
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     "formation DGR DGAC Maroc",
   ],
   openGraph: {
-    title: "Formation IATA DGR au Maroc — KOST GROUP",
+    title: "Parcours DGR / CBTA au Maroc — KOST GROUP",
     description:
-      "Formation DGR CBTA certifiée pour transitaires, cargo aérien et compagnies au Maroc.",
+      "Formation marchandises dangereuses selon les tâches et exigences applicables. Aucune reconnaissance ou intervention sur site n'est garantie automatiquement.",
     url: "https://dgr.kostacademy.com/formation-dgr-maroc",
   },
 };
@@ -32,20 +32,13 @@ export default function Page() {
         autoriteRegionale: "la DGAC Maroc (Direction Générale de l'Aviation Civile)",
         codeIso: "MA",
         langue: "fr",
-        savingsVsParis: 45,
-        testimonialName: "Karim E.",
-        testimonialPoste: "Agent de fret aérien",
-        testimonialVille: "Casablanca",
-        testimonialText:
-          "Formation de qualité, contenu conforme IATA DGR 63e édition. L'examen CBTA est rigoureux mais le formateur nous a très bien préparés.",
-        keyFeature: "Formation dispensée par un centre CBTA Provider certifié, sans se déplacer en Europe",
+        savingsVsParis: 0,
+        keyFeature: "Périmètre et modalités à confirmer après analyse des tâches",
         localContext: {
           title: "Formation DGR au Maroc : contexte réglementaire et enjeux sectoriels",
           paragraphs: [
-            "Le transport aérien de marchandises dangereuses au Maroc est encadré par la DGAC Maroc (Direction Générale de l'Aviation Civile), conformément à l'Annexe 18 de l'OACI et aux Instructions Techniques de l'IATA. Toute entreprise impliquée dans l'expédition, l'acceptation ou la manutention de marchandises dangereuses par voie aérienne est légalement tenue de former et certifier son personnel selon les normes DGR IATA en vigueur.",
-            "Royal Air Maroc (RAM) et Air Arabia Maroc appliquent des politiques DGR strictes à leurs agents de fret agréés (AFA), transitaires et partenaires cargo. Un certificat IATA DGR valide est exigé pour tout intervenant dans la chaîne logistique aérienne. Sans certification conforme, vos expéditions risquent d'être bloquées ou refusées au départ, avec des pénalités pouvant aller jusqu'à la suspension de l'agrément cargo.",
-            "Les secteurs chimique, pharmaceutique, cosmétique et pétrolier marocains sont particulièrement concernés par la réglementation marchandises dangereuses. Les plateformes logistiques de la zone franche de Tanger Med — premier port de conteneurs d'Afrique — génèrent également un volume important de fret aérien réglementé.",
-            "Faire appel à KOST GROUP vous permet d'obtenir une certification IATA DGR reconnue mondialement à un tarif jusqu'à 45 % inférieur à celui pratiqué à Paris ou Bruxelles. Nos formateurs IATA certifiés peuvent se déplacer directement dans vos locaux à Casablanca, Marrakech ou Agadir dès 6 participants, ou vous accueillir en session inter-entreprises à Alger.",
+            "Les exigences de formation au transport aérien de marchandises dangereuses dépendent des tâches réellement exercées, des sources en vigueur, de l'autorité compétente et des procédures des opérateurs. Une fonction CBTA ne se déduit pas du seul intitulé de poste.",
+            "KOST peut étudier un besoin de formation sous réserve des règles et autorisations locales applicables. Lieu, dates, prix, évaluation, certificat et conditions de reconnaissance doivent être confirmés par proposition écrite ; aucune reconnaissance universelle IATA ou nationale n'est garantie.",
           ],
           aeroports: [
             "Mohammed V — Casablanca (CMN)",

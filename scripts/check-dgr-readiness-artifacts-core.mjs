@@ -191,6 +191,10 @@ function frStatusClass(value) {
     .toUpperCase();
 
   if (!normalized) return "";
+  // Keep the aggregate bank/EN comparison aligned with the dedicated
+  // reconciliation mirror checker: missing direct item evidence is UNRESOLVED,
+  // not a confirmed SOURCE GAP or a terminal FROZEN state.
+  if (/\b(?:TIER[ _]A[ _]PROVENANCE[ _]UNRESOLVED|SOURCE[ _]GAP[ _]UNRESOLVED|DIRECT[ _]ITEM[ _]EVIDENCE[ _]REQUIRED|UNRESOLVED)\b/.test(normalized)) return "UNRESOLVED";
   if (/FROZEN FR\s*\/\s*SOURCE VERIFIED/.test(normalized)) return "FROZEN FR / SOURCE VERIFIED";
   if (/SOURCE CONFLICT/.test(normalized)) return "SOURCE CONFLICT";
   if (/SOURCE GAP/.test(normalized)) return "SOURCE GAP";
@@ -409,6 +413,22 @@ function runReviewStateRegressionFixtures() {
   for (const state of enPositive) {
     if (!isPositiveEnReviewState(state)) {
       throw new Error(`EN positive state misclassified as negative: ${state}`);
+    }
+  }
+
+  const frStatusClassFixtures = [
+    ["TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED", "UNRESOLVED"],
+    ["SOURCE GAP UNRESOLVED — DIRECT ITEM EVIDENCE REQUIRED", "UNRESOLVED"],
+    ["FROZEN FR / SOURCE VERIFIED", "FROZEN FR / SOURCE VERIFIED"],
+    ["SOURCE GAP", "SOURCE GAP"],
+    ["SOURCE CONFLICT", "SOURCE CONFLICT"],
+    ["PARTIALLY CONFIRMED", "PARTIALLY CONFIRMED"],
+    ["DRAFT — Tier B only", "DRAFT"],
+  ];
+  for (const [value, expected] of frStatusClassFixtures) {
+    const actual = frStatusClass(value);
+    if (actual !== expected) {
+      throw new Error(`FR status class mismatch: ${value} => ${actual}; expected ${expected}`);
     }
   }
 

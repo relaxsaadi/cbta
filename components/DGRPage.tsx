@@ -60,16 +60,7 @@ export default function DGRPage({ formation }: { formation: Formation }) {
                   value={formation.publicCible}
                 />
                 <Stat icon={Clock} label="Durée" value={formation.duree} />
-                <Stat
-                  icon={Award}
-                  label="Prix EUR"
-                  value={`${formation.prixEur.toLocaleString("fr-FR")} €`}
-                />
-                <Stat
-                  icon={Award}
-                  label="Prix USD"
-                  value={`${formation.prixUsd.toLocaleString("fr-FR")} $`}
-                />
+                <Stat icon={Award} label="Tarif" value="Sur devis" />
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a href="#formulaire" className="btn-primary">

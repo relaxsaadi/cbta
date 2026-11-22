@@ -1,13 +1,13 @@
 import { Check } from "lucide-react";
 
 const ITEMS = [
-  { text: "Formation présentielle 4-5 jours avec formateur IATA certifié", value: "2 250 €" },
-  { text: "Manuel IATA DGR 2026 (67e édition) inclus", value: "200 €" },
-  { text: "Examen IATA officiel CBTA inclus", value: "✓" },
-  { text: "Certificat IATA numérique vérifiable en ligne", value: "✓" },
-  { text: "Exercices pratiques et cas réels", value: "✓" },
-  { text: "Facturation officielle France ou Algérie", value: "✓" },
-  { text: "Hébergement et restauration inclus pour multi-jours (sur demande)", value: "✓" },
+  { text: "Durée et format confirmés dans le programme", value: "Sur devis" },
+  { text: "Références réglementaires et édition applicables précisées avant la session", value: "Selon périmètre" },
+  { text: "Objectifs et modalités d'évaluation définis par tâche", value: "✓" },
+  { text: "Documents délivrés et statut de l'évaluation précisés par écrit", value: "✓" },
+  { text: "Exercices pratiques et mises en situation selon le programme", value: "✓" },
+  { text: "Facturation selon l'entité contractante", value: "✓" },
+  { text: "Logistique et hébergement précisés au devis si nécessaire", value: "Sur demande" },
 ];
 
 export default function IncludedSection() {

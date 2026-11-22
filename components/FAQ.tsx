@@ -10,11 +10,11 @@ const ITEMS = [
   },
   {
     q: "Comment payer depuis l'Afrique ?",
-    a: "Plusieurs options : virement bancaire EUR ou USD vers notre compte STRATEGIX (entité française), ou virement local en Algérie. Nous émettons une facture officielle conforme aux exigences comptables de votre pays. Paiements échelonnés possibles pour les groupes.",
+    a: "Les moyens de paiement, l’entité de facturation, les documents comptables et les éventuels échéanciers sont confirmés par écrit dans la proposition applicable avant toute inscription.",
   },
   {
     q: "Faut-il venir en Algérie ?",
-    a: "Pas nécessairement. Nous organisons des sessions à Alger, mais aussi des formations intra-entreprise (nous nous déplaçons dans votre pays) à partir de 6 participants. Demandez le devis intra dans le formulaire.",
+    a: "Les modalités de déplacement et de formation hors du lieu habituel dépendent du pays, des autorisations applicables, des disponibilités et d’une proposition écrite. Elles ne sont pas garanties par défaut.",
   },
   {
     q: "Comment déterminer l'échéance de formation récurrente ?",
@@ -34,11 +34,11 @@ const ITEMS = [
   },
   {
     q: "Quels sont les délais d'inscription ?",
-    a: "Les sessions ouvrent toutes les 4 à 6 semaines. Le délai conseillé entre inscription et formation est de 2 semaines pour valider le paiement et l'émission de la facture. Sessions urgentes possibles sur demande.",
+    a: "Les dates, délais d’inscription et possibilités de session urgente sont à confirmer dans le planning et la proposition en vigueur. Aucune périodicité ni délai n’est garanti ici.",
   },
   {
     q: "La formation est en français ou en anglais ?",
-    a: "Les deux. Sessions standards en français. Nous proposons aussi des sessions en anglais sur demande, notamment pour les compagnies aériennes opérant en environnement bilingue.",
+    a: "La langue de la session et la disponibilité d’un intervenant compétent dans cette langue doivent être confirmées avant inscription.",
   },
 ];
 

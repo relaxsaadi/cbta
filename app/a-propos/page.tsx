@@ -7,12 +7,12 @@ import { Award, MapPin, CheckCircle, Globe, BadgeCheck, Users } from "lucide-rea
 export const metadata: Metadata = {
   title: "À propos de KOST GROUP",
   description:
-    "Premier centre IATA CBTA Provider certifié en Algérie. Fondé pour rendre la certification DGR accessible en Afrique francophone à prix juste.",
+    "Organisme de formation DGR/CBTA en Algérie. Les programmes sont cadrés selon les tâches exercées et les exigences applicables.",
   alternates: { canonical: "/a-propos" },
   openGraph: {
     title: "À propos de KOST GROUP",
     description:
-      "Centre IATA CBTA Provider en Algérie. Formations DGR adaptées aux fonctions exercées en Afrique francophone.",
+      "Formations DGR/CBTA adaptées aux tâches exercées dans le transport aérien de marchandises dangereuses.",
     url: "/a-propos",
   },
 };
@@ -27,7 +27,7 @@ const orgSchema = {
   logo: `${siteUrl}/kost-group-logo.svg`,
   image: `${siteUrl}/og-image.jpg`,
   description:
-    "Centre IATA CBTA Provider en Algérie proposant des formations CBTA pour les fonctions du transport aérien de marchandises dangereuses.",
+    "Organisme de formation proposant des parcours DGR/CBTA adaptés aux fonctions du transport aérien de marchandises dangereuses.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "176 Cité Boushaki",
@@ -49,19 +49,10 @@ const orgSchema = {
     opens: "08:30",
     closes: "16:30",
   },
-  sameAs: ["https://www.iata.org/en/training/cbta-center-registry/"],
-  hasCredential: {
-    "@type": "EducationalOccupationalCredential",
-    credentialCategory: "IATA CBTA Provider",
-    recognizedBy: {
-      "@type": "Organization",
-      name: "International Air Transport Association (IATA)",
-    },
-  },
   employee: {
     "@type": "Person",
-    name: "Formateur Principal IATA DGR",
-    jobTitle: "Formateur & Instructeur IATA CBTA Certifié",
+    name: "Formateur DGR/CBTA",
+    jobTitle: "Formateur en marchandises dangereuses",
     worksFor: { "@type": "Organization", name: "KOST GROUP" },
     knowsAbout: [
       "IATA DGR Dangerous Goods Regulations",
@@ -113,15 +104,15 @@ export default function AProposPage() {
             </nav>
             <div className="inline-flex items-center gap-2 bg-[#F39C12]/20 border border-[#F39C12]/40 px-4 py-1.5 rounded-full text-sm font-bold text-[#F39C12] mb-5">
               <Award className="h-4 w-4" aria-hidden />
-              IATA CBTA Provider Certifié — Algérie
+              Formation DGR/CBTA — Algérie
             </div>
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
               À propos de KOST GROUP
             </h1>
             <p className="text-lg text-white/80 leading-relaxed max-w-2xl">
-              Premier centre IATA CBTA (Competency-Based Training & Assessment) certifié en Algérie
-              et en Afrique francophone. Nous formons les professionnels du transport aérien
-              aux Réglementations Marchandises Dangereuses (DGR) depuis Alger.
+              KOST GROUP propose des parcours de formation DGR/CBTA depuis Alger.
+              Le contenu est cadré selon les tâches réellement exercées et les exigences
+              applicables à chaque fonction.
             </p>
           </div>
         </section>
@@ -138,19 +129,11 @@ export default function AProposPage() {
               des parcours de formation accessibles depuis Alger.
             </p>
             <p>
-              En obtenant la certification IATA CBTA Provider — la seule en Algérie, vérifiable
-              sur{" "}
-              <a
-                href="https://www.iata.org/en/training/cbta-center-registry/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#003D7A] underline"
-              >
-                iata.org/cbta-center-registry
-              </a>{" "}
-              — nous proposons des formations fondées sur les fonctions CBTA 7.1 à 7.10.
-              Le périmètre, les tarifs, les modalités d'évaluation et la reconnaissance
-              des attestations sont à confirmer selon le programme et l'organisme concerné.
+              Nos parcours sont structurés autour des fonctions CBTA 7.1 à 7.10, chacune
+              étant cadrée selon sa propre table de tâches et son jeu de sources. Le statut
+              du prestataire et son périmètre doivent être vérifiés dans les registres
+              officiels et auprès de l’organisme concerné. Les modalités d’évaluation et
+              la reconnaissance des attestations sont à confirmer pour chaque programme.
             </p>
             <p>
               Nos formations couvrent tous les rôles réglementés : expéditeurs, agents de fret,
@@ -197,7 +180,7 @@ export default function AProposPage() {
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 <h3 className="text-lg font-extrabold text-[#0f1c2e]">
-                  Formateur Principal — IATA DGR CBTA
+                  Formateur DGR/CBTA
                 </h3>
                 <span className="text-xs font-bold bg-[#F39C12]/15 text-[#b87400] border border-[#F39C12]/30 px-2.5 py-0.5 rounded-full">
                   KOST GROUP
@@ -208,14 +191,13 @@ export default function AProposPage() {
                 Alger · Déplacements Afrique francophone
               </p>
               <p className="text-gray-700 leading-relaxed mb-4 text-sm">
-                Praticien du fret aérien international, certifié IATA Instructor & Evaluator avec plus de 15 ans d'expérience en compagnie aérienne et en agence de fret. Spécialiste de la réglementation IATA DGR (67e édition 2026), il a accompagné des centaines d'apprenants vers la certification — avec un taux de réussite supérieur à 95% au premier examen.
+                Les intervenants présentent leur expérience et leurs justificatifs de qualification dans le dossier pédagogique de la session. Les références réglementaires, les objectifs et les modalités d’évaluation sont précisés pour chaque programme.
               </p>
               <ul className="space-y-1.5 text-sm">
                 {[
-                  "Certifié IATA CBTA Instructor & Evaluator",
-                  "15+ années dans le fret aérien international",
-                  "Ancien agent acceptation DGR — compagnie aérienne",
-                  "Formateur agréé Algérie · Maroc · Afrique francophone",
+                  "Fonctions et tâches couvertes par le programme",
+                  "Objectifs pédagogiques et modalités d’évaluation",
+                  "Justificatifs de qualification communiqués dans le dossier de session",
                 ].map((c) => (
                   <li key={c} className="flex items-center gap-2 text-gray-700">
                     <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" aria-hidden />
@@ -256,14 +238,14 @@ export default function AProposPage() {
         {/* CERTIFICATIONS & GARANTIES */}
         <section className="container-x max-w-4xl py-14">
           <h2 className="text-2xl font-extrabold text-[#003D7A] mb-6">
-            Certifications & garanties
+            Informations et modalités
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             {[
               {
                 icon: BadgeCheck,
-                title: "IATA CBTA Provider — seul en Algérie",
-                desc: "Statut de prestataire à vérifier sur le registre IATA. La reconnaissance des attestations dépend de l’employeur, de l’opérateur et de l’autorité compétente.",
+                title: "Statut du prestataire",
+                desc: "Le statut et le périmètre du prestataire doivent être vérifiés dans le registre officiel et auprès de l’organisme concerné.",
               },
               {
                 icon: Award,
@@ -272,8 +254,8 @@ export default function AProposPage() {
               },
               {
                 icon: Users,
-                title: "Facturation officielle EUR/USD",
-                desc: "Facture via STRATEGIX (entité française) ou via notre entité algérienne selon vos besoins comptables.",
+                title: "Modalités de facturation",
+                desc: "L’entité contractante et les conditions de facturation sont précisées dans le devis et la convention applicables.",
               },
               {
                 icon: Globe,

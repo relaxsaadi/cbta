@@ -1,56 +1,31 @@
-# Pricing — KOST GROUP (Formations IATA DGR)
+# Informations commerciales — formations DGR / CBTA
 
-> Formations DGR/CBTA proposées par KOST GROUP. La voie de délivrance, les autorisations et modalités applicables doivent être confirmées sur l'offre écrite. Conditions de paiement et de facturation à confirmer.
+> Document d'information. Il ne constitue ni une preuve d'agrément, de certification, d'approbation IATA/ANAC, ni une garantie d'acceptation par un exploitant ou une autorité.
 
-## Initial
+## Définition du périmètre
 
-| Formation | Public cible | Durée | Prix EUR | Prix USD |
-|---|---|---|---|---|
-| DGR 7.1 Initial | Expéditeurs, packers, freight forwarders | 4 jours / 32h | 1 800 | 1 950 |
-| DGR 7.3 Initial | Agents d'acceptation cargo | 5 jours / 40h | 2 100 | 2 280 |
+- Les fonctions CBTA 7.1 à 7.10 sont étudiées séparément à partir de leurs tables de tâches et sources applicables.
+- Le seul intitulé de poste, le secteur d'activité ou une ancienne catégorie ne suffit pas à attribuer automatiquement une fonction.
+- Le périmètre, les objectifs, les prérequis et les modalités d'évaluation sont confirmés par écrit avant toute inscription.
+- Les exigences de formation récurrente et leur périodicité doivent être vérifiées dans les sources en vigueur, les variations de l'État et les exigences de l'exploitant. Aucune validité universelle de 24 mois n'est présumée.
 
-## Recurrent (renouvellement biennal)
+## Prix, durée et modalités
 
-| Formation | Public cible | Durée | Prix EUR | Prix USD |
-|---|---|---|---|---|
-| DGR 7.1 Recurrent | Expéditeurs, packers, freight forwarders | 3 jours / 24h | 1 400 | 1 520 |
-| DGR 7.3 Recurrent | Agents d'acceptation cargo | 3 jours / 18h | 1 500 | 1 630 |
+Les prix, durées, remises, frais de déplacement, supports, modalités d'évaluation et documents éventuellement délivrés sont communiqués dans une proposition écrite après cadrage des tâches, du périmètre, du lieu, du nombre de participants et des exigences applicables.
 
-## Spécialisées
+Aucun prix ou calendrier affiché dans un ancien support ne doit être considéré comme une offre actuelle sans confirmation écrite.
 
-| Formation | Public cible | Durée | Prix EUR | Prix USD |
-|---|---|---|---|---|
-| DGR 7.2 | Agents de fret général, handlers | 2 jours / 16h | 900 | 980 |
-| DGR 7.4 | Personnel sol et cargo (ramp, ground handling) | 2 jours / 16h | 900 | 980 |
-| DGR 7.5 | Agents d'enregistrement, check-in | 2 jours / 16h | 850 | 920 |
-| DGR 7.6 | Loadmasters, load planners | 1 jour / 8h | 650 | 700 |
-| DGR 7.7 | Pilotes et copilotes | 1 jour / 8h | 650 | 700 |
-| DGR 7.8 | Dispatchers, opérations de vol | 1 jour / 8h | 650 | 700 |
-| DGR 7.9 | Personnel navigant de cabine (PNC) | 1 jour / 8h | 650 | 700 |
-| DGR 7.10 | Agents de sûreté aérien, screening | 1 jour / 8h | 650 | 700 |
+## Sources et reconnaissance
 
-## Inclus dans chaque tarif
-
-- Formation présentielle, formateur certifié IATA
-- Manuel IATA DGR 2026 (67e édition)
-- Évaluation prévue selon le programme et les modalités confirmées dans l'offre
-- Reprise d'examen gratuite en cas d'échec au premier essai
-- Document délivré, validité et vérifiabilité à confirmer selon le programme et les exigences applicables
-
-## Remises disponibles
-
-- Early Bird : −10% (inscription 30 jours avant la session)
-- Pack Duo : −12% (2 inscriptions simultanées)
-- Groupe intra-entreprise (4+ participants) : −15% à −25% selon volume
-- Fidélité renouvellement : −8% (anciens certifiés KOST)
-- Cumulables entre elles (voir https://dgr.kostacademy.com/promos)
-
-## Formation intra-entreprise / groupe
-
-Devis sur mesure, déplacement formateur inclus en Algérie (hors Algérie : Maroc, Tunisie, Sénégal, Côte d'Ivoire sur demande). Contact : voir ci-dessous.
+- Les références réglementaires et leur édition doivent être identifiées et vérifiées avant la formation.
+- Les sources manquantes doivent rester signalées comme `SOURCE GAP`.
+- Les sources contradictoires doivent rester signalées comme `SOURCE CONFLICT`.
+- Toute mention d'un référencement IATA doit être vérifiée directement dans le registre officiel et pour son périmètre actuel.
+- Un référencement de prestataire ne vaut pas approbation ANAC ni reconnaissance automatique par toutes les compagnies aériennes.
+- L'acceptation d'un document délivré doit être confirmée auprès de l'employeur, de l'exploitant et, si nécessaire, de l'autorité compétente.
 
 ## Contact
 
 - Site : https://dgr.kostacademy.com
 - WhatsApp : +213 542 30 53 83
-- Devis groupe : https://dgr.kostacademy.com/entreprises
+- Demande entreprise : https://dgr.kostacademy.com/entreprises

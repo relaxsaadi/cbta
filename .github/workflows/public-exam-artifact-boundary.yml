@@ -1,0 +1,27 @@
+name: Public exam artifact boundary (paths and keyed Markdown)
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exam-artifact-path-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout proposed repository tree
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (Node 24)
+        with:
+          persist-credentials: false
+      - name: Use Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0 (Node 24)
+        with:
+          node-version: "22"
+      - name: Validate detector fixture paths
+        run: node scripts/check-public-exam-artifact-paths.mjs --self-test
+      - name: Reject known answer-key paths and keyed Markdown content from public tree
+        run: node scripts/check-public-exam-artifact-paths.mjs

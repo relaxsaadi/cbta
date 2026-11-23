@@ -29,6 +29,9 @@ export async function POST(request: Request) {
   if (bounded.tooLarge) {
     return NextResponse.json({ error: "Corps webhook trop volumineux." }, { status: 413 });
   }
+  if (bounded.invalidEncoding) {
+    return NextResponse.json({ error: "Encodage UTF-8 invalide." }, { status: 400 });
+  }
   const rawBody = bounded.rawBody;
   const svixId = request.headers.get("svix-id");
   const verification = verifyResendWebhookSignature({

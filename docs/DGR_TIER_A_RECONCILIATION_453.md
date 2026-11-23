@@ -1,5 +1,8 @@
 # DGR Tier A Bookshelf Reconciliation — 453 Questions
 
+> **Historical `Next_Action` hints — current import holds (verified 2026-11-22):** The August 2026 per-item reconciliation CSV contains **236** `Next_Action` entries saying `Import-eligible for V2 (pending reviewer sign-off)` (Functions 7.1–7.10: **13, 23, 30, 25, 20, 31, 25, 27, 22, 20** respectively). At historical PR #3 head `4747d7b817fd288adff19fe836a94d15b1d5d672`, the count was **237**; the sole row no longer carrying that historical hint is `Q-7.3-029`, which remains `IMPORT_ELIGIBLE=NO`. An exact question-ID join confirms all **236** remaining hints map to `IMPORT_ELIGIBLE=NO`; all **453/453** rows in the current import-candidate CSV are `NO`. `Next_Action` is a **historical narrative, never an executable current permission or human approval**. The canonical current import flag, direct-item DGR 67th Edition 2026 Tier-A and regulatory CI, explicit SOURCE GAP/CONFLICT treatment, qualified dated FR and independently qualified dated EN review, confidential bank controls, and technical/staging acceptance all remain mandatory. Any older staging/Moodle imports require separate live-data inventory; CSV holds do not recall those records. No question, source conclusion, reviewer, import flag, runtime data or approval was changed by this clarification. **DRAFT / PLATFORM NOT READY.**
+
+
 **Date:** 2026-08-26 (Pass 1 reconciliation), **2026-08-29 (Pass 2 — live Bookshelf
 verification of the 332-item DRAFT backlog)**.
 **Scope:** All 453 KOST DGR questions, Functions 7.1 → 7.10, DGR 67th Edition (AM1).

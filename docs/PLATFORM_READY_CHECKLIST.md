@@ -209,3 +209,31 @@ Owner-controlled actions: inventory branch tips, history, artifacts, forks/mirro
 A separate PR #413 tip correction replaced the Q-7.3-029 quoted reference with the non-verbatim locator already present on the handoff and restored its explicit NO IMPORT action. Its historical public commit remains accessible; the correction does not resolve history exposure or the other quoted references.
 
 **No question, answer, source conclusion, reviewer decision, import flag, runtime data or approval changed during this scan.** All 453 current import candidates remain `IMPORT_ELIGIBLE=NO`. This finding does not establish IATA/ANAC approval or clear any technical/regulatory release gate.
+
+
+## Per-function effective source-state reconciliation — 2026-11-23 21:50 Africa/Algiers
+
+This section is derived from the exact handoff-head per-item ledger `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv` at `f92b8b27727fb4cb95880a0868bc7189ced10d82`, reconciled with exact-head DGR readiness workflow #45204182577 and direct Tier-A workflow #45204182539. It is a status inventory, not a regulatory review or approval.
+
+| Function | Official tasks | Draft questions | Tier-A affected IDs | FROZEN provenance exceptions | FR↔EN status drift | Current SOURCE GAP IDs | Current SOURCE CONFLICT IDs | STALE citation IDs |
+|---|---:|---:|---:|---:|---:|---|---|---|
+| 7.1 | 44 | 19 | 18 | 0 | 0 | Q-7.1-001 | — | — |
+| 7.2 | 23 | 49 | 29 | 4 | 11 | Q-7.2-002, Q-7.2-008, Q-7.2-021, Q-7.2-031, Q-7.2-045 | — | Q-7.2-042 |
+| 7.3 | 33 | 45 | 30 | 18 | 20 | Q-7.3-017 | — | Q-7.3-025 |
+| 7.4 | 37 | 53 | 25 | 10 | 13 | Q-7.4-027 | — | Q-7.4-008, Q-7.4-028 |
+| 7.5 | 25 | 44 | 20 | 12 | 16 | Q-7.5-018 | Q-7.5-011 | Q-7.5-026 |
+| 7.6 | 28 | 56 | 31 | 13 | 18 | Q-7.6-018 | — | Q-7.6-001 |
+| 7.7 | 27 | 53 | 25 | 14 | 19 | Q-7.7-019 | — | — |
+| 7.8 | 23 | 51 | 27 | 12 | 15 | Q-7.8-018, Q-7.8-036 | — | — |
+| 7.9 | 24 | 39 | 22 | 14 | 16 | Q-7.9-022, Q-7.9-023 | Q-7.9-032 | Q-7.9-008 |
+| 7.10 | 23 | 44 | 20 | 10 | 12 | Q-7.10-019 | Q-7.10-012 | Q-7.10-032 |
+
+**Current FR status-bucket totals (453 rows):** CONFLICT=3; DRAFT=147; FROZEN=246; GAP=16; PARTIAL=31; STALE=8; UNRESOLVED=2. The 107 FROZEN provenance exceptions and 140 FR↔EN status-mirror discrepancies are separate exact-head validator findings; historical `FROZEN` labels are not APPROVED and do not replace item-specific direct Tier-A evidence or named/date human review.
+
+**Interpretation guardrails:**
+- The 16 current `GAP` rows and 3 current `CONFLICT` rows above are the exact effective buckets in the per-item CSV. The 8 `STALE` rows are separately listed; do not silently relabel them as the three current `CONFLICT` buckets.
+- The current row-level `SOURCE CONFLICT` records are Q-7.5-011, Q-7.9-032 and Q-7.10-012. Q-7.10-038 remains `DRAFT — Tier B only. SOURCE REQUIRED for Tier A`; its reason/next-action fields warn that the historical >15 PED/>20 batteries distractor has a 2026 power-bank addendum conflict. It is non-importable, but it is not a row-level `SOURCE CONFLICT` bucket.
+- The eight `STALE` citation records are Q-7.2-042, Q-7.3-025, Q-7.4-008, Q-7.4-028, Q-7.5-026, Q-7.6-001, Q-7.9-008 and Q-7.10-032. Their source/correct-answer defects remain held; this list is not a human disposition.
+- All 453 import candidates remain `IMPORT_ELIGIBLE=NO`. No question is APPROVED. The reviewer registry is empty; no qualified named/date FR or separate EN sign-off is established.
+
+The direct Tier-A validator still fails on item-specific current 67th Edition 2026 evidence, including representative/batch/cross-applied evidence. The full readiness validator still fails. Preserve all GAP/CONFLICT/STALE and import holds until authorized direct evidence, separate qualified FR and EN review, and final approval-chain evidence exist.

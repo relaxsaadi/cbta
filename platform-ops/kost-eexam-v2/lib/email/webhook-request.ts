@@ -14,15 +14,17 @@ export function hasSvixSignatureHeaders(headers: Headers): boolean {
 
 export type BoundedWebhookBody =
   | { tooLarge: true }
-  | { tooLarge: false; rawBody: string };
+  | { tooLarge: false; invalidEncoding: true }
+  | { tooLarge: false; invalidEncoding: false; rawBody: string };
 
 /**
  * Read the exact UTF-8 text used by the current Svix HMAC verifier without
- * letting untrusted request bodies grow without bound. A streaming decoder
- * preserves multibyte characters split across transport chunks.
+ * letting untrusted request bodies grow without bound.
  *
+ * Fatal decoding rejects malformed UTF-8 instead of replacing invalid bytes.
+ * ignoreBOM=true preserves a leading UTF-8 BOM in rawBody, so the string
+ * re-encodes to the same bytes that arrived on the wire before HMAC checking.
  * A claimed small Content-Length is never trusted: every chunk is counted.
- * Empty/malformed Content-Length falls back to the same stream byte cap.
  */
 export async function readBoundedWebhookBody(request: Request): Promise<BoundedWebhookBody> {
   const advertised = request.headers.get("content-length");
@@ -31,10 +33,10 @@ export async function readBoundedWebhookBody(request: Request): Promise<BoundedW
     return { tooLarge: true };
   }
 
-  if (!request.body) return { tooLarge: false, rawBody: "" };
+  if (!request.body) return { tooLarge: false, invalidEncoding: false, rawBody: "" };
 
   const reader = request.body.getReader();
-  const decoder = new TextDecoder();
+  const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
   let totalBytes = 0;
   let rawBody = "";
 
@@ -49,10 +51,25 @@ export async function readBoundedWebhookBody(request: Request): Promise<BoundedW
         try { await reader.cancel(); } catch { /* Already closed stream. */ }
         return { tooLarge: true };
       }
-      rawBody += decoder.decode(value, { stream: true });
+
+      try {
+        rawBody += decoder.decode(value, { stream: true });
+      } catch {
+        // Stop consuming malformed input. Never normalize it into a different
+        // HMAC input or pass it to provider-event processing.
+        try { await reader.cancel(); } catch { /* Already closed stream. */ }
+        return { tooLarge: false, invalidEncoding: true };
+      }
     }
-    rawBody += decoder.decode();
-    return { tooLarge: false, rawBody };
+
+    try {
+      // Flush catches a truncated multibyte sequence at end-of-stream.
+      rawBody += decoder.decode();
+    } catch {
+      return { tooLarge: false, invalidEncoding: true };
+    }
+
+    return { tooLarge: false, invalidEncoding: false, rawBody };
   } finally {
     reader.releaseLock();
   }

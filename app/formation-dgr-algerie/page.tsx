@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CountryLandingPage from "@/components/CountryLandingPage";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR Algérie — Certification en 3 Jours à Alger",
+  title: "Formation DGR IATA Algérie — 1er Centre CBTA",
   description:
-    "Obtenez votre certificat IATA DGR en 3 jours à Alger. 1er centre CBTA agréé d'Algérie. Conforme ANAC. Catégories 7.1 à 7.10. Sessions mensuelles.",
+    "Certifiez votre personnel DGR en 3 jours à Alger, seul centre IATA CBTA Provider d'Algérie. Catégories 7.1 à 7.10, conforme ANAC, reconnu par 300+ compagnies.",
   alternates: { canonical: "/formation-dgr-algerie" },
   keywords: [
     "formation IATA DGR Algérie",

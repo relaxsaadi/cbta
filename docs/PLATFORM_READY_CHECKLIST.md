@@ -1,47 +1,76 @@
-## CURRENT RUN — 2026-11-24 18:36 Africa/Algiers
+## CURRENT RUN — 2026-11-24 20:22 Africa/Algiers
 
-> **Audited code-bearing baseline:** PR [#3](https://github.com/relaxsaadi/cbta/pull/3), branch `ai/dgr-stage2b-handoff`, head `5c36a9cc18ef86659b9d9d17fe100bfc6d598529` (750 ahead / 0 behind `main`; 249 changed files; OPEN / DRAFT / UNMERGED). This run's documentation update changes only this checklist; it does not change application code, question/answer content, source evidence, reviewer records, import flags, Moodle data or deployment.
+> **Live PR #3:** [#3](https://github.com/relaxsaadi/cbta/pull/3), branch `ai/dgr-stage2b-handoff`, current head `fdc956b12db3934caa3ed7fc56b925b9e8d252bb` (751 ahead / 0 behind `main`; 249 changed files; OPEN / DRAFT / UNMERGED). Compared with the prior audit head `5c36a9cc18ef86659b9d9d17fe100bfc6d598529`, GitHub compare confirms exactly one commit and one changed file: `docs/PLATFORM_READY_CHECKLIST.md` (+46 / -0). This latest delta is documentation-only; no application code, question/answer content, source evidence, reviewer record, import flag, Moodle data or deployment changed.
 
-### Exact-head DGR validation on the audited baseline
+### Exact-head DGR workflows — `fdc956b1`
 
-- CSV import structure: **PASS** — [run #45440021240](https://github.com/relaxsaadi/cbta/actions/runs/45440021240)
-- Controlled reviewer admission: **PASS** — [run #45440021410](https://github.com/relaxsaadi/cbta/actions/runs/45440021410)
-- Governance regression integrity: **PASS** — [run #45440021524](https://github.com/relaxsaadi/cbta/actions/runs/45440021524)
-- Direct item Tier-A provenance: **FAIL** — [run #45440021113](https://github.com/relaxsaadi/cbta/actions/runs/45440021113)
-- Full DGR regulatory readiness: **FAIL** — [run #45440021704](https://github.com/relaxsaadi/cbta/actions/runs/45440021704)
+- CSV import structure: **PASS** — [run #45452386498](https://github.com/relaxsaadi/cbta/actions/runs/45452386498)
+- Controlled reviewer admission: **PASS** — [run #45452386968](https://github.com/relaxsaadi/cbta/actions/runs/45452386968)
+- Governance regression integrity: **PASS** — [run #45452386675](https://github.com/relaxsaadi/cbta/actions/runs/45452386675)
+- Direct item Tier-A provenance: **FAIL** — [run #45452386565](https://github.com/relaxsaadi/cbta/actions/runs/45452386565)
+- Full DGR regulatory readiness: **FAIL** — [run #45452386611](https://github.com/relaxsaadi/cbta/actions/runs/45452386611)
 
-The separate regulatory-governance-integrity sub-job passes. Direct Tier-A still affects 247 items. The full artifact gate reports 107 historical FROZEN provenance exceptions and 140 FR↔EN status-mirror discrepancies. Preserve all fail-closed gates.
+The separate regulatory-governance-integrity job passes. The direct Tier-A job still rejects missing item-specific current IATA DGR 67th Edition 2026 evidence and representative/batch/cross-applied evidence wording. The full artifact gate still reports **247** Tier-A-affected items, **107** historical FROZEN provenance exceptions and **140** FR↔EN status-mirror discrepancies. These are intended fail-closed controls; do not weaken them. The PR head's combined Vercel status is FAILURE for the separate `kost-funnel` project; it is not an E-EXAM/Moodle acceptance result.
 
-### Ten-function source/question-bank control
+### Ten-function question-bank and source-program inventory
 
-- Function-specific task counts 7.1–7.10: **44 / 23 / 33 / 37 / 25 / 28 / 27 / 23 / 24 / 23** (287 task-to-matrix rows).
-- FR/EN question counts: **19 / 49 / 45 / 53 / 44 / 56 / 53 / 51 / 39 / 44** (453 FR and 453 EN IDs).
-- Each function has its own task set, source/competency matrix, Stage 2A blueprint, FR bank and separate EN review package. No Function 7.1 structure is copied to another function.
-- FR ledger: 246 FROZEN, 147 DRAFT, 31 PARTIAL, 16 SOURCE GAP, 3 SOURCE CONFLICT, 8 STALE, 2 UNRESOLVED.
-- 247 items still fail the strict direct current-edition Tier-A evidence gate; 107 historical FROZEN provenance exceptions and 140 FR↔EN status-mirror discrepancies remain.
-- The controlled reviewer registry is empty. No question is established APPROVED.
+| Function | Official tasks | FR questions | EN questions | Tier-A affected | FROZEN provenance exceptions | FR↔EN drift |
+|---|---:|---:|---:|---:|---:|---:|
+| 7.1 | 44 | 19 | 19 | 18 | 0 | 0 |
+| 7.2 | 23 | 49 | 49 | 29 | 4 | 11 |
+| 7.3 | 33 | 45 | 45 | 30 | 18 | 20 |
+| 7.4 | 37 | 53 | 53 | 25 | 10 | 13 |
+| 7.5 | 25 | 44 | 44 | 20 | 12 | 16 |
+| 7.6 | 28 | 56 | 56 | 31 | 13 | 18 |
+| 7.7 | 27 | 53 | 53 | 25 | 14 | 19 |
+| 7.8 | 23 | 51 | 51 | 27 | 12 | 15 |
+| 7.9 | 24 | 39 | 39 | 22 | 14 | 16 |
+| 7.10 | 23 | 44 | 44 | 20 | 10 | 12 |
+| **Total** | **287** | **453** | **453** | **247** | **107** | **140** |
 
-### Import CSV readback
+Read-only changed-file inventory confirms all ten independent official task sets, all ten source/competency matrices, all ten Stage 2A function blueprints, all ten FR production-bank files and all ten separate EN review packages are present. The exact-head governance workflow confirms 287/287 task-to-matrix rows, with no missing or extra task IDs; the readiness workflow confirms 453/453 FR and EN IDs with no missing or extra EN IDs. Function 7.1's 44-task structure is not imposed on any other function.
 
-Both the per-item reconciliation CSV and V2 candidate CSV contain 453 rows with identical question-ID populations. All **453/453** V2 candidates are `IMPORT_ELIGIBLE=NO`; there are **zero blank BLOCKER fields**. The 236 legacy `Next_Action = Import-eligible for V2` strings are historical hints only; exact ID join confirms all 236 map to current `NO` rows (per function 7.1–7.10: 13 / 23 / 30 / 25 / 20 / 31 / 25 / 27 / 22 / 20). These strings are not permission, source verification, human review or approval.
+Current FR status ledger: **246 FROZEN, 147 DRAFT, 31 PARTIAL, 16 SOURCE GAP, 3 SOURCE CONFLICT, 8 STALE, 2 UNRESOLVED**. The per-item CSV separately identifies the current GAP/CONFLICT/STALE records; do not collapse stale citations into conflict or infer regulatory absence from a failed search. All **453/453** V2 candidates remain `IMPORT_ELIGIBLE=NO`; the current candidate and reconciliation CSVs have identical 453-ID populations and zero blank blocker fields.
 
-### Related DGR PRs
+The controlled reviewer registry's canonical table is empty. Its structural checks pass but explicitly do not prove real-world identity, qualification authenticity or competence. There are **zero established APPROVED questions**. FROZEN is not approval. Separate named/date qualified FR source verification, separate EN bilingual review, final authorization and confidentiality eligibility remain required.
 
-- #411's historical-Next_Action clarification, #412's Function 7.10 power-bank source-scope caveat, and #407's cautious public-claims wording are already present in the current handoff branch.
-- #413 is stale/diverged and has no Actions run. The current handoff already contains the same blocker-validator blob, 453 NO rows and zero blank blockers. Its only remaining semantic CSV difference is Q-7.3-029; the draft changes the current handoff's item-specific locator/hold to generic unresolved wording. Do not merge #413 as-is.
-- #408–#410 remain draft EN reviewer-guidance corrections; they do not constitute qualified human review or resolve exact-head status-mirror findings.
+### Security correction — current `main` versus PR #298 and PR #348
 
-### Confidentiality, public claims and Stage 2B.1
+Fresh file readback on `main` confirms middleware blob `839ac0b0` still accepts `?secret=CRON_SECRET` as a protected-route bypass. The same URL-secret pattern remains in `app/api/agent/intel/stream/route.ts`, `app/api/agents/linkedin-outreach/route.ts`, `app/api/agents/followup/route.ts` and `app/api/agents/send-email/route.ts`. This is a current-main security blocker, not merely a historical finding.
 
-- Repository visibility remains PUBLIC. The public PR #3 branch contains answer-bearing FR banks and EN reviewer packages. Issue [#340](https://github.com/relaxsaadi/cbta/issues/340) remains a critical confidentiality blocker.
-- PR #341's public-artifact tripwire passed only on its own candidate tree; it is not a scan or containment of PR #3, history, forks, artifacts or runtime pools. The current-handoff scan previously recorded 42 quoted DGR reference fields, 35 exact matches in production-bank Markdown and one additional 278-character field requiring licensing review. No licensed excerpt is reproduced here.
-- Current `main` middleware still accepts `?secret=CRON_SECRET` (blob `839ac0b0`). PR #298's static security workflow passes [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152); its branch uses an exact seven-route GET allowlist with server-side Bearer auth and same-origin mutation checks, but remains OPEN / DRAFT / UNMERGED / UNDEPLOYED.
-- GitHub branch metadata reports `main.protected=false`; repository rulesets collection is empty. The branch-protection detail endpoint returns 403 to this integration; no administrative write was attempted.
-- Unsupported recognition/ANAC claims remain on `main` in visible homepage FAQ and FAQPage content. #401 has a successful compile gate [#44987097818](https://github.com/relaxsaadi/cbta/actions/runs/44987097818); #414 has no Actions run. They overlap in 34 files and require consolidation before merge.
-- #399 and #415 E-EXAM validation passed on their own heads, but both remain draft/unmerged and do not establish integrated provider-signed staging. Issues #65 (assessment-scope integrity) and #225 (durable notification intent) remain open.
+- [PR #298](https://github.com/relaxsaadi/cbta/pull/298), head `8ecdc5e1c997d3fe3e6b38d2a1a04b58bb9c910c`, remains OPEN / DRAFT / UNMERGED. Its static security workflow [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152) passes. Read-only comparison confirms its middleware uses an exact scheduled-GET allowlist with server-side Bearer authentication and removes URL-secret checks from the inspected handlers. This is a materially stronger correction, but static tests are not deployed positive/negative cron, dashboard, SSE, CSRF or rollback acceptance.
+- [PR #348](https://github.com/relaxsaadi/cbta/pull/348) is an older compatibility design. Its middleware/helper still permits `CRON_SECRET` in the URL query for five legacy GET paths and does not admit the seven configured Vercel scheduled Bearer calls. Existing blocking comment [#6457300397](https://github.com/relaxsaadi/cbta/pull/348#issuecomment-6457300397) records that contract mismatch. Do not merge #348 as a substitute for #298.
 
-**Decision: PLATFORM NOT READY.** Candidate workflow/RBAC/audit, separate qualified FR and EN review, Moodle/console integration, security/confidentiality, integrated build, deployment/runbook and backup/recovery remain unaccepted. No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+### Confidentiality, repository governance and public claims
 
+- Repository visibility is still **PUBLIC**. PR #3's public branch contains answer-bearing FR banks and EN reviewer packages. [Issue #340](https://github.com/relaxsaadi/cbta/issues/340) remains a critical examination-confidentiality blocker. The previous branch scan recorded 42 quoted DGR reference fields, 35 exact matches in production-bank Markdown and one additional unquoted reference requiring licensing review. The latest commit changes only this checklist, so it does not remediate that exposure.
+- [PR #341](https://github.com/relaxsaadi/cbta/pull/341) is detection-only and its green run [#45090168973](https://github.com/relaxsaadi/cbta/actions/runs/45090168973) is on its own candidate tree, not an exact scan or containment of PR #3, public history, forks, artifacts or runtime pools.
+- GitHub reports `main.protected=false`, branch protection disabled and no required status checks; the repository rulesets collection is empty. [Issue #118](https://github.com/relaxsaadi/cbta/issues/118) remains an owner-side governance blocker. No administrative setting was changed.
+- Claude-coauthored [PR #416](https://github.com/relaxsaadi/cbta/pull/416) includes commit [`ba8e5f3a`](https://github.com/relaxsaadi/cbta/commit/ba8e5f3a453867b2abb211435e303e065f2dc02d), which changes the Function 7.1 page title to task-based wording rather than a job-title label. #416 remains OPEN / DRAFT and has no GitHub Actions run; its Vercel status is FAILURE. The latest `main` commit [`e1151964`](https://github.com/relaxsaadi/cbta/commit/e115196448753d2871b9885a0ea5cbdaf071790e) is prospect-title matching only, not DGR question-bank or E-EXAM work.
+- Public-claims remediation PRs #401 and #414 overlap in 34 files; #401 has a compile result, #414 has no exact-head Actions run. Consolidate and reconcile before merging either. #411, #412 and #407 changes are already represented in the handoff; #413 remains stale/diverged and must not be merged as-is; #408–#410 remain guidance drafts, not human review.
+
+### Stage 2B.1 / E-EXAM
+
+- [PR #399](https://github.com/relaxsaadi/cbta/pull/399) and [PR #415](https://github.com/relaxsaadi/cbta/pull/415) have isolated validation successes on their own heads, but remain OPEN / DRAFT / UNMERGED and do not establish integrated provider-signed staging.
+- [Issue #65](https://github.com/relaxsaadi/cbta/issues/65) assessment-scope integrity and [issue #225](https://github.com/relaxsaadi/cbta/issues/225) durable notification intent remain open. Candidate workflow, roles/RBAC, audit trail, Moodle/console integration, deployment, backup/recovery and notification delivery are not accepted end-to-end.
+
+### Release gates
+
+| Gate | Status |
+|---|---|
+| Candidate workflow | Partial; isolated branch validations only |
+| Roles/RBAC | Not accepted |
+| Audit trail | Partial |
+| FR source verification | Incomplete; 247 direct Tier-A evidence failures |
+| Independent EN bilingual review | Pending; 140 status-mirror discrepancies |
+| Moodle/console integration | Not accepted |
+| Security/confidentiality | Critical blocker |
+| Integrated build/tests | Not accepted |
+| Deployment/runbook/monitoring | Not accepted |
+| Backup/recovery | Not accepted |
+| Notification durability | Not accepted |
+
+**Decision: PLATFORM NOT READY.** No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed. If critical technical gates later pass while regulatory human review remains, the maximum permitted label is **technically/pre-production ready — human review pending**.
 ---
 
 ## AUDIT SNAPSHOT — 2026-11-24 15:41 Africa/Algiers (exact-head baseline 598705f)

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formation DGR IATA Entreprises — KOST GROUP",
     description:
-      "Formations DGR pour grands comptes. Seul prestataire IATA CBTA Provider certifié en Algérie.",
+      "Formations DGR intra-entreprise pour grands comptes en Algérie. Centre CBTA Provider ; périmètre à vérifier.",
     url: "https://dgr.kostacademy.com/entreprises",
   },
 };

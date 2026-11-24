@@ -1,16 +1,11 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 import {
   Flame, Target, Mail, MessageSquare, Phone, Linkedin, Globe,
   RefreshCw, CheckCircle, Clock, Zap, AlertTriangle, TrendingUp,
   Send, Users, DollarSign, Calendar, ChevronRight, Play, Copy, Check
 } from 'lucide-react'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 // September 30, 2026 — IATA CBTA certification deadline
 const DEADLINE = new Date('2026-09-30T23:59:59')
@@ -74,29 +69,42 @@ export default function BlitzPage() {
   const [whatsappLoading, setWhatsappLoading] = useState(false)
   const [whatsappStatus, setWhatsappStatus] = useState<string | null>(null)
   const [stats, setStats] = useState({ total: 0, withEmail: 0, contacted: 0, qualified: 0, won: 0 })
+  const [dataError, setDataError] = useState<string | null>(null)
 
   const fetchData = useCallback(async () => {
-    const [{ data: prospects }, { data: won }] = await Promise.all([
-      supabase
-        .from('company_prospects')
-        .select('*')
-        .not('contact_email', 'is', null)
-        .in('status', ['found', 'contacted'])
-        .order('score', { ascending: false })
-        .limit(10),
-      supabase.from('company_prospects').select('id, status'),
-    ])
-    setTargets(prospects || [])
-    const all = won || []
-    setRegistered(all.filter(p => p.status === 'won').length)
-    setStats({
-      total: all.length,
-      withEmail: 0,
-      contacted: all.filter(p => p.status === 'contacted').length,
-      qualified: all.filter(p => p.status === 'qualified').length,
-      won: all.filter(p => p.status === 'won').length,
-    })
-    setLoading(false)
+    setDataError(null)
+    try {
+      const [prospectsResult, wonResult] = await Promise.all([
+        supabase
+          .from('company_prospects')
+          .select('*')
+          .not('contact_email', 'is', null)
+          .in('status', ['found', 'contacted'])
+          .order('score', { ascending: false })
+          .limit(10),
+        supabase.from('company_prospects').select('id, status'),
+      ])
+      if (prospectsResult.error || wonResult.error) throw new Error('Supabase query failed')
+
+      const prospects = prospectsResult.data
+      const all = wonResult.data || []
+      setTargets(prospects || [])
+      setRegistered(all.filter(p => p.status === 'won').length)
+      setStats({
+        total: all.length,
+        withEmail: 0,
+        contacted: all.filter(p => p.status === 'contacted').length,
+        qualified: all.filter(p => p.status === 'qualified').length,
+        won: all.filter(p => p.status === 'won').length,
+      })
+    } catch {
+      setDataError('Données CRM indisponibles. Vérifiez la configuration Supabase de cet environnement.')
+      setTargets([])
+      setRegistered(0)
+      setStats({ total: 0, withEmail: 0, contacted: 0, qualified: 0, won: 0 })
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => { fetchData() }, [fetchData])
@@ -132,8 +140,17 @@ export default function BlitzPage() {
 
   const markSent = async (idx: number) => {
     const r = results[idx]
-    await supabase.from('company_prospects').update({ status: 'contacted', updated_at: new Date().toISOString() }).eq('id', r.prospect.id)
-    setResults(prev => prev.map((item, i) => i === idx ? { ...item, sent: true } : item))
+    try {
+      const { error } = await supabase
+        .from('company_prospects')
+        .update({ status: 'contacted', updated_at: new Date().toISOString() })
+        .eq('id', r.prospect.id)
+      if (error) throw new Error('Supabase update failed')
+      setDataError(null)
+      setResults(prev => prev.map((item, i) => i === idx ? { ...item, sent: true } : item))
+    } catch {
+      setDataError('Le statut du prospect n’a pas pu être enregistré. Vérifiez la connexion CRM.')
+    }
   }
 
   const copyField = (idx: number, field: 'email' | 'linkedin' | 'whatsapp') => {
@@ -168,6 +185,12 @@ export default function BlitzPage() {
           <RefreshCw size={14} />
         </button>
       </div>
+
+      {dataError && (
+        <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          {dataError}
+        </div>
+      )}
 
       {/* COUNTDOWN + PROGRESS */}
       <div className="grid grid-cols-2 gap-4">

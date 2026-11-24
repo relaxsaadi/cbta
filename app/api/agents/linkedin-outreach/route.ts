@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse, after } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
@@ -78,7 +78,7 @@ async function runLinkedInBlitz(limit = 10) {
       .order('score', { ascending: false })
       .limit(limit)
 
-    if (!fallback?.length) return { messaged: 0, prospects: [] }
+    if (!fallback?.length) return { generated: 0, sent: 0, messaged: 0, prospects: [] }
 
     return processLinkedIn(fallback, supabase)
   }
@@ -98,13 +98,11 @@ async function processLinkedIn(prospects: Record<string, unknown>[], supabase: R
       linkedin: p.decision_maker_linkedin,
       message,
     })
-    // Mark as contacted
-    await supabase.from('company_prospects')
-      .update({ status: 'contacted', notes: `LinkedIn message envoyé ${new Date().toLocaleDateString('fr-FR')}`, updated_at: new Date().toISOString() })
-      .eq('id', p.id as string)
   }
 
-  return { messaged: results.length, prospects: results }
+  // This route generates drafts only; it never sends LinkedIn messages.
+  // Keep the legacy sent-count field at zero for response compatibility.
+  return { generated: results.length, sent: 0, messaged: 0, prospects: results }
 }
 
 // POST — generate messages for a batch (returns results, doesn't auto-send — user copies+sends)
@@ -123,12 +121,3 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(result)
 }
 
-// GET — background daily run
-export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-  after(() => runLinkedInBlitz(15))
-  return NextResponse.json({ status: 'started' })
-}

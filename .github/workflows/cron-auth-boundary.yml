@@ -1,0 +1,29 @@
+name: CRM cron authentication security (static)
+
+# Fail closed when a cron route, middleware, or browser credential boundary
+# changes. This does not replace live authentication/SSE/cron acceptance tests.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - ai/dgr-stage2b-handoff
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-cron-auth-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (Node 24)
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0 (Node 24)
+        with:
+          node-version: '22'
+      - name: Check cron allowlist, route auth, browser token and SSE hold
+        run: node --test scripts/security-cron-boundary.test.mjs
+      - name: Test Basic-auth dashboard mutation CSRF origin policy
+        run: node --experimental-strip-types --test scripts/security-dashboard-origin.test.mjs

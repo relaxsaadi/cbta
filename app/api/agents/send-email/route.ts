@@ -138,16 +138,24 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // Batch daily blitz — fire and forget
+  // Batch daily blitz — autonomous bulk outreach remains opt-in only.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Batch outbound is disabled' }, { status: 503 })
+  }
   after(runDailyBlitz)
   return NextResponse.json({ status: 'started', message: 'Blitz email lancé en arrière-plan' })
 }
 
 // GET — cron quotidien 8h du matin
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== process.env.CRON_SECRET) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  // A valid cron credential does not authorize autonomous outbound email.
+  // Keep the scheduled batch inert unless the deployment owner explicitly opts in.
+  if (process.env.DGR_OUTBOUND_AUTOSEND_ENABLED !== 'true') {
+    return NextResponse.json({ error: 'Scheduled outbound is disabled' }, { status: 503 })
   }
   after(runDailyBlitz)
   return NextResponse.json({ status: 'started' })

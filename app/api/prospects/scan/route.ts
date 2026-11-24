@@ -143,8 +143,8 @@ async function runScan() {
 
 // GET — cron Vercel (nécessite secret)
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== process.env.CRON_SECRET) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   // Répond immédiatement — le scan continue en background même si le navigateur ferme

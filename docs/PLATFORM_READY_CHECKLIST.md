@@ -503,3 +503,28 @@ This section is derived from the exact handoff-head per-item ledger `docs/DGR_TI
 - All 453 import candidates remain `IMPORT_ELIGIBLE=NO`. No question is APPROVED. The reviewer registry is empty; no qualified named/date FR or separate EN sign-off is established.
 
 The direct Tier-A validator still fails on item-specific current 67th Edition 2026 evidence, including representative/batch/cross-applied evidence. The full readiness validator still fails. Preserve all GAP/CONFLICT/STALE and import holds until authorized direct evidence, separate qualified FR and EN review, and final approval-chain evidence exist.
+
+
+## Supplemental public-artifact tripwire audit — 2026-11-24 17:34 Africa/Algiers
+
+This supplements the earlier exact-head readiness snapshot. It records a useful detection control without treating it as remediation or confidentiality acceptance.
+
+### PR #341 — detector passes, exposure remains open
+
+- [PR #341](https://github.com/relaxsaadi/cbta/pull/341), branch `audit/eexam-public-answer-key-ci-340-20261027`, head `86545595a56a8e4365ee82591202e7853aca91db`, remains **OPEN / DRAFT / UNMERGED**.
+- Its **Public exam artifact boundary (paths and keyed Markdown)** workflow completed successfully: [run #45090168973](https://github.com/relaxsaadi/cbta/actions/runs/45090168973).
+- The detector reads the tracked checkout (`git ls-files --cached`), rejects known `DGR_PRODUCTION_BANK_7.x` and `DGR_EN_REVIEW_PACKAGE_7.x` paths, and checks supported text/structured formats for high-confidence keyed DGR items. It deliberately avoids printing question/answer excerpts.
+- The detector itself explicitly says it is **not** a secret scanner, retroactive content withdrawal, push-time protection, or proof that every assessment format is confidential. The added `.gitignore` patterns prevent some future accidental staging; they do not untrack existing files or erase public Git history.
+
+### Exact branch distinction verified
+
+- On current `main`, `docs/DGR_PRODUCTION_BANK_7.1.md` and `docs/DGR_EN_REVIEW_PACKAGE_7.1.md` are absent (GitHub contents API returned 404).
+- On the publicly readable PR #3 branch `ai/dgr-stage2b-handoff`, both files are present (the bank file is 25,964 characters; the EN package is 33,425 characters). The same branch contains the all-function bank and reviewer packages.
+- Therefore the green run on PR #341 proves the detector passes on **PR #341's own candidate tree only**. It is not a scan of PR #3's public handoff branch. No exact-head PR #3 run of this detector is claimed. After the detector is available from the base branch, it must be explicitly exercised against PR #3's exact head; the known restricted paths should cause a fail-closed result until the content is moved out of the public tree.
+- PR #341 is detection-only. It has not removed or restricted the existing PR #3 branch, its Git objects, historical copies, forks/mirrors, artifacts, or any staging/runtime pool.
+
+### Release disposition
+
+[Issue #340](https://github.com/relaxsaadi/cbta/issues/340) remains **CRITICAL OPEN**. Keep secure summative/certification use blocked for exposed items until the owner-authorized containment, exposure inventory, retirement/replacement decision, restricted-storage boundary, and server-side eligibility checks are independently accepted. Do not rely on repository visibility changes or `.gitignore` alone to retract copies already fetched.
+
+No question, answer, source status, reviewer decision, import flag, Moodle record, or production deployment was changed by this audit. No licensed text or answer content is reproduced here. The confidentiality gate remains **NOT ACCEPTED**.

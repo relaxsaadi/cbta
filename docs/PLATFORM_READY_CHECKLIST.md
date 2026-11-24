@@ -1,3 +1,31 @@
+## CURRENT RUN — 2026-11-24 21:30 Africa/Algiers
+
+> **Exact live PR #3 head verified:** `64de509391682a2f9d390c0b33fd2b3f38d9bf69`, branch `ai/dgr-stage2b-handoff`, OPEN / DRAFT / UNMERGED, 755 ahead / 0 behind `main`, 249 changed files. Repository visibility remains PUBLIC.
+>
+> **Correction to the 21:17 snapshot above:** five newer DGR workflows did complete on the exact live head `64de5093`; the prior statement that the last completed runs were on `a202b2c6` is superseded. The Direct Tier-A job log explicitly shows checkout/ref `64de509391682a2f9d390c0b33fd2b3f38d9bf69`.
+>
+> - CSV import structure: **PASS** — [run #45480384521](https://github.com/relaxsaadi/cbta/actions/runs/45480384521)
+> - Controlled reviewer admission: **PASS** — [run #45480384604](https://github.com/relaxsaadi/cbta/actions/runs/45480384604)
+> - Governance regression integrity: **PASS** — [run #45480384515](https://github.com/relaxsaadi/cbta/actions/runs/45480384515)
+> - Direct item Tier-A provenance: **FAIL** — [run #45480384611](https://github.com/relaxsaadi/cbta/actions/runs/45480384611)
+> - Full DGR regulatory readiness: **FAIL** — [run #45480384751](https://github.com/relaxsaadi/cbta/actions/runs/45480384751)
+>
+> The direct-evidence job fails at “Reject sampled-only Tier-A promotions” and “Require affirmative current-edition per-item evidence.” The full-readiness job's governance-integrity sub-job passes, but the direct Tier-A, affirmative per-item evidence and final artifact gates fail. The exact-head artifact summary is **287/287 task-to-matrix rows**, **453 FR / 453 EN IDs** with no missing/extra IDs, **107 FROZEN provenance exceptions**, and **140 FR↔EN status-mirror discrepancies**. Direct Tier-A diagnostics identify **247 affected items** across Functions 7.1–7.10. All **453/453** import candidates remain `IMPORT_ELIGIBLE=NO`; the qualified-reviewer registry is empty; zero APPROVED questions are established. Keep all holds fail-closed.
+>
+> **Function coverage remains independent:** 7.1=44 tasks/19 questions; 7.2=23/49; 7.3=33/45; 7.4=37/53; 7.5=25/44; 7.6=28/56; 7.7=27/53; 7.8=23/51; 7.9=24/39; 7.10=23/44. The 44-task 7.1 structure is not imposed on other functions. Structural completeness is not regulatory correctness or approval.
+>
+> **Security recheck:** current `main` remains PUBLIC and `main.protected=false`; the rulesets collection is empty. The current `middleware.ts` still reads `searchParams.get('secret') === CRON_SECRET` before Basic authentication (blob `839ac0b0`), and the inspected `app/api/agents/linkedin-outreach/route.ts` still has a GET query-secret check (blob `66f7f4ac`). PR [#298](https://github.com/relaxsaadi/cbta/pull/298) remains OPEN / DRAFT / UNMERGED / UNDEPLOYED; its static tests do not replace deployed positive/negative cron, dashboard, SSE, CSRF and rollback acceptance. [Issue #340](https://github.com/relaxsaadi/cbta/issues/340) remains a critical public answer-key/licensed-reference exposure blocker; PR #341's detector pass is not containment.
+>
+> **Claude Code / related work:** [PR #416](https://github.com/relaxsaadi/cbta/pull/416) now has Claude-authored head commit `ba8e5f3a`, changing the Function 7.1 page title to task-based “Préparation” wording rather than a job-title label. It remains DRAFT; no integrated exam-platform acceptance follows. [PR #417](https://github.com/relaxsaadi/cbta/pull/417) remains a separate dashboard lazy-Supabase Preview correction, not E-EXAM/Moodle acceptance. No new Claude-authored DGR bank or E-EXAM implementation PR was found.
+>
+> **Edition transition:** IATA's [DGR Updates page](https://www.iata.org/dgr-updates) states the 68th Edition electronic edition is available and the 2027 DGR enters into force on **1 January 2027**. The 67th Edition 2026 remains the evidence baseline for 2026 sittings; preserve its records and conduct separate per-function 68th Edition impact/revalidation before 2027 use. Public significant-change summaries are not substitutes for authorized full-edition, item-specific evidence.
+>
+> **Release gates remain NOT ACCEPTED:** candidate workflow (partial); roles/RBAC; audit trail (partial); FR source verification; independent EN review; Moodle/console integration; security/confidentiality; integrated build/tests; deployment/runbook/monitoring; backup/recovery; notification durability. Owner-only blockers include authorized full IATA source access, appointment of qualified FR/EN reviewers, repository administration for protection/rulesets, and authorization/execution of confidential-bank containment.
+>
+> **Decision: PLATFORM NOT READY.** No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+
+---
+
 ## CURRENT RUN — 2026-11-24 21:17 Africa/Algiers
 
 > **Live PR #3:** [#3](https://github.com/relaxsaadi/cbta/pull/3), branch `ai/dgr-stage2b-handoff`, OPEN / DRAFT / UNMERGED, 249 changed files. The live branch SHA and ahead/behind count are maintained in the PR description; this checklist snapshot intentionally anchors its five exact-head DGR results to the last code-bearing audit parent `a202b2c6d799382177ae04a3c5489543e252581b` (752 ahead / 0 behind `main`). The previous header incorrectly named `fdc956b1` / 751 ahead. GitHub compare confirmed the intervening code-bearing-parent update and subsequent commits changed only `docs/PLATFORM_READY_CHECKLIST.md`; the five DGR workflow results below are tied to `a202b2c6`. The checklist-only commits are outside the DGR workflows' path filters, so no fresh workflow run is claimed for those documentation descendants. No application code, question/answer content, regulatory evidence, reviewer record, import flag, Moodle data or deployment changed.

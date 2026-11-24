@@ -1,3 +1,15 @@
+## LATEST FOLLOW-UP — 2026-11-24 (Claude metadata correction and Preview result)
+
+> **PR #416:** latest Claude Sonnet 5 commit is `33a16a01db495b94cbb6aef8bad1e67da63e264b`. It now removes the unsupported first/exclusive, ANAC-compliance, scarcity and 300+ airline-recognition assertions from the three changed pages' ordinary and Open Graph metadata. This corrects the earlier metadata-only finding. The underlying Algeria `CountryLandingPage` data and enterprise page body still contain provider-exclusivity, certificate-equivalence, ANAC and airline-recognition claims outside this PR. Follow-up comment [#7126699034](https://github.com/relaxsaadi/cbta/pull/416#issuecomment-7126699034) records the remaining public-claims scope. #416 remains OPEN / DRAFT; latest Vercel deployment is FAILURE and no GitHub Actions build/lint result is present. Page-body remediation remains with #401/#414.
+>
+> **PR #417:** Vercel reports the stacked Preview deployment as READY ([deployment](https://vercel.com/saadis-projects-09874ee5/kost-funnel/GU5i54DvHa3dcLxE268ioPiYrp3K)). This is a positive deployment result after the Resend/Supabase lazy-initialization changes, but does not independently prove whether Preview env variables were absent. Missing-config runtime and normal configured-environment tests remain pending; #417 is DRAFT on #22.
+>
+> **PR #3:** current handoff head remains `c231c35a08b3758e16b81c3f3a219298c0e5be02` (736 ahead / 0 behind `main`, 249 files, OPEN / DRAFT). Exact-head DGR workflows are 3 PASS / 2 FAIL (CSV #45359569896, reviewer #45359569655, governance #45359569549 PASS; Tier-A #45359570491 and full readiness #45359569411 FAIL). Current Vercel status is FAILURE for separate `kost-funnel` deployment [HH9Nzy...](https://vercel.com/saadis-projects-09874ee5/kost-funnel/HH9NzyEMsu4s76YD7AzwT3k3dCHF); the immediately preceding doc-only head had SUCCESS, so the preview status is inconsistent and is not E-EXAM acceptance.
+>
+> All 453 question rows remain import-ineligible; no question approved, no production deployment, no PR merged, no production secrets read/added, and no ANAC/IATA approval claimed. **PLATFORM NOT READY.**
+
+---
+
 ## STATUS CORRECTION — 2026-11-24 (latest exact-head and Preview results)
 
 > PR #3 current head at this correction: `271025e4496bce61ef58ecefe3d89b13d393cdcf` (735 ahead / 0 behind `main`, 249 files, OPEN / DRAFT / UNMERGED). All five exact-head DGR workflows completed: CSV [#45359178707](https://github.com/relaxsaadi/cbta/actions/runs/45359178707) PASS; reviewer [#45359178732](https://github.com/relaxsaadi/cbta/actions/runs/45359178732) PASS; governance [#45359179589](https://github.com/relaxsaadi/cbta/actions/runs/45359179589) PASS; direct Tier-A [#45359179103](https://github.com/relaxsaadi/cbta/actions/runs/45359179103) FAIL; full readiness [#45359179030](https://github.com/relaxsaadi/cbta/actions/runs/45359179030) FAIL. The PR #3 Vercel status is now SUCCESS for the separate `kost-funnel` project ([deployment](https://vercel.com/saadis-projects-09874ee5/kost-funnel/8aFAPx74AheCrBcbied2kPei75yG)); this is not E-EXAM/Moodle runtime acceptance.

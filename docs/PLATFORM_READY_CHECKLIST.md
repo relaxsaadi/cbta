@@ -1,3 +1,9 @@
+## EXACT-HEAD RE-RUN — checklist commit a8c574c7
+
+> The 08:16 checklist-only commit `a8c574c7ce300ba1442c7ce059b15462dd349840` is now the live PR #3 head. Compare from `257e4612` confirms exactly one changed file, `docs/PLATFORM_READY_CHECKLIST.md` (+19 / −0); the PR is 730 commits ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED. All five workflows on that exact head completed: CSV structure PASS [#45348066814](https://github.com/relaxsaadi/cbta/actions/runs/45348066814), controlled reviewer admission PASS [#45348066813](https://github.com/relaxsaadi/cbta/actions/runs/45348066813), governance regression PASS [#45348066807](https://github.com/relaxsaadi/cbta/actions/runs/45348066807), direct Tier-A provenance FAIL [#45348066922](https://github.com/relaxsaadi/cbta/actions/runs/45348066922), and full DGR readiness FAIL [#45348066771](https://github.com/relaxsaadi/cbta/actions/runs/45348066771). In the full-readiness run, regulatory-governance integrity passes; the full artifact gate fails with 453 FR / 453 EN IDs, 287 matrix rows, zero missing/extra EN IDs or matrix links, 107 historical FROZEN provenance exceptions and 140 FR↔EN status drifts. Direct Tier-A failure includes missing direct item evidence for the held FROZEN population and terminal records with representative/cross-applied or absent per-item evidence (including Q-7.1-011, Q-7.2-016/035/039/044/049, Q-7.4-040, Q-7.6-003 and Q-7.9-015/028). The V2 candidate population remains 453/453 `IMPORT_ELIGIBLE=NO`. No question, answer, reviewer, source status, import flag, application code or Moodle data changed in this documentation-only commit. **PLATFORM NOT READY.**
+
+---
+
 ## CURRENT AUDIT — 2026-11-24 08:16 Africa/Algiers
 
 > **Decision: PLATFORM NOT READY.** This audit adds current GitHub/CI evidence; it does not approve a question, alter an FR/EN source state, authorize an import, merge a PR, deploy production, or claim ANAC/IATA approval.

@@ -1,12 +1,7 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 import { FileText, RefreshCw, Download, Mail, Building2, Users, Search, ChevronDown } from 'lucide-react'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 type Prospect = {
   id: string; company_name: string; sector: string; decision_maker_name: string | null
@@ -25,16 +20,25 @@ export default function ProposalPage() {
   const [summary, setSummary] = useState<Record<string, unknown> | null>(null)
   const [search, setSearch] = useState('')
   const [fetching, setFetching] = useState(true)
+  const [dataError, setDataError] = useState<string | null>(null)
 
   const fetchProspects = useCallback(async () => {
-    const { data } = await supabase
-      .from('company_prospects')
-      .select('id,company_name,sector,decision_maker_name,decision_maker_title,contact_email,estimated_staff,deal_value_eur,status,country')
-      .in('status', ['contacted', 'qualified', 'found'])
-      .order('score', { ascending: false })
-      .limit(100)
-    setProspects(data || [])
-    setFetching(false)
+    setDataError(null)
+    try {
+      const { data, error } = await supabase
+        .from('company_prospects')
+        .select('id,company_name,sector,decision_maker_name,decision_maker_title,contact_email,estimated_staff,deal_value_eur,status,country')
+        .in('status', ['contacted', 'qualified', 'found'])
+        .order('score', { ascending: false })
+        .limit(100)
+      if (error) throw new Error('Supabase query failed')
+      setProspects(data || [])
+    } catch {
+      setDataError('Données CRM indisponibles. Vérifiez la configuration Supabase de cet environnement.')
+      setProspects([])
+    } finally {
+      setFetching(false)
+    }
   }, [])
 
   useEffect(() => { fetchProspects() }, [fetchProspects])
@@ -42,6 +46,7 @@ export default function ProposalPage() {
   const generate = async () => {
     if (!selected) return
     setLoading(true)
+    setDataError(null)
     setProposalHtml('')
     try {
       const res = await fetch('/api/agents/proposal', {
@@ -50,15 +55,27 @@ export default function ProposalPage() {
         body: JSON.stringify({ prospect: selected, headcount }),
       })
       const data = await res.json()
+      if (!res.ok) throw new Error('Proposal generation failed')
       setProposalHtml(data.html || '')
       setSummary(data.summary || null)
-      // Upgrade status to qualified
-      await supabase.from('company_prospects').update({ status: 'qualified', updated_at: new Date().toISOString() }).eq('id', selected.id)
-      setProspects(prev => prev.map(p => p.id === selected.id ? { ...p, status: 'qualified' } : p))
+
+      try {
+        const { error } = await supabase
+          .from('company_prospects')
+          .update({ status: 'qualified', updated_at: new Date().toISOString() })
+          .eq('id', selected.id)
+        if (error) throw new Error('Supabase update failed')
+        setProspects(prev => prev.map(p => p.id === selected.id ? { ...p, status: 'qualified' } : p))
+      } catch {
+        setDataError('Proposition générée, mais le statut CRM du prospect n’a pas pu être mis à jour.')
+      }
     } catch {
-      setProposalHtml('<p style="color:red">Erreur génération</p>')
+      setDataError('Impossible de générer la proposition dans cet environnement.')
+      setProposalHtml('')
+      setSummary(null)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const downloadHtml = () => {
@@ -105,6 +122,11 @@ export default function ProposalPage() {
               className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" />
           </div>
         </div>
+        {dataError && (
+          <div role="alert" className="mx-4 mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            {dataError}
+          </div>
+        )}
         <div className="flex-1 overflow-auto">
           {fetching ? (
             <div className="p-4 space-y-2">{[...Array(8)].map((_, i) => <div key={i} className="h-12 bg-gray-100 rounded animate-pulse" />)}</div>

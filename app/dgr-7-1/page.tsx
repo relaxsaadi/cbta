@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   ...buildFormationMetadata(formation),
   title: "Formation DGR 7.1 IATA Algérie — Expéditeurs",
   description:
-    "Formation IATA DGR 7.1 (expéditeurs, packers, transitaires) à Alger avec le seul centre CBTA Provider certifié d'Algérie. 4 jours, examen officiel inclus.",
+    "Formation IATA DGR 7.1 (préparation des expéditions) à Alger, 4 jours. Centre CBTA Provider ; fonction et prérequis à vérifier selon votre poste.",
 };
 
 export default function Page() {

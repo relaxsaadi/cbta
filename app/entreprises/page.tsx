@@ -10,7 +10,7 @@ import TrackedLink from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Formation DGR Entreprises — Grands Comptes",
   description:
-    "Formation IATA DGR intra-entreprise pour grands comptes en Algérie : Sonatrach, Air Algérie, TotalEnergies. Seul centre IATA CBTA Provider certifié du pays.",
+    "Formation IATA DGR intra-entreprise pour grands comptes en Algérie (oil & gas, aviation, institutionnel). Centre CBTA Provider ; périmètre à vérifier.",
   alternates: { canonical: "/entreprises" },
   keywords: [
     "formation DGR entreprises Algérie",

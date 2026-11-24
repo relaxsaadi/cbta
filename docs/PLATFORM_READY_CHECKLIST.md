@@ -1,3 +1,15 @@
+## STATUS CORRECTION — 2026-11-24 (latest exact-head and Preview results)
+
+> PR #3 current head at this correction: `271025e4496bce61ef58ecefe3d89b13d393cdcf` (735 ahead / 0 behind `main`, 249 files, OPEN / DRAFT / UNMERGED). All five exact-head DGR workflows completed: CSV [#45359178707](https://github.com/relaxsaadi/cbta/actions/runs/45359178707) PASS; reviewer [#45359178732](https://github.com/relaxsaadi/cbta/actions/runs/45359178732) PASS; governance [#45359179589](https://github.com/relaxsaadi/cbta/actions/runs/45359179589) PASS; direct Tier-A [#45359179103](https://github.com/relaxsaadi/cbta/actions/runs/45359179103) FAIL; full readiness [#45359179030](https://github.com/relaxsaadi/cbta/actions/runs/45359179030) FAIL. The PR #3 Vercel status is now SUCCESS for the separate `kost-funnel` project ([deployment](https://vercel.com/saadis-projects-09874ee5/kost-funnel/8aFAPx74AheCrBcbied2kPei75yG)); this is not E-EXAM/Moodle runtime acceptance.
+
+> **PR #417 Preview status correction:** Vercel reports its stacked Preview deployment as READY ([deployment](https://vercel.com/saadis-projects-09874ee5/kost-funnel/GU5i54DvHa3dcLxE268ioPiYrp3K), [Preview](https://kost-funnel-git-fix-dashboard-s-d64ae1-saadis-projects-09874ee5.vercel.app)). This confirms a deployment completed, but does not prove whether Supabase/Resend variables were absent during that build. PR #417 remains DRAFT, stacked on #22; separate missing-config runtime and configured-environment tests remain required. Issue #21 now records this limitation. No production secret was read or added.
+
+> **PR #416 remains blocked:** Claude Code's metadata-only change still carries unsupported provider-exclusivity, ANAC-compliance and 300+ airline-recognition wording; its Vercel deployment failed. Review comment #7126386008 requests neutral, evidence-bounded copy and coordination with #401/#414.
+
+> No question-bank, answer, FR/EN status, reviewer record, import flag, Moodle data or production deployment changed in these follow-ups. The all-function counts and holds above remain in force. **PLATFORM NOT READY.**
+
+---
+
 ## FOLLOW-UP — 2026-11-24 (Preview/build signal remediation)
 
 > PR #3 head at this follow-up: `8d67dc48a53a10af93858b0bd5478b87a90b04cd` (734 ahead / 0 behind `main`, 249 files, OPEN / DRAFT / UNMERGED). Exact-head DGR workflows completed 3 PASS / 2 FAIL: CSV [#45358147643](https://github.com/relaxsaadi/cbta/actions/runs/45358147643), reviewer admission [#45358147209](https://github.com/relaxsaadi/cbta/actions/runs/45358147209), governance [#45358147233](https://github.com/relaxsaadi/cbta/actions/runs/45358147233) PASS; direct Tier-A [#45358147188](https://github.com/relaxsaadi/cbta/actions/runs/45358147188) and full readiness [#45358147227](https://github.com/relaxsaadi/cbta/actions/runs/45358147227) FAIL. The Vercel status is FAILURE for the separate `kost-funnel` project, not E-EXAM runtime acceptance. No question-bank or application code changed on PR #3.

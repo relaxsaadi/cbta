@@ -1,3 +1,71 @@
+## CURRENT AUDIT — 2026-11-24 08:51 Africa/Algiers
+
+> **Decision: PLATFORM NOT READY.** This is a GitHub/documentation and CI audit, not a regulatory approval, production acceptance, merge or deployment. The live PR #3 baseline checked before these documentation-only corrections was `f9617a159cefb49180864dd6e3ac849caebc235f` (731 ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED). Commit `63eca0349cdff14e430fce5c6d59f2ef8e3f7d6e` adds the verified historical-`Next_Action` clarification to `docs/DGR_TIER_A_RECONCILIATION_453.md`; this checklist update is also documentation-only. No question, answer, FR source state, reviewer record, import flag, application code, Moodle data or deployment was changed.
+
+### Exact-head regulatory gates on the pre-correction PR #3 head
+
+All five workflows completed on `f9617a15`:
+- CSV structure PASS — [#45348371144](https://github.com/relaxsaadi/cbta/actions/runs/45348371144)
+- Controlled reviewer admission PASS — [#45348371112](https://github.com/relaxsaadi/cbta/actions/runs/45348371112)
+- Governance regression integrity PASS — [#45348371151](https://github.com/relaxsaadi/cbta/actions/runs/45348371151)
+- Direct Tier-A provenance FAIL — [#45348371234](https://github.com/relaxsaadi/cbta/actions/runs/45348371234)
+- Full DGR readiness FAIL — [#45348371174](https://github.com/relaxsaadi/cbta/actions/runs/45348371174)
+
+The full-readiness governance-integrity job passes; the regulatory artifact gate fails. Direct Tier-A logs include missing explicit 67th Edition binding (for example Q-7.1-010 and Q-7.2-009), missing recorded item-specific Bookshelf evidence (Q-7.2-035/039/044/049), and representative/non-direct evidence wording (Q-7.4-032 and Q-7.8-049). These are examples, not the complete affected set.
+
+### Function-by-function reconciliation
+
+The current per-item FR ledger was parsed directly: 453 questions, 287 function-specific official task rows, and exact task-ID/matrix correspondence for all ten functions. Status shorthand below is **F/D/P/G/C/S/U = FROZEN / DRAFT / PARTIAL / SOURCE GAP / SOURCE CONFLICT / STALE / UNRESOLVED**. Tier-A column is the strict validator's affected-item count, not a claim that the questions are substantively wrong.
+
+| Function | Tasks | Questions | F/D/P/G/C/S/U | Tier-A affected |
+|---|---:|---:|---|---:|
+| 7.1 | 44 | 19 | 18/0/0/1/0/0/0 | 18 |
+| 7.2 | 23 | 49 | 27/10/5/5/0/1/1 | 29 |
+| 7.3 | 33 | 45 | 31/9/2/1/0/1/1 | 30 |
+| 7.4 | 37 | 53 | 25/22/3/1/0/2/0 | 25 |
+| 7.5 | 25 | 44 | 20/17/4/1/1/1/0 | 20 |
+| 7.6 | 28 | 56 | 31/18/5/1/0/1/0 | 31 |
+| 7.7 | 27 | 53 | 25/22/5/1/0/0/0 | 25 |
+| 7.8 | 23 | 51 | 27/19/3/2/0/0/0 | 27 |
+| 7.9 | 24 | 39 | 22/11/2/2/1/1/0 | 22 |
+| 7.10 | 23 | 44 | 20/19/2/1/1/1/0 | 20 |
+| **Total** | **287** | **453** | **246/147/31/16/3/8/2** | **247** |
+
+The current EN-package mirror validator reports **140** stale/missing FR-to-EN status mirrors (7.2:11, 7.3:20, 7.4:13, 7.5:16, 7.6:18, 7.7:19, 7.8:15, 7.9:16, 7.10:12). EN draft presence is not bilingual review. The controlled reviewer registry remains empty; zero established APPROVED questions. All 453 candidate rows are `IMPORT_ELIGIBLE=NO`, and all 453 have nonblank blockers.
+
+### Historical import-hint correction
+
+Commit `63eca034` records an independently reproduced correction: the current reconciliation CSV has **236** historical `Next_Action` phrases “Import-eligible for V2 (pending reviewer sign-off)” (per function 13/23/30/25/20/31/25/27/22/20), versus **237** at historical baseline `4747d7b817fd288adff19fe836a94d15b1d5d672`. The sole removed hint is Q-7.3-029. Exact ID join: 236/236 hints map to `IMPORT_ELIGIBLE=NO`; current candidate CSV is 453/453 NO with zero blank blockers. `Next_Action` is historical narrative, never current permission or approval.
+
+### New/related DGR draft PR audit
+
+- **[#413 — explicit 453 import blockers](https://github.com/relaxsaadi/cbta/pull/413):** do not merge as-is. Its head `edea57c8` has no associated workflow runs and its base is the old PR #3 commit `4747d7b8`. The CSV-structure checker blob is already identical to current PR #3; current PR #3 already has 453/453 NO and zero blank blockers. The only candidate-row difference is Q-7.3-029, where #413 replaces the current human-review/confidentiality hold with a Tier-A-unresolved blocker. The current exact-head Tier-A failure log does not flag Q-7.3-029, and the current per-item reason records a direct Bookshelf read for that item's claim. #413 also weakens that reason to generic live/spot-verified wording. Rebase/reconcile before any further review; do not import its row blindly.
+- **[#411 — historical 237 vs current 236 hints](https://github.com/relaxsaadi/cbta/pull/411):** the count correction is now incorporated into the PR #3 reconciliation document by commit `63eca034`; no source status or import flag changed.
+- **[#412 — Function 7.10 battery/power-bank blueprint caveat](https://github.com/relaxsaadi/cbta/pull/412):** its blueprint blob is already identical to current PR #3. The caveat correctly prevents the old >15 AEP / >20 battery course-slide threshold from being used as a current-2026 rule; IATA's public operator guidance is only an applicability/conflict lead, not a substitute for licensed item-specific Tier-A verification.
+- **[#408](https://github.com/relaxsaadi/cbta/pull/408), [#409](https://github.com/relaxsaadi/cbta/pull/409), [#410](https://github.com/relaxsaadi/cbta/pull/410):** warning-only EN reviewer-guide corrections remain separate drafts based on old PR #3 baseline `4747d7b8`. Their governance/reviewer workflows pass, but Tier-A and full-readiness workflows fail. They correctly warn that package FR-status fields are historical mirrors, not authoritative current states. They do not complete the 140 per-item mirror corrections or any human EN review. Do not treat their historical branch-specific counts as current.
+
+### Stage 2B.1, security and public claims
+
+- [#399](https://github.com/relaxsaadi/cbta/pull/399) exact-head E-EXAM V2 validation [#42539993728](https://github.com/relaxsaadi/cbta/actions/runs/42539993728) PASS; remains OPEN/DRAFT and not integrated into provider-signed staging.
+- [#415](https://github.com/relaxsaadi/cbta/pull/415) exact-head app/console validation [#45169572631](https://github.com/relaxsaadi/cbta/actions/runs/45169572631) PASS; remains stacked/draft, with genuine provider-signed staging, deployment and monitoring pending.
+- [#298](https://github.com/relaxsaadi/cbta/pull/298) static cron-auth security workflow [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152) PASS; still OPEN/DRAFT/UNMERGED/UNDEPLOYED. Main remains affected until owner-authorized merge and live verification.
+- [#401](https://github.com/relaxsaadi/cbta/pull/401) current-head public-claims build/guard [#44987097818](https://github.com/relaxsaadi/cbta/actions/runs/44987097818) PASS. [#414](https://github.com/relaxsaadi/cbta/pull/414) has no exact-head workflow run and overlaps #401; consolidate before merge.
+- [#341](https://github.com/relaxsaadi/cbta/pull/341) public exam-artifact detector CI [#45090168973](https://github.com/relaxsaadi/cbta/actions/runs/45090168973) PASS, but a detector pass does not remove public history/forks/artifacts or close confidentiality issue [#340](https://github.com/relaxsaadi/cbta/issues/340).
+
+Repository visibility is **PUBLIC**. Owner/release blockers remain #340 (exam answer-key confidentiality), #118 (branch protection), #65 (assessment scope integrity) and #225 (durable notification recovery). No deployment environment values were read.
+
+### Claude Code / branch search
+
+The DGR-related branch search was exhausted across **129** matching branches. The only branch name explicitly containing “claude” is the historical `audit/dgr-claude-guidance-claims-gate-20261027`; its [PR #343](https://github.com/relaxsaadi/cbta/pull/343) remains an older OPEN/DRAFT documentation proposal. No new Claude-named DGR branch or recent Claude-attributed commit was found.
+
+### Release gates
+
+Candidate workflow PARTIAL; RBAC NOT ACCEPTED; audit trail PARTIAL; FR source verification INCOMPLETE; EN bilingual review PENDING; Moodle/console integration NOT ACCEPTED; security/confidentiality BLOCKED; integrated build/tests NOT ACCEPTED; deployment/runbook/monitoring NOT ACCEPTED; backup/recovery NOT ACCEPTED; notification durability NOT ACCEPTED.
+
+**Release decision remains PLATFORM NOT READY.** No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+
+---
+
 ## EXACT-HEAD RE-RUN — checklist commit a8c574c7
 
 > The 08:16 checklist-only commit `a8c574c7ce300ba1442c7ce059b15462dd349840` is now the live PR #3 head. Compare from `257e4612` confirms exactly one changed file, `docs/PLATFORM_READY_CHECKLIST.md` (+19 / −0); the PR is 730 commits ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED. All five workflows on that exact head completed: CSV structure PASS [#45348066814](https://github.com/relaxsaadi/cbta/actions/runs/45348066814), controlled reviewer admission PASS [#45348066813](https://github.com/relaxsaadi/cbta/actions/runs/45348066813), governance regression PASS [#45348066807](https://github.com/relaxsaadi/cbta/actions/runs/45348066807), direct Tier-A provenance FAIL [#45348066922](https://github.com/relaxsaadi/cbta/actions/runs/45348066922), and full DGR readiness FAIL [#45348066771](https://github.com/relaxsaadi/cbta/actions/runs/45348066771). In the full-readiness run, regulatory-governance integrity passes; the full artifact gate fails with 453 FR / 453 EN IDs, 287 matrix rows, zero missing/extra EN IDs or matrix links, 107 historical FROZEN provenance exceptions and 140 FR↔EN status drifts. Direct Tier-A failure includes missing direct item evidence for the held FROZEN population and terminal records with representative/cross-applied or absent per-item evidence (including Q-7.1-011, Q-7.2-016/035/039/044/049, Q-7.4-040, Q-7.6-003 and Q-7.9-015/028). The V2 candidate population remains 453/453 `IMPORT_ELIGIBLE=NO`. No question, answer, reviewer, source status, import flag, application code or Moodle data changed in this documentation-only commit. **PLATFORM NOT READY.**

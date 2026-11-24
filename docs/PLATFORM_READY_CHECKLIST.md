@@ -1,3 +1,52 @@
+## CURRENT AUDIT — 2026-11-24 09:34 Africa/Algiers
+
+> **Decision: PLATFORM NOT READY.** This audit is based on PR #3 head `43d4334b460f1e8f2149edd5484f97b8da7e594b` before this documentation-only publication. At that point the PR was OPEN / DRAFT / UNMERGED, 733 commits ahead / 0 behind `main`, with 249 changed files. Compare from prior described head `f9617a15` shows two commits and only two documentation files changed: `docs/DGR_TIER_A_RECONCILIATION_453.md` (+3/−0) and `docs/PLATFORM_READY_CHECKLIST.md` (+68/−0). No question, answer, FR status, EN review, reviewer record, import flag, application code, Moodle record or deployment changed.
+
+### Exact-head DGR workflows on 43d4334b
+
+All five workflows completed:
+- CSV structure PASS — [#45352779930](https://github.com/relaxsaadi/cbta/actions/runs/45352779930)
+- Controlled reviewer admission PASS — [#45352779853](https://github.com/relaxsaadi/cbta/actions/runs/45352779853)
+- Governance regression integrity PASS — [#45352779858](https://github.com/relaxsaadi/cbta/actions/runs/45352779858)
+- Direct Tier-A provenance FAIL — [#45352779861](https://github.com/relaxsaadi/cbta/actions/runs/45352779861)
+- Full DGR readiness FAIL — [#45352779844](https://github.com/relaxsaadi/cbta/actions/runs/45352779844)
+
+The full-readiness run's regulatory-governance-integrity job passes. Its direct item Tier-A and affirmative current-edition evidence steps fail; the artifact gate therefore fails. The Tier-A run still rejects sampled-only Tier-A promotion and missing affirmative current-edition per-item evidence. Evidence-artifact binding, explicit unresolved SOURCE GAP/CONFLICT import holds and stale V2 import-hold regressions pass. Structural/governance success is not regulatory approval.
+
+### All-function bank state carried forward; no item data changed
+
+The latest reconciled ledger remains 453 FR / 453 EN IDs and 287 function-specific official task-to-matrix rows with exact task-ID correspondence for all ten functions. Current FR status counts: 246 FROZEN, 147 DRAFT, 31 PARTIAL, 16 SOURCE GAP, 3 SOURCE CONFLICT, 8 STALE, 2 UNRESOLVED. Strict Tier-A validator: 247 affected items by function: 7.1=18, 7.2=29, 7.3=30, 7.4=25, 7.5=20, 7.6=31, 7.7=25, 7.8=27, 7.9=22, 7.10=20. Separate findings: 107 historical FROZEN provenance exceptions and 140 FR→EN status-mirror discrepancies. The V2 candidate CSV remains 453/453 `IMPORT_ELIGIBLE=NO`, with blockers populated. Controlled qualified-reviewer registry remains empty; zero established APPROVED questions.
+
+All ten functions retain their own official task set, source/competency matrix, Stage 2A blueprint and separate EN review package. The explicit historical 66th Edition course-baseline caveat occurs in blueprints 7.3–7.10; 7.1/7.2 do not carry that same explicit caveat. Every function still requires item-specific current 67th Edition 2026 Tier-A evidence. No Function 7.1 structure is copied to other functions. EN packages remain preparatory and require separate qualified reviewer + date.
+
+### New Claude Code PR #416 — public DGR metadata claims
+
+[PR #416](https://github.com/relaxsaadi/cbta/pull/416), branch `seo/onpage-fix-2026-11-24`, commit `4ddf5667b61e155e22ff3123ecfff6eca1df2772`, is a new Claude Sonnet 5-authored metadata-only change to three public pages. It shortens title/description strings, but retains “seul centre IATA CBTA Provider”, “conforme ANAC” and “reconnu par 300+ compagnies” assertions in public metadata/copy. Those claims remain under evidence review in [#401](https://github.com/relaxsaadi/cbta/pull/401) and [#414](https://github.com/relaxsaadi/cbta/pull/414). I posted a review comment on #416 ([comment #7126386008](https://github.com/relaxsaadi/cbta/pull/416#issuecomment-7126386008)) requesting neutral, evidence-bounded metadata and coordination with the existing claim-remediation drafts. #416 remains OPEN / DRAFT / UNMERGED.
+
+#416 has no GitHub Actions build/lint workflow result. Its green “Vercel Preview Comments” check is not a build pass; the Vercel Preview deployment is reported failed. The PR discussion records local build failures at eager Resend initialization without an email key and then Supabase initialization when a dummy email key is supplied. Existing draft [#22](https://github.com/relaxsaadi/cbta/pull/22) guards four Resend constructors but does not resolve the reported Supabase URL initialization failure. Do not add production secrets to Preview. The Vercel status on PR #3 head 43d4334b is also FAILURE for the separate `kost-funnel` project; its exact deployment root cause was not established in this audit. These Vercel checks are not E-EXAM runtime acceptance.
+
+### Stage 2B.1, security and owner blockers
+
+- PRs #394–#399: sequential candidate/manual-grading/data-integrity drafts; exact-head E-EXAM workflows previously passed, but they remain unmerged and not integrated into provider-signed staging.
+- PR #415: application + console CI passed on its recorded exact head; provider-signed staging, deployment and monitoring remain pending.
+- PR #298: static cron/CSRF regression passed after removing URL-token and browser-secret paths; still unmerged/undeployed. Main remains affected until owner-authorized merge and live security verification.
+- PR #401: public-claims build/guard passed on its recorded exact head. PR #414 overlaps 34/37 files and requires reconciliation before either is merged.
+- PR #341's public-artifact detector pass does not remove already published content/history/forks or close confidentiality issue #340.
+
+Repository visibility remains PUBLIC. Critical owner/release blockers remain [#340](https://github.com/relaxsaadi/cbta/issues/340) (exam answer-key confidentiality), [#118](https://github.com/relaxsaadi/cbta/issues/118) (branch protection), [#65](https://github.com/relaxsaadi/cbta/issues/65) (assessment scope integrity) and [#225](https://github.com/relaxsaadi/cbta/issues/225) (durable notification intent/recovery). No deployment environment values were read.
+
+### Branch / Claude monitoring
+
+The DGR branch search was exhausted (129 matches across two pages); no additional page remained. The `claude` branch-name search found only the historical `audit/dgr-claude-guidance-claims-gate-20261027`; the `seo` branch search found 13 matches and was exhausted. The new Claude-authored DGR-adjacent work is PR #416 above; no new Claude-authored regulatory-bank or E-EXAM code PR was identified.
+
+### Release gates
+
+Candidate workflow PARTIAL; roles/RBAC NOT ACCEPTED; audit trail PARTIAL; FR source verification INCOMPLETE; separate EN bilingual review PENDING; Moodle/console integration NOT ACCEPTED; security/confidentiality BLOCKED; integrated build/tests NOT ACCEPTED; deployment/runbook/monitoring NOT ACCEPTED; production backup/recovery NOT ACCEPTED; notification durability NOT ACCEPTED.
+
+**PLATFORM NOT READY.** No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed. If all critical technical gates later pass while regulatory human review remains, the maximum permitted label is **technically/pre-production ready — human review pending**.
+
+---
+
 ## CURRENT AUDIT — 2026-11-24 08:51 Africa/Algiers
 
 > **Decision: PLATFORM NOT READY.** This is a GitHub/documentation and CI audit, not a regulatory approval, production acceptance, merge or deployment. The live PR #3 baseline checked before these documentation-only corrections was `f9617a159cefb49180864dd6e3ac849caebc235f` (731 ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED). Commit `63eca0349cdff14e430fce5c6d59f2ef8e3f7d6e` adds the verified historical-`Next_Action` clarification to `docs/DGR_TIER_A_RECONCILIATION_453.md`; this checklist update is also documentation-only. No question, answer, FR source state, reviewer record, import flag, application code, Moodle data or deployment was changed.

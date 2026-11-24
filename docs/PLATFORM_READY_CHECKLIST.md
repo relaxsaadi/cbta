@@ -1,3 +1,16 @@
+## CORRECTION — exact-head DGR workflows on current PR #3 head — 2026-11-24 05:47 Africa/Algiers
+
+> This corrects the 05:20 statement that no DGR workflow run was reported for checklist-only updates. GitHub now exposes a completed exact-head five-workflow set for current PR #3 head `763d96b7ba261e9cbee3d049594985eeb63f56e7`. The comparison from `a8bf54ae9871d1767c2eca7cbe899b5998358a2e` to this head is five commits ahead / zero behind and changes only this checklist (+19 / −0); no DGR application, question, answer, evidence, reviewer, import or Moodle data changed.
+
+- **Exact-head workflow results on `763d96b7`:** import CSV structure PASS ([#45326309171](https://github.com/relaxsaadi/cbta/actions/runs/45326309171)); controlled reviewer admission PASS ([#45326309166](https://github.com/relaxsaadi/cbta/actions/runs/45326309166)); governance regression integrity PASS ([#45326309212](https://github.com/relaxsaadi/cbta/actions/runs/45326309212)); direct item Tier-A provenance FAIL ([#45326309240](https://github.com/relaxsaadi/cbta/actions/runs/45326309240)); full DGR readiness FAIL ([#45326309226](https://github.com/relaxsaadi/cbta/actions/runs/45326309226)). All five runs are completed; this is the current exact-head result, not merely the preceding code-identical `a8bf54ae` baseline.
+- **Failure detail:** the direct Tier-A job reports missing direct item-specific current-DGR evidence for terminal rows and representative/batch/cross-applied evidence; the full-readiness job repeats the function-specific frozen-evidence and FR↔EN status-mirror findings. It reports 453 FR IDs, 453 EN IDs, zero missing/extra EN IDs, 287 matrix task rows, zero missing/extra matrix links, 107 historical FROZEN provenance exceptions and 140 FR↔EN status drifts. Its artifact gate remains FAIL. The Tier-A regression fixtures, evidence-artifact binding checks, CSV structure checks and unresolved SOURCE GAP/CONFLICT import-hold checks pass; these passing guards do not cure the missing regulatory evidence.
+- **Decision unchanged:** all ten function packages remain non-approved and 453/453 import-ineligible; direct Tier-A evidence, FR/EN human review and named qualified reviewer + date remain required. Functions 7.8/7.9 retain the 66th Edition baseline limitation; Q-7.10-012 remains SOURCE CONFLICT and Q-7.10-038 remains DRAFT/Tier B only.
+- **Other current exact heads unchanged:** PR #298 remains OPEN/DRAFT/UNMERGED at `8ecdc5e1c997d3fe3e6b38d2a1a04b58bb9c910c`, with static security workflow #45325913152 SUCCESS; PR #415 remains OPEN/DRAFT/UNMERGED with application and console workflow #45169572631 SUCCESS, but provider-signed staging/deployment/monitoring remain pending. Repository visibility remains PUBLIC; #340, #118, #65 and #225 remain open owner/release blockers. No new Claude-attributed DGR commit/PR was found in this check.
+
+**Release remains PLATFORM NOT READY.** No PR merged, no deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+
+---
+
 ## CURRENT AUTHORITATIVE READINESS — 2026-11-24 05:20 Africa/Algiers
 
 > This addendum supersedes the 02:49/02:55 snapshots below. **Decision remains OPEN / DRAFT / UNMERGED / PLATFORM NOT READY.** It records a security correction on PR #298 only; no merge, deployment, question-bank approval/import or Moodle production-data change occurred.

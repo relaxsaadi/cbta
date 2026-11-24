@@ -4,7 +4,12 @@ import { getFormationBySlug } from "@/lib/formations";
 import { buildFormationMetadata, courseSchema } from "@/lib/page-meta";
 
 const formation = getFormationBySlug("dgr-7-1")!;
-export const metadata: Metadata = buildFormationMetadata(formation);
+export const metadata: Metadata = {
+  ...buildFormationMetadata(formation),
+  title: "Formation IATA DGR 7.1 Algérie — Préparation",
+  description:
+    "Formation IATA DGR 7.1 (préparation des expéditions) à Alger, 4 jours. Centre CBTA Provider ; fonction et prérequis à vérifier selon votre poste.",
+};
 
 export default function Page() {
   return (

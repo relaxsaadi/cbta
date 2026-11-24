@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CountryLandingPage from "@/components/CountryLandingPage";
 
 export const metadata: Metadata = {
-  title: "Formation IATA DGR Algérie — Certification en 3 Jours à Alger",
+  title: "Formation DGR IATA Algérie — Cat. 7.1 à 7.10",
   description:
-    "Obtenez votre certificat IATA DGR en 3 jours à Alger. 1er centre CBTA agréé d'Algérie. Conforme ANAC. Catégories 7.1 à 7.10. Sessions mensuelles.",
+    "Formation IATA DGR à Alger : catégories 7.1 à 7.10, centre CBTA Provider. Périmètre et exigences à vérifier selon votre fonction et votre État.",
   alternates: { canonical: "/formation-dgr-algerie" },
   keywords: [
     "formation IATA DGR Algérie",
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     "formation DGR ANAC Algérie",
   ],
   openGraph: {
-    title: "Formation IATA DGR Algérie — Certification en 3 Jours à Alger",
+    title: "Formation DGR IATA Algérie — Cat. 7.1 à 7.10",
     description:
-      "Certificat IATA DGR en 3 jours à Alger. 1er centre CBTA agréé d'Algérie. Conforme ANAC. Places limitées.",
+      "Formation IATA DGR à Alger : catégories 7.1 à 7.10, centre CBTA Provider. Périmètre à vérifier selon votre fonction.",
     url: "https://dgr.kostacademy.com/formation-dgr-algerie",
   },
 };

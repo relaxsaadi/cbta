@@ -1,3 +1,19 @@
+## CORRECTION — 66th Edition course-baseline caveat spans Functions 7.3–7.10 — 2026-11-24 07:06 Africa/Algiers
+
+> **This corrects the earlier checklist wording that limited the 66th Edition course-baseline limitation to Functions 7.8 and 7.9.** Direct line-level inspection of all ten current Stage 2A blueprints finds the explicit statement “Course baseline is the DGR 66th Edition, not the current 67th” in Functions **7.3 (line 121), 7.4 (174), 7.5 (128), 7.6 (130), 7.7 (161), 7.8 (160), 7.9 (186) and 7.10 (215)**. The same explicit course-baseline caveat was not found in the 7.1 or 7.2 blueprints; that does not exempt any 7.1/7.2 item from direct current 67th Edition 2026 Tier-A verification. The caveat is a course/source-provenance limitation, not proof that every individual question is substantively wrong; each regulatory claim and correct answer still requires direct item-specific current-edition evidence.
+>
+> **Independent structural recheck:** the 10 canonical official task sets and their 10 source/competency matrices match row-for-row at 7.1=44, 7.2=23, 7.3=33, 7.4=37, 7.5=25, 7.6=28, 7.7=27, 7.8=23, 7.9=24 and 7.10=23 (287 total). Function 7.1's 44-task structure is not imposed on other functions.
+>
+> **Current regulatory hold remains:** exact-head Tier-A workflow on PR #3 head `ffd4d9942fe86781bcf29212de65bae8d2c17485` identifies 247 unique affected questions (7.1:18, 7.2:29, 7.3:30, 7.4:25, 7.5:20, 7.6:31, 7.7:25, 7.8:27, 7.9:22, 7.10:20). The 453-row FR ledger remains 246 FROZEN, 147 DRAFT, 31 PARTIAL, 16 GAP, 3 CONFLICT, 8 STALE and 2 UNRESOLVED. The separate 453-row V2 import CSV remains 453/453 `IMPORT_ELIGIBLE=NO`; no qualified-reviewer registry entry or established APPROVED question exists. All ten EN packages explicitly require separate qualified bilingual review and a named reviewer/date; draft translation is not approval.
+>
+> **Public-claims release hold:** current `main` still contains unsubstantiated “first/only” IATA CBTA Provider, certificate-equivalence, universal ANAC/operator recognition and 90% pass-rate statements in public/AI-facing copy. PR #401 has a successful exact-head TypeScript/claim-guard/Next.js build workflow (#44987097818); PR #414 overlaps 34 of 37 files with #401, has three unique component files and no exact-head workflow result. Reconcile the drafts rather than merging overlapping changes independently. Audit comments were posted on PR #3 and PR #414.
+>
+> **Other technical state:** PR #298's static cron/CSRF regression workflow passed after removal of the legacy LinkedIn URL-token GET handler, but #298 remains unmerged/undeployed and main still has the old middleware/browser-secret code. PR #415's app/console CI passed, but provider-signed staging, deployment and monitoring remain pending. Repository visibility remains PUBLIC; #340, #118, #65 and #225 remain open blockers.
+>
+> **Release remains PLATFORM NOT READY.** No PR merged, no deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+
+---
+
 ## CORRECTION — exact-head DGR workflows on current PR #3 head — 2026-11-24 05:47 Africa/Algiers
 
 > This corrects the 05:20 statement that no DGR workflow run was reported for checklist-only updates. GitHub now exposes a completed exact-head five-workflow set for current PR #3 head `763d96b7ba261e9cbee3d049594985eeb63f56e7`. The comparison from `a8bf54ae9871d1767c2eca7cbe899b5998358a2e` to this head is five commits ahead / zero behind and changes only this checklist (+19 / −0); no DGR application, question, answer, evidence, reviewer, import or Moodle data changed.

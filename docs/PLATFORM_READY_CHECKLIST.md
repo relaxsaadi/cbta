@@ -1,3 +1,49 @@
+## CURRENT RUN — 2026-11-24 18:36 Africa/Algiers
+
+> **Audited code-bearing baseline:** PR [#3](https://github.com/relaxsaadi/cbta/pull/3), branch `ai/dgr-stage2b-handoff`, head `5c36a9cc18ef86659b9d9d17fe100bfc6d598529` (750 ahead / 0 behind `main`; 249 changed files; OPEN / DRAFT / UNMERGED). This run's documentation update changes only this checklist; it does not change application code, question/answer content, source evidence, reviewer records, import flags, Moodle data or deployment.
+
+### Exact-head DGR validation on the audited baseline
+
+- CSV import structure: **PASS** — [run #45440021240](https://github.com/relaxsaadi/cbta/actions/runs/45440021240)
+- Controlled reviewer admission: **PASS** — [run #45440021410](https://github.com/relaxsaadi/cbta/actions/runs/45440021410)
+- Governance regression integrity: **PASS** — [run #45440021524](https://github.com/relaxsaadi/cbta/actions/runs/45440021524)
+- Direct item Tier-A provenance: **FAIL** — [run #45440021113](https://github.com/relaxsaadi/cbta/actions/runs/45440021113)
+- Full DGR regulatory readiness: **FAIL** — [run #45440021704](https://github.com/relaxsaadi/cbta/actions/runs/45440021704)
+
+The separate regulatory-governance-integrity sub-job passes. Direct Tier-A still affects 247 items. The full artifact gate reports 107 historical FROZEN provenance exceptions and 140 FR↔EN status-mirror discrepancies. Preserve all fail-closed gates.
+
+### Ten-function source/question-bank control
+
+- Function-specific task counts 7.1–7.10: **44 / 23 / 33 / 37 / 25 / 28 / 27 / 23 / 24 / 23** (287 task-to-matrix rows).
+- FR/EN question counts: **19 / 49 / 45 / 53 / 44 / 56 / 53 / 51 / 39 / 44** (453 FR and 453 EN IDs).
+- Each function has its own task set, source/competency matrix, Stage 2A blueprint, FR bank and separate EN review package. No Function 7.1 structure is copied to another function.
+- FR ledger: 246 FROZEN, 147 DRAFT, 31 PARTIAL, 16 SOURCE GAP, 3 SOURCE CONFLICT, 8 STALE, 2 UNRESOLVED.
+- 247 items still fail the strict direct current-edition Tier-A evidence gate; 107 historical FROZEN provenance exceptions and 140 FR↔EN status-mirror discrepancies remain.
+- The controlled reviewer registry is empty. No question is established APPROVED.
+
+### Import CSV readback
+
+Both the per-item reconciliation CSV and V2 candidate CSV contain 453 rows with identical question-ID populations. All **453/453** V2 candidates are `IMPORT_ELIGIBLE=NO`; there are **zero blank BLOCKER fields**. The 236 legacy `Next_Action = Import-eligible for V2` strings are historical hints only; exact ID join confirms all 236 map to current `NO` rows (per function 7.1–7.10: 13 / 23 / 30 / 25 / 20 / 31 / 25 / 27 / 22 / 20). These strings are not permission, source verification, human review or approval.
+
+### Related DGR PRs
+
+- #411's historical-Next_Action clarification, #412's Function 7.10 power-bank source-scope caveat, and #407's cautious public-claims wording are already present in the current handoff branch.
+- #413 is stale/diverged and has no Actions run. The current handoff already contains the same blocker-validator blob, 453 NO rows and zero blank blockers. Its only remaining semantic CSV difference is Q-7.3-029; the draft changes the current handoff's item-specific locator/hold to generic unresolved wording. Do not merge #413 as-is.
+- #408–#410 remain draft EN reviewer-guidance corrections; they do not constitute qualified human review or resolve exact-head status-mirror findings.
+
+### Confidentiality, public claims and Stage 2B.1
+
+- Repository visibility remains PUBLIC. The public PR #3 branch contains answer-bearing FR banks and EN reviewer packages. Issue [#340](https://github.com/relaxsaadi/cbta/issues/340) remains a critical confidentiality blocker.
+- PR #341's public-artifact tripwire passed only on its own candidate tree; it is not a scan or containment of PR #3, history, forks, artifacts or runtime pools. The current-handoff scan previously recorded 42 quoted DGR reference fields, 35 exact matches in production-bank Markdown and one additional 278-character field requiring licensing review. No licensed excerpt is reproduced here.
+- Current `main` middleware still accepts `?secret=CRON_SECRET` (blob `839ac0b0`). PR #298's static security workflow passes [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152); its branch uses an exact seven-route GET allowlist with server-side Bearer auth and same-origin mutation checks, but remains OPEN / DRAFT / UNMERGED / UNDEPLOYED.
+- GitHub branch metadata reports `main.protected=false`; repository rulesets collection is empty. The branch-protection detail endpoint returns 403 to this integration; no administrative write was attempted.
+- Unsupported recognition/ANAC claims remain on `main` in visible homepage FAQ and FAQPage content. #401 has a successful compile gate [#44987097818](https://github.com/relaxsaadi/cbta/actions/runs/44987097818); #414 has no Actions run. They overlap in 34 files and require consolidation before merge.
+- #399 and #415 E-EXAM validation passed on their own heads, but both remain draft/unmerged and do not establish integrated provider-signed staging. Issues #65 (assessment-scope integrity) and #225 (durable notification intent) remain open.
+
+**Decision: PLATFORM NOT READY.** Candidate workflow/RBAC/audit, separate qualified FR and EN review, Moodle/console integration, security/confidentiality, integrated build, deployment/runbook and backup/recovery remain unaccepted. No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+
+---
+
 ## AUDIT SNAPSHOT — 2026-11-24 15:41 Africa/Algiers (exact-head baseline 598705f)
 
 > **Timestamped exact-head snapshot, not a live-head assertion:** PR [#3](https://github.com/relaxsaadi/cbta/pull/3), branch `ai/dgr-stage2b-handoff`, was at `598705fef7dec2b7a6758b1bc289284777cd69a3` (747 commits ahead / 0 behind `main`; 249 changed files; OPEN / DRAFT / UNMERGED) when the five workflows below completed. Compared with code-bearing baseline `21eddbc096c8c01864c608654bd14ead3913188c`, this snapshot represents 9 commits and one changed file only (`docs/PLATFORM_READY_CHECKLIST.md`, +18 / -16). The subsequent documentation-only commit `c73b7f38f9b7ce313568c9dcecf265019acc47f6` changed only this checklist to correct its head/run references; it brought the branch to 748 commits ahead / 0 behind `main`, still 249 changed files. No application code, question/answer data, regulatory evidence, FR/EN status, reviewer record, import flag, Moodle data or deployment changed. Exact-head checks on `c73b7f38` were in progress when this snapshot note was prepared; the completed results immediately below are specifically for `598705f`. See the PR description and Actions page for the newest head.

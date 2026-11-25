@@ -626,3 +626,66 @@ This supplements the earlier exact-head readiness snapshot. It records a useful 
 [Issue #340](https://github.com/relaxsaadi/cbta/issues/340) remains **CRITICAL OPEN**. Keep secure summative/certification use blocked for exposed items until the owner-authorized containment, exposure inventory, retirement/replacement decision, restricted-storage boundary, and server-side eligibility checks are independently accepted. Do not rely on repository visibility changes or `.gitignore` alone to retract copies already fetched.
 
 No question, answer, source status, reviewer decision, import flag, Moodle record, or production deployment was changed by this audit. No licensed text or answer content is reproduced here. The confidentiality gate remains **NOT ACCEPTED**.
+
+
+## Exact-ledger and Stage 2B.1 base reconciliation — 2026-11-25 01:41 Africa/Algiers
+
+This is a read-only evidence reconciliation recorded as documentation. It changes no question, answer, source conclusion, reviewer decision, import flag, E-EXAM runtime data, Moodle record or deployment.
+
+### 453-row ledger: distinguish the two status columns
+
+Both controlled CSVs were parsed with quoted/multiline CSV handling on the exact PR #3 head `c84d175751cd5c269951a6b2f1832467a960dce2`:
+
+- `DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`: 453 logical question rows.
+- `DGR_V2_IMPORT_CANDIDATES_AFTER_RECONCILIATION.csv`: 453 logical candidate rows; `IMPORT_ELIGIBLE=NO` on all 453; zero blank `BLOCKER` cells.
+- The canonical reviewer registry table remains empty. No row has a final reconciled status beginning `APPROVED`; appearances of the word APPROVED inside explanatory text are not status values.
+
+The following are **different fields**, not contradictory totals:
+
+| Status field | FROZEN | DRAFT | PARTIAL | GAP | CONFLICT | STALE | UNRESOLVED |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `Current_Individual_FR_Status_Bucket` | 246 | 147 | 31 | 16 | 3 | 8 | 2 |
+| `Final_Reconciled_Status` (normalized by explicit leading state) | 242 | 151 | 31 | 18 | 11 | 0 | 0 |
+
+The stricter final reconciliation therefore:
+- downgrades four historical Function 7.2 FROZEN labels to DRAFT: `Q-7.2-035`, `Q-7.2-039`, `Q-7.2-044`, `Q-7.2-049`; each requires its own directly bound 67th Edition 2026 evidence and qualified dated FR plus independent EN review;
+- treats the eight current STALE citation records as final SOURCE CONFLICT holds: `Q-7.2-042`, `Q-7.3-025`, `Q-7.4-008`, `Q-7.4-028`, `Q-7.5-026`, `Q-7.6-001`, `Q-7.9-008`, `Q-7.10-032`;
+- carries the three explicit power-bank/source conflicts `Q-7.5-011`, `Q-7.9-032`, `Q-7.10-012` as final SOURCE CONFLICT; and
+- carries the two unresolved current-bucket rows `Q-7.2-022` and `Q-7.3-039` as final SOURCE GAP pending direct classification.
+
+Per-function **Final_Reconciled_Status** counts (not approvals):
+
+| Function | FROZEN | DRAFT | PARTIAL | SOURCE GAP | SOURCE CONFLICT |
+|---|---:|---:|---:|---:|---:|
+| 7.1 | 18 | 0 | 0 | 1 | 0 |
+| 7.2 | 23 | 14 | 5 | 6 | 1 |
+| 7.3 | 31 | 9 | 2 | 2 | 1 |
+| 7.4 | 25 | 22 | 3 | 1 | 2 |
+| 7.5 | 20 | 17 | 4 | 1 | 2 |
+| 7.6 | 31 | 18 | 5 | 1 | 1 |
+| 7.7 | 25 | 22 | 5 | 1 | 0 |
+| 7.8 | 27 | 19 | 3 | 2 | 0 |
+| 7.9 | 22 | 11 | 2 | 2 | 2 |
+| 7.10 | 20 | 19 | 2 | 1 | 2 |
+| **Total** | **242** | **151** | **31** | **18** | **11** |
+
+These are reconciliation states only. FROZEN is not APPROVED. All 453 candidates remain blocked.
+
+### Stage 2B.1 — revalidate against the current PR #18 base, not only the historical audit SHA
+
+Current GitHub PR metadata:
+- PR #18 base branch `feature/kost-eexam-v2-native`, base SHA `c4f4dae3a1d68a97bd7edc118cfa4d7bcddb2909`; PR head `def9dc931a2fb796f910b664af3138c18c50bb03`.
+- The prior Stage 2B.1 note names audit SHA `04334362f2ef028ded1ab5fd2dcc9c3b813dbd6b`. GitHub compare reports that the current PR #18 base is 337 commits behind that audit SHA. Treat the 043… note as a historical audit point, not as the current PR #18 base.
+- Direct file revalidation on both refs: `lib/questions.ts` is the same blob `92edf60e` and still contains the permissive helper predicate `reviewer_status != 'REJECTED'`; `CreateAssessmentForm.tsx` is the same blob `1c48b3b2`.
+- On the current c4f… base, the individual report route is blob `03bd5747` (different from the prior audit's `f32f002b`). Its candidate release check still tests ownership, `show_result`, and deferred release; it does not test terminal attempt state or completed grading, and does not itself require `show_correct_answers=1` for a detailed PDF.
+- PR #18 adds a production-specific assessment query requiring active + frozen source + `reviewer_status='APPROVED'` + non-null `review_date`, and revalidates before publication. This is a useful interim guard, but the schema/workflow still lacks admitted named reviewer identity, qualification evidence/reference, and a separate EN bilingual review record. Its client-selected scope is enum-validated but is not compared server-side with the selected group's persisted scope; production/demo/test scope binding remains open.
+- PR #25 (head `f77ca5c73423ff3ddcc4d3a5f61dfb15849accf8`, base `8585d226c514b74564b9e86fed15c159385e741c`) adds the `show_correct_answers` gate for detailed PDFs and `Cache-Control: private, no-store`, but still has no attempt-terminal/grading-complete input. Its base differs from PR #18's current base, so the two drafts must be reconciled on one candidate SHA before acceptance.
+- No PR-triggered workflow runs are recorded for the current PR #18 or PR #25 heads. Do not infer a green E-EXAM build/test from their patches.
+
+### Exact-head and release disposition
+
+PR #3 remains OPEN / DRAFT / UNMERGED at `c84d175751cd5c269951a6b2f1832467a960dce2`. Its five exact-head workflows remain 3 PASS (CSV structure, controlled reviewer admission, governance integrity) and 2 FAIL (direct Tier-A provenance, full DGR readiness). PR #298 remains draft/unmerged/undeployed with only its static security workflow passing. The repository remains public; the branch-protection endpoint returned HTTP 403 to this integration and the readable rulesets collection is empty.
+
+No new Claude-authored DGR question-bank or E-EXAM implementation PR was found. The latest main commit `e1151964` is prospect-contact matching, not exam-platform work; PR #416's Claude-authored metadata correction is SEO-only.
+
+**Decision remains NOT READY.** No question approved or imported; no PR merged; no production deployment; no DRM bypass; no ANAC/IATA approval claimed.

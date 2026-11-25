@@ -127,3 +127,20 @@ Critical technical gates remain open: strict production reviewer admission, serv
 Owner actions: protect release branches and require the merge-safe governance-integrity check; contain/retire exposed answer-bearing items and assess historical/licensed-source copies; complete credential/session/Moodle-log review; authorize item-specific IATA 67th Edition verification; appoint qualified FR and independent EN reviewers; reconcile the E-EXAM stack into one release candidate; complete live Moodle staging, deployment and off-site restore acceptance.
 
 No question was approved or imported by this audit; the current candidate CSV remains 453/453 NO, and historical staging/import traces require a separate live-data inventory. No PR was merged. No production deployment or live Moodle acceptance was performed or validated by this audit. No DRM bypass. No ANAC/IATA approval claimed.
+
+
+## Documentation-only follow-up — 2026-11-25 19:06 Africa/Algiers
+
+The audit's code-bearing baseline remains `7378a23abde4f7d1e827e7c4193e49e3e841d5cb`. Two documentation-only commits followed it: `0ca44a87142acc31a075d7fd9bf63cdcff7470d1` (new audit file) and `f29dd6522b2dc3b144c98ccd99670768f6e9b4b2` (clarified historical-import/deployment wording). No application code, bank content, answer keys, reviewer records, import flags or Moodle data changed.
+
+Current PR #3 head is `f29dd6522b2dc3b144c98ccd99670768f6e9b4b2`, 780 commits ahead / 0 behind `main`, 251 changed files, OPEN / DRAFT / UNMERGED. All five DGR workflows were rerun against that exact current head:
+
+| Workflow | Run | Result |
+|---|---:|---|
+| DGR import CSV structure | [45672421482](https://github.com/relaxsaadi/cbta/actions/runs/45672421482) | PASS |
+| DGR controlled reviewer admission | [45672421128](https://github.com/relaxsaadi/cbta/actions/runs/45672421128) | PASS |
+| DGR governance regression integrity | [45672421125](https://github.com/relaxsaadi/cbta/actions/runs/45672421125) | PASS |
+| DGR direct Tier-A provenance | [45672421029](https://github.com/relaxsaadi/cbta/actions/runs/45672421029) | FAIL |
+| DGR regulatory readiness | [45672421063](https://github.com/relaxsaadi/cbta/actions/runs/45672421063) | FAIL |
+
+The exact-current-head logs again report 247 distinct Tier-A-affected question IDs, 107 FROZEN provenance exceptions, 140 FR/EN status-mirror discrepancies, 287/287 matrix task rows, 453/453 FR and EN IDs, an empty qualified-reviewer registry, zero established APPROVED questions and 453/453 import candidates held NO with explicit blockers. The failure is substantive evidence/readiness, not CI infrastructure.

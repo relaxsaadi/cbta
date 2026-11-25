@@ -871,3 +871,59 @@ The import-candidate CSV has 453 unique IDs, all `IMPORT_ELIGIBLE=NO`, with zero
 ### Disposition
 
 All 453 import candidates remain blocked. No question status is promoted. No named qualified FR/EN review or final approval is recorded. No PR is merged, no production deployment is accepted, and no ANAC/IATA approval is claimed. Release remains **PLATFORM NOT READY**.
+
+
+## Exact-head CI and Stage 2B.1 stacked-candidate re-audit — 2026-11-25 08:48 Africa/Algiers
+
+This addendum records a fresh read-only audit. It does not alter question content, source evidence, reviewer decisions, import flags, E-EXAM runtime data or Moodle data.
+
+### PR #3 exact current head
+
+- Live PR #3 remains OPEN / DRAFT / UNMERGED. Branch: `ai/dgr-stage2b-handoff`; exact head: `d9412881a2e4b57e6ec7b3d5f0f9f25061fb072d`; 764 commits ahead / 0 behind `main`; 249 changed files. Repository visibility remains PUBLIC.
+- All five PR-triggered DGR workflows are associated with this exact SHA. Both failing job logs explicitly fetch and check out `d9412881a2e4b57e6ec7b3d5f0f9f25061fb072d`.
+  - DGR controlled reviewer admission: PASS — https://github.com/relaxsaadi/cbta/actions/runs/45561815427
+  - DGR governance regression integrity: PASS — https://github.com/relaxsaadi/cbta/actions/runs/45561815456
+  - DGR import CSV row structure: PASS — https://github.com/relaxsaadi/cbta/actions/runs/45561815453
+  - DGR direct item Tier-A provenance: FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45561815495
+  - DGR full regulatory readiness: FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45561815433
+- The direct Tier-A regression fixtures, evidence-artifact binding, CSV structure, unresolved SOURCE GAP/CONFLICT import holds and import-candidate provenance checks pass. The actual gate still fails because 247 distinct questions contain representative, batch, cross-applied or otherwise non-direct evidence wording and lack affirmative direct current-edition per-item evidence.
+- The full-readiness job's governance-integrity sub-job passes. Its final artifact gate fails on 107 historical FROZEN provenance exceptions and 140 FR↔EN status-mirror discrepancies. The log confirms 287/287 task-to-matrix rows, 453 FR / 453 EN IDs, zero missing/extra IDs, and 453/453 import candidates blocked as `IMPORT_ELIGIBLE=NO` with zero blank blockers. The controlled qualified-reviewer registry remains empty; zero APPROVED questions are established.
+- The ten-function matrix, blueprint, FR-bank and separate EN-package inventory recorded above remains the current structural baseline. No task structure is copied from Function 7.1 to the other functions. Structural presence is not direct regulatory evidence or human approval.
+
+### Stage 2B.1 — later E-EXAM stacked candidate found and tested
+
+The earlier audit of `feature/kost-eexam-v2-native` at `04334362` is not the only relevant code line. A later, substantially larger stacked audit branch exists:
+
+- PR [#399](https://github.com/relaxsaadi/cbta/pull/399), head branch `audit/eexam-submit-transition-reconcile-20261107`, head `3ea3745c5406da51dadd01719dddd6c204f1d0a5`, base branch `audit/eexam-answer-qtype-server-boundary`, 8 commits / 5 changed files, OPEN / DRAFT / UNMERGED.
+- GitHub compare reports this branch 619 commits ahead / 0 behind `main`; compared with `feature/kost-eexam-v2-native` at `04334362`, it is 190 commits ahead / 2 behind. It is a large stacked proposal, not a merged or deployed release candidate.
+- PRs [#362](https://github.com/relaxsaadi/cbta/pull/362), [#363](https://github.com/relaxsaadi/cbta/pull/363), [#364](https://github.com/relaxsaadi/cbta/pull/364), [#365](https://github.com/relaxsaadi/cbta/pull/365), [#381](https://github.com/relaxsaadi/cbta/pull/381) and [#399](https://github.com/relaxsaadi/cbta/pull/399) each have a completed successful E-EXAM V2 validation workflow. The inspected jobs pass lint, typecheck, unit tests, Playwright E2E, a LOCAL backup/restore drill, production build, Moodle token-transport regression, focused lint/typecheck and console production build. These are separate branch validations; they do not prove one integrated, merged, deployed candidate. Local backup/restore is not off-site durability or disaster-recovery acceptance.
+- PRs #362–#365, #381 and #399 remain OPEN / DRAFT / UNMERGED. PRs [#18](https://github.com/relaxsaadi/cbta/pull/18) and [#25](https://github.com/relaxsaadi/cbta/pull/25) remain older draft proposals with no PR-triggered Actions runs on their exact heads.
+
+### Controls present in the #399 stack — progress, not release acceptance
+
+Read-only source inspection of `audit/eexam-submit-transition-reconcile-20261107` confirms:
+
+- Assessment creation/publication and new candidate starts compare persisted company, group and assessment scopes. New starts recheck current group membership and role-aware candidate membership.
+- Production publication adds an APPROVED + nonblank review-date minimum. New production starts revalidate every frozen snapshot against function, active/source state, reviewer flag/date, current question version, declared count, distinct question IDs and contiguous positions.
+- Candidate answer writes are serialized with submission. The submit transition uses the server clock/serialized transaction, and submission, grading, result and audit work have atomicity regression coverage.
+- The generic question admissibility helper still uses a non-REJECTED reviewer predicate for general pool construction; the stricter production publication and new-start gates are separate. Do not describe the generic helper alone as production approval.
+- The production reviewer flag/date is explicitly only a technical minimum. The E-EXAM schema still does not establish the named qualified reviewer, qualification evidence/reference and independent EN review required by the DGR governance program. A status flag and date cannot substitute for that chain.
+- Existing in-progress attempts intentionally retain resume continuity before new-start scope/reviewer gates. Preserve that behavior only with explicit policy and regression coverage; do not silently conflate it with admission of a new attempt.
+
+### Remaining critical report-disclosure defect
+
+The individual candidate PDF route on the #399 stack still checks candidate ownership, `show_result` and deferred-feedback timing, but does not enforce `show_correct_answers`, terminal attempt status or completed grading before rendering the detailed question-by-question report.
+
+PR #25's separate branch adds a server-side `show_correct_answers` gate, but its policy helper still has no attempt-status or grading-state input; it also remains draft and is not integrated into the #399 stack. Reconcile both changes on one current candidate and add tests proving that an in-progress or awaiting-manual-grading attempt cannot expose detailed corrections, even with immediate feedback or a crafted `level=detailed` URL. Do not merge the stale PR #25 stack as-is.
+
+### Claude Code / current open work
+
+- The latest inspected Claude-authored commit remains `ba8e5f3a453867b2abb211435e303e065f2dc02d` on PR #416, authored and committed by GitHub user `claude`. It changes public-page SEO metadata/Function 7.1 task wording only; it is not exam-bank or E-EXAM implementation.
+- PR #417 is a dashboard/Preview change, not E-EXAM/Moodle acceptance. No new Claude-authored DGR question-bank or E-EXAM implementation PR was identified in the current open-PR/branch search.
+- Issues #340 (public answer-key exposure), #418 (test-harness documentation exposure), #118 (repository governance) and #400 (2027 edition rollover) remain OPEN. The repository remains public. Sanitizing current files does not erase public Git history or downloaded copies.
+
+### Disposition
+
+The later E-EXAM stack demonstrates meaningful technical progress and successful isolated validation, but remains unmerged and incomplete. Detailed answer-key report protection, named qualified reviewer/EN evidence, confidentiality containment, one reconciled release candidate, live staging, deployment and off-site recovery acceptance remain open. All 453 DGR import candidates remain blocked. No question is approved or imported. No PR is merged or deployed. No DRM is bypassed and no ANAC/IATA approval is claimed.
+
+**Release decision: PLATFORM NOT READY.**

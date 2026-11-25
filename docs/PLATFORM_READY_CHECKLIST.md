@@ -1250,3 +1250,37 @@ No application-code fix from PR #419 is integrated. Exact current source paths a
 No new PR was returned by the repository-scoped `author:claude` PR search. Existing #416/#417 are not DGR question-bank or E-EXAM release acceptance. No new Claude-authored implementation PR was identified in this run. The repository still has numerous unprotected AI/audit branches; do not infer that a branch is merged or production-ready from its name.
 
 **Disposition: PLATFORM NOT READY.** No PR merged, no question approved/imported, no production deployment, no DRM bypass and no ANAC/IATA approval claimed. Owner actions remain: confidential bank containment and exposure review; credential/session review; branch protection/rulesets; authorized item-specific IATA 67th Edition evidence; qualified named FR and independent EN reviewers; one reconciled E-EXAM candidate with integrated Moodle/staging, deployment and off-site restore acceptance.
+
+
+## Follow-up audit — 2026-11-25 17:42 Africa/Algiers
+
+### Exact DGR handoff head
+
+The live PR #3 branch is `ai/dgr-stage2b-handoff` at `c0b10a136738bab0f53235c872ebb59afe76f311`, OPEN / DRAFT / UNMERGED, 777 commits ahead / 0 behind `main`, 250 changed files. The repository remains PUBLIC. Both `main` and the DGR handoff branch report `protected=false`; the repository rulesets collection is empty.
+
+All five PR-triggered DGR workflows completed against exact checkout `c0b10a13`:
+- CSV import structure: PASS — [45649190712](https://github.com/relaxsaadi/cbta/actions/runs/45649190712)
+- Controlled reviewer admission: PASS — [45649191253](https://github.com/relaxsaadi/cbta/actions/runs/45649191253)
+- Governance regression integrity: PASS — [45649190824](https://github.com/relaxsaadi/cbta/actions/runs/45649190824)
+- Direct item Tier-A provenance: FAIL — [45649190807](https://github.com/relaxsaadi/cbta/actions/runs/45649190807)
+- Full DGR regulatory readiness: FAIL — [45649190828](https://github.com/relaxsaadi/cbta/actions/runs/45649190828)
+
+The direct-evidence regression fixtures pass; the live-data gate fails on missing explicit item-specific 67th Edition 2026 bindings and representative/batch/cross-applied evidence wording. The full-readiness log also confirms 287/287 matrix rows, 453 FR and 453 EN IDs, 107 FROZEN provenance exceptions, 140 FR/EN status mismatches, an empty qualified-reviewer registry, and zero APPROVED questions. All 453 import candidates remain `IMPORT_ELIGIBLE=NO`. Do not weaken these gates.
+
+### Stage 2B.1 stack ancestry — comparison-based correction
+
+The native E-EXAM branch remains `feature/kost-eexam-v2-native` at `e8489ee040ef7da23fcaa916c0d3ff47dfd16973`. The current passing candidate work is one stacked, unmerged line, not two independent patches:
+
+- PR #381 head `a32846a2f1488b8d26e99f06f0cec39eec7ee9b9` is 136 commits ahead / 2 behind the native branch (46 changed files in the comparison). It introduces atomic submission, grading, result and audit persistence.
+- PR #399 head `3ea3745c5406da51dadd01719dddd6c204f1d0a5` is 54 commits ahead of PR #381's head with no commits behind. It adds server-authoritative expiry/transition-winner handling. Its exact-head validation [42539993728](https://github.com/relaxsaadi/cbta/actions/runs/42539993728) passes both main and console jobs.
+- PR #419 head `5c4fd23d2b659adb34f252679ca87ff3b3c427c2` is 6 commits ahead of PR #399's head with no commits behind. It adds terminal-attempt, completed-grading and answer-key checks for detailed candidate PDFs. Its exact-head validation [45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513) passes both main and console jobs.
+
+Thus PR #419's head is 196 commits ahead / 2 behind the native branch (60 changed files in the comparison). The two native-only commits are not silently discarded. The 196-commit stack is still DRAFT / UNMERGED / UNDEPLOYED; successful isolated CI does not prove integration, live Moodle acceptance, RBAC, cross-tenant privacy, outbox durability, deployment or disaster recovery. Reconcile the two native-only commits and review the full stack before selecting one release candidate; do not merge or rebase blindly.
+
+### Claude Code activity
+
+The inspected Claude-authored commits on PR #416 are dated 2026-11-24 and concern public SEO metadata wording only. No new Claude-authored DGR question-bank or E-EXAM implementation commit/PR was identified in this audit. PR #416 remains draft and is not platform acceptance.
+
+### Release disposition
+
+The ten function-specific task sets, matrices, Stage 2A blueprints, FR banks and separate EN review packages remain present. Structural presence is not source correctness or human approval. Current direct Tier-A, FR qualified review, independent EN review, confidentiality, security, candidate-integrity, integrated deployment and recovery gates remain open. No question is approved or importable; no ANAC/IATA approval is claimed.

@@ -1166,3 +1166,20 @@ PR #298 remains OPEN / DRAFT / UNMERGED / UNDEPLOYED at `8ecdc5e1`; its static c
 No new Claude-authored DGR question-bank or E-EXAM implementation PR was identified. The latest open PR search still tops out at #419; the existing Claude-related DGR branch is documentation/guidance work, not question-bank or E-EXAM implementation.
 
 **Disposition: PLATFORM NOT READY.** This audit is a documentation-only reconciliation. It does not approve questions, change import eligibility, alter regulatory evidence, change Moodle data, merge PRs or deploy production. No ANAC/IATA approval is claimed.
+
+
+## Exact-head CI completion correction — 2026-11-25 12:44 Africa/Algiers
+
+The five PR-triggered DGR workflows have now completed on the documentation-only head `5f724c7248075229e35cfac10551d58c7fee2746`. This supersedes the 12:24 note that no run was yet attached to that head; at that earlier observation time, the jobs had not completed.
+
+- CSV import structure: PASS — [run #45605053024](https://github.com/relaxsaadi/cbta/actions/runs/45605053024)
+- Controlled reviewer admission: PASS — [run #45605052982](https://github.com/relaxsaadi/cbta/actions/runs/45605052982)
+- Governance regression integrity: PASS — [run #45605053371](https://github.com/relaxsaadi/cbta/actions/runs/45605053371)
+- Direct item Tier-A provenance: FAIL — [run #45605053257](https://github.com/relaxsaadi/cbta/actions/runs/45605053257)
+- Full DGR regulatory readiness: FAIL — [run #45605053072](https://github.com/relaxsaadi/cbta/actions/runs/45605053072)
+
+Both failing job logs explicitly check out the exact SHA above. The Tier-A regression fixtures pass; the live-data gates fail on existing per-item evidence defects, not runner or workflow infrastructure. Examples include Q-7.2-035 lacking recorded direct Bookshelf evidence and a concrete DGR reference, Q-7.6-027 lacking an explicit item-specific 67th Edition 2026 binding, and representative/batch/cross-applied evidence wording on terminal regulatory rows across functions. Do not replace these failures with sampled evidence or weaken the validator.
+
+The full-readiness artifact gate still reports 287/287 official task-to-matrix rows and 453/453 FR/EN question IDs, while retaining 107 FROZEN provenance exceptions and 140 FR/EN status-mirror discrepancies. All 453 V2 import candidates remain IMPORT_ELIGIBLE=NO; the qualified reviewer registry remains empty; zero questions are established APPROVED. The 10 function-specific task sets, matrices, blueprints and separate EN packages remain structurally present; structural coverage is not regulatory or human approval.
+
+This is a workflow-result correction only. No question, source record, reviewer decision, import flag, Moodle data, application code or deployment was changed.

@@ -783,3 +783,91 @@ A read-only review of the public `feature/kost-eexam-v2-native` branch found tha
 ### Owner-side actions still required
 
 Rotate/reset affected test credentials if any disclosed or example value was ever used; invalidate related sessions/tokens as appropriate; review Moodle role assignments, external-service allowlist membership and authentication logs; confirm no real candidate/staff credentials were reused; and assess public Git history, forks, mirrors, caches and downloaded copies. Sanitizing the current tree does not erase historical Git objects. No live Moodle account, record, token or production state was changed by this documentation work.
+
+
+## Function-level reconciliation — 2026-11-25 07:29 Africa/Algiers
+
+This addendum is a read-only reconciliation of the current PR #3 artifacts and exact-head CI. It records counts and states only; it does not reproduce licensed IATA source text, promote any question, or change examination content.
+
+### Exact PR #3 head and workflows
+
+- Live PR #3: `ai/dgr-stage2b-handoff`, head `86e8faff2d1b7481b0a43b8de3016e69ae3cf186`, 763 commits ahead / 0 behind `main`, 249 changed files; OPEN / DRAFT / UNMERGED.
+- Repository visibility remains PUBLIC.
+- Exact-head pull-request workflows on `86e8faff`:
+  - CSV import structure: PASS — https://github.com/relaxsaadi/cbta/actions/runs/45546021865
+  - Controlled reviewer admission: PASS — https://github.com/relaxsaadi/cbta/actions/runs/45546021818
+  - Governance regression integrity: PASS — https://github.com/relaxsaadi/cbta/actions/runs/45546021835
+  - Direct item Tier-A provenance: FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45546021887
+  - Full DGR regulatory readiness: FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45546021817
+- Both failing jobs were inspected. The direct Tier-A job has 247 distinct affected question IDs; the full-readiness job's governance-integrity sub-job passes, while its direct-evidence and final-artifact gates fail.
+
+### Per-function reconciliation
+
+The matrix files were fetched independently from the current handoff branch. Every function has its own source/competency matrix, its own official task count, its own Stage 2A blueprint, its own production-bank population and a separate EN review package. No function inherits Function 7.1's 44-task structure.
+
+| Function | Official tasks | Questions FR/EN | Tier-A-affected question IDs | Question SOURCE GAP | Question SOURCE CONFLICT |
+|---|---:|---:|---:|---:|---:|
+| 7.1 | 44 | 19 / 19 | 18 | 1 | 0 |
+| 7.2 | 23 | 49 / 49 | 29 | 6 | 1 |
+| 7.3 | 33 | 45 / 45 | 30 | 2 | 1 |
+| 7.4 | 37 | 53 / 53 | 25 | 1 | 2 |
+| 7.5 | 25 | 44 / 44 | 20 | 1 | 2 |
+| 7.6 | 28 | 56 / 56 | 31 | 1 | 1 |
+| 7.7 | 27 | 53 / 53 | 25 | 1 | 0 |
+| 7.8 | 23 | 51 / 51 | 27 | 2 | 0 |
+| 7.9 | 24 | 39 / 39 | 22 | 2 | 2 |
+| 7.10 | 23 | 44 / 44 | 20 | 1 | 2 |
+| **Total** | **287** | **453 / 453** | **247** | **18** | **11** |
+
+Task-level matrix GAP/CONFLICT counts are separate from question-level reconciliation counts:
+
+| Function | Matrix task SOURCE GAP | Matrix task SOURCE CONFLICT |
+|---|---:|---:|
+| 7.1 | 2 | 1 |
+| 7.2 | 5 | 1 |
+| 7.3 | 2 | 1 |
+| 7.4 | 5 | 2 |
+| 7.5 | 5 | 2 |
+| 7.6 | 5 | 1 |
+| 7.7 | 4 | 0 |
+| 7.8 | 3 | 0 |
+| 7.9 | 3 | 2 |
+| 7.10 | 2 | 2 |
+
+The 247 Tier-A-affected counts are derived from the exact-head failing workflow log, grouped by canonical question ID. They are not a count of all questions or a statement that the remaining items are approved. The matrix task GAP/CONFLICT counts are derived from the separate matrix rows and must not be added to the question-level counts.
+
+### Current 453-row reconciliation CSV
+
+A quotation-aware CSV parse confirms 453 unique question IDs and these current individual FR status buckets:
+
+- FROZEN: 246
+- DRAFT: 147
+- PARTIAL: 31
+- GAP: 16
+- CONFLICT: 3
+- STALE: 8
+- UNRESOLVED: 2
+
+The normalized final reconciliation field is: 242 FROZEN, 151 DRAFT, 31 PARTIALLY CONFIRMED, 18 SOURCE GAP and 11 SOURCE CONFLICT. The difference between the individual FR bucket and final reconciled status is intentional and must not be silently collapsed. The final status field includes explanatory provenance text; the counts above were normalized by status prefix, not by treating the full text as a single category.
+
+The import-candidate CSV has 453 unique IDs, all `IMPORT_ELIGIBLE=NO`, with zero blank BLOCKER fields. The controlled reviewer registry remains empty. No item is APPROVED.
+
+### Function-specific evidence and reviewer limitations
+
+- All ten matrices retain explicit non-positive FR source states where evidence is incomplete; reviewer/date cells remain pending.
+- All ten EN review packages exist as separate artifacts. The inspected packages retain `BILINGUAL TECHNICAL REVIEW REQUIRED` and `PENDING REVIEWER + DATE`; translation-draft presence is not EN technical review.
+- The reviewer registry is governance scaffolding with an empty canonical reviewer table. CI validates recorded structure, not the real-world qualification of a person.
+- Matrices for Functions 7.8, 7.9 and 7.10 explicitly identify local course material built on DGR 66th Edition and limit current 67th Edition locators to evidence leads; this does not constitute current item-level Tier-A verification. The broader program status also records that local function course materials are not a substitute for the 67th Edition 2026 baseline.
+- The final question-level SOURCE GAP/CONFLICT counts remain: GAP 18; CONFLICT 11. Known power-bank conflict items include Q-7.5-011, Q-7.9-032 and Q-7.10-012; preserve their explicit hold pending the applicable 2026 source/addendum reconciliation. Do not convert a conflict into a confirmed fact by cross-function copying.
+
+### Stage 2B.1, Claude Code and security recheck
+
+- Current audited E-EXAM feature baseline remains `04334362f2ef028ded1ab5fd2dcc9c3b813dbd6b`. PR #18 remains draft at `def9dc93` based on `c4f4dae3`; PR #25 remains draft at `f77ca5c7` based on `8585d226`. Both are stale-base proposals without current-head PR-triggered validation. Production admission, persisted group-scope binding, and terminal-attempt/completed-grading controls for detailed candidate reports remain unresolved.
+- Claude-authored PR #416 is currently at `ba8e5f3a`; its latest commit changes the Function 7.1 SEO title to task-based wording. It is metadata-only, not exam logic. No new Claude-authored DGR question-bank or E-EXAM implementation PR was found.
+- PR #417 is currently at `6f32d8c5` and changes dashboard Supabase initialization/error handling in two pages. It is a separate dashboard/Preview change, not E-EXAM/Moodle acceptance; the Blitz page still contains an expired 2026-09-30 deadline constant requiring separate copy correction.
+- Current `main` still contains the query-string cron-secret middleware bypass and the LinkedIn-outreach GET query-secret check. PR #298's branch removes those paths and has static tests, but remains draft/unmerged/undeployed. Repository rulesets read is empty; branch-protection administration read returns HTTP 403 to this integration. Do not claim current protection settings have been changed.
+- Public examination-bank and source-reference exposure remains under issue #340. The separate test-harness documentation cleanup is current-tree remediation only; it does not erase public history or replace credential rotation/log review where applicable.
+
+### Disposition
+
+All 453 import candidates remain blocked. No question status is promoted. No named qualified FR/EN review or final approval is recorded. No PR is merged, no production deployment is accepted, and no ANAC/IATA approval is claimed. Release remains **PLATFORM NOT READY**.

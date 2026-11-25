@@ -1119,3 +1119,50 @@ PR #18's base `c4f4dae3` is 339 commits behind the current feature branch; PR #2
 PR #419 remains OPEN / DRAFT / UNMERGED at `5c4fd23d`, stacked on PR #399. Its exact-head E-EXAM V2 workflow [#45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513) passed both jobs, including 751 unit tests and 93 Playwright E2E tests. This is a validated proposal, not a deployed or integrated release. Issue #68 remains open until the fix is included in the selected current candidate and accepted in live staging.
 
 **Stage 2B.1 disposition: NOT ACCEPTED.** Candidate admission, server-authoritative group scope, terminal/grading-aware report release, shared-candidate account boundary, outbox durability, independent off-site backup/restore and integrated staging/deployment remain release gates.
+
+
+## Exact-head DGR workflow and per-function evidence reconciliation — 2026-11-25 12:24 Africa/Algiers
+
+PR #3 was rechecked at exact branch head `f7294f4e1e9cfa9a876e3bdc3c94341b8b5f079c` (`ai/dgr-stage2b-handoff`), OPEN / DRAFT / UNMERGED, 773 commits ahead / 0 behind `main`, 249 changed files. Repository visibility remains PUBLIC. The branch-to-main compare confirms 773 ahead / 0 behind and 249 changed files.
+
+All five DGR workflows were retrieved for this exact commit. The two failing job logs explicitly show checkout of `f7294f4e`:
+
+- CSV import row structure PASS — [run #45579674707](https://github.com/relaxsaadi/cbta/actions/runs/45579674707)
+- Controlled reviewer registry PASS — [run #45579674669](https://github.com/relaxsaadi/cbta/actions/runs/45579674669)
+- Governance regression integrity PASS — [run #45579674794](https://github.com/relaxsaadi/cbta/actions/runs/45579674794)
+- Direct item Tier-A provenance FAIL — [run #45579674678](https://github.com/relaxsaadi/cbta/actions/runs/45579674678)
+- Full DGR regulatory readiness FAIL — [run #45579674671](https://github.com/relaxsaadi/cbta/actions/runs/45579674671). Its regulatory-governance-integrity sub-job passes; final readiness fails.
+
+The direct Tier-A job reports a row treated as source-verified/import-eligible/confirmed-gap without the required direct provenance and identifies `Q-7.6-027` as a terminal regulatory state lacking an explicit per-item IATA DGR 67th Edition 2026 binding. This is an item-level evidence blocker, not a workflow infrastructure failure.
+
+The full-readiness log gives a function-specific reconciliation of frozen items still relying on representative/non-item-specific evidence and overlapping FR-bank/EN-package status mirrors:
+
+| Function | FROZEN items with non-item-specific evidence | FR/EN mirror mismatches |
+|---|---:|---:|
+| 7.1 | 0 | 0 |
+| 7.2 | 4 | 11 |
+| 7.3 | 18 | 20 |
+| 7.4 | 10 | 13 |
+| 7.5 | 12 | 16 |
+| 7.6 | 13 | 18 |
+| 7.7 | 14 | 19 |
+| 7.8 | 12 | 15 |
+| 7.9 | 14 | 16 |
+| 7.10 | 10 | 12 |
+| **Total** | **107** | **140** |
+
+These are distinct diagnostic dimensions and must not be added together or confused with the 247-question direct Tier-A affected population. The full artifact report still reconciles 453 FR/EN IDs and 287 official task rows. All 453 V2 import candidates remain `IMPORT_ELIGIBLE=NO`; zero blocker fields are blank; the qualified reviewer registry remains empty; zero questions are established APPROVED.
+
+The ten independent task sets, matrices, blueprints, FR banks and separate EN packages remain structurally present. Keep each function's own task-derived scope. Preserve explicit SOURCE GAP/CONFLICT states. Do not treat FROZEN as APPROVED or batch/representative evidence as item-specific verification. No new licensed Bookshelf item verification was performed in this run.
+
+### Stage 2B.1 / security recheck
+
+The native E-EXAM feature branch remains `feature/kost-eexam-v2-native`. Compare from prior audited SHA `04334362` to the current branch returns exactly two commits and two changed files, both console documentation files (`platform-ops/kost-eexam-console/README.md` and `.env.example`). The three source-level blockers remain: legacy production admission permits PENDING via `reviewer_status != 'REJECTED'`; assessment scope is taken from client FormData without a persisted group-scope comparison; and the native candidate PDF route lacks terminal-attempt/completed-grading protection.
+
+PR #419 remains OPEN / DRAFT / UNMERGED at `5c4fd23d`, stacked on PR #399. Its E-EXAM V2 workflow [#45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513) remains successful. It is a tested proposal, not integrated into the native feature branch or deployed. PR #18 and #25 remain stale relative to the native feature branch and must not be merged directly.
+
+PR #298 remains OPEN / DRAFT / UNMERGED / UNDEPLOYED at `8ecdc5e1`; its static cron-auth workflow [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152) passes but does not establish live cron/dashboard/SSE/CSRF/rollback acceptance. Current `main` still has the middleware query-secret bypass, a LinkedIn outreach GET query-secret check, and `NEXT_PUBLIC_CRON_SECRET` references in four dashboard pages. The repository remains PUBLIC; issues #340 and #418 remain open for examination-bank confidentiality and historical test-harness exposure. No secret values were read.
+
+No new Claude-authored DGR question-bank or E-EXAM implementation PR was identified. The latest open PR search still tops out at #419; the existing Claude-related DGR branch is documentation/guidance work, not question-bank or E-EXAM implementation.
+
+**Disposition: PLATFORM NOT READY.** This audit is a documentation-only reconciliation. It does not approve questions, change import eligibility, alter regulatory evidence, change Moodle data, merge PRs or deploy production. No ANAC/IATA approval is claimed.

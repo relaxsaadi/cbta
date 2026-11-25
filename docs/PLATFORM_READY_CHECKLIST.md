@@ -1019,3 +1019,33 @@ The corrected exact-head run is https://github.com/relaxsaadi/cbta/actions/runs/
 The earlier failed run remains failed and must not be presented as a pass. No overall PR #419 validation pass is claimed until the corrected run completes all jobs. The direct route-level candidate report regression remains a required acceptance check; the current PR adds pure-policy unit tests and static route-wiring assertions, not a live deployed candidate test.
 
 **Release disposition unchanged:** the E-EXAM report fix is a promising unmerged proposal; DGR direct Tier-A evidence and FR/EN reviewer gates remain blocked; repository security and production integration/recovery remain unaccepted. No question approved/imported, no PR merged, no deployment.
+
+
+## Correction: historical Bookshelf session and per-function final bank states — 2026-11-25
+
+The source-access history is more nuanced than the earlier 2FA note alone:
+
+- The Library contains the IATA Store receipt for the 2026 Edition 67 Digital Individual French product (Received, 24 August 2026). This proves purchase only.
+- An earlier 25 August working note said the Bookshelf session needed owner 2FA re-login. However, Git commit [4d48d093](https://github.com/relaxsaadi/cbta/commit/4d48d093a4bc3ce46ab7e5e72e677e3c688e6cca) records a successful authenticated live 67th Edition / Addendum 1 Bookshelf session on 29 August 2026. It individually checked 25 concrete items, spot-checked 6 of 6 examples from a 133-item citation-carryover pattern, and then materialized 128 additional status carryovers from that pattern.
+- Therefore it is incorrect to say the program never had live Bookshelf access. No live Bookshelf navigation was performed in this current audit, so current session availability is unverified.
+- The present strict direct-item gate is stricter than the historical Pass 2 batch method. A 6/6 sample does not establish the remaining 127 claims item-by-item. The current validator rejects representative, batch, cross-applied and missing per-item bindings; those historic batch-derived FROZEN labels cannot be treated as current direct Tier-A acceptance. Re-verify affected items individually against the exact 67th Edition / AM1 text and current applicable addenda. Do not automatically preserve a FROZEN label merely because the earlier batch sample matched.
+
+### Current final reconciled FR status by function
+
+| Function | Questions | FROZEN FR | SOURCE GAP | SOURCE CONFLICT | PARTIAL | DRAFT |
+|---|---:|---:|---:|---:|---:|---:|
+| 7.1 | 19 | 18 | 1 | 0 | 0 | 0 |
+| 7.2 | 49 | 23 | 6 | 1 | 5 | 14 |
+| 7.3 | 45 | 31 | 2 | 1 | 2 | 9 |
+| 7.4 | 53 | 25 | 1 | 2 | 3 | 22 |
+| 7.5 | 44 | 20 | 1 | 2 | 4 | 17 |
+| 7.6 | 56 | 31 | 1 | 1 | 5 | 18 |
+| 7.7 | 53 | 25 | 1 | 0 | 5 | 22 |
+| 7.8 | 51 | 27 | 2 | 0 | 3 | 19 |
+| 7.9 | 39 | 22 | 2 | 2 | 2 | 11 |
+| 7.10 | 44 | 20 | 1 | 2 | 2 | 19 |
+| **Total** | **453** | **242** | **18** | **11** | **31** | **151** |
+
+These are FR evidence/reconciliation states, not approvals. FROZEN is not APPROVED. The exact-head direct Tier-A workflow still identifies 247 affected items, while the full artifact gate separately identifies 107 historical FROZEN provenance exceptions and 140 FR↔EN mirror discrepancies. Those are different validators and must not be conflated.
+
+**Owner action refined:** provide an authorized current Bookshelf session or controlled per-item evidence export so the remaining affected claims can be re-read directly. Keep the 247-item Tier-A hold, all SOURCE GAP/CONFLICT holds, separate EN review and reviewer/date requirements. No copyrighted text is to be copied into public GitHub.

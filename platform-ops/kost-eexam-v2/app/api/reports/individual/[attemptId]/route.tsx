@@ -4,6 +4,7 @@ import { formatAlgeriaDateTime } from "@/lib/timezone";
 import { hasAttemptAccess } from "@/lib/tenant-scope";
 import { getAttempt, getAssessmentSettingsForAttempt } from "@/lib/attempts";
 import { getAttemptDetail } from "@/lib/results";
+import { candidateCanDownloadIndividualReport } from "@/lib/report-access";
 import { audit } from "@/lib/audit";
 import { IndividualReportDocument } from "@/lib/pdf/IndividualReportDocument";
 import type { DocumentMeta } from "@/lib/pdf/DocumentChrome";
@@ -30,24 +31,41 @@ export async function GET(request: Request, { params }: { params: Promise<{ atte
   const { searchParams } = new URL(request.url);
   const level = searchParams.get("level") === "detailed" ? "detailed" : "simple";
 
+  let detail: ReturnType<typeof getAttemptDetail>;
+
   if (session.role === "candidate") {
     const attempt = getAttempt(attemptIdNum);
     if (!attempt || attempt.candidate_user_id !== session.userId) {
       return new Response("Rapport introuvable.", { status: 404 });
     }
-    // Même politique A/B/C/D que l'écran "Mes résultats" (§11) — jamais
-    // un interrupteur séparé qui pourrait diverger : si le résultat est
-    // encore différé à l'écran, le PDF l'est aussi.
     const settings = getAssessmentSettingsForAttempt(attemptIdNum);
     const stillDeferred = !!settings && settings.feedback_mode === "deferred" && !!settings.close_at && new Date(settings.close_at).getTime() > Date.now();
-    if (!settings || settings.show_result !== 1 || stillDeferred) {
+    detail = getAttemptDetail(attemptIdNum);
+    if (!detail) return new Response("Rapport introuvable.", { status: 404 });
+
+    // A detailed candidate PDF contains the answer key. It is released only
+    // when the explicit answer-key switch is enabled, the attempt is terminal,
+    // and automatic/manual grading is fully complete. Immediate feedback alone
+    // must not expose provisional answers or scores during manual correction.
+    const allowed = candidateCanDownloadIndividualReport({
+      showResult: settings?.show_result,
+      showCorrectAnswers: detail.showCorrectAnswers ? 1 : 0,
+      stillDeferred,
+      level,
+      attemptStatus: detail.status,
+      gradingState: detail.grading_state,
+    });
+    if (!allowed) {
+      if (level === "detailed" && settings?.show_result === 1 && !stillDeferred) {
+        return new Response("La correction détaillée n'est pas disponible pour cet examen.", { status: 403 });
+      }
       return new Response("Le téléchargement du rapport n'est pas encore disponible pour cet examen.", { status: 403 });
     }
   } else if (!hasAttemptAccess({ userId: session.userId, role: session.role }, attemptIdNum)) {
     return new Response("Rapport introuvable.", { status: 404 });
   }
 
-  const detail = getAttemptDetail(attemptIdNum);
+  if (!detail) detail = getAttemptDetail(attemptIdNum);
   if (!detail) return new Response("Rapport introuvable.", { status: 404 });
 
   const meta: DocumentMeta = {
@@ -76,6 +94,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ atte
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="rapport-individuel-${attemptIdNum}-${level}.pdf"`,
+      "Cache-Control": "private, no-store",
     },
   });
 }

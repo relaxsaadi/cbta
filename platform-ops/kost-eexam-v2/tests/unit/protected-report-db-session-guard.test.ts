@@ -38,7 +38,16 @@ test("candidate individual report still preserves candidate and staff role admis
     /requireRole\(\s*["']candidate["']\s*,\s*["']pedagogical_manager["']\s*,\s*["']administrator["']\s*,\s*["']auditor["']\s*\)/,
   );
   assert.match(source, /attempt\.candidate_user_id\s*!==\s*session\.userId/, "candidate ownership check must remain present");
-  assert.match(source, /settings\.show_result\s*!==\s*1/, "candidate result-release check must remain present");
+  const policy = readRelative("../../lib/report-access.ts");
+  assert.match(source, /candidateCanDownloadIndividualReport\(/, "candidate report must use the shared release policy");
+  assert.match(source, /showResult:\s*settings\?\.show_result/, "candidate result visibility must be passed to the policy");
+  assert.match(source, /showCorrectAnswers:\s*detail\.showCorrectAnswers/, "answer-key visibility must be passed to the policy");
+  assert.match(source, /attemptStatus:\s*detail\.status/, "terminal attempt status must be passed to the policy");
+  assert.match(source, /gradingState:\s*detail\.grading_state/, "completed grading state must be passed to the policy");
+  assert.match(policy, /showResult\s*!==\s*1/, "policy must fail closed when result visibility is disabled");
+  assert.match(policy, /showCorrectAnswers\s*===\s*1/, "detailed report must require explicit answer-key release");
+  assert.match(policy, /terminalAttempt\s*&&\s*gradingState\s*===\s*["']COMPLETE["']/, "detailed report must require terminal attempt and completed grading");
+  assert.match(source, /["']Cache-Control["']:\s*["']private, no-store["']/, "individual PDF must not be cached publicly");
   assert.match(source, /hasAttemptAccess\(/, "staff tenant/resource scope must remain present");
 });
 

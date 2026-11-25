@@ -712,3 +712,24 @@ The 453 candidate rows remain `IMPORT_ELIGIBLE=NO`, with zero blank blockers. Th
 The one-commit comparison from `c84d1757` to `84dd340d` confirms only `docs/PLATFORM_READY_CHECKLIST.md` changed (+63 lines). No bank, answer, source record, reviewer decision, import flag, application code, Moodle data or deployment changed. The combined Vercel status is FAILURE for the separate `kost-funnel` project and is not E-EXAM/Moodle acceptance.
 
 **Release decision remains NOT READY.** No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.
+
+
+## Exact-head correction — 2026-11-25 03:27 Africa/Algiers
+
+This entry supersedes the prior 02:30 note that documented the preceding `84dd340d` head. The `84dd340d` runs remain valid for that earlier commit, but they are not the latest PR #3 validation.
+
+**Live PR #3 metadata rechecked before this update:** branch `ai/dgr-stage2b-handoff`, head `${sha}`, 758 commits ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED. GitHub run metadata independently confirms each run below has `head_sha=${sha}`, branch `ai/dgr-stage2b-handoff`, event `pull_request`.
+
+| Workflow | Exact-head run | Result |
+|---|---:|---|
+| DGR import CSV structure | [45526554063](https://github.com/relaxsaadi/cbta/actions/runs/45526554063) | PASS |
+| DGR controlled reviewer admission | [45526554091](https://github.com/relaxsaadi/cbta/actions/runs/45526554091) | PASS |
+| DGR governance regression integrity | [45526554007](https://github.com/relaxsaadi/cbta/actions/runs/45526554007) | PASS |
+| DGR direct item Tier-A provenance | [45526554109](https://github.com/relaxsaadi/cbta/actions/runs/45526554109) | FAIL |
+| DGR full regulatory readiness | [45526554086](https://github.com/relaxsaadi/cbta/actions/runs/45526554086) | FAIL |
+
+The direct Tier-A job fails its sampled-only promotion and affirmative per-item current-edition evidence checks. It identifies 247 distinct question IDs with terminal evidence wording that is representative, batch, cross-applied or otherwise non-direct. Evidence-artifact binding, CSV structure and explicit SOURCE GAP/CONFLICT import-hold regression checks pass; those structural tests do not supply missing licensed evidence.
+
+The full-readiness governance-integrity sub-job passes. The full artifact gate still fails on **107 historical FROZEN provenance exceptions** and **140 FR↔EN status-mirror discrepancies**. Per-function counts (FROZEN exceptions / FR↔EN drift): 7.1 (0/0), 7.2 (4/11), 7.3 (18/20), 7.4 (10/13), 7.5 (12/16), 7.6 (13/18), 7.7 (14/19), 7.8 (12/15), 7.9 (14/16), 7.10 (10/12). The exact-head artifact still has 287/287 task-to-matrix rows and 453 FR / 453 EN IDs with no missing/extra IDs. All 453 candidates remain `IMPORT_ELIGIBLE=NO`; the controlled reviewer registry remains empty; zero APPROVED questions are established.
+
+This is a documentation-only correction. It does not change questions, answers, source evidence, FR/EN review status, reviewer records, import flags, E-EXAM code, Moodle data or deployment. **Release remains PLATFORM NOT READY.**

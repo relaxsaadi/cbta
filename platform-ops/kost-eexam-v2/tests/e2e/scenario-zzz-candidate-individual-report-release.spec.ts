@@ -129,7 +129,7 @@ test("candidate detailed individual PDF is denied live/pending and released only
     .first();
   await expect(card).toBeVisible();
   await card.getByRole("button", { name: "Correcte", exact: true }).click();
-  await page.waitForURL(/\\/grading\\?graded=1&finalized=1/);
+  await page.waitForURL(/\/grading\?graded=1&finalized=1/);
   expect(fixture.gradingState()).toBe("COMPLETE");
 
   await page.context().clearCookies();

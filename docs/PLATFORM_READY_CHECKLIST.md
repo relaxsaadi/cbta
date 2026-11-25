@@ -718,7 +718,7 @@ The one-commit comparison from `c84d1757` to `84dd340d` confirms only `docs/PLAT
 
 This entry supersedes the prior 02:30 note that documented the preceding `84dd340d` head. The `84dd340d` runs remain valid for that earlier commit, but they are not the latest PR #3 validation.
 
-**Live PR #3 metadata rechecked before this update:** branch `ai/dgr-stage2b-handoff`, head `${sha}`, 758 commits ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED. GitHub run metadata independently confirms each run below has `head_sha=${sha}`, branch `ai/dgr-stage2b-handoff`, event `pull_request`.
+**Live PR #3 metadata rechecked before this update:** branch `ai/dgr-stage2b-handoff`, head `99360568b9f218046bd901ff0485e503a14432ca`, 758 commits ahead / 0 behind `main`, 249 changed files, OPEN / DRAFT / UNMERGED. GitHub run metadata independently confirms each run below has `head_sha=99360568b9f218046bd901ff0485e503a14432ca`, branch `ai/dgr-stage2b-handoff`, event `pull_request`.
 
 | Workflow | Exact-head run | Result |
 |---|---:|---|
@@ -733,3 +733,10 @@ The direct Tier-A job fails its sampled-only promotion and affirmative per-item 
 The full-readiness governance-integrity sub-job passes. The full artifact gate still fails on **107 historical FROZEN provenance exceptions** and **140 FR↔EN status-mirror discrepancies**. Per-function counts (FROZEN exceptions / FR↔EN drift): 7.1 (0/0), 7.2 (4/11), 7.3 (18/20), 7.4 (10/13), 7.5 (12/16), 7.6 (13/18), 7.7 (14/19), 7.8 (12/15), 7.9 (14/16), 7.10 (10/12). The exact-head artifact still has 287/287 task-to-matrix rows and 453 FR / 453 EN IDs with no missing/extra IDs. All 453 candidates remain `IMPORT_ELIGIBLE=NO`; the controlled reviewer registry remains empty; zero APPROVED questions are established.
 
 This is a documentation-only correction. It does not change questions, answers, source evidence, FR/EN review status, reviewer records, import flags, E-EXAM code, Moodle data or deployment. **Release remains PLATFORM NOT READY.**
+
+
+## Documentation-head follow-up — 2026-11-25 03:29 Africa/Algiers
+
+The prior exact-head correction's template placeholders have been replaced with the literal verified SHA `99360568b9f218046bd901ff0485e503a14432ca`. The five run IDs in that section were independently checked through the GitHub Actions run endpoint and each reports that exact `head_sha`, branch `ai/dgr-stage2b-handoff`, and `pull_request` event.
+
+This follow-up itself is commit `68f5a97d4dd6ba5ecc8424bc87adcff6d93bf8e6`, a documentation-only change to this checklist. PR #3 therefore now points to `68f5a97d` (759 commits ahead / 0 behind `main`, 249 changed files). No new DGR workflow run is attached to this documentation-only commit; the latest five exact-head DGR results remain the verified runs on `99360568` above. No application code, question bank, source evidence, reviewer state, import flag, Moodle data or deployment changed.

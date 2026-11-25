@@ -927,3 +927,39 @@ PR #25's separate branch adds a server-side `show_correct_answers` gate, but its
 The later E-EXAM stack demonstrates meaningful technical progress and successful isolated validation, but remains unmerged and incomplete. Detailed answer-key report protection, named qualified reviewer/EN evidence, confidentiality containment, one reconciled release candidate, live staging, deployment and off-site recovery acceptance remain open. All 453 DGR import candidates remain blocked. No question is approved or imported. No PR is merged or deployed. No DRM is bypassed and no ANAC/IATA approval is claimed.
 
 **Release decision: PLATFORM NOT READY.**
+
+
+## Main-branch cron credential exposure and PR #298 revalidation — 2026-11-25 08:48 Africa/Algiers
+
+A fresh default-branch code search on `main` at `e115196448753d2871b9885a0ea5cbdaf071790e` found a broader authentication boundary issue relevant to repository security and release governance.
+
+### Current-main source findings
+
+- `middleware.ts` still accepts `?secret=CRON_SECRET` as a bypass for protected routes without restricting the method/path to the exact scheduled cron allowlist.
+- Browser pages `app/dashboard/agent/page.tsx`, `app/dashboard/intel/page.tsx`, `app/dashboard/instructors/page.tsx` and `app/dashboard/linkedin/page.tsx` reference `NEXT_PUBLIC_CRON_SECRET`. A `NEXT_PUBLIC_` variable is eligible for inclusion in the browser bundle. If it aliases the server-side `CRON_SECRET` expected by protected routes, the privileged credential is exposed to clients. Deployment environment values were not inspected; do not assume whether the alias is currently configured.
+- Main still contains query-token checks in side-effecting stream and agent routes, including LinkedIn scan, instructor scan streams, agent follow-up and related scheduled handlers. URL credentials can enter browser history, proxy logs, telemetry and referrer paths.
+- This is source-level evidence on public `main`, not proof that a particular secret value has been deployed or exfiltrated. No secret value was read or reproduced.
+
+### PR #298 — substantial proposed correction, not yet deployed
+
+- [PR #298](https://github.com/relaxsaadi/cbta/pull/298) remains OPEN / DRAFT / UNMERGED. Branch `fix/strict-cron-bearer-boundary-20261024`; head `8ecdc5e1c997d3fe3e6b38d2a1a04b58bb9c910c`; base `main` at `e1151964`; 37 commits / 25 files.
+- Its static workflow [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152) completed successfully. The job passed both the cron authentication boundary tests and dashboard mutation CSRF-origin tests.
+- The patch replaces URL-token middleware bypass with an exact seven-path, GET-only Vercel Cron Bearer allowlist; scheduled handlers independently reject missing server-side `CRON_SECRET`.
+- Manual dashboard POSTs and side-effecting SSE GETs use separate Basic-authenticated `requireDashboardRequest` checks, same-origin Origin/Referer and Fetch-Metadata validation, and dashboard-referrer checks for SSE.
+- The patch removes `NEXT_PUBLIC_CRON_SECRET` references from the four dashboard pages and removes query credentials from the four SSE routes covered by the regression suite. It also keeps autonomous outbound batch actions disabled unless the owner explicitly opts in via `DGR_OUTBOUND_AUTOSEND_ENABLED=true`.
+- The static tests explicitly check the cron path allowlist, browser-token absence, SSE URL-token absence, POST-vs-cron separation and same-origin dashboard authentication.
+
+### PR #298 acceptance still incomplete
+
+The only associated PR-triggered workflow found on this exact head is the static security workflow. No full application build, integrated unit/E2E suite, deployed HTTP acceptance, live Vercel Cron invocation, authenticated browser/SSE run, or production rollback test is established by that result. The patch is a strong candidate for review, not proof of deployed remediation.
+
+PR [#348](https://github.com/relaxsaadi/cbta/pull/348) remains an older OPEN / DRAFT / UNMERGED compatibility proposal. It narrows legacy query-token middleware bypass to five exact GET paths and rejects a public/server-secret alias, but retains a temporary query-token compatibility model; it is not a substitute for the more complete server-only Bearer + human dashboard-auth boundary in PR #298.
+
+### Required owner/security acceptance
+
+- Verify whether any deployed `NEXT_PUBLIC_CRON_SECRET` was configured to the server-side `CRON_SECRET`; inspect deployment configuration without printing values.
+- If a privileged credential was ever browser-exposed, rotate it, invalidate related sessions/tokens, and inspect access logs and deployed browser bundles.
+- Review PR #298 on one current candidate; run the full build/unit/E2E suite and live positive/negative tests for each scheduled GET, manual POST, SSE stream, CSRF/origin rejection and unauthenticated request before merge/deployment.
+- Confirm all Vercel cron schedules use server-only Authorization Bearer and no URL query token remains. Do not enable autonomous outbound actions merely to make a test pass.
+
+**Disposition:** current `main` remains uncorrected because PR #298 is unmerged. Repository security remains a release blocker. No credential value was inspected, no environment setting changed, no route was deployed and no production state was modified.

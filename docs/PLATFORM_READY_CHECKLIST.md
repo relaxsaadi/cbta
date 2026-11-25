@@ -740,3 +740,30 @@ This is a documentation-only correction. It does not change questions, answers, 
 The prior exact-head correction's template placeholders have been replaced with the literal verified SHA `99360568b9f218046bd901ff0485e503a14432ca`. The five run IDs in that section were independently checked through the GitHub Actions run endpoint and each reports that exact `head_sha`, branch `ai/dgr-stage2b-handoff`, and `pull_request` event.
 
 The preceding documentation-only update was commit `68f5a97d4dd6ba5ecc8424bc87adcff6d93bf8e6`; this follow-up corrects its self-reference. The current PR head and ahead/behind count must be taken from live PR metadata, not inferred from this static checklist. No new DGR workflow run is attached to the documentation-only descendant that contains this correction; the latest five exact-head DGR results remain the verified runs on `99360568` above. No application code, question bank, source evidence, reviewer state, import flag, Moodle data or deployment changed.
+
+
+## Stage 2B.1 — current E-EXAM base revalidation — 2026-11-25 03:32 Africa/Algiers
+
+This is a read-only current-base audit of `feature/kost-eexam-v2-native` at `04334362f2ef028ded1ab5fd2dcc9c3b813dbd6b`. It supersedes treating the older PR #18/#25 base SHAs as the current E-EXAM candidate.
+
+### Stack/base drift
+
+- Current feature branch: `04334362`, unprotected.
+- PR #18 base: `c4f4dae3a1d68a97bd7edc118cfa4d7bcddb2909`; current feature branch is 337 commits ahead (0 behind).
+- PR #25 base: `8585d226c514b74564b9e86fed15c159385e741c`; current feature branch is 336 commits ahead (0 behind).
+- PR #18 remains OPEN / DRAFT / UNMERGED at `def9dc931a2fb796f910b664af3138c18c50bb03`; PR #25 remains OPEN / DRAFT / UNMERGED at `f77ca5c73423ff3ddcc4d3a5f61dfb15849accf8`. GitHub's commit-workflow lookup returns no PR-triggered Actions runs for either exact head. Neither patch is a current integrated candidate until rebased/reconciled and tested on one SHA.
+
+### Confirmed current-base defects
+
+- `lib/questions.ts` blob `92edf60e`: `isAdmissibleWhereClause()` still uses `reviewer_status != 'REJECTED'`; a PENDING question therefore passes this helper.
+- `lib/assessments.ts` blob `d21a34f2`: `createAssessmentDraft()` builds the pool with `listAdmissibleQuestionIds()` regardless of assessment scope, and `publishAssessment()` revalidates against the same helper. The stored `scope` does not currently select a stricter production reviewer gate.
+- `CreateAssessmentForm.tsx` blob `1c48b3b2` and server action `actions.ts` blob `8f8bd54b`: the client submits a scope value and the action passes it to draft creation after a group-access check, but it does not bind/compare that scope to the selected group's persisted scope. The page's group selector does not load a scope field for this check.
+- Candidate individual-report route blob `f32f002b`: the candidate path checks ownership, `show_result` and deferred release, but not `show_correct_answers`, terminal attempt status or completed grading before generating the detailed report. The URL's `level=detailed` controls the report level.
+
+### What the two drafts do — and do not — resolve
+
+- PR #18 adds a production-specific APPROVED + non-null `review_date` query and regression tests, but it is based 337 commits behind the current feature branch. Its own description correctly says the schema still lacks persisted named reviewer identity, qualification evidence/reference and separate EN bilingual-review completion. It also does not establish selected-group scope equality.
+- PR #25 adds the `show_correct_answers=1` gate for detailed candidate PDFs and private/no-store caching, but its helper has no attempt-status or grading-completion input. It is based 336 commits behind the current feature branch.
+- Rebase both changes onto one current candidate, then add group-scope binding and terminal-attempt/completed-grading checks with regression tests. Do not merge either stale stack or infer validation from the other PR's tests.
+
+No code, question bank, Moodle data, credential, reviewer record or production state was changed by this audit. **Stage 2B.1 remains NOT ACCEPTED.**

@@ -689,3 +689,26 @@ PR #3 remains OPEN / DRAFT / UNMERGED at `c84d175751cd5c269951a6b2f1832467a960dc
 No new Claude-authored DGR question-bank or E-EXAM implementation PR was found. The latest main commit `e1151964` is prospect-contact matching, not exam-platform work; PR #416's Claude-authored metadata correction is SEO-only.
 
 **Decision remains NOT READY.** No question approved or imported; no PR merged; no production deployment; no DRM bypass; no ANAC/IATA approval claimed.
+
+
+## Exact-head CI rerun — 2026-11-25 02:30 Africa/Algiers
+
+This update supersedes the earlier 01:41 note that no PR-triggered workflow run was yet attached to `84dd340d`. GitHub now confirms all five DGR workflows completed against the exact PR #3 head `84dd340dd0c5c08a4dcaf13b5bfec6deb8907cfd` (branch `ai/dgr-stage2b-handoff`, PR #3, event `pull_request`):
+
+| Workflow | Exact-head run | Result |
+|---|---:|---|
+| DGR import CSV structure | [45520618599](https://github.com/relaxsaadi/cbta/actions/runs/45520618599) | PASS |
+| Controlled reviewer admission | [45520618593](https://github.com/relaxsaadi/cbta/actions/runs/45520618593) | PASS |
+| Governance regression integrity | [45520618721](https://github.com/relaxsaadi/cbta/actions/runs/45520618721) | PASS |
+| Direct item Tier-A provenance | [45520618540](https://github.com/relaxsaadi/cbta/actions/runs/45520618540) | FAIL |
+| Full DGR regulatory readiness | [45520618609](https://github.com/relaxsaadi/cbta/actions/runs/45520618609) | FAIL |
+
+The run metadata for both failing workflows records `head_sha=84dd340d...`; the three passing workflow runs are associated with the same exact PR head. The full-readiness job's governance-integrity sub-job passes, but the final artifact gate fails closed.
+
+The exact-head full-readiness summary reports 287/287 task-to-matrix rows and 453 FR / 453 EN IDs with zero missing or extra IDs. It still reports **107 historical FROZEN provenance exceptions** and **140 FR↔EN status-mirror discrepancies**. By function, those counts are: 7.1 (0/0), 7.2 (4/11), 7.3 (18/20), 7.4 (10/13), 7.5 (12/16), 7.6 (13/18), 7.7 (14/19), 7.8 (12/15), 7.9 (14/16), and 7.10 (10/12), where each pair is FROZEN provenance exceptions / FR↔EN drift. The direct Tier-A job continues to reject terminal records without explicit per-item 67th Edition 2026 binding and records using representative, batch or cross-applied evidence wording. Evidence-artifact binding regression fixtures pass; that does not cure missing item-level licensed evidence.
+
+The 453 candidate rows remain `IMPORT_ELIGIBLE=NO`, with zero blank blockers. The controlled reviewer registry remains empty; zero APPROVED questions are established. No regulatory state is promoted by this CI run.
+
+The one-commit comparison from `c84d1757` to `84dd340d` confirms only `docs/PLATFORM_READY_CHECKLIST.md` changed (+63 lines). No bank, answer, source record, reviewer decision, import flag, application code, Moodle data or deployment changed. The combined Vercel status is FAILURE for the separate `kost-funnel` project and is not E-EXAM/Moodle acceptance.
+
+**Release decision remains NOT READY.** No PR merged, no production deployment, no question approved/imported, no DRM bypass and no ANAC/IATA approval claimed.

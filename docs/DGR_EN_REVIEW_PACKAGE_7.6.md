@@ -15,14 +15,7 @@ substitute for that review.**
 - Every item below carries the status **`BILINGUAL TECHNICAL REVIEW
   REQUIRED`** (translation drafted, not yet reviewed).
 - Every approval field reads **`PENDING REVIEWER + DATE`**.
-- **This package does not change any item's FR status.** Each per-item FR
-  field below is a conservative mirror of
-  `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`: direct current evidence
-  may support `FROZEN`, while representative/partial evidence remains
-  `TIER_A_PROVENANCE_UNRESOLVED — DIRECT_ITEM_EVIDENCE_REQUIRED`, and any
-  `SOURCE GAP` / `SOURCE CONFLICT` remains explicit. Per `.claude/rules/
-  dgr-stage2b.md` rule 5, FR source verification and EN bilingual technical
-  review are **separate gates** — this package closes neither gate.
+- **FR source-of-record and EN status mirrors (2026-11-19; documentation only):** This draft translation does not change any item's authoritative FR status. Its per-item `FR status` entries are historical EN-package mirrors, **not** guaranteed copies of current reconciled FR states. At PR #3 head `4747d7b817fd288adff19fe836a94d15b1d5d672`, [full regulatory-readiness CI](https://github.com/relaxsaadi/cbta/actions/runs/44098716488) reports **18** Function 7.6 items with stale, missing or unclassified FR-status mirrors. Reconcile each item against `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, its FR production-bank record and exact-head CI before relying on the EN field; do **not** copy historical `FROZEN FR / SOURCE VERIFIED` solely to satisfy a mirror check. Direct authorized current IATA DGR 67th Edition 2026 item-specific Tier-A evidence, explicit SOURCE GAP/CONFLICT handling, qualified dated FR review, separate qualified dated EN bilingual review and final approval remain independent fail-closed gates. This note does not change question text, source status, import eligibility or approval.
 - This closes no gate in `docs/DGR_STAGE_2B_STATUS.md` or
   `docs/DGR_FUNCTIONS_PROGRAM_STATUS.md`; it only prepares material for the
   separate EN/human-reviewer gate defined by `.claude/rules/dgr-stage2b.md`
@@ -639,10 +632,10 @@ file's fuller sourcing notes.
 **What to check, per item:**
 
 1. **Source-text fidelity check first:** confirm the FR text quoted in this package matches `docs/DGR_PRODUCTION_BANK_7.6.md` exactly (this package copies it verbatim, but a copy error is always possible — check before relying on either).
-2. **Regulatory accuracy — FR:** independent of this package, every item's FR status remains `DRAFT — Tier B only`. This package's translation review does not substitute for, accelerate, or presuppose the outcome of that separate Tier A verification (`.claude/rules/dgr-stage2b.md` rule 5) — do not mark FR status based on anything in this file.
+2. **Regulatory accuracy — FR:** the 56 items have item-specific current FR governance states, not one blanket `DRAFT — Tier B only` state. Check `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR bank and exact-head CI for the effective state of each item. Historical `FROZEN FR / SOURCE VERIFIED` claims from representative evidence do **not** prove direct current-edition verification. This EN package cannot establish or change FR source verification (`.claude/rules/dgr-stage2b.md` rule 5).
 3. **Regulatory accuracy — EN:** confirm the EN draft's terminology and facts against the current English-language IATA DGR 67th Edition text, resolving every item flagged "unverified"/"FLAGGED" in the terminology table (the "agent des opérations aériennes"→"flight operations officer" candidate; the "assistant"→"agent" candidate; the "divergence"→"Variation" candidate; Q-7.6-016's "SCoETDG"→"UNCETDG" acronym; Q-7.6-023's high/medium/minor-danger caption wording; Q-7.6-017's IATA Multilateral Interline Traffic Agreement wording).
 4. **Meaning-equivalence FR↔EN:** confirm the EN stem, correct answer, and every distractor carry the same regulatory meaning as the FR side — not a loose paraphrase. Pay special attention to items whose correct answer hinges on a single qualifying word or clause (Q-7.6-001's "n'ont pas besoin d'être séparées," Q-7.6-017/020/027's "uniquement"/"ni... ni.../y compris," Q-7.6-029's "malgré tout," Q-7.6-030's contre-exemple framing "N'est PAS dispensée").
-5. **Terminology consistency:** confirm EN terms match the terminology table and are used consistently across all 33 items (e.g., "Packing Group" not "packaging group"; "Compatibility Group" not "compatibility class"; "State/Operator variation" reserved for the technical DGR 2.8 sense (Q-7.6-022), not used loosely for Q-7.6-009's generic "divergence"). Also confirm consistency with Function 7.3's package for terms shared across both functions.
+5. **Terminology consistency:** confirm EN terms match the terminology table and are used consistently across all 56 items (Batches 1–3) (e.g., "Packing Group" not "packaging group"; "Compatibility Group" not "compatibility class"; "State/Operator variation" reserved for the technical DGR 2.8 sense (Q-7.6-022), not used loosely for Q-7.6-009's generic "divergence"). Also confirm consistency with Function 7.3's package for terms shared across both functions.
 6. **Distractor plausibility in English:** confirm each EN distractor remains plausible-but-wrong to an English-speaking candidate — a distractor that only "sounds wrong" in French, or that becomes obviously wrong for an EN-specific reason (e.g., an idiom that doesn't translate), should be flagged for revision. Note that Q-7.6-028's "6 metres" distractor and Q-7.6-019's "tariff surcharge" distractor are both deliberately fabricated facts (per the production bank's own flags) — confirm the EN wording still reads as plausible-but-fabricated, not as an accidentally-asserted true fact.
 7. **No item drifts from its FR source citation:** cross-check each item's EN draft against its full sourcing note (slide numbers, DGR section references, distractor rationale, or — for `Q-7.6-033` only — the Practice Book question number) in `docs/DGR_PRODUCTION_BANK_7.6.md` — the EN translation must not introduce a fact, threshold, or exception not present in the cited FR source.
 8. **Course-vs-current-edition caveat:** `docs/DGR_PRODUCTION_BANK_7.6.md` notes the KOST course is built on the DGR **66th Edition**, not the 67th/Addendum 1 baseline this repository otherwise targets. Every "DGR x.y.z" section number in both the FR and EN text is Tier B (as displayed on the KOST slide), not independently re-verified as still-current numbering. The bilingual reviewer's terminology check does not resolve this — it remains open for whoever performs FR Tier A verification.
@@ -685,10 +678,7 @@ rule 4, no item may be marked `APPROVED` without this completed sign-off.
   printed slide citations, or the Practice Book question number for
   `Q-7.6-033`) from the actual KOST Function 7.6 course/exam/practice
   material.
-- All 33 items' FR status remains `DRAFT — Tier B only, SOURCE REQUIRED for
-  Tier A`, unchanged by this package, per `.claude/rules/dgr-stage2b.md`
-  rule 5 (FR source verification and EN bilingual review are separate
-  gates).
+- **Historical Batch 1/2 status note (superseded as current-state guidance):** the original 33-item translation pass treated the items as `DRAFT — Tier B only`. Effective FR states now differ by item; follow `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`, the FR bank and exact-head CI rather than this original summary. This package does not complete FR verification, independent EN review or final approval.
 - 5 terminology points are explicitly flagged unverified for the reviewer:
   the "agent des opérations aériennes"→"flight operations officer" candidate
   (1 item); the "l'exploitant ou son assistant"→"the operator or its agent"
@@ -727,8 +717,7 @@ now at its own full ceiling).
 The same status discipline stated at the top of this package applies
 unchanged to every item below: no `BILINGUAL TECHNICAL REVIEW COMPLETE` or
 `APPROVED` status, no named reviewer, no review date, and no change to any
-item's separate FR status (`DRAFT — Tier B only, SOURCE REQUIRED for
-Tier A`).
+item's separate FR status (read each current effective state from `docs/DGR_TIER_A_RECONCILIATION_453_PER_ITEM.csv`; the original blanket `DRAFT` statement is historical only).
 
 ### Q-7.6-034 — Distinction entre un « article » et une « substance »
 

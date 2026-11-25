@@ -963,3 +963,18 @@ PR [#348](https://github.com/relaxsaadi/cbta/pull/348) remains an older OPEN / D
 - Confirm all Vercel cron schedules use server-only Authorization Bearer and no URL query token remains. Do not enable autonomous outbound actions merely to make a test pass.
 
 **Disposition:** current `main` remains uncorrected because PR #298 is unmerged. Repository security remains a release blocker. No credential value was inspected, no environment setting changed, no route was deployed and no production state was modified.
+
+
+## E-EXAM candidate detailed-report correction proposal — 2026-11-25 08:48 Africa/Algiers
+
+A focused correction was opened after re-reading the current #399 stacked candidate's individual PDF route and `AttemptDetail` data contract.
+
+- New [PR #419](https://github.com/relaxsaadi/cbta/pull/419), branch `fix/eexam-candidate-report-terminal-grading-20261125`, is stacked on PR #399's head branch `audit/eexam-submit-transition-reconcile-20261107` at `3ea3745c5406da51dadd01719dddd6c204f1d0a5`.
+- PR #419 head: `ae93013bbfd2c73a8e26970602c833e147b78d88`; 3 commits / 3 files; OPEN / DRAFT / UNMERGED; GitHub reports mergeable against its declared stacked base.
+- The new pure candidate-report policy keeps the existing simple-report result-visibility behavior. A candidate detailed PDF now requires `show_result=1`, deferred feedback elapsed, `show_correct_answers=1`, terminal attempt status (`submitted` or `auto_submitted`) and `grading_state=COMPLETE`. In-progress, abandoned, awaiting-manual-review and missing-result states fail closed.
+- The PDF response adds `Cache-Control: private, no-store`. Staff/administrator/auditor access remains governed by the existing role and tenant checks; the new policy is candidate-only.
+- Six unit cases cover explicit answer-key release, in-progress/abandoned states, pending/manual grading, deferred/hidden results, successful terminal completion and preservation of the simple-report policy.
+- The E-EXAM V2 workflow [#45572009622](https://github.com/relaxsaadi/cbta/actions/runs/45572009622) started on the exact PR #419 head. The console token-transport/focused-lint/typecheck/build job passed. The main lint and typecheck steps passed; the unit-test step was still running at this audit, with E2E, local backup/restore and production build pending. No overall workflow pass is claimed.
+- This proposal addresses issue [#68](https://github.com/relaxsaadi/cbta/issues/68) and the separate report gap not fixed by PR #25 alone. It is not merged, deployed or accepted. Recheck the full workflow on the exact final head before any merge consideration.
+
+**Disposition:** candidate answer-key release remains a critical gate until PR #419's full validation passes and the change is integrated into one current E-EXAM candidate. This does not resolve DGR Tier-A evidence, named qualified FR/EN reviewer requirements, public-bank confidentiality, live staging, deployment or off-site recovery.

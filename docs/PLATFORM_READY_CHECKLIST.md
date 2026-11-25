@@ -989,3 +989,33 @@ Prior Stage 2B.1 working records explicitly state that the IATA Digital Publicat
 **Owner-only blocker refined:** the edition purchase is documented; the missing step is authorized owner-side Bookshelf re-authentication/access and delivery of verifiable current-edition locations to the controlled review process. After access is restored, verify each affected item against its exact 67th Edition section/table/PI/SP and applicable 2026 addendum, record source locator and FR verification, then obtain named qualified reviewer/date and separate EN review. No copyrighted text needs to be copied into public GitHub.
 
 No licensed source text was retrieved or reproduced in this audit. No question status changed. No DRM was bypassed.
+
+
+## Exact-head DGR result and PR #419 rerun state — 2026-11-25 08:48 Africa/Algiers
+
+### Latest PR #3 DGR head
+
+PR #3 is OPEN / DRAFT / UNMERGED at `7e79809d35ee34f1958aa72c28c45fc050b78f53`, 768 commits ahead / 0 behind main, 249 changed files. The latest exact-head workflow set checked out this SHA in both failing logs:
+
+- CSV import structure PASS — https://github.com/relaxsaadi/cbta/actions/runs/45572510310
+- Controlled reviewer admission PASS — https://github.com/relaxsaadi/cbta/actions/runs/45572510367
+- Governance regression integrity PASS — https://github.com/relaxsaadi/cbta/actions/runs/45572510337
+- Direct Tier-A provenance FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45572510248
+- Full DGR readiness FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45572510354
+
+The full-readiness governance-integrity sub-job passes. The direct-evidence and final artifact gates fail. The artifact summary again reports 287/287 task rows, 453/453 FR and EN IDs, zero missing/extra IDs, 107 historical FROZEN provenance exceptions and 140 FR↔EN status discrepancies. All 453 import candidates remain NO. The failure log lists the same function-level exception distribution already tabulated above (7.2: 4/11; 7.3: 18/20; 7.4: 10/13; 7.5: 12/16; 7.6: 13/18; 7.7: 14/19; 7.8: 12/15; 7.9: 14/16; 7.10: 10/12; Function 7.1: 0/0 for FROZEN exceptions / FR↔EN drift). The direct Tier-A validator still rejects representative, batch, cross-applied or missing per-item 67th Edition evidence.
+
+### PR #419 corrected rerun
+
+PR #419 is OPEN / DRAFT / UNMERGED at exact head `a81fc3f1e498ed83ae84dadef585f24232863d8c`, stacked on PR #399. Its first run on the prior head failed one static test because an existing guard still expected the old inline result-visibility expression; the test was updated to assert the shared fail-closed policy wiring.
+
+The corrected exact-head run is https://github.com/relaxsaadi/cbta/actions/runs/45572275470:
+- Console Moodle token-transport, focused lint, typecheck and production build: PASS.
+- Main E-EXAM lint and typecheck: PASS.
+- Unit tests: PASS after the static guard correction.
+- Playwright E2E: IN PROGRESS at this audit.
+- Local backup/restore drill and main production build: not yet run (pending behind E2E).
+
+The earlier failed run remains failed and must not be presented as a pass. No overall PR #419 validation pass is claimed until the corrected run completes all jobs. The direct route-level candidate report regression remains a required acceptance check; the current PR adds pure-policy unit tests and static route-wiring assertions, not a live deployed candidate test.
+
+**Release disposition unchanged:** the E-EXAM report fix is a promising unmerged proposal; DGR direct Tier-A evidence and FR/EN reviewer gates remain blocked; repository security and production integration/recovery remain unaccepted. No question approved/imported, no PR merged, no deployment.

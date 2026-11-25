@@ -767,3 +767,19 @@ This is a read-only current-base audit of `feature/kost-eexam-v2-native` at `043
 - Rebase both changes onto one current candidate, then add group-scope binding and terminal-attempt/completed-grading checks with regression tests. Do not merge either stale stack or infer validation from the other PR's tests.
 
 No code, question bank, Moodle data, credential, reviewer record or production state was changed by this audit. **Stage 2B.1 remains NOT ACCEPTED.**
+
+
+## E-EXAM public test-harness documentation exposure — 2026-11-25 05:12 Africa/Algiers
+
+A read-only review of the public `feature/kost-eexam-v2-native` branch found that the black-box test-harness README and `.env.example` exposed live Moodle test-account identifiers, role/context and course/service-allowlist details, plus a fixed password-shaped example. No credential value is reproduced here. Treat any value that may have been used as a live credential as exposed until the owner verifies and rotates it.
+
+### Documentation correction completed
+
+- [Commit `2fb911a`](https://github.com/relaxsaadi/cbta/commit/2fb911ae6e795ebeb1dfe74d4017eb282c00ca6f) rewrites `platform-ops/kost-eexam-console/README.md`: removes account/provisioning details and password examples; clarifies that the black-box suite does not build the separate console source tree at `platform-ops/kost-eexam-console-src`; and limits the candidate-flow test to the designated non-regulatory practice assessment.
+- [Commit `e8489ee`](https://github.com/relaxsaadi/cbta/commit/e8489ee040ef7da23fcaa916c0d3ff47dfd16973) replaces the test-account identifiers in `platform-ops/kost-eexam-console/.env.example` with nonfunctional local placeholders.
+- Read-back on the new feature-branch head `e8489ee040ef7da23fcaa916c0d3ff47dfd16973` confirms no former test usernames, password-shaped example, non-placeholder username values or non-empty password values remain in those two current files.
+- [Issue #418](https://github.com/relaxsaadi/cbta/issues/418) tracks the owner-side exposure response. The documentation-only commits have no PR-triggered Actions runs; they are not a build, deployment or live security acceptance result.
+
+### Owner-side actions still required
+
+Rotate/reset affected test credentials if any disclosed or example value was ever used; invalidate related sessions/tokens as appropriate; review Moodle role assignments, external-service allowlist membership and authentication logs; confirm no real candidate/staff credentials were reused; and assess public Git history, forks, mirrors, caches and downloaded copies. Sanitizing the current tree does not erase historical Git objects. No live Moodle account, record, token or production state was changed by this documentation work.

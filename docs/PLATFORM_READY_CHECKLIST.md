@@ -1183,3 +1183,70 @@ Both failing job logs explicitly check out the exact SHA above. The Tier-A regre
 The full-readiness artifact gate still reports 287/287 official task-to-matrix rows and 453/453 FR/EN question IDs, while retaining 107 FROZEN provenance exceptions and 140 FR/EN status-mirror discrepancies. All 453 V2 import candidates remain IMPORT_ELIGIBLE=NO; the qualified reviewer registry remains empty; zero questions are established APPROVED. The 10 function-specific task sets, matrices, blueprints and separate EN packages remain structurally present; structural coverage is not regulatory or human approval.
 
 This is a workflow-result correction only. No question, source record, reviewer decision, import flag, Moodle data, application code or deployment was changed.
+
+
+## Exact-head watch — 2026-11-25 14:33 Africa/Algiers
+
+> **Live PR #3:** `ai/dgr-stage2b-handoff` at `c4e7cd290cd757096f94813cb33b5267cf169d29`; OPEN / DRAFT / UNMERGED; 775 commits ahead / 0 behind `main`; 249 changed files. Repository visibility is PUBLIC. The branch object reports `protected=false`; repository rulesets collection is empty. The branch-protection detail endpoint is not accessible to this GitHub integration (403), so no stronger policy is claimed.
+
+### Exact-current-head DGR CI
+
+All five PR-triggered workflows completed on exact head `c4e7cd29`:
+
+- CSV import structure: **PASS** — [run #45607798240](https://github.com/relaxsaadi/cbta/actions/runs/45607798240)
+- Controlled reviewer admission: **PASS** — [run #45607797997](https://github.com/relaxsaadi/cbta/actions/runs/45607797997)
+- Governance regression integrity: **PASS** — [run #45607798062](https://github.com/relaxsaadi/cbta/actions/runs/45607798062)
+- Direct item Tier-A provenance: **FAIL** — [run #45607798100](https://github.com/relaxsaadi/cbta/actions/runs/45607798100)
+- Full DGR regulatory readiness: **FAIL** — [run #45607798184](https://github.com/relaxsaadi/cbta/actions/runs/45607798184)
+
+The direct Tier-A job's regression fixtures pass; live-data validation fails on missing explicit per-item 67th Edition 2026 bindings and representative/batch/cross-applied or otherwise non-direct evidence wording. Examples on this exact head include `Q-7.2-035` (no recorded direct Bookshelf evidence plus no concrete item reference) and `Q-7.6-027` (no explicit item-specific 67th Edition 2026 binding). These are substantive evidence failures, not runner failures.
+
+### Ten-function reconciliation — exact current artifacts
+
+| Function | Official leaf tasks | FR/EN bank IDs | Tier-A-affected items | FROZEN provenance exceptions | FR/EN status-mirror mismatches |
+|---|---:|---:|---:|---:|---:|
+| 7.1 | 44 | 19 | 18 | 0 | 0 |
+| 7.2 | 23 | 49 | 29 | 4 | 11 |
+| 7.3 | 33 | 45 | 30 | 18 | 20 |
+| 7.4 | 37 | 53 | 25 | 10 | 13 |
+| 7.5 | 25 | 44 | 20 | 12 | 16 |
+| 7.6 | 28 | 56 | 31 | 13 | 18 |
+| 7.7 | 27 | 53 | 25 | 14 | 19 |
+| 7.8 | 23 | 51 | 27 | 12 | 15 |
+| 7.9 | 24 | 39 | 22 | 14 | 16 |
+| 7.10 | 23 | 44 | 20 | 10 | 12 |
+| **Total** | **287** | **453** | **247** | **107** | **140** |
+
+The exact-head tree contains ten separate official task-set files, ten source/competency matrices, ten Stage 2A blueprints, ten FR production-bank files and ten separate EN review packages. The task counts are independently function-specific; Function 7.1's 44-task structure is not copied to other functions.
+
+The 107 FROZEN provenance exceptions and 140 EN mirror discrepancies are separate diagnostic dimensions; neither is additive to the 247 Tier-A-affected population. The current import-candidate CSV has 453 rows: **453/453 `IMPORT_ELIGIBLE=NO`**, zero YES and zero blank BLOCKER fields. The controlled reviewer registry's canonical reviewer table is empty; zero questions are established APPROVED. Preserve explicit SOURCE GAP / SOURCE CONFLICT states. FROZEN is not APPROVED. No new licensed Bookshelf item verification was performed in this run.
+
+### Stage 2B.1 — current native E-EXAM code line
+
+The native branch remains `feature/kost-eexam-v2-native` at `e8489ee040ef7da23fcaa916c0d3ff47dfd16973`. Compare from the prior audited code SHA `04334362` to this head is exactly **2 commits / 2 files**, both documentation sanitation only:
+
+- `platform-ops/kost-eexam-console/README.md`
+- `platform-ops/kost-eexam-console/.env.example`
+
+No application-code fix from PR #419 is integrated. Exact current source paths and remaining blockers:
+
+1. `platform-ops/kost-eexam-v2/lib/questions.ts`: `isAdmissibleWhereClause()` still uses `reviewer_status != 'REJECTED'`; PENDING can pass the legacy production-admission predicate. Production must require explicit APPROVED plus the persisted named qualified reviewer, qualification evidence/reference, actual review date/version and separate EN review.
+2. `platform-ops/kost-eexam-v2/app/(app)/exam-preparation/actions.ts`: `createAssessmentAction()` reads `scope` from client FormData, checks group access, then passes the client value to `createAssessmentDraft()`; it does not compare against the group's persisted scope.
+3. `platform-ops/kost-eexam-v2/app/api/reports/individual/[attemptId]/route.tsx`: candidate report release checks ownership, `show_result` and deferred timing, but does not require the answer-key switch, terminal attempt state or completed grading before rendering the detailed PDF.
+
+[PR #419](https://github.com/relaxsaadi/cbta/pull/419) remains OPEN / DRAFT / UNMERGED at `5c4fd23d`, stacked on [PR #399](https://github.com/relaxsaadi/cbta/pull/399). Exact-head E-EXAM V2 workflow [#45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513) passes both jobs (751 unit tests, 93 Playwright E2E tests, console/main builds and local SQLite backup/restore). This is isolated proposal CI, not integration or deployment. PR #18 and #25 remain stale draft proposals on older bases; do not merge them directly.
+
+### Security / confidentiality — still release-blocking
+
+- Current `main` is `e115196448753d2871b9885a0ea5cbdaf071790e`; branch API reports `protected=false`.
+- Current `middleware.ts` still accepts `?secret=CRON_SECRET` on protected paths.
+- Current code search still finds `NEXT_PUBLIC_CRON_SECRET` in four browser pages: dashboard agent, intelligence, LinkedIn and instructors.
+- PR #298 remains OPEN / DRAFT / UNMERGED at `8ecdc5e1`; static cron-boundary workflow [#45325913152](https://github.com/relaxsaadi/cbta/actions/runs/45325913152) passes, but the vulnerable current `main` code is unchanged and no live acceptance/deployment is established. Older overlapping PR #348 also remains a separate draft proposal; do not merge both without reconciliation.
+- Repository rulesets collection is empty. Branch API reports the DGR handoff and the report-guard branch as `protected=false`; branch-protection detail reads return 403 to this integration.
+- [Issue #340](https://github.com/relaxsaadi/cbta/issues/340) remains OPEN: public draft DGR bank/answer-key confidentiality. [Issue #418](https://github.com/relaxsaadi/cbta/issues/418) remains OPEN: documentation was sanitized, but owner-side test-account rotation, session/token invalidation as appropriate, Moodle role/allowlist and access-log review, and historical-copy assessment remain pending. Sanitization does not retract public Git history, forks or cached copies.
+
+### Claude Code / related activity
+
+No new PR was returned by the repository-scoped `author:claude` PR search. Existing #416/#417 are not DGR question-bank or E-EXAM release acceptance. No new Claude-authored implementation PR was identified in this run. The repository still has numerous unprotected AI/audit branches; do not infer that a branch is merged or production-ready from its name.
+
+**Disposition: PLATFORM NOT READY.** No PR merged, no question approved/imported, no production deployment, no DRM bypass and no ANAC/IATA approval claimed. Owner actions remain: confidential bank containment and exposure review; credential/session review; branch protection/rulesets; authorized item-specific IATA 67th Edition evidence; qualified named FR and independent EN reviewers; one reconciled E-EXAM candidate with integrated Moodle/staging, deployment and off-site restore acceptance.

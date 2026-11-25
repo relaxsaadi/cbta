@@ -1102,3 +1102,20 @@ PR #419 remains OPEN / DRAFT / UNMERGED at `5c4fd23d2b659adb34f252679ca87ff3b3c4
 PR #298 remains OPEN / DRAFT / UNMERGED / UNDEPLOYED at `8ecdc5e1`; its static cron-boundary workflow does not prove live cron, dashboard, SSE, CSRF, external-caller or rollback acceptance. The current `main` security boundary and public examination-bank confidentiality issues remain release blockers. No secrets were read or copied, and no destructive containment was attempted.
 
 **Disposition: PLATFORM NOT READY.** Do not merge or import on these results. No question is approved, no production deployment occurred, and no ANAC/IATA approval is claimed.
+
+
+## Stage 2B.1 current feature-branch code recheck — 2026-11-25 09:39 Africa/Algiers
+
+The live native E-EXAM feature branch is `feature/kost-eexam-v2-native` at `e8489ee040ef7da23fcaa916c0d3ff47dfd16973`. Comparing it with the previously audited code SHA `04334362f2ef028ded1ab5fd2dcc9c3b813dbd6b` shows exactly two commits and exactly two changed files: `platform-ops/kost-eexam-console/README.md` and `platform-ops/kost-eexam-console/.env.example`. These are the credential-documentation sanitation changes; no E-EXAM application-code fix from PR #419 is integrated into this feature branch.
+
+A fresh read of the current feature-branch code reconfirms three Stage 2B.1 blockers:
+
+1. `lib/questions.ts::isAdmissibleWhereClause()` still returns an active/current-source predicate with `reviewer_status != 'REJECTED'`. A `PENDING` question therefore remains admissible through this legacy helper; production admission must require explicit `APPROVED` with persisted named reviewer, qualification evidence/reference, actual review date/version and separate EN sign-off.
+2. `app/(app)/exam-preparation/actions.ts` reads `scope` directly from client FormData, checks only `hasGroupAccess(session, groupId)`, then passes the client value to `createAssessmentDraft()`. It does not compare the requested scope with the group's persisted scope. Enforce the scope relationship server-side using the stored group record; do not trust the client selector.
+3. `app/api/reports/individual/[attemptId]/route.tsx` still gates candidate reports on ownership, `show_result` and deferred feedback only. It does not require the detailed answer-key switch, terminal attempt or completed grading. PR #419 adds a fail-closed candidate policy and direct route E2E for this issue, but that proposal is on a separate stack and is not integrated into this feature branch.
+
+PR #18's base `c4f4dae3` is 339 commits behind the current feature branch; PR #25's base `8585d226` is 338 commits behind. Both remain OPEN / DRAFT / UNMERGED. Do not merge either stale proposal directly. Reconcile the required reviewer-admission and report controls onto one current candidate, then re-run integrated regression tests.
+
+PR #419 remains OPEN / DRAFT / UNMERGED at `5c4fd23d`, stacked on PR #399. Its exact-head E-EXAM V2 workflow [#45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513) passed both jobs, including 751 unit tests and 93 Playwright E2E tests. This is a validated proposal, not a deployed or integrated release. Issue #68 remains open until the fix is included in the selected current candidate and accepted in live staging.
+
+**Stage 2B.1 disposition: NOT ACCEPTED.** Candidate admission, server-authoritative group scope, terminal/grading-aware report release, shared-candidate account boundary, outbox durability, independent off-site backup/restore and integrated staging/deployment remain release gates.

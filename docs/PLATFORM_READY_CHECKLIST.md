@@ -1049,3 +1049,33 @@ The source-access history is more nuanced than the earlier 2FA note alone:
 These are FR evidence/reconciliation states, not approvals. FROZEN is not APPROVED. The exact-head direct Tier-A workflow still identifies 247 affected items, while the full artifact gate separately identifies 107 historical FROZEN provenance exceptions and 140 FR↔EN mirror discrepancies. Those are different validators and must not be conflated.
 
 **Owner action refined:** provide an authorized current Bookshelf session or controlled per-item evidence export so the remaining affected claims can be re-read directly. Keep the 247-item Tier-A hold, all SOURCE GAP/CONFLICT holds, separate EN review and reviewer/date requirements. No copyrighted text is to be copied into public GitHub.
+
+
+## Correction: PR #419 exact-head validation completed — 2026-11-25
+
+The corrected PR #419 candidate is no longer in progress. Exact head `5c4fd23d2b659adb34f252679ca87ff3b3c427c2` passed both jobs in E-EXAM V2 validation [#45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513):
+
+- Console Moodle token-transport regression, focused lint, typecheck and production build: PASS.
+- Main lint and typecheck: PASS.
+- Unit tests: 751 passed / 0 failed.
+- Playwright E2E: 93 passed / 0 failed, including `scenario-zzz-candidate-individual-report-release.spec.ts`.
+- Local SQLite backup/restore drill: PASS.
+- Main production build: PASS.
+
+The new direct route E2E verifies candidate denial with no PDF while the attempt is in progress and while submitted grading awaits manual review; denial when answer-key release is disabled; denial before deferred-feedback release time; and successful PDF release only after the manager completes grading and the configured release boundary has elapsed. The response is private/no-store.
+
+PR #419 remains OPEN / DRAFT / UNMERGED, stacked on PR #399. Issue #68 remains open until this code is integrated into the selected current release candidate and live staging/role-scope acceptance is completed. The local CI backup/restore drill does not establish off-site backup durability or disaster-recovery acceptance. No production deployment or Moodle production write occurred.
+
+### Latest PR #3 DGR workflow set
+
+PR #3 remains OPEN / DRAFT / UNMERGED at `bd9ed30bcec19cf004234ab4cc622bfca524e93a` (770 ahead / 0 behind; 249 changed files). All five workflows completed on that exact SHA:
+
+- CSV structure PASS — https://github.com/relaxsaadi/cbta/actions/runs/45573761387
+- Controlled reviewer admission PASS — https://github.com/relaxsaadi/cbta/actions/runs/45573761580
+- Governance integrity PASS — https://github.com/relaxsaadi/cbta/actions/runs/45573761426
+- Direct Tier-A provenance FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45573761491
+- Full DGR readiness FAIL — https://github.com/relaxsaadi/cbta/actions/runs/45573761460
+
+Both failing logs explicitly check out this SHA. The full-readiness governance-integrity sub-job passes; the affirmative per-item evidence and final artifact gates fail. The artifact summary remains 287/287 task rows, 453/453 FR/EN IDs, 107 historical FROZEN provenance exceptions and 140 FR↔EN status mismatches. All 453 import candidates remain NO; no question is APPROVED.
+
+**Release disposition:** the candidate PDF disclosure defect now has a tested, unmerged correction. The DGR evidence/reviewer program, public-bank confidentiality, repository security, one integrated release candidate, live deployment and off-site recovery remain blockers.

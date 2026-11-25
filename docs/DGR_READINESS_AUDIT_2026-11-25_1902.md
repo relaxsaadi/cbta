@@ -126,4 +126,4 @@ Critical technical gates remain open: strict production reviewer admission, serv
 
 Owner actions: protect release branches and require the merge-safe governance-integrity check; contain/retire exposed answer-bearing items and assess historical/licensed-source copies; complete credential/session/Moodle-log review; authorize item-specific IATA 67th Edition verification; appoint qualified FR and independent EN reviewers; reconcile the E-EXAM stack into one release candidate; complete live Moodle staging, deployment and off-site restore acceptance.
 
-No question approved or imported. No PR merged. No production deployment. No DRM bypass. No ANAC/IATA approval claimed.
+No question was approved or imported by this audit; the current candidate CSV remains 453/453 NO, and historical staging/import traces require a separate live-data inventory. No PR was merged. No production deployment or live Moodle acceptance was performed or validated by this audit. No DRM bypass. No ANAC/IATA approval claimed.

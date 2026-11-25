@@ -978,3 +978,14 @@ A focused correction was opened after re-reading the current #399 stacked candid
 - This proposal addresses issue [#68](https://github.com/relaxsaadi/cbta/issues/68) and the separate report gap not fixed by PR #25 alone. It is not merged, deployed or accepted. Recheck the full workflow on the exact final head before any merge consideration.
 
 **Disposition:** candidate answer-key release remains a critical gate until PR #419's full validation passes and the change is integrated into one current E-EXAM candidate. This does not resolve DGR Tier-A evidence, named qualified FR/EN reviewer requirements, public-bank confidentiality, live staging, deployment or off-site recovery.
+
+
+## Licensed 67th Edition source-access reconciliation — 2026-11-25
+
+A Library search found the IATA Store order confirmation for the **2026 Edition 67, Digital Individual, French** DGR product, with order status Received and order date 24 August 2026. The confirmation establishes purchase, not current access to or verification of the licensed manual text. The Library search surfaced the order receipt and historical working notes, but not the full 67th Edition text, tables, packing instructions, special provisions or current addenda.
+
+Prior Stage 2B.1 working records explicitly state that the IATA Digital Publications Bookshelf session requires the owner to manually re-authenticate with 2FA; no login attempt or DRM bypass was made. The existing per-item SOURCE REQUIRED states therefore remain correct. Do not infer that a purchase receipt, 66th Edition course deck, 2026 significant-change summary, or old addendum is direct 67th Edition Tier-A evidence.
+
+**Owner-only blocker refined:** the edition purchase is documented; the missing step is authorized owner-side Bookshelf re-authentication/access and delivery of verifiable current-edition locations to the controlled review process. After access is restored, verify each affected item against its exact 67th Edition section/table/PI/SP and applicable 2026 addendum, record source locator and FR verification, then obtain named qualified reviewer/date and separate EN review. No copyrighted text needs to be copied into public GitHub.
+
+No licensed source text was retrieved or reproduced in this audit. No question status changed. No DRM was bypassed.

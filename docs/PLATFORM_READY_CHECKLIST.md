@@ -1079,3 +1079,26 @@ PR #3 remains OPEN / DRAFT / UNMERGED at `bd9ed30bcec19cf004234ab4cc622bfca524e9
 Both failing logs explicitly check out this SHA. The full-readiness governance-integrity sub-job passes; the affirmative per-item evidence and final artifact gates fail. The artifact summary remains 287/287 task rows, 453/453 FR/EN IDs, 107 historical FROZEN provenance exceptions and 140 FR↔EN status mismatches. All 453 import candidates remain NO; no question is APPROVED.
 
 **Release disposition:** the candidate PDF disclosure defect now has a tested, unmerged correction. The DGR evidence/reviewer program, public-bank confidentiality, repository security, one integrated release candidate, live deployment and off-site recovery remain blockers.
+
+
+## Exact-head audit — 2026-11-25 09:39 Africa/Algiers
+
+PR #3 remains OPEN / DRAFT / UNMERGED. The live branch `ai/dgr-stage2b-handoff` is at `086254a309de2c46c0eb895a873f2fe6bcd3ad6f`, 771 commits ahead / 0 behind `main`, with 249 changed files. Compared with the prior reported handoff head `d9412881`, seven commits were added and the comparison reports exactly one changed path: this checklist (+208 lines, no deletions). No question/answer bank, regulatory evidence, reviewer record, import flag, application code, Moodle data or deployment artifact changed in that comparison.
+
+All five DGR workflows were retrieved for the exact current commit `086254a3` and completed:
+
+- Import CSV row structure: PASS — [run #45574175608](https://github.com/relaxsaadi/cbta/actions/runs/45574175608)
+- Controlled reviewer registry: PASS — [run #45574175616](https://github.com/relaxsaadi/cbta/actions/runs/45574175616)
+- Governance regression integrity: PASS — [run #45574175672](https://github.com/relaxsaadi/cbta/actions/runs/45574175672)
+- Direct item Tier-A provenance: FAIL — [run #45574175731](https://github.com/relaxsaadi/cbta/actions/runs/45574175731)
+- Full DGR regulatory readiness: FAIL — [run #45574175659](https://github.com/relaxsaadi/cbta/actions/runs/45574175659)
+
+The full-readiness run's regulatory-governance-integrity sub-job passes; the final readiness job fails. The direct Tier-A log continues to reject item-level terminal states that lack explicit per-question IATA DGR 67th Edition 2026 bindings or rely on representative, batch or cross-applied wording. The full artifact report remains 287/287 task-to-matrix rows and 453/453 FR/EN question IDs, with 247 direct Tier-A-affected questions, 107 historical FROZEN provenance exceptions and 140 FR/EN status discrepancies. These are separate validators and must not be conflated. All 453 V2 import candidates remain `IMPORT_ELIGIBLE=NO`; zero blockers are blank; the controlled qualified-reviewer registry is empty; zero questions are established APPROVED.
+
+The ten function-specific task sets, matrices, Stage 2A blueprints and separate EN review packages remain present. Official task counts remain 7.1=44, 7.2=23, 7.3=33, 7.4=37, 7.5=25, 7.6=28, 7.7=27, 7.8=23, 7.9=24 and 7.10=23 (287 total); FR/EN question populations remain 19, 49, 45, 53, 44, 56, 53, 51, 39 and 44 (453 total). Structural presence does not establish current regulatory correctness or human approval. Keep explicit SOURCE GAP/CONFLICT states, direct per-item Tier-A evidence, independent FR verification, separate EN review and named qualified reviewer plus actual date as independent gates.
+
+PR #419 remains OPEN / DRAFT / UNMERGED at `5c4fd23d2b659adb34f252679ca87ff3b3c427c2`, stacked on PR #399. Its exact-head E-EXAM V2 validation [#45573321513](https://github.com/relaxsaadi/cbta/actions/runs/45573321513) completed successfully: both jobs passed, including 751 unit tests, 93 Playwright E2E tests, console Moodle token-transport/lint/typecheck/build checks, main lint/typecheck/build and a local SQLite backup/restore drill. This remains isolated candidate CI, not a merged or deployed integrated release; local restore does not prove off-site recovery.
+
+PR #298 remains OPEN / DRAFT / UNMERGED / UNDEPLOYED at `8ecdc5e1`; its static cron-boundary workflow does not prove live cron, dashboard, SSE, CSRF, external-caller or rollback acceptance. The current `main` security boundary and public examination-bank confidentiality issues remain release blockers. No secrets were read or copied, and no destructive containment was attempted.
+
+**Disposition: PLATFORM NOT READY.** Do not merge or import on these results. No question is approved, no production deployment occurred, and no ANAC/IATA approval is claimed.

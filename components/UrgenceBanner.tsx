@@ -14,6 +14,14 @@ const NON_ALGERIA_PATHS = [
   "/formation-dgr-cote-ivoire",
   "/formation-dgr-cameroun",
   "/formation-dgr-afrique",
+  "/formation-dgr-tunisie",
+  "/cbta-dgr-training-africa",
+  "/iata-dgr-course-nigeria",
+  "/iata-dgr-course-ghana",
+  "/iata-dgr-course-kenya",
+  "/iata-dgr-recurrent-training",
+  "/formation-dgr-mali",
+  "/formation-dgr-gabon",
 ];
 
 export default function UrgenceBanner() {
@@ -48,33 +56,20 @@ export default function UrgenceBanner() {
 
   return (
     <div
-      role="alert"
+      role="status"
       aria-live="polite"
       className="w-full bg-[#7c2d12] text-white text-sm"
       style={{ minHeight: "40px" }}
     >
       <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
-        {/* Desktop text */}
-        <p className="hidden sm:block leading-snug flex-1">
-          <span className="font-semibold">⚠️ Obligation légale (Décret 21-253, Art. 14) :</span>{" "}
-          l'ANAC doit contrôler les programmes de formation marchandises dangereuses de tout exploitant — votre certification est-elle conforme ?{" "}
-          <Link
-            href="/reglementation-dgr-algerie"
-            className="underline font-semibold whitespace-nowrap hover:text-orange-200 transition-colors"
-          >
-            → Voir le cadre réglementaire
-          </Link>
-        </p>
-
-        {/* Mobile text (shorter) */}
-        <p className="block sm:hidden leading-snug flex-1 text-xs">
-          <span className="font-semibold">⚠️ Décret 21-253 :</span>{" "}
-          contrôle ANAC obligatoire des formations DGR.{" "}
+        <p className="leading-snug flex-1">
+          <span className="font-semibold">Cadre réglementaire Algérie :</span>{" "}
+          vérifiez le périmètre applicable et les exigences de formation DGR à partir des textes et sources en vigueur avant de conclure à une obligation ou à une équivalence.{" "}
           <Link
             href="/reglementation-dgr-algerie"
             className="underline font-semibold hover:text-orange-200 transition-colors"
           >
-            Cadre légal →
+            Voir les références →
           </Link>
         </p>
 

@@ -15,6 +15,8 @@ import {
 type Props = {
   defaultFormation?: string;
   sourcePage?: string;
+  /** Exact-match pages must not publish prices. Existing pages keep the euro amount. */
+  showPrices?: boolean;
 };
 
 async function hashTransactionId(email: string): Promise<string> {
@@ -36,7 +38,11 @@ async function hashTransactionId(email: string): Promise<string> {
   return `tx_${Date.now().toString(36)}`;
 }
 
-export default function LeadForm({ defaultFormation, sourcePage }: Props) {
+export default function LeadForm({
+  defaultFormation,
+  sourcePage,
+  showPrices = true,
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const utm = useUTMParams();
@@ -129,7 +135,8 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
         p: parsed.data.pays,
         tx: txId,
       });
-      if (fObj) params.set("v", String(fObj.prixEur));
+      // Exact-match written-proposal pages must not put an unquoted price in the public URL.
+      if (showPrices && fObj) params.set("v", String(fObj.prixEur));
       router.push(`/merci?${params.toString()}`);
     } catch {
       setServerError("Connexion impossible. Vérifiez votre réseau.");
@@ -308,7 +315,9 @@ export default function LeadForm({ defaultFormation, sourcePage }: Props) {
               >
                 {FORMATIONS.map((f) => (
                   <option key={f.slug} value={f.code}>
-                    {f.code} — {f.title} ({f.prixEur.toLocaleString("fr-FR")} €)
+                    {showPrices
+                      ? `${f.code} — ${f.title} (${f.prixEur.toLocaleString("fr-FR")} €)`
+                      : `${f.code} — ${f.title}`}
                   </option>
                 ))}
               </select>

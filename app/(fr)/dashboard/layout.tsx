@@ -1,6 +1,10 @@
 import Link from 'next/link'
 import { LayoutDashboard, Globe, Linkedin, GraduationCap, Building2, Flame, FileText } from 'lucide-react'
 
+// Internal CRM (behind middleware auth): render at request time only, so a
+// build without Supabase env vars (Vercel preview) does not try to prerender it.
+export const dynamic = 'force-dynamic'
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50 flex">

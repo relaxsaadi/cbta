@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Lock, Send } from "lucide-react";
 import { FORMATIONS, COUNTRIES } from "@/lib/formations";
+import { formatDa } from "@/lib/kost-facts";
 import { leadSchema } from "@/lib/schemas";
 import { useUTMParams } from "@/lib/useUTMParams";
 import {
@@ -316,7 +317,7 @@ export default function LeadForm({
                 {FORMATIONS.map((f) => (
                   <option key={f.slug} value={f.code}>
                     {showPrices
-                      ? `${f.code} — ${f.title} (${f.prixEur.toLocaleString("fr-FR")} €)`
+                      ? `${f.code} — ${f.title} (${formatDa(f.prixDa)} HT)`
                       : `${f.code} — ${f.title}`}
                   </option>
                 ))}

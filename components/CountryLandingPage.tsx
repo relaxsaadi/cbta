@@ -5,7 +5,9 @@ import Link from "next/link";
 import LeadForm from "./LeadForm";
 import WhatsAppSticky from "./WhatsAppSticky";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Accreditations from "./Accreditations";
+import RelatedTrainings from "./RelatedTrainings";
+import { MENTION_EN, MENTION_FR } from "@/lib/kost-facts";
 import { trackWhatsApp } from "@/lib/tracking";
 import { faqPageJsonLd } from "@/lib/jsonld";
 
@@ -32,12 +34,15 @@ export type CountryData = {
   keyFeature?: string;
   localContext?: CountryLocalContext;
   extraLinks?: { href: string; label: string }[];
+  /** FAQ entries shown first (40–60 words each), included in FAQPage JSON-LD. */
+  extraFaqs?: { q: string; a: string }[];
 };
 
 const DGR_FUNCTIONS = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10"];
 
 export default function CountryLandingPage({ data }: { data: CountryData }) {
   const isEnglish = data.langue === "en";
+  const isAlgeria = data.codeIso === "DZ";
 
   const t = isEnglish
     ? {
@@ -46,8 +51,9 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
           "Training scope is confirmed from the participant's actual tasks, the applicable current source set and the required review path. No job title is mapped automatically to a DGR function.",
         whyTitle: `How KOST GROUP scopes DGR training in ${data.pays}`,
         noticeTitle: `Regulatory scope — ${data.autoriteRegionale}`,
-        noticeText:
-          "Applicable training, recurrent-training, certification and recognition requirements must be confirmed against the current authoritative rules and the participant's duties before enrolment or issuance. This page does not claim universal regulator, airline or IATA approval.",
+        noticeText: isAlgeria
+          ? `KOST Academy is an ${MENTION_EN}. Training and recurrent-training requirements for each participant are confirmed against the current rules and the participant's actual duties before enrolment.`
+          : "Applicable training, recurrent-training, certification and recognition requirements must be confirmed against the current authoritative rules and the participant's duties before enrolment or issuance. This page does not claim universal regulator, airline or IATA approval.",
         functionsTitle: "DGR / CBTA functions 7.1–7.10",
         functionsIntro:
           "Each function is treated independently. Scope, duration, assessment design, source evidence and reviewer sign-off are validated per function before use.",
@@ -62,8 +68,9 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
           "Le périmètre de formation est déterminé à partir des tâches réellement exercées, des sources courantes applicables et du circuit de revue requis. Aucun intitulé de poste n'est associé automatiquement à une fonction DGR.",
         whyTitle: `Comment KOST GROUP détermine le périmètre DGR ${data.paysPreposition} ${data.pays}`,
         noticeTitle: `Périmètre réglementaire — ${data.autoriteRegionale}`,
-        noticeText:
-          "Les obligations de formation, de recyclage, de certification et de reconnaissance doivent être confirmées à partir des textes faisant autorité en vigueur et des tâches réelles du participant avant inscription ou délivrance. Cette page ne revendique aucune approbation universelle d'une autorité, d'une compagnie aérienne ou de l'IATA.",
+        noticeText: isAlgeria
+          ? `KOST Academy est un ${MENTION_FR}. Les exigences de formation et de recyclage de chaque participant sont confirmées à partir des textes en vigueur et des tâches réellement exercées avant l'inscription.`
+          : "Les obligations de formation, de recyclage, de certification et de reconnaissance doivent être confirmées à partir des textes faisant autorité en vigueur et des tâches réelles du participant avant inscription ou délivrance. Cette page ne revendique aucune approbation universelle d'une autorité, d'une compagnie aérienne ou de l'IATA.",
         functionsTitle: "Fonctions DGR / CBTA 7.1–7.10",
         functionsIntro:
           "Chaque fonction est traitée indépendamment. Le périmètre, la durée, l'évaluation, les preuves de source et la revue qualifiée sont validés fonction par fonction avant utilisation.",
@@ -119,7 +126,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         },
       ];
 
-  const faqItems = isEnglish
+  const baseFaqItems = isEnglish
     ? [
         {
           q: `Is a DGR / CBTA certificate automatically recognized in ${data.pays}?`,
@@ -157,13 +164,19 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         },
       ];
 
+  // On Algeria pages the "no recognition claimed" answer would contradict the
+  // ANAC approval, so it is replaced by the page-specific FAQ entries.
+  const faqItems =
+    isAlgeria && data.extraFaqs
+      ? data.extraFaqs
+      : [...(data.extraFaqs ?? []), ...(isAlgeria ? baseFaqItems.slice(1) : baseFaqItems)];
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqPageJsonLd(faqItems) }}
       />
-      <Navbar />
       <WhatsAppSticky />
 
       <section
@@ -196,6 +209,9 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
             {t.heroTitle}
           </h1>
           <p style={{ fontSize: 16, opacity: 0.75, lineHeight: 1.7, marginBottom: 28 }}>{t.heroSub}</p>
+          <div style={{ textAlign: "left", marginBottom: 28 }}>
+            <Accreditations lang={data.langue} tone="dark" withHeading />
+          </div>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
               href="#devis"
@@ -339,6 +355,7 @@ export default function CountryLandingPage({ data }: { data: CountryData }) {
         </div>
       </section>
 
+      <RelatedTrainings path={`/${data.slug}`} lang={data.langue} />
       <Footer />
     </>
   );

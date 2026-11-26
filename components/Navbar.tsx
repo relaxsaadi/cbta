@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, MessageCircle, Calendar, Tag, BookOpen, Home, Info } from "lucide-react";
 import { WHATSAPP_LINK } from "@/lib/formations";
 import { trackWhatsApp } from "@/lib/tracking";
+import { pagesInGroup } from "@/lib/site-pages";
 
 const FORMATIONS_NAV = [
   { href: "/dgr-7-1", label: "DGR 7.1 — Préparation des envois DG" },
@@ -73,7 +74,7 @@ export default function Navbar() {
 
             {/* FORMATIONS DROPDOWN */}
             <div
-              className="relative"
+              className="group relative"
               onMouseEnter={() => setFormationsOpen(true)}
               onMouseLeave={() => setFormationsOpen(false)}
             >
@@ -92,30 +93,30 @@ export default function Navbar() {
                 />
               </button>
 
-              {formationsOpen && (
-                  <div
-                    className="animate-dropdown absolute top-full left-0 mt-1 w-64 bg-[#001f45] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
-                  >
-                    <div className="px-3 py-2 border-b border-white/[0.07]">
-                      <p className="text-xs font-bold text-white/30 uppercase tracking-wider">Fonctions CBTA 7.1–7.10</p>
-                    </div>
-                    <div className="py-1">
-                      {FORMATIONS_NAV.map((f) => (
-                        <Link
-                          key={f.href}
-                          href={f.href}
-                          className={`block px-4 py-2 text-sm transition-colors duration-100 ${
-                            isActive(f.href)
-                              ? "text-yellow-400 bg-yellow-400/[0.08]"
-                              : "text-white/60 hover:text-white hover:bg-white/[0.06]"
-                          }`}
-                        >
-                          {f.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
+              {/* Always in the HTML (crawlable); shown on hover/focus. */}
+              <div
+                className={`${formationsOpen ? "block" : "hidden"} group-focus-within:block absolute top-full left-0 mt-1 w-[44rem] max-w-[90vw] bg-[#001f45] border border-white/10 rounded-xl shadow-2xl overflow-hidden`}
+              >
+                <div className="grid grid-cols-3 gap-0 divide-x divide-white/[0.07]">
+                  <MenuColumn title="Fonctions CBTA 7.1–7.10" items={FORMATIONS_NAV} isActive={isActive} />
+                  <MenuColumn
+                    title="Formation DGR Algérie"
+                    items={[...pagesInGroup("algerie-themes"), ...pagesInGroup("algerie-villes")].map((page) => ({
+                      href: page.path,
+                      label: page.label,
+                    }))}
+                    isActive={isActive}
+                  />
+                  <MenuColumn
+                    title="International · English"
+                    items={[...pagesInGroup("international"), ...pagesInGroup("english")].map((page) => ({
+                      href: page.path,
+                      label: page.label,
+                    }))}
+                    isActive={isActive}
+                  />
+                </div>
+              </div>
             </div>
 
             <NavLink href="/planning" active={isActive("/planning")}>
@@ -269,5 +270,34 @@ function MobileNavLink({
     >
       {children}
     </Link>
+  );
+}
+
+function MenuColumn({
+  title,
+  items,
+  isActive,
+}: {
+  title: string;
+  items: { href: string; label: string }[];
+  isActive: (href: string) => boolean;
+}) {
+  return (
+    <div className="py-2 max-h-[70vh] overflow-y-auto">
+      <p className="px-4 py-1 text-xs font-bold text-white/40 uppercase tracking-wider">{title}</p>
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={`block px-4 py-1.5 text-sm transition-colors duration-100 ${
+            isActive(item.href)
+              ? "text-yellow-400 bg-yellow-400/[0.08]"
+              : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+          }`}
+        >
+          {item.label}
+        </Link>
+      ))}
+    </div>
   );
 }

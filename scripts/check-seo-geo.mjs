@@ -7,6 +7,7 @@
 const base = (process.argv[2] || "http://localhost:3000").replace(/\/$/, "");
 const headers = {};
 if (process.env.VERCEL_BYPASS) headers["x-vercel-protection-bypass"] = process.env.VERCEL_BYPASS;
+if (process.env.PREVIEW_COOKIE) headers.cookie = process.env.PREVIEW_COOKIE;
 
 const failures = [];
 const fail = (msg) => failures.push(msg);

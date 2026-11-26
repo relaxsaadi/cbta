@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Accreditations from "@/components/Accreditations";
+import RelatedTrainings from "@/components/RelatedTrainings";
 import { Suspense } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -54,6 +56,12 @@ export default function Page() {
           </div>
         </section>
 
+        <section className="bg-white">
+          <div className="container-x max-w-4xl pt-10">
+            <Accreditations lang="fr" tone="light" withHeading />
+          </div>
+        </section>
+
         <section className="container-x max-w-5xl py-14">
           <h2 className="text-2xl md:text-3xl font-extrabold text-[#006b45] mb-4">Contextes à analyser</h2>
           <p className="text-gray-700 mb-8 max-w-3xl">
@@ -106,6 +114,7 @@ export default function Page() {
             <Link href="/" className="text-[#003087] no-underline">Accueil</Link>
           </div>
         </nav>
+        <RelatedTrainings path="/formation-dgr-pharmacie" lang="fr" />
       </main>
       <Footer />
     </>

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Accreditations from "@/components/Accreditations";
+import RelatedTrainings from "@/components/RelatedTrainings";
 import { Suspense } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -83,6 +85,12 @@ export default function EntreprisesPage() {
           </div>
         </section>
 
+        <section className="bg-white">
+          <div className="container-x max-w-4xl pt-10">
+            <Accreditations lang="fr" tone="light" withHeading />
+          </div>
+        </section>
+
         <section className="container-x max-w-5xl py-14">
           <h2 className="text-2xl md:text-3xl font-extrabold text-[#003D7A] mb-6">Secteurs accompagnés</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -120,6 +128,7 @@ export default function EntreprisesPage() {
             </Suspense>
           </div>
         </section>
+        <RelatedTrainings path="/entreprises" lang="fr" />
       </main>
       <Footer />
     </>

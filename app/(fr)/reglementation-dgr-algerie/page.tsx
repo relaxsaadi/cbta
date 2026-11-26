@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Accreditations from "@/components/Accreditations";
+import RelatedTrainings from "@/components/RelatedTrainings";
 import { Suspense } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -59,7 +61,7 @@ export default function ReglementationPage() {
               <span className="text-white/70">Réglementation DGR</span>
             </nav>
             <span className="inline-block text-sm uppercase tracking-wider text-[#F39C12] font-bold mb-3">
-              Cadre de vérification — pas une déclaration d'agrément
+              Cadre de vérification réglementaire
             </span>
             <h1 className="text-3xl md:text-4xl font-extrabold leading-tight mb-4">
               Vérifier le cadre DGR applicable en Algérie
@@ -67,6 +69,12 @@ export default function ReglementationPage() {
             <p className="text-white/80 text-lg max-w-3xl leading-relaxed">
               Cette page décrit la méthode de preuve à suivre avant d'affirmer qu'une obligation, une fonction, une validité, une reconnaissance ou une approbation s'applique. Elle ne revendique pas de statut ANAC/IATA pour KOST GROUP.
             </p>
+          </div>
+        </section>
+
+        <section className="bg-white">
+          <div className="container-x max-w-4xl pt-10">
+            <Accreditations lang="fr" tone="light" withHeading />
           </div>
         </section>
 
@@ -120,6 +128,7 @@ export default function ReglementationPage() {
             </Suspense>
           </div>
         </section>
+        <RelatedTrainings path="/reglementation-dgr-algerie" lang="fr" />
       </main>
       <Footer />
     </>

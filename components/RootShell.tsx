@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import LazyThirdParties from "@/components/LazyThirdParties";
 import Navbar from "@/components/Navbar";
@@ -16,12 +15,6 @@ import {
   geoSchema,
   postalAddressSchema,
 } from "@/lib/kost-facts";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || SITE_URL;
 
@@ -168,7 +161,7 @@ export function RootShell({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={lang} className={inter.variable}>
+    <html lang={lang}>
       <head>
         <script
           type="application/ld+json"

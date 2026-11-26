@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   experimental: {
     optimizePackageImports: ["lucide-react"],
+    // Two root layouts ((fr) lang="fr", (en) lang="en") → app/global-not-found.tsx
+    globalNotFound: true,
   },
   poweredByHeader: false,
   compress: true,
@@ -15,6 +17,10 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Expired campaign page → maintained planning (permanent, 301).
+      { source: "/session-aout", destination: "/planning", statusCode: 301 },
+      // Old URL that 404s → closest page (permanent, 301).
+      { source: "/reglementation", destination: "/reglementation-dgr-algerie", statusCode: 301 },
       {
         source: "/dgr-7-1-recurrent",
         destination: "/dgr-7-1#recyclage",
@@ -31,8 +37,8 @@ const nextConfig: NextConfig = {
     // Content-Security-Policy — every domain below is authorized because it is
     // actually loaded by the site today. No nonce system is in place, so
     // 'unsafe-inline' is used for script-src/style-src (inline JSON-LD in
-    // app/layout.tsx, inline gtag/LinkedIn/Meta bootstrap snippets in
-    // components/AnalyticsLoader.tsx, and Tailwind's inline style attributes).
+    // components/RootShell.tsx; GTM/LinkedIn/Meta are injected lazily by
+    // components/LazyThirdParties.tsx, and Tailwind's inline style attributes).
     const csp = [
       // Fallback for any directive not explicitly listed below.
       "default-src 'self'",
@@ -62,7 +68,8 @@ const nextConfig: NextConfig = {
       // - www.google-analytics.com → GA4 image-beacon fallback
       // - www.facebook.com         → Meta Pixel /tr beacon
       // - px.ads.linkedin.com / www.linkedin.com → LinkedIn Insight Tag conversion beacon + px sync redirect
-      "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://www.facebook.com https://px.ads.linkedin.com https://www.linkedin.com",
+      // px4.ads.linkedin.com: LinkedIn Insight Tag beacon host (was blocked by CSP)
+      "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://www.facebook.com https://px.ads.linkedin.com https://px4.ads.linkedin.com https://www.linkedin.com",
 
       // connect-src (fetch/XHR/beacon targets):
       // - 'self'                      → same-origin API routes (/api/lead, /api/leads, ...)
@@ -74,7 +81,7 @@ const nextConfig: NextConfig = {
       // - stats.g.doubleclick.net     → Google Ads conversion linking (also fired by the GA4/GTM tag)
       // - snap.licdn.com / px.ads.linkedin.com / www.linkedin.com → LinkedIn Insight Tag calls + px sync
       // - connect.facebook.net / www.facebook.com → Meta Pixel event calls
-      "connect-src 'self' https://vitals.vercel-insights.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.google.com https://stats.g.doubleclick.net https://snap.licdn.com https://px.ads.linkedin.com https://www.linkedin.com https://connect.facebook.net https://www.facebook.com",
+      "connect-src 'self' https://vitals.vercel-insights.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.google.com https://stats.g.doubleclick.net https://snap.licdn.com https://px.ads.linkedin.com https://px4.ads.linkedin.com https://www.linkedin.com https://connect.facebook.net https://www.facebook.com",
 
       // frame-src: GTM's <noscript> iframe fallback (ns.html)
       "frame-src https://www.googletagmanager.com",

@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import WhatsAppSticky from "@/components/WhatsAppSticky";
 import LeadForm from "@/components/LeadForm";
 import TrackedLink from "@/components/TrackedLink";
-import SetHtmlLang from "@/components/SetHtmlLang";
+import Accreditations from "@/components/Accreditations";
+import RelatedTrainings from "@/components/RelatedTrainings";
 import { faqPageJsonLd } from "@/lib/jsonld";
 import {
   CONTACT_EMAIL,
@@ -76,7 +77,6 @@ export default function ExactMatchPage({
 
   return (
     <>
-      {en ? <SetHtmlLang lang="en" /> : null}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd(crumbs) }}
@@ -120,6 +120,9 @@ export default function ExactMatchPage({
               {lead.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
+            </div>
+            <div className="mt-8 max-w-3xl">
+              <Accreditations lang={lang} tone="dark" withHeading />
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="#proposition" className="rounded-lg bg-white px-6 py-3 font-bold text-[#003087] no-underline">
@@ -256,6 +259,7 @@ export default function ExactMatchPage({
             </div>
           </div>
         </nav>
+        <RelatedTrainings path={`/${slug}`} lang={lang} />
       </main>
       <Footer />
     </>

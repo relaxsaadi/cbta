@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
+import {
+  CONTACT_EMAIL,
+  MENTION_EN,
+  MENTION_FR,
+  SITE_URL,
+  WHATSAPP_DISPLAY,
+  WHATSAPP_E164,
+  providerSchema,
+  whatsAppHref,
+} from "./kost-facts";
+import { alternatesFor } from "./site-pages";
 
-export const SITE = "https://dgr.kostacademy.com";
+export const SITE = SITE_URL;
 
-export const OFFICIAL_FR =
-  "centre de formation DGR/CBTA dont les habilitations applicables doivent être vérifiées pour la prestation envisagée";
+/** Mandatory official wording (see lib/kost-facts.ts). */
+export const OFFICIAL_FR = MENTION_FR;
+export const OFFICIAL_EN = MENTION_EN;
 
-export const OFFICIAL_EN =
-  "DGR/CBTA training centre whose applicable authorizations must be verified for the proposed course";
-
-export const CONTACT_EMAIL = "cbta@kostacademy.com";
-export const WHATSAPP_DISPLAY = "+213 542 305 383";
-export const WHATSAPP_E164 = "213542305383";
-
-export function whatsAppHref(message: string): string {
-  return `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(message)}`;
-}
+export { CONTACT_EMAIL, WHATSAPP_DISPLAY, WHATSAPP_E164, whatsAppHref };
 
 type MetaInput = {
   title: string;
@@ -31,16 +34,13 @@ export function exactMatchMetadata({
   slug,
   locale,
   keywords,
-  languages,
 }: MetaInput): Metadata {
   return {
     title: { absolute: title },
     description,
     keywords,
-    alternates: {
-      canonical: `/${slug}`,
-      languages,
-    },
+    // Canonical + reciprocal hreflang come from the page registry.
+    alternates: alternatesFor(`/${slug}`),
     openGraph: {
       title,
       description,
@@ -94,17 +94,6 @@ export function courseJsonLd(input: {
     description: input.description,
     url: `${SITE}/${input.slug}`,
     inLanguage: input.inLanguage,
-    provider: {
-      "@type": "EducationalOrganization",
-      name: "KOST Academy",
-      url: SITE,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: "176 Cité Boushaki, Bab Ezzouar",
-        addressLocality: "Alger",
-        postalCode: "16024",
-        addressCountry: "DZ",
-      },
-    },
+    provider: providerSchema(),
   }).replace(/</g, "\\u003c");
 }

@@ -26,20 +26,21 @@ const NON_ALGERIA_PATHS = [
 
 export default function UrgenceBanner() {
   const pathname = usePathname();
-  const [visible, setVisible] = useState(false);
+  // Rendered on the server (visible by default) so it is painted with the
+  // first HTML: rendering it only after hydration made it the late LCP
+  // element on mobile and shifted the layout (CLS).
+  const [visible, setVisible] = useState(true);
 
   const hiddenOnThisPage = NON_ALGERIA_PATHS.includes(pathname);
 
   useEffect(() => {
     if (hiddenOnThisPage) return;
     try {
-      const dismissed = localStorage.getItem(STORAGE_KEY);
-      if (!dismissed) {
-        setVisible(true);
+      if (localStorage.getItem(STORAGE_KEY)) {
+        setVisible(false);
       }
     } catch {
-      // localStorage unavailable (SSR safety)
-      setVisible(true);
+      // localStorage unavailable — keep the banner visible
     }
   }, [hiddenOnThisPage]);
 

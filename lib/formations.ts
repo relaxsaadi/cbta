@@ -4,6 +4,9 @@ export type Formation = {
   title: string;
   publicCible: string;
   duree: string;
+  /** Price in DA, excl. VAT (TVA formation 9 % en sus). Single public price. */
+  prixDa: number;
+  /** Internal reference grid (EUR). Never displayed on Algeria pages. */
   prixEur: number;
   prixUsd: number;
   category: "initial" | "recurrent" | "specialise";
@@ -19,6 +22,7 @@ export const FORMATIONS: Formation[] = [
     title: "Préparation des expéditions de marchandises dangereuses",
     publicCible: "Expéditeurs, packers, freight forwarders",
     duree: "4 jours / 32h",
+    prixDa: 500400,
     prixEur: 1800,
     prixUsd: 1950,
     category: "initial",
@@ -47,6 +51,7 @@ export const FORMATIONS: Formation[] = [
     title: "Renouvellement préparation expéditions DG",
     publicCible: "Personnel déjà certifié 7.1",
     duree: "3 jours / 24h",
+    prixDa: 389200,
     prixEur: 1400,
     prixUsd: 1520,
     category: "recurrent",
@@ -69,6 +74,7 @@ export const FORMATIONS: Formation[] = [
     title: "Traitement et acceptation du fret général",
     publicCible: "Agents fret général, acceptation cargo",
     duree: "2 jours / 16h",
+    prixDa: 250200,
     prixEur: 900,
     prixUsd: 980,
     category: "specialise",
@@ -93,6 +99,7 @@ export const FORMATIONS: Formation[] = [
     title: "Acceptation des expéditions de marchandises dangereuses",
     publicCible: "Agents acceptation DG (compagnies, GHA)",
     duree: "5 jours / 40h",
+    prixDa: 583800,
     prixEur: 2100,
     prixUsd: 2280,
     category: "initial",
@@ -119,6 +126,7 @@ export const FORMATIONS: Formation[] = [
     title: "Renouvellement acceptation DG",
     publicCible: "Personnel déjà certifié 7.3",
     duree: "3 jours / 24h",
+    prixDa: 417000,
     prixEur: 1500,
     prixUsd: 1630,
     category: "recurrent",
@@ -138,6 +146,7 @@ export const FORMATIONS: Formation[] = [
     title: "Agent de piste et personnel de manutention",
     publicCible: "Agents piste, chargement, manutention",
     duree: "2 jours / 16h",
+    prixDa: 250200,
     prixEur: 900,
     prixUsd: 980,
     category: "specialise",
@@ -163,6 +172,7 @@ export const FORMATIONS: Formation[] = [
     title: "Handling passagers et bagages",
     publicCible: "Agents enregistrement, embarquement",
     duree: "2 jours / 16h",
+    prixDa: 236300,
     prixEur: 850,
     prixUsd: 920,
     category: "specialise",
@@ -187,6 +197,7 @@ export const FORMATIONS: Formation[] = [
     title: "Loadmaster et planificateur de chargement",
     publicCible: "Loadmasters, agents load control",
     duree: "1 jour / 8h",
+    prixDa: 180700,
     prixEur: 650,
     prixUsd: 700,
     category: "specialise",
@@ -211,6 +222,7 @@ export const FORMATIONS: Formation[] = [
     title: "Personnel navigant technique (PNT)",
     publicCible: "Pilotes, copilotes",
     duree: "1 jour / 8h",
+    prixDa: 180700,
     prixEur: 650,
     prixUsd: 700,
     category: "specialise",
@@ -231,6 +243,7 @@ export const FORMATIONS: Formation[] = [
     title: "Officiers ops vol et flight dispatchers",
     publicCible: "Dispatchers, ops vol",
     duree: "1 jour / 8h",
+    prixDa: 180700,
     prixEur: 650,
     prixUsd: 700,
     category: "specialise",
@@ -255,6 +268,7 @@ export const FORMATIONS: Formation[] = [
     title: "Personnel navigant commercial (PNC)",
     publicCible: "Hôtesses et stewards",
     duree: "1 jour / 8h",
+    prixDa: 180700,
     prixEur: 650,
     prixUsd: 700,
     category: "specialise",
@@ -275,6 +289,7 @@ export const FORMATIONS: Formation[] = [
     title: "Personnel sécurité et screening",
     publicCible: "Agents sûreté, screeners",
     duree: "1 jour / 8h",
+    prixDa: 180700,
     prixEur: 650,
     prixUsd: 700,
     category: "specialise",

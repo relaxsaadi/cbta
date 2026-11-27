@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Lock, Send } from "lucide-react";
 import { FORMATIONS, COUNTRIES } from "@/lib/formations";
+import { getSitePage } from "@/lib/site-pages";
 import { formatDa } from "@/lib/kost-facts";
 import { leadSchema } from "@/lib/schemas";
 import { useUTMParams } from "@/lib/useUTMParams";
@@ -45,8 +46,11 @@ export default function LeadForm({
   showPrices = true,
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname() || "/";
   const searchParams = useSearchParams();
   const utm = useUTMParams();
+  const isFrench = (getSitePage(pathname)?.lang ?? "fr") === "fr";
+  const defaultPays = isFrench ? "Algérie" : "";
   const formStartedRef = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -256,7 +260,7 @@ export default function LeadForm({
                   name="whatsapp"
                   type="tel"
                   required
-                  placeholder="+212 6 XX XX XX XX"
+                  placeholder="+213 5 XX XX XX XX"
                   autoComplete="tel"
                   className={`${inputCls} ${errors.whatsapp ? errorCls : ""}`}
                 />
@@ -272,7 +276,7 @@ export default function LeadForm({
                   id="pays"
                   name="pays"
                   required
-                  defaultValue=""
+                  defaultValue={defaultPays}
                   className={`${inputCls} ${errors.pays ? errorCls : ""}`}
                 >
                   <option value="" disabled>Sélectionnez votre pays</option>
